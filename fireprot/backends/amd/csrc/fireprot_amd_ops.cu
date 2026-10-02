@@ -1,6 +1,7 @@
 #include <torch/extension.h>
 
 #include <c10/hip/HIPException.h>
+#include <c10/core/DeviceGuard.h>
 #include <c10/hip/HIPStream.h>
 #include <hip/hip_runtime.h>
 
@@ -175,6 +176,78 @@ void check_common(const torch::Tensor& tensor, const char* name) {
   TORCH_CHECK(tensor.is_contiguous(), name, " must be contiguous");
 }
 
+// Coalesced reads and writes on either side of a [rows,128] transpose.
+// Padding the LDS tile breaks bank conflicts during the layout exchange.
+constexpr int kPackedTileRows = 32;
+
+__global__ void sigmoid_pack_f32_128_kernel(
+    const float* __restrict__ gate,
+    const float* __restrict__ projection,
+    float* __restrict__ packed,
+    std::int64_t rows) {
+  __shared__ float tile[kPackedTileRows][kLayerNormWidth + 1];
+  const std::int64_t row_base =
+      static_cast<std::int64_t>(blockIdx.x) * kPackedTileRows;
+  for (int index = threadIdx.x; index < kPackedTileRows * kLayerNormWidth;
+       index += blockDim.x) {
+    const int row = index / kLayerNormWidth;
+    const int channel = index % kLayerNormWidth;
+    const std::int64_t global_row = row_base + row;
+    if (global_row < rows) {
+      const std::int64_t offset = global_row * kLayerNormWidth + channel;
+      tile[row][channel] = sigmoid(gate[offset]) * projection[offset];
+    }
+  }
+  __syncthreads();
+  for (int index = threadIdx.x; index < kPackedTileRows * kLayerNormWidth;
+       index += blockDim.x) {
+    const int channel = index / kPackedTileRows;
+    const int row = index % kPackedTileRows;
+    if (row_base + row < rows) {
+      packed[static_cast<std::int64_t>(channel) * rows + row_base + row] =
+          tile[row][channel];
+    }
+  }
+}
+
+__global__ void packed_layer_norm_f32_128_kernel(
+    const float* __restrict__ packed,
+    const float* __restrict__ weight,
+    const float* __restrict__ bias,
+    float* __restrict__ output,
+    std::int64_t rows,
+    float epsilon) {
+  __shared__ float tile[kLayerNormWidth][kPackedTileRows + 1];
+  const std::int64_t row_base =
+      static_cast<std::int64_t>(blockIdx.x) * kPackedTileRows;
+  for (int index = threadIdx.x; index < kPackedTileRows * kLayerNormWidth;
+       index += blockDim.x) {
+    const int channel = index / kPackedTileRows;
+    const int row = index % kPackedTileRows;
+    tile[channel][row] = row_base + row < rows
+        ? packed[static_cast<std::int64_t>(channel) * rows + row_base + row]
+        : 0.0f;
+  }
+  __syncthreads();
+  const int lane = threadIdx.x % kWaveSize;
+  const int wave = threadIdx.x / kWaveSize;
+  for (int row = wave; row < kPackedTileRows; row += kWavesPerBlock) {
+    if (row_base + row < rows) {
+      const float first = tile[lane][row];
+      const float second = tile[lane + kWaveSize][row];
+      const float mean = wave_sum(first + second) * (1.0f / kLayerNormWidth);
+      const float d0 = first - mean;
+      const float d1 = second - mean;
+      const float variance = wave_sum(d0 * d0 + d1 * d1) / kLayerNormWidth;
+      const float inverse_std = rsqrtf(variance + epsilon);
+      const std::int64_t base = (row_base + row) * kLayerNormWidth;
+      output[base + lane] = d0 * inverse_std * weight[lane] + bias[lane];
+      output[base + lane + kWaveSize] =
+          d1 * inverse_std * weight[lane + kWaveSize] + bias[lane + kWaveSize];
+    }
+  }
+}
+
 template <bool HasScale, bool HasOffset>
 torch::Tensor launch_layer_norm_f32_128(
     const torch::Tensor& input,
@@ -203,6 +276,53 @@ torch::Tensor launch_layer_norm_f32_128(
 }
 
 }  // namespace
+
+torch::Tensor fireprot_sigmoid_pack_f32_128(
+    torch::Tensor gate, torch::Tensor projection) {
+  check_common(gate, "gate");
+  check_common(projection, "projection");
+  TORCH_CHECK(gate.sizes() == projection.sizes(), "gate and projection shapes must match");
+  TORCH_CHECK(gate.get_device() == projection.get_device(), "devices must match");
+  TORCH_CHECK(gate.dim() == 3 && gate.size(0) == gate.size(1) &&
+      gate.size(0) > 0 && gate.size(2) == kLayerNormWidth,
+      "input shape must be [N,N,128], N > 0");
+  const c10::DeviceGuard device_guard(gate.device());
+  const auto rows = gate.numel() / kLayerNormWidth;
+  auto output = torch::empty({kLayerNormWidth, gate.size(0), gate.size(1)}, gate.options());
+  const auto stream = c10::hip::getCurrentHIPStream(gate.get_device());
+  hipLaunchKernelGGL(sigmoid_pack_f32_128_kernel,
+      dim3((rows + kPackedTileRows - 1) / kPackedTileRows),
+      dim3(kWaveSize * kWavesPerBlock), 0, stream.stream(),
+      gate.data_ptr<float>(), projection.data_ptr<float>(), output.data_ptr<float>(), rows);
+  C10_CUDA_KERNEL_LAUNCH_CHECK();
+  return output;
+}
+
+torch::Tensor fireprot_packed_layer_norm_f32_128(
+    torch::Tensor packed, torch::Tensor weight, torch::Tensor bias, double epsilon) {
+  check_common(packed, "packed");
+  check_common(weight, "weight");
+  check_common(bias, "bias");
+  TORCH_CHECK(packed.dim() == 3 && packed.size(0) == kLayerNormWidth &&
+      packed.size(1) == packed.size(2) && packed.size(1) > 0,
+      "packed input shape must be [128,N,N], N > 0");
+  TORCH_CHECK(weight.numel() == kLayerNormWidth && bias.numel() == kLayerNormWidth,
+      "weight and bias must each contain 128 values");
+  TORCH_CHECK(packed.get_device() == weight.get_device() &&
+      packed.get_device() == bias.get_device(), "devices must match");
+  TORCH_CHECK(epsilon > 0.0, "epsilon must be positive");
+  const c10::DeviceGuard device_guard(packed.device());
+  const auto rows = packed.numel() / kLayerNormWidth;
+  auto output = torch::empty({packed.size(1), packed.size(2), kLayerNormWidth}, packed.options());
+  const auto stream = c10::hip::getCurrentHIPStream(packed.get_device());
+  hipLaunchKernelGGL(packed_layer_norm_f32_128_kernel,
+      dim3((rows + kPackedTileRows - 1) / kPackedTileRows),
+      dim3(kWaveSize * kWavesPerBlock), 0, stream.stream(),
+      packed.data_ptr<float>(), weight.data_ptr<float>(), bias.data_ptr<float>(),
+      output.data_ptr<float>(), rows, static_cast<float>(epsilon));
+  C10_CUDA_KERNEL_LAUNCH_CHECK();
+  return output;
+}
 
 torch::Tensor fireprot_layer_norm_f32_128(
     torch::Tensor input,

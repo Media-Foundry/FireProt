@@ -1,5 +1,11 @@
 #include <torch/extension.h>
 
+torch::Tensor fireprot_sigmoid_pack_f32_128(
+    torch::Tensor gate, torch::Tensor projection);
+
+torch::Tensor fireprot_packed_layer_norm_f32_128(
+    torch::Tensor packed, torch::Tensor weight, torch::Tensor bias, double epsilon);
+
 torch::Tensor fireprot_layer_norm_f32_128(
     torch::Tensor input,
     torch::Tensor weight,
@@ -35,6 +41,10 @@ torch::Tensor fireprot_sigmoid_mul_mask_f32(
     torch::Tensor mask);
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, module) {
+  module.def("sigmoid_pack_f32_128", &fireprot_sigmoid_pack_f32_128,
+      "FireProt fused sigmoid projection and channel-first packing");
+  module.def("packed_layer_norm_f32_128", &fireprot_packed_layer_norm_f32_128,
+      "FireProt fused channel-first unpacking and FP32 LayerNorm");
   module.def(
       "layer_norm_f32_128",
       &fireprot_layer_norm_f32_128,

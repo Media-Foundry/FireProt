@@ -12,6 +12,23 @@
     "exclusive_max_vram_used_bytes": 268435456,
     "clock_policy": "record-current"
   },
+  "blas_benchmark": {
+    "warmups": 25,
+    "iterations": 200,
+    "bmm_iterations": 100,
+    "minimum_speedup": 1.1,
+    "dtypes": ["float32", "bfloat16"],
+    "shapes": [
+      {"kind": "mm", "shape": [15376, 128, 128]},
+      {"kind": "mm", "shape": [7688, 128, 128]},
+      {"kind": "mm", "shape": [15376, 128, 512]},
+      {"kind": "mm", "shape": [15376, 512, 128]},
+      {"kind": "mm", "shape": [124, 384, 384]},
+      {"kind": "bmm", "shape": [128, 124, 124, 62]},
+      {"kind": "bmm", "shape": [496, 124, 32, 124]},
+      {"kind": "bmm", "shape": [496, 124, 124, 32]}
+    ]
+  },
   "workloads": [
     {
       "id": "mini-default-1izr-c4-s1-fp32",

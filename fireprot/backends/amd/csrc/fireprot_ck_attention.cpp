@@ -32,10 +32,12 @@ using Epilogue = ct::Default2DEpilogue<ct::Default2DEpilogueProblem<float,float,
 using Kernel = ct::FmhaFwdKernel<Pipeline,Epilogue>;
 extern "C" int ck_attention(float* q,float* k,float* v,float* b,float* o,int batch,int n,void* stream) {
     if(!((batch==1000 && n==1000) || (batch==512 && n==1536))) return 2;
+    // Must match Python's N1536 padded bias allocation; padding is not a token.
+    const int bias_stride = n == 1536 ? n + 16 : n;
     auto args=Kernel::MakeKargs(q,k,v,b,nullptr,nullptr,nullptr,nullptr,nullptr,o,
         n,n,32,32,4,1,1.0f,0.0f,
-        128,128,128,n,0,128, 0,0,0,
-        32,32,32,n*n,0,0,32, 0,0,0,
+        128,128,128,bias_stride,0,128, 0,0,0,
+        32,32,32,n*bias_stride,0,0,32, 0,0,0,
         n*128,n*128,n*128,0,0,0,n*128, 0,0,0,
         -1,-1,0,0,0.0f,false,std::tuple<uint64_t,uint64_t>{0,0},0,0);
     ct::stream_config config{static_cast<hipStream_t>(stream),false};

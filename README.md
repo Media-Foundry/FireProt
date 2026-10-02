@@ -19,6 +19,15 @@ Protenix v1.1.0 is the first working adapter target. The repository now contains
 
 AtlasFold, OpenFold, ESMFold, Base-model coverage, BF16 promotion, additional long-sequence buckets, and multi-GPU execution remain future work.
 
+## Experimental 1,536-residue workload
+
+A real **1,536-residue** input and opt-in attention experiments are now
+available. SDPA has passed full-model native-agreement validation. Padding
+the physical CK bias row stride reduced its operator time from about 48.4
+to 39.4 ms, but SDPA remains faster at about 34.8 ms; CK is therefore not
+promoted for this bucket. Controlled warm model speedups at N1536 remain
+unmeasured. See [long-sequence diagnosis](docs/protenix-long1536.md).
+
 ## Verified 1,000-token MI250 result
 
 The latest CK Tile attention path improves the model median from **13.120 to 12.580 s (1.043x)** in a same-source, five-repetition comparison, with unchanged peak allocated memory. The complete attention operator measures **32.711 ms** versus SDPA's **36.35–36.36 ms**. CK Tile is now the default for this exact validated bucket. See [CK Tile implementation and model validation](docs/protenix-ck-tile.md). The preceding [generic CK/SDPA investigation](docs/protenix-attention-tuning.md) remains historical evidence; its generic CK candidate was not promoted.

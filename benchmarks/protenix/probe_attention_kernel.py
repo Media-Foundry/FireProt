@@ -23,6 +23,8 @@ def main() -> int:
     parser.add_argument("--library", type=pathlib.Path,
                         help="Prebuilt CK C ABI library; required for CK to exclude compilation")
     parser.add_argument("--iterations", type=int, default=3)
+    parser.add_argument("--bias-padding", type=int, choices=(0, 16), default=0,
+                        help="Extra FP32 elements per bias row; CK library must match this stride")
     parser.add_argument("--output", type=pathlib.Path, required=True)
     args = parser.parse_args()
     if os.environ.get("HIP_VISIBLE_DEVICES") not in {"6", "7"}:
@@ -44,6 +46,7 @@ def main() -> int:
                   torch=torch.__version__, hip=torch.version.hip,
                   physical_device=os.environ["HIP_VISIBLE_DEVICES"],
                   cache_state="first launch cold; subsequent launches warm",
+                  bias_padding=args.bias_padding,
                   source_sha256=hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest())
     entry = None
     if args.library is not None:
@@ -56,7 +59,13 @@ def main() -> int:
     with torch.inference_mode():
         q, k, v = [torch.randn(batch, n, 4, 32, device="cuda").transpose(1, 2) for _ in range(3)]
         q.div_(32**0.5)
-        bias = torch.randn(n, n, 4, device="cuda").permute(2, 0, 1).unsqueeze(0).contiguous()
+        raw_bias = torch.randn(n, n, 4, device="cuda").permute(2, 0, 1).unsqueeze(0)
+        if args.bias_padding:
+            bias = torch.empty(1, 4, n, n + args.bias_padding, device="cuda")[..., :n]
+            bias.copy_(raw_bias)
+        else:
+            bias = raw_bias.contiguous()
+        report["bias_stride"] = list(bias.stride())
         output = torch.empty_like(q)
         torch.cuda.synchronize()
         for _ in range(args.iterations):

@@ -1,0 +1,331 @@
+{
+  "schema_version": 1,
+  "source_commit": "2cf3ef50e67dae466021568cfd4482c6091150c6",
+  "scope": "FP32 N1536 B512 H4 D32 kernel-counter diagnostics; not model performance",
+  "counter_isolation": "GPU 6 explicitly selected; no continuous external-process monitor under injected profiler; GPU 7 tests overlapped SQ collection",
+  "runs": {
+    "attention-counters-sdpa1536": {
+      "probe": {
+        "scope": "kernel resource/counter probe; not a latency benchmark or model result",
+        "implementation": "sdpa",
+        "shape": [
+          512,
+          4,
+          1536,
+          32
+        ],
+        "seed": 419,
+        "dtype": "float32",
+        "tf32": false,
+        "iterations": 3,
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "physical_device": "6",
+        "cache_state": "first launch cold; subsequent launches warm",
+        "source_sha256": "38a4561e76d073f8aa96ad936c30166f1a64821a98fef1af7f35a5dc6296de98",
+        "finite": true
+      },
+      "resources": {
+        "Workgroup_Size": "128",
+        "LDS_Block_Size": "0",
+        "Scratch_Size": "80",
+        "VGPR_Count": "128",
+        "Accum_VGPR_Count": "128",
+        "SGPR_Count": "112"
+      },
+      "counters": {
+        "TCC_EA_RDREQ_32B_sum": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "TCC_EA_RDREQ_sum": [
+          334330019.0,
+          339406124.0,
+          337743885.0
+        ],
+        "TCC_HIT_sum": [
+          158482417.0,
+          156043332.0,
+          156796342.0
+        ],
+        "TCC_MISS_sum": [
+          173500340.0,
+          176074703.0,
+          175203624.0
+        ]
+      },
+      "raw_files": {
+        "attention-counters-sdpa1536/probe.json": "c4f5adb96814587d25b0fb65bfa054a92932495ccb6927f6ec8e9f7cdf19f980",
+        "attention-counters-sdpa1536/DiamondHill/707593_kernel_trace.csv": "cb09c12e75ca40f31aaf5edba4b27f4d7db98644dd3b439fb0a409f44c42e260",
+        "attention-counters-sdpa1536/DiamondHill/707593_counter_collection.csv": "19c95b444922234bb6a84632370151b0f6b7db4f1eede76aa389cded0b2e848b",
+        "attention-counters-sdpa1536/DiamondHill/707593_agent_info.csv": "acf54890612aebe759bae121e4df34b04c3948f662767f90a3a913dde5fc4017"
+      }
+    },
+    "attention-counters-ck1536": {
+      "probe": {
+        "scope": "kernel resource/counter probe; not a latency benchmark or model result",
+        "implementation": "ck",
+        "shape": [
+          512,
+          4,
+          1536,
+          32
+        ],
+        "seed": 419,
+        "dtype": "float32",
+        "tf32": false,
+        "iterations": 3,
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "physical_device": "6",
+        "cache_state": "first launch cold; subsequent launches warm",
+        "source_sha256": "38a4561e76d073f8aa96ad936c30166f1a64821a98fef1af7f35a5dc6296de98",
+        "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_ae9740acde4157d3/attention.so",
+        "library_sha256": "435d9d0ae7003eaef5a6c3602b6121522197a2ed91ad0c52d3b09329f27280f5",
+        "finite": true
+      },
+      "resources": {
+        "Workgroup_Size": "256",
+        "LDS_Block_Size": "9216",
+        "Scratch_Size": "0",
+        "VGPR_Count": "28",
+        "Accum_VGPR_Count": "132",
+        "SGPR_Count": "96"
+      },
+      "counters": {
+        "TCC_EA_RDREQ_32B_sum": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "TCC_EA_RDREQ_sum": [
+          345850629.0,
+          347190079.0,
+          347504947.0
+        ],
+        "TCC_HIT_sum": [
+          313508164.0,
+          312894173.0,
+          312280510.0
+        ],
+        "TCC_MISS_sum": [
+          177786164.0,
+          178477128.0,
+          178597651.0
+        ]
+      },
+      "raw_files": {
+        "attention-counters-ck1536/probe.json": "2db00d736bb649d43c2ec2f1cf2ae7efe0f61305f6ab97a436c88b72d228d91b",
+        "attention-counters-ck1536/DiamondHill/708917_agent_info.csv": "acf54890612aebe759bae121e4df34b04c3948f662767f90a3a913dde5fc4017",
+        "attention-counters-ck1536/DiamondHill/708917_kernel_trace.csv": "013bf2975c5e8b96f5f948202ac12b37021fde6aad5772bd1b3878df8cd21a3d",
+        "attention-counters-ck1536/DiamondHill/708917_counter_collection.csv": "30c8369c7dd7a0d6ea3b896978413fc63f580b098cb95c58d2ff5697dde1a8c0"
+      }
+    },
+    "attention-sq-sdpa1536": {
+      "probe": {
+        "scope": "kernel resource/counter probe; not a latency benchmark or model result",
+        "implementation": "sdpa",
+        "shape": [
+          512,
+          4,
+          1536,
+          32
+        ],
+        "seed": 419,
+        "dtype": "float32",
+        "tf32": false,
+        "iterations": 3,
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "physical_device": "6",
+        "cache_state": "first launch cold; subsequent launches warm",
+        "source_sha256": "38a4561e76d073f8aa96ad936c30166f1a64821a98fef1af7f35a5dc6296de98",
+        "finite": true
+      },
+      "resources": {
+        "Workgroup_Size": "128",
+        "LDS_Block_Size": "0",
+        "Scratch_Size": "80",
+        "VGPR_Count": "128",
+        "Accum_VGPR_Count": "128",
+        "SGPR_Count": "112"
+      },
+      "counters": {
+        "SQ_INSTS_LDS": [
+          271024128.0,
+          271024128.0,
+          271024128.0
+        ],
+        "SQ_INSTS_MFMA": [
+          157286400.0,
+          157286400.0,
+          157286400.0
+        ],
+        "SQ_INSTS_VALU": [
+          1705476096.0,
+          1705476096.0,
+          1705476096.0
+        ],
+        "SQ_LDS_BANK_CONFLICT": [
+          1107689472.0,
+          1107689472.0,
+          1107689472.0
+        ],
+        "SQ_WAIT_INST_LDS": [
+          848600315.0,
+          797272322.0,
+          806134618.0
+        ],
+        "SQ_WAVES": [
+          98304.0,
+          98304.0,
+          98304.0
+        ]
+      },
+      "raw_files": {
+        "attention-sq-sdpa1536/probe.json": "c4f5adb96814587d25b0fb65bfa054a92932495ccb6927f6ec8e9f7cdf19f980",
+        "attention-sq-sdpa1536/DiamondHill/709912_kernel_trace.csv": "d3c74ca11e555f8309bd9ebe605f45631783c052d892d24cd20423001f23bb36",
+        "attention-sq-sdpa1536/DiamondHill/709912_agent_info.csv": "acf54890612aebe759bae121e4df34b04c3948f662767f90a3a913dde5fc4017",
+        "attention-sq-sdpa1536/DiamondHill/709912_counter_collection.csv": "8963e4c9a774a904f050935895a96429b34136a848bea64afe1ae4291fcf0aff"
+      }
+    },
+    "attention-sq-ck1536": {
+      "probe": {
+        "scope": "kernel resource/counter probe; not a latency benchmark or model result",
+        "implementation": "ck",
+        "shape": [
+          512,
+          4,
+          1536,
+          32
+        ],
+        "seed": 419,
+        "dtype": "float32",
+        "tf32": false,
+        "iterations": 3,
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "physical_device": "6",
+        "cache_state": "first launch cold; subsequent launches warm",
+        "source_sha256": "38a4561e76d073f8aa96ad936c30166f1a64821a98fef1af7f35a5dc6296de98",
+        "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_ae9740acde4157d3/attention.so",
+        "library_sha256": "435d9d0ae7003eaef5a6c3602b6121522197a2ed91ad0c52d3b09329f27280f5",
+        "finite": true
+      },
+      "resources": {
+        "Workgroup_Size": "256",
+        "LDS_Block_Size": "9216",
+        "Scratch_Size": "0",
+        "VGPR_Count": "28",
+        "Accum_VGPR_Count": "132",
+        "SGPR_Count": "96"
+      },
+      "counters": {
+        "SQ_INSTS_LDS": [
+          66060288.0,
+          66060288.0,
+          66060288.0
+        ],
+        "SQ_INSTS_MFMA": [
+          301989888.0,
+          301989888.0,
+          301989888.0
+        ],
+        "SQ_INSTS_VALU": [
+          1793359872.0,
+          1793359872.0,
+          1793359872.0
+        ],
+        "SQ_LDS_BANK_CONFLICT": [
+          339738624.0,
+          339738624.0,
+          339738624.0
+        ],
+        "SQ_WAIT_INST_LDS": [
+          67876208.0,
+          67040830.0,
+          67061526.0
+        ],
+        "SQ_WAVES": [
+          98304.0,
+          98304.0,
+          98304.0
+        ]
+      },
+      "raw_files": {
+        "attention-sq-ck1536/probe.json": "2db00d736bb649d43c2ec2f1cf2ae7efe0f61305f6ab97a436c88b72d228d91b",
+        "attention-sq-ck1536/DiamondHill/710081_counter_collection.csv": "0bbad8725a17b37bc9e26457e69155dbd1494b06617c9fecad93072f2fdddc76",
+        "attention-sq-ck1536/DiamondHill/710081_agent_info.csv": "acf54890612aebe759bae121e4df34b04c3948f662767f90a3a913dde5fc4017",
+        "attention-sq-ck1536/DiamondHill/710081_kernel_trace.csv": "643ce7801761fef08fea7846d206647f0ada6e2b7390aca900a82a167d639da7"
+      }
+    },
+    "attention-counters-ck1536-pad16": {
+      "probe": {
+        "scope": "kernel resource/counter probe; not a latency benchmark or model result",
+        "implementation": "ck",
+        "shape": [
+          512,
+          4,
+          1536,
+          32
+        ],
+        "seed": 419,
+        "dtype": "float32",
+        "tf32": false,
+        "iterations": 3,
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "physical_device": "6",
+        "cache_state": "first launch cold; subsequent launches warm",
+        "bias_padding": 16,
+        "source_sha256": "b884f4e840ccbd7552f2fbd9967c2c485059434c2f11246bcbbff80d7e819f36",
+        "library": "/media/IntelSSD/fireprot/runtime/ck_bias_padding_diagnosis/probe.so",
+        "library_sha256": "4f79874a2ade6c0e1311cf835a06d0738adbb6e67bb5a611a53713d8c1dba3a5",
+        "bias_stride": [
+          9535488,
+          2383872,
+          1552,
+          1
+        ],
+        "finite": true
+      },
+      "resources": {
+        "Workgroup_Size": "256",
+        "LDS_Block_Size": "9216",
+        "Scratch_Size": "0",
+        "VGPR_Count": "28",
+        "Accum_VGPR_Count": "132",
+        "SGPR_Count": "96"
+      },
+      "counters": {
+        "TCC_EA_RDREQ_32B_sum": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "TCC_EA_RDREQ_sum": [
+          281752896.0,
+          303427637.0,
+          292653361.0
+        ],
+        "TCC_HIT_sum": [
+          322197313.0,
+          307830477.0,
+          314870266.0
+        ],
+        "TCC_MISS_sum": [
+          160532571.0,
+          174922645.0,
+          167864279.0
+        ]
+      },
+      "raw_files": {
+        "attention-counters-ck1536-pad16/probe.json": "a49bd82192adb79c522ee57d613d9d6aec564af4d061108e9558e9ed1943ad92",
+        "attention-counters-ck1536-pad16/DiamondHill/717532_counter_collection.csv": "bbdcb0068617c5efa7f7474094d5d146be62a9e03df49620577bfa9e2d261418",
+        "attention-counters-ck1536-pad16/DiamondHill/717532_agent_info.csv": "acf54890612aebe759bae121e4df34b04c3948f662767f90a3a913dde5fc4017",
+        "attention-counters-ck1536-pad16/DiamondHill/717532_kernel_trace.csv": "0c953960a232295ffb14984b498c35f23c3161e84db4fa0c4caa6801c4abc252"
+      }
+    }
+  }
+}

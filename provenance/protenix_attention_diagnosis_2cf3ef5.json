@@ -1,0 +1,1421 @@
+{
+  "schema_version": 1,
+  "source_commit": "2cf3ef50e67dae466021568cfd4482c6091150c6",
+  "scope": "Isolated attention diagnostics; no model speedup claim",
+  "experiments": {
+    "attention-bias-padding-diagnosis": {
+      "seed": 419,
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "shape": [
+        512,
+        4,
+        1536,
+        32
+      ],
+      "scope": "complete operator; bias padding/copy and output allocation included",
+      "library_sha256": "4f79874a2ade6c0e1311cf835a06d0738adbb6e67bb5a611a53713d8c1dba3a5",
+      "source_sha256": "f12532169283976ceef7274d0f420fa26f6a81bb87cf7c62b54409ac33b39a2c",
+      "records": [
+        {
+          "name": "sdpa",
+          "median_ms": 34.856807708740234,
+          "values_ms": [
+            34.90739822387695,
+            34.90755844116211,
+            34.901611328125,
+            34.81329345703125,
+            34.939369201660156,
+            34.886409759521484,
+            34.79874038696289,
+            34.82561492919922,
+            34.853614807128906,
+            34.873130798339844,
+            34.84928512573242,
+            34.86912155151367,
+            34.778560638427734,
+            34.82783508300781,
+            34.80928039550781,
+            34.86000061035156,
+            34.91632080078125,
+            34.76448059082031,
+            34.90864944458008,
+            34.80160903930664
+          ],
+          "max_abs_delta": 0.0
+        },
+        {
+          "name": "ck_original",
+          "median_ms": 48.402671813964844,
+          "values_ms": [
+            48.43339157104492,
+            48.40571212768555,
+            48.39514923095703,
+            48.41178512573242,
+            48.41291046142578,
+            48.400272369384766,
+            48.390342712402344,
+            48.42378234863281,
+            48.34779357910156,
+            48.44891357421875,
+            48.37307357788086,
+            48.42203140258789,
+            48.425228118896484,
+            48.396270751953125,
+            48.46043014526367,
+            48.40507125854492,
+            48.351951599121094,
+            48.374027252197266,
+            48.3833122253418,
+            48.383792877197266
+          ],
+          "max_abs_delta": 5.9604644775390625e-06
+        },
+        {
+          "name": "ck_bias_pad16",
+          "median_ms": 39.39211463928223,
+          "values_ms": [
+            39.398433685302734,
+            39.4381103515625,
+            39.227718353271484,
+            39.581790924072266,
+            39.49443054199219,
+            39.55427169799805,
+            39.643070220947266,
+            39.24420166015625,
+            39.342594146728516,
+            39.5142707824707,
+            39.44147491455078,
+            39.31092071533203,
+            39.20499801635742,
+            39.29267501831055,
+            39.23204040527344,
+            39.378116607666016,
+            39.285640716552734,
+            39.38579559326172,
+            39.466270446777344,
+            39.435550689697266
+          ],
+          "max_abs_delta": 5.9604644775390625e-06
+        },
+        {
+          "name": "sdpa_repeat",
+          "median_ms": 34.815202713012695,
+          "values_ms": [
+            34.8192024230957,
+            34.81120300292969,
+            34.83888244628906,
+            34.87839889526367,
+            34.75424575805664,
+            34.733924865722656,
+            34.76496505737305,
+            34.85023880004883,
+            34.77632522583008,
+            34.88479995727539,
+            34.86207962036133,
+            34.859519958496094,
+            34.80640411376953,
+            34.85919952392578,
+            34.76608657836914,
+            34.90607833862305,
+            34.793922424316406,
+            34.7883186340332,
+            34.89712142944336,
+            34.78288269042969
+          ],
+          "max_abs_delta": 0.0
+        }
+      ],
+      "monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 4,
+        "allowed_pid": 714492,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "attention-sdpa-ck-diagnosis": {
+      "torch": "2.12.0a0+git78258b9",
+      "seed": 419,
+      "dtype": "float32",
+      "tf32": false,
+      "records": [
+        {
+          "n": 1000,
+          "batch": 1000,
+          "path": "sdpa",
+          "events": [
+            {
+              "name": "void at::native::elementwise_kernel_manual_unroll<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}) [clone .kd]",
+              "us": 71.51700000000005
+            },
+            {
+              "name": "attn_fwd.kd",
+              "us": 36594.666999999994
+            }
+          ]
+        },
+        {
+          "n": 1000,
+          "batch": 1000,
+          "path": "ck",
+          "events": [
+            {
+              "name": "void at::native::elementwise_kernel_manual_unroll<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}) [clone .kd]",
+              "us": 72.15700000000001
+            },
+            {
+              "name": "void ck_tile::kentry<2, ck_tile::FmhaFwdKernel<ck_tile::BlockFmhaPipelineQRKSVS<ck_tile::BlockFmhaPipelineProblem<float, float, float, float, float, float, unsigned char, float, float, float, float, ck_tile::TileFmhaShape<ck_tile::sequence<128, 64, 16, 32, 64, 32>, ck_tile::sequence<4, 1, 1>, ck_tile::sequence<16, 16, 16>, ck_tile::sequence<4, 1, 1>, ck_tile::sequence<16, 16, 16>, true>, false, ck_tile::ComposedAttention<0u, false>, ck_tile::SimplifiedGenericAttentionMask<false>, false, ck_tile::TileFmhaTraits<true, true, false, false, false, (ck_tile::BlockAttentionBiasEnum)1, false, false, false, (ck_tile::BlockAttentionQuantScaleEnum)0, -1, false, false> >, ck_tile::BlockFmhaPipelineQXKSVSCustomPolicy<true, false, 1, 1>, false>, ck_tile::Default2DEpilogue<ck_tile::Default2DEpilogueProblem<float, float, true, false, true>, void> >, ck_tile::FmhaFwdKernel<ck_tile::BlockFmhaPipelineQRKSVS<ck_tile::BlockFmhaPipelineProblem<float, float, float, float, float, float, unsigned char, float, float, float, float, ck_tile::TileFmhaShape<ck_tile::sequence<128, 64, 16, 32, 64, 32>, ck_tile::sequence<4, 1, 1>, ck_tile::sequence<16, 16, 16>, ck_tile::sequence<4, 1, 1>, ck_tile::sequence<16, 16, 16>, true>, false, ck_tile::ComposedAttention<0u, false>, ck_tile::SimplifiedGenericAttentionMask<false>, false, ck_tile::TileFmhaTraits<true, true, false, false, false, (ck_tile::BlockAttentionBiasEnum)1, false, false, false, (ck_tile::BlockAttentionQuantScaleEnum)0, -1, false, false> >, ck_tile::BlockFmhaPipelineQXKSVSCustomPolicy<true, false, 1, 1>, false>, ck_tile::Default2DEpilogue<ck_tile::Default2DEpilogueProblem<float, float, true, false, true>, void> >::FmhaFwdBatchModeKargs>(ck_tile::FmhaFwdKernel<ck_tile::BlockFmhaPipelineQRKSVS<ck_tile::BlockFmhaPipelineProblem<float, float, float, float, float, float, unsigned char, float, float, float, float, ck_tile::TileFmhaShape<ck_tile::sequence<128, 64, 16, 32, 64, 32>, ck_tile::sequence<4, 1, 1>, ck_tile::sequence<16, 16, 16>, ck_tile::sequence<4, 1, 1>, ck_tile::sequence<16, 16, 16>, true>, false, ck_tile::ComposedAttention<0u, false>, ck_tile::SimplifiedGenericAttentionMask<false>, false, ck_tile::TileFmhaTraits<true, true, false, false, false, (ck_tile::BlockAttentionBiasEnum)1, false, false, false, (ck_tile::BlockAttentionQuantScaleEnum)0, -1, false, false> >, ck_tile::BlockFmhaPipelineQXKSVSCustomPolicy<true, false, 1, 1>, false>, ck_tile::Default2DEpilogue<ck_tile::Default2DEpilogueProblem<float, float, true, false, true>, void> >::FmhaFwdBatchModeKargs) [clone .kd]",
+              "us": 32905.316000000006
+            }
+          ]
+        },
+        {
+          "n": 1536,
+          "batch": 512,
+          "path": "sdpa",
+          "events": [
+            {
+              "name": "void at::native::elementwise_kernel_manual_unroll<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}) [clone .kd]",
+              "us": 159.515
+            },
+            {
+              "name": "attn_fwd.kd",
+              "us": 34609.12
+            }
+          ]
+        },
+        {
+          "n": 1536,
+          "batch": 512,
+          "path": "ck",
+          "events": [
+            {
+              "name": "void at::native::elementwise_kernel_manual_unroll<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}) [clone .kd]",
+              "us": 163.19400000000002
+            },
+            {
+              "name": "void ck_tile::kentry<2, ck_tile::FmhaFwdKernel<ck_tile::BlockFmhaPipelineQRKSVS<ck_tile::BlockFmhaPipelineProblem<float, float, float, float, float, float, unsigned char, float, float, float, float, ck_tile::TileFmhaShape<ck_tile::sequence<128, 64, 16, 32, 64, 32>, ck_tile::sequence<4, 1, 1>, ck_tile::sequence<16, 16, 16>, ck_tile::sequence<4, 1, 1>, ck_tile::sequence<16, 16, 16>, true>, false, ck_tile::ComposedAttention<0u, false>, ck_tile::SimplifiedGenericAttentionMask<false>, false, ck_tile::TileFmhaTraits<true, true, false, false, false, (ck_tile::BlockAttentionBiasEnum)1, false, false, false, (ck_tile::BlockAttentionQuantScaleEnum)0, -1, false, false> >, ck_tile::BlockFmhaPipelineQXKSVSCustomPolicy<true, false, 1, 1>, false>, ck_tile::Default2DEpilogue<ck_tile::Default2DEpilogueProblem<float, float, true, false, true>, void> >, ck_tile::FmhaFwdKernel<ck_tile::BlockFmhaPipelineQRKSVS<ck_tile::BlockFmhaPipelineProblem<float, float, float, float, float, float, unsigned char, float, float, float, float, ck_tile::TileFmhaShape<ck_tile::sequence<128, 64, 16, 32, 64, 32>, ck_tile::sequence<4, 1, 1>, ck_tile::sequence<16, 16, 16>, ck_tile::sequence<4, 1, 1>, ck_tile::sequence<16, 16, 16>, true>, false, ck_tile::ComposedAttention<0u, false>, ck_tile::SimplifiedGenericAttentionMask<false>, false, ck_tile::TileFmhaTraits<true, true, false, false, false, (ck_tile::BlockAttentionBiasEnum)1, false, false, false, (ck_tile::BlockAttentionQuantScaleEnum)0, -1, false, false> >, ck_tile::BlockFmhaPipelineQXKSVSCustomPolicy<true, false, 1, 1>, false>, ck_tile::Default2DEpilogue<ck_tile::Default2DEpilogueProblem<float, float, true, false, true>, void> >::FmhaFwdBatchModeKargs>(ck_tile::FmhaFwdKernel<ck_tile::BlockFmhaPipelineQRKSVS<ck_tile::BlockFmhaPipelineProblem<float, float, float, float, float, float, unsigned char, float, float, float, float, ck_tile::TileFmhaShape<ck_tile::sequence<128, 64, 16, 32, 64, 32>, ck_tile::sequence<4, 1, 1>, ck_tile::sequence<16, 16, 16>, ck_tile::sequence<4, 1, 1>, ck_tile::sequence<16, 16, 16>, true>, false, ck_tile::ComposedAttention<0u, false>, ck_tile::SimplifiedGenericAttentionMask<false>, false, ck_tile::TileFmhaTraits<true, true, false, false, false, (ck_tile::BlockAttentionBiasEnum)1, false, false, false, (ck_tile::BlockAttentionQuantScaleEnum)0, -1, false, false> >, ck_tile::BlockFmhaPipelineQXKSVSCustomPolicy<true, false, 1, 1>, false>, ck_tile::Default2DEpilogue<ck_tile::Default2DEpilogueProblem<float, float, true, false, true>, void> >::FmhaFwdBatchModeKargs) [clone .kd]",
+              "us": 48225.044
+            }
+          ]
+        }
+      ],
+      "monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 2,
+        "allowed_pid": 704319,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "attention-grid-diagnosis": {
+      "scope": "isolated grid-order ablation, no model claim",
+      "seed": 419,
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "command": [
+        "/opt/rocm/bin/hipcc",
+        "-O3",
+        "-std=c++17",
+        "-fPIC",
+        "-shared",
+        "--offload-arch=gfx90a",
+        "-I/media/IntelSSD/fireprot/runtime/ck_grid_diagnosis",
+        "-I/opt/rocm/include",
+        "runtime/ck_grid_diagnosis/probe.cpp",
+        "-o",
+        "/media/IntelSSD/fireprot/runtime/ck_grid_diagnosis/probe.so"
+      ],
+      "source_sha256": "0532415b9b6aa597e9dece62820a723b8e3b0ee151ff457fe8ddb6c12e2c79c1",
+      "original_header_sha256": "af3ae7102bb6c6439ce8501fec214571076eaec9540c1f02ac1a9d16bb0e1ef1",
+      "patched_header_sha256": "e447dc17b6e1eb710ddce73b933d6ce56139c4c4436815651e83d50dbe23d057",
+      "records": [
+        {
+          "n": 1536,
+          "batch": 512,
+          "name": "sdpa",
+          "median_ms": 34.85255432128906,
+          "values_ms": [
+            34.900970458984375,
+            34.925453186035156,
+            34.81920623779297,
+            34.78896713256836,
+            34.85917663574219,
+            34.824615478515625,
+            34.8465576171875,
+            34.89887237548828,
+            34.94208908081055,
+            34.815372467041016,
+            34.83119201660156,
+            34.858551025390625,
+            34.79519271850586,
+            34.809593200683594,
+            34.89998245239258,
+            34.90446472167969,
+            34.76062774658203,
+            34.841583251953125,
+            34.868614196777344,
+            34.937095642089844
+          ],
+          "max_abs_delta": 0.0
+        },
+        {
+          "n": 1536,
+          "batch": 512,
+          "name": "ck_original",
+          "median_ms": 48.41808319091797,
+          "values_ms": [
+            48.42537307739258,
+            48.43049240112305,
+            48.407127380371094,
+            48.44856262207031,
+            48.476402282714844,
+            48.43800735473633,
+            48.489845275878906,
+            48.400882720947266,
+            48.387123107910156,
+            48.396244049072266,
+            48.406646728515625,
+            48.37480926513672,
+            48.37704849243164,
+            48.386329650878906,
+            48.41560363769531,
+            48.41480255126953,
+            48.43688201904297,
+            48.47624206542969,
+            48.420562744140625,
+            48.42856216430664
+          ],
+          "max_abs_delta": 5.9604644775390625e-06
+        },
+        {
+          "n": 1536,
+          "batch": 512,
+          "name": "ck_query_major",
+          "median_ms": 48.09849548339844,
+          "values_ms": [
+            48.21737289428711,
+            48.251129150390625,
+            48.080257415771484,
+            48.279449462890625,
+            47.986656188964844,
+            48.14617156982422,
+            48.09385681152344,
+            48.02057647705078,
+            48.057857513427734,
+            48.28776931762695,
+            48.139610290527344,
+            48.05913543701172,
+            48.05769729614258,
+            48.01481628417969,
+            48.18377685546875,
+            47.99417495727539,
+            48.08265686035156,
+            48.28168869018555,
+            48.10313415527344,
+            48.124576568603516
+          ],
+          "max_abs_delta": 5.9604644775390625e-06
+        },
+        {
+          "n": 1536,
+          "batch": 512,
+          "name": "sdpa_repeat",
+          "median_ms": 34.84582328796387,
+          "values_ms": [
+            34.88062286376953,
+            34.7796630859375,
+            34.84638214111328,
+            34.853424072265625,
+            34.75150680541992,
+            34.83134460449219,
+            34.84174346923828,
+            34.840145111083984,
+            34.790069580078125,
+            34.85550308227539,
+            34.76798629760742,
+            34.75102615356445,
+            34.85950469970703,
+            34.853424072265625,
+            34.923824310302734,
+            34.72782897949219,
+            34.902225494384766,
+            34.84526443481445,
+            34.877586364746094,
+            34.87118911743164
+          ],
+          "max_abs_delta": 0.0
+        },
+        {
+          "n": 1000,
+          "batch": 1000,
+          "name": "sdpa",
+          "median_ms": 36.541141510009766,
+          "values_ms": [
+            35.98811721801758,
+            36.51641845703125,
+            36.43930435180664,
+            36.54410171508789,
+            36.55337905883789,
+            36.61753463745117,
+            36.58425521850586,
+            36.05739212036133,
+            36.622337341308594,
+            35.93883514404297,
+            36.58906173706055,
+            36.03099060058594,
+            36.62473678588867,
+            36.394344329833984,
+            36.38778305053711,
+            36.616416931152344,
+            36.53818130493164,
+            36.40906524658203,
+            36.69993591308594,
+            36.61289596557617
+          ],
+          "max_abs_delta": 0.0
+        },
+        {
+          "n": 1000,
+          "batch": 1000,
+          "name": "ck_original",
+          "median_ms": 32.74540901184082,
+          "values_ms": [
+            32.796844482421875,
+            32.518611907958984,
+            32.802284240722656,
+            32.76692581176758,
+            32.732688903808594,
+            32.42037582397461,
+            32.86148452758789,
+            32.62916946411133,
+            32.92244338989258,
+            32.71636962890625,
+            32.91924285888672,
+            32.920040130615234,
+            32.767887115478516,
+            32.705326080322266,
+            32.63237380981445,
+            32.68452835083008,
+            32.61829376220703,
+            32.86628341674805,
+            32.75812911987305,
+            32.69620895385742
+          ],
+          "max_abs_delta": 3.5762786865234375e-06
+        },
+        {
+          "n": 1000,
+          "batch": 1000,
+          "name": "ck_query_major",
+          "median_ms": 33.09435844421387,
+          "values_ms": [
+            32.84612274169922,
+            33.03507995605469,
+            33.0817985534668,
+            32.8515625,
+            33.606903076171875,
+            33.06739807128906,
+            33.45842742919922,
+            33.33843231201172,
+            33.24083709716797,
+            33.10691833496094,
+            33.29395294189453,
+            33.40243148803711,
+            33.30595016479492,
+            33.39155197143555,
+            32.749488830566406,
+            33.45138931274414,
+            33.0518798828125,
+            33.001800537109375,
+            33.045799255371094,
+            32.93620300292969
+          ],
+          "max_abs_delta": 3.5762786865234375e-06
+        },
+        {
+          "n": 1000,
+          "batch": 1000,
+          "name": "sdpa_repeat",
+          "median_ms": 36.56194496154785,
+          "values_ms": [
+            36.288272857666016,
+            36.58474349975586,
+            36.64073944091797,
+            36.62154006958008,
+            36.43274688720703,
+            36.562984466552734,
+            36.61546325683594,
+            36.47034454345703,
+            36.6623420715332,
+            36.585384368896484,
+            36.62682342529297,
+            36.46026611328125,
+            36.6140251159668,
+            36.56090545654297,
+            36.611305236816406,
+            36.542823791503906,
+            36.252750396728516,
+            36.52762222290039,
+            36.50650405883789,
+            36.50698471069336
+          ],
+          "max_abs_delta": 0.0
+        }
+      ],
+      "monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 7,
+        "allowed_pid": 705500,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "attention-mfma32-unswizzled-validation": {
+      "max_abs_delta": 6.079673767089844e-06,
+      "passed": true
+    },
+    "attention-bias-padding-combined": {
+      "seed": 419,
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "shape": [
+        512,
+        4,
+        1536,
+        32
+      ],
+      "bias_padding": 16,
+      "scope": "complete operator including padded bias copy and output allocation",
+      "records": [
+        {
+          "name": "sdpa",
+          "median_ms": 34.862388610839844,
+          "values_ms": [
+            34.975196838378906,
+            34.95087432861328,
+            34.85856246948242,
+            34.901119232177734,
+            34.694549560546875,
+            34.856143951416016,
+            34.873268127441406,
+            34.86574935913086,
+            34.90288162231445,
+            34.88959884643555,
+            34.8563117980957,
+            34.85247039794922,
+            34.830711364746094,
+            34.873748779296875,
+            34.865108489990234,
+            34.92238235473633,
+            34.78558349609375,
+            34.74190902709961,
+            34.761112213134766,
+            34.85966873168945
+          ],
+          "max_abs_delta": 0.0
+        },
+        {
+          "name": "probe",
+          "median_ms": 39.39218330383301,
+          "values_ms": [
+            39.55538558959961,
+            39.42546463012695,
+            39.461944580078125,
+            39.285308837890625,
+            39.31394958496094,
+            39.44450378417969,
+            39.46562576293945,
+            39.363704681396484,
+            39.315860748291016,
+            39.51185607910156,
+            39.580501556396484,
+            39.39602279663086,
+            39.388343811035156,
+            39.326904296875,
+            39.407859802246094,
+            39.35441970825195,
+            39.378265380859375,
+            39.5318603515625,
+            39.32098388671875,
+            39.31794357299805
+          ],
+          "max_abs_delta": 5.9604644775390625e-06
+        },
+        {
+          "name": "mf32_m128",
+          "median_ms": 41.70811653137207,
+          "values_ms": [
+            41.71260070800781,
+            41.71131896972656,
+            41.712440490722656,
+            41.69995880126953,
+            41.7066764831543,
+            41.707794189453125,
+            41.6855583190918,
+            41.702518463134766,
+            41.6870002746582,
+            41.70683670043945,
+            41.71531677246094,
+            41.719635009765625,
+            41.72444152832031,
+            41.708438873291016,
+            41.70092010498047,
+            41.728759765625,
+            41.83435821533203,
+            41.70620346069336,
+            41.67963409423828,
+            41.71787643432617
+          ],
+          "max_abs_delta": 6.079673767089844e-06
+        },
+        {
+          "name": "mf32_m64",
+          "median_ms": 43.86189651489258,
+          "values_ms": [
+            43.78757858276367,
+            43.82949447631836,
+            43.860374450683594,
+            43.866294860839844,
+            43.83973693847656,
+            43.8694953918457,
+            43.8850212097168,
+            43.91429901123047,
+            43.840545654296875,
+            43.86341857910156,
+            43.8674201965332,
+            43.87989807128906,
+            43.766780853271484,
+            43.87973403930664,
+            43.83174133300781,
+            43.81669998168945,
+            43.8344612121582,
+            43.952056884765625,
+            43.85894012451172,
+            43.9091796875
+          ],
+          "max_abs_delta": 6.079673767089844e-06
+        },
+        {
+          "name": "mf16_m64",
+          "median_ms": 41.39693069458008,
+          "values_ms": [
+            41.45644760131836,
+            41.347652435302734,
+            41.413726806640625,
+            41.334049224853516,
+            41.401729583740234,
+            41.39581298828125,
+            41.44108963012695,
+            41.37245178222656,
+            41.39020919799805,
+            41.40940856933594,
+            41.41660690307617,
+            41.40060806274414,
+            41.3574104309082,
+            41.41740798950195,
+            41.36637496948242,
+            41.38236999511719,
+            41.398048400878906,
+            41.36812973022461,
+            41.410213470458984,
+            41.370052337646484
+          ],
+          "max_abs_delta": 5.9604644775390625e-06
+        },
+        {
+          "name": "sdpa_repeat",
+          "median_ms": 34.80159378051758,
+          "values_ms": [
+            34.8727912902832,
+            34.86015319824219,
+            34.80943298339844,
+            34.77167510986328,
+            34.812477111816406,
+            34.7692756652832,
+            34.74895477294922,
+            34.86335372924805,
+            34.77535629272461,
+            34.775672912597656,
+            34.6910400390625,
+            34.85615158081055,
+            34.82943344116211,
+            34.79551315307617,
+            34.810874938964844,
+            34.75935745239258,
+            34.807674407958984,
+            34.85679244995117,
+            34.75727462768555,
+            34.74543762207031
+          ],
+          "max_abs_delta": 0.0
+        }
+      ],
+      "monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 6,
+        "allowed_pid": 717045,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "attention-mfma32-diagnosis": {
+      "seed": 419,
+      "dtype": "float32",
+      "tf32": false,
+      "shape": [
+        512,
+        4,
+        1536,
+        32
+      ],
+      "warmups": 5,
+      "repetitions": 20,
+      "scope": "FP32 CK Tile MFMA shape diagnostic; no model claim",
+      "source_sha256": "a7837947a1de75e9bddeafd31e32e25acf8f62f69b9ce10c7b82a21c86b64c9d",
+      "builds": [
+        {
+          "name": "m128n64w4_mf32",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a",
+            "-Rpass-analysis=kernel-resource-usage",
+            "-I/opt/rocm/include",
+            "-DBM=128",
+            "-DBN=64",
+            "-DWM=4",
+            "runtime/ck_mfma32_diagnosis/probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/ck_mfma32_diagnosis/m128n64w4_mf32.so"
+          ],
+          "returncode": 1
+        },
+        {
+          "name": "m64n64w2_mf32",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a",
+            "-Rpass-analysis=kernel-resource-usage",
+            "-I/opt/rocm/include",
+            "-DBM=64",
+            "-DBN=64",
+            "-DWM=2",
+            "runtime/ck_mfma32_diagnosis/probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/ck_mfma32_diagnosis/m64n64w2_mf32.so"
+          ],
+          "returncode": 1
+        }
+      ],
+      "records": [
+        {
+          "name": "sdpa",
+          "median_ms": 34.87277793884277,
+          "values_ms": [
+            34.78799819946289,
+            34.9649543762207,
+            34.93293380737305,
+            34.795654296875,
+            34.8729362487793,
+            34.98173522949219,
+            34.831974029541016,
+            34.87309646606445,
+            34.9124641418457,
+            34.85438537597656,
+            34.907501220703125,
+            34.78510284423828,
+            34.90398406982422,
+            34.860145568847656,
+            34.94813919067383,
+            34.90861892700195,
+            34.8214225769043,
+            34.818702697753906,
+            34.8347053527832,
+            34.87261962890625
+          ],
+          "max_abs_delta": 0.0
+        },
+        {
+          "name": "sdpa_repeat",
+          "median_ms": 34.88302421569824,
+          "values_ms": [
+            34.82767105102539,
+            34.820953369140625,
+            34.94205856323242,
+            34.92926025390625,
+            34.92878341674805,
+            34.933265686035156,
+            34.88206481933594,
+            34.85230255126953,
+            34.92622375488281,
+            34.8780632019043,
+            34.90270233154297,
+            34.863502502441406,
+            34.85166549682617,
+            34.90526580810547,
+            34.84494400024414,
+            34.869422912597656,
+            34.899024963378906,
+            34.85646438598633,
+            34.90718460083008,
+            34.88398361206055
+          ],
+          "max_abs_delta": 0.0
+        }
+      ],
+      "monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 2,
+        "allowed_pid": 710473,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "attention-mfma32-corrected": {
+      "seed": 419,
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "scope": "complete attention operator; bias packing and output allocation included; warm cache; compilation excluded",
+      "library_sha256": "2ebe5e4508ec5b91ffb5de9f1270bcf1bae43cca2ce46e444eb2e2c98fe1dcb6",
+      "source_sha256": "43fdd99b14cb788b48ce74ea7269d5891f0117733aabc9ef0e17a317c84bee9b",
+      "records": [
+        {
+          "n": 1536,
+          "batch": 512,
+          "name": "sdpa",
+          "median_ms": 34.85446357727051,
+          "values_ms": [
+            34.88807678222656,
+            34.85079574584961,
+            34.848533630371094,
+            34.858131408691406,
+            34.924346923828125,
+            34.912506103515625,
+            34.84822082519531,
+            34.788700103759766,
+            34.90372848510742,
+            34.895729064941406,
+            34.875240325927734,
+            34.82435989379883,
+            34.86116027832031,
+            34.90243911743164,
+            34.726280212402344,
+            34.79187774658203,
+            34.7665901184082,
+            34.83027267456055,
+            34.74244689941406,
+            34.864044189453125
+          ],
+          "max_abs_delta": 0.0
+        },
+        {
+          "n": 1536,
+          "batch": 512,
+          "name": "ck_mf16",
+          "median_ms": 48.37991714477539,
+          "values_ms": [
+            48.345767974853516,
+            48.41744613647461,
+            48.33967208862305,
+            48.40174865722656,
+            48.38255310058594,
+            48.34271240234375,
+            48.48942947387695,
+            48.41470718383789,
+            48.380001068115234,
+            48.416481018066406,
+            48.34751510620117,
+            48.376956939697266,
+            48.3846321105957,
+            48.341270446777344,
+            48.36447525024414,
+            48.40303421020508,
+            48.37983322143555,
+            48.36335372924805,
+            48.37167739868164,
+            48.41983413696289
+          ],
+          "max_abs_delta": 5.9604644775390625e-06
+        },
+        {
+          "n": 1536,
+          "batch": 512,
+          "name": "ck_mf32",
+          "median_ms": 87.54223251342773,
+          "values_ms": [
+            87.56759643554688,
+            87.49159240722656,
+            87.56007385253906,
+            87.58856201171875,
+            87.55911254882812,
+            87.52679443359375,
+            87.5147933959961,
+            87.52039337158203,
+            87.56359100341797,
+            87.56023406982422,
+            87.53783416748047,
+            87.546630859375,
+            87.52999877929688,
+            87.53751373291016,
+            87.60391235351562,
+            87.59175109863281,
+            87.35559844970703,
+            87.58360290527344,
+            87.49687957763672,
+            87.53191375732422
+          ],
+          "max_abs_delta": 6.079673767089844e-06
+        },
+        {
+          "n": 1536,
+          "batch": 512,
+          "name": "sdpa_repeat",
+          "median_ms": 34.812355041503906,
+          "values_ms": [
+            34.85619354248047,
+            34.78083419799805,
+            34.9139518737793,
+            34.88195037841797,
+            34.85091018676758,
+            34.79427719116211,
+            34.80835723876953,
+            34.806915283203125,
+            34.8705940246582,
+            34.874916076660156,
+            34.80036163330078,
+            34.78260040283203,
+            34.75811767578125,
+            34.812355041503906,
+            34.86323547363281,
+            34.6713981628418,
+            34.787715911865234,
+            34.812355041503906,
+            34.82435607910156,
+            34.823875427246094
+          ],
+          "max_abs_delta": 0.0
+        },
+        {
+          "n": 1000,
+          "batch": 1000,
+          "name": "sdpa",
+          "median_ms": 36.53423309326172,
+          "values_ms": [
+            36.00224685668945,
+            36.00880813598633,
+            36.59470748901367,
+            36.66398620605469,
+            36.02560806274414,
+            36.568790435791016,
+            36.440155029296875,
+            36.5396728515625,
+            36.606231689453125,
+            36.43007278442383,
+            35.99936294555664,
+            36.66478729248047,
+            36.64510726928711,
+            36.560150146484375,
+            36.63998794555664,
+            36.52159118652344,
+            35.938087463378906,
+            36.52879333496094,
+            36.551353454589844,
+            36.34847640991211
+          ],
+          "max_abs_delta": 0.0
+        },
+        {
+          "n": 1000,
+          "batch": 1000,
+          "name": "ck_mf16",
+          "median_ms": 32.73737144470215,
+          "values_ms": [
+            32.66105651855469,
+            32.483619689941406,
+            32.9338493347168,
+            32.942806243896484,
+            32.750492095947266,
+            33.066802978515625,
+            32.72425079345703,
+            32.487300872802734,
+            32.79609298706055,
+            32.69305419921875,
+            32.75225067138672,
+            32.8503303527832,
+            32.67017364501953,
+            32.383460998535156,
+            32.75385284423828,
+            32.891929626464844,
+            32.43370056152344,
+            32.481380462646484,
+            32.75385284423828,
+            32.44105911254883
+          ],
+          "max_abs_delta": 3.5762786865234375e-06
+        },
+        {
+          "n": 1000,
+          "batch": 1000,
+          "name": "ck_mf32",
+          "median_ms": 34.27133369445801,
+          "values_ms": [
+            34.16053771972656,
+            34.337650299072266,
+            34.15525436401367,
+            34.04518127441406,
+            34.410606384277344,
+            34.21845626831055,
+            34.34469223022461,
+            34.587886810302734,
+            34.19013595581055,
+            34.421966552734375,
+            34.31733322143555,
+            34.056060791015625,
+            34.384368896484375,
+            34.22533416748047,
+            34.03813934326172,
+            34.477169036865234,
+            34.20805740356445,
+            34.526607513427734,
+            34.334930419921875,
+            34.03334045410156
+          ],
+          "max_abs_delta": 3.5762786865234375e-06
+        },
+        {
+          "n": 1000,
+          "batch": 1000,
+          "name": "sdpa_repeat",
+          "median_ms": 36.55607223510742,
+          "values_ms": [
+            36.66463088989258,
+            36.087528228759766,
+            35.997928619384766,
+            36.55439376831055,
+            36.69135284423828,
+            36.511356353759766,
+            36.577110290527344,
+            36.63279342651367,
+            36.5577507019043,
+            36.329280853271484,
+            36.6039924621582,
+            36.169925689697266,
+            36.5742301940918,
+            36.200645446777344,
+            36.586551666259766,
+            36.67631149291992,
+            36.52799606323242,
+            36.48063659667969,
+            36.39535903930664,
+            36.596153259277344
+          ],
+          "max_abs_delta": 0.0
+        }
+      ],
+      "monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 8,
+        "allowed_pid": 713781,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "attention-tile1536-diagnosis": {
+      "seed": 419,
+      "dtype": "float32",
+      "tf32": false,
+      "shape": [
+        512,
+        4,
+        1536,
+        32
+      ],
+      "warmups": 5,
+      "repetitions": 20,
+      "scope": "operator diagnostic only; unchanged upstream CK headers",
+      "source_sha256": "af6c5cdc188b2bffe26b0edfa0fc7a5960595c1088630d19556155134ad6fced",
+      "builds": [
+        {
+          "name": "m64n64w2",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a",
+            "-I/opt/rocm/include",
+            "-DBM=64",
+            "-DBN=64",
+            "-DWM=2",
+            "fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/ck_tile1536_diagnosis/m64n64w2.so"
+          ],
+          "returncode": 0
+        },
+        {
+          "name": "m64n128w2",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a",
+            "-I/opt/rocm/include",
+            "-DBM=64",
+            "-DBN=128",
+            "-DWM=2",
+            "fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/ck_tile1536_diagnosis/m64n128w2.so"
+          ],
+          "returncode": 0
+        },
+        {
+          "name": "m128n128w4",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a",
+            "-I/opt/rocm/include",
+            "-DBM=128",
+            "-DBN=128",
+            "-DWM=4",
+            "fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/ck_tile1536_diagnosis/m128n128w4.so"
+          ],
+          "returncode": 0
+        },
+        {
+          "name": "m128n64w2",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a",
+            "-I/opt/rocm/include",
+            "-DBM=128",
+            "-DBN=64",
+            "-DWM=2",
+            "fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/ck_tile1536_diagnosis/m128n64w2.so"
+          ],
+          "returncode": 0
+        }
+      ],
+      "records": [
+        {
+          "name": "sdpa",
+          "median_ms": 34.877817153930664,
+          "values_ms": [
+            34.9294319152832,
+            34.9577522277832,
+            34.899017333984375,
+            34.89197540283203,
+            34.84142303466797,
+            34.84014129638672,
+            34.86125564575195,
+            34.89741516113281,
+            34.884456634521484,
+            34.90461349487305,
+            34.843345642089844,
+            34.907344818115234,
+            34.871177673339844,
+            34.9254150390625,
+            34.859031677246094,
+            34.81663131713867,
+            34.791015625,
+            34.83613586425781,
+            34.91853713989258,
+            34.847015380859375
+          ],
+          "max_abs_delta": 0.0
+        },
+        {
+          "name": "m64n64w2",
+          "median_ms": 45.01650047302246,
+          "values_ms": [
+            45.0133056640625,
+            45.06721878051758,
+            45.01969528198242,
+            44.94321823120117,
+            45.00273513793945,
+            45.10017013549805,
+            44.808982849121094,
+            45.23440933227539,
+            44.85441970825195,
+            45.133453369140625,
+            44.863224029541016,
+            45.243377685546875,
+            44.80914306640625,
+            45.14241409301758,
+            45.1627311706543,
+            44.994895935058594,
+            44.908660888671875,
+            45.16753005981445,
+            45.03761672973633,
+            44.94913864135742
+          ],
+          "max_abs_delta": 5.9604644775390625e-06
+        },
+        {
+          "name": "m64n128w2",
+          "median_ms": 48.37056350708008,
+          "values_ms": [
+            48.4064826965332,
+            48.364402770996094,
+            48.35432434082031,
+            48.39255905151367,
+            48.35320281982422,
+            48.38359832763672,
+            48.38759994506836,
+            48.38407897949219,
+            48.403438568115234,
+            48.35688400268555,
+            48.403282165527344,
+            48.357688903808594,
+            48.3344841003418,
+            48.39303970336914,
+            48.360084533691406,
+            48.3658447265625,
+            48.3704833984375,
+            48.370643615722656,
+            48.36296463012695,
+            48.37560272216797
+          ],
+          "max_abs_delta": 3.6954879760742188e-06
+        },
+        {
+          "name": "m128n128w4",
+          "median_ms": 50.68402099609375,
+          "values_ms": [
+            50.7363395690918,
+            50.60946273803711,
+            50.59602355957031,
+            50.65761947631836,
+            50.71730041503906,
+            50.59730529785156,
+            50.6363410949707,
+            50.70418167114258,
+            50.68706130981445,
+            50.71234130859375,
+            50.68561935424805,
+            50.614105224609375,
+            50.691062927246094,
+            50.693145751953125,
+            50.695220947265625,
+            50.65826416015625,
+            50.68242263793945,
+            50.76946258544922,
+            50.63874435424805,
+            50.59010314941406
+          ],
+          "max_abs_delta": 3.6954879760742188e-06
+        },
+        {
+          "name": "m128n64w2",
+          "median_ms": 55.02622413635254,
+          "values_ms": [
+            55.09621810913086,
+            54.9936637878418,
+            55.019744873046875,
+            54.96102523803711,
+            54.7875862121582,
+            55.472686767578125,
+            55.24470138549805,
+            54.931907653808594,
+            55.17926025390625,
+            54.7088737487793,
+            55.130619049072266,
+            55.13414001464844,
+            55.36693572998047,
+            54.95622253417969,
+            55.0327033996582,
+            54.72711181640625,
+            55.41717529296875,
+            54.72183609008789,
+            54.55559539794922,
+            55.57508850097656
+          ],
+          "max_abs_delta": 5.9604644775390625e-06
+        },
+        {
+          "name": "sdpa_repeat",
+          "median_ms": 34.82991027832031,
+          "values_ms": [
+            34.731990814208984,
+            34.64431381225586,
+            34.856788635253906,
+            34.92910385131836,
+            34.80094909667969,
+            34.838226318359375,
+            34.762550354003906,
+            34.87854766845703,
+            34.834228515625,
+            34.8867073059082,
+            34.822227478027344,
+            34.76911163330078,
+            34.825592041015625,
+            34.79423141479492,
+            34.86430740356445,
+            34.91150665283203,
+            34.846073150634766,
+            34.783992767333984,
+            34.758872985839844,
+            34.91838836669922
+          ],
+          "max_abs_delta": 0.0
+        }
+      ],
+      "monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 6,
+        "allowed_pid": 705938,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    }
+  },
+  "diagnostic_sources": {
+    "bias_pad16.cpp": {
+      "text": "// FP32 CK Tile attention candidate. AMD CK headers are MIT licensed.\n// Exact observed N=1000/B=1000 or N=1536/B=512, H=4, D=32; no explicit mask.\n#include \"ck_tile/core.hpp\"\n#include \"ck_tile/host.hpp\"\n#include \"ck_tile/ops/gemm.hpp\"\n#include \"ck_tile/ops/fmha.hpp\"\n#include \"ck_tile/ops/epilogue/default_2d_epilogue.hpp\"\n#include \"ck_tile/ops/fmha/block/variants.hpp\"\n#include <tuple>\nnamespace ct = ck_tile;\n#ifndef BM\n#define BM 128\n#endif\n#ifndef BN\n#define BN 64\n#endif\n#ifndef WM\n#define WM 4\n#endif\nusing Shape = ct::TileFmhaShape<ct::sequence<BM,BN,16,32,BN,32>,\n    ct::sequence<WM,1,1>,ct::sequence<16,16,16>,\n    ct::sequence<WM,1,1>,ct::sequence<16,16,16>,true>;\nusing Traits = ct::TileFmhaTraits<true,true,false,false,false,\n    ct::BlockAttentionBiasEnum::ELEMENTWISE_BIAS,false,false,false,\n    ct::BlockAttentionQuantScaleEnum::NO_SCALE>;\nusing Variant = ct::ComposedAttention<0, CK_TILE_FMHA_FWD_FAST_EXP2>;\nusing Problem = ct::BlockFmhaPipelineProblem<float,float,float,float,float,float,\n    uint8_t,float,float,float,float,Shape,false,Variant,\n    ct::SimplifiedGenericAttentionMask<false>,false,Traits>;\nusing Pipeline = ct::BlockFmhaPipelineQRKSVS<Problem>;\nusing Epilogue = ct::Default2DEpilogue<ct::Default2DEpilogueProblem<float,float,true,false>>;\nusing Kernel = ct::FmhaFwdKernel<Pipeline,Epilogue>;\nextern \"C\" int ck_attention(float* q,float* k,float* v,float* b,float* o,int batch,int n,void* stream) {\n    if(!((batch==1000 && n==1000) || (batch==512 && n==1536))) return 2;\n    auto args=Kernel::MakeKargs(q,k,v,b,nullptr,nullptr,nullptr,nullptr,nullptr,o,\n        n,n,32,32,4,1,1.0f,0.0f,\n        128,128,128,n+16,0,128, 0,0,0,\n        32,32,32,n*(n+16),0,0,32, 0,0,0,\n        n*128,n*128,n*128,0,0,0,n*128, 0,0,0,\n        -1,-1,0,0,0.0f,false,std::tuple<uint64_t,uint64_t>{0,0},0,0);\n    ct::stream_config config{static_cast<hipStream_t>(stream),false};\n    auto launch=ct::make_kernel<Kernel::kBlockPerCu>(Kernel{},Kernel::GridSize(batch,4,n,32,false),Kernel::BlockSize(),0,args);\n    launch(config);\n    return static_cast<int>(hipGetLastError());\n}\n",
+      "sha256": "f12532169283976ceef7274d0f420fa26f6a81bb87cf7c62b54409ac33b39a2c",
+      "verification": "Reconstructed from pinned source and experiment edits; SHA256 equals measurement record."
+    },
+    "mfma32_unswizzled.cpp": {
+      "text": "// FP32 CK Tile attention candidate. AMD CK headers are MIT licensed.\n// Exact observed N=1000/B=1000 or N=1536/B=512, H=4, D=32; no explicit mask.\n#include \"ck_tile/core.hpp\"\n#include \"ck_tile/host.hpp\"\n#include \"ck_tile/ops/gemm.hpp\"\n#include \"ck_tile/ops/fmha.hpp\"\n#include \"ck_tile/ops/epilogue/default_2d_epilogue.hpp\"\n#include \"ck_tile/ops/fmha/block/variants.hpp\"\n#include <tuple>\nnamespace ck_tile::impl::warp_gemm_dispatcher {\ntemplate<> struct Dispatcher<float,float,float,32,32,8,true,false> {\n using Type = WarpGemmImpl<WarpGemmAttributeMfmaIterateKAndTransposedCDistribution<\n  WarpGemmAttributeMfmaImplF32F32F32M32N32K2<WGAttrCtlEnum::Default_>,4>>;\n};\ntemplate<> struct Dispatcher<float,float,float,32,32,8,true,true> {\n using Type = WarpGemmImpl<WarpGemmAttributeMfmaIterateKAndTransposedCDistribution<\n  WarpGemmAttributeMfmaImplF32F32F32M32N32K2<WGAttrCtlEnum::Default_>,4>>;\n};\n}\nnamespace ct = ck_tile;\n#ifndef BM\n#define BM 128\n#endif\n#ifndef BN\n#define BN 64\n#endif\n#ifndef WM\n#define WM 4\n#endif\nusing Shape = ct::TileFmhaShape<ct::sequence<BM,BN,16,32,BN,32>,\n    ct::sequence<WM,1,1>,ct::sequence<32,32,8>,\n    ct::sequence<WM,1,1>,ct::sequence<32,32,8>,true>;\nusing Traits = ct::TileFmhaTraits<true,true,false,false,false,\n    ct::BlockAttentionBiasEnum::ELEMENTWISE_BIAS,false,false,false,\n    ct::BlockAttentionQuantScaleEnum::NO_SCALE>;\nusing Variant = ct::ComposedAttention<0, CK_TILE_FMHA_FWD_FAST_EXP2>;\nusing Problem = ct::BlockFmhaPipelineProblem<float,float,float,float,float,float,\n    uint8_t,float,float,float,float,Shape,false,Variant,\n    ct::SimplifiedGenericAttentionMask<false>,false,Traits>;\nusing Pipeline = ct::BlockFmhaPipelineQRKSVS<Problem>;\nusing Epilogue = ct::Default2DEpilogue<ct::Default2DEpilogueProblem<float,float,true,false>>;\nusing Kernel = ct::FmhaFwdKernel<Pipeline,Epilogue>;\nextern \"C\" int ck_attention(float* q,float* k,float* v,float* b,float* o,int batch,int n,void* stream) {\n    if(!((batch==1000 && n==1000) || (batch==512 && n==1536))) return 2;\n    auto args=Kernel::MakeKargs(q,k,v,b,nullptr,nullptr,nullptr,nullptr,nullptr,o,\n        n,n,32,32,4,1,1.0f,0.0f,\n        128,128,128,n,0,128, 0,0,0,\n        32,32,32,n*n,0,0,32, 0,0,0,\n        n*128,n*128,n*128,0,0,0,n*128, 0,0,0,\n        -1,-1,0,0,0.0f,false,std::tuple<uint64_t,uint64_t>{0,0},0,0);\n    ct::stream_config config{static_cast<hipStream_t>(stream),false};\n    auto launch=ct::make_kernel<Kernel::kBlockPerCu>(Kernel{},Kernel::GridSize(batch,4,n,32,false),Kernel::BlockSize(),0,args);\n    launch(config);\n    return static_cast<int>(hipGetLastError());\n}\n",
+      "sha256": "43fdd99b14cb788b48ce74ea7269d5891f0117733aabc9ef0e17a317c84bee9b",
+      "verification": "Reconstructed from pinned source and experiment edits; SHA256 equals measurement record."
+    }
+  },
+  "failures": [
+    "Bare FP32 MFMA32 shapes fail compilation because transposed dispatcher specializations are absent.",
+    "Initial SwizzleB adapter compiled but failed numerical comparison: maximum absolute error 2.21172.",
+    "Unswizzled MFMA32 adapter passed numerical comparison but regressed N1536 to 87.54 ms; padding reduced it to 41.71 ms, still slower than MFMA16 plus padding."
+  ],
+  "integrated_candidate": {
+    "artifact": "outputs/benchmarks/long1536-attention-padded-candidate.json",
+    "retrieval": "Complete JSON still on DiamondHill; SSH outage prevented retrieval. Summary captured from successful CLI stdout.",
+    "command": "HIP_VISIBLE_DEVICES=6 PYTHONPATH=.:Protenix python -m benchmarks.protenix.benchmark_attention --length 1536 --include-ck-tile --output outputs/benchmarks/long1536-attention-padded-candidate.json",
+    "exit_code": 0,
+    "seed": 419,
+    "warmups": 5,
+    "repetitions": 20,
+    "records": [
+      {
+        "name": "direct_sdpa",
+        "median_ms": 34.83759307861328,
+        "p95_ms": 34.92911148071289
+      },
+      {
+        "name": "ck_tile_attention",
+        "median_ms": 39.41522407531738,
+        "p95_ms": 39.548824310302734,
+        "max_abs_delta": 5.9604644775390625e-06,
+        "peak_allocated_bytes": 2089156608
+      },
+      {
+        "name": "direct_sdpa_repeat",
+        "median_ms": 34.828792572021484,
+        "p95_ms": 34.899513244628906
+      }
+    ],
+    "source_sha256": {
+      "benchmarks/protenix/benchmark_attention.py": "425365c5f9a0e039a2e7f49eaebf57d413e0fc35bbf1f3bb53d485f39cb2ec65",
+      "fireprot/backends/amd/ck_attention.py": "7e4e11134bb90ad8a39d2fbd15ea65f286e3cb98673704a3a3d8c05d3fa7d042",
+      "fireprot/backends/amd/csrc/fireprot_ck_attention.cpp": "bf0d12eface75e642675f6149709439c53c2592021fe1f8cabdbe7f150e22cbd"
+    }
+  },
+  "tests": {
+    "local": "100 passed, 14 skipped",
+    "gpu6": "113 passed, 1 skipped",
+    "environment": "PYTHONPATH=.:Protenix LAYERNORM_TYPE=torch; GPU also HIP_VISIBLE_DEVICES=6 FIREPROT_RUN_HIP_TESTS=1",
+    "scope": "pytest tests; includes explicit Torch reference for full B512 N1536 attention on a nondefault stream"
+  },
+  "remaining": [
+    "Padded CK full-model native-agreement run has not started because DiamondHill SSH became unreachable.",
+    "Warm repeated N1536 model latency comparisons remain unmeasured."
+  ]
+}

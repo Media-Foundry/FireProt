@@ -132,7 +132,13 @@ def attention(*, module: Any, q: Any, k: Any, v: Any, biases: Any, native: Any) 
     if entry is None:
         return ta._direct_sdpa(module=module, q=q, k=k, v=v, biases=biases, native=native)
     with torch.cuda.device(q.device):
-        bias = biases[0].contiguous()
+        if q.shape[2] == 1536:
+            # Break the measured N1536 bias row-stride performance cliff.
+            # The C ABI uses the same physical row stride, 1536 + 16.
+            bias = torch.empty((1, 4, 1536, 1552), device=q.device, dtype=q.dtype)
+            bias[..., :1536].copy_(biases[0])
+        else:
+            bias = biases[0].contiguous()
         output = torch.empty_like(q)
         status = entry(q.data_ptr(), k.data_ptr(), v.data_ptr(), bias.data_ptr(),
                        output.data_ptr(), q.shape[0], q.shape[2], torch.cuda.current_stream(q.device).cuda_stream)
@@ -144,4 +150,4 @@ def attention(*, module: Any, q: Any, k: Any, v: Any, biases: Any, native: Any) 
 registry.register(operation=ta.OPERATION, name=IMPLEMENTATION, function=attention,
                   supports=_supports, priority=30, version="1")
 registry.register(operation=ta.OPERATION, name=LONG1536_IMPLEMENTATION, function=attention,
-                  supports=_supports_long1536, priority=30, version="experimental-1")
+                  supports=_supports_long1536, priority=30, version="experimental-2")

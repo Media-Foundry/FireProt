@@ -22,11 +22,15 @@ AtlasFold, OpenFold, ESMFold, Base-model coverage, BF16 promotion, additional lo
 ## Experimental 1,536-residue workload
 
 A real **1,536-residue** input and opt-in attention experiments are now
-available. SDPA and padded CK have passed full-model native-agreement validation. Padding
+available. SDPA, padded CK, and packed triangle multiplication have passed full-model native-agreement validation. Padding
 the physical CK bias row stride reduced its operator time from about 48.4
 to 39.4 ms, but SDPA remains faster at about 34.8 ms; CK is therefore not
-promoted for this bucket. Controlled warm model speedups at N1536 remain
-unmeasured. See [long-sequence diagnosis](docs/protenix-long1536.md).
+promoted for this bucket. A same-source comparison now measures **137.709 s
+native, 62.396 s with SDPA, and 41.771 s with SDPA plus packed triangle
+multiplication (3.297x overall)**. This uses Mini-default FP32, C4/S1,
+one warmup and three measured calls on GPU 7. Further CK batch scheduling
+reaches 37.93 ms but still trails SDPA; it remains a standalone experiment.
+See [long-sequence diagnosis](docs/protenix-long1536.md).
 
 ## Verified 1,000-token MI250 result
 

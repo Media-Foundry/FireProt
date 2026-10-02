@@ -55,6 +55,70 @@ def _shape_id(dtype: str, kind: str, shape: list[int]) -> str:
     return f"{dtype}:{kind}:" + "x".join(str(value) for value in shape)
 
 
+def _observed_shape(kind: str, input_shapes: list[Any]) -> list[int] | None:
+    if kind == "mm" and len(input_shapes) >= 2:
+        left, right = input_shapes[:2]
+        if len(left) == 2 and len(right) == 2 and left[1] == right[0]:
+            return [left[0], left[1], right[1]]
+    elif kind == "bmm" and len(input_shapes) >= 2:
+        left, right = input_shapes[:2]
+        if (
+            len(left) == 3
+            and len(right) == 3
+            and left[0] == right[0]
+            and left[2] == right[1]
+        ):
+            return [left[0], left[1], left[2], right[2]]
+    elif kind == "addmm" and len(input_shapes) >= 3:
+        left, right = input_shapes[1:3]
+        if len(left) == 2 and len(right) == 2 and left[1] == right[0]:
+            return [left[0], left[1], right[1]]
+    return None
+
+
+def _extract_observed_shapes(
+    path: pathlib.Path, *, minimum_calls: int = 1
+) -> list[dict[str, Any]]:
+    """Convert profiler operator rows into a complete BLAS shape matrix."""
+    rows = _json_load(path)
+    if not isinstance(rows, list):
+        raise ValueError(f"Profiler operators must be a list: {path}")
+    observed: dict[tuple[str, tuple[int, ...]], dict[str, Any]] = {}
+    for row in rows:
+        key = row.get("key")
+        if key not in {"aten::mm", "aten::bmm", "aten::addmm"}:
+            continue
+        calls = int(row.get("count", 0))
+        if calls < minimum_calls:
+            continue
+        kind = key.removeprefix("aten::")
+        shape = _observed_shape(kind, row.get("input_shapes", []))
+        if shape is None:
+            continue
+        identifier = (kind, tuple(shape))
+        record = observed.setdefault(
+            identifier,
+            {
+                "kind": kind,
+                "shape": shape,
+                "observed_count": 0,
+                "observed_device_time_us": 0.0,
+            },
+        )
+        record["observed_count"] += calls
+        record["observed_device_time_us"] += float(
+            row.get("self_device_time_total_us", 0.0)
+        )
+    return sorted(
+        observed.values(),
+        key=lambda item: (
+            -item["observed_device_time_us"],
+            item["kind"],
+            item["shape"],
+        ),
+    )
+
+
 def _measure(torch: Any, function: Any, warmups: int, iterations: int) -> dict[str, Any]:
     for _ in range(warmups):
         function()
@@ -114,6 +178,14 @@ def _worker(spec_path: pathlib.Path) -> int:
                     "kind": kind,
                     "shape": shape,
                     "backend": spec["backend"],
+                    **{
+                        key: shape_record[key]
+                        for key in (
+                            "observed_count",
+                            "observed_device_time_us",
+                        )
+                        if key in shape_record
+                    },
                 }
                 try:
                     if kind == "mm":
@@ -132,6 +204,13 @@ def _worker(spec_path: pathlib.Path) -> int:
                         )
                         function = lambda: torch.bmm(left, right)
                         iterations = spec["benchmark"]["bmm_iterations"]
+                    elif kind == "addmm":
+                        m, k, n = shape
+                        bias = torch.randn(n, device="cuda", dtype=dtype)
+                        left = torch.randn(m, k, device="cuda", dtype=dtype)
+                        right = torch.randn(k, n, device="cuda", dtype=dtype)
+                        function = lambda: torch.addmm(bias, left, right)
+                        iterations = spec["benchmark"]["iterations"]
                     else:
                         raise ValueError(f"Unknown operation kind: {kind}")
                     record.update(
@@ -239,9 +318,23 @@ def _select_summary(
         decision = select_blas_backend(
             native, candidates, minimum_speedup=minimum_speedup
         )
+        selected_measurement = (
+            native
+            if decision["selected"] == native.backend
+            else candidates[decision["selected"]]
+        )
+        observed_count = int(native_record.get("observed_count", 0))
+        projected_savings_us = observed_count * max(
+            0.0, native.median_us - selected_measurement.median_us
+        )
         decisions.append(
             {
                 "id": identifier,
+                "observed_count": observed_count or None,
+                "observed_device_time_us": native_record.get(
+                    "observed_device_time_us"
+                ),
+                "projected_savings_us": projected_savings_us,
                 "native": native_record,
                 "candidates": {
                     key: {
@@ -264,6 +357,12 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--output-dir", type=pathlib.Path, required=True)
     parser.add_argument("--backend", action="append", choices=BACKENDS)
     parser.add_argument("--seed", type=int, default=101)
+    parser.add_argument(
+        "--operators-json",
+        type=pathlib.Path,
+        help="torch-operators.json from profile_inference.py; replaces config shapes",
+    )
+    parser.add_argument("--minimum-observed-calls", type=int, default=1)
     parser.add_argument("--_worker-spec", type=pathlib.Path)
     return parser.parse_args()
 
@@ -275,6 +374,23 @@ def main() -> int:
     config_path = args.config.resolve()
     config = _json_load(config_path)
     benchmark = config["blas_benchmark"]
+    operators_path = (
+        args.operators_json.resolve() if args.operators_json is not None else None
+    )
+    if operators_path is not None:
+        if args.minimum_observed_calls < 1:
+            raise ValueError("--minimum-observed-calls must be at least one")
+        benchmark = {
+            **benchmark,
+            "dtypes": ["float32"],
+            "shapes": _extract_observed_shapes(
+                operators_path, minimum_calls=args.minimum_observed_calls
+            ),
+            "observed_operators": str(operators_path),
+            "observed_operators_sha256": _sha256(operators_path),
+        }
+        if not benchmark["shapes"]:
+            raise ValueError(f"No BLAS signatures found in {operators_path}")
     output_dir = args.output_dir.resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
     backends = args.backend or list(BACKENDS)

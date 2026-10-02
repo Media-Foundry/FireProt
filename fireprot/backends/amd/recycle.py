@@ -15,6 +15,7 @@ from fireprot.ops.registry import OperationSignature, registry
 PAIR_ROWS = 124 * 124
 PAIR_CHANNELS = 128
 LONG_LAYER_NORM_ROWS = frozenset({1000 * 244, 1000 * 256, 1000 * 1000})
+LONG_TRANSITION_SHAPE = (1000, 1000, PAIR_CHANNELS)
 LAYER_NORM_OPERATION = "layer_norm"
 TRANSITION_OPERATION = "gated_transition"
 LAYER_NORM_IMPLEMENTATION = "amd-gfx90a-hip-layernorm-f32-c128"
@@ -23,12 +24,16 @@ CHANNEL_FIRST_LAYER_NORM_IMPLEMENTATION = (
     "amd-gfx90a-hip-layernorm-f32-c128-channel-first"
 )
 TRANSITION_IMPLEMENTATION = "amd-gfx90a-hip-transition-f32-c128"
+LONG_TRANSITION_IMPLEMENTATION = "amd-gfx90a-hip-transition-f32-c128-long"
 _fast_path_counts: Counter[tuple[str, str]] = Counter()
 _channel_first_layer_norm_enabled = (
     os.environ.get("FIREPROT_DISABLE_CHANNEL_FIRST_LAYERNORM") != "1"
 )
 _long_layer_norm_enabled = (
     os.environ.get("FIREPROT_DISABLE_LONG_LAYERNORM") != "1"
+)
+_long_transition_enabled = (
+    os.environ.get("FIREPROT_DISABLE_LONG_TRANSITION") != "1"
 )
 
 
@@ -149,6 +154,25 @@ def _supports_transition(
     return True
 
 
+def _supports_long_transition(
+    signature: OperationSignature,
+) -> bool | tuple[bool, str]:
+    if not _long_transition_enabled:
+        return False, "disabled by FIREPROT_DISABLE_LONG_TRANSITION"
+    if signature.shape != LONG_TRANSITION_SHAPE:
+        return False, "shape is not the validated 1000x1000x128 bucket"
+    supported = _base_support(
+        signature,
+        validated_rows=frozenset({1000 * 1000}),
+    )
+    if supported is not True:
+        return supported
+    attributes = dict(signature.attributes)
+    if attributes.get("expansion") != "4":
+        return False, "transition expansion is not four"
+    return True
+
+
 def _hip_layer_norm(
     *, module: Any, x: Any, native: Callable[[], Any]
 ) -> Any:
@@ -227,6 +251,14 @@ registry.register(
     priority=20,
     version="1",
 )
+registry.register(
+    operation=TRANSITION_OPERATION,
+    name=LONG_TRANSITION_IMPLEMENTATION,
+    function=_hip_transition,
+    supports=_supports_long_transition,
+    priority=30,
+    version="1",
+)
 
 
 def _mode(module: Any, tensor: Any) -> str:
@@ -290,20 +322,27 @@ def dispatch_transition(
 ) -> Any:
     import torch
 
+    shape = tuple(x.shape)
+    long_bucket = _long_transition_enabled and shape == LONG_TRANSITION_SHAPE
     supported = (
         x.device.type == "cuda"
         and _architecture(x) == "gfx90a"
         and x.dtype is torch.float32
         and _mode(module, x) == "inference"
         and x.is_contiguous()
-        and tuple(x.shape) == (124, 124, PAIR_CHANNELS)
+        and (shape == (124, 124, PAIR_CHANNELS) or long_bucket)
         and module.n == 4
         and module.c_in == PAIR_CHANNELS
     )
     if supported:
         extension = load_amd_extension()
         if extension is not None:
-            _fast_path_counts[(TRANSITION_OPERATION, TRANSITION_IMPLEMENTATION)] += 1
+            implementation = (
+                LONG_TRANSITION_IMPLEMENTATION
+                if long_bucket
+                else TRANSITION_IMPLEMENTATION
+            )
+            _fast_path_counts[(TRANSITION_OPERATION, implementation)] += 1
             return _hip_transition(module=module, x=x, native=native)
     _fast_path_counts[(TRANSITION_OPERATION, "native")] += 1
     return native()
@@ -313,6 +352,7 @@ def fast_path_manifest() -> dict[str, Any]:
     return {
         "channel_first_layer_norm_enabled": _channel_first_layer_norm_enabled,
         "long_layer_norm_enabled": _long_layer_norm_enabled,
+        "long_transition_enabled": _long_transition_enabled,
         "selection_counts": [
             {"operation": operation, "implementation": implementation, "count": count}
             for (operation, implementation), count in sorted(_fast_path_counts.items())

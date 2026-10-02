@@ -4,10 +4,15 @@ Status: measured development result, 2026-10-02.
 
 ## Scope and provenance
 
-This report covers Protenix Mini-default v0.5.0 on AMD Instinct MI250X/MI250 gfx90a GCDs 6 and 7. The input is `cases/1izr_L124/input.json`, a 124-token single-chain development case. Results apply to FP32 inference with seed 101, one sample, warm in-process caches, no MSA/template search, TF32 disabled, four recycling cycles, and one or five diffusion steps.
+This report covers Protenix Mini-default v0.5.0 on AMD Instinct MI250X/MI250 gfx90a GCDs 6 and 7. The primary input is `benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json`, a real 1,000-residue protein sequence retained from an existing local OpenFold benchmark corpus. The historical short-sequence results use `cases/1izr_L124/input.json`. Results apply to FP32 inference with seed 101, one sample, warm in-process caches, no MSA/template search, TF32 disabled, four recycling cycles, and one or five diffusion steps as stated per workload.
 
 Source identities:
 
+- long-sequence FireProt commit: `523f922`
+- long-sequence Protenix integration commit: `77218da70a9c84b101049aa0adf87cb0be461d15`
+- long-sequence input SHA-256: `f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac`
+- long-sequence sequence SHA-256: `462bb697ecdcce2f979b00075e60d96fbfcd1b18ba3d92f5427cb03befbcc570`
+- long-sequence benchmark configuration SHA-256: `883c3d53ef6c76e7799eaf80ec3546c7166345827e2d087b288e7e4e5b31355b`
 - measured FireProt commit: `773999ae404c561309391fa72902641e5be3fb95`
 - direct CK candidate commit: `619db00e21d942f3ff4f3d202b0b02b93bfe5695`
 - channel-first LayerNorm commit: `47850407da303a21ec84a6327300424082ac4875`
@@ -16,9 +21,9 @@ Source identities:
 - profiler SHA-256: `511213a16ed1e820e0976cec4903638f589c2d1d3bdd657c26bbd14e13ff7b4a`
 - benchmark configuration SHA-256: `ee8de5227f50f1f9348fde4980127cc81ad20bfc898a8281dd87554accaabffa`
 
-The runtime used Python 3.12.13, PyTorch `2.12.0a0+git78258b9`, and HIP `7.14.60850`. Each latency result used five warmups and thirty measured repetitions. GPU events exclude preprocessing and serialization.
+The runtime used Python 3.12.13, PyTorch `2.12.0a0+git78258b9`, and HIP `7.14.60850`. The 1,000-token result used one warmup and three measured repetitions because each native model call takes about 45 seconds. The historical 124-token result used five warmups and thirty measured repetitions. GPU events exclude preprocessing and serialization.
 
-Every accepted run passed both an exclusive-device preflight and continuous `amd-smi process --json` monitoring at one-second intervals. The C4/S1 pair ran on physical GCD 6 and the C4/S5 pair ran on GCD 7. C4/S1 and C4/S5 were executed concurrently on separate GCDs; each native/FireProt comparison used the same GCD. Other GCDs on the host may have been active.
+Every accepted run passed both an exclusive-device preflight and continuous `amd-smi process --json` monitoring at one-second intervals. The long native/FireProt pair ran sequentially on physical GCD 6. In the historical short study, the C4/S1 pair ran on GCD 6 and the C4/S5 pair ran on GCD 7; those two workloads were executed concurrently, while each native/FireProt comparison stayed on the same GCD. Other GCDs on the host may have been active.
 
 ## Model architecture and execution flow
 
@@ -44,15 +49,17 @@ flowchart TD
 
 Each Pairformer block performs two triangle multiplications, two triangle attentions, a pair transition, and single-state work. Recycling repeats the complete sixteen-block trunk. The confidence head also contains Pairformer work, so raw `PairformerStack.forward` event counts include one post-recycle confidence stack; the `get_pairformer_output` stage is the clean recycle-trunk boundary.
 
-On the native C4/S1 run, `get_pairformer_output` took 399.94 ms of the 457.86 ms model median. This makes the recycle trunk the dominant optimization target for this bucket. The result does not establish the same split for Base weights, longer sequences, complexes, or other models.
+On the native 1,000-token C4/S1 run, `get_pairformer_output` took 41.480 seconds of the 45.310-second model median. Triangle attention took 29.486 seconds and triangle multiplication took 12.460 seconds. The recycle trunk is therefore the dominant long-sequence optimization target, with triangle attention as its largest measured component. This split is measured for one Mini-default input and does not establish the same mix for Base weights, complexes, or other models.
 
 ## Promoted implementation set
 
 | Operation or policy | Implementation | Promoted capability |
 | --- | --- | --- |
-| Process BLAS | PyTorch `hipblas` preference | Exact measured Mini-default, 124-token, FP32, gfx90a bucket |
+| Process BLAS | PyTorch `hipblas` preference | Fixed comparison policy for the measured 124- and 1,000-token buckets; backend optimality was established only for the 124-token matrix |
 | Triangle multiplication | `amd-short-sequence-torch` | gfx90a, FP32, inference/no-grad, contiguous unbatched pair tensor, `N <= 256`, in-place-safe Protenix path |
+| Long triangle multiplication gates | `amd-gfx90a-hip-triangle-gates-f32-n1000-c128` | gfx90a, FP32, inference/no-grad, exact contiguous `[1000,1000,128]`, in-place-safe chunked Protenix path, implicit pair mask |
 | Triangle attention | `amd-gfx90a-efficient-sdpa` | gfx90a, FP32, QKV `[124,4,124,32]`, observed strided layout and two additive bias shapes |
+| Long triangle attention | `amd-gfx90a-efficient-sdpa` | gfx90a, FP32, QKV `[1000,4,1000,32]`, observed strided layout, four heads, head dimension 32, exact implicit-mask or dense-mask bias shapes |
 | Pair LayerNorm | `amd-gfx90a-hip-layernorm-f32-c128` | gfx90a, FP32, inference/no-grad, contiguous 15,376 by 128 rows, epsilon `1e-5`, supported affine forms |
 | Channel-first pair LayerNorm | `amd-gfx90a-hip-layernorm-f32-c128-channel-first` | gfx90a, FP32, inference/no-grad, exact `[124,124,128]` shape and `[124,1,15376]` stride, full affine parameters, epsilon `1e-5` |
 | Gated transition epilogue | `amd-gfx90a-hip-transition-f32-c128` | gfx90a, FP32, contiguous `[124,124,128]`, expansion factor four |
@@ -64,7 +71,25 @@ The new recycle-trunk operations are small handwritten HIP kernels with CK-style
 - The transition keeps its three linear layers library-backed and fuses `SiLU(activation) * gate` into a vectorized `float4` kernel.
 - Sources compile lazily through the PyTorch C++ extension loader into excluded `runtime/torch_extensions/`. A missing compiler, unsupported ROCm build, unsupported signature, training/autograd call, or disabled extension falls back to native Protenix.
 
-Triangle attention uses ROCm memory-efficient scaled dot-product attention with an outer batch chunk of 64. Triangle multiplication selects the direct non-chunked update for the validated short sequence while preserving Protenix's in-place result behavior.
+Triangle attention uses ROCm memory-efficient scaled dot-product attention with an outer batch chunk of 64. For the measured long input, the Protenix integration omits an implicit all-ones pair mask and its zero additive bias, then broadcasts only the triangle bias into each SDPA chunk. This avoids the native full `[1000,4,1000,1000]` attention matrix. Triangle multiplication selects the direct non-chunked update for the validated short sequence. The 1,000-token path retains Protenix's chunked in-place contraction and uses handwritten HIP to fuse `sigmoid(gate) * projection` and `sigmoid(gate) * output` epilogues.
+
+## Primary 1,000-token end-to-end result
+
+The primary workload is Mini-default, C4/S1, FP32, seed 101, one sample, no MSA/template search, and warm in-process caches. Native and FireProt ran sequentially on physical GCD 6 with hipBLAS selected at process start. Each run used one warmup and three measurements. Both continuous process monitors passed with no external PID. The FireProt run used no long-path enable environment variables; the validated exact bucket is selected by default.
+
+| Metric | Native median | FireProt median | Native / FireProt |
+| --- | ---: | ---: | ---: |
+| Model | 45.310 s | 22.977 s | 1.972x |
+| Model p95 | 45.807 s | 23.039 s | 1.988x |
+| Pairformer/recycle trunk | 41.480 s | 21.395 s | 1.939x |
+| Triangle attention | 29.486 s | 7.681 s | 3.839x |
+| Triangle multiplication | 12.460 s | 11.915 s | 1.046x |
+
+The three native model samples were 45.310, 45.158, and 45.862 seconds. The three FireProt samples were 23.045, 22.977, and 22.961 seconds. Peak allocated memory fell from 39,499,758,592 to 10,549,256,704 bytes, a `73.29%` reduction. Peak reserved memory fell from 42,756,734,976 to 14,686,355,456 bytes, a `65.65%` reduction. The accelerated run selected long triangle attention and long triangle-gate fusion 576 times each across its warmup and measured calls.
+
+The numerical gate compared native and default FireProt predictions with the same model, input, C4/S1 settings, seed, and cache policy. Across 7,979 atoms, raw coordinate RMSD was `9.01e-5 A`, aligned RMSD was `8.97e-5 A`, and maximum coordinate delta was `9.77e-4 A`. The maximum numeric confidence delta was `3.81e-6`; schemas matched and all values were finite. The locked coordinate and confidence tolerances were `1e-3`, so the comparison passed.
+
+This input has no experimental-coordinate mapping in FireProt. The numerical gate establishes agreement with native Protenix, while the timing and memory results establish performance for this exact workload. They do not establish structure accuracy or generalization.
 
 ## Complete observed BLAS call matrix
 
@@ -91,6 +116,8 @@ A separate direct CK wrapper calls the PyTorch HIP `gemm_internal_ck<float>` ent
 Same-seed output validation passed, but formal 30-repetition A/B runs did not improve model medians: C4/S1 changed from 321.03 to 321.68 ms and C4/S5 from 390.06 to 396.30 ms. Direct CK is therefore not promoted. It requires `FIREPROT_ENABLE_CK_OPS=1`, and `FIREPROT_DISABLE_CK_OPS=1` overrides the opt-in. The wrapper uses an internal ATen API, so compilation failure or a version mismatch records the error and returns to the native route without disabling other FireProt kernels.
 
 ## End-to-end performance
+
+The table below is the historical 124-token study. It is retained to show the short-sequence path and does not define the primary long-sequence target.
 
 | Workload | Metric | Native | FireProt | Native / FireProt |
 | --- | --- | ---: | ---: | ---: |
@@ -163,16 +190,17 @@ A future early-exit policy requires an independent evaluation set and a converge
 
 ## Remaining work
 
-1. Capture fresh operator traces for longer token buckets, Base weights, complexes, and the other model adapters before sharing tuning rules.
-2. Revisit the 144-call `bmm 128x124x124` triangle contraction. Auto is 13.60 us faster per isolated call than global hipBLAS, but any local override must beat its dispatch cost and improve end-to-end p95.
-3. Extend stride-aware kernels beyond the promoted channel-first LayerNorm and evaluate residual epilogues. Keep contraction GEMMs library-backed unless a specialized CK or HIP kernel wins end to end.
-4. Add BF16 only after operator and end-to-end distributional validation. Existing evidence does not support promoting it.
-5. Implement approximate recycle early exit only after the independent quality protocol above is available.
+1. Optimize the remaining 11.915-second long-sequence triangle-multiplication stage. Its chunked contraction BMMs and layout copies now dominate the accelerated Pairformer; benchmark CK, hipBLAS, hipBLASLt, and specialized grouped/batched kernels at the observed `1000/256/244` shapes before changing dispatch.
+2. Extend the 128-wide LayerNorm and transition fusions to the observed long contiguous and chunked row counts. Promote them only after incremental E2E and peak-memory gates.
+3. Measure several additional 1,000+ token inputs, length buckets, Base weights, and complexes. The exact 1,000-token capability must not be generalized from a single shape.
+4. Add OpenFold, ESMFold, and AtlasFold profiles and map their long-sequence attention and pair-update contracts into shared operation signatures where semantics match.
+5. Add BF16 only after operator and end-to-end distributional validation. Existing evidence does not support promoting it.
+6. Implement approximate recycle early exit only after an independent quality protocol and convergence signal are available.
 
 ## Limits
 
-- The eight repository cases are development inputs, not an independent test set. The repeated results above use one 124-token case.
-- The BLAS call inventory comes from a C4/S1 FireProt/auto trace with the same model shape. Custom LayerNorm changes non-BLAS operator counts but does not change the listed GEMM dimensions.
-- Base weights, longer sequences, complexes, ligands, production diffusion-step counts, BF16/FP16, gfx942, and multi-GPU execution are unmeasured.
+- The eight repository cases are development inputs, not an independent test set. The 1,000-token input is a separate performance-only workload without experimental coordinates. The long result covers one sequence and one exact token bucket.
+- The complete BLAS call inventory comes from the historical 124-token C4/S1 FireProt/auto trace. It does not describe the 1,000-token matrix shapes.
+- Base weights, lengths other than the exact 1,000-token and historical short buckets, complexes, ligands, production diffusion-step counts, BF16/FP16, gfx942, and multi-GPU execution are unmeasured.
 - The installed environment does not provide the optional Triton package required by Protenix's `triattention` implementation. FireProt uses PyTorch ROCm efficient attention for the promoted signature.
-- Raw manifests, predictions, and profiler traces remain on DiamondHill under excluded `outputs/` paths. Compact machine-readable records are in `provenance/protenix_amd_benchmark.json` and `provenance/protenix_amd_incremental_4785040.json`.
+- Raw manifests, predictions, and profiler traces remain on DiamondHill under excluded `outputs/` paths. Compact machine-readable records are in `provenance/protenix_amd_long1000_523f922.json`, `provenance/protenix_amd_benchmark.json`, and `provenance/protenix_amd_incremental_4785040.json`.

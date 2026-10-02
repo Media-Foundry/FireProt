@@ -11,13 +11,31 @@ Protenix v1.1.0 is the first working adapter target. The repository now contains
 - a model-neutral operator registry with deterministic capability checks and native fallback;
 - measured process-start BLAS selection for PyTorch ROCm and a matrix covering every observed GEMM signature;
 - validated FP32 gfx90a paths for short-sequence Protenix triangle multiplication, triangle attention, contiguous pair LayerNorm, channel-first pair LayerNorm, and the gated transition epilogue;
+- validated FP32 gfx90a long-sequence paths for the exact 1,000-token bucket, including memory-efficient triangle attention and chunked triangle-gate fusion;
 - lazily compiled handwritten HIP kernels with exact capability gates and native fallback;
 - a direct CK GEMM candidate for observed Protenix signatures, kept behind an experimental opt-in when end-to-end measurements do not justify promotion;
 - an independent Protenix patch branch that exposes FireProt dispatch without changing native defaults.
 
-AtlasFold, OpenFold, ESMFold, Base-model coverage, BF16 promotion, long-sequence tuning, and multi-GPU execution remain future work.
+AtlasFold, OpenFold, ESMFold, Base-model coverage, BF16 promotion, additional long-sequence buckets, and multi-GPU execution remain future work.
 
-## Verified primary MI250 result
+## Verified 1,000-token MI250 result
+
+The primary optimization target is long-sequence folding. The measured workload is Protenix Mini-default, a real 1,000-residue protein sequence, FP32, four cycles, one diffusion step, seed 101, one sample, warm in-process caches, and no MSA/template search. Native and FireProt used the same physical gfx90a GCD, hipBLAS process policy, one warmup, and three measured repetitions. Continuous process monitoring found no external GPU PID.
+
+| Metric | Native median | FireProt median | Speedup |
+| --- | ---: | ---: | ---: |
+| Model | 45.310 s | 22.977 s | 1.972x |
+| Pairformer/recycle trunk | 41.480 s | 21.395 s | 1.939x |
+| Triangle attention | 29.486 s | 7.681 s | 3.839x |
+| Triangle multiplication | 12.460 s | 11.915 s | 1.046x |
+
+Model p95 improved from 45.807 s to 23.039 s (`1.988x`). Peak allocated memory fell from 39,499,758,592 to 10,549,256,704 bytes (`73.29%`), and peak reserved memory fell from 42,756,734,976 to 14,686,355,456 bytes (`65.65%`). The accelerated run selected the long triangle-attention and triangle-gate paths 576 times each across warmup and measured calls.
+
+The same-seed validation covered 7,979 output atoms and passed the locked `1e-3` coordinate and confidence gates: aligned coordinate RMSD was `8.97e-5 A`, maximum coordinate delta was `9.77e-4 A`, and maximum confidence delta was `3.81e-6`. The input is a performance workload without an experimental-coordinate mapping, so these checks establish agreement with native Protenix rather than structural accuracy.
+
+The long attention path prevents materialization of the native `[1000,4,1000,1000]` attention matrix by using ROCm memory-efficient SDPA in outer chunks. When the pair mask is implicit, the Protenix adapter also omits the all-ones mask and its zero additive bias. The chunked triangle-multiplication path keeps its contraction library-backed and fuses projection and output sigmoid gates with handwritten HIP kernels. Exact capability predicates preserve native fallback for other lengths, dtypes, layouts, masks, architectures, training, and autograd.
+
+## Historical 124-token MI250 result
 
 The primary comparison bucket is Protenix Mini-default, 124 tokens, FP32, four cycles, seed 101, one sample, warm in-process caches, no MSA/template search, and either one or five diffusion steps. Each latency result used five warmups and thirty measured repetitions on one exclusively checked gfx90a GCD. Incremental operator studies are reported below and are not folded into this historical native/FireProt table.
 
@@ -36,7 +54,7 @@ The promoted channel-first LayerNorm kernel targets the 144 triangle-multiplicat
 
 Reducing four recycle cycles to one, two, or three measured 2.700x, 1.768x, and 1.289x speedups over C4. Those outputs differed from C4 by 5.760, 2.691, and 4.221 A aligned RMSD on this development case. Cycle reduction therefore remains an explicit approximate choice; the default stays at four cycles.
 
-These are development-case results for one 124-token input and do not establish Base-model, long-sequence, complex, ligand-heavy, or production-dataset speedups. See [Protenix AMD performance](docs/protenix-amd-performance.md) for the complete method, stage results, numerical checks, residual profile, and limits.
+These are development-case results for one 124-token input and do not establish Base-model, complex, ligand-heavy, or production-dataset speedups. See [Protenix AMD performance](docs/protenix-amd-performance.md) for the complete method, stage results, numerical checks, residual profile, and limits.
 
 ## Run on DiamondHill
 
@@ -50,7 +68,7 @@ FIREPROT_BACKEND=native \
   --input /media/IntelSSD/fireprot/cases/1izr_L124/input.json \
   --out_dir /media/IntelSSD/fireprot/outputs/native
 
-# Validated Mini-default/124-token AMD path with automatic operator fallback
+# Validated AMD path with automatic operator fallback
 FIREPROT_BACKEND=fireprot FIREPROT_BLAS_BACKEND=hipblas \
   bash scripts/infer.sh \
   --model_name protenix_mini_default_v0.5.0 \
@@ -61,6 +79,8 @@ FIREPROT_BACKEND=fireprot FIREPROT_BLAS_BACKEND=hipblas \
 `FIREPROT_BLAS_BACKEND` accepts `auto`, `hipblaslt`, `hipblas`, or `ck`. It is fixed once at process start. `hipblas` is validated only for the measured Mini/124-token/FP32 bucket; use `auto` for unmeasured buckets until they have their own matrix and end-to-end gate. The promoted operator implementations select only validated gfx90a/FP32/inference signatures. Unsupported architectures, dtypes, shapes, layouts, masks, training/autograd calls, aliasing modes, or extension builds use the upstream torch path.
 
 The exact channel-first LayerNorm path is enabled by the FireProt backend and can be disabled for A/B diagnosis with `FIREPROT_DISABLE_CHANNEL_FIRST_LAYERNORM=1`. The direct CK OuterProductMean candidate is experimental and requires `FIREPROT_ENABLE_CK_OPS=1`; `FIREPROT_DISABLE_CK_OPS=1` overrides that opt-in.
+
+The exact 1,000-token triangle-attention and triangle-gate paths are enabled by default after their end-to-end and numerical gates. Use `FIREPROT_DISABLE_LONG_TRIANGLE_ATTENTION=1` or `FIREPROT_DISABLE_LONG_TRIANGLE_GATES=1` only for diagnostic A/B runs. Other long lengths fall back until measured and promoted.
 
 ## Benchmark
 
@@ -77,9 +97,18 @@ HIP_VISIBLE_DEVICES=6 PYTHONPATH=. python -m benchmarks.protenix.benchmark_blas 
   --config benchmarks/protenix/configs/mi250.yaml \
   --operators-json outputs/benchmarks/<run>/torch-operators.json \
   --output-dir outputs/benchmarks/blas-all-calls
+
+# Primary 1,000-token native/FireProt comparison
+HIP_VISIBLE_DEVICES=6 python benchmarks/protenix/profile_inference.py \
+  --config benchmarks/protenix/configs/mi250-long.json \
+  --backend native --blas-backend hipblas
+
+HIP_VISIBLE_DEVICES=6 python benchmarks/protenix/profile_inference.py \
+  --config benchmarks/protenix/configs/mi250-long.json \
+  --backend fireprot --blas-backend hipblas
 ```
 
-Raw predictions, profiler traces, weights, and hardware-local tuning data remain under excluded `outputs/` and `runtime/` paths. Compact measured records are [the primary Protenix benchmark](provenance/protenix_amd_benchmark.json) and [the incremental CK and channel-first LayerNorm study](provenance/protenix_amd_incremental_4785040.json).
+Raw predictions, profiler traces, weights, and hardware-local tuning data remain under excluded `outputs/` and `runtime/` paths. Compact measured records are [the 1,000-token benchmark](provenance/protenix_amd_long1000_523f922.json), [the historical short Protenix benchmark](provenance/protenix_amd_benchmark.json), and [the incremental CK and channel-first LayerNorm study](provenance/protenix_amd_incremental_4785040.json).
 
 ## Repository layout
 
@@ -89,7 +118,7 @@ Raw predictions, profiler traces, weights, and hardware-local tuning data remain
 | `fireprot/backends/amd/` | AMD BLAS policy and validated operator implementations |
 | `fireprot/adapters/protenix/` | Protenix runtime bootstrap and backend registration |
 | `fireprot/validation/` | Coordinate, confidence, and ground-truth helpers |
-| `benchmarks/protenix/` | Fixed workload configuration, inference profiler, BLAS matrix, and output comparison |
+| `benchmarks/protenix/` | Fixed short and 1,000-token workload configurations, inference profiler, BLAS matrix, and output comparison |
 | `tests/` | Registry, backend, numerical, adapter, and profiler tests |
 | `Protenix/` | Independent upstream Git checkout with FireProt integration commits |
 | `patches/protenix/` | Exported patches that reproduce the independent Protenix integration branch |

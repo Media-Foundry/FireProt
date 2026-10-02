@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "status": "measured-development-result",
+  "date": "2026-10-02",
+  "scope": {
+    "model": "protenix_mini_default_v0.5.0",
+    "input_id": "umem_L01000_462bb697ecdcce2f",
+    "token_count": 1000,
+    "dtype": "fp32",
+    "cycles": 4,
+    "diffusion_steps": 1,
+    "samples": 1,
+    "seed": 101,
+    "cache_state": "warm-within-process",
+    "use_msa": false,
+    "use_template": false,
+    "enable_tf32": false,
+    "blas_backend": "hipblas"
+  },
+  "source": {
+    "fireprot_commit": "523f922",
+    "protenix_commit": "77218da70a9c84b101049aa0adf87cb0be461d15",
+    "protenix_upstream_baseline": "d3b4db6a121dd4584edd85e93744239325a2b72e",
+    "profile_script_sha256": "511213a16ed1e820e0976cec4903638f589c2d1d3bdd657c26bbd14e13ff7b4a",
+    "benchmark_config_sha256": "883c3d53ef6c76e7799eaf80ec3546c7166345827e2d087b288e7e4e5b31355b",
+    "input_sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac",
+    "sequence_sha256": "462bb697ecdcce2f979b00075e60d96fbfcd1b18ba3d92f5427cb03befbcc570"
+  },
+  "environment": {
+    "host": "DiamondHill",
+    "physical_device": 6,
+    "device": "AMD Instinct MI250X / MI250",
+    "architecture": "gfx90a:sramecc+:xnack-",
+    "device_memory_bytes": 68702699520,
+    "python": "3.12.13",
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850"
+  },
+  "measurement": {
+    "warmups": 1,
+    "repetitions": 3,
+    "device_policy": "exclusive",
+    "continuous_process_monitor": true,
+    "native_monitor_passed": true,
+    "fireprot_monitor_passed": true,
+    "external_gpu_pids": [],
+    "gpu_events_exclude_preprocessing_and_serialization": true
+  },
+  "performance": {
+    "native": {
+      "model_ms": {
+        "values": [
+          45309.72265625,
+          45158.48046875,
+          45861.7890625
+        ],
+        "median": 45309.72265625,
+        "p95": 45806.582421875
+      },
+      "pairformer_ms": {
+        "values": [
+          41480.4609375,
+          41304.03125,
+          41500.06640625
+        ],
+        "median": 41480.4609375
+      },
+      "triangle_attention_ms": {
+        "values": [
+          29485.626571655273,
+          29372.996704101562,
+          29970.56088256836
+        ],
+        "median": 29485.626571655273
+      },
+      "triangle_multiplication_ms": {
+        "values": [
+          12459.949699401855,
+          12408.016220092773,
+          12495.1103515625
+        ],
+        "median": 12459.949699401855
+      },
+      "peak_allocated_bytes": 39499758592,
+      "peak_reserved_bytes": 42756734976
+    },
+    "fireprot": {
+      "model_ms": {
+        "values": [
+          23045.435546875,
+          22976.794921875,
+          22960.701171875
+        ],
+        "median": 22976.794921875,
+        "p95": 23038.571484375
+      },
+      "pairformer_ms": {
+        "values": [
+          21456.732421875,
+          21395.3046875,
+          21368.501953125
+        ],
+        "median": 21395.3046875
+      },
+      "triangle_attention_ms": {
+        "values": [
+          7716.883079528809,
+          7680.982769012451,
+          7667.483726501465
+        ],
+        "median": 7680.982769012451
+      },
+      "triangle_multiplication_ms": {
+        "values": [
+          11947.894897460938,
+          11914.600936889648,
+          11902.916236877441
+        ],
+        "median": 11914.600936889648
+      },
+      "peak_allocated_bytes": 10549256704,
+      "peak_reserved_bytes": 14686355456
+    },
+    "speedup": {
+      "model_median": 1.9719775020976922,
+      "model_p95": 1.9882561925743314,
+      "pairformer_median": 1.9387646749305028,
+      "triangle_attention_median": 3.8387830644028718,
+      "triangle_multiplication_median": 1.0457714669086158
+    },
+    "memory_reduction_fraction": {
+      "peak_allocated": 0.7329285777929648,
+      "peak_reserved": 0.6565136354718462
+    }
+  },
+  "selected_implementations": [
+    {
+      "operation": "triangle_attention",
+      "implementation": "amd-gfx90a-efficient-sdpa",
+      "count_across_warmup_and_measurement": 576
+    },
+    {
+      "operation": "triangle_multiplication",
+      "implementation": "amd-gfx90a-hip-triangle-gates-f32-n1000-c128",
+      "count_across_warmup_and_measurement": 576
+    }
+  ],
+  "numerical_validation": {
+    "passed": true,
+    "atom_count": 7979,
+    "finite": true,
+    "raw_rmsd_angstrom": 9.010550569591002e-05,
+    "aligned_rmsd_angstrom": 8.965320215485083e-05,
+    "max_abs_coordinate_delta_angstrom": 0.0009765625,
+    "max_abs_confidence_delta": 3.814697265625e-06,
+    "coordinate_tolerance_angstrom": 0.001,
+    "confidence_tolerance": 0.001,
+    "missing_confidence_fields": [],
+    "extra_confidence_fields": []
+  },
+  "artifacts_on_diamondhill": {
+    "native": "outputs/benchmarks/long1000-formal-523f922-native",
+    "fireprot": "outputs/benchmarks/long1000-formal-523f922-fireprot-default",
+    "native_validation": "outputs/benchmarks/long1000-equivalence-e540363-native",
+    "fireprot_validation": "outputs/benchmarks/long1000-equivalence-523f922-fireprot-default",
+    "comparison": "outputs/benchmarks/long1000-equivalence-523f922-fireprot-default/comparison.json"
+  },
+  "tests": {
+    "local": "84 passed, 3 skipped",
+    "diamondhill": "85 passed, 2 skipped",
+    "protenix_targeted": "11 passed, 7 skipped"
+  },
+  "limits": [
+    "The input is a performance-only workload without an experimental-coordinate mapping.",
+    "The result covers one exact 1,000-token Mini-default FP32 C4/S1 bucket.",
+    "The comparison fixes hipBLAS for both backends but does not establish the best process BLAS policy for long sequences.",
+    "Base weights, other lengths, complexes, ligands, reduced precision, gfx942, and multi-GPU execution remain unmeasured."
+  ]
+}

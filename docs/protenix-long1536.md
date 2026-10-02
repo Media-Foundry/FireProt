@@ -500,3 +500,51 @@ projections. At N1536 the logical batches are `[128,1536,1536]`. The existing
 dimension-only BLAS replay does not preserve these transpose strides, so
 these exact contractions need their own CK/BLAS comparison before choosing
 a replacement.
+
+### Explicit CK packed BMM comparison
+
+The actual outgoing NT and incoming TN layouts were replayed with physical
+contiguous `[128,1536,1536]` projections, seed 443, FP32, TF32 disabled,
+five warmups and twenty measured calls. Every candidate was checked against
+all elements of saved hipBLAS outputs before timing. GPU 6 isolation checks
+passed for every run; output allocation is included.
+
+| Implementation | Outgoing median ms | Incoming median ms |
+| --- | ---: | ---: |
+| hipBLAS | 29.526 | 29.414 |
+| Process CK preference | 29.601 | 29.491 |
+| hipBLASLt | 25.916 | 25.732 |
+| hipBLAS repeat | 29.617 | 29.467 |
+| Explicit CK MFMA32 | 36.690 | 33.952 |
+| Explicit CK MFMA16 | 39.549 | 35.963 |
+
+The installed PyTorch `bgemm_internal<float>` source branches only on
+Cublaslt preference; all other preferences fall through to ordinary BLAS.
+Thus the process CK row does not demonstrate a CK BMM kernel. The new C ABI
+probe explicitly instantiates `DeviceBatchedGemmXdl` with a 128x128 tile,
+256 threads and K=32, using the two actual transpose layouts. Both MFMA
+variants pass the full numerical gate (maximum delta below `2e-7`), but
+both are slower than hipBLAS. Compiler warnings report achieved occupancy
+below the requested target; that is a tuning lead, not a proven cause.
+Neither candidate is registered in model dispatch.
+
+hipBLASLt reduces this isolated contraction's time by approximately 12–13%.
+No N1536 model improvement is established by this result; changing global
+BLAS policy also changes other projections. The next gate is a controlled
+model comparison or an explicit per-operation Lt path. Full reports,
+source hashes, compiler logs and the PyTorch dispatch finding are retained
+in [BMM evidence](../provenance/protenix_packed_bmm_e6dfa14.json).
+
+Reproduce the explicit candidate after compiling the probe into a shared
+library with the recorded flags:
+
+```bash
+HIP_VISIBLE_DEVICES=6 PYTHONPATH=.:Protenix python -m benchmarks.protenix.benchmark_packed_bmm \
+  --backend direct_ck --library runtime/ck_packed_bmm_probe/mfma32.so \
+  --reference-dir outputs/benchmarks/packed-bmm1536-e6dfa14/reference \
+  --output outputs/benchmarks/packed-bmm1536-direct-ck.json
+```
+
+Create the full reference first with `--backend hipblas --write-reference`
+and the same reference directory, omitting `--library`. Each process fixes
+its BLAS policy once. References and output files stay outside Git.

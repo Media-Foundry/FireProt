@@ -1,0 +1,1669 @@
+{
+  "schema_version": 1,
+  "base_commit": "e6dfa14",
+  "scope": "Standalone N1536 FP32 packed triangle BMM; not model performance",
+  "runs": {
+    "hipblaslt": {
+      "schema_version": 1,
+      "backend": "hipblaslt",
+      "shape": [
+        128,
+        1536,
+        1536
+      ],
+      "seed": 443,
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "cache_state": "warm; reference serialization and checking excluded",
+      "scope": "Exact packed triangle contraction layouts; not model performance",
+      "script_sha256": "35a98b3d1f6bb9e97e2dcc5af296f0922fa2026a005b98eaf234bb93816d09bd",
+      "records": [
+        {
+          "direction": "outgoing",
+          "left_stride": [
+            2359296,
+            1536,
+            1
+          ],
+          "right_stride": [
+            2359296,
+            1,
+            1536
+          ],
+          "status": "ok",
+          "median_ms": 25.915685653686523,
+          "p95_ms": 25.972087860107422,
+          "values_ms": [
+            25.96120834350586,
+            25.972087860107422,
+            25.955608367919922,
+            25.961843490600586,
+            25.92328453063965,
+            25.913204193115234,
+            25.89864730834961,
+            25.91384506225586,
+            25.907928466796875,
+            25.927125930786133,
+            25.92872428894043,
+            25.914325714111328,
+            25.90216827392578,
+            25.900245666503906,
+            29.360471725463867,
+            25.91704559326172,
+            25.913843154907227,
+            25.89112663269043,
+            25.89336585998535,
+            25.920244216918945
+          ],
+          "max_abs_delta": 3.2782554626464844e-07,
+          "peak_allocated_bytes": 3703570432,
+          "reference_metadata": {
+            "seed": 443,
+            "shape": [
+              128,
+              1536,
+              1536
+            ],
+            "dtype": "float32",
+            "tf32": false,
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "direction": "outgoing",
+            "sha256": "806f60428baec2ffb8f850ab846e1f75313b2d9069bbbbac4aa917c781602934"
+          }
+        },
+        {
+          "direction": "incoming",
+          "left_stride": [
+            2359296,
+            1,
+            1536
+          ],
+          "right_stride": [
+            2359296,
+            1536,
+            1
+          ],
+          "status": "ok",
+          "median_ms": 25.731929779052734,
+          "p95_ms": 25.79144859313965,
+          "values_ms": [
+            25.746170043945312,
+            25.74856948852539,
+            25.743450164794922,
+            25.74201011657715,
+            25.731769561767578,
+            25.73208999633789,
+            25.749210357666016,
+            25.72776985168457,
+            25.724252700805664,
+            25.722652435302734,
+            25.72393035888672,
+            25.722169876098633,
+            25.72393226623535,
+            25.720251083374023,
+            25.71369171142578,
+            25.725210189819336,
+            25.754968643188477,
+            25.77880859375,
+            25.796567916870117,
+            25.79144859313965
+          ],
+          "max_abs_delta": 0.0,
+          "peak_allocated_bytes": 3703570432,
+          "reference_metadata": {
+            "seed": 443,
+            "shape": [
+              128,
+              1536,
+              1536
+            ],
+            "dtype": "float32",
+            "tf32": false,
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "direction": "incoming",
+            "sha256": "06b29f9b75d6c6bd4f7dbcfc57ed24307a5bd7b9ed3421ed772b0a0f331b6e98"
+          }
+        }
+      ],
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "863950669",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "525137091",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1084010931",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "756899437",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "614546357",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "612056467",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451389361",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533754986",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "6",
+        "selected_physical_index": 6,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "policy": {
+        "requested": "hipblaslt",
+        "before": "_BlasBackend.Cublaslt",
+        "effective": "_BlasBackend.Cublaslt",
+        "changed": false
+      },
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "status": "ok",
+      "gpu_process_monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 6,
+        "allowed_pid": 757327,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "ck": {
+      "schema_version": 1,
+      "backend": "ck",
+      "shape": [
+        128,
+        1536,
+        1536
+      ],
+      "seed": 443,
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "cache_state": "warm; reference serialization and checking excluded",
+      "scope": "Exact packed triangle contraction layouts; not model performance",
+      "script_sha256": "35a98b3d1f6bb9e97e2dcc5af296f0922fa2026a005b98eaf234bb93816d09bd",
+      "records": [
+        {
+          "direction": "outgoing",
+          "left_stride": [
+            2359296,
+            1536,
+            1
+          ],
+          "right_stride": [
+            2359296,
+            1,
+            1536
+          ],
+          "status": "ok",
+          "median_ms": 29.601340293884277,
+          "p95_ms": 29.650056838989258,
+          "values_ms": [
+            28.930238723754883,
+            28.93071746826172,
+            28.949758529663086,
+            28.947036743164062,
+            28.943035125732422,
+            29.048154830932617,
+            29.280147552490234,
+            29.482542037963867,
+            29.58254051208496,
+            29.617258071899414,
+            29.63533592224121,
+            29.6282958984375,
+            29.645898818969727,
+            29.67741584777832,
+            29.645898818969727,
+            29.6164608001709,
+            29.617420196533203,
+            29.586219787597656,
+            29.617097854614258,
+            29.650056838989258
+          ],
+          "max_abs_delta": 0.0,
+          "peak_allocated_bytes": 3657433088,
+          "reference_metadata": {
+            "seed": 443,
+            "shape": [
+              128,
+              1536,
+              1536
+            ],
+            "dtype": "float32",
+            "tf32": false,
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "direction": "outgoing",
+            "sha256": "806f60428baec2ffb8f850ab846e1f75313b2d9069bbbbac4aa917c781602934"
+          }
+        },
+        {
+          "direction": "incoming",
+          "left_stride": [
+            2359296,
+            1,
+            1536
+          ],
+          "right_stride": [
+            2359296,
+            1536,
+            1
+          ],
+          "status": "ok",
+          "median_ms": 29.49070167541504,
+          "p95_ms": 29.533260345458984,
+          "values_ms": [
+            27.574596405029297,
+            27.57443618774414,
+            27.67843246459961,
+            28.289775848388672,
+            29.06367301940918,
+            29.5031795501709,
+            29.568939208984375,
+            29.533260345458984,
+            29.5314998626709,
+            29.39566421508789,
+            29.342063903808594,
+            29.40990447998047,
+            29.434064865112305,
+            29.493261337280273,
+            29.510059356689453,
+            29.50206184387207,
+            29.488142013549805,
+            29.495662689208984,
+            29.513259887695312,
+            29.50157928466797
+          ],
+          "max_abs_delta": 0.0,
+          "peak_allocated_bytes": 3657433088,
+          "reference_metadata": {
+            "seed": 443,
+            "shape": [
+              128,
+              1536,
+              1536
+            ],
+            "dtype": "float32",
+            "tf32": false,
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "direction": "incoming",
+            "sha256": "06b29f9b75d6c6bd4f7dbcfc57ed24307a5bd7b9ed3421ed772b0a0f331b6e98"
+          }
+        }
+      ],
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "863950605",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "525137026",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1084010868",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "756899374",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "614386801",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "612056402",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451389297",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533754922",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "6",
+        "selected_physical_index": 6,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "policy": {
+        "requested": "ck",
+        "before": "_BlasBackend.Cublaslt",
+        "effective": "_BlasBackend.Ck",
+        "changed": true
+      },
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "status": "ok",
+      "gpu_process_monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 7,
+        "allowed_pid": 757139,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "hipblas": {
+      "schema_version": 1,
+      "backend": "hipblas",
+      "shape": [
+        128,
+        1536,
+        1536
+      ],
+      "seed": 443,
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "cache_state": "warm; reference serialization and checking excluded",
+      "scope": "Exact packed triangle contraction layouts; not model performance",
+      "script_sha256": "35a98b3d1f6bb9e97e2dcc5af296f0922fa2026a005b98eaf234bb93816d09bd",
+      "records": [
+        {
+          "direction": "outgoing",
+          "left_stride": [
+            2359296,
+            1536,
+            1
+          ],
+          "right_stride": [
+            2359296,
+            1,
+            1536
+          ],
+          "status": "ok",
+          "median_ms": 29.5263729095459,
+          "p95_ms": 29.564132690429688,
+          "values_ms": [
+            28.923032760620117,
+            28.92367172241211,
+            28.923992156982422,
+            28.930072784423828,
+            28.921749114990234,
+            28.983827590942383,
+            29.131183624267578,
+            29.404296875,
+            29.524133682250977,
+            29.564132690429688,
+            29.58637237548828,
+            29.548131942749023,
+            29.49901580810547,
+            29.52861213684082,
+            29.55213165283203,
+            29.543174743652344,
+            29.559972763061523,
+            29.539175033569336,
+            29.54093360900879,
+            29.54365348815918
+          ],
+          "max_abs_delta": 0.0,
+          "peak_allocated_bytes": 3657433088,
+          "reference_metadata": {
+            "seed": 443,
+            "shape": [
+              128,
+              1536,
+              1536
+            ],
+            "dtype": "float32",
+            "tf32": false,
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "direction": "outgoing",
+            "sha256": "806f60428baec2ffb8f850ab846e1f75313b2d9069bbbbac4aa917c781602934"
+          }
+        },
+        {
+          "direction": "incoming",
+          "left_stride": [
+            2359296,
+            1,
+            1536
+          ],
+          "right_stride": [
+            2359296,
+            1536,
+            1
+          ],
+          "status": "ok",
+          "median_ms": 29.413657188415527,
+          "p95_ms": 29.500295639038086,
+          "values_ms": [
+            27.551389694213867,
+            27.551708221435547,
+            27.586748123168945,
+            28.08289337158203,
+            28.86031150817871,
+            29.340299606323242,
+            29.524934768676758,
+            29.500295639038086,
+            29.498695373535156,
+            29.421415328979492,
+            29.42461585998535,
+            29.410215377807617,
+            29.399818420410156,
+            29.399656295776367,
+            29.411815643310547,
+            29.415498733520508,
+            29.419336318969727,
+            29.43405532836914,
+            29.428936004638672,
+            29.439815521240234
+          ],
+          "max_abs_delta": 0.0,
+          "peak_allocated_bytes": 3657433088,
+          "reference_metadata": {
+            "seed": 443,
+            "shape": [
+              128,
+              1536,
+              1536
+            ],
+            "dtype": "float32",
+            "tf32": false,
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "direction": "incoming",
+            "sha256": "06b29f9b75d6c6bd4f7dbcfc57ed24307a5bd7b9ed3421ed772b0a0f331b6e98"
+          }
+        }
+      ],
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "863950548",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "525136969",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1084010811",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "756899317",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "614233140",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "612056342",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451389239",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533754865",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "6",
+        "selected_physical_index": 6,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "policy": {
+        "requested": "hipblas",
+        "before": "_BlasBackend.Cublaslt",
+        "effective": "_BlasBackend.Cublas",
+        "changed": true
+      },
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "status": "ok",
+      "gpu_process_monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 8,
+        "allowed_pid": 756948,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "direct_ck16": {
+      "schema_version": 1,
+      "backend": "direct_ck",
+      "shape": [
+        128,
+        1536,
+        1536
+      ],
+      "seed": 443,
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "cache_state": "warm; reference serialization and checking excluded",
+      "scope": "Exact packed triangle contraction layouts; not model performance",
+      "script_sha256": "0939c03726e6e6251a6fb4af2b15256f4adeae323d020bed2787ede447693a0e",
+      "records": [
+        {
+          "direction": "outgoing",
+          "left_stride": [
+            2359296,
+            1536,
+            1
+          ],
+          "right_stride": [
+            2359296,
+            1,
+            1536
+          ],
+          "status": "ok",
+          "median_ms": 39.548892974853516,
+          "p95_ms": 39.593936920166016,
+          "values_ms": [
+            39.64689636230469,
+            39.593936920166016,
+            39.5555305480957,
+            39.5448112487793,
+            39.53537368774414,
+            39.54913330078125,
+            39.554412841796875,
+            39.54865264892578,
+            39.555057525634766,
+            39.5545768737793,
+            39.54033660888672,
+            39.52337646484375,
+            39.546573638916016,
+            39.54465103149414,
+            39.53089141845703,
+            39.53457260131836,
+            39.566734313964844,
+            39.5576171875,
+            39.525291442871094,
+            39.54913330078125
+          ],
+          "max_abs_delta": 1.9371509552001953e-07,
+          "peak_allocated_bytes": 3623878656,
+          "reference_metadata": {
+            "seed": 443,
+            "shape": [
+              128,
+              1536,
+              1536
+            ],
+            "dtype": "float32",
+            "tf32": false,
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "direction": "outgoing",
+            "sha256": "806f60428baec2ffb8f850ab846e1f75313b2d9069bbbbac4aa917c781602934"
+          }
+        },
+        {
+          "direction": "incoming",
+          "left_stride": [
+            2359296,
+            1,
+            1536
+          ],
+          "right_stride": [
+            2359296,
+            1536,
+            1
+          ],
+          "status": "ok",
+          "median_ms": 35.96251678466797,
+          "p95_ms": 36.006832122802734,
+          "values_ms": [
+            35.87627410888672,
+            35.91035461425781,
+            35.97067642211914,
+            35.983150482177734,
+            36.006832122802734,
+            35.98011016845703,
+            35.974830627441406,
+            35.96171188354492,
+            35.97435760498047,
+            35.962677001953125,
+            35.96235656738281,
+            35.96171188354492,
+            35.95771026611328,
+            35.95947265625,
+            35.95915603637695,
+            35.9564323425293,
+            35.964111328125,
+            35.968910217285156,
+            36.01675033569336,
+            35.95675277709961
+          ],
+          "max_abs_delta": 1.4528632164001465e-07,
+          "peak_allocated_bytes": 3623878656,
+          "reference_metadata": {
+            "seed": 443,
+            "shape": [
+              128,
+              1536,
+              1536
+            ],
+            "dtype": "float32",
+            "tf32": false,
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "direction": "incoming",
+            "sha256": "06b29f9b75d6c6bd4f7dbcfc57ed24307a5bd7b9ed3421ed772b0a0f331b6e98"
+          }
+        }
+      ],
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "863950858",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "525137281",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1084011118",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "756899625",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "615042819",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "612056655",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451389552",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533755178",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "6",
+        "selected_physical_index": 6,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "policy": {
+        "requested": "hipblas",
+        "before": "_BlasBackend.Cublaslt",
+        "effective": "_BlasBackend.Cublas",
+        "changed": true
+      },
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "library_sha256": "e833eb4e906da2fcae1d82411822168dd1db84cbf1366fdba720ee30130d8762",
+      "library": "/media/IntelSSD/fireprot/runtime/ck_packed_bmm_probe/mfma16.so",
+      "status": "ok",
+      "gpu_process_monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 6,
+        "allowed_pid": 760307,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "direct_ck32": {
+      "schema_version": 1,
+      "backend": "direct_ck",
+      "shape": [
+        128,
+        1536,
+        1536
+      ],
+      "seed": 443,
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "cache_state": "warm; reference serialization and checking excluded",
+      "scope": "Exact packed triangle contraction layouts; not model performance",
+      "script_sha256": "0939c03726e6e6251a6fb4af2b15256f4adeae323d020bed2787ede447693a0e",
+      "records": [
+        {
+          "direction": "outgoing",
+          "left_stride": [
+            2359296,
+            1536,
+            1
+          ],
+          "right_stride": [
+            2359296,
+            1,
+            1536
+          ],
+          "status": "ok",
+          "median_ms": 36.689693450927734,
+          "p95_ms": 36.7428092956543,
+          "values_ms": [
+            36.65625762939453,
+            36.66329574584961,
+            36.71961212158203,
+            36.67641067504883,
+            36.69353485107422,
+            36.698814392089844,
+            36.68952941894531,
+            36.66264724731445,
+            36.70505142211914,
+            36.69737243652344,
+            36.689857482910156,
+            36.67929458618164,
+            36.75688934326172,
+            36.670013427734375,
+            36.70281219482422,
+            36.68073272705078,
+            36.68745040893555,
+            36.6840934753418,
+            36.7428092956543,
+            36.70649337768555
+          ],
+          "max_abs_delta": 1.4156103134155273e-07,
+          "peak_allocated_bytes": 3623878656,
+          "reference_metadata": {
+            "seed": 443,
+            "shape": [
+              128,
+              1536,
+              1536
+            ],
+            "dtype": "float32",
+            "tf32": false,
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "direction": "outgoing",
+            "sha256": "806f60428baec2ffb8f850ab846e1f75313b2d9069bbbbac4aa917c781602934"
+          }
+        },
+        {
+          "direction": "incoming",
+          "left_stride": [
+            2359296,
+            1,
+            1536
+          ],
+          "right_stride": [
+            2359296,
+            1536,
+            1
+          ],
+          "status": "ok",
+          "median_ms": 33.951927185058594,
+          "p95_ms": 33.98240661621094,
+          "values_ms": [
+            33.799217224121094,
+            33.81041717529297,
+            33.933448791503906,
+            33.93888854980469,
+            33.9763298034668,
+            33.95888900756836,
+            33.949127197265625,
+            33.97040939331055,
+            33.97584915161133,
+            33.981929779052734,
+            33.98240661621094,
+            33.9974479675293,
+            33.9556884765625,
+            33.95472717285156,
+            33.93088912963867,
+            33.964168548583984,
+            33.94896697998047,
+            33.9408073425293,
+            33.93088912963867,
+            33.939369201660156
+          ],
+          "max_abs_delta": 1.4901161193847656e-07,
+          "peak_allocated_bytes": 3623878656,
+          "reference_metadata": {
+            "seed": 443,
+            "shape": [
+              128,
+              1536,
+              1536
+            ],
+            "dtype": "float32",
+            "tf32": false,
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "direction": "incoming",
+            "sha256": "06b29f9b75d6c6bd4f7dbcfc57ed24307a5bd7b9ed3421ed772b0a0f331b6e98"
+          }
+        }
+      ],
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "863950797",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "525137219",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1084011059",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "756899565",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "614850471",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "612056594",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451389491",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533755117",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "6",
+        "selected_physical_index": 6,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "policy": {
+        "requested": "hipblas",
+        "before": "_BlasBackend.Cublaslt",
+        "effective": "_BlasBackend.Cublas",
+        "changed": true
+      },
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "library_sha256": "668967fd230b55a83d285657a99ab3f61ff10bea5546b64e5fa601fda082889b",
+      "library": "/media/IntelSSD/fireprot/runtime/ck_packed_bmm_probe/mfma32.so",
+      "status": "ok",
+      "gpu_process_monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 6,
+        "allowed_pid": 759768,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "hipblas_repeat": {
+      "schema_version": 1,
+      "backend": "hipblas",
+      "shape": [
+        128,
+        1536,
+        1536
+      ],
+      "seed": 443,
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "cache_state": "warm; reference serialization and checking excluded",
+      "scope": "Exact packed triangle contraction layouts; not model performance",
+      "script_sha256": "35a98b3d1f6bb9e97e2dcc5af296f0922fa2026a005b98eaf234bb93816d09bd",
+      "records": [
+        {
+          "direction": "outgoing",
+          "left_stride": [
+            2359296,
+            1536,
+            1
+          ],
+          "right_stride": [
+            2359296,
+            1,
+            1536
+          ],
+          "status": "ok",
+          "median_ms": 29.617024421691895,
+          "p95_ms": 29.675662994384766,
+          "values_ms": [
+            28.940643310546875,
+            28.941604614257812,
+            28.93744468688965,
+            28.937286376953125,
+            28.94096565246582,
+            29.030244827270508,
+            29.275676727294922,
+            29.49774742126465,
+            29.603824615478516,
+            29.63326644897461,
+            29.675662994384766,
+            29.693744659423828,
+            29.630224227905273,
+            29.66414451599121,
+            29.64846420288086,
+            29.630224227905273,
+            29.631664276123047,
+            29.60318374633789,
+            29.637903213500977,
+            29.66062355041504
+          ],
+          "max_abs_delta": 0.0,
+          "peak_allocated_bytes": 3657433088,
+          "reference_metadata": {
+            "seed": 443,
+            "shape": [
+              128,
+              1536,
+              1536
+            ],
+            "dtype": "float32",
+            "tf32": false,
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "direction": "outgoing",
+            "sha256": "806f60428baec2ffb8f850ab846e1f75313b2d9069bbbbac4aa917c781602934"
+          }
+        },
+        {
+          "direction": "incoming",
+          "left_stride": [
+            2359296,
+            1,
+            1536
+          ],
+          "right_stride": [
+            2359296,
+            1536,
+            1
+          ],
+          "status": "ok",
+          "median_ms": 29.466947555541992,
+          "p95_ms": 29.510547637939453,
+          "values_ms": [
+            27.573963165283203,
+            27.57396125793457,
+            27.680519104003906,
+            28.320659637451172,
+            29.096479415893555,
+            29.495027542114258,
+            29.595985412597656,
+            29.510547637939453,
+            29.459667205810547,
+            29.414392471313477,
+            29.42127227783203,
+            29.44702911376953,
+            29.475187301635742,
+            29.49214744567871,
+            29.508947372436523,
+            29.495668411254883,
+            29.495027542114258,
+            29.474227905273438,
+            29.423831939697266,
+            29.474227905273438
+          ],
+          "max_abs_delta": 0.0,
+          "peak_allocated_bytes": 3657433088,
+          "reference_metadata": {
+            "seed": 443,
+            "shape": [
+              128,
+              1536,
+              1536
+            ],
+            "dtype": "float32",
+            "tf32": false,
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "direction": "incoming",
+            "sha256": "06b29f9b75d6c6bd4f7dbcfc57ed24307a5bd7b9ed3421ed772b0a0f331b6e98"
+          }
+        }
+      ],
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "863950732",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "525137154",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1084010995",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "756899501",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "614689524",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "612056531",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451389427",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533755052",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "6",
+        "selected_physical_index": 6,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "policy": {
+        "requested": "hipblas",
+        "before": "_BlasBackend.Cublaslt",
+        "effective": "_BlasBackend.Cublas",
+        "changed": true
+      },
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "status": "ok",
+      "gpu_process_monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 7,
+        "allowed_pid": 757613,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    }
+  },
+  "sources": {
+    "benchmarks/protenix/benchmark_packed_bmm.py": "0939c03726e6e6251a6fb4af2b15256f4adeae323d020bed2787ede447693a0e",
+    "benchmarks/protenix/csrc/ck_packed_bmm_probe.cpp": "b7a9ba93bb1999d41a297bb5acfb04588bed7e30909c02623c7ba9cddd322385"
+  },
+  "build": {
+    "common_flags": "-O3 -std=c++17 -fPIC -shared --offload-arch=gfx90a -I/opt/rocm/include",
+    "mfma32_flags": "default XDL=32 REP=2",
+    "mfma16_flags": "-DXDL=16 -DREP=4",
+    "logs": {
+      "build16.log": "In file included from /media/IntelSSD/fireprot/benchmarks/protenix/csrc/ck_packed_bmm_probe.cpp:4:\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: warning: failed to meet occupancy target given by 'amdgpu-waves-per-eu' in '_ZN2ck16tensor_operation6device31kernel_batched_gemm_xdlops_v2r3INS1_20DeviceBatchedGemmXdlIffffNS_13tensor_layout4gemm8RowMajorENS5_11ColumnMajorES6_NS0_12element_wise11PassThroughES9_S9_Li256ELi128ELi128ELi8ELi4ELi16ELi16ELi4ELi4ENS_8SequenceIJLi8ELi16ELi2EEEENSA_IJLi1ELi0ELi2EEEESC_Li2ELi2ELi2ELb1ESB_SC_SC_Li2ELi2ELi2ELb1ELi7ELi1ELi1ELNS_13LoopSchedulerE0ELNS_15PipelineVersionE0EEENS_43GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_extILi256EfffLNS_25InMemoryDataOperationEnumE0ES6_S7_S6_S9_S9_S9_LNS1_18GemmSpecializationE7ELi128ELi128ELi8ELi16ELi16ELi4ELi4ELi4ESB_SC_SC_Li2ELi2ELi2ELb0ELb1ESB_SC_SC_Li2ELi2ELi2ELb0ELb1ENSA_IJLi2ELi3ELi0ELi1ELi7ELi5ELi4ELi6EEEELi7ELi1ELi1ELSD_0ELSE_0EEELb1EEEvNT_8ArgumentE': desired occupancy was 2, final occupancy is 1 [-Wpass-failed]\n   57 |     kernel_batched_gemm_xdlops_v2r3(const typename DeviceOp::Argument karg)\n      |     ^\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: warning: failed to meet occupancy target given by 'amdgpu-waves-per-eu' in '_ZN2ck16tensor_operation6device31kernel_batched_gemm_xdlops_v2r3INS1_20DeviceBatchedGemmXdlIffffNS_13tensor_layout4gemm8RowMajorENS5_11ColumnMajorES6_NS0_12element_wise11PassThroughES9_S9_Li256ELi128ELi128ELi8ELi4ELi16ELi16ELi4ELi4ENS_8SequenceIJLi8ELi16ELi2EEEENSA_IJLi1ELi0ELi2EEEESC_Li2ELi2ELi2ELb1ESB_SC_SC_Li2ELi2ELi2ELb1ELi7ELi1ELi1ELNS_13LoopSchedulerE0ELNS_15PipelineVersionE0EEENS_43GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_extILi256EfffLNS_25InMemoryDataOperationEnumE0ES6_S7_S6_S9_S9_S9_LNS1_18GemmSpecializationE7ELi128ELi128ELi8ELi16ELi16ELi4ELi4ELi4ESB_SC_SC_Li2ELi2ELi2ELb0ELb1ESB_SC_SC_Li2ELi2ELi2ELb0ELb1ENSA_IJLi2ELi3ELi0ELi1ELi7ELi5ELi4ELi6EEEELi7ELi1ELi1ELSD_0ELSE_0EEELb0EEEvNT_8ArgumentE': desired occupancy was 2, final occupancy is 1 [-Wpass-failed]\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: warning: failed to meet occupancy target given by 'amdgpu-waves-per-eu' in '_ZN2ck16tensor_operation6device31kernel_batched_gemm_xdlops_v2r3INS1_20DeviceBatchedGemmXdlIffffNS_13tensor_layout4gemm11ColumnMajorENS5_8RowMajorES7_NS0_12element_wise11PassThroughES9_S9_Li256ELi128ELi128ELi8ELi4ELi16ELi16ELi4ELi4ENS_8SequenceIJLi4ELi64ELi1EEEENSA_IJLi0ELi2ELi1EEEESC_Li1ELi2ELi4ELb1ESB_SC_SC_Li1ELi2ELi4ELb1ELi7ELi1ELi1ELNS_13LoopSchedulerE0ELNS_15PipelineVersionE0EEENS_43GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_extILi256EfffLNS_25InMemoryDataOperationEnumE0ES6_S7_S7_S9_S9_S9_LNS1_18GemmSpecializationE7ELi128ELi128ELi8ELi16ELi16ELi4ELi4ELi4ESB_SC_SC_Li1ELi2ELi4ELb0ELb1ESB_SC_SC_Li1ELi2ELi4ELb0ELb1ENSA_IJLi2ELi3ELi0ELi1ELi7ELi5ELi4ELi6EEEELi7ELi1ELi1ELSD_0ELSE_0EEELb1EEEvNT_8ArgumentE': desired occupancy was 2, final occupancy is 1 [-Wpass-failed]\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: warning: failed to meet occupancy target given by 'amdgpu-waves-per-eu' in '_ZN2ck16tensor_operation6device31kernel_batched_gemm_xdlops_v2r3INS1_20DeviceBatchedGemmXdlIffffNS_13tensor_layout4gemm11ColumnMajorENS5_8RowMajorES7_NS0_12element_wise11PassThroughES9_S9_Li256ELi128ELi128ELi8ELi4ELi16ELi16ELi4ELi4ENS_8SequenceIJLi4ELi64ELi1EEEENSA_IJLi0ELi2ELi1EEEESC_Li1ELi2ELi4ELb1ESB_SC_SC_Li1ELi2ELi4ELb1ELi7ELi1ELi1ELNS_13LoopSchedulerE0ELNS_15PipelineVersionE0EEENS_43GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_extILi256EfffLNS_25InMemoryDataOperationEnumE0ES6_S7_S7_S9_S9_S9_LNS1_18GemmSpecializationE7ELi128ELi128ELi8ELi16ELi16ELi4ELi4ELi4ESB_SC_SC_Li1ELi2ELi4ELb0ELb1ESB_SC_SC_Li1ELi2ELi4ELb0ELb1ENSA_IJLi2ELi3ELi0ELi1ELi7ELi5ELi4ELi6EEEELi7ELi1ELi1ELSD_0ELSE_0EEELb0EEEvNT_8ArgumentE': desired occupancy was 2, final occupancy is 1 [-Wpass-failed]\n4 warnings generated when compiling for gfx90a.\n",
+      "build32.log": "In file included from /media/IntelSSD/fireprot/benchmarks/protenix/csrc/ck_packed_bmm_probe.cpp:4:\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: warning: failed to meet occupancy target given by 'amdgpu-waves-per-eu' in '_ZN2ck16tensor_operation6device31kernel_batched_gemm_xdlops_v2r3INS1_20DeviceBatchedGemmXdlIffffNS_13tensor_layout4gemm8RowMajorENS5_11ColumnMajorES6_NS0_12element_wise11PassThroughES9_S9_Li256ELi128ELi128ELi8ELi4ELi32ELi32ELi2ELi2ENS_8SequenceIJLi8ELi16ELi2EEEENSA_IJLi1ELi0ELi2EEEESC_Li2ELi2ELi2ELb1ESB_SC_SC_Li2ELi2ELi2ELb1ELi7ELi1ELi1ELNS_13LoopSchedulerE0ELNS_15PipelineVersionE0EEENS_43GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_extILi256EfffLNS_25InMemoryDataOperationEnumE0ES6_S7_S6_S9_S9_S9_LNS1_18GemmSpecializationE7ELi128ELi128ELi8ELi32ELi32ELi4ELi2ELi2ESB_SC_SC_Li2ELi2ELi2ELb0ELb1ESB_SC_SC_Li2ELi2ELi2ELb0ELb1ENSA_IJLi2ELi3ELi0ELi1ELi7ELi5ELi4ELi6EEEELi7ELi1ELi1ELSD_0ELSE_0EEELb1EEEvNT_8ArgumentE': desired occupancy was 2, final occupancy is 1 [-Wpass-failed]\n   57 |     kernel_batched_gemm_xdlops_v2r3(const typename DeviceOp::Argument karg)\n      |     ^\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: warning: failed to meet occupancy target given by 'amdgpu-waves-per-eu' in '_ZN2ck16tensor_operation6device31kernel_batched_gemm_xdlops_v2r3INS1_20DeviceBatchedGemmXdlIffffNS_13tensor_layout4gemm8RowMajorENS5_11ColumnMajorES6_NS0_12element_wise11PassThroughES9_S9_Li256ELi128ELi128ELi8ELi4ELi32ELi32ELi2ELi2ENS_8SequenceIJLi8ELi16ELi2EEEENSA_IJLi1ELi0ELi2EEEESC_Li2ELi2ELi2ELb1ESB_SC_SC_Li2ELi2ELi2ELb1ELi7ELi1ELi1ELNS_13LoopSchedulerE0ELNS_15PipelineVersionE0EEENS_43GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_extILi256EfffLNS_25InMemoryDataOperationEnumE0ES6_S7_S6_S9_S9_S9_LNS1_18GemmSpecializationE7ELi128ELi128ELi8ELi32ELi32ELi4ELi2ELi2ESB_SC_SC_Li2ELi2ELi2ELb0ELb1ESB_SC_SC_Li2ELi2ELi2ELb0ELb1ENSA_IJLi2ELi3ELi0ELi1ELi7ELi5ELi4ELi6EEEELi7ELi1ELi1ELSD_0ELSE_0EEELb0EEEvNT_8ArgumentE': desired occupancy was 2, final occupancy is 1 [-Wpass-failed]\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: warning: failed to meet occupancy target given by 'amdgpu-waves-per-eu' in '_ZN2ck16tensor_operation6device31kernel_batched_gemm_xdlops_v2r3INS1_20DeviceBatchedGemmXdlIffffNS_13tensor_layout4gemm11ColumnMajorENS5_8RowMajorES7_NS0_12element_wise11PassThroughES9_S9_Li256ELi128ELi128ELi8ELi4ELi32ELi32ELi2ELi2ENS_8SequenceIJLi4ELi64ELi1EEEENSA_IJLi0ELi2ELi1EEEESC_Li1ELi2ELi4ELb1ESB_SC_SC_Li1ELi2ELi4ELb1ELi7ELi1ELi1ELNS_13LoopSchedulerE0ELNS_15PipelineVersionE0EEENS_43GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_extILi256EfffLNS_25InMemoryDataOperationEnumE0ES6_S7_S7_S9_S9_S9_LNS1_18GemmSpecializationE7ELi128ELi128ELi8ELi32ELi32ELi4ELi2ELi2ESB_SC_SC_Li1ELi2ELi4ELb0ELb1ESB_SC_SC_Li1ELi2ELi4ELb0ELb1ENSA_IJLi2ELi3ELi0ELi1ELi7ELi5ELi4ELi6EEEELi7ELi1ELi1ELSD_0ELSE_0EEELb1EEEvNT_8ArgumentE': desired occupancy was 2, final occupancy is 1 [-Wpass-failed]\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: warning: failed to meet occupancy target given by 'amdgpu-waves-per-eu' in '_ZN2ck16tensor_operation6device31kernel_batched_gemm_xdlops_v2r3INS1_20DeviceBatchedGemmXdlIffffNS_13tensor_layout4gemm11ColumnMajorENS5_8RowMajorES7_NS0_12element_wise11PassThroughES9_S9_Li256ELi128ELi128ELi8ELi4ELi32ELi32ELi2ELi2ENS_8SequenceIJLi4ELi64ELi1EEEENSA_IJLi0ELi2ELi1EEEESC_Li1ELi2ELi4ELb1ESB_SC_SC_Li1ELi2ELi4ELb1ELi7ELi1ELi1ELNS_13LoopSchedulerE0ELNS_15PipelineVersionE0EEENS_43GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_extILi256EfffLNS_25InMemoryDataOperationEnumE0ES6_S7_S7_S9_S9_S9_LNS1_18GemmSpecializationE7ELi128ELi128ELi8ELi32ELi32ELi4ELi2ELi2ESB_SC_SC_Li1ELi2ELi4ELb0ELb1ESB_SC_SC_Li1ELi2ELi4ELb0ELb1ENSA_IJLi2ELi3ELi0ELi1ELi7ELi5ELi4ELi6EEEELi7ELi1ELi1ELSD_0ELSE_0EEELb0EEEvNT_8ArgumentE': desired occupancy was 2, final occupancy is 1 [-Wpass-failed]\n4 warnings generated when compiling for gfx90a.\n"
+    }
+  },
+  "dispatch_evidence": {
+    "path": "/home/pc/pytorch/aten/src/ATen/cuda/CUDABlas.cpp",
+    "sha256": "d4359aa28c37b40e3bf9ca54a5690ee589b9c0ecd7b1da837768977814addc1f",
+    "function": "bgemm_internal<float>",
+    "finding": "Only Cublaslt preference gets a distinct branch; all other preferences including CK call ordinary BLAS. Process CK timing is not explicit CK execution."
+  },
+  "decision": "Do not promote either direct CK configuration. hipBLASLt wins this operator but requires separate model validation."
+}

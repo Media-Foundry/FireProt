@@ -33,7 +33,7 @@ from fireprot.backends.amd.blas import (
 )
 
 
-BACKENDS = ("auto", "hipblaslt", "hipblas", "ck")
+BACKENDS = ("auto", "hipblaslt", "hipblas", "ck", "direct_ck")
 
 
 def _utc_now() -> str:
@@ -162,7 +162,21 @@ def _worker(spec_path: pathlib.Path) -> int:
 
         if not torch.cuda.is_available():
             raise RuntimeError("A CUDA-compatible PyTorch device is required")
-        policy = configure_process_blas(spec["backend"], torch_module=torch)
+        direct_ck = None
+        if spec["backend"] == "direct_ck":
+            from fireprot.backends.amd.ck_extension import (
+                extension_status,
+                load_ck_extension,
+            )
+
+            direct_ck = load_ck_extension(torch_module=torch)
+            policy = {
+                "requested": "direct_ck",
+                "effective": "direct CK extension" if direct_ck else "unavailable",
+                "extension": extension_status(),
+            }
+        else:
+            policy = configure_process_blas(spec["backend"], torch_module=torch)
         torch.manual_seed(spec["seed"])
         dtype_map = {
             "float32": torch.float32,
@@ -194,9 +208,20 @@ def _worker(spec_path: pathlib.Path) -> int:
                         m, k, n = shape
                         left = torch.randn(m, k, device="cuda", dtype=dtype)
                         right = torch.randn(k, n, device="cuda", dtype=dtype)
-                        function = lambda: torch.mm(left, right)
+                        if spec["backend"] == "direct_ck":
+                            if direct_ck is None:
+                                raise RuntimeError("direct CK extension is unavailable")
+                            if dtype is not torch.float32:
+                                raise RuntimeError("direct CK wrapper supports FP32 only")
+                            function = lambda: direct_ck.mm_f32(left, right)
+                        else:
+                            function = lambda: torch.mm(left, right)
                         iterations = spec["benchmark"]["iterations"]
                     elif kind == "bmm":
+                        if spec["backend"] == "direct_ck":
+                            raise RuntimeError(
+                                "direct CK wrapper does not implement batched GEMM"
+                            )
                         batch, m, k, n = shape
                         left = torch.randn(
                             batch, m, k, device="cuda", dtype=dtype
@@ -207,6 +232,10 @@ def _worker(spec_path: pathlib.Path) -> int:
                         function = lambda: torch.bmm(left, right)
                         iterations = spec["benchmark"]["bmm_iterations"]
                     elif kind == "addmm":
+                        if spec["backend"] == "direct_ck":
+                            raise RuntimeError(
+                                "direct CK wrapper does not implement an add epilogue"
+                            )
                         m, k, n = shape
                         bias = torch.randn(n, device="cuda", dtype=dtype)
                         left = torch.randn(m, k, device="cuda", dtype=dtype)

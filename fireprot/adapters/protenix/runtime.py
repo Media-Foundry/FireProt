@@ -20,6 +20,7 @@ from fireprot.ops.registry import registry
 
 
 _OPTIONAL_REGISTRATION_MODULES = (
+    "fireprot.backends.amd.ck_gemm",
     "fireprot.backends.amd.triangle_multiplication",
     "fireprot.backends.amd.triangle_attention",
     "fireprot.backends.amd.recycle",

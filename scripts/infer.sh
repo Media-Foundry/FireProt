@@ -29,18 +29,17 @@ COMMON_ARGS=(
   --use_default_params false
   --use_msa false
   --use_template false
-  --trimul_kernel torch
-  --triatt_kernel torch
   --enable_tf32 false
 )
 case "$FIREPROT_BACKEND" in
   native)
-    exec "$FIREPROT_PYTHON" -m runner.batch_inference "${COMMON_ARGS[@]}" "$@"
+    exec "$FIREPROT_PYTHON" -m runner.batch_inference \
+      "${COMMON_ARGS[@]}" --trimul_kernel torch --triatt_kernel torch "$@"
     ;;
   fireprot)
     exec "$FIREPROT_PYTHON" -m fireprot.adapters.protenix.runtime \
       --fireprot-blas-backend "$FIREPROT_BLAS_BACKEND" -- \
-      "${COMMON_ARGS[@]}" "$@"
+      "${COMMON_ARGS[@]}" --trimul_kernel fireprot --triatt_kernel torch "$@"
     ;;
   *)
     echo "FIREPROT_BACKEND must be 'native' or 'fireprot', got '$FIREPROT_BACKEND'." >&2

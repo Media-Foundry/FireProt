@@ -162,7 +162,7 @@ class OperationRegistry:
     def dispatch(
         self,
         signature: OperationSignature,
-        native: ImplementationFunction,
+        fallback: ImplementationFunction,
         *args: Any,
         **kwargs: Any,
     ) -> Any:
@@ -170,7 +170,7 @@ class OperationRegistry:
         function = (
             selection.implementation.function
             if selection.implementation is not None
-            else native
+            else fallback
         )
         return function(*args, **kwargs)
 

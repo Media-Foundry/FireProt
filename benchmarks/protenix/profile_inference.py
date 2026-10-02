@@ -813,6 +813,11 @@ def _worker_main(spec_path: pathlib.Path) -> int:
         )
 
         workload = spec["workload"]
+        trimul_kernel = (
+            "fireprot"
+            if spec["backend"] == "fireprot"
+            else workload.get("trimul_kernel", "torch")
+        )
         inference_started = time.perf_counter()
         torch_profiler = None
         profiler_context: Any = contextlib.nullcontext()
@@ -837,7 +842,7 @@ def _worker_main(spec_path: pathlib.Path) -> int:
                 n_sample=workload["samples"],
                 dtype=workload["dtype"],
                 model_name=workload["model_name"],
-                trimul_kernel=workload.get("trimul_kernel", "torch"),
+                trimul_kernel=trimul_kernel,
                 triatt_kernel=workload.get("triatt_kernel", "torch"),
                 enable_cache=workload["cache"],
                 enable_fusion=workload.get("enable_fusion", True),

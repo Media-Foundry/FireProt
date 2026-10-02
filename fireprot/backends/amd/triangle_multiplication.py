@@ -26,7 +26,7 @@ _fused_gate_enabled = os.environ.get("FIREPROT_DISABLE_TRIANGLE_GATE_FUSION") !=
 _long_fused_gate_enabled = (
     os.environ.get("FIREPROT_DISABLE_LONG_TRIANGLE_GATES") != "1"
 )
-_long_packed_enabled = os.environ.get("FIREPROT_ENABLE_LONG_TRIANGLE_PACKED") == "1"
+_long_packed_enabled = os.environ.get("FIREPROT_DISABLE_LONG_TRIANGLE_PACKED") != "1"
 
 
 def _architecture(tensor: Any) -> str:
@@ -241,7 +241,7 @@ def _long_sequence_hip_fused(
 
 def _supports_long_packed(signature: OperationSignature) -> bool | tuple[bool, str]:
     if not _long_packed_enabled:
-        return False, "requires FIREPROT_ENABLE_LONG_TRIANGLE_PACKED"
+        return False, "disabled by FIREPROT_DISABLE_LONG_TRIANGLE_PACKED"
     return _supports_long_fused_gates(signature)
 
 

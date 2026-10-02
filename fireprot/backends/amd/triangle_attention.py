@@ -26,7 +26,7 @@ OUTER_BATCH_CHUNK = 64
 _long_sequence_enabled = (
     os.environ.get("FIREPROT_DISABLE_LONG_TRIANGLE_ATTENTION") != "1"
 )
-_long_direct_enabled = os.environ.get("FIREPROT_ENABLE_LONG_DIRECT_ATTENTION") == "1"
+_long_direct_enabled = os.environ.get("FIREPROT_DISABLE_LONG_DIRECT_ATTENTION") != "1"
 
 
 def _architecture(tensor: Any) -> str:
@@ -123,7 +123,7 @@ def _efficient_sdpa(
 
 def _supports_long_direct(signature: OperationSignature) -> bool | tuple[bool, str]:
     if not _long_direct_enabled:
-        return False, "experimental direct attention requires opt-in"
+        return False, "disabled by FIREPROT_DISABLE_LONG_DIRECT_ATTENTION"
     if signature.shape != LONG_QKV_SHAPE or dict(signature.attributes).get(
         "bias_shapes"
     ) != repr(LONG_UNMASKED_BIAS_SHAPES):

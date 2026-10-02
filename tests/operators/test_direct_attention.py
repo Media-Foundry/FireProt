@@ -10,7 +10,7 @@ from fireprot.backends.amd import triangle_attention as ta
 from fireprot.ops.registry import OperationSignature
 
 
-def test_direct_attention_capability_requires_opt_in_and_implicit_long_mask(monkeypatch):
+def test_direct_attention_capability_can_be_disabled_and_requires_implicit_long_mask(monkeypatch):
     signature = OperationSignature.create(
         operation=ta.OPERATION, device_type="cuda", architecture="gfx90a",
         dtype="float32", shape=ta.LONG_QKV_SHAPE, layout="strided",

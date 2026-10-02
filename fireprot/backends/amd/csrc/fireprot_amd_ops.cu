@@ -531,3 +531,35 @@ torch::Tensor fireprot_sigmoid_mul_mask_f32(
   C10_CUDA_KERNEL_LAUNCH_CHECK();
   return output;
 }
+
+
+namespace {
+__global__ void sigmoid_mul_out_kernel(const float4* activation,const float4* value,
+                                       float4* output,std::int64_t count) {
+  const std::int64_t i=static_cast<std::int64_t>(blockIdx.x)*blockDim.x+threadIdx.x;
+  if(i>=count) return;
+  const float4 g=activation[i],v=value[i];
+  output[i]=make_float4(v.x/(1.0f+expf(-g.x)),v.y/(1.0f+expf(-g.y)),
+                       v.z/(1.0f+expf(-g.z)),v.w/(1.0f+expf(-g.w)));
+}
+}
+
+torch::Tensor fireprot_sigmoid_mul_out_f32(torch::Tensor activation,torch::Tensor value) {
+  check_common(activation,"activation");
+  check_common(value,"value");
+  TORCH_CHECK(activation.sizes()==value.sizes(),"shapes must match");
+  TORCH_CHECK(activation.device()==value.device(),"devices must match");
+  TORCH_CHECK(activation.numel()>0 && activation.numel()%4==0,"requires nonempty float4 vectors");
+  TORCH_CHECK(reinterpret_cast<std::uintptr_t>(activation.data_ptr())%16==0 &&
+              reinterpret_cast<std::uintptr_t>(value.data_ptr())%16==0,"requires 16-byte alignment");
+  const c10::DeviceGuard guard(activation.device());
+  auto output=torch::empty_like(value);
+  const auto stream=c10::hip::getCurrentHIPStream(activation.get_device());
+  const std::int64_t count=activation.numel()/4;
+  hipLaunchKernelGGL(sigmoid_mul_out_kernel,dim3((count+255)/256),dim3(256),0,stream.stream(),
+      reinterpret_cast<const float4*>(activation.data_ptr<float>()),
+      reinterpret_cast<const float4*>(value.data_ptr<float>()),
+      reinterpret_cast<float4*>(output.data_ptr<float>()),count);
+  C10_CUDA_KERNEL_LAUNCH_CHECK();
+  return output;
+}

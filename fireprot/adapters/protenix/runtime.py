@@ -54,6 +54,7 @@ def install(blas_backend: str | None = None) -> dict[str, Any]:
 def manifest() -> dict[str, Any]:
     from fireprot.backends.amd.ck_attention import extension_status
     from fireprot.backends.amd.lt_bmm import extension_status as lt_status
+    from fireprot.backends.amd.attention_gate import manifest as gate_manifest
 
     result = {
         **(_installed or {"adapter": "protenix", "installed": False}),
@@ -61,6 +62,7 @@ def manifest() -> dict[str, Any]:
         "operations": registry.manifest(),
         "ck_attention": extension_status(),
         "lt_bmm": lt_status(),
+        "attention_gate": gate_manifest(),
     }
     if _installed is not None:
         from fireprot.adapters.protenix import hooks

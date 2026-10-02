@@ -31,7 +31,8 @@ def install() -> dict[str, Any]:
             return manifest()
         recycle_disabled = os.environ.get("FIREPROT_DISABLE_RECYCLE_OPS") == "1"
         ck_disabled = not _ck_ops_enabled()
-        if recycle_disabled and ck_disabled:
+        attention_gate_enabled = os.environ.get("FIREPROT_ENABLE_ATTENTION_GATE_1536") == "1"
+        if recycle_disabled and ck_disabled and not attention_gate_enabled:
             _installed = True
             _enabled = False
             return manifest()
@@ -103,6 +104,20 @@ def install() -> dict[str, Any]:
             OuterProductMean._forward = outer_product_mean_forward
             hook_names.append("OuterProductMean._forward")
             _ck_enabled = True
+
+        if attention_gate_enabled:
+            from protenix.model.triangular.layers import Attention
+            from fireprot.backends.amd.attention_gate import wrap_up
+
+            original_wrap_up = Attention._wrap_up
+
+            @functools.wraps(original_wrap_up)
+            def attention_wrap_up(self: Any, o: Any, q_x: Any) -> Any:
+                return wrap_up(module=self, o=o, x=q_x,
+                               native=lambda: original_wrap_up(self, o, q_x))
+
+            Attention._wrap_up = attention_wrap_up
+            hook_names.append("Attention._wrap_up")
 
         _hook_names = hook_names
         _installed = True

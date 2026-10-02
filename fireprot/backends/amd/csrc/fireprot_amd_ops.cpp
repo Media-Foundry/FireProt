@@ -40,7 +40,11 @@ torch::Tensor fireprot_sigmoid_mul_mask_f32(
     torch::Tensor output,
     torch::Tensor mask);
 
+torch::Tensor fireprot_sigmoid_mul_out_f32(torch::Tensor activation,torch::Tensor value);
+
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, module) {
+  module.def("sigmoid_mul_out_f32", &fireprot_sigmoid_mul_out_f32,
+      "FireProt out-of-place FP32 sigmoid gate fusion");
   module.def("sigmoid_pack_f32_128", &fireprot_sigmoid_pack_f32_128,
       "FireProt fused sigmoid projection and channel-first packing");
   module.def("packed_layer_norm_f32_128", &fireprot_packed_layer_norm_f32_128,

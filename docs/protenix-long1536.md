@@ -575,11 +575,14 @@ The isolated BMM advantage therefore does not justify a global switch.
 A per-operation Lt implementation or real-call kernel trace is needed to
 separate contraction improvements from projection changes and runtime dispatch.
 
-Before this comparison, a checksum audit detected one stale remote HIP
-source file; it was restored to the committed version before either run.
-Model-source and benchmark checksums were then consistent, excluding
-hardware-local generated LayerNorm build artifacts. This audit does not
-retroactively establish the source state of earlier runs. See
+Before this comparison, a checksum audit detected a stale remote generated
+`.hip` file, which was refreshed. A subsequent audit clarified that the
+tracked `.cu` and `.cpp` files are the authoritative build inputs; `.hip`
+is a hipify-generated copy, not a committed source. The earlier evidence
+record's wording "restored local committed version" is inaccurate for that
+file and is retained as historical metadata. This generated-file difference
+does not prove earlier loaded kernels were stale. Source and benchmark
+checksums otherwise matched, excluding generated LayerNorm build artifacts. See
 [complete model evidence](../provenance/protenix_long1536_blas_e6dfa14.json).
 
 ### CK BMM tile and prefetch tuning
@@ -811,3 +814,21 @@ The benchmark sets `LAYERNORM_TYPE=torch` before importing Protenix,
 matching the existing benchmark environment and avoiding unrelated CUDA
 LayerNorm compilation. See
 [attention surround evidence](../provenance/protenix_attention_surround_4bfadb8.json).
+
+
+### Experimental attention-gate model route
+
+`FIREPROT_ENABLE_ATTENTION_GATE_1536=1` installs an opt-in adapter hook for
+`Attention._wrap_up`. It selects the out-of-place HIP sigmoid/multiply
+kernel only for the measured contiguous `[512,1536,4,32]` attention output
+and `[512,1536,128]` input, FP32 gfx90a, evaluation mode, no gradients and
+no autocast. Other shapes or unavailable builds retain the original method.
+The gate and output linear layers remain the original model modules.
+The runtime manifest records selected and fallback counts separately.
+
+The new operation is built from the tracked `fireprot_amd_ops.cu` and
+`.cpp` sources; generated `.hip` files must not be treated as independent
+implementation sources. Focused tests cover extreme sigmoid inputs,
+input preservation, alignment/layout rejection, non-default streams and
+full-size output agreement. Model promotion requires same-source timing
+and coordinate/confidence agreement; the switch defaults to disabled.

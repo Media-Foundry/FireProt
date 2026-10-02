@@ -181,3 +181,29 @@ def test_explicit_source_commits_override_synced_git_metadata(
         "fireprot_commit": "fireprot-explicit",
         "protenix_commit": "protenix-explicit",
     }
+
+
+def test_gpu_stage_recorder_does_not_double_count_same_label_recursion() -> None:
+    class FakeEvent:
+        def record(self) -> None:
+            pass
+
+    class FakeCuda:
+        @staticmethod
+        def Event(enable_timing: bool) -> FakeEvent:
+            assert enable_timing is True
+            return FakeEvent()
+
+    fake_torch = type("FakeTorch", (), {"cuda": FakeCuda})()
+    recorder = profile_inference._Recorder(fake_torch, [])
+    wrapped = None
+
+    def original(depth: int) -> int:
+        if depth:
+            return wrapped(depth - 1)
+        return 7
+
+    wrapped = recorder.wrap_gpu_stage(original, "triangle_multiplication")
+
+    assert wrapped(1) == 7
+    assert len(recorder.gpu_events["triangle_multiplication"]) == 1

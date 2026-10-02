@@ -544,6 +544,9 @@ class _Recorder:
         self.current_call: contextvars.ContextVar[int | None] = contextvars.ContextVar(
             "fireprot_profile_call", default=None
         )
+        self.active_gpu_stages: contextvars.ContextVar[frozenset[str]] = (
+            contextvars.ContextVar("fireprot_active_gpu_stages", default=frozenset())
+        )
         self.call_count = 0
         self.gpu_events: dict[str, list[dict[str, Any]]] = defaultdict(list)
         self.wall_events: dict[str, list[dict[str, Any]]] = defaultdict(list)
@@ -581,6 +584,10 @@ class _Recorder:
     def wrap_gpu_stage(self, original: Callable[..., Any], label: str) -> Callable[..., Any]:
         @functools.wraps(original)
         def wrapped(*args: Any, **kwargs: Any) -> Any:
+            active = self.active_gpu_stages.get()
+            if label in active:
+                return original(*args, **kwargs)
+            token = self.active_gpu_stages.set(active | {label})
             start = self._new_event()
             end = self._new_event()
             start.record()
@@ -595,6 +602,7 @@ class _Recorder:
                         "end": end,
                     }
                 )
+                self.active_gpu_stages.reset(token)
 
         return wrapped
 

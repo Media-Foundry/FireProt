@@ -14,9 +14,11 @@ from fireprot.ops.registry import OperationSignature, registry
 
 PAIR_ROWS = 124 * 124
 PAIR_CHANNELS = 128
+LONG_LAYER_NORM_ROWS = frozenset({1000 * 244, 1000 * 256, 1000 * 1000})
 LAYER_NORM_OPERATION = "layer_norm"
 TRANSITION_OPERATION = "gated_transition"
 LAYER_NORM_IMPLEMENTATION = "amd-gfx90a-hip-layernorm-f32-c128"
+LONG_LAYER_NORM_IMPLEMENTATION = "amd-gfx90a-hip-layernorm-f32-c128-long"
 CHANNEL_FIRST_LAYER_NORM_IMPLEMENTATION = (
     "amd-gfx90a-hip-layernorm-f32-c128-channel-first"
 )
@@ -24,6 +26,9 @@ TRANSITION_IMPLEMENTATION = "amd-gfx90a-hip-transition-f32-c128"
 _fast_path_counts: Counter[tuple[str, str]] = Counter()
 _channel_first_layer_norm_enabled = (
     os.environ.get("FIREPROT_DISABLE_CHANNEL_FIRST_LAYERNORM") != "1"
+)
+_long_layer_norm_enabled = (
+    os.environ.get("FIREPROT_DISABLE_LONG_LAYERNORM") != "1"
 )
 
 
@@ -42,7 +47,11 @@ def _device_architecture(device_index: int) -> str:
     return str(getattr(properties, "gcnArchName", "")).split(":", 1)[0]
 
 
-def _base_support(signature: OperationSignature) -> bool | tuple[bool, str]:
+def _base_support(
+    signature: OperationSignature,
+    *,
+    validated_rows: frozenset[int] = frozenset({PAIR_ROWS}),
+) -> bool | tuple[bool, str]:
     if signature.device_type != "cuda":
         return False, "device is not CUDA/HIP"
     if signature.architecture != "gfx90a":
@@ -55,8 +64,8 @@ def _base_support(signature: OperationSignature) -> bool | tuple[bool, str]:
         return False, "input is not contiguous"
     if signature.shape[-1:] != (PAIR_CHANNELS,):
         return False, "last dimension is not 128"
-    if not signature.shape or _row_count(signature.shape) != PAIR_ROWS:
-        return False, "row count is not the validated 124x124 bucket"
+    if not signature.shape or _row_count(signature.shape) not in validated_rows:
+        return False, "row count is not in a validated bucket"
     if load_amd_extension() is None:
         return False, "FireProt AMD extension is unavailable"
     return True
@@ -73,6 +82,22 @@ def _supports_layer_norm(
     signature: OperationSignature,
 ) -> bool | tuple[bool, str]:
     supported = _base_support(signature)
+    if supported is not True:
+        return supported
+    attributes = dict(signature.attributes)
+    if attributes.get("offset") == "True" and attributes.get("scale") != "True":
+        return False, "offset-only LayerNorm is not implemented"
+    if attributes.get("epsilon") != "1e-05":
+        return False, "epsilon is not the validated 1e-5"
+    return True
+
+
+def _supports_long_layer_norm(
+    signature: OperationSignature,
+) -> bool | tuple[bool, str]:
+    if not _long_layer_norm_enabled:
+        return False, "disabled by FIREPROT_DISABLE_LONG_LAYERNORM"
+    supported = _base_support(signature, validated_rows=LONG_LAYER_NORM_ROWS)
     if supported is not True:
         return supported
     attributes = dict(signature.attributes)
@@ -180,6 +205,14 @@ registry.register(
 )
 registry.register(
     operation=LAYER_NORM_OPERATION,
+    name=LONG_LAYER_NORM_IMPLEMENTATION,
+    function=_hip_layer_norm,
+    supports=_supports_long_layer_norm,
+    priority=30,
+    version="1",
+)
+registry.register(
+    operation=LAYER_NORM_OPERATION,
     name=CHANNEL_FIRST_LAYER_NORM_IMPLEMENTATION,
     function=_hip_channel_first_layer_norm,
     supports=_supports_channel_first_layer_norm,
@@ -211,13 +244,15 @@ def dispatch_layer_norm(
 ) -> Any:
     import torch
 
+    rows = _row_count(tuple(x.shape)) if x.shape else 0
+    long_bucket = _long_layer_norm_enabled and rows in LONG_LAYER_NORM_ROWS
     common = (
         x.device.type == "cuda"
         and _architecture(x) == "gfx90a"
         and x.dtype is torch.float32
         and _mode(module, x) == "inference"
         and x.shape[-1:] == (PAIR_CHANNELS,)
-        and _row_count(tuple(x.shape)) == PAIR_ROWS
+        and (rows == PAIR_ROWS or long_bucket)
         and not (module.weight is None and module.bias is not None)
         and module.eps == 1e-5
     )
@@ -239,7 +274,12 @@ def dispatch_layer_norm(
     if common and x.is_contiguous():
         extension = load_amd_extension()
         if extension is not None:
-            _fast_path_counts[(LAYER_NORM_OPERATION, LAYER_NORM_IMPLEMENTATION)] += 1
+            implementation = (
+                LONG_LAYER_NORM_IMPLEMENTATION
+                if long_bucket
+                else LAYER_NORM_IMPLEMENTATION
+            )
+            _fast_path_counts[(LAYER_NORM_OPERATION, implementation)] += 1
             return _hip_layer_norm(module=module, x=x, native=native)
     _fast_path_counts[(LAYER_NORM_OPERATION, "native")] += 1
     return native()
@@ -272,6 +312,7 @@ def dispatch_transition(
 def fast_path_manifest() -> dict[str, Any]:
     return {
         "channel_first_layer_norm_enabled": _channel_first_layer_norm_enabled,
+        "long_layer_norm_enabled": _long_layer_norm_enabled,
         "selection_counts": [
             {"operation": operation, "implementation": implementation, "count": count}
             for (operation, implementation), count in sorted(_fast_path_counts.items())

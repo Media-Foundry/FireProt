@@ -88,6 +88,38 @@ def test_valid_capabilities_require_the_extension() -> None:
 
 
 @pytest.mark.parametrize(
+    "shape",
+    [
+        (1000, 244, 128),
+        (1000, 256, 128),
+        (256, 1000, 128),
+        (1000, 1000, 128),
+    ],
+)
+def test_long_layer_norm_accepts_profiled_row_buckets(
+    shape: tuple[int, ...],
+) -> None:
+    with mock.patch.object(recycle, "load_amd_extension", return_value=object()):
+        assert (
+            recycle._supports_long_layer_norm(
+                _signature(recycle.LAYER_NORM_OPERATION, shape=shape)
+            )
+            is True
+        )
+
+
+def test_long_layer_norm_rejects_unprofiled_row_bucket() -> None:
+    with mock.patch.object(recycle, "load_amd_extension", return_value=object()):
+        result = recycle._supports_long_layer_norm(
+            _signature(
+                recycle.LAYER_NORM_OPERATION,
+                shape=(1000, 255, 128),
+            )
+        )
+    assert result is not True
+
+
+@pytest.mark.parametrize(
     "change",
     [
         {"architecture": "gfx942"},

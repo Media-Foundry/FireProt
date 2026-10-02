@@ -9,9 +9,11 @@ os.environ["LAYERNORM_TYPE"] = "torch"
 
 from fireprot.backends.amd.triangle_multiplication import (
     _short_sequence_torch,
+    _supports_fused_gates,
     _supports_short_sequence,
     dispatch_triangle_multiplication,
 )
+from fireprot.backends.amd.extension import load_amd_extension
 from fireprot.ops.registry import OperationSignature
 from protenix.model.triangular.triangular import (
     TriangleMultiplicationIncoming,
@@ -92,3 +94,59 @@ def test_capability_rejects_long_or_training_signature() -> None:
     training = OperationSignature.create(**{**base, "mode": "training"})
     assert _supports_short_sequence(long)[0] is False
     assert _supports_short_sequence(training)[0] is False
+
+
+def test_fused_gate_capability_is_limited_to_validated_bucket(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "fireprot.backends.amd.triangle_multiplication.load_amd_extension",
+        lambda: object(),
+    )
+    base = {
+        "operation": "triangle_multiplication",
+        "device_type": "cuda",
+        "architecture": "gfx90a",
+        "dtype": "float32",
+        "shape": (124, 124, 128),
+        "layout": "contiguous",
+        "mode": "inference",
+        "mask": "dense",
+        "inplace": True,
+        "attributes": {"c_z": 128, "c_hidden": 128},
+    }
+    assert _supports_fused_gates(OperationSignature.create(**base)) is True
+    wrong_shape = OperationSignature.create(**{**base, "shape": (123, 123, 128)})
+    no_mask = OperationSignature.create(**{**base, "mask": "none"})
+    assert _supports_fused_gates(wrong_shape)[0] is False
+    assert _supports_fused_gates(no_mask) is True
+
+
+@pytest.mark.skipif(
+    not torch.cuda.is_available() or torch.version.hip is None,
+    reason="requires PyTorch HIP",
+)
+def test_hip_sigmoid_multiply_fusions_match_torch() -> None:
+    extension = load_amd_extension()
+    if extension is None:
+        pytest.skip("FireProt AMD extension is unavailable")
+
+    torch.manual_seed(103)
+    device = torch.device("cuda")
+    activation = torch.randn(124, 124, 128, device=device)
+    projection = torch.randn_like(activation)
+    mask = torch.randint(0, 2, (124, 124), device=device).float()
+
+    expected_masked = (mask.unsqueeze(-1) * torch.sigmoid(activation)) * projection
+    masked_output = projection.clone()
+    masked_pointer = masked_output.data_ptr()
+    actual_masked = extension.sigmoid_mul_mask_f32(
+        activation, masked_output, mask
+    )
+    assert actual_masked.data_ptr() == masked_pointer
+    torch.testing.assert_close(actual_masked, expected_masked, rtol=2e-6, atol=2e-6)
+
+    expected = projection * torch.sigmoid(activation)
+    output = projection.clone()
+    pointer = output.data_ptr()
+    actual = extension.sigmoid_mul_f32(activation, output)
+    assert actual.data_ptr() == pointer
+    torch.testing.assert_close(actual, expected, rtol=2e-6, atol=2e-6)

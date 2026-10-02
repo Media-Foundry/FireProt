@@ -25,6 +25,15 @@ torch::Tensor fireprot_silu_mul_f32(
     torch::Tensor activation,
     torch::Tensor gate);
 
+torch::Tensor fireprot_sigmoid_mul_f32(
+    torch::Tensor activation,
+    torch::Tensor output);
+
+torch::Tensor fireprot_sigmoid_mul_mask_f32(
+    torch::Tensor activation,
+    torch::Tensor output,
+    torch::Tensor mask);
+
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, module) {
   module.def(
       "layer_norm_f32_128",
@@ -46,4 +55,12 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, module) {
       "silu_mul_f32",
       &fireprot_silu_mul_f32,
       "FireProt fused FP32 SiLU multiplied by a gate");
+  module.def(
+      "sigmoid_mul_f32",
+      &fireprot_sigmoid_mul_f32,
+      "FireProt fused FP32 sigmoid gate and output multiply");
+  module.def(
+      "sigmoid_mul_mask_f32",
+      &fireprot_sigmoid_mul_mask_f32,
+      "FireProt fused FP32 sigmoid gate, mask, and projection multiply");
 }

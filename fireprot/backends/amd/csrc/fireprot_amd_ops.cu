@@ -143,6 +143,32 @@ __global__ void silu_mul_f32_kernel(
       silu(a.w) * b.w);
 }
 
+__device__ __forceinline__ float sigmoid(float value) {
+  return 1.0f / (1.0f + expf(-value));
+}
+
+template <bool HasMask>
+__global__ void sigmoid_mul_f32_kernel(
+    const float4* __restrict__ activation,
+    float4* __restrict__ output,
+    const float* __restrict__ mask,
+    std::int64_t vector_count,
+    std::int64_t vectors_per_row) {
+  const std::int64_t index =
+      static_cast<std::int64_t>(blockIdx.x) * blockDim.x + threadIdx.x;
+  if (index >= vector_count) {
+    return;
+  }
+  const float4 a = activation[index];
+  const float4 value = output[index];
+  const float scale = HasMask ? mask[index / vectors_per_row] : 1.0f;
+  output[index] = make_float4(
+      (scale * sigmoid(a.x)) * value.x,
+      (scale * sigmoid(a.y)) * value.y,
+      (scale * sigmoid(a.z)) * value.z,
+      (scale * sigmoid(a.w)) * value.w);
+}
+
 void check_common(const torch::Tensor& tensor, const char* name) {
   TORCH_CHECK(tensor.is_cuda(), name, " must be a HIP tensor");
   TORCH_CHECK(tensor.scalar_type() == at::kFloat, name, " must be FP32");
@@ -303,4 +329,85 @@ torch::Tensor fireprot_silu_mul_f32(
       vector_count);
   C10_CUDA_KERNEL_LAUNCH_CHECK();
   return gate;
+}
+
+torch::Tensor fireprot_sigmoid_mul_f32(
+    torch::Tensor activation,
+    torch::Tensor output) {
+  check_common(activation, "activation");
+  check_common(output, "output");
+  TORCH_CHECK(
+      activation.sizes() == output.sizes(),
+      "activation and output shapes must match");
+  TORCH_CHECK(
+      activation.numel() % 4 == 0,
+      "the fused vector path requires a multiple of four values");
+  TORCH_CHECK(
+      activation.get_device() == output.get_device(),
+      "activation and output must be on the same device");
+  TORCH_CHECK(
+      activation.data_ptr() != output.data_ptr(),
+      "activation and output must not alias");
+
+  const std::int64_t vector_count = activation.numel() / 4;
+  constexpr int threads = 256;
+  const dim3 blocks((vector_count + threads - 1) / threads);
+  const auto stream = c10::hip::getCurrentHIPStream(activation.get_device());
+  hipLaunchKernelGGL(
+      HIP_KERNEL_NAME(sigmoid_mul_f32_kernel<false>),
+      blocks,
+      dim3(threads),
+      0,
+      stream.stream(),
+      reinterpret_cast<const float4*>(activation.data_ptr<float>()),
+      reinterpret_cast<float4*>(output.data_ptr<float>()),
+      nullptr,
+      vector_count,
+      1);
+  C10_CUDA_KERNEL_LAUNCH_CHECK();
+  return output;
+}
+
+torch::Tensor fireprot_sigmoid_mul_mask_f32(
+    torch::Tensor activation,
+    torch::Tensor output,
+    torch::Tensor mask) {
+  check_common(activation, "activation");
+  check_common(output, "output");
+  check_common(mask, "mask");
+  TORCH_CHECK(
+      activation.sizes() == output.sizes(),
+      "activation and output shapes must match");
+  TORCH_CHECK(
+      activation.dim() >= 1 && activation.size(-1) % 4 == 0,
+      "the last dimension must be a multiple of four");
+  TORCH_CHECK(
+      mask.numel() == activation.numel() / activation.size(-1),
+      "mask must contain one value per activation row");
+  TORCH_CHECK(
+      activation.get_device() == output.get_device() &&
+          activation.get_device() == mask.get_device(),
+      "activation, output, and mask must be on the same device");
+  TORCH_CHECK(
+      activation.data_ptr() != output.data_ptr(),
+      "activation and output must not alias");
+
+  const std::int64_t vector_count = activation.numel() / 4;
+  const std::int64_t vectors_per_row = activation.size(-1) / 4;
+  constexpr int threads = 256;
+  const dim3 blocks((vector_count + threads - 1) / threads);
+  const auto stream = c10::hip::getCurrentHIPStream(activation.get_device());
+  hipLaunchKernelGGL(
+      HIP_KERNEL_NAME(sigmoid_mul_f32_kernel<true>),
+      blocks,
+      dim3(threads),
+      0,
+      stream.stream(),
+      reinterpret_cast<const float4*>(activation.data_ptr<float>()),
+      reinterpret_cast<float4*>(output.data_ptr<float>()),
+      mask.data_ptr<float>(),
+      vector_count,
+      vectors_per_row);
+  C10_CUDA_KERNEL_LAUNCH_CHECK();
+  return output;
 }

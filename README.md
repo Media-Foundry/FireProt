@@ -6,11 +6,12 @@ FireProt is an AMD GPU focused framework for protein structure inference. It is 
 
 Protenix v1.1.0 is the first working adapter target. The repository now contains:
 
-- a reproducible Protenix MI250 benchmark harness with synchronized GPU stage timing, rocprof import, source and input hashes, exclusive-device checks, and per-run peak memory;
+- a reproducible Protenix MI250 benchmark harness with synchronized GPU stage timing, rocprof import, source and input hashes, continuous GPU process isolation checks, and per-run peak memory;
 - same-seed coordinate and confidence validation;
 - a model-neutral operator registry with deterministic capability checks and native fallback;
-- process-start BLAS selection for PyTorch ROCm;
-- validated FP32 gfx90a paths for short-sequence Protenix triangle multiplication and triangle attention;
+- measured process-start BLAS selection for PyTorch ROCm and a matrix covering every observed GEMM signature;
+- validated FP32 gfx90a paths for short-sequence Protenix triangle multiplication, triangle attention, pair LayerNorm, and the gated transition epilogue;
+- lazily compiled handwritten HIP kernels with exact capability gates and native fallback;
 - an independent Protenix patch branch that exposes FireProt dispatch without changing native defaults.
 
 AtlasFold, OpenFold, ESMFold, Base-model coverage, BF16 promotion, long-sequence tuning, and multi-GPU execution remain future work.
@@ -21,10 +22,14 @@ The current promoted bucket is Protenix Mini-default, 124 tokens, FP32, four cyc
 
 | Workload | Native median | FireProt median | Median speedup | Native p95 | FireProt p95 | p95 speedup |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| C4/S1 | 453.53 ms | 373.94 ms | 1.213x | 457.51 ms | 406.06 ms | 1.127x |
-| C4/S5 | 518.43 ms | 437.86 ms | 1.184x | 541.45 ms | 468.27 ms | 1.156x |
+| C4/S1 | 457.86 ms | 334.48 ms | 1.369x | 475.15 ms | 351.86 ms | 1.350x |
+| C4/S5 | 530.89 ms | 390.77 ms | 1.359x | 564.35 ms | 407.77 ms | 1.384x |
 
-Maximum measured PyTorch peak allocated memory fell from 850,018,304 to 837,647,360 bytes. Maximum reserved memory fell from 1,029,701,632 to 1,000,341,504 bytes. Same-seed Mini-default C4/S1 and C4/S5 comparisons passed the locked 1e-3 coordinate and confidence thresholds.
+Maximum measured PyTorch peak allocated memory fell from 850,018,304 to 757,955,584 bytes. Maximum reserved memory fell from 1,029,701,632 to 920,649,728 bytes. Same-seed Mini-default C4/S1 and C4/S5 comparisons passed the locked 1e-3 coordinate and confidence thresholds.
+
+The observed BLAS matrix covers 57 FP32 `mm`, `bmm`, and `addmm` signatures and 3,132 calls. hipBLAS won the dominant 1,588-call signature and is the validated process policy for this exact bucket. CK won five isolated signatures, was slower on the dominant signature, and did not support 15 signatures, so global CK is not promoted. CK and custom HIP remain per-operation candidates.
+
+Reducing four recycle cycles to one, two, or three measured 2.700x, 1.768x, and 1.289x speedups over C4. Those outputs differed from C4 by 5.760, 2.691, and 4.221 A aligned RMSD on this development case. Cycle reduction therefore remains an explicit approximate choice; the default stays at four cycles.
 
 These are development-case results for one 124-token input and do not establish Base-model, long-sequence, complex, ligand-heavy, or production-dataset speedups. See [Protenix AMD performance](docs/protenix-amd-performance.md) for the complete method, stage results, numerical checks, residual profile, and limits.
 
@@ -36,31 +41,35 @@ The default script uses the Mini-ESM baseline, FP32, four cycles, one diffusion 
 # Native Protenix reference
 FIREPROT_BACKEND=native \
   bash scripts/infer.sh \
+  --model_name protenix_mini_default_v0.5.0 \
   --input /media/IntelSSD/fireprot/cases/1izr_L124/input.json \
   --out_dir /media/IntelSSD/fireprot/outputs/native
 
-# Capability-gated AMD paths with automatic native fallback
-FIREPROT_BACKEND=fireprot FIREPROT_BLAS_BACKEND=auto \
+# Validated Mini-default/124-token AMD path with automatic operator fallback
+FIREPROT_BACKEND=fireprot FIREPROT_BLAS_BACKEND=hipblas \
   bash scripts/infer.sh \
+  --model_name protenix_mini_default_v0.5.0 \
   --input /media/IntelSSD/fireprot/cases/1izr_L124/input.json \
   --out_dir /media/IntelSSD/fireprot/outputs/fireprot
 ```
 
-`FIREPROT_BLAS_BACKEND` accepts `auto`, `hipblaslt`, `hipblas`, or `ck`. It is fixed once at process start. The promoted operator implementations only select the validated gfx90a/FP32/inference signatures; unsupported architectures, dtypes, shapes, layouts, masks, training/autograd calls, and aliasing modes use the upstream torch path.
+`FIREPROT_BLAS_BACKEND` accepts `auto`, `hipblaslt`, `hipblas`, or `ck`. It is fixed once at process start. `hipblas` is validated only for the measured Mini/124-token/FP32 bucket; use `auto` for unmeasured buckets until they have their own matrix and end-to-end gate. The promoted operator implementations select only validated gfx90a/FP32/inference signatures. Unsupported architectures, dtypes, shapes, layouts, masks, training/autograd calls, aliasing modes, or extension builds use the upstream torch path.
 
 ## Benchmark
 
 ```bash
-python benchmarks/protenix/profile_inference.py \
+HIP_VISIBLE_DEVICES=6 python benchmarks/protenix/profile_inference.py \
   --config benchmarks/protenix/configs/mi250.yaml \
   --backend native
 
-python benchmarks/protenix/profile_inference.py \
+HIP_VISIBLE_DEVICES=6 python benchmarks/protenix/profile_inference.py \
   --config benchmarks/protenix/configs/mi250.yaml \
-  --backend fireprot
+  --backend fireprot --blas-backend hipblas
 
-python benchmarks/protenix/benchmark_blas.py \
-  --config benchmarks/protenix/configs/mi250.yaml
+HIP_VISIBLE_DEVICES=6 PYTHONPATH=. python -m benchmarks.protenix.benchmark_blas \
+  --config benchmarks/protenix/configs/mi250.yaml \
+  --operators-json outputs/benchmarks/<run>/torch-operators.json \
+  --output-dir outputs/benchmarks/blas-all-calls
 ```
 
 Raw predictions, profiler traces, weights, and hardware-local tuning data remain under excluded `outputs/` and `runtime/` paths. The compact measured record is [provenance/protenix_amd_benchmark.json](provenance/protenix_amd_benchmark.json).

@@ -1,14 +1,25 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "status": "measured-development-result",
   "date": "2026-10-02",
   "source": {
-    "fireprot_commit": "d31013ac643bdb7e033dd378795d216e29ecf448",
+    "fireprot_measurement_commit": "773999ae404c561309391fa72902641e5be3fb95",
     "protenix_integration_commit": "316f5778e80965015a80339de632291f1abbb7f5",
     "protenix_upstream_baseline": "d3b4db6a121dd4584edd85e93744239325a2b72e",
-    "profile_script_sha256": "812972eb94817a421172630d3bf839eece467361d48bf2215fbec9771b229eb3",
+    "profile_script_sha256": "511213a16ed1e820e0976cec4903638f589c2d1d3bdd657c26bbd14e13ff7b4a",
+    "benchmark_config_sha256": "ee8de5227f50f1f9348fde4980127cc81ad20bfc898a8281dd87554accaabffa",
     "input_sha256": "b2873a9a704806759aca651c7b0287239f7e346ffffcba1a3972efc1cbc9768e",
     "weight_sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81",
+    "amd_extension_sources": [
+      {
+        "path": "fireprot/backends/amd/csrc/fireprot_amd_ops.cpp",
+        "sha256": "f08d202e92396d5bd8bbf7195c9bbf7d8e33c29d3011292bd9993a007a1314b0"
+      },
+      {
+        "path": "fireprot/backends/amd/csrc/fireprot_amd_ops.cu",
+        "sha256": "48da94e5d1dee9210bb3fae18048527e758c82d4b093a59a662503258fe5de3b"
+      }
+    ],
     "protenix_patches": [
       {
         "path": "patches/protenix/0001-feat-add-FireProt-triangle-multiplication-dispatch.patch",
@@ -24,6 +35,11 @@
     "host": "DiamondHill",
     "device": "AMD Instinct MI250X / MI250",
     "architecture": "gfx90a:sramecc+:xnack-",
+    "physical_devices_used": [
+      6,
+      7
+    ],
+    "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:38:16) [GCC 14.3.0]",
     "torch": "2.12.0a0+git78258b9",
     "hip": "7.14.60850"
   },
@@ -41,54 +57,357 @@
     "enable_tf32": false,
     "warmups": 5,
     "repetitions": 30,
-    "device_policy": "exclusive",
-    "preflight_gpu_use_percent": 0,
-    "preflight_vram_used_bytes": 11014144
+    "native_blas_policy": "auto",
+    "fireprot_blas_policy": "hipblas",
+    "device_policy": "exclusive-selected-device",
+    "continuous_process_monitor_interval_seconds": 1.0,
+    "concurrency": "C4/S1 and C4/S5 ran concurrently on separate GCDs; each native/FireProt pair used the same physical GCD"
+  },
+  "promoted_implementations": {
+    "triangle_multiplication": "amd-short-sequence-torch",
+    "triangle_attention": "amd-gfx90a-efficient-sdpa",
+    "layer_norm": "amd-gfx90a-hip-layernorm-f32-c128",
+    "gated_transition": "amd-gfx90a-hip-transition-f32-c128",
+    "process_blas": "hipblas"
   },
   "workloads": {
     "c4_s1": {
       "diffusion_steps": 1,
       "native": {
-        "model_gpu_ms": {"median": 453.52622985839844, "p95": 457.51043701171875},
-        "pairformer_gpu_ms": {"median": 397.19384765625, "p95": 398.6498718261719},
-        "triangle_multiplication_gpu_ms": {"median": 193.2707261443138, "p95": 194.0635324716568},
-        "triangle_attention_gpu_ms": {"median": 135.18611446022987, "p95": 136.47004467248917},
-        "peak_memory_allocated_bytes_max": 850018304,
-        "peak_memory_reserved_bytes_max": 1029701632
+        "model_gpu_ms": {
+          "count": 30,
+          "min": 443.5548400878906,
+          "median": 457.86265563964844,
+          "p95": 475.1528015136719,
+          "max": 645.8973388671875,
+          "mean": 462.95741373697916
+        },
+        "pairformer_gpu_ms": {
+          "count": 30,
+          "min": 386.8610534667969,
+          "median": 399.93690490722656,
+          "p95": 414.5328063964844,
+          "max": 589.2323608398438,
+          "mean": 405.12688496907555
+        },
+        "triangle_multiplication_gpu_ms": {
+          "count": 30,
+          "min": 185.20932054519653,
+          "median": 195.77596586942673,
+          "p95": 203.48156583309174,
+          "max": 382.78702092170715,
+          "mean": 200.4540166258812
+        },
+        "triangle_attention_gpu_ms": {
+          "count": 30,
+          "min": 130.99865871667862,
+          "median": 135.2513542175293,
+          "p95": 136.5101975798607,
+          "max": 136.95949172973633,
+          "mean": 135.102329681317
+        },
+        "diffusion_gpu_ms": {
+          "count": 30,
+          "min": 17.584070205688477,
+          "median": 18.19200897216797,
+          "p95": 22.99496078491211,
+          "max": 23.72426414489746,
+          "mean": 19.003554916381837
+        },
+        "confidence_gpu_ms": {
+          "count": 30,
+          "min": 25.172147750854492,
+          "median": 26.664194107055664,
+          "p95": 28.723779678344727,
+          "max": 29.120271682739258,
+          "mean": 26.76435769399007
+        },
+        "peak_memory_allocated_bytes": {
+          "count": 30,
+          "min": 848982016,
+          "median": 848982016.0,
+          "p95": 848982016,
+          "max": 850018304,
+          "mean": 849016558.9333333
+        },
+        "peak_memory_reserved_bytes": {
+          "count": 30,
+          "min": 1025507328,
+          "median": 1027604480.0,
+          "p95": 1027604480,
+          "max": 1029701632,
+          "mean": 1026835524.2666667
+        },
+        "gpu_process_monitor": {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 6,
+          "interval_seconds": 1.0,
+          "samples": 43,
+          "allowed_pid": 575494,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
       },
       "fireprot": {
-        "model_gpu_ms": {"median": 373.93896484375, "p95": 406.0614929199219},
-        "pairformer_gpu_ms": {"median": 320.71070861816406, "p95": 352.515869140625},
-        "triangle_multiplication_gpu_ms": {"median": 135.78107130527496, "p95": 137.40437668561935},
-        "triangle_attention_gpu_ms": {"median": 111.73459258675575, "p95": 113.76494836807251},
-        "peak_memory_allocated_bytes_max": 837647360,
-        "peak_memory_reserved_bytes_max": 1000341504,
-        "triangle_multiplication_selections": 5040,
-        "triangle_attention_selections": 5040
+        "model_gpu_ms": {
+          "count": 30,
+          "min": 327.4333190917969,
+          "median": 334.47618103027344,
+          "p95": 351.8583984375,
+          "max": 360.0348205566406,
+          "mean": 336.1530507405599
+        },
+        "pairformer_gpu_ms": {
+          "count": 30,
+          "min": 278.4927062988281,
+          "median": 283.0104675292969,
+          "p95": 301.47216796875,
+          "max": 307.4206848144531,
+          "mean": 285.91127115885416
+        },
+        "triangle_multiplication_gpu_ms": {
+          "count": 30,
+          "min": 116.86420369148254,
+          "median": 117.4318220615387,
+          "p95": 119.0332379937172,
+          "max": 119.41995805501938,
+          "mean": 117.63512400984764
+        },
+        "triangle_attention_gpu_ms": {
+          "count": 30,
+          "min": 93.34265470504761,
+          "median": 95.95905128121376,
+          "p95": 107.52214181423187,
+          "max": 110.8705666065216,
+          "mean": 97.67621593077978
+        },
+        "diffusion_gpu_ms": {
+          "count": 30,
+          "min": 16.600849151611328,
+          "median": 17.321990966796875,
+          "p95": 23.306982040405273,
+          "max": 23.513227462768555,
+          "mean": 18.8078311920166
+        },
+        "confidence_gpu_ms": {
+          "count": 30,
+          "min": 18.261701583862305,
+          "median": 18.83180046081543,
+          "p95": 21.11395263671875,
+          "max": 21.382919311523438,
+          "mean": 19.15163408915202
+        },
+        "peak_memory_allocated_bytes": {
+          "count": 30,
+          "min": 756923392,
+          "median": 757582336.0,
+          "p95": 757955584,
+          "max": 757955584,
+          "mean": 757477580.8
+        },
+        "peak_memory_reserved_bytes": {
+          "count": 30,
+          "min": 916455424,
+          "median": 918552576.0,
+          "p95": 920649728,
+          "max": 920649728,
+          "mean": 918342860.8
+        },
+        "gpu_process_monitor": {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 6,
+          "interval_seconds": 1.0,
+          "samples": 41,
+          "allowed_pid": 576038,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
       },
-      "speedup": {"model_median": 1.212835, "model_p95": 1.126702}
+      "speedup": {
+        "model_median": 1.3688946526156591,
+        "model_p95": 1.3504091521580448
+      }
     },
     "c4_s5": {
       "diffusion_steps": 5,
       "native": {
-        "model_gpu_ms": {"median": 518.4280700683594, "p95": 541.4475708007812},
-        "pairformer_gpu_ms": {"median": 393.3095245361328, "p95": 417.8134460449219},
-        "triangle_multiplication_gpu_ms": {"median": 190.0720518231392, "p95": 220.73554408550262},
-        "triangle_attention_gpu_ms": {"median": 134.5504942536354, "p95": 136.2451336979866},
-        "peak_memory_allocated_bytes_max": 850018304,
-        "peak_memory_reserved_bytes_max": 1029701632
+        "model_gpu_ms": {
+          "count": 30,
+          "min": 519.6178588867188,
+          "median": 530.8933715820312,
+          "p95": 564.3524169921875,
+          "max": 765.8939208984375,
+          "mean": 540.2624877929687
+        },
+        "pairformer_gpu_ms": {
+          "count": 30,
+          "min": 394.1398620605469,
+          "median": 402.6674346923828,
+          "p95": 419.64947509765625,
+          "max": 642.1351928710938,
+          "mean": 411.17978922526044
+        },
+        "triangle_multiplication_gpu_ms": {
+          "count": 30,
+          "min": 190.6919023990631,
+          "median": 196.7843383550644,
+          "p95": 209.92898309230804,
+          "max": 432.7686229944229,
+          "mean": 204.9512987057368
+        },
+        "triangle_attention_gpu_ms": {
+          "count": 30,
+          "min": 134.88519167900085,
+          "median": 135.45353209972382,
+          "p95": 137.93312948942184,
+          "max": 158.71026360988617,
+          "mean": 136.4612414518992
+        },
+        "diffusion_gpu_ms": {
+          "count": 30,
+          "min": 87.00912475585938,
+          "median": 88.08708190917969,
+          "p95": 94.96729278564453,
+          "max": 101.36349487304688,
+          "mean": 89.68379974365234
+        },
+        "confidence_gpu_ms": {
+          "count": 30,
+          "min": 24.8764591217041,
+          "median": 25.567123413085938,
+          "p95": 29.14475440979004,
+          "max": 47.34452438354492,
+          "mean": 26.690725326538086
+        },
+        "peak_memory_allocated_bytes": {
+          "count": 30,
+          "min": 848982016,
+          "median": 848982016.0,
+          "p95": 848982016,
+          "max": 850018304,
+          "mean": 849016558.9333333
+        },
+        "peak_memory_reserved_bytes": {
+          "count": 30,
+          "min": 1025507328,
+          "median": 1027604480.0,
+          "p95": 1027604480,
+          "max": 1029701632,
+          "mean": 1026975334.4
+        },
+        "gpu_process_monitor": {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 7,
+          "interval_seconds": 1.0,
+          "samples": 45,
+          "allowed_pid": 575491,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
       },
       "fireprot": {
-        "model_gpu_ms": {"median": 437.85520935058594, "p95": 468.26580810546875},
-        "pairformer_gpu_ms": {"median": 316.68507385253906, "p95": 322.82489013671875},
-        "triangle_multiplication_gpu_ms": {"median": 134.16162076592445, "p95": 134.75650763511658},
-        "triangle_attention_gpu_ms": {"median": 111.20084315538406, "p95": 117.84242981672287},
-        "peak_memory_allocated_bytes_max": 837647360,
-        "peak_memory_reserved_bytes_max": 1000341504,
-        "triangle_multiplication_selections": 5040,
-        "triangle_attention_selections": 5040
+        "model_gpu_ms": {
+          "count": 30,
+          "min": 382.5611572265625,
+          "median": 390.77069091796875,
+          "p95": 407.7739562988281,
+          "max": 421.3958435058594,
+          "mean": 392.75147298177086
+        },
+        "pairformer_gpu_ms": {
+          "count": 30,
+          "min": 273.0094909667969,
+          "median": 277.90789794921875,
+          "p95": 294.72491455078125,
+          "max": 307.1197204589844,
+          "mean": 280.4830708821615
+        },
+        "triangle_multiplication_gpu_ms": {
+          "count": 30,
+          "min": 116.366106569767,
+          "median": 116.98044541478157,
+          "p95": 118.03784209489822,
+          "max": 119.59069126844406,
+          "mean": 117.2181383550167
+        },
+        "triangle_attention_gpu_ms": {
+          "count": 30,
+          "min": 91.30147159099579,
+          "median": 94.42988854646683,
+          "p95": 103.4711492061615,
+          "max": 110.99634772539139,
+          "mean": 95.74683519204457
+        },
+        "diffusion_gpu_ms": {
+          "count": 30,
+          "min": 77.46007537841797,
+          "median": 79.13188552856445,
+          "p95": 87.62295532226562,
+          "max": 89.9815902709961,
+          "mean": 80.88118184407553
+        },
+        "confidence_gpu_ms": {
+          "count": 30,
+          "min": 18.166339874267578,
+          "median": 18.41922664642334,
+          "p95": 20.628177642822266,
+          "max": 24.209732055664062,
+          "mean": 18.937921142578126
+        },
+        "peak_memory_allocated_bytes": {
+          "count": 30,
+          "min": 756923392,
+          "median": 757582336.0,
+          "p95": 757955584,
+          "max": 757955584,
+          "mean": 757477580.8
+        },
+        "peak_memory_reserved_bytes": {
+          "count": 30,
+          "min": 916455424,
+          "median": 918552576.0,
+          "p95": 920649728,
+          "max": 920649728,
+          "mean": 917923430.4
+        },
+        "gpu_process_monitor": {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 7,
+          "interval_seconds": 1.0,
+          "samples": 42,
+          "allowed_pid": 576035,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
       },
-      "speedup": {"model_median": 1.184017, "model_p95": 1.156283}
+      "speedup": {
+        "model_median": 1.3585803232450646,
+        "model_p95": 1.383983474850989
+      }
     }
   },
   "numerical_validation": {
@@ -96,40 +415,302 @@
     "confidence_tolerance": 0.001,
     "c4_s1": {
       "atoms": 945,
-      "aligned_rmsd_angstrom": 0.00010758358965066059,
+      "raw_rmsd_angstrom": 0.00012375420439531906,
+      "aligned_rmsd_angstrom": 0.00011820665543115178,
       "max_abs_coordinate_delta_angstrom": 0.0009765625,
-      "max_abs_confidence_delta": 0.000034332275390625,
+      "max_abs_confidence_delta": 2.384185791015625e-07,
       "passed": true
     },
     "c4_s5": {
       "atoms": 945,
-      "aligned_rmsd_angstrom": 0.00006028994853708303,
-      "max_abs_coordinate_delta_angstrom": 0.00029277801513671875,
-      "max_abs_confidence_delta": 0.00003814697265625,
+      "raw_rmsd_angstrom": 5.886975097591878e-05,
+      "aligned_rmsd_angstrom": 5.8673052957642346e-05,
+      "max_abs_coordinate_delta_angstrom": 0.0004711151123046875,
+      "max_abs_confidence_delta": 2.6702880859375e-05,
       "passed": true
     }
   },
-  "rocprof": {
-    "workload": "c4_s1_profile_one",
-    "kernel_count": 135,
-    "dispatch_count": 14809,
-    "aggregate_kernel_duration_ns": 349316757,
-    "category_percent": {
-      "gemm": 37.938727628803676,
-      "elementwise": 20.089401265110222,
-      "copy_or_layout": 16.831001611525895,
-      "layernorm": 15.046055176791876,
-      "other": 6.2840031461760075,
-      "reduction": 3.641015996263815,
-      "softmax": 0.16979517532850563
+  "recycle_cut_experiment": {
+    "status": "measured-approximation-not-promoted",
+    "reference": "FireProt C4/S1",
+    "experimental_coordinates": "coordinates[mask] from cases/1izr_L124/gt_mapping.npz",
+    "workloads": {
+      "c1": {
+        "cycles": 1,
+        "model_gpu_ms": {
+          "count": 30,
+          "min": 121.15067291259766,
+          "median": 123.86291122436523,
+          "p95": 126.26058959960938,
+          "max": 127.13117218017578,
+          "mean": 123.87699406941732
+        },
+        "pairformer_gpu_ms": {
+          "count": 30,
+          "min": 74.70953369140625,
+          "median": 75.5033187866211,
+          "p95": 76.98784637451172,
+          "max": 77.78419494628906,
+          "mean": 75.56290690104167
+        },
+        "speedup_versus_c4_median": 2.7003739676714313,
+        "aligned_rmsd_versus_c4_angstrom": 5.759840352115468,
+        "max_abs_confidence_delta_versus_c4": 5.4681243896484375,
+        "aligned_rmsd_to_experimental_mapping_angstrom": 13.572627686524761,
+        "gpu_process_monitor": {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 6,
+          "interval_seconds": 1.0,
+          "samples": 35,
+          "allowed_pid": 579561,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
+      },
+      "c2": {
+        "cycles": 2,
+        "model_gpu_ms": {
+          "count": 30,
+          "min": 183.54782104492188,
+          "median": 189.2002410888672,
+          "p95": 194.16879272460938,
+          "max": 194.82833862304688,
+          "mean": 189.05781962076824
+        },
+        "pairformer_gpu_ms": {
+          "count": 30,
+          "min": 136.79837036132812,
+          "median": 140.29935455322266,
+          "p95": 144.280029296875,
+          "max": 144.63397216796875,
+          "mean": 140.9636433919271
+        },
+        "speedup_versus_c4_median": 1.7678422559365041,
+        "aligned_rmsd_versus_c4_angstrom": 2.6906302071818677,
+        "max_abs_confidence_delta_versus_c4": 2.0,
+        "aligned_rmsd_to_experimental_mapping_angstrom": 14.282446850886766,
+        "gpu_process_monitor": {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 7,
+          "interval_seconds": 1.0,
+          "samples": 37,
+          "allowed_pid": 579558,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
+      },
+      "c3": {
+        "cycles": 3,
+        "model_gpu_ms": {
+          "count": 30,
+          "min": 254.92881774902344,
+          "median": 259.5704040527344,
+          "p95": 263.6289367675781,
+          "max": 264.5935974121094,
+          "mean": 259.5022003173828
+        },
+        "pairformer_gpu_ms": {
+          "count": 30,
+          "min": 206.00343322753906,
+          "median": 210.57174682617188,
+          "p95": 212.73532104492188,
+          "max": 216.5405731201172,
+          "mean": 210.72508087158204
+        },
+        "speedup_versus_c4_median": 1.2885759539917394,
+        "aligned_rmsd_versus_c4_angstrom": 4.221345187847681,
+        "max_abs_confidence_delta_versus_c4": 2.0478668212890625,
+        "aligned_rmsd_to_experimental_mapping_angstrom": 13.970171726187976,
+        "gpu_process_monitor": {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 6,
+          "interval_seconds": 1.0,
+          "samples": 39,
+          "allowed_pid": 579882,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
+      },
+      "c4": {
+        "cycles": 4,
+        "model_gpu_ms": {
+          "count": 30,
+          "min": 327.4333190917969,
+          "median": 334.47618103027344,
+          "p95": 351.8583984375,
+          "max": 360.0348205566406,
+          "mean": 336.1530507405599
+        },
+        "pairformer_gpu_ms": {
+          "count": 30,
+          "min": 278.4927062988281,
+          "median": 283.0104675292969,
+          "p95": 301.47216796875,
+          "max": 307.4206848144531,
+          "mean": 285.91127115885416
+        },
+        "speedup_versus_c4_median": 1.0,
+        "aligned_rmsd_to_experimental_mapping_angstrom": 14.366776221192826,
+        "gpu_process_monitor": {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 6,
+          "interval_seconds": 1.0,
+          "samples": 41,
+          "allowed_pid": 576038,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
+      }
     },
-    "host_to_device_copy_calls": 1851,
-    "host_to_device_copy_duration_ns": 52895189,
-    "allocation_calls": 178,
-    "free_calls": 87
+    "conclusion": "Cycle cuts reduce latency but are not numerically equivalent to C4 and are not monotonic on this single development case."
+  },
+  "observed_blas_matrix": {
+    "operator_trace_sha256": "7d1ff21e6c013ff3ba9286ee380061d1d2828dea120e7e43b1608379541e5904",
+    "benchmark_script_sha256": "52d15c1dde164bda2bfe0fee5ac0502d57ba4e8f5e19c252a79b4e475e78b08e",
+    "physical_device": 6,
+    "signature_count": 57,
+    "observed_call_count": 3132,
+    "observed_trace_device_time_us": 132925.89399995282,
+    "selection_threshold": 1.1,
+    "selected_backend_summary": {
+      "auto": {
+        "signature_count": 11,
+        "observed_call_count": 507,
+        "observed_trace_device_time_us": 33694.82300000638,
+        "projected_savings_us": 0.0
+      },
+      "ck": {
+        "signature_count": 5,
+        "observed_call_count": 154,
+        "observed_trace_device_time_us": 3603.881999962032,
+        "projected_savings_us": 2217.832090333104
+      },
+      "hipblas": {
+        "signature_count": 41,
+        "observed_call_count": 2471,
+        "observed_trace_device_time_us": 95627.18899998441,
+        "projected_savings_us": 36773.768400773406
+      }
+    },
+    "backend_support": {
+      "auto": {
+        "supported_signatures": 57,
+        "unsupported_signatures": 0,
+        "gpu_process_monitor": {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 6,
+          "interval_seconds": 1.0,
+          "samples": 3,
+          "allowed_pid": 576686,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
+      },
+      "hipblaslt": {
+        "supported_signatures": 57,
+        "unsupported_signatures": 0,
+        "gpu_process_monitor": {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 6,
+          "interval_seconds": 1.0,
+          "samples": 3,
+          "allowed_pid": 576862,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
+      },
+      "hipblas": {
+        "supported_signatures": 57,
+        "unsupported_signatures": 0,
+        "gpu_process_monitor": {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 6,
+          "interval_seconds": 1.0,
+          "samples": 5,
+          "allowed_pid": 577038,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
+      },
+      "ck": {
+        "supported_signatures": 42,
+        "unsupported_signatures": 15,
+        "gpu_process_monitor": {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 6,
+          "interval_seconds": 1.0,
+          "samples": 5,
+          "allowed_pid": 577220,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
+      }
+    },
+    "global_hipblas_modeled_savings_us": 37639.249082654715,
+    "hybrid_per_signature_modeled_savings_us": 38991.60049110651,
+    "ck_incremental_over_hipblas_for_ck_selected_signatures_us": 313.91984783113,
+    "dominant_signature": {
+      "id": "float32:mm:15376x128x128",
+      "observed_calls": 1588,
+      "observed_trace_device_time_us": 76558.92799994722,
+      "auto_median_us": 50.241999328136444,
+      "hipblas_median_us": 35.84200143814087,
+      "ck_median_us": 53.44200134277344
+    },
+    "conclusion": "Global hipBLAS was promoted for this exact bucket. Global CK was rejected because it was slower on the dominant signature and unsupported on 15 of 57 signatures."
   },
   "limits": [
-    "The repeated performance result covers one 124-token development case.",
+    "The repeated performance and recycle-cut results cover one 124-token development case.",
+    "The selected-device monitor excludes other processes from physical GPUs 6 and 7 during each accepted run; other GCDs on the host may have been active.",
+    "The isolated BLAS matrix projects savings from per-signature medians; only the process-wide hipBLAS policy has an end-to-end validation here.",
     "Base weights, long sequences, complexes, ligands, BF16/FP16, gfx942, and multi-GPU execution are unmeasured.",
     "Raw manifests, outputs, and profiler traces remain excluded from Git on DiamondHill."
   ]

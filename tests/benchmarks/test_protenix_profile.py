@@ -207,3 +207,28 @@ def test_gpu_stage_recorder_does_not_double_count_same_label_recursion() -> None
 
     assert wrapped(1) == 7
     assert len(recorder.gpu_events["triangle_multiplication"]) == 1
+
+
+def test_model_recorder_retains_failures_swallowed_by_outer_runner() -> None:
+    class FakeEvent:
+        def record(self) -> None:
+            pass
+
+    class FakeCuda:
+        @staticmethod
+        def Event(enable_timing: bool) -> FakeEvent:
+            assert enable_timing is True
+            return FakeEvent()
+
+    fake_torch = type("FakeTorch", (), {"cuda": FakeCuda})()
+    recorder = profile_inference._Recorder(fake_torch, [])
+
+    def failing_model() -> None:
+        raise ValueError("bad prediction")
+
+    with pytest.raises(ValueError, match="bad prediction"):
+        recorder.wrap_model_call(failing_model)()
+
+    assert recorder.model_failures == [
+        {"call_id": 0, "type": "ValueError", "message": "bad prediction"}
+    ]

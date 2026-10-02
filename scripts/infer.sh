@@ -39,7 +39,7 @@ case "$FIREPROT_BACKEND" in
   fireprot)
     exec "$FIREPROT_PYTHON" -m fireprot.adapters.protenix.runtime \
       --fireprot-blas-backend "$FIREPROT_BLAS_BACKEND" -- \
-      "${COMMON_ARGS[@]}" --trimul_kernel fireprot --triatt_kernel torch "$@"
+      "${COMMON_ARGS[@]}" --trimul_kernel fireprot --triatt_kernel fireprot "$@"
     ;;
   *)
     echo "FIREPROT_BACKEND must be 'native' or 'fireprot', got '$FIREPROT_BACKEND'." >&2

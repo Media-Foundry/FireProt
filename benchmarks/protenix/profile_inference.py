@@ -548,6 +548,7 @@ class _Recorder:
             contextvars.ContextVar("fireprot_active_gpu_stages", default=frozenset())
         )
         self.call_count = 0
+        self.model_failures: list[dict[str, Any]] = []
         self.gpu_events: dict[str, list[dict[str, Any]]] = defaultdict(list)
         self.wall_events: dict[str, list[dict[str, Any]]] = defaultdict(list)
 
@@ -566,6 +567,15 @@ class _Recorder:
             start.record()
             try:
                 return original(*args, **kwargs)
+            except BaseException as error:
+                self.model_failures.append(
+                    {
+                        "call_id": call_id,
+                        "type": type(error).__name__,
+                        "message": str(error),
+                    }
+                )
+                raise
             finally:
                 end.record()
                 self.gpu_events["model"].append(
@@ -831,6 +841,11 @@ def _worker_main(spec_path: pathlib.Path) -> int:
             if spec["backend"] == "fireprot"
             else workload.get("trimul_kernel", "torch")
         )
+        triatt_kernel = (
+            "fireprot"
+            if spec["backend"] == "fireprot"
+            else workload.get("triatt_kernel", "torch")
+        )
         inference_started = time.perf_counter()
         torch_profiler = None
         profiler_context: Any = contextlib.nullcontext()
@@ -856,7 +871,7 @@ def _worker_main(spec_path: pathlib.Path) -> int:
                 dtype=workload["dtype"],
                 model_name=workload["model_name"],
                 trimul_kernel=trimul_kernel,
-                triatt_kernel=workload.get("triatt_kernel", "torch"),
+                triatt_kernel=triatt_kernel,
                 enable_cache=workload["cache"],
                 enable_fusion=workload.get("enable_fusion", True),
                 enable_tf32=workload.get("enable_tf32", False),
@@ -866,6 +881,12 @@ def _worker_main(spec_path: pathlib.Path) -> int:
                 need_atom_confidence=workload.get("need_atom_confidence", False),
             )
         timing = recorder.finalize()
+        if recorder.model_failures:
+            first = recorder.model_failures[0]
+            raise RuntimeError(
+                f"{len(recorder.model_failures)} model call(s) failed; first failure "
+                f"at call {first['call_id']}: {first['type']}: {first['message']}"
+            )
         if recorder.call_count != len(labels):
             raise RuntimeError(
                 f"Expected {len(labels)} model calls but observed "

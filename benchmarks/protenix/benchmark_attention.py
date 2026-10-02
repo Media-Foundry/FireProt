@@ -92,15 +92,21 @@ def main() -> int:
     parser.add_argument("--output", type=pathlib.Path, required=True)
     parser.add_argument("--include-ck", action="store_true")
     parser.add_argument("--include-ck-tile", action="store_true")
+    parser.add_argument("--length", type=int, choices=(1000, 1536), default=1000)
     parser.add_argument("--ck-set", choices=("all", "tuned"), default="all")
     parser.add_argument("--rocm-root", type=pathlib.Path, default=pathlib.Path("/opt/rocm"))
     parser.add_argument("--warmups", type=int, default=5)
     parser.add_argument("--repetitions", type=int, default=20)
     args = parser.parse_args()
+    if args.include_ck and args.length != 1000:
+        parser.error("the legacy CK probe supports only length 1000")
+    n = args.length
+    batch = 1000 if n == 1000 else 512
     if args.warmups < 0 or args.repetitions < 1:
         parser.error("warmups must be nonnegative and repetitions positive")
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    report = dict(schema_version=1, status="running", seed=419, shape=[1000, 4, 1000, 32],
+    report = dict(schema_version=1, status="running", seed=419, shape=[batch, 4, n, 32],
+                  sequence_length=n, upstream_outer_chunks=1 if n == 1000 else 3,
                   dtype="float32", tf32=False, warmups=args.warmups, repetitions=args.repetitions,
                   cache_state="warm within process; compilation excluded",
                   scope="random QKV and bias, observed strides; no checkpoint or model speedup",
@@ -138,9 +144,9 @@ def main() -> int:
         torch.backends.cuda.matmul.allow_tf32 = False
         torch.manual_seed(419)
         with torch.inference_mode():
-            q, k, v = [torch.randn(1000, 1000, 4, 32, device="cuda").transpose(1, 2) for _ in range(3)]
+            q, k, v = [torch.randn(batch, n, 4, 32, device="cuda").transpose(1, 2) for _ in range(3)]
             q.div_(32**0.5)
-            bias = torch.randn(1000, 1000, 4, device="cuda").permute(2, 0, 1).unsqueeze(0)
+            bias = torch.randn(n, n, 4, device="cuda").permute(2, 0, 1).unsqueeze(0)
             report.update(q_stride=list(q.stride()), bias_stride=list(bias.stride()))
             keywords = dict(module=None, q=q, k=k, v=v, biases=[bias], native=lambda: None)
             reference = _efficient_sdpa(**keywords)

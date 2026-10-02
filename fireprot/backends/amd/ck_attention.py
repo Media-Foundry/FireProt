@@ -14,11 +14,13 @@ from fireprot.backends.amd import triangle_attention as ta
 from fireprot.ops.registry import OperationSignature, registry
 
 IMPLEMENTATION = "amd-gfx90a-ck-tile-attention-f32-n1000"
+LONG1536_IMPLEMENTATION = "amd-gfx90a-ck-tile-attention-f32-n1536"
 STRIDES = (128000, 32, 128, 1)
 _enabled = (
     os.environ.get("FIREPROT_ENABLE_CK_ATTENTION", "1") == "1"
     and os.environ.get("FIREPROT_DISABLE_CK_ATTENTION") != "1"
 )
+_long1536_enabled = os.environ.get("FIREPROT_ENABLE_CK_ATTENTION_1536") == "1"
 _lock = threading.RLock()
 _library: Any = None
 _entry: Any = None
@@ -92,25 +94,35 @@ def load_extension() -> Any:
 
 def extension_status() -> dict[str, Any]:
     with _lock:
-        return dict(enabled=_enabled, loaded=_entry is not None, error=_error, build=dict(_build))
+        return dict(enabled=_enabled, long1536_enabled=_long1536_enabled,
+                    loaded=_entry is not None, error=_error, build=dict(_build))
 
 
-def _supports(signature: OperationSignature) -> bool | tuple[bool, str]:
+def _supports(signature: OperationSignature, *, shape=ta.LONG_QKV_SHAPE) -> bool | tuple[bool, str]:
     if not _enabled:
         return False, "CK Tile attention disabled by environment"
-    if signature.shape != ta.LONG_QKV_SHAPE:
-        return False, "CK Tile attention requires N1000"
+    if signature.shape != shape:
+        return False, "CK Tile attention requires an exact measured bucket"
+    n = shape[2]
     attributes = dict(signature.attributes)
-    if attributes.get("bias_shapes") != repr(ta.LONG_UNMASKED_BIAS_SHAPES):
+    if attributes.get("bias_shapes") != repr(((1, 4, n, n),)):
         return False, "CK Tile attention requires implicit pair mask"
-    if attributes.get("qkv_strides") != repr((STRIDES,) * 3) or attributes.get("ck_tile_compatible") != "True":
+    strides = (n * 128, 32, 128, 1)
+    if attributes.get("qkv_strides") != repr((strides,) * 3) or attributes.get("ck_tile_compatible") != "True":
         return False, "CK Tile attention requires exact QKV shape, strides, dtype, device and alignment"
-    supported = ta._supports_long_direct(signature)
+    supported = (ta._supports_long1536_direct(signature) if shape == ta.LONG1536_QKV_SHAPE
+                 else ta._supports_long_direct(signature))
     if supported is not True:
         return supported
     if load_extension() is None:
         return False, "CK Tile attention extension unavailable"
     return True
+
+
+def _supports_long1536(signature: OperationSignature) -> bool | tuple[bool, str]:
+    if not _long1536_enabled:
+        return False, "experimental CK N1536 requires FIREPROT_ENABLE_CK_ATTENTION_1536=1"
+    return _supports(signature, shape=ta.LONG1536_QKV_SHAPE)
 
 
 def attention(*, module: Any, q: Any, k: Any, v: Any, biases: Any, native: Any) -> Any:
@@ -123,7 +135,7 @@ def attention(*, module: Any, q: Any, k: Any, v: Any, biases: Any, native: Any) 
         bias = biases[0].contiguous()
         output = torch.empty_like(q)
         status = entry(q.data_ptr(), k.data_ptr(), v.data_ptr(), bias.data_ptr(),
-                       output.data_ptr(), 1000, 1000, torch.cuda.current_stream(q.device).cuda_stream)
+                       output.data_ptr(), q.shape[0], q.shape[2], torch.cuda.current_stream(q.device).cuda_stream)
         if status:
             raise RuntimeError(f"CK Tile attention launch failed with HIP status {status}")
     return output.transpose(-2, -3)
@@ -131,3 +143,5 @@ def attention(*, module: Any, q: Any, k: Any, v: Any, biases: Any, native: Any) 
 
 registry.register(operation=ta.OPERATION, name=IMPLEMENTATION, function=attention,
                   supports=_supports, priority=30, version="1")
+registry.register(operation=ta.OPERATION, name=LONG1536_IMPLEMENTATION, function=attention,
+                  supports=_supports_long1536, priority=30, version="experimental-1")

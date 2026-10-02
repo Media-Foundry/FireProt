@@ -916,6 +916,10 @@ def _worker_main(spec_path: pathlib.Path) -> int:
         "status": "running",
         "created_at": _utc_now(),
         "spec": spec,
+        "allocator_environment": {
+            key: os.environ.get(key)
+            for key in ("PYTORCH_ALLOC_CONF", "PYTORCH_CUDA_ALLOC_CONF")
+        },
         "source": {
             **spec.get("source", {}),
             "profile_script_sha256": _sha256(pathlib.Path(__file__).resolve()),

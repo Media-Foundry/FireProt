@@ -1,5 +1,5 @@
 // FP32 CK Tile attention candidate. AMD CK headers are MIT licensed.
-// Exact observed N=1000, H=4, D=32 head-last storage; no explicit mask.
+// Exact observed N=1000/B=1000 or N=1536/B=512, H=4, D=32; no explicit mask.
 #include "ck_tile/core.hpp"
 #include "ck_tile/host.hpp"
 #include "ck_tile/ops/gemm.hpp"
@@ -31,7 +31,7 @@ using Pipeline = ct::BlockFmhaPipelineQRKSVS<Problem>;
 using Epilogue = ct::Default2DEpilogue<ct::Default2DEpilogueProblem<float,float,true,false>>;
 using Kernel = ct::FmhaFwdKernel<Pipeline,Epilogue>;
 extern "C" int ck_attention(float* q,float* k,float* v,float* b,float* o,int batch,int n,void* stream) {
-    if(batch!=1000 || n!=1000) return 2;
+    if(!((batch==1000 && n==1000) || (batch==512 && n==1536))) return 2;
     auto args=Kernel::MakeKargs(q,k,v,b,nullptr,nullptr,nullptr,nullptr,nullptr,o,
         n,n,32,32,4,1,1.0f,0.0f,
         128,128,128,n,0,128, 0,0,0,

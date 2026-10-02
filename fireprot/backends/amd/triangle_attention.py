@@ -22,6 +22,10 @@ SUPPORTED_UNMASKED_BIAS_SHAPES = ((1, 4, 124, 124),)
 LONG_QKV_SHAPE = (1000, 4, 1000, 32)
 LONG_BIAS_SHAPES = ((1000, 1, 1, 1000), (1, 4, 1000, 1000))
 LONG_UNMASKED_BIAS_SHAPES = ((1, 4, 1000, 1000),)
+LONG1536_QKV_SHAPE = (512, 4, 1536, 32)
+LONG1536_BIAS_SHAPES = ((1, 4, 1536, 1536),)
+LONG1536_DIRECT_IMPLEMENTATION = "amd-gfx90a-efficient-sdpa-direct-n1536"
+_long1536_enabled = os.environ.get("FIREPROT_ENABLE_LONG1536") == "1"
 OUTER_BATCH_CHUNK = 64
 _long_sequence_enabled = (
     os.environ.get("FIREPROT_DISABLE_LONG_TRIANGLE_ATTENTION") != "1"
@@ -65,6 +69,10 @@ def _supports_efficient_sdpa(
             repr(LONG_BIAS_SHAPES),
             repr(LONG_UNMASKED_BIAS_SHAPES),
         }
+    elif signature.shape == LONG1536_QKV_SHAPE:
+        if not _long1536_enabled or not _long_sequence_enabled:
+            return False, "1536-token attention is disabled"
+        expected_bias_shapes = {repr(LONG1536_BIAS_SHAPES)}
     else:
         return False, "QKV shape is not a validated short or long bucket"
     if attributes.get("bias_shapes") not in expected_bias_shapes:
@@ -131,6 +139,12 @@ def _supports_long_direct(signature: OperationSignature) -> bool | tuple[bool, s
     return _supports_efficient_sdpa(signature)
 
 
+def _supports_long1536_direct(signature: OperationSignature) -> bool | tuple[bool, str]:
+    if not _long_direct_enabled or signature.shape != LONG1536_QKV_SHAPE:
+        return False, "1536-token direct attention requires its exact enabled bucket"
+    return _supports_efficient_sdpa(signature)
+
+
 def _direct_sdpa(
     *, module: Any, q: Any, k: Any, v: Any,
     biases: Sequence[Any], native: Callable[..., Any],
@@ -153,6 +167,16 @@ registry.register(
     supports=_supports_long_direct,
     priority=20,
     version="1",
+)
+
+
+registry.register(
+    operation=OPERATION,
+    name=LONG1536_DIRECT_IMPLEMENTATION,
+    function=_direct_sdpa,
+    supports=_supports_long1536_direct,
+    priority=20,
+    version="experimental-1",
 )
 
 

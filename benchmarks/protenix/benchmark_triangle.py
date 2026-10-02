@@ -21,6 +21,8 @@ def main() -> int:
     parser.add_argument("--blas-backend", default="hipblas", choices=["hipblas", "hipblaslt", "ck"])
     parser.add_argument("--warmups", type=int, default=5)
     parser.add_argument("--repetitions", type=int, default=20)
+    parser.add_argument("--length", type=int, choices=(1000, 1536), default=1000)
+    parser.add_argument("--include-native", action="store_true")
     args = parser.parse_args()
     if args.warmups < 0 or args.repetitions < 1:
         parser.error("warmups must be nonnegative and repetitions positive")
@@ -44,19 +46,24 @@ def main() -> int:
         if load_amd_extension() is None:
             raise RuntimeError(str(extension_status()))
         torch.manual_seed(307)
+        torch.backends.cuda.matmul.allow_tf32 = False
         records = []
         with torch.inference_mode():
             for outgoing in (True, False):
                 module = TriangleMultiplicativeUpdate(128, 128, outgoing).cuda().eval()
                 for parameter in module.parameters():
                     parameter.normal_(0, 0.1)
-                source = torch.randn(1000, 1000, 128, device="cuda")
+                source = torch.randn(args.length, args.length, 128, device="cuda")
                 target = torch.empty_like(source)
                 outputs = {}
-                for name, function in (
+                functions = [
                     ("chunked", tm._long_sequence_hip_fused),
                     ("packed", tm._long_sequence_packed),
-                ):
+                ]
+                if args.include_native:
+                    functions.insert(0, ("native", lambda **kw: module(
+                        kw["z"], inplace_safe=True, _add_with_inplace=True)))
+                for name, function in functions:
                     timings = []
                     torch.cuda.reset_peak_memory_stats()
                     for iteration in range(args.warmups + args.repetitions):
@@ -80,14 +87,15 @@ def main() -> int:
                         p95_ms=ordered[max(0, (95 * len(ordered) + 99) // 100 - 1)],
                         peak_allocated_bytes=torch.cuda.max_memory_allocated(),
                     ))
-                delta = (outputs["chunked"] - outputs["packed"]).abs()
-                torch.testing.assert_close(outputs["packed"], outputs["chunked"], rtol=2e-5, atol=1e-5)
+                reference = outputs["native"] if args.include_native else outputs["chunked"]
+                delta = (reference - outputs["packed"]).abs()
+                torch.testing.assert_close(outputs["packed"], reference, rtol=2e-5, atol=1e-5)
                 records.append(dict(outgoing=outgoing, max_abs_delta=delta.max().item(),
                                     rms_delta=delta.square().mean().sqrt().item()))
                 del source, target, result, module, outputs
                 torch.cuda.empty_cache()
         report.update(
-            status="ok", seed=307, shape=[1000, 1000, 128], dtype="float32",
+            status="ok", seed=307, shape=[args.length, args.length, 128], dtype="float32", tf32=False,
             parameters="random nonzero normal(0,0.1); not checkpoint weights",
             warmups=args.warmups, repetitions=args.repetitions,
             cache_state="warm within process; source restored before each event",
@@ -95,6 +103,7 @@ def main() -> int:
             torch=torch.__version__, hip=torch.version.hip,
             source_commit=os.environ.get("FIREPROT_SOURCE_COMMIT") or _git_commit(REPO_ROOT),
             source_sha256={name: _sha256(REPO_ROOT / name) for name in (
+                "benchmarks/protenix/benchmark_triangle.py",
                 "fireprot/backends/amd/triangle_multiplication.py",
                 "fireprot/backends/amd/csrc/fireprot_amd_ops.cu",
                 "fireprot/backends/amd/csrc/fireprot_amd_ops.cpp",

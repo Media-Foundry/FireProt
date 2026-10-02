@@ -19,9 +19,12 @@ IMPLEMENTATION = "amd-short-sequence-torch"
 FUSED_GATE_IMPLEMENTATION = "amd-gfx90a-hip-triangle-gates-f32-n124-c128"
 LONG_FUSED_GATE_IMPLEMENTATION = "amd-gfx90a-hip-triangle-gates-f32-n1000-c128"
 LONG_PACKED_IMPLEMENTATION = "amd-gfx90a-hip-triangle-packed-f32-n1000-c128"
+LONG1536_PACKED_IMPLEMENTATION = "amd-gfx90a-hip-triangle-packed-f32-n1536-c128"
 MAX_TOKENS = 256
 VALIDATED_SHAPE = (124, 124, 128)
 LONG_VALIDATED_SHAPE = (1000, 1000, 128)
+LONG1536_SHAPE = (1536, 1536, 128)
+_long1536_enabled = os.environ.get("FIREPROT_ENABLE_LONG1536") == "1"
 _fused_gate_enabled = os.environ.get("FIREPROT_DISABLE_TRIANGLE_GATE_FUSION") != "1"
 _long_fused_gate_enabled = (
     os.environ.get("FIREPROT_DISABLE_LONG_TRIANGLE_GATES") != "1"
@@ -176,6 +179,7 @@ def _short_sequence_hip_fused(
 
 def _supports_long_fused_gates(
     signature: OperationSignature,
+    *, shape: tuple[int, ...] = LONG_VALIDATED_SHAPE,
 ) -> bool | tuple[bool, str]:
     if not _long_fused_gate_enabled:
         return False, "disabled by FIREPROT_DISABLE_LONG_TRIANGLE_GATES"
@@ -191,8 +195,8 @@ def _supports_long_fused_gates(
         return False, "input is not contiguous"
     if not signature.inplace:
         return False, "long path requires inplace inference"
-    if signature.shape != LONG_VALIDATED_SHAPE:
-        return False, "shape is not the validated 1000x1000x128 bucket"
+    if signature.shape != shape:
+        return False, "shape is not the exact supported long bucket"
     if signature.mask != "none":
         return False, "the validated long-sequence bucket has no explicit mask"
     attributes = dict(signature.attributes)
@@ -245,6 +249,12 @@ def _supports_long_packed(signature: OperationSignature) -> bool | tuple[bool, s
     return _supports_long_fused_gates(signature)
 
 
+def _supports_long1536_packed(signature: OperationSignature) -> bool | tuple[bool, str]:
+    if not _long1536_enabled or not _long_packed_enabled:
+        return False, "N1536 packed triangle requires its length opt-in and packed path"
+    return _supports_long_fused_gates(signature, shape=LONG1536_SHAPE)
+
+
 def _long_sequence_packed(
     *, module: Any, z: Any, mask: Any, inplace_safe: bool,
     add_with_inplace: bool, inplace_chunk_size: int | None,
@@ -289,6 +299,14 @@ registry.register(
     supports=_supports_long_packed,
     priority=40,
     version="1",
+)
+registry.register(
+    operation=OPERATION,
+    name=LONG1536_PACKED_IMPLEMENTATION,
+    function=_long_sequence_packed,
+    supports=_supports_long1536_packed,
+    priority=40,
+    version="experimental-1",
 )
 registry.register(
     operation=OPERATION,

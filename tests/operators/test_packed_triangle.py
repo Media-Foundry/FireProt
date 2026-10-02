@@ -85,16 +85,17 @@ def test_packed_norm_handles_large_means_and_constant_rows():
 
 
 @hip_only
+@pytest.mark.parametrize("n", [1000, 1536])
 @pytest.mark.parametrize("outgoing", [True, False])
 @pytest.mark.parametrize("with_add", [True, False])
-def test_packed_triangle_matches_native_chunked_and_preserves_alias(outgoing, with_add):
+def test_packed_triangle_matches_native_chunked_and_preserves_alias(n, outgoing, with_add):
     assert load_amd_extension() is not None, extension_status()
     torch.manual_seed(317)
     module = TriangleMultiplicativeUpdate(128, 128, outgoing).cuda().eval()
     with torch.inference_mode():
         for parameter in module.parameters():
             parameter.normal_(0, 0.1)
-        source = torch.randn(1000, 1000, 128, device="cuda")
+        source = torch.randn(n, n, 128, device="cuda")
         expected = module(source.clone(), inplace_safe=True, _add_with_inplace=with_add)
         candidate = source.clone()
         actual = tm._long_sequence_packed(
@@ -103,3 +104,31 @@ def test_packed_triangle_matches_native_chunked_and_preserves_alias(outgoing, wi
         )
         assert actual.data_ptr() == candidate.data_ptr()
         torch.testing.assert_close(actual, expected, atol=1e-5, rtol=2e-5)
+
+
+def test_long1536_packed_capability_is_explicit_and_exact(monkeypatch):
+    monkeypatch.setattr(tm, "load_amd_extension", lambda: object())
+    monkeypatch.setattr(tm, "_long_fused_gate_enabled", True)
+    monkeypatch.setattr(tm, "_long_packed_enabled", True)
+    base = dict(operation=tm.OPERATION, device_type="cuda", architecture="gfx90a",
+                dtype="float32", shape=(1536, 1536, 128), layout="contiguous",
+                mode="inference", mask="none", inplace=True,
+                attributes={"c_z": 128, "c_hidden": 128})
+    monkeypatch.setattr(tm, "_long1536_enabled", False)
+    assert tm._supports_long1536_packed(OperationSignature.create(**base)) is not True
+    monkeypatch.setattr(tm, "_long1536_enabled", True)
+    assert tm._supports_long1536_packed(OperationSignature.create(**base)) is True
+    assert tm._supports_long_packed(OperationSignature.create(**base)) is not True
+    for change in ({"shape": (1537, 1537, 128)}, {"shape": (1, 1536, 1536, 128)},
+                   {"dtype": "bfloat16"}, {"mask": "dense"}, {"mode": "training"},
+                   {"layout": "strided"}, {"inplace": False}, {"architecture": "gfx942"},
+                   {"attributes": {"c_z": 128, "c_hidden": 64}}):
+        assert tm._supports_long1536_packed(OperationSignature.create(**(base | change))) is not True
+    monkeypatch.setattr(tm, "_long_packed_enabled", False)
+    assert tm._supports_long1536_packed(OperationSignature.create(**base)) is not True
+    monkeypatch.setattr(tm, "_long_packed_enabled", True)
+    monkeypatch.setattr(tm, "_long_fused_gate_enabled", False)
+    assert tm._supports_long1536_packed(OperationSignature.create(**base)) is not True
+    monkeypatch.setattr(tm, "_long_fused_gate_enabled", True)
+    monkeypatch.setattr(tm, "load_amd_extension", lambda: None)
+    assert tm._supports_long1536_packed(OperationSignature.create(**base)) is not True

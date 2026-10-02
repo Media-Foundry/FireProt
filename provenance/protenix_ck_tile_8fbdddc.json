@@ -1,0 +1,2461 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-03",
+  "candidate_commit": "af43d8e47b40cb20bdca6f6fbed3d744b5a4429c",
+  "promoted_commit": "8fbdddc791c4844a79f71efa67f7e300ee1f5a6c",
+  "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b",
+  "scope": "Mini-default v0.5.0, exact N1000 FP32 C4/S1, seed 101, sample 1, no MSA/templates, hipBLAS, TF32 off, warm model timings. Random-input operator screening uses seed 419.",
+  "source_identity_note": "The canonical operator probe ran immediately before the candidate commit; its recorded source hashes identify af43d8e contents. The identical C++ kernel source is used by candidate and promoted model runs. Model source IDs were supplied explicitly because remote sync excludes Git metadata.",
+  "operator": {
+    "schema_version": 1,
+    "status": "ok",
+    "seed": 419,
+    "shape": [
+      1000,
+      4,
+      1000,
+      32
+    ],
+    "dtype": "float32",
+    "tf32": false,
+    "warmups": 5,
+    "repetitions": 20,
+    "cache_state": "warm within process; compilation excluded",
+    "scope": "random QKV and bias, observed strides; no checkpoint or model speedup",
+    "source_commit": null,
+    "source_sha256": {
+      "benchmarks/protenix/benchmark_attention.py": "d9b0add6e7ddb94946344bb87e13e8656367372dcc91a63d34137b1fbffb88df",
+      "benchmarks/protenix/csrc/ck_attention_probe.cpp": "9eb881612bb1c2a3bdc4090378dbc108ee20cec17cc8204edeac4a88cced7609",
+      "patches/ck/attention-cache-q-fp32.patch": "c6940fb8ced64289870df6849802f1399724f06cd18eb2cc7e77cd8712f3ee99",
+      "fireprot/backends/amd/triangle_attention.py": "4d31111c64efe97041ad6d33e92ccdc0109c6eef74ee2ba885edb29999b0d8d6",
+      "fireprot/backends/amd/ck_attention.py": "1e7f28b78759de0dacf0dd8886b5d6cc52740cd1ed59454d43f02685f1017f92",
+      "fireprot/backends/amd/csrc/fireprot_ck_attention.cpp": "41026c6c44ce4ae112a7f09d38dd11c137dd22da8ee2820f500460c00a9b783d"
+    },
+    "records": [
+      {
+        "name": "chunked_sdpa",
+        "median_ms": 38.00237846374512,
+        "p95_ms": 38.20341110229492,
+        "values_ms": [
+          38.01191711425781,
+          37.8143196105957,
+          38.044376373291016,
+          38.20341110229492,
+          37.932552337646484,
+          38.258304595947266,
+          38.12328338623047,
+          37.954166412353516,
+          37.99862289428711,
+          37.97574234008789,
+          37.87142562866211,
+          37.880062103271484,
+          37.85078430175781,
+          38.102935791015625,
+          37.873016357421875,
+          38.006134033203125,
+          38.15029525756836,
+          37.83894348144531,
+          38.01029968261719,
+          38.01430130004883
+        ],
+        "peak_allocated_bytes": 2660663296,
+        "max_abs_delta": 0,
+        "output_stride": [
+          128000,
+          32,
+          32000,
+          1
+        ]
+      },
+      {
+        "name": "direct_sdpa",
+        "median_ms": 36.36057662963867,
+        "p95_ms": 37.94389724731445,
+        "values_ms": [
+          36.46170425415039,
+          36.3153076171875,
+          36.31529998779297,
+          36.40345764160156,
+          36.27434539794922,
+          35.88459777832031,
+          35.834991455078125,
+          36.22378158569336,
+          36.38729476928711,
+          36.41689682006836,
+          35.87739181518555,
+          36.333858489990234,
+          36.32410430908203,
+          35.73163986206055,
+          36.563297271728516,
+          37.94501495361328,
+          37.09479904174805,
+          37.23015594482422,
+          37.94389724731445,
+          36.58345031738281
+        ],
+        "peak_allocated_bytes": 3105554432,
+        "max_abs_delta": 0,
+        "output_stride": [
+          128000,
+          128,
+          32,
+          1
+        ]
+      },
+      {
+        "name": "ck_tile_attention",
+        "median_ms": 32.71100616455078,
+        "p95_ms": 32.88844680786133,
+        "values_ms": [
+          32.64564514160156,
+          32.67476272583008,
+          32.88844680786133,
+          32.792930603027344,
+          32.6342887878418,
+          32.74116516113281,
+          32.80483627319336,
+          32.639244079589844,
+          32.7552490234375,
+          32.705169677734375,
+          32.64452362060547,
+          32.4998893737793,
+          32.95652389526367,
+          32.76884841918945,
+          32.74020004272461,
+          32.71684265136719,
+          32.76852035522461,
+          32.66404342651367,
+          32.652042388916016,
+          32.64196014404297
+        ],
+        "peak_allocated_bytes": 2593554432,
+        "max_abs_delta": 0.000003933906555175781,
+        "output_stride": [
+          128000,
+          128,
+          32,
+          1
+        ]
+      },
+      {
+        "name": "direct_sdpa_repeat",
+        "median_ms": 36.34937858581543,
+        "p95_ms": 36.490814208984375,
+        "values_ms": [
+          36.05738830566406,
+          36.34442138671875,
+          36.490814208984375,
+          36.46969985961914,
+          36.3704948425293,
+          36.3869743347168,
+          37.00648498535156,
+          36.38682174682617,
+          36.35226058959961,
+          36.43898010253906,
+          36.482017517089844,
+          36.34649658203125,
+          35.69211959838867,
+          36.40538024902344,
+          36.315940856933594,
+          35.74763488769531,
+          36.31914520263672,
+          36.244422912597656,
+          36.33258056640625,
+          35.64588165283203
+        ],
+        "peak_allocated_bytes": 3105554432,
+        "max_abs_delta": 0,
+        "output_stride": [
+          128000,
+          128,
+          32,
+          1
+        ]
+      }
+    ],
+    "ck_build": null,
+    "ck_tile_build": {
+      "enabled": false,
+      "loaded": true,
+      "error": null,
+      "build": {
+        "source_sha256": "41026c6c44ce4ae112a7f09d38dd11c137dd22da8ee2820f500460c00a9b783d",
+        "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+        "header_count": 581,
+        "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+        "command": [
+          "/opt/rocm/bin/hipcc",
+          "-O3",
+          "-std=c++17",
+          "-fPIC",
+          "-shared",
+          "--offload-arch=gfx90a",
+          "-I/opt/rocm/include",
+          "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+          "-o",
+          "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_761bc00b6f3e7881/attention.pending.so"
+        ],
+        "library_sha256": "528482f59c6d20e0da4f4d800ebe6b47c5ab70ae1b1370343aa5360a0485bb47",
+        "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_761bc00b6f3e7881/attention.so",
+        "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+      }
+    },
+    "preflight": {
+      "selected_physical_index": 7,
+      "exclusive_check": {
+        "required": true,
+        "passed": true,
+        "gpu_use_percent": 0,
+        "vram_used_bytes": 11014144,
+        "max_gpu_use_percent": 5,
+        "max_vram_used_bytes": 268435456
+      }
+    },
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850",
+    "q_stride": [
+      128000,
+      32,
+      128,
+      1
+    ],
+    "bias_stride": [
+      4,
+      1,
+      4000,
+      4
+    ],
+    "gpu_process_monitor": {
+      "available": true,
+      "command": [
+        "/usr/bin/amd-smi",
+        "process",
+        "--json"
+      ],
+      "physical_device_index": 7,
+      "interval_seconds": 1,
+      "samples": 4,
+      "allowed_pid": 691790,
+      "external_pids": [],
+      "errors": [],
+      "passed": true
+    },
+    "artifact": "outputs/benchmarks/long1000-ck-tile-canonical.json"
+  },
+  "model_ab": {
+    "long1000-ck-tile-ab-0-af43d8e": {
+      "status": "ok",
+      "source": {
+        "fireprot_commit": "af43d8e47b40cb20bdca6f6fbed3d744b5a4429c",
+        "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b",
+        "profile_script_sha256": "511213a16ed1e820e0976cec4903638f589c2d1d3bdd657c26bbd14e13ff7b4a"
+      },
+      "spec": {
+        "schema_version": 1,
+        "created_at": "2026-10-02T18:48:00.539207+00:00",
+        "config_path": "/media/IntelSSD/fireprot/benchmarks/protenix/configs/mi250-long.json",
+        "config_sha256": "883c3d53ef6c76e7799eaf80ec3546c7166345827e2d087b288e7e4e5b31355b",
+        "repo_root": "/media/IntelSSD/fireprot",
+        "protenix_root": "/media/IntelSSD/fireprot/Protenix",
+        "run_dir": "/media/IntelSSD/fireprot/outputs/benchmarks/long1000-ck-tile-ab-0-af43d8e/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot",
+        "backend": "fireprot",
+        "blas_backend": "hipblas",
+        "profile_one": false,
+        "torch_profile": false,
+        "source": {
+          "fireprot_commit": "af43d8e47b40cb20bdca6f6fbed3d744b5a4429c",
+          "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b"
+        },
+        "measurement": {
+          "warmups": 1,
+          "repetitions": 3,
+          "dump_outputs": false,
+          "cache_state": "warm-within-process",
+          "device_policy": "exclusive",
+          "exclusive_max_gpu_use_percent": 5,
+          "exclusive_max_vram_used_bytes": 268435456,
+          "process_monitor_interval_seconds": 1,
+          "reject_external_gpu_processes": true,
+          "clock_policy": "record-current"
+        },
+        "workload": {
+          "id": "mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32",
+          "input": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "token_count": 1000,
+          "model_name": "protenix_mini_default_v0.5.0",
+          "dtype": "fp32",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "seeds": [
+            101
+          ],
+          "cache": true,
+          "use_msa": false,
+          "use_template": false,
+          "enable_fusion": true,
+          "enable_tf32": false,
+          "trimul_kernel": "torch",
+          "triatt_kernel": "torch"
+        }
+      },
+      "input": {
+        "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+        "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac",
+        "token_count": 1000,
+        "atom_count": null
+      },
+      "software": {
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:38:16) [GCC 14.3.0]",
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "miopen": null,
+        "miopen_available": false,
+        "preferred_blas": "_BlasBackend.Cublas"
+      },
+      "summary": {
+        "model_gpu_ms": {
+          "count": 3,
+          "min": 13216.0087890625,
+          "median": 13318.7919921875,
+          "p95": 13604.9052734375,
+          "max": 13604.9052734375,
+          "mean": 13379.902018229166
+        },
+        "model_wall_ms": {
+          "count": 3,
+          "min": 13216.127778985538,
+          "median": 13318.913839000743,
+          "p95": 13605.088667012751,
+          "max": 13605.088667012751,
+          "mean": 13380.04342833301
+        },
+        "peak_memory_allocated_bytes": {
+          "count": 3,
+          "min": 10035223040,
+          "median": 10036225536,
+          "p95": 10037256704,
+          "max": 10037256704,
+          "mean": 10036235093.333334
+        },
+        "peak_memory_reserved_bytes": {
+          "count": 3,
+          "min": 13795065856,
+          "median": 13822328832,
+          "p95": 13912506368,
+          "max": 13912506368,
+          "mean": 13843300352
+        },
+        "stages_gpu_ms": {
+          "atom_attention_decoder": {
+            "count": 3,
+            "min": 7.685398101806641,
+            "median": 7.702198028564453,
+            "p95": 7.7041168212890625,
+            "max": 7.7041168212890625,
+            "mean": 7.697237650553386
+          },
+          "atom_attention_encoder": {
+            "count": 3,
+            "min": 36.915510177612305,
+            "median": 36.91822910308838,
+            "p95": 36.92126941680908,
+            "max": 36.92126941680908,
+            "mean": 36.91833623250326
+          },
+          "confidence": {
+            "count": 3,
+            "min": 724.9636840820312,
+            "median": 726.7368774414062,
+            "p95": 726.9239501953125,
+            "max": 726.9239501953125,
+            "mean": 726.2081705729166
+          },
+          "confidence_head": {
+            "count": 3,
+            "min": 724.9555053710938,
+            "median": 726.7284545898438,
+            "p95": 726.9154663085938,
+            "max": 726.9154663085938,
+            "mean": 726.1998087565104
+          },
+          "diffusion_module": {
+            "count": 3,
+            "min": 49.34382247924805,
+            "median": 49.3662223815918,
+            "p95": 49.56269454956055,
+            "max": 49.56269454956055,
+            "mean": 49.42424647013346
+          },
+          "diffusion_transformer": {
+            "count": 3,
+            "min": 52.914130210876465,
+            "median": 52.91429042816162,
+            "p95": 52.91940927505493,
+            "max": 52.91940927505493,
+            "mean": 52.91594330469767
+          },
+          "pairformer_output": {
+            "count": 3,
+            "min": 12198.3740234375,
+            "median": 12278.46484375,
+            "p95": 12565.740234375,
+            "max": 12565.740234375,
+            "mean": 12347.5263671875
+          },
+          "pairformer_stack": {
+            "count": 3,
+            "min": 12104.601257324219,
+            "median": 12180.644836425781,
+            "p95": 12472.651733398438,
+            "max": 12472.651733398438,
+            "mean": 12252.632609049479
+          },
+          "sample_diffusion": {
+            "count": 3,
+            "min": 50.239959716796875,
+            "median": 50.255001068115234,
+            "p95": 50.531150817871094,
+            "max": 50.531150817871094,
+            "mean": 50.342037200927734
+          },
+          "triangle_attention": {
+            "count": 3,
+            "min": 6809.084056854248,
+            "median": 6849.125576019287,
+            "p95": 6891.456634521484,
+            "max": 6891.456634521484,
+            "mean": 6849.88875579834
+          },
+          "triangle_multiplication": {
+            "count": 3,
+            "min": 3919.9922618865967,
+            "median": 3926.26056098938,
+            "p95": 4255.351589202881,
+            "max": 4255.351589202881,
+            "mean": 4033.868137359619
+          }
+        }
+      },
+      "records": [
+        {
+          "phase": "warmup",
+          "iteration": 0,
+          "model_gpu_ms": 20224.681640625,
+          "model_wall_ms": 20224.81822100235,
+          "peak_memory_allocated_bytes": 9505005568,
+          "peak_memory_reserved_bytes": 13172211712
+        },
+        {
+          "phase": "measure",
+          "iteration": 0,
+          "model_gpu_ms": 13216.0087890625,
+          "model_wall_ms": 13216.127778985538,
+          "peak_memory_allocated_bytes": 10037256704,
+          "peak_memory_reserved_bytes": 13912506368
+        },
+        {
+          "phase": "measure",
+          "iteration": 1,
+          "model_gpu_ms": 13318.7919921875,
+          "model_wall_ms": 13318.913839000743,
+          "peak_memory_allocated_bytes": 10036225536,
+          "peak_memory_reserved_bytes": 13795065856
+        },
+        {
+          "phase": "measure",
+          "iteration": 2,
+          "model_gpu_ms": 13604.9052734375,
+          "model_wall_ms": 13605.088667012751,
+          "peak_memory_allocated_bytes": 10035223040,
+          "peak_memory_reserved_bytes": 13822328832
+        }
+      ],
+      "monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1,
+        "samples": 79,
+        "allowed_pid": 692658,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      },
+      "selections": [
+        {
+          "operation": "triangle_attention",
+          "implementation": "amd-gfx90a-efficient-sdpa-direct-n1000",
+          "count": 576
+        },
+        {
+          "operation": "triangle_multiplication",
+          "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+          "count": 576
+        }
+      ],
+      "ck_build": {
+        "enabled": false,
+        "loaded": false,
+        "error": null,
+        "build": {}
+      },
+      "process_wall_ms": 100176.54730798677,
+      "artifact": "outputs/benchmarks/long1000-ck-tile-ab-0-af43d8e/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/manifest.json"
+    },
+    "long1000-ck-tile-ab-1-af43d8e": {
+      "status": "ok",
+      "source": {
+        "fireprot_commit": "af43d8e47b40cb20bdca6f6fbed3d744b5a4429c",
+        "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b",
+        "profile_script_sha256": "511213a16ed1e820e0976cec4903638f589c2d1d3bdd657c26bbd14e13ff7b4a"
+      },
+      "spec": {
+        "schema_version": 1,
+        "created_at": "2026-10-02T18:49:44.365293+00:00",
+        "config_path": "/media/IntelSSD/fireprot/benchmarks/protenix/configs/mi250-long.json",
+        "config_sha256": "883c3d53ef6c76e7799eaf80ec3546c7166345827e2d087b288e7e4e5b31355b",
+        "repo_root": "/media/IntelSSD/fireprot",
+        "protenix_root": "/media/IntelSSD/fireprot/Protenix",
+        "run_dir": "/media/IntelSSD/fireprot/outputs/benchmarks/long1000-ck-tile-ab-1-af43d8e/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot",
+        "backend": "fireprot",
+        "blas_backend": "hipblas",
+        "profile_one": false,
+        "torch_profile": false,
+        "source": {
+          "fireprot_commit": "af43d8e47b40cb20bdca6f6fbed3d744b5a4429c",
+          "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b"
+        },
+        "measurement": {
+          "warmups": 1,
+          "repetitions": 3,
+          "dump_outputs": false,
+          "cache_state": "warm-within-process",
+          "device_policy": "exclusive",
+          "exclusive_max_gpu_use_percent": 5,
+          "exclusive_max_vram_used_bytes": 268435456,
+          "process_monitor_interval_seconds": 1,
+          "reject_external_gpu_processes": true,
+          "clock_policy": "record-current"
+        },
+        "workload": {
+          "id": "mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32",
+          "input": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "token_count": 1000,
+          "model_name": "protenix_mini_default_v0.5.0",
+          "dtype": "fp32",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "seeds": [
+            101
+          ],
+          "cache": true,
+          "use_msa": false,
+          "use_template": false,
+          "enable_fusion": true,
+          "enable_tf32": false,
+          "trimul_kernel": "torch",
+          "triatt_kernel": "torch"
+        }
+      },
+      "input": {
+        "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+        "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac",
+        "token_count": 1000,
+        "atom_count": null
+      },
+      "software": {
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:38:16) [GCC 14.3.0]",
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "miopen": null,
+        "miopen_available": false,
+        "preferred_blas": "_BlasBackend.Cublas"
+      },
+      "summary": {
+        "model_gpu_ms": {
+          "count": 3,
+          "min": 12573.1572265625,
+          "median": 12580.8134765625,
+          "p95": 12582.4267578125,
+          "max": 12582.4267578125,
+          "mean": 12578.799153645834
+        },
+        "model_wall_ms": {
+          "count": 3,
+          "min": 12573.26130697038,
+          "median": 12580.904730013572,
+          "p95": 12582.522579003125,
+          "max": 12582.522579003125,
+          "mean": 12578.896205329025
+        },
+        "peak_memory_allocated_bytes": {
+          "count": 3,
+          "min": 10035223040,
+          "median": 10036225536,
+          "p95": 10037256704,
+          "max": 10037256704,
+          "mean": 10036235093.333334
+        },
+        "peak_memory_reserved_bytes": {
+          "count": 3,
+          "min": 13795065856,
+          "median": 13822328832,
+          "p95": 13912506368,
+          "max": 13912506368,
+          "mean": 13843300352
+        },
+        "stages_gpu_ms": {
+          "atom_attention_decoder": {
+            "count": 3,
+            "min": 7.700448036193848,
+            "median": 7.703167915344238,
+            "p95": 7.703648090362549,
+            "max": 7.703648090362549,
+            "mean": 7.702421347300212
+          },
+          "atom_attention_encoder": {
+            "count": 3,
+            "min": 36.7155647277832,
+            "median": 36.745962142944336,
+            "p95": 36.80675983428955,
+            "max": 36.80675983428955,
+            "mean": 36.75609556833903
+          },
+          "confidence": {
+            "count": 3,
+            "min": 693.56982421875,
+            "median": 698.1903686523438,
+            "p95": 699.9633178710938,
+            "max": 699.9633178710938,
+            "mean": 697.2411702473959
+          },
+          "confidence_head": {
+            "count": 3,
+            "min": 693.5614013671875,
+            "median": 698.181884765625,
+            "p95": 699.9550170898438,
+            "max": 699.9550170898438,
+            "mean": 697.2327677408854
+          },
+          "diffusion_module": {
+            "count": 3,
+            "min": 49.218929290771484,
+            "median": 49.26068878173828,
+            "p95": 49.349327087402344,
+            "max": 49.349327087402344,
+            "mean": 49.27631505330404
+          },
+          "diffusion_transformer": {
+            "count": 3,
+            "min": 52.90027666091919,
+            "median": 52.913877964019775,
+            "p95": 52.91435766220093,
+            "max": 52.91435766220093,
+            "mean": 52.909504095713295
+          },
+          "pairformer_output": {
+            "count": 3,
+            "min": 11578.9326171875,
+            "median": 11587.69921875,
+            "p95": 11590.087890625,
+            "max": 11590.087890625,
+            "mean": 11585.5732421875
+          },
+          "pairformer_stack": {
+            "count": 3,
+            "min": 11489.078735351562,
+            "median": 11489.765686035156,
+            "p95": 11497.150939941406,
+            "max": 11497.150939941406,
+            "mean": 11491.998453776041
+          },
+          "sample_diffusion": {
+            "count": 3,
+            "min": 50.0771484375,
+            "median": 50.0905876159668,
+            "p95": 50.14034652709961,
+            "max": 50.14034652709961,
+            "mean": 50.10269419352213
+          },
+          "triangle_attention": {
+            "count": 3,
+            "min": 6178.044750213623,
+            "median": 6179.299030303955,
+            "p95": 6180.597332000732,
+            "max": 6180.597332000732,
+            "mean": 6179.3137041727705
+          },
+          "triangle_multiplication": {
+            "count": 3,
+            "min": 3912.5039653778076,
+            "median": 3913.0924396514893,
+            "p95": 3920.5554332733154,
+            "max": 3920.5554332733154,
+            "mean": 3915.3839461008706
+          }
+        }
+      },
+      "records": [
+        {
+          "phase": "warmup",
+          "iteration": 0,
+          "model_gpu_ms": 18701.08203125,
+          "model_wall_ms": 18701.222000992857,
+          "peak_memory_allocated_bytes": 9505005568,
+          "peak_memory_reserved_bytes": 13172211712
+        },
+        {
+          "phase": "measure",
+          "iteration": 0,
+          "model_gpu_ms": 12580.8134765625,
+          "model_wall_ms": 12580.904730013572,
+          "peak_memory_allocated_bytes": 10037256704,
+          "peak_memory_reserved_bytes": 13912506368
+        },
+        {
+          "phase": "measure",
+          "iteration": 1,
+          "model_gpu_ms": 12582.4267578125,
+          "model_wall_ms": 12582.522579003125,
+          "peak_memory_allocated_bytes": 10036225536,
+          "peak_memory_reserved_bytes": 13795065856
+        },
+        {
+          "phase": "measure",
+          "iteration": 2,
+          "model_gpu_ms": 12573.1572265625,
+          "model_wall_ms": 12573.26130697038,
+          "peak_memory_allocated_bytes": 10035223040,
+          "peak_memory_reserved_bytes": 13822328832
+        }
+      ],
+      "monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1,
+        "samples": 77,
+        "allowed_pid": 693273,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      },
+      "selections": [
+        {
+          "operation": "triangle_attention",
+          "implementation": "amd-gfx90a-ck-tile-attention-f32-n1000",
+          "count": 576
+        },
+        {
+          "operation": "triangle_multiplication",
+          "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+          "count": 576
+        }
+      ],
+      "ck_build": {
+        "enabled": true,
+        "loaded": true,
+        "error": null,
+        "build": {
+          "source_sha256": "41026c6c44ce4ae112a7f09d38dd11c137dd22da8ee2820f500460c00a9b783d",
+          "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+          "header_count": 581,
+          "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a",
+            "-I/opt/rocm/include",
+            "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_761bc00b6f3e7881/attention.pending.so"
+          ],
+          "library_sha256": "528482f59c6d20e0da4f4d800ebe6b47c5ab70ae1b1370343aa5360a0485bb47",
+          "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_761bc00b6f3e7881/attention.so",
+          "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+        }
+      },
+      "process_wall_ms": 96257.42071098648,
+      "artifact": "outputs/benchmarks/long1000-ck-tile-ab-1-af43d8e/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/manifest.json"
+    }
+  },
+  "model_ba": {
+    "long1000-ck-tile-ba-1-af43d8e": {
+      "status": "ok",
+      "source": {
+        "fireprot_commit": "af43d8e47b40cb20bdca6f6fbed3d744b5a4429c",
+        "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b",
+        "profile_script_sha256": "511213a16ed1e820e0976cec4903638f589c2d1d3bdd657c26bbd14e13ff7b4a"
+      },
+      "spec": {
+        "schema_version": 1,
+        "created_at": "2026-10-02T18:52:27.562677+00:00",
+        "config_path": "/media/IntelSSD/fireprot/benchmarks/protenix/configs/mi250-long.json",
+        "config_sha256": "883c3d53ef6c76e7799eaf80ec3546c7166345827e2d087b288e7e4e5b31355b",
+        "repo_root": "/media/IntelSSD/fireprot",
+        "protenix_root": "/media/IntelSSD/fireprot/Protenix",
+        "run_dir": "/media/IntelSSD/fireprot/outputs/benchmarks/long1000-ck-tile-ba-1-af43d8e/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot",
+        "backend": "fireprot",
+        "blas_backend": "hipblas",
+        "profile_one": false,
+        "torch_profile": false,
+        "source": {
+          "fireprot_commit": "af43d8e47b40cb20bdca6f6fbed3d744b5a4429c",
+          "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b"
+        },
+        "measurement": {
+          "warmups": 1,
+          "repetitions": 5,
+          "dump_outputs": false,
+          "cache_state": "warm-within-process",
+          "device_policy": "exclusive",
+          "exclusive_max_gpu_use_percent": 5,
+          "exclusive_max_vram_used_bytes": 268435456,
+          "process_monitor_interval_seconds": 1,
+          "reject_external_gpu_processes": true,
+          "clock_policy": "record-current"
+        },
+        "workload": {
+          "id": "mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32",
+          "input": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "token_count": 1000,
+          "model_name": "protenix_mini_default_v0.5.0",
+          "dtype": "fp32",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "seeds": [
+            101
+          ],
+          "cache": true,
+          "use_msa": false,
+          "use_template": false,
+          "enable_fusion": true,
+          "enable_tf32": false,
+          "trimul_kernel": "torch",
+          "triatt_kernel": "torch"
+        }
+      },
+      "input": {
+        "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+        "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac",
+        "token_count": 1000,
+        "atom_count": null
+      },
+      "software": {
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:38:16) [GCC 14.3.0]",
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "miopen": null,
+        "miopen_available": false,
+        "preferred_blas": "_BlasBackend.Cublas"
+      },
+      "summary": {
+        "model_gpu_ms": {
+          "count": 5,
+          "min": 12566.7001953125,
+          "median": 12579.755859375,
+          "p95": 13103.076171875,
+          "max": 13103.076171875,
+          "mean": 12680.3154296875
+        },
+        "model_wall_ms": {
+          "count": 5,
+          "min": 12566.803405992687,
+          "median": 12579.84438596759,
+          "p95": 13103.165179025382,
+          "max": 13103.165179025382,
+          "mean": 12680.419724795502
+        },
+        "peak_memory_allocated_bytes": {
+          "count": 5,
+          "min": 10035105280,
+          "median": 10035497984,
+          "p95": 10037256704,
+          "max": 10037256704,
+          "mean": 10035861708.8
+        },
+        "peak_memory_reserved_bytes": {
+          "count": 5,
+          "min": 13694402560,
+          "median": 13822328832,
+          "p95": 14294188032,
+          "max": 14294188032,
+          "mean": 13903698329.6
+        },
+        "stages_gpu_ms": {
+          "atom_attention_decoder": {
+            "count": 5,
+            "min": 7.6914849281311035,
+            "median": 7.699326038360596,
+            "p95": 7.704444885253906,
+            "max": 7.704444885253906,
+            "mean": 7.697597312927246
+          },
+          "atom_attention_encoder": {
+            "count": 5,
+            "min": 36.7643518447876,
+            "median": 36.85970687866211,
+            "p95": 36.948665618896484,
+            "max": 36.948665618896484,
+            "mean": 36.860540580749515
+          },
+          "confidence": {
+            "count": 5,
+            "min": 694.7149047851562,
+            "median": 695.0542602539062,
+            "p95": 704.8519897460938,
+            "max": 704.8519897460938,
+            "mean": 696.9446899414063
+          },
+          "confidence_head": {
+            "count": 5,
+            "min": 694.7064208984375,
+            "median": 695.0457763671875,
+            "p95": 704.8434448242188,
+            "max": 704.8434448242188,
+            "mean": 696.9361206054688
+          },
+          "diffusion_module": {
+            "count": 5,
+            "min": 49.39267349243164,
+            "median": 49.4633903503418,
+            "p95": 49.805458068847656,
+            "max": 49.805458068847656,
+            "mean": 49.51868438720703
+          },
+          "diffusion_transformer": {
+            "count": 5,
+            "min": 52.885863304138184,
+            "median": 52.900901794433594,
+            "p95": 52.902501583099365,
+            "max": 52.902501583099365,
+            "mean": 52.895782470703125
+          },
+          "pairformer_output": {
+            "count": 5,
+            "min": 11584.9375,
+            "median": 11596.4091796875,
+            "p95": 11599.1533203125,
+            "max": 11599.1533203125,
+            "mean": 11593.4203125
+          },
+          "pairformer_stack": {
+            "count": 5,
+            "min": 11489.730895996094,
+            "median": 11499.592041015625,
+            "p95": 11513.033569335938,
+            "max": 11513.033569335938,
+            "mean": 11498.742651367187
+          },
+          "sample_diffusion": {
+            "count": 5,
+            "min": 50.181453704833984,
+            "median": 50.33552932739258,
+            "p95": 51.0236701965332,
+            "max": 51.0236701965332,
+            "mean": 50.43130111694336
+          },
+          "triangle_attention": {
+            "count": 5,
+            "min": 6176.406810760498,
+            "median": 6182.753868103027,
+            "p95": 6193.112983703613,
+            "max": 6193.112983703613,
+            "mean": 6182.823148345948
+          },
+          "triangle_multiplication": {
+            "count": 5,
+            "min": 3912.0591373443604,
+            "median": 3914.526258468628,
+            "p95": 3917.2212295532227,
+            "max": 3917.2212295532227,
+            "mean": 3914.511671829224
+          }
+        }
+      },
+      "records": [
+        {
+          "phase": "warmup",
+          "iteration": 0,
+          "model_gpu_ms": 19165.07421875,
+          "model_wall_ms": 19165.194744011387,
+          "peak_memory_allocated_bytes": 9505005568,
+          "peak_memory_reserved_bytes": 13172211712
+        },
+        {
+          "phase": "measure",
+          "iteration": 0,
+          "model_gpu_ms": 12579.755859375,
+          "model_wall_ms": 12579.84438596759,
+          "peak_memory_allocated_bytes": 10037256704,
+          "peak_memory_reserved_bytes": 13912506368
+        },
+        {
+          "phase": "measure",
+          "iteration": 1,
+          "model_gpu_ms": 13103.076171875,
+          "model_wall_ms": 13103.165179025382,
+          "peak_memory_allocated_bytes": 10036225536,
+          "peak_memory_reserved_bytes": 13795065856
+        },
+        {
+          "phase": "measure",
+          "iteration": 2,
+          "model_gpu_ms": 12566.7001953125,
+          "model_wall_ms": 12566.803405992687,
+          "peak_memory_allocated_bytes": 10035223040,
+          "peak_memory_reserved_bytes": 13822328832
+        },
+        {
+          "phase": "measure",
+          "iteration": 3,
+          "model_gpu_ms": 12568.900390625,
+          "model_wall_ms": 12569.029203965329,
+          "peak_memory_allocated_bytes": 10035105280,
+          "peak_memory_reserved_bytes": 13694402560
+        },
+        {
+          "phase": "measure",
+          "iteration": 4,
+          "model_gpu_ms": 12583.14453125,
+          "model_wall_ms": 12583.256449026521,
+          "peak_memory_allocated_bytes": 10035497984,
+          "peak_memory_reserved_bytes": 14294188032
+        }
+      ],
+      "monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1,
+        "samples": 102,
+        "allowed_pid": 694049,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      },
+      "selections": [
+        {
+          "operation": "triangle_attention",
+          "implementation": "amd-gfx90a-ck-tile-attention-f32-n1000",
+          "count": 864
+        },
+        {
+          "operation": "triangle_multiplication",
+          "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+          "count": 864
+        }
+      ],
+      "ck_build": {
+        "enabled": true,
+        "loaded": true,
+        "error": null,
+        "build": {
+          "source_sha256": "41026c6c44ce4ae112a7f09d38dd11c137dd22da8ee2820f500460c00a9b783d",
+          "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+          "header_count": 581,
+          "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a",
+            "-I/opt/rocm/include",
+            "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_761bc00b6f3e7881/attention.pending.so"
+          ],
+          "library_sha256": "528482f59c6d20e0da4f4d800ebe6b47c5ab70ae1b1370343aa5360a0485bb47",
+          "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_761bc00b6f3e7881/attention.so",
+          "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+        }
+      },
+      "process_wall_ms": 128673.68994100252,
+      "artifact": "outputs/benchmarks/long1000-ck-tile-ba-1-af43d8e/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/manifest.json"
+    },
+    "long1000-ck-tile-ba-0-af43d8e": {
+      "status": "ok",
+      "source": {
+        "fireprot_commit": "af43d8e47b40cb20bdca6f6fbed3d744b5a4429c",
+        "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b",
+        "profile_script_sha256": "511213a16ed1e820e0976cec4903638f589c2d1d3bdd657c26bbd14e13ff7b4a"
+      },
+      "spec": {
+        "schema_version": 1,
+        "created_at": "2026-10-02T18:54:39.945663+00:00",
+        "config_path": "/media/IntelSSD/fireprot/benchmarks/protenix/configs/mi250-long.json",
+        "config_sha256": "883c3d53ef6c76e7799eaf80ec3546c7166345827e2d087b288e7e4e5b31355b",
+        "repo_root": "/media/IntelSSD/fireprot",
+        "protenix_root": "/media/IntelSSD/fireprot/Protenix",
+        "run_dir": "/media/IntelSSD/fireprot/outputs/benchmarks/long1000-ck-tile-ba-0-af43d8e/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot",
+        "backend": "fireprot",
+        "blas_backend": "hipblas",
+        "profile_one": false,
+        "torch_profile": false,
+        "source": {
+          "fireprot_commit": "af43d8e47b40cb20bdca6f6fbed3d744b5a4429c",
+          "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b"
+        },
+        "measurement": {
+          "warmups": 1,
+          "repetitions": 5,
+          "dump_outputs": false,
+          "cache_state": "warm-within-process",
+          "device_policy": "exclusive",
+          "exclusive_max_gpu_use_percent": 5,
+          "exclusive_max_vram_used_bytes": 268435456,
+          "process_monitor_interval_seconds": 1,
+          "reject_external_gpu_processes": true,
+          "clock_policy": "record-current"
+        },
+        "workload": {
+          "id": "mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32",
+          "input": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "token_count": 1000,
+          "model_name": "protenix_mini_default_v0.5.0",
+          "dtype": "fp32",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "seeds": [
+            101
+          ],
+          "cache": true,
+          "use_msa": false,
+          "use_template": false,
+          "enable_fusion": true,
+          "enable_tf32": false,
+          "trimul_kernel": "torch",
+          "triatt_kernel": "torch"
+        }
+      },
+      "input": {
+        "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+        "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac",
+        "token_count": 1000,
+        "atom_count": null
+      },
+      "software": {
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:38:16) [GCC 14.3.0]",
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "miopen": null,
+        "miopen_available": false,
+        "preferred_blas": "_BlasBackend.Cublas"
+      },
+      "summary": {
+        "model_gpu_ms": {
+          "count": 5,
+          "min": 13095.77734375,
+          "median": 13120.072265625,
+          "p95": 13178.912109375,
+          "max": 13178.912109375,
+          "mean": 13124.6998046875
+        },
+        "model_wall_ms": {
+          "count": 5,
+          "min": 13095.870429999195,
+          "median": 13120.16043503536,
+          "p95": 13179.023500997573,
+          "max": 13179.023500997573,
+          "mean": 13124.807006213814
+        },
+        "peak_memory_allocated_bytes": {
+          "count": 5,
+          "min": 10035105280,
+          "median": 10035497984,
+          "p95": 10037256704,
+          "max": 10037256704,
+          "mean": 10035861708.8
+        },
+        "peak_memory_reserved_bytes": {
+          "count": 5,
+          "min": 13694402560,
+          "median": 13822328832,
+          "p95": 14294188032,
+          "max": 14294188032,
+          "mean": 13903698329.6
+        },
+        "stages_gpu_ms": {
+          "atom_attention_decoder": {
+            "count": 5,
+            "min": 7.691174030303955,
+            "median": 7.695653915405273,
+            "p95": 7.707173824310303,
+            "max": 7.707173824310303,
+            "mean": 7.697413921356201
+          },
+          "atom_attention_encoder": {
+            "count": 5,
+            "min": 36.57015609741211,
+            "median": 36.726152420043945,
+            "p95": 36.88358688354492,
+            "max": 36.88358688354492,
+            "mean": 36.72474384307861
+          },
+          "confidence": {
+            "count": 5,
+            "min": 725.3232421875,
+            "median": 726.8657836914062,
+            "p95": 753.8873291015625,
+            "max": 753.8873291015625,
+            "mean": 732.1874389648438
+          },
+          "confidence_head": {
+            "count": 5,
+            "min": 725.3148193359375,
+            "median": 726.8573608398438,
+            "p95": 753.8790283203125,
+            "max": 753.8790283203125,
+            "mean": 732.1790893554687
+          },
+          "diffusion_module": {
+            "count": 5,
+            "min": 49.083614349365234,
+            "median": 49.24856948852539,
+            "p95": 49.437042236328125,
+            "max": 49.437042236328125,
+            "mean": 49.231546020507814
+          },
+          "diffusion_transformer": {
+            "count": 5,
+            "min": 52.84080457687378,
+            "median": 52.90608358383179,
+            "p95": 52.924323081970215,
+            "max": 52.924323081970215,
+            "mean": 52.894083213806155
+          },
+          "pairformer_output": {
+            "count": 5,
+            "min": 12085.755859375,
+            "median": 12096.064453125,
+            "p95": 12123.513671875,
+            "max": 12123.513671875,
+            "mean": 12098.8853515625
+          },
+          "pairformer_stack": {
+            "count": 5,
+            "min": 11992.287170410156,
+            "median": 12005.463439941406,
+            "p95": 12049.60498046875,
+            "max": 12049.60498046875,
+            "mean": 12009.505932617187
+          },
+          "sample_diffusion": {
+            "count": 5,
+            "min": 49.85639572143555,
+            "median": 50.02775192260742,
+            "p95": 50.30790328979492,
+            "max": 50.30790328979492,
+            "mean": 50.03706283569336
+          },
+          "triangle_attention": {
+            "count": 5,
+            "min": 6711.990016937256,
+            "median": 6712.073322296143,
+            "p95": 6753.714401245117,
+            "max": 6753.714401245117,
+            "mean": 6720.718759155274
+          },
+          "triangle_multiplication": {
+            "count": 5,
+            "min": 3912.263696670532,
+            "median": 3913.6610774993896,
+            "p95": 3923.353525161743,
+            "max": 3923.353525161743,
+            "mean": 3915.428706359863
+          }
+        }
+      },
+      "records": [
+        {
+          "phase": "warmup",
+          "iteration": 0,
+          "model_gpu_ms": 19092.111328125,
+          "model_wall_ms": 19092.294310044963,
+          "peak_memory_allocated_bytes": 9505005568,
+          "peak_memory_reserved_bytes": 13172211712
+        },
+        {
+          "phase": "measure",
+          "iteration": 0,
+          "model_gpu_ms": 13120.072265625,
+          "model_wall_ms": 13120.16043503536,
+          "peak_memory_allocated_bytes": 10037256704,
+          "peak_memory_reserved_bytes": 13912506368
+        },
+        {
+          "phase": "measure",
+          "iteration": 1,
+          "model_gpu_ms": 13105.5400390625,
+          "model_wall_ms": 13105.629885045346,
+          "peak_memory_allocated_bytes": 10036225536,
+          "peak_memory_reserved_bytes": 13795065856
+        },
+        {
+          "phase": "measure",
+          "iteration": 2,
+          "model_gpu_ms": 13123.197265625,
+          "model_wall_ms": 13123.350779991597,
+          "peak_memory_allocated_bytes": 10035223040,
+          "peak_memory_reserved_bytes": 13822328832
+        },
+        {
+          "phase": "measure",
+          "iteration": 3,
+          "model_gpu_ms": 13178.912109375,
+          "model_wall_ms": 13179.023500997573,
+          "peak_memory_allocated_bytes": 10035105280,
+          "peak_memory_reserved_bytes": 13694402560
+        },
+        {
+          "phase": "measure",
+          "iteration": 4,
+          "model_gpu_ms": 13095.77734375,
+          "model_wall_ms": 13095.870429999195,
+          "peak_memory_allocated_bytes": 10035497984,
+          "peak_memory_reserved_bytes": 14294188032
+        }
+      ],
+      "monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1,
+        "samples": 103,
+        "allowed_pid": 694563,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      },
+      "selections": [
+        {
+          "operation": "triangle_attention",
+          "implementation": "amd-gfx90a-efficient-sdpa-direct-n1000",
+          "count": 864
+        },
+        {
+          "operation": "triangle_multiplication",
+          "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+          "count": 864
+        }
+      ],
+      "ck_build": {
+        "enabled": false,
+        "loaded": false,
+        "error": null,
+        "build": {}
+      },
+      "process_wall_ms": 130609.7592029837,
+      "artifact": "outputs/benchmarks/long1000-ck-tile-ba-0-af43d8e/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/manifest.json"
+    }
+  },
+  "numerical": {
+    "status": "ok",
+    "source": {
+      "fireprot_commit": "af43d8e47b40cb20bdca6f6fbed3d744b5a4429c",
+      "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b",
+      "profile_script_sha256": "511213a16ed1e820e0976cec4903638f589c2d1d3bdd657c26bbd14e13ff7b4a"
+    },
+    "spec": {
+      "schema_version": 1,
+      "created_at": "2026-10-02T18:48:01.792474+00:00",
+      "config_path": "/media/IntelSSD/fireprot/benchmarks/protenix/configs/mi250-long-validation.json",
+      "config_sha256": "31362f3c8dee8fff5525e0ba5db31e11616162947fc8dbfd04394f3cf8dfc7ba",
+      "repo_root": "/media/IntelSSD/fireprot",
+      "protenix_root": "/media/IntelSSD/fireprot/Protenix",
+      "run_dir": "/media/IntelSSD/fireprot/outputs/benchmarks/long1000-ck-tile-numerical-af43d8e/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot",
+      "backend": "fireprot",
+      "blas_backend": "hipblas",
+      "profile_one": false,
+      "torch_profile": false,
+      "source": {
+        "fireprot_commit": "af43d8e47b40cb20bdca6f6fbed3d744b5a4429c",
+        "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b"
+      },
+      "measurement": {
+        "warmups": 0,
+        "repetitions": 1,
+        "dump_outputs": true,
+        "cache_state": "warm-within-process",
+        "device_policy": "exclusive",
+        "exclusive_max_gpu_use_percent": 5,
+        "exclusive_max_vram_used_bytes": 268435456,
+        "process_monitor_interval_seconds": 1,
+        "reject_external_gpu_processes": true,
+        "clock_policy": "record-current"
+      },
+      "workload": {
+        "id": "mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32",
+        "input": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+        "token_count": 1000,
+        "model_name": "protenix_mini_default_v0.5.0",
+        "dtype": "fp32",
+        "cycles": 4,
+        "diffusion_steps": 1,
+        "samples": 1,
+        "seeds": [
+          101
+        ],
+        "cache": true,
+        "use_msa": false,
+        "use_template": false,
+        "enable_fusion": true,
+        "enable_tf32": false,
+        "trimul_kernel": "torch",
+        "triatt_kernel": "torch"
+      }
+    },
+    "input": {
+      "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+      "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac",
+      "token_count": 1000,
+      "atom_count": null
+    },
+    "software": {
+      "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:38:16) [GCC 14.3.0]",
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "miopen": null,
+      "miopen_available": false,
+      "preferred_blas": "_BlasBackend.Cublas"
+    },
+    "summary": {
+      "model_gpu_ms": {
+        "count": 1,
+        "min": 19227.693359375,
+        "median": 19227.693359375,
+        "p95": 19227.693359375,
+        "max": 19227.693359375,
+        "mean": 19227.693359375
+      },
+      "model_wall_ms": {
+        "count": 1,
+        "min": 19227.86080802325,
+        "median": 19227.86080802325,
+        "p95": 19227.86080802325,
+        "max": 19227.86080802325,
+        "mean": 19227.86080802325
+      },
+      "peak_memory_allocated_bytes": {
+        "count": 1,
+        "min": 9505005568,
+        "median": 9505005568,
+        "p95": 9505005568,
+        "max": 9505005568,
+        "mean": 9505005568
+      },
+      "peak_memory_reserved_bytes": {
+        "count": 1,
+        "min": 13172211712,
+        "median": 13172211712,
+        "p95": 13172211712,
+        "max": 13172211712,
+        "mean": 13172211712
+      },
+      "stages_gpu_ms": {
+        "atom_attention_decoder": {
+          "count": 1,
+          "min": 7.74538516998291,
+          "median": 7.74538516998291,
+          "p95": 7.74538516998291,
+          "max": 7.74538516998291,
+          "mean": 7.74538516998291
+        },
+        "atom_attention_encoder": {
+          "count": 1,
+          "min": 3215.2215995788574,
+          "median": 3215.2215995788574,
+          "p95": 3215.2215995788574,
+          "max": 3215.2215995788574,
+          "mean": 3215.2215995788574
+        },
+        "confidence": {
+          "count": 1,
+          "min": 763.3563842773438,
+          "median": 763.3563842773438,
+          "p95": 763.3563842773438,
+          "max": 763.3563842773438,
+          "mean": 763.3563842773438
+        },
+        "confidence_head": {
+          "count": 1,
+          "min": 763.3479614257812,
+          "median": 763.3479614257812,
+          "p95": 763.3479614257812,
+          "max": 763.3479614257812,
+          "mean": 763.3479614257812
+        },
+        "diffusion_module": {
+          "count": 1,
+          "min": 1326.3712158203125,
+          "median": 1326.3712158203125,
+          "p95": 1326.3712158203125,
+          "max": 1326.3712158203125,
+          "mean": 1326.3712158203125
+        },
+        "diffusion_transformer": {
+          "count": 1,
+          "min": 1499.4295678138733,
+          "median": 1499.4295678138733,
+          "p95": 1499.4295678138733,
+          "max": 1499.4295678138733,
+          "mean": 1499.4295678138733
+        },
+        "pairformer_output": {
+          "count": 1,
+          "min": 16152.9052734375,
+          "median": 16152.9052734375,
+          "p95": 16152.9052734375,
+          "max": 16152.9052734375,
+          "mean": 16152.9052734375
+        },
+        "pairformer_stack": {
+          "count": 1,
+          "min": 11912.537292480469,
+          "median": 11912.537292480469,
+          "p95": 11912.537292480469,
+          "max": 11912.537292480469,
+          "mean": 11912.537292480469
+        },
+        "sample_diffusion": {
+          "count": 1,
+          "min": 1394.72705078125,
+          "median": 1394.72705078125,
+          "p95": 1394.72705078125,
+          "max": 1394.72705078125,
+          "mean": 1394.72705078125
+        },
+        "triangle_attention": {
+          "count": 1,
+          "min": 6560.276821136475,
+          "median": 6560.276821136475,
+          "p95": 6560.276821136475,
+          "max": 6560.276821136475,
+          "mean": 6560.276821136475
+        },
+        "triangle_multiplication": {
+          "count": 1,
+          "min": 4070.4729137420654,
+          "median": 4070.4729137420654,
+          "p95": 4070.4729137420654,
+          "max": 4070.4729137420654,
+          "mean": 4070.4729137420654
+        }
+      }
+    },
+    "monitor": {
+      "available": true,
+      "command": [
+        "/usr/bin/amd-smi",
+        "process",
+        "--json"
+      ],
+      "physical_device_index": 7,
+      "interval_seconds": 1,
+      "samples": 41,
+      "allowed_pid": 692756,
+      "external_pids": [],
+      "errors": [],
+      "passed": true
+    },
+    "selections": [
+      {
+        "operation": "triangle_attention",
+        "implementation": "amd-gfx90a-ck-tile-attention-f32-n1000",
+        "count": 144
+      },
+      {
+        "operation": "triangle_multiplication",
+        "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+        "count": 144
+      }
+    ],
+    "ck_build": {
+      "enabled": true,
+      "loaded": true,
+      "error": null,
+      "build": {
+        "source_sha256": "41026c6c44ce4ae112a7f09d38dd11c137dd22da8ee2820f500460c00a9b783d",
+        "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+        "header_count": 581,
+        "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+        "command": [
+          "/opt/rocm/bin/hipcc",
+          "-O3",
+          "-std=c++17",
+          "-fPIC",
+          "-shared",
+          "--offload-arch=gfx90a",
+          "-I/opt/rocm/include",
+          "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+          "-o",
+          "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_761bc00b6f3e7881/attention.pending.so"
+        ],
+        "library_sha256": "528482f59c6d20e0da4f4d800ebe6b47c5ab70ae1b1370343aa5360a0485bb47",
+        "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_761bc00b6f3e7881/attention.so",
+        "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+      }
+    },
+    "process_wall_ms": 51117.15781601379,
+    "artifact": "outputs/benchmarks/long1000-ck-tile-numerical-af43d8e/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/manifest.json"
+  },
+  "comparison": {
+    "schema_version": 1,
+    "created_at": "2026-10-02T18:49:47.848651+00:00",
+    "reference_root": "/media/IntelSSD/fireprot/outputs/benchmarks/long1000-equivalence-e540363-native/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/native/predictions",
+    "candidate_root": "/media/IntelSSD/fireprot/outputs/benchmarks/long1000-ck-tile-numerical-af43d8e/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions",
+    "passed": true,
+    "comparisons": [
+      {
+        "case": "umem_L01000_462bb697ecdcce2f__fireprot_measure_000",
+        "seed": 101,
+        "sample": 0,
+        "reference": {
+          "cif": "outputs/benchmarks/long1000-equivalence-e540363-native/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/native/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000_sample_0.cif",
+          "confidence": "outputs/benchmarks/long1000-equivalence-e540363-native/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/native/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000_summary_confidence_sample_0.json"
+        },
+        "candidate": {
+          "cif": "outputs/benchmarks/long1000-ck-tile-numerical-af43d8e/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000_sample_0.cif",
+          "confidence": "outputs/benchmarks/long1000-ck-tile-numerical-af43d8e/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000_summary_confidence_sample_0.json"
+        },
+        "coordinate_tolerance_angstrom": 0.001,
+        "confidence_tolerance": 0.001,
+        "coordinates": {
+          "atom_count": 7979,
+          "finite": true,
+          "raw_rmsd_angstrom": 0.00009488137910765101,
+          "aligned_rmsd_angstrom": 0.00009365743890925656,
+          "max_abs_coordinate_delta_angstrom": 0.0009765625
+        },
+        "confidence": {
+          "numeric_leaf_count": 15,
+          "finite": true,
+          "max_abs_delta": 0.000003814697265625,
+          "mean_abs_delta": 3.8345654805501303e-7,
+          "missing_from_candidate": [],
+          "extra_in_candidate": []
+        },
+        "passed": true
+      }
+    ]
+  },
+  "default_verification": {
+    "status": "ok",
+    "source": {
+      "fireprot_commit": "8fbdddc791c4844a79f71efa67f7e300ee1f5a6c",
+      "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b",
+      "profile_script_sha256": "511213a16ed1e820e0976cec4903638f589c2d1d3bdd657c26bbd14e13ff7b4a"
+    },
+    "spec": {
+      "schema_version": 1,
+      "created_at": "2026-10-02T19:00:49.286594+00:00",
+      "config_path": "/media/IntelSSD/fireprot/benchmarks/protenix/configs/mi250-long.json",
+      "config_sha256": "883c3d53ef6c76e7799eaf80ec3546c7166345827e2d087b288e7e4e5b31355b",
+      "repo_root": "/media/IntelSSD/fireprot",
+      "protenix_root": "/media/IntelSSD/fireprot/Protenix",
+      "run_dir": "/media/IntelSSD/fireprot/outputs/benchmarks/long1000-ck-tile-default-8fbdddc/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot",
+      "backend": "fireprot",
+      "blas_backend": "hipblas",
+      "profile_one": false,
+      "torch_profile": false,
+      "source": {
+        "fireprot_commit": "8fbdddc791c4844a79f71efa67f7e300ee1f5a6c",
+        "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b"
+      },
+      "measurement": {
+        "warmups": 1,
+        "repetitions": 3,
+        "dump_outputs": false,
+        "cache_state": "warm-within-process",
+        "device_policy": "exclusive",
+        "exclusive_max_gpu_use_percent": 5,
+        "exclusive_max_vram_used_bytes": 268435456,
+        "process_monitor_interval_seconds": 1,
+        "reject_external_gpu_processes": true,
+        "clock_policy": "record-current"
+      },
+      "workload": {
+        "id": "mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32",
+        "input": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+        "token_count": 1000,
+        "model_name": "protenix_mini_default_v0.5.0",
+        "dtype": "fp32",
+        "cycles": 4,
+        "diffusion_steps": 1,
+        "samples": 1,
+        "seeds": [
+          101
+        ],
+        "cache": true,
+        "use_msa": false,
+        "use_template": false,
+        "enable_fusion": true,
+        "enable_tf32": false,
+        "trimul_kernel": "torch",
+        "triatt_kernel": "torch"
+      }
+    },
+    "input": {
+      "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+      "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac",
+      "token_count": 1000,
+      "atom_count": null
+    },
+    "software": {
+      "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:38:16) [GCC 14.3.0]",
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "miopen": null,
+      "miopen_available": false,
+      "preferred_blas": "_BlasBackend.Cublas"
+    },
+    "summary": {
+      "model_gpu_ms": {
+        "count": 3,
+        "min": 12583.44921875,
+        "median": 12584.2314453125,
+        "p95": 12586.16796875,
+        "max": 12586.16796875,
+        "mean": 12584.6162109375
+      },
+      "model_wall_ms": {
+        "count": 3,
+        "min": 12583.567005000077,
+        "median": 12584.333493025042,
+        "p95": 12586.273257038556,
+        "max": 12586.273257038556,
+        "mean": 12584.724585021226
+      },
+      "peak_memory_allocated_bytes": {
+        "count": 3,
+        "min": 10035223040,
+        "median": 10036225536,
+        "p95": 10037256704,
+        "max": 10037256704,
+        "mean": 10036235093.333334
+      },
+      "peak_memory_reserved_bytes": {
+        "count": 3,
+        "min": 13795065856,
+        "median": 13822328832,
+        "p95": 13912506368,
+        "max": 13912506368,
+        "mean": 13843300352
+      },
+      "stages_gpu_ms": {
+        "atom_attention_decoder": {
+          "count": 3,
+          "min": 7.685398101806641,
+          "median": 7.695958137512207,
+          "p95": 7.709077835083008,
+          "max": 7.709077835083008,
+          "mean": 7.696811358133952
+        },
+        "atom_attention_encoder": {
+          "count": 3,
+          "min": 36.7607946395874,
+          "median": 36.771514892578125,
+          "p95": 36.80255317687988,
+          "max": 36.80255317687988,
+          "mean": 36.7782875696818
+        },
+        "confidence": {
+          "count": 3,
+          "min": 695.2322998046875,
+          "median": 700.3427124023438,
+          "p95": 702.8002319335938,
+          "max": 702.8002319335938,
+          "mean": 699.4584147135416
+        },
+        "confidence_head": {
+          "count": 3,
+          "min": 695.2238159179688,
+          "median": 700.3342895507812,
+          "p95": 702.7918090820312,
+          "max": 702.7918090820312,
+          "mean": 699.4499715169271
+        },
+        "diffusion_module": {
+          "count": 3,
+          "min": 49.24286651611328,
+          "median": 49.32606506347656,
+          "p95": 49.37742233276367,
+          "max": 49.37742233276367,
+          "mean": 49.315451304117836
+        },
+        "diffusion_transformer": {
+          "count": 3,
+          "min": 52.926130294799805,
+          "median": 52.96244955062866,
+          "p95": 52.973649978637695,
+          "max": 52.973649978637695,
+          "mean": 52.954076608022056
+        },
+        "pairformer_output": {
+          "count": 3,
+          "min": 11584.5283203125,
+          "median": 11586.3134765625,
+          "p95": 11593.169921875,
+          "max": 11593.169921875,
+          "mean": 11588.00390625
+        },
+        "pairformer_stack": {
+          "count": 3,
+          "min": 11493.707763671875,
+          "median": 11496.008666992188,
+          "p95": 11497.232666015625,
+          "max": 11497.232666015625,
+          "mean": 11495.649698893229
+        },
+        "sample_diffusion": {
+          "count": 3,
+          "min": 50.06924819946289,
+          "median": 50.183162689208984,
+          "p95": 50.20732116699219,
+          "max": 50.20732116699219,
+          "mean": 50.15324401855469
+        },
+        "triangle_attention": {
+          "count": 3,
+          "min": 6177.765430450439,
+          "median": 6180.979049682617,
+          "p95": 6183.671016693115,
+          "max": 6183.671016693115,
+          "mean": 6180.805165608724
+        },
+        "triangle_multiplication": {
+          "count": 3,
+          "min": 3912.4990940093994,
+          "median": 3916.812261581421,
+          "p95": 3918.216075897217,
+          "max": 3918.216075897217,
+          "mean": 3915.842477162679
+        }
+      }
+    },
+    "records": [
+      {
+        "phase": "warmup",
+        "iteration": 0,
+        "model_gpu_ms": 18520.49609375,
+        "model_wall_ms": 18520.633604959585,
+        "peak_memory_allocated_bytes": 9505005568,
+        "peak_memory_reserved_bytes": 13172211712
+      },
+      {
+        "phase": "measure",
+        "iteration": 0,
+        "model_gpu_ms": 12584.2314453125,
+        "model_wall_ms": 12584.333493025042,
+        "peak_memory_allocated_bytes": 10037256704,
+        "peak_memory_reserved_bytes": 13912506368
+      },
+      {
+        "phase": "measure",
+        "iteration": 1,
+        "model_gpu_ms": 12586.16796875,
+        "model_wall_ms": 12586.273257038556,
+        "peak_memory_allocated_bytes": 10036225536,
+        "peak_memory_reserved_bytes": 13795065856
+      },
+      {
+        "phase": "measure",
+        "iteration": 2,
+        "model_gpu_ms": 12583.44921875,
+        "model_wall_ms": 12583.567005000077,
+        "peak_memory_allocated_bytes": 10035223040,
+        "peak_memory_reserved_bytes": 13822328832
+      }
+    ],
+    "monitor": {
+      "available": true,
+      "command": [
+        "/usr/bin/amd-smi",
+        "process",
+        "--json"
+      ],
+      "physical_device_index": 6,
+      "interval_seconds": 1,
+      "samples": 77,
+      "allowed_pid": 696068,
+      "external_pids": [],
+      "errors": [],
+      "passed": true
+    },
+    "selections": [
+      {
+        "operation": "triangle_attention",
+        "implementation": "amd-gfx90a-ck-tile-attention-f32-n1000",
+        "count": 576
+      },
+      {
+        "operation": "triangle_multiplication",
+        "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+        "count": 576
+      }
+    ],
+    "ck_build": {
+      "enabled": true,
+      "loaded": true,
+      "error": null,
+      "build": {
+        "source_sha256": "41026c6c44ce4ae112a7f09d38dd11c137dd22da8ee2820f500460c00a9b783d",
+        "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+        "header_count": 581,
+        "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+        "command": [
+          "/opt/rocm/bin/hipcc",
+          "-O3",
+          "-std=c++17",
+          "-fPIC",
+          "-shared",
+          "--offload-arch=gfx90a",
+          "-I/opt/rocm/include",
+          "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+          "-o",
+          "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_38f9bf53ac3dc879/attention.pending.so"
+        ],
+        "library_sha256": "292e54bd5878d26200c7929ccb587c9f416724dc6f98b4eb989e6ab2491d5553",
+        "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_38f9bf53ac3dc879/attention.so",
+        "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+      }
+    },
+    "process_wall_ms": 96303.32219804404,
+    "artifact": "outputs/benchmarks/long1000-ck-tile-default-8fbdddc/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/manifest.json",
+    "screen_source_sha256": "5db02d6c8b0fcbda8f38910c2f93e822ee85326ec79f5a251c5cbc0417348890",
+    "screen_libraries": {
+      "ck_attention_tile32_64.so": "90d69f793d6ec62bd0bb0dc50ff7fb4b93ac58a83b6abb2f78319212ef081dbc",
+      "ck_attention_tile64w4.so": "eb7739292e56e8ba511414418005fc2fb5a1a0172c07cc754db239be9c34b604",
+      "ck_attention_tile64_32.so": "e3f546dee14938364ada55cb5716de3b2c084cfe96616facd240b9d243407ccd",
+      "ck_attention_tile32_32.so": "4144cf140979d82efa0205420f2ab0cf74338e16754b55da8e38e49fab08cd10",
+      "ck_attention_tile64fast.so": "0b75a030c2556815e03968564a25afedc133c0bdb0f76842957e1f73146448a0",
+      "ck_attention_tile64.so": "4ce5315cc1759390b103f9510828634c6b7817577de55847bde28a2b6355bd0d",
+      "ck_attention_tile128w4.so": "01beec11e3dd3270b11384b511a87100baaedf528c379448c2c8b6e57a82fa28"
+    },
+    "compiler_resource_log": [
+      "/opt/rocm/core-10.0/include/ck_tile/host/flush_icache.hpp:16:1: remark:     VGPRs: 0 [-Rpass-analysis=kernel-resource-usage]",
+      "/opt/rocm/core-10.0/include/ck_tile/host/flush_icache.hpp:16:1: remark:     ScratchSize [bytes/lane]: 0 [-Rpass-analysis=kernel-resource-usage]",
+      "/opt/rocm/core-10.0/include/ck_tile/host/flush_icache.hpp:16:1: remark:     Occupancy [waves/SIMD]: 8 [-Rpass-analysis=kernel-resource-usage]",
+      "/opt/rocm/core-10.0/include/ck_tile/host/flush_icache.hpp:16:1: remark:     SGPRs Spill: 0 [-Rpass-analysis=kernel-resource-usage]",
+      "/opt/rocm/core-10.0/include/ck_tile/host/flush_icache.hpp:16:1: remark:     VGPRs Spill: 0 [-Rpass-analysis=kernel-resource-usage]",
+      "/opt/rocm/core-10.0/include/ck_tile/host/flush_icache.hpp:16:1: remark:     LDS Size [bytes/block]: 0 [-Rpass-analysis=kernel-resource-usage]",
+      "/opt/rocm/core-10.0/include/ck_tile/host/kernel_launch.hpp:83:1: remark:     VGPRs: 154 [-Rpass-analysis=kernel-resource-usage]",
+      "/opt/rocm/core-10.0/include/ck_tile/host/kernel_launch.hpp:83:1: remark:     ScratchSize [bytes/lane]: 0 [-Rpass-analysis=kernel-resource-usage]",
+      "/opt/rocm/core-10.0/include/ck_tile/host/kernel_launch.hpp:83:1: remark:     Occupancy [waves/SIMD]: 3 [-Rpass-analysis=kernel-resource-usage]",
+      "/opt/rocm/core-10.0/include/ck_tile/host/kernel_launch.hpp:83:1: remark:     SGPRs Spill: 0 [-Rpass-analysis=kernel-resource-usage]",
+      "/opt/rocm/core-10.0/include/ck_tile/host/kernel_launch.hpp:83:1: remark:     VGPRs Spill: 0 [-Rpass-analysis=kernel-resource-usage]",
+      "/opt/rocm/core-10.0/include/ck_tile/host/kernel_launch.hpp:83:1: remark:     LDS Size [bytes/block]: 9216 [-Rpass-analysis=kernel-resource-usage]"
+    ]
+  },
+  "screening": {
+    "long1000-ck-tile-first": {
+      "seed": 419,
+      "warmups": 5,
+      "repetitions": 15,
+      "records": [
+        {
+          "label": "sdpa",
+          "max_abs_delta": 0,
+          "median_ms": 35.90972137451172,
+          "values_ms": [
+            35.90972137451172,
+            36.07099533081055,
+            35.80667495727539,
+            35.567161560058594,
+            35.92283248901367,
+            35.91099166870117,
+            36.08394241333008,
+            35.17484664916992,
+            35.8754768371582,
+            35.97003173828125,
+            35.85307693481445,
+            35.987152099609375,
+            35.414363861083984,
+            35.214046478271484,
+            36.00571060180664
+          ]
+        },
+        {
+          "label": "tile64",
+          "max_abs_delta": 0.000004410743713378906,
+          "median_ms": 34.284481048583984,
+          "values_ms": [
+            34.3182373046875,
+            34.295677185058594,
+            34.37663269042969,
+            34.16639709472656,
+            34.345760345458984,
+            34.27376174926758,
+            34.3038330078125,
+            34.21647644042969,
+            34.25455093383789,
+            34.20735549926758,
+            34.35744094848633,
+            34.284481048583984,
+            34.20847702026367,
+            34.4175910949707,
+            34.25807571411133
+          ]
+        },
+        {
+          "label": "64_32_cachedq",
+          "max_abs_delta": 0.0000036954879760742188,
+          "median_ms": 35.87211227416992,
+          "values_ms": [
+            35.87211227416992,
+            35.839473724365234,
+            35.89131164550781,
+            35.89227294921875,
+            35.879791259765625,
+            35.8765869140625,
+            35.82923126220703,
+            35.887630462646484,
+            35.85307312011719,
+            35.888431549072266,
+            35.85755157470703,
+            35.882667541503906,
+            35.863792419433594,
+            35.86427307128906,
+            35.85771179199219
+          ]
+        },
+        {
+          "label": "sdpa",
+          "max_abs_delta": 0,
+          "median_ms": 35.895469665527344,
+          "values_ms": [
+            35.90059280395508,
+            35.80363082885742,
+            35.931949615478516,
+            35.93178939819336,
+            35.78267288208008,
+            35.94858932495117,
+            35.85067367553711,
+            35.62347412109375,
+            36.081382751464844,
+            35.827632904052734,
+            35.956268310546875,
+            35.895469665527344,
+            35.8657112121582,
+            36.05674362182617,
+            35.75435256958008
+          ]
+        }
+      ],
+      "status": "ok",
+      "gpu_process_monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 7,
+        "interval_seconds": 1,
+        "samples": 4,
+        "allowed_pid": 686603,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "long1000-ck-tile-matrix": {
+      "seed": 419,
+      "warmups": 5,
+      "repetitions": 15,
+      "records": [
+        {
+          "label": "sdpa",
+          "max_abs_delta": 0,
+          "median_ms": 35.918853759765625,
+          "values_ms": [
+            35.918853759765625,
+            36.076927185058594,
+            35.6366081237793,
+            35.569087982177734,
+            36.04203414916992,
+            35.944759368896484,
+            36.03819274902344,
+            35.881080627441406,
+            35.88459777832031,
+            35.936912536621094,
+            35.98427200317383,
+            36.091312408447266,
+            35.78139877319336,
+            35.88716125488281,
+            35.72684097290039
+          ]
+        },
+        {
+          "label": "tile64",
+          "max_abs_delta": 0.000004410743713378906,
+          "median_ms": 34.39263153076172,
+          "values_ms": [
+            34.441436767578125,
+            34.28656005859375,
+            34.4047966003418,
+            34.452632904052734,
+            34.455196380615234,
+            34.420475006103516,
+            34.31760025024414,
+            34.40687561035156,
+            34.39263153076172,
+            34.32527542114258,
+            34.4319953918457,
+            34.32432174682617,
+            34.318397521972656,
+            34.31775665283203,
+            34.347999572753906
+          ]
+        },
+        {
+          "label": "tile64_32",
+          "max_abs_delta": 0.00000476837158203125,
+          "median_ms": 34.59919357299805,
+          "values_ms": [
+            34.59919357299805,
+            34.50591278076172,
+            34.537113189697266,
+            34.42463684082031,
+            34.560951232910156,
+            34.281280517578125,
+            34.61518859863281,
+            34.341915130615234,
+            34.73214340209961,
+            34.49982833862305,
+            34.64686965942383,
+            34.870059967041016,
+            34.7167854309082,
+            34.76670455932617,
+            34.70478439331055
+          ]
+        },
+        {
+          "label": "tile32_32",
+          "max_abs_delta": 0.00000476837158203125,
+          "median_ms": 40.3692626953125,
+          "values_ms": [
+            40.212791442871094,
+            40.636619567871094,
+            40.257747650146484,
+            40.42718505859375,
+            40.47038269042969,
+            40.419349670410156,
+            40.18206787109375,
+            40.36894226074219,
+            40.3692626953125,
+            40.363182067871094,
+            40.18383026123047,
+            40.31566619873047,
+            40.509422302246094,
+            40.4630241394043,
+            40.43502426147461
+          ]
+        },
+        {
+          "label": "tile32_64",
+          "max_abs_delta": 0.000004410743713378906,
+          "median_ms": 38.0054931640625,
+          "values_ms": [
+            38.10308837890625,
+            38.05093002319336,
+            38.06277084350586,
+            38.10468673706055,
+            37.87909698486328,
+            37.90341567993164,
+            37.89013671875,
+            38.047889709472656,
+            37.97765350341797,
+            37.97045135498047,
+            38.0054931640625,
+            37.95925521850586,
+            38.00005340576172,
+            38.03493118286133,
+            38.100372314453125
+          ]
+        },
+        {
+          "label": "sdpa",
+          "max_abs_delta": 0,
+          "median_ms": 35.90971374511719,
+          "values_ms": [
+            35.88587188720703,
+            35.3559684753418,
+            36.038028717041016,
+            35.24652862548828,
+            35.209251403808594,
+            36.10554504394531,
+            35.97515106201172,
+            36.05018615722656,
+            35.889713287353516,
+            35.649879455566406,
+            36.04282760620117,
+            36.02730941772461,
+            35.941070556640625,
+            35.90971374511719,
+            35.84843063354492
+          ]
+        }
+      ],
+      "status": "ok",
+      "gpu_process_monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 7,
+        "interval_seconds": 1,
+        "samples": 6,
+        "allowed_pid": 687388,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "long1000-ck-tile-schedule": {
+      "seed": 419,
+      "warmups": 5,
+      "repetitions": 15,
+      "records": [
+        {
+          "label": "sdpa",
+          "max_abs_delta": 0,
+          "median_ms": 35.990997314453125,
+          "values_ms": [
+            35.89739990234375,
+            36.112430572509766,
+            36.07866287231445,
+            35.94219207763672,
+            36.03547286987305,
+            35.901390075683594,
+            36.00315475463867,
+            35.990997314453125,
+            36.034027099609375,
+            35.26189041137695,
+            35.91659927368164,
+            36.05115509033203,
+            36.06266784667969,
+            35.44876480102539,
+            35.420936584472656
+          ]
+        },
+        {
+          "label": "tile64",
+          "max_abs_delta": 0.000004410743713378906,
+          "median_ms": 34.492950439453125,
+          "values_ms": [
+            34.411041259765625,
+            34.609432220458984,
+            34.44767761230469,
+            34.50143051147461,
+            34.5308723449707,
+            34.492950439453125,
+            34.4166374206543,
+            34.515830993652344,
+            34.513912200927734,
+            34.53615188598633,
+            34.58367156982422,
+            34.48415756225586,
+            34.42479705810547,
+            34.48895263671875,
+            34.42527770996094
+          ]
+        },
+        {
+          "label": "tile64w4",
+          "max_abs_delta": 0.000004410743713378906,
+          "median_ms": 34.82734298706055,
+          "values_ms": [
+            34.81006622314453,
+            34.74750900268555,
+            34.751502990722656,
+            34.845584869384766,
+            34.87102508544922,
+            34.72782897949219,
+            34.83358383178711,
+            34.92414474487305,
+            34.82734298706055,
+            34.82398223876953,
+            34.684146881103516,
+            34.77230453491211,
+            34.94301986694336,
+            34.86510467529297,
+            34.89725875854492
+          ]
+        },
+        {
+          "label": "tile128w4",
+          "max_abs_delta": 0.000004410743713378906,
+          "median_ms": 32.68292236328125,
+          "values_ms": [
+            32.649322509765625,
+            32.50676727294922,
+            32.7918815612793,
+            32.64260482788086,
+            32.66084289550781,
+            32.68292236328125,
+            32.56196975708008,
+            32.89204025268555,
+            32.705162048339844,
+            32.74435806274414,
+            32.85603713989258,
+            32.47332763671875,
+            32.70036315917969,
+            32.71348571777344,
+            32.64644241333008
+          ]
+        },
+        {
+          "label": "tile64fast",
+          "max_abs_delta": 0.000004172325134277344,
+          "median_ms": 39.019222259521484,
+          "values_ms": [
+            39.04114532470703,
+            39.05250549316406,
+            39.023704528808594,
+            39.0225830078125,
+            38.97394561767578,
+            39.05138397216797,
+            38.88066864013672,
+            38.96626281738281,
+            38.99250793457031,
+            39.05138397216797,
+            39.00450897216797,
+            39.019222259521484,
+            39.01634216308594,
+            39.070743560791016,
+            38.96802520751953
+          ]
+        },
+        {
+          "label": "sdpa",
+          "max_abs_delta": 0,
+          "median_ms": 35.91435241699219,
+          "values_ms": [
+            35.51420211791992,
+            35.38140869140625,
+            35.756595611572266,
+            35.92091369628906,
+            36.030189514160156,
+            36.07850646972656,
+            35.91435241699219,
+            35.16477584838867,
+            35.65340042114258,
+            35.81083679199219,
+            35.94683074951172,
+            35.95051193237305,
+            35.937870025634766,
+            36.09098815917969,
+            35.80523681640625
+          ]
+        }
+      ],
+      "status": "ok",
+      "gpu_process_monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 7,
+        "interval_seconds": 1,
+        "samples": 5,
+        "allowed_pid": 688318,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    }
+  },
+  "screening_recipe": {
+    "source": "fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+    "flags": "hipcc -O3 -std=c++17 -fPIC -shared --offload-arch=gfx90a -I/opt/rocm/include",
+    "variants": {
+      "tile64": [
+        "-DBM=64",
+        "-DBN=64",
+        "-DWM=2"
+      ],
+      "tile64_32": [
+        "-DBM=64",
+        "-DBN=32",
+        "-DWM=2"
+      ],
+      "tile32_32": [
+        "-DBM=32",
+        "-DBN=32",
+        "-DWM=2"
+      ],
+      "tile32_64": [
+        "-DBM=32",
+        "-DBN=64",
+        "-DWM=2"
+      ],
+      "tile64w4": [
+        "-DBM=64",
+        "-DBN=64",
+        "-DWM=4"
+      ],
+      "tile128w4": [
+        "-DBM=128",
+        "-DBN=64",
+        "-DWM=4"
+      ],
+      "tile64fast": [
+        "-DBM=64",
+        "-DBN=64",
+        "-DWM=2",
+        "-DCK_TILE_FMHA_FWD_FAST_EXP2=1"
+      ]
+    },
+    "note": "Early screening used the standalone outputs/ck_tile_attention_probe.cpp precursor. These flags reproduce the same template instantiations with the tracked C++ source; raw scratch timings exclude bias packing and reuse output storage. The canonical backend run is the promotion operator evidence."
+  },
+  "tests": {
+    "local": {
+      "passed": 99,
+      "skipped": 13,
+      "command": "PYTHONPATH=.:Protenix python -m pytest -q tests"
+    },
+    "remote": {
+      "passed": 111,
+      "skipped": 1,
+      "command": "HIP_VISIBLE_DEVICES=7 FIREPROT_RUN_HIP_TESTS=1 PYTHONPATH=.:Protenix python -m pytest -q tests"
+    }
+  },
+  "limitations": [
+    "One exact protein input, shape, dtype and architecture; no larger-length or Base-model generalization.",
+    "The forward baseline fluctuated. A numerical run on GPU 7 overlapped part of the forward comparison on GPU 6. GPU 7 was idle during the primary reverse-order comparison.",
+    "Five-sample p95 equals that run's maximum. A CK model slow sample of 13.103 seconds is retained; its stage medians do not justify dismissing it.",
+    "Worker wall time includes startup, warmup and multiple predictions; it is not a single-request cold latency.",
+    "The experimental-coordinate accuracy of this performance-only sequence is unmeasured. Numerical comparison establishes native agreement.",
+    "Initial standalone compile attempts failed on a missing epilogue include and the pipeline's fixed K-prefetch requirement; the final source includes the epilogue and uses K16."
+  ]
+}

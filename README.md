@@ -14,13 +14,14 @@ Protenix v1.1.0 is the first working adapter target. The repository now contains
 - validated FP32 gfx90a long-sequence paths for the exact 1,000-token bucket, including memory-efficient triangle attention, packed triangle contraction with fused HIP layouts, pair LayerNorm, and gated transitions;
 - lazily compiled handwritten HIP kernels with exact capability gates and native fallback;
 - a direct CK GEMM candidate for observed Protenix signatures, kept behind an experimental opt-in when end-to-end measurements do not justify promotion;
+- a validated CK Tile FP32 triangle-attention path for the exact unmasked 1,000-token gfx90a bucket, with SDPA fallback;
 - an independent Protenix patch branch that exposes FireProt dispatch without changing native defaults.
 
 AtlasFold, OpenFold, ESMFold, Base-model coverage, BF16 promotion, additional long-sequence buckets, and multi-GPU execution remain future work.
 
 ## Verified 1,000-token MI250 result
 
-The latest attention refinement measures **13.124 s** model median, with unchanged peak allocated memory. Same-source A/B runs confirm a further **1.026–1.028x** improvement over the packed-triangle result below. The tuned CK attention candidate improved from **45.641 to 36.139 ms**, close to SDPA's **36.00–36.02 ms**, and remains experimental. See [SDPA/CK investigation and model validation](docs/protenix-attention-tuning.md).
+The latest CK Tile attention path improves the model median from **13.120 to 12.580 s (1.043x)** in a same-source, five-repetition comparison, with unchanged peak allocated memory. The complete attention operator measures **32.711 ms** versus SDPA's **36.35–36.36 ms**. CK Tile is now the default for this exact validated bucket. See [CK Tile implementation and model validation](docs/protenix-ck-tile.md). The preceding [generic CK/SDPA investigation](docs/protenix-attention-tuning.md) remains historical evidence; its generic CK candidate was not promoted.
 
 ### Packed triangle comparison
 
@@ -37,7 +38,7 @@ Model p95 improved from 45.416 s to 13.556 s (`3.350x`). Peak allocated memory f
 
 The same-seed validation covered 7,979 output atoms and passed the locked `1e-3` coordinate and confidence gates: aligned coordinate RMSD was `9.46e-5 A`, maximum coordinate delta was `9.77e-4 A`, and maximum confidence delta was `7.63e-6`. The input is a performance workload without an experimental-coordinate mapping, so these checks establish agreement with native Protenix rather than structural accuracy.
 
-The long attention path prevents materialization of the native `[1000,4,1000,1000]` attention matrix by using ROCm memory-efficient SDPA. The comparison above used outer chunks; the latest exact unmasked path uses one call with head-last output storage to remove chunk assignments and layout copies. When the pair mask is implicit, the Protenix adapter also omits the all-ones mask and its zero additive bias. The packed triangle path normalizes once, fuses sigmoid projection with channel-first packing, contracts through library BMM, then fuses unpacking with output LayerNorm. The preceding chunked paths remain available as diagnostic fallbacks. A wave64 HIP LayerNorm covers the measured 244,000-, 256,000-, and 1,000,000-row contiguous tensors, while the exact `[1000,1000,128]` transition fuses SiLU with its gate multiply. Exact capability predicates preserve native fallback for other lengths, dtypes, layouts, masks, architectures, training, and autograd. See [packed triangle design and results](docs/protenix-packed-triangle.md).
+The long attention path prevents materialization of the native `[1000,4,1000,1000]` attention matrix by using ROCm memory-efficient SDPA. The comparison above used outer chunks; the latest exact unmasked path uses CK Tile with direct SDPA fallback and head-last output storage to remove chunk assignments and layout copies. When the pair mask is implicit, the Protenix adapter also omits the all-ones mask and its zero additive bias. The packed triangle path normalizes once, fuses sigmoid projection with channel-first packing, contracts through library BMM, then fuses unpacking with output LayerNorm. The preceding chunked paths remain available as diagnostic fallbacks. A wave64 HIP LayerNorm covers the measured 244,000-, 256,000-, and 1,000,000-row contiguous tensors, while the exact `[1000,1000,128]` transition fuses SiLU with its gate multiply. Exact capability predicates preserve native fallback for other lengths, dtypes, layouts, masks, architectures, training, and autograd. See [packed triangle design and results](docs/protenix-packed-triangle.md).
 
 ## Historical 124-token MI250 result
 
@@ -86,7 +87,7 @@ The exact channel-first LayerNorm path is enabled by the FireProt backend and ca
 
 The validated 1,000-token paths are enabled by default after their end-to-end and numerical gates. Use `FIREPROT_DISABLE_LONG_TRIANGLE_PACKED=1` to return to the preceding chunked gate path. `FIREPROT_DISABLE_LONG_TRIANGLE_GATES=1` disables both long multiplication implementations. Other diagnostic switches are `FIREPROT_DISABLE_LONG_TRIANGLE_ATTENTION=1`, `FIREPROT_DISABLE_LONG_LAYERNORM=1`, and `FIREPROT_DISABLE_LONG_TRANSITION=1`. Other long lengths fall back until measured and promoted.
 
-`FIREPROT_DISABLE_LONG_DIRECT_ATTENTION=1` restores outer-chunked SDPA for the exact unmasked 1,000-token bucket. The separate CK attention probe is invoked with `python -m benchmarks.protenix.benchmark_attention --include-ck --ck-set tuned --output outputs/benchmarks/attention.json`; it is not selected by model dispatch. Its version-pinned header overlay leaves installed ROCm headers unchanged.
+`FIREPROT_DISABLE_CK_ATTENTION=1` restores direct SDPA for the exact unmasked 1,000-token bucket. `FIREPROT_DISABLE_LONG_DIRECT_ATTENTION=1` disables both CK Tile and direct SDPA and restores outer chunks. The new backend builds lazily against the measured CK version and uses SDPA if that build is unavailable. Run its operator comparison with `python -m benchmarks.protenix.benchmark_attention --include-ck-tile --output outputs/benchmarks/attention.json`. The older `--include-ck --ck-set tuned` probe is a separate, unregistered generic CK experiment; its private header overlay is not needed by CK Tile.
 
 ## Benchmark
 
@@ -139,6 +140,7 @@ Raw predictions, profiler traces, weights, and hardware-local tuning data remain
 - [Architecture](docs/architecture.md)
 - [Measured Protenix AMD performance](docs/protenix-amd-performance.md)
 - [Long attention: SDPA, CK tuning, and incremental model results](docs/protenix-attention-tuning.md)
+- [Promoted CK Tile attention and model results](docs/protenix-ck-tile.md)
 - [Implementation plan](docs/plans/2026-10-02-gitnexus-plan-protenix-amd-acceleration.md)
 - [Historical Protenix baseline notes](.agents/protenix_baseline.md) (Chinese, retained as recorded)
 - [Project context](.agents/project_context.md)

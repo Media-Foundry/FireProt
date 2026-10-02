@@ -1,5 +1,9 @@
 # Long triangle attention: SDPA and CK
 
+Historical investigation: the later [CK Tile implementation](protenix-ck-tile.md)
+outperforms SDPA and is promoted for the exact validated bucket. The generic
+CK header-patch candidate measured below remains unregistered.
+
 Status: measured on 2026-10-03. Direct SDPA is promoted for the exact unmasked
 1,000-token FP32 gfx90a bucket. The modified CK kernel remains a benchmark
 candidate. [Machine-readable evidence](../provenance/protenix_amd_attention_2ad81b6.json)

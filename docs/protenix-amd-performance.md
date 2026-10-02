@@ -2,6 +2,8 @@
 
 Status: measured development result, 2026-10-03.
 
+The promoted [CK Tile attention path](protenix-ck-tile.md) subsequently improves the controlled model median from 13.120 to 12.580 seconds (1.043x), with numerical gates passed and unchanged peak allocation. This is the latest exact 1,000-token result.
+
 The latest [attention investigation](protenix-attention-tuning.md) adds a 13.124-second default model verification and CK/SDPA source, resource, and tuning comparisons. The paired packed-triangle and historical short results below remain their original measurements. The newer report also corrects the full Protenix integration SHA label using a complete deployed-source audit; archived raw manifests retain their original labels.
 
 ## Scope and provenance

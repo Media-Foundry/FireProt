@@ -1,0 +1,989 @@
+{
+  "schema_version": 1,
+  "scope": "Four-wave row-permuted Q/bias loads with wave-local mixed MFMA conversion",
+  "source_context": "878074e plus isolated generated candidates",
+  "runs": {
+    "direct64": {
+      "scope": "N1536 attention operator scheduling diagnosis",
+      "seed": 419,
+      "shape": [
+        512,
+        4,
+        1536,
+        32
+      ],
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "cache_state": "warm",
+      "physical_device": "6",
+      "records": [
+        {
+          "name": "sdpa",
+          "status": "ok",
+          "median_ms": 34.8581428527832,
+          "p95_ms": 34.939186096191406,
+          "values_ms": [
+            34.939186096191406,
+            34.894710540771484,
+            34.828948974609375,
+            34.83918380737305,
+            34.931663513183594,
+            34.938865661621094,
+            34.77406311035156,
+            34.899818420410156,
+            34.899986267089844,
+            34.935665130615234,
+            35.30093765258789,
+            34.87966537475586,
+            34.85246276855469,
+            34.81550216674805,
+            34.86382293701172,
+            34.80638885498047,
+            34.83790969848633,
+            34.81150817871094,
+            34.83454895019531,
+            34.83550262451172
+          ],
+          "max_abs_delta": 0.0,
+          "peak_allocated_bytes": 2491416576
+        },
+        {
+          "name": "ck_padded",
+          "status": "ok",
+          "median_ms": 39.40945625305176,
+          "p95_ms": 39.50689697265625,
+          "values_ms": [
+            39.37666320800781,
+            39.35842514038086,
+            39.36945724487305,
+            39.30641555786133,
+            39.40961837768555,
+            39.269622802734375,
+            39.40929412841797,
+            39.461936950683594,
+            39.15106201171875,
+            39.49409484863281,
+            39.4638557434082,
+            39.43345642089844,
+            39.22386169433594,
+            39.31313705444336,
+            39.4139404296875,
+            39.50689697265625,
+            39.505455017089844,
+            39.240665435791016,
+            39.54385757446289,
+            39.42193603515625
+          ],
+          "max_abs_delta": 5.9604644775390625e-06,
+          "peak_allocated_bytes": 2089156608
+        },
+        {
+          "name": "sdpa_batch_head_swap",
+          "status": "ok",
+          "median_ms": 37.44719123840332,
+          "p95_ms": 37.50151062011719,
+          "values_ms": [
+            37.4987907409668,
+            37.469032287597656,
+            37.42375564575195,
+            37.404396057128906,
+            37.35639572143555,
+            37.396236419677734,
+            37.363914489746094,
+            37.49863052368164,
+            37.48439025878906,
+            37.44887161254883,
+            37.476070404052734,
+            37.44551086425781,
+            37.454952239990234,
+            37.50151062011719,
+            37.41911315917969,
+            37.441192626953125,
+            37.458473205566406,
+            37.40119552612305,
+            37.2891960144043,
+            37.56422805786133
+          ],
+          "max_abs_delta": 0.0,
+          "peak_allocated_bytes": 2491416576
+        },
+        {
+          "name": "ck_qk32_pv16",
+          "status": "ok",
+          "median_ms": 39.33586311340332,
+          "p95_ms": 40.122398376464844,
+          "values_ms": [
+            39.439056396484375,
+            39.28722381591797,
+            39.33826446533203,
+            39.3001823425293,
+            39.32386016845703,
+            40.24415588378906,
+            39.33346176147461,
+            39.32882308959961,
+            39.348018646240234,
+            39.590091705322266,
+            39.34066390991211,
+            39.291385650634766,
+            40.122398376464844,
+            39.99696350097656,
+            39.34018325805664,
+            39.86368942260742,
+            39.32978439331055,
+            39.326904296875,
+            39.185462951660156,
+            39.17794418334961
+          ],
+          "max_abs_delta": 6.079673767089844e-06,
+          "peak_allocated_bytes": 2089156608
+        },
+        {
+          "name": "ck_qk16_pv32",
+          "status": "ok",
+          "median_ms": 38.81324005126953,
+          "p95_ms": 38.98739242553711,
+          "values_ms": [
+            38.86883544921875,
+            38.91635513305664,
+            38.9525146484375,
+            38.78739929199219,
+            38.79827880859375,
+            38.934913635253906,
+            38.947872161865234,
+            38.79731750488281,
+            38.777801513671875,
+            38.97091293334961,
+            38.791080474853516,
+            38.79795837402344,
+            38.95059585571289,
+            38.7789192199707,
+            38.98739242553711,
+            38.80963897705078,
+            39.003231048583984,
+            38.808040618896484,
+            38.81684112548828,
+            38.80324172973633
+          ],
+          "max_abs_delta": 5.9604644775390625e-06,
+          "peak_allocated_bytes": 2089156608
+        },
+        {
+          "name": "sdpa_repeat",
+          "status": "ok",
+          "median_ms": 34.8300724029541,
+          "p95_ms": 34.89182662963867,
+          "values_ms": [
+            34.77775192260742,
+            34.83087158203125,
+            34.91326904296875,
+            34.83055114746094,
+            34.678714752197266,
+            34.85551071166992,
+            34.863670349121094,
+            34.87870788574219,
+            34.84687042236328,
+            34.89182662963867,
+            34.8516731262207,
+            34.73423767089844,
+            34.82655334472656,
+            34.88111114501953,
+            34.829593658447266,
+            34.81071090698242,
+            34.81391143798828,
+            34.78559112548828,
+            34.779510498046875,
+            34.78511047363281
+          ],
+          "max_abs_delta": 0.0,
+          "peak_allocated_bytes": 2491416576
+        }
+      ],
+      "probe_contiguous_qkv": false,
+      "script_sha256": "d78cdd38948739e1c513292f0a6cacb556772e7d40a4b114aebedeb58f56b449",
+      "ck_build": {
+        "enabled": true,
+        "long1536_enabled": false,
+        "loaded": true,
+        "error": null,
+        "build": {
+          "source_sha256": "bf0d12eface75e642675f6149709439c53c2592021fe1f8cabdbe7f150e22cbd",
+          "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+          "header_count": 581,
+          "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a",
+            "-I/opt/rocm/include",
+            "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_8935f4f00fbacbfd/attention.pending.so"
+          ],
+          "library_sha256": "e3c84fb80fac9a688f4539d9b9497e69dabf2d7bc4a5e8764fecf164a74c6b1a",
+          "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_8935f4f00fbacbfd/attention.so",
+          "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+        }
+      },
+      "probe_build": {
+        "scope": "N1536 M128/W4 mixed MFMA with Q/bias row permutation and wave shuffle",
+        "maps": {
+          "qk32_pv16": {
+            "elements": 8192,
+            "cross_wave": 0,
+            "generated_shuffles": 64,
+            "conversion": "const auto s = [&]() {\nSBlockTileType converted{};\nconst int lane = threadIdx.x % 64;\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 0 ^ (((lane >> 5) & 1) * 4);\nconst float v0 = __shfl(s_acc.get_thread_buffer()[number<0>{}], source_lane, 64);\nconst float v4 = __shfl(s_acc.get_thread_buffer()[number<4>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<0>{}] = (source_reg == 0 ? v0 : v4);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 1 ^ (((lane >> 5) & 1) * 4);\nconst float v1 = __shfl(s_acc.get_thread_buffer()[number<1>{}], source_lane, 64);\nconst float v5 = __shfl(s_acc.get_thread_buffer()[number<5>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<1>{}] = (source_reg == 1 ? v1 : v5);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 2 ^ (((lane >> 5) & 1) * 4);\nconst float v2 = __shfl(s_acc.get_thread_buffer()[number<2>{}], source_lane, 64);\nconst float v6 = __shfl(s_acc.get_thread_buffer()[number<6>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<2>{}] = (source_reg == 2 ? v2 : v6);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 3 ^ (((lane >> 5) & 1) * 4);\nconst float v3 = __shfl(s_acc.get_thread_buffer()[number<3>{}], source_lane, 64);\nconst float v7 = __shfl(s_acc.get_thread_buffer()[number<7>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<3>{}] = (source_reg == 3 ? v3 : v7);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 8 ^ (((lane >> 5) & 1) * 4);\nconst float v8 = __shfl(s_acc.get_thread_buffer()[number<8>{}], source_lane, 64);\nconst float v12 = __shfl(s_acc.get_thread_buffer()[number<12>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<4>{}] = (source_reg == 8 ? v8 : v12);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 9 ^ (((lane >> 5) & 1) * 4);\nconst float v9 = __shfl(s_acc.get_thread_buffer()[number<9>{}], source_lane, 64);\nconst float v13 = __shfl(s_acc.get_thread_buffer()[number<13>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<5>{}] = (source_reg == 9 ? v9 : v13);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 10 ^ (((lane >> 5) & 1) * 4);\nconst float v10 = __shfl(s_acc.get_thread_buffer()[number<10>{}], source_lane, 64);\nconst float v14 = __shfl(s_acc.get_thread_buffer()[number<14>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<6>{}] = (source_reg == 10 ? v10 : v14);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 11 ^ (((lane >> 5) & 1) * 4);\nconst float v11 = __shfl(s_acc.get_thread_buffer()[number<11>{}], source_lane, 64);\nconst float v15 = __shfl(s_acc.get_thread_buffer()[number<15>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<7>{}] = (source_reg == 11 ? v11 : v15);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 16 ^ (((lane >> 5) & 1) * 4);\nconst float v16 = __shfl(s_acc.get_thread_buffer()[number<16>{}], source_lane, 64);\nconst float v20 = __shfl(s_acc.get_thread_buffer()[number<20>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<8>{}] = (source_reg == 16 ? v16 : v20);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 17 ^ (((lane >> 5) & 1) * 4);\nconst float v17 = __shfl(s_acc.get_thread_buffer()[number<17>{}], source_lane, 64);\nconst float v21 = __shfl(s_acc.get_thread_buffer()[number<21>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<9>{}] = (source_reg == 17 ? v17 : v21);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 18 ^ (((lane >> 5) & 1) * 4);\nconst float v18 = __shfl(s_acc.get_thread_buffer()[number<18>{}], source_lane, 64);\nconst float v22 = __shfl(s_acc.get_thread_buffer()[number<22>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<10>{}] = (source_reg == 18 ? v18 : v22);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 19 ^ (((lane >> 5) & 1) * 4);\nconst float v19 = __shfl(s_acc.get_thread_buffer()[number<19>{}], source_lane, 64);\nconst float v23 = __shfl(s_acc.get_thread_buffer()[number<23>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<11>{}] = (source_reg == 19 ? v19 : v23);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 24 ^ (((lane >> 5) & 1) * 4);\nconst float v24 = __shfl(s_acc.get_thread_buffer()[number<24>{}], source_lane, 64);\nconst float v28 = __shfl(s_acc.get_thread_buffer()[number<28>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<12>{}] = (source_reg == 24 ? v24 : v28);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 25 ^ (((lane >> 5) & 1) * 4);\nconst float v25 = __shfl(s_acc.get_thread_buffer()[number<25>{}], source_lane, 64);\nconst float v29 = __shfl(s_acc.get_thread_buffer()[number<29>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<13>{}] = (source_reg == 25 ? v25 : v29);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 26 ^ (((lane >> 5) & 1) * 4);\nconst float v26 = __shfl(s_acc.get_thread_buffer()[number<26>{}], source_lane, 64);\nconst float v30 = __shfl(s_acc.get_thread_buffer()[number<30>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<14>{}] = (source_reg == 26 ? v26 : v30);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 27 ^ (((lane >> 5) & 1) * 4);\nconst float v27 = __shfl(s_acc.get_thread_buffer()[number<27>{}], source_lane, 64);\nconst float v31 = __shfl(s_acc.get_thread_buffer()[number<31>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<15>{}] = (source_reg == 27 ? v27 : v31);\n}\n{\nconst int source_lane = 16 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 0 ^ (((lane >> 5) & 1) * 4);\nconst float v0 = __shfl(s_acc.get_thread_buffer()[number<0>{}], source_lane, 64);\nconst float v4 = __shfl(s_acc.get_thread_buffer()[number<4>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<16>{}] = (source_reg == 0 ? v0 : v4);\n}\n{\nconst int source_lane = 16 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 1 ^ (((lane >> 5) & 1) * 4);\nconst float v1 = __shfl(s_acc.get_thread_buffer()[number<1>{}], source_lane, 64);\nconst float v5 = __shfl(s_acc.get_thread_buffer()[number<5>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<17>{}] = (source_reg == 1 ? v1 : v5);\n}\n{\nconst int source_lane = 16 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 2 ^ (((lane >> 5) & 1) * 4);\nconst float v2 = __shfl(s_acc.get_thread_buffer()[number<2>{}], source_lane, 64);\nconst float v6 = __shfl(s_acc.get_thread_buffer()[number<6>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<18>{}] = (source_reg == 2 ? v2 : v6);\n}\n{\nconst int source_lane = 16 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 3 ^ (((lane >> 5) & 1) * 4);\nconst float v3 = __shfl(s_acc.get_thread_buffer()[number<3>{}], source_lane, 64);\nconst float v7 = __shfl(s_acc.get_thread_buffer()[number<7>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<19>{}] = (source_reg == 3 ? v3 : v7);\n}\n{\nconst int source_lane = 16 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 8 ^ (((lane >> 5) & 1) * 4);\nconst float v8 = __shfl(s_acc.get_thread_buffer()[number<8>{}], source_lane, 64);\nconst float v12 = __shfl(s_acc.get_thread_buffer()[number<12>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<20>{}] = (source_reg == 8 ? v8 : v12);\n}\n{\nconst int source_lane = 16 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 9 ^ (((lane >> 5) & 1) * 4);\nconst float v9 = __shfl(s_acc.get_thread_buffer()[number<9>{}], source_lane, 64);\nconst float v13 = __shfl(s_acc.get_thread_buffer()[number<13>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<21>{}] = (source_reg == 9 ? v9 : v13);\n}\n{\nconst int source_lane = 16 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 10 ^ (((lane >> 5) & 1) * 4);\nconst float v10 = __shfl(s_acc.get_thread_buffer()[number<10>{}], source_lane, 64);\nconst float v14 = __shfl(s_acc.get_thread_buffer()[number<14>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<22>{}] = (source_reg == 10 ? v10 : v14);\n}\n{\nconst int source_lane = 16 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 11 ^ (((lane >> 5) & 1) * 4);\nconst float v11 = __shfl(s_acc.get_thread_buffer()[number<11>{}], source_lane, 64);\nconst float v15 = __shfl(s_acc.get_thread_buffer()[number<15>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<23>{}] = (source_reg == 11 ? v11 : v15);\n}\n{\nconst int source_lane = 16 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 16 ^ (((lane >> 5) & 1) * 4);\nconst float v16 = __shfl(s_acc.get_thread_buffer()[number<16>{}], source_lane, 64);\nconst float v20 = __shfl(s_acc.get_thread_buffer()[number<20>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<24>{}] = (source_reg == 16 ? v16 : v20);\n}\n{\nconst int source_lane = 16 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 17 ^ (((lane >> 5) & 1) * 4);\nconst float v17 = __shfl(s_acc.get_thread_buffer()[number<17>{}], source_lane, 64);\nconst float v21 = __shfl(s_acc.get_thread_buffer()[number<21>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<25>{}] = (source_reg == 17 ? v17 : v21);\n}\n{\nconst int source_lane = 16 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 18 ^ (((lane >> 5) & 1) * 4);\nconst float v18 = __shfl(s_acc.get_thread_buffer()[number<18>{}], source_lane, 64);\nconst float v22 = __shfl(s_acc.get_thread_buffer()[number<22>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<26>{}] = (source_reg == 18 ? v18 : v22);\n}\n{\nconst int source_lane = 16 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 19 ^ (((lane >> 5) & 1) * 4);\nconst float v19 = __shfl(s_acc.get_thread_buffer()[number<19>{}], source_lane, 64);\nconst float v23 = __shfl(s_acc.get_thread_buffer()[number<23>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<27>{}] = (source_reg == 19 ? v19 : v23);\n}\n{\nconst int source_lane = 16 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 24 ^ (((lane >> 5) & 1) * 4);\nconst float v24 = __shfl(s_acc.get_thread_buffer()[number<24>{}], source_lane, 64);\nconst float v28 = __shfl(s_acc.get_thread_buffer()[number<28>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<28>{}] = (source_reg == 24 ? v24 : v28);\n}\n{\nconst int source_lane = 16 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 25 ^ (((lane >> 5) & 1) * 4);\nconst float v25 = __shfl(s_acc.get_thread_buffer()[number<25>{}], source_lane, 64);\nconst float v29 = __shfl(s_acc.get_thread_buffer()[number<29>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<29>{}] = (source_reg == 25 ? v25 : v29);\n}\n{\nconst int source_lane = 16 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 26 ^ (((lane >> 5) & 1) * 4);\nconst float v26 = __shfl(s_acc.get_thread_buffer()[number<26>{}], source_lane, 64);\nconst float v30 = __shfl(s_acc.get_thread_buffer()[number<30>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<30>{}] = (source_reg == 26 ? v26 : v30);\n}\n{\nconst int source_lane = 16 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 4) & 1) * 32);\nconst int source_reg = 27 ^ (((lane >> 5) & 1) * 4);\nconst float v27 = __shfl(s_acc.get_thread_buffer()[number<27>{}], source_lane, 64);\nconst float v31 = __shfl(s_acc.get_thread_buffer()[number<31>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<31>{}] = (source_reg == 27 ? v27 : v31);\n}\nreturn converted;\n}();",
+            "row_view_helper": "auto permute_query_rows = [](auto view) {\n            auto width = view.get_tensor_descriptor().get_length(number<1>{});\n            auto split = transform_tensor_view(view,\n                make_tuple(make_unmerge_transform(make_tuple(number<12>{}, number<2>{}, number<4>{}, number<16>{})), make_pass_through_transform(width)),\n                make_tuple(sequence<0>{}, sequence<1>{}), make_tuple(sequence<0,1,2,3>{}, sequence<4>{}));\n            return transform_tensor_view(split,\n                make_tuple(make_merge_transform(make_tuple(number<12>{}, number<4>{}, number<2>{}, number<16>{})), make_pass_through_transform(width)),\n                make_tuple(sequence<0,2,1,3>{}, sequence<4>{}), make_tuple(sequence<0>{}, sequence<1>{}));\n        };\n        ",
+            "pipeline_sha256": "1819c0207e86fd901d63b7ba214b9d29239a7dd486966912ecbfdd82bba30ac1"
+          },
+          "qk16_pv32": {
+            "elements": 8192,
+            "cross_wave": 0,
+            "generated_shuffles": 64,
+            "conversion": "const auto s = [&]() {\nSBlockTileType converted{};\nconst int lane = threadIdx.x % 64;\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 0 ^ (((lane >> 4) & 1) * 16);\nconst float v0 = __shfl(s_acc.get_thread_buffer()[number<0>{}], source_lane, 64);\nconst float v16 = __shfl(s_acc.get_thread_buffer()[number<16>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<0>{}] = (source_reg == 0 ? v0 : v16);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 1 ^ (((lane >> 4) & 1) * 16);\nconst float v1 = __shfl(s_acc.get_thread_buffer()[number<1>{}], source_lane, 64);\nconst float v17 = __shfl(s_acc.get_thread_buffer()[number<17>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<1>{}] = (source_reg == 1 ? v1 : v17);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 2 ^ (((lane >> 4) & 1) * 16);\nconst float v2 = __shfl(s_acc.get_thread_buffer()[number<2>{}], source_lane, 64);\nconst float v18 = __shfl(s_acc.get_thread_buffer()[number<18>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<2>{}] = (source_reg == 2 ? v2 : v18);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 3 ^ (((lane >> 4) & 1) * 16);\nconst float v3 = __shfl(s_acc.get_thread_buffer()[number<3>{}], source_lane, 64);\nconst float v19 = __shfl(s_acc.get_thread_buffer()[number<19>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<3>{}] = (source_reg == 3 ? v3 : v19);\n}\n{\nconst int source_lane = 32 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 0 ^ (((lane >> 4) & 1) * 16);\nconst float v0 = __shfl(s_acc.get_thread_buffer()[number<0>{}], source_lane, 64);\nconst float v16 = __shfl(s_acc.get_thread_buffer()[number<16>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<4>{}] = (source_reg == 0 ? v0 : v16);\n}\n{\nconst int source_lane = 32 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 1 ^ (((lane >> 4) & 1) * 16);\nconst float v1 = __shfl(s_acc.get_thread_buffer()[number<1>{}], source_lane, 64);\nconst float v17 = __shfl(s_acc.get_thread_buffer()[number<17>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<5>{}] = (source_reg == 1 ? v1 : v17);\n}\n{\nconst int source_lane = 32 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 2 ^ (((lane >> 4) & 1) * 16);\nconst float v2 = __shfl(s_acc.get_thread_buffer()[number<2>{}], source_lane, 64);\nconst float v18 = __shfl(s_acc.get_thread_buffer()[number<18>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<6>{}] = (source_reg == 2 ? v2 : v18);\n}\n{\nconst int source_lane = 32 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 3 ^ (((lane >> 4) & 1) * 16);\nconst float v3 = __shfl(s_acc.get_thread_buffer()[number<3>{}], source_lane, 64);\nconst float v19 = __shfl(s_acc.get_thread_buffer()[number<19>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<7>{}] = (source_reg == 3 ? v3 : v19);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 4 ^ (((lane >> 4) & 1) * 16);\nconst float v4 = __shfl(s_acc.get_thread_buffer()[number<4>{}], source_lane, 64);\nconst float v20 = __shfl(s_acc.get_thread_buffer()[number<20>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<8>{}] = (source_reg == 4 ? v4 : v20);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 5 ^ (((lane >> 4) & 1) * 16);\nconst float v5 = __shfl(s_acc.get_thread_buffer()[number<5>{}], source_lane, 64);\nconst float v21 = __shfl(s_acc.get_thread_buffer()[number<21>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<9>{}] = (source_reg == 5 ? v5 : v21);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 6 ^ (((lane >> 4) & 1) * 16);\nconst float v6 = __shfl(s_acc.get_thread_buffer()[number<6>{}], source_lane, 64);\nconst float v22 = __shfl(s_acc.get_thread_buffer()[number<22>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<10>{}] = (source_reg == 6 ? v6 : v22);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 7 ^ (((lane >> 4) & 1) * 16);\nconst float v7 = __shfl(s_acc.get_thread_buffer()[number<7>{}], source_lane, 64);\nconst float v23 = __shfl(s_acc.get_thread_buffer()[number<23>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<11>{}] = (source_reg == 7 ? v7 : v23);\n}\n{\nconst int source_lane = 32 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 4 ^ (((lane >> 4) & 1) * 16);\nconst float v4 = __shfl(s_acc.get_thread_buffer()[number<4>{}], source_lane, 64);\nconst float v20 = __shfl(s_acc.get_thread_buffer()[number<20>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<12>{}] = (source_reg == 4 ? v4 : v20);\n}\n{\nconst int source_lane = 32 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 5 ^ (((lane >> 4) & 1) * 16);\nconst float v5 = __shfl(s_acc.get_thread_buffer()[number<5>{}], source_lane, 64);\nconst float v21 = __shfl(s_acc.get_thread_buffer()[number<21>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<13>{}] = (source_reg == 5 ? v5 : v21);\n}\n{\nconst int source_lane = 32 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 6 ^ (((lane >> 4) & 1) * 16);\nconst float v6 = __shfl(s_acc.get_thread_buffer()[number<6>{}], source_lane, 64);\nconst float v22 = __shfl(s_acc.get_thread_buffer()[number<22>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<14>{}] = (source_reg == 6 ? v6 : v22);\n}\n{\nconst int source_lane = 32 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 7 ^ (((lane >> 4) & 1) * 16);\nconst float v7 = __shfl(s_acc.get_thread_buffer()[number<7>{}], source_lane, 64);\nconst float v23 = __shfl(s_acc.get_thread_buffer()[number<23>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<15>{}] = (source_reg == 7 ? v7 : v23);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 8 ^ (((lane >> 4) & 1) * 16);\nconst float v8 = __shfl(s_acc.get_thread_buffer()[number<8>{}], source_lane, 64);\nconst float v24 = __shfl(s_acc.get_thread_buffer()[number<24>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<16>{}] = (source_reg == 8 ? v8 : v24);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 9 ^ (((lane >> 4) & 1) * 16);\nconst float v9 = __shfl(s_acc.get_thread_buffer()[number<9>{}], source_lane, 64);\nconst float v25 = __shfl(s_acc.get_thread_buffer()[number<25>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<17>{}] = (source_reg == 9 ? v9 : v25);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 10 ^ (((lane >> 4) & 1) * 16);\nconst float v10 = __shfl(s_acc.get_thread_buffer()[number<10>{}], source_lane, 64);\nconst float v26 = __shfl(s_acc.get_thread_buffer()[number<26>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<18>{}] = (source_reg == 10 ? v10 : v26);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 11 ^ (((lane >> 4) & 1) * 16);\nconst float v11 = __shfl(s_acc.get_thread_buffer()[number<11>{}], source_lane, 64);\nconst float v27 = __shfl(s_acc.get_thread_buffer()[number<27>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<19>{}] = (source_reg == 11 ? v11 : v27);\n}\n{\nconst int source_lane = 32 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 8 ^ (((lane >> 4) & 1) * 16);\nconst float v8 = __shfl(s_acc.get_thread_buffer()[number<8>{}], source_lane, 64);\nconst float v24 = __shfl(s_acc.get_thread_buffer()[number<24>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<20>{}] = (source_reg == 8 ? v8 : v24);\n}\n{\nconst int source_lane = 32 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 9 ^ (((lane >> 4) & 1) * 16);\nconst float v9 = __shfl(s_acc.get_thread_buffer()[number<9>{}], source_lane, 64);\nconst float v25 = __shfl(s_acc.get_thread_buffer()[number<25>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<21>{}] = (source_reg == 9 ? v9 : v25);\n}\n{\nconst int source_lane = 32 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 10 ^ (((lane >> 4) & 1) * 16);\nconst float v10 = __shfl(s_acc.get_thread_buffer()[number<10>{}], source_lane, 64);\nconst float v26 = __shfl(s_acc.get_thread_buffer()[number<26>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<22>{}] = (source_reg == 10 ? v10 : v26);\n}\n{\nconst int source_lane = 32 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 11 ^ (((lane >> 4) & 1) * 16);\nconst float v11 = __shfl(s_acc.get_thread_buffer()[number<11>{}], source_lane, 64);\nconst float v27 = __shfl(s_acc.get_thread_buffer()[number<27>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<23>{}] = (source_reg == 11 ? v11 : v27);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 12 ^ (((lane >> 4) & 1) * 16);\nconst float v12 = __shfl(s_acc.get_thread_buffer()[number<12>{}], source_lane, 64);\nconst float v28 = __shfl(s_acc.get_thread_buffer()[number<28>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<24>{}] = (source_reg == 12 ? v12 : v28);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 13 ^ (((lane >> 4) & 1) * 16);\nconst float v13 = __shfl(s_acc.get_thread_buffer()[number<13>{}], source_lane, 64);\nconst float v29 = __shfl(s_acc.get_thread_buffer()[number<29>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<25>{}] = (source_reg == 13 ? v13 : v29);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 14 ^ (((lane >> 4) & 1) * 16);\nconst float v14 = __shfl(s_acc.get_thread_buffer()[number<14>{}], source_lane, 64);\nconst float v30 = __shfl(s_acc.get_thread_buffer()[number<30>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<26>{}] = (source_reg == 14 ? v14 : v30);\n}\n{\nconst int source_lane = 0 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 15 ^ (((lane >> 4) & 1) * 16);\nconst float v15 = __shfl(s_acc.get_thread_buffer()[number<15>{}], source_lane, 64);\nconst float v31 = __shfl(s_acc.get_thread_buffer()[number<31>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<27>{}] = (source_reg == 15 ? v15 : v31);\n}\n{\nconst int source_lane = 32 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 12 ^ (((lane >> 4) & 1) * 16);\nconst float v12 = __shfl(s_acc.get_thread_buffer()[number<12>{}], source_lane, 64);\nconst float v28 = __shfl(s_acc.get_thread_buffer()[number<28>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<28>{}] = (source_reg == 12 ? v12 : v28);\n}\n{\nconst int source_lane = 32 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 13 ^ (((lane >> 4) & 1) * 16);\nconst float v13 = __shfl(s_acc.get_thread_buffer()[number<13>{}], source_lane, 64);\nconst float v29 = __shfl(s_acc.get_thread_buffer()[number<29>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<29>{}] = (source_reg == 13 ? v13 : v29);\n}\n{\nconst int source_lane = 32 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 14 ^ (((lane >> 4) & 1) * 16);\nconst float v14 = __shfl(s_acc.get_thread_buffer()[number<14>{}], source_lane, 64);\nconst float v30 = __shfl(s_acc.get_thread_buffer()[number<30>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<30>{}] = (source_reg == 14 ? v14 : v30);\n}\n{\nconst int source_lane = 32 ^ (((lane >> 0) & 1) * 1) ^ (((lane >> 1) & 1) * 2) ^ (((lane >> 2) & 1) * 4) ^ (((lane >> 3) & 1) * 8) ^ (((lane >> 5) & 1) * 16);\nconst int source_reg = 15 ^ (((lane >> 4) & 1) * 16);\nconst float v15 = __shfl(s_acc.get_thread_buffer()[number<15>{}], source_lane, 64);\nconst float v31 = __shfl(s_acc.get_thread_buffer()[number<31>{}], source_lane, 64);\nconverted.get_thread_buffer()[number<31>{}] = (source_reg == 15 ? v15 : v31);\n}\nreturn converted;\n}();",
+            "row_view_helper": "auto permute_query_rows = [](auto view) {\n            auto width = view.get_tensor_descriptor().get_length(number<1>{});\n            auto split = transform_tensor_view(view,\n                make_tuple(make_unmerge_transform(make_tuple(number<12>{}, number<4>{}, number<2>{}, number<16>{})), make_pass_through_transform(width)),\n                make_tuple(sequence<0>{}, sequence<1>{}), make_tuple(sequence<0,1,2,3>{}, sequence<4>{}));\n            return transform_tensor_view(split,\n                make_tuple(make_merge_transform(make_tuple(number<12>{}, number<2>{}, number<4>{}, number<16>{})), make_pass_through_transform(width)),\n                make_tuple(sequence<0,2,1,3>{}, sequence<4>{}), make_tuple(sequence<0>{}, sequence<1>{}));\n        };\n        ",
+            "pipeline_sha256": "bfaa763db34affd8b00c0821d828591da799803f841f5fc8c31d1f783b489c4a"
+          }
+        },
+        "source_sha256": "5ec9ab3929c83a4b86b5b3b76e64299d14e4de894fe36d8ab949f3a4566ef0ff",
+        "builds": [
+          {
+            "name": "qk32_pv16",
+            "command": [
+              "/opt/rocm/bin/hipcc",
+              "-O3",
+              "-std=c++17",
+              "-fPIC",
+              "-shared",
+              "--offload-arch=gfx90a",
+              "-I/media/IntelSSD/fireprot/runtime/ck_row_permute_probe/qk32_pv16",
+              "-I/media/IntelSSD/fireprot/runtime/ck_row_permute_probe",
+              "-I/opt/rocm/include",
+              "-DBM=128",
+              "-DWM=4",
+              "-DG0M=32",
+              "-DG0K=8",
+              "-DG1M=16",
+              "-DG1K=16",
+              "runtime/ck_row_permute_probe/probe.cpp",
+              "-o",
+              "runtime/ck_row_permute_probe/qk32_pv16.so"
+            ],
+            "returncode": 0
+          },
+          {
+            "name": "qk16_pv32",
+            "command": [
+              "/opt/rocm/bin/hipcc",
+              "-O3",
+              "-std=c++17",
+              "-fPIC",
+              "-shared",
+              "--offload-arch=gfx90a",
+              "-I/media/IntelSSD/fireprot/runtime/ck_row_permute_probe/qk16_pv32",
+              "-I/media/IntelSSD/fireprot/runtime/ck_row_permute_probe",
+              "-I/opt/rocm/include",
+              "-DBM=128",
+              "-DWM=4",
+              "-DG0M=16",
+              "-DG0K=16",
+              "-DG1M=32",
+              "-DG1K=8",
+              "runtime/ck_row_permute_probe/probe.cpp",
+              "-o",
+              "runtime/ck_row_permute_probe/qk16_pv32.so"
+            ],
+            "returncode": 0
+          }
+        ]
+      },
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "863950423",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "525136843",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1084010688",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "756899194",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "613043867",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "612056218",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451389114",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533754740",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "6",
+        "selected_physical_index": 6,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "q_stride": [
+        196608,
+        32,
+        128,
+        1
+      ],
+      "bias_stride": [
+        4,
+        1,
+        6144,
+        4
+      ],
+      "libraries": {
+        "qk32_pv16.so": "00b90b478e17c21647967a768ae9843d3c4873a986281b11d30cd6b0abad44b3",
+        "qk16_pv32.so": "3017677d28dbdd0bd4af58ef8f8edc2bb264bc036c6b13a1622465a72894c4e4"
+      },
+      "status": "ok",
+      "gpu_process_monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 6,
+        "allowed_pid": 754126,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "factored48": {
+      "scope": "N1536 attention operator scheduling diagnosis",
+      "seed": 419,
+      "shape": [
+        512,
+        4,
+        1536,
+        32
+      ],
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "cache_state": "warm",
+      "physical_device": "6",
+      "records": [
+        {
+          "name": "sdpa",
+          "status": "ok",
+          "median_ms": 34.88606071472168,
+          "p95_ms": 34.98126220703125,
+          "values_ms": [
+            34.873741149902344,
+            34.947021484375,
+            34.98126220703125,
+            34.87054443359375,
+            34.888938903808594,
+            34.86349868774414,
+            34.84702682495117,
+            34.919822692871094,
+            34.95742416381836,
+            34.807342529296875,
+            35.15437316894531,
+            34.827823638916016,
+            34.907501220703125,
+            34.89213943481445,
+            34.830223083496094,
+            34.809425354003906,
+            34.9335823059082,
+            34.883182525634766,
+            34.872467041015625,
+            34.922706604003906
+          ],
+          "max_abs_delta": 0.0,
+          "peak_allocated_bytes": 2491416576
+        },
+        {
+          "name": "ck_padded",
+          "status": "ok",
+          "median_ms": 39.38673782348633,
+          "p95_ms": 39.5323371887207,
+          "values_ms": [
+            39.33826446533203,
+            39.385780334472656,
+            39.59409713745117,
+            39.45057678222656,
+            39.32689666748047,
+            39.322574615478516,
+            39.3619384765625,
+            39.49745559692383,
+            39.296504974365234,
+            39.43569564819336,
+            39.5323371887207,
+            39.4592170715332,
+            39.3001823425293,
+            39.49729537963867,
+            39.44625473022461,
+            39.365455627441406,
+            39.176185607910156,
+            39.35569763183594,
+            39.46529769897461,
+            39.3876953125
+          ],
+          "max_abs_delta": 5.9604644775390625e-06,
+          "peak_allocated_bytes": 2089156608
+        },
+        {
+          "name": "sdpa_batch_head_swap",
+          "status": "ok",
+          "median_ms": 37.42767333984375,
+          "p95_ms": 37.51415252685547,
+          "values_ms": [
+            37.43463134765625,
+            37.40519332885742,
+            37.41815185546875,
+            37.38551330566406,
+            37.51415252685547,
+            37.40727233886719,
+            37.410316467285156,
+            37.4375114440918,
+            37.385833740234375,
+            37.463111877441406,
+            37.43687057495117,
+            37.413673400878906,
+            37.526790618896484,
+            37.37079620361328,
+            37.379276275634766,
+            37.503753662109375,
+            37.428070068359375,
+            37.49767303466797,
+            37.427276611328125,
+            37.46983337402344
+          ],
+          "max_abs_delta": 0.0,
+          "peak_allocated_bytes": 2491416576
+        },
+        {
+          "name": "ck_qk32_pv16",
+          "status": "ok",
+          "median_ms": 39.25482368469238,
+          "p95_ms": 39.99712371826172,
+          "values_ms": [
+            39.21906280517578,
+            38.98099136352539,
+            38.949790954589844,
+            39.40242004394531,
+            39.40721893310547,
+            39.1502685546875,
+            39.27618408203125,
+            38.984352111816406,
+            39.81568908691406,
+            39.99712371826172,
+            39.10034942626953,
+            39.80768966674805,
+            39.233463287353516,
+            38.96675109863281,
+            39.44993591308594,
+            38.93699264526367,
+            39.37730026245117,
+            39.93392562866211,
+            39.12786865234375,
+            40.079681396484375
+          ],
+          "max_abs_delta": 6.079673767089844e-06,
+          "peak_allocated_bytes": 2089156608
+        },
+        {
+          "name": "ck_qk16_pv32",
+          "status": "ok",
+          "median_ms": 38.65884208679199,
+          "p95_ms": 38.67876434326172,
+          "values_ms": [
+            38.67876434326172,
+            38.770599365234375,
+            38.663719177246094,
+            38.65876007080078,
+            38.67811965942383,
+            38.66611862182617,
+            38.65540313720703,
+            38.67060089111328,
+            38.650604248046875,
+            38.65460205078125,
+            38.66532516479492,
+            38.662925720214844,
+            38.6667594909668,
+            38.652198791503906,
+            38.6589241027832,
+            38.65540313720703,
+            38.657958984375,
+            38.65283966064453,
+            38.65620422363281,
+            38.65780258178711
+          ],
+          "max_abs_delta": 5.9604644775390625e-06,
+          "peak_allocated_bytes": 2089156608
+        },
+        {
+          "name": "sdpa_repeat",
+          "status": "ok",
+          "median_ms": 34.80351257324219,
+          "p95_ms": 34.93278884887695,
+          "values_ms": [
+            34.87183380126953,
+            34.77327346801758,
+            34.78175354003906,
+            34.8038330078125,
+            34.6065559387207,
+            34.93278884887695,
+            34.79119110107422,
+            34.791831970214844,
+            34.870872497558594,
+            34.88703155517578,
+            34.78255081176758,
+            34.734230041503906,
+            34.84095001220703,
+            34.785911560058594,
+            34.78879165649414,
+            34.853271484375,
+            34.803192138671875,
+            37.554954528808594,
+            34.91967010498047,
+            34.8131103515625
+          ],
+          "max_abs_delta": 0.0,
+          "peak_allocated_bytes": 2491416576
+        }
+      ],
+      "probe_contiguous_qkv": false,
+      "script_sha256": "d78cdd38948739e1c513292f0a6cacb556772e7d40a4b114aebedeb58f56b449",
+      "ck_build": {
+        "enabled": true,
+        "long1536_enabled": false,
+        "loaded": true,
+        "error": null,
+        "build": {
+          "source_sha256": "bf0d12eface75e642675f6149709439c53c2592021fe1f8cabdbe7f150e22cbd",
+          "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+          "header_count": 581,
+          "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a",
+            "-I/opt/rocm/include",
+            "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_8935f4f00fbacbfd/attention.pending.so"
+          ],
+          "library_sha256": "e3c84fb80fac9a688f4539d9b9497e69dabf2d7bc4a5e8764fecf164a74c6b1a",
+          "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_8935f4f00fbacbfd/attention.so",
+          "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+        }
+      },
+      "probe_build": {
+        "scope": "Four-wave row permutation with factored 48-shuffle conversion",
+        "maps": {
+          "qk32_pv16": {
+            "elements": 8192,
+            "cross_wave": 0,
+            "generated_shuffles": 48,
+            "conversion": "const auto s = [&]() {\nconst int lane = threadIdx.x % 64;\nconst bool high_lane = (lane & 32) != 0;\nconst int swapped_lane = (lane & 15) | ((lane & 16) << 1) | ((lane & 32) >> 1);\nauto cross_stage = decltype(s_acc){};\nSBlockTileType converted{};\nauto lane_stage = decltype(s_acc){};\nlane_stage.get_thread_buffer()[number<0>{}] = __shfl(s_acc.get_thread_buffer()[number<0>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<1>{}] = __shfl(s_acc.get_thread_buffer()[number<1>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<2>{}] = __shfl(s_acc.get_thread_buffer()[number<2>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<3>{}] = __shfl(s_acc.get_thread_buffer()[number<3>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<4>{}] = __shfl(s_acc.get_thread_buffer()[number<4>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<5>{}] = __shfl(s_acc.get_thread_buffer()[number<5>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<6>{}] = __shfl(s_acc.get_thread_buffer()[number<6>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<7>{}] = __shfl(s_acc.get_thread_buffer()[number<7>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<8>{}] = __shfl(s_acc.get_thread_buffer()[number<8>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<9>{}] = __shfl(s_acc.get_thread_buffer()[number<9>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<10>{}] = __shfl(s_acc.get_thread_buffer()[number<10>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<11>{}] = __shfl(s_acc.get_thread_buffer()[number<11>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<12>{}] = __shfl(s_acc.get_thread_buffer()[number<12>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<13>{}] = __shfl(s_acc.get_thread_buffer()[number<13>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<14>{}] = __shfl(s_acc.get_thread_buffer()[number<14>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<15>{}] = __shfl(s_acc.get_thread_buffer()[number<15>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<16>{}] = __shfl(s_acc.get_thread_buffer()[number<16>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<17>{}] = __shfl(s_acc.get_thread_buffer()[number<17>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<18>{}] = __shfl(s_acc.get_thread_buffer()[number<18>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<19>{}] = __shfl(s_acc.get_thread_buffer()[number<19>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<20>{}] = __shfl(s_acc.get_thread_buffer()[number<20>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<21>{}] = __shfl(s_acc.get_thread_buffer()[number<21>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<22>{}] = __shfl(s_acc.get_thread_buffer()[number<22>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<23>{}] = __shfl(s_acc.get_thread_buffer()[number<23>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<24>{}] = __shfl(s_acc.get_thread_buffer()[number<24>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<25>{}] = __shfl(s_acc.get_thread_buffer()[number<25>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<26>{}] = __shfl(s_acc.get_thread_buffer()[number<26>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<27>{}] = __shfl(s_acc.get_thread_buffer()[number<27>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<28>{}] = __shfl(s_acc.get_thread_buffer()[number<28>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<29>{}] = __shfl(s_acc.get_thread_buffer()[number<29>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<30>{}] = __shfl(s_acc.get_thread_buffer()[number<30>{}], swapped_lane, 64);\nlane_stage.get_thread_buffer()[number<31>{}] = __shfl(s_acc.get_thread_buffer()[number<31>{}], swapped_lane, 64);\n{\nconst float a = lane_stage.get_thread_buffer()[number<0>{}];\nconst float b = lane_stage.get_thread_buffer()[number<4>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<0>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<4>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = lane_stage.get_thread_buffer()[number<1>{}];\nconst float b = lane_stage.get_thread_buffer()[number<5>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<1>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<5>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = lane_stage.get_thread_buffer()[number<2>{}];\nconst float b = lane_stage.get_thread_buffer()[number<6>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<2>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<6>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = lane_stage.get_thread_buffer()[number<3>{}];\nconst float b = lane_stage.get_thread_buffer()[number<7>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<3>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<7>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = lane_stage.get_thread_buffer()[number<8>{}];\nconst float b = lane_stage.get_thread_buffer()[number<12>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<8>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<12>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = lane_stage.get_thread_buffer()[number<9>{}];\nconst float b = lane_stage.get_thread_buffer()[number<13>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<9>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<13>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = lane_stage.get_thread_buffer()[number<10>{}];\nconst float b = lane_stage.get_thread_buffer()[number<14>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<10>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<14>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = lane_stage.get_thread_buffer()[number<11>{}];\nconst float b = lane_stage.get_thread_buffer()[number<15>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<11>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<15>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = lane_stage.get_thread_buffer()[number<16>{}];\nconst float b = lane_stage.get_thread_buffer()[number<20>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<16>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<20>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = lane_stage.get_thread_buffer()[number<17>{}];\nconst float b = lane_stage.get_thread_buffer()[number<21>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<17>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<21>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = lane_stage.get_thread_buffer()[number<18>{}];\nconst float b = lane_stage.get_thread_buffer()[number<22>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<18>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<22>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = lane_stage.get_thread_buffer()[number<19>{}];\nconst float b = lane_stage.get_thread_buffer()[number<23>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<19>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<23>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = lane_stage.get_thread_buffer()[number<24>{}];\nconst float b = lane_stage.get_thread_buffer()[number<28>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<24>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<28>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = lane_stage.get_thread_buffer()[number<25>{}];\nconst float b = lane_stage.get_thread_buffer()[number<29>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<25>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<29>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = lane_stage.get_thread_buffer()[number<26>{}];\nconst float b = lane_stage.get_thread_buffer()[number<30>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<26>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<30>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = lane_stage.get_thread_buffer()[number<27>{}];\nconst float b = lane_stage.get_thread_buffer()[number<31>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<27>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<31>{}] = high_lane ? b : exchanged;\n}\nconverted.get_thread_buffer()[number<0>{}] = cross_stage.get_thread_buffer()[number<0>{}];\nconverted.get_thread_buffer()[number<1>{}] = cross_stage.get_thread_buffer()[number<1>{}];\nconverted.get_thread_buffer()[number<2>{}] = cross_stage.get_thread_buffer()[number<2>{}];\nconverted.get_thread_buffer()[number<3>{}] = cross_stage.get_thread_buffer()[number<3>{}];\nconverted.get_thread_buffer()[number<4>{}] = cross_stage.get_thread_buffer()[number<8>{}];\nconverted.get_thread_buffer()[number<5>{}] = cross_stage.get_thread_buffer()[number<9>{}];\nconverted.get_thread_buffer()[number<6>{}] = cross_stage.get_thread_buffer()[number<10>{}];\nconverted.get_thread_buffer()[number<7>{}] = cross_stage.get_thread_buffer()[number<11>{}];\nconverted.get_thread_buffer()[number<8>{}] = cross_stage.get_thread_buffer()[number<16>{}];\nconverted.get_thread_buffer()[number<9>{}] = cross_stage.get_thread_buffer()[number<17>{}];\nconverted.get_thread_buffer()[number<10>{}] = cross_stage.get_thread_buffer()[number<18>{}];\nconverted.get_thread_buffer()[number<11>{}] = cross_stage.get_thread_buffer()[number<19>{}];\nconverted.get_thread_buffer()[number<12>{}] = cross_stage.get_thread_buffer()[number<24>{}];\nconverted.get_thread_buffer()[number<13>{}] = cross_stage.get_thread_buffer()[number<25>{}];\nconverted.get_thread_buffer()[number<14>{}] = cross_stage.get_thread_buffer()[number<26>{}];\nconverted.get_thread_buffer()[number<15>{}] = cross_stage.get_thread_buffer()[number<27>{}];\nconverted.get_thread_buffer()[number<16>{}] = cross_stage.get_thread_buffer()[number<4>{}];\nconverted.get_thread_buffer()[number<17>{}] = cross_stage.get_thread_buffer()[number<5>{}];\nconverted.get_thread_buffer()[number<18>{}] = cross_stage.get_thread_buffer()[number<6>{}];\nconverted.get_thread_buffer()[number<19>{}] = cross_stage.get_thread_buffer()[number<7>{}];\nconverted.get_thread_buffer()[number<20>{}] = cross_stage.get_thread_buffer()[number<12>{}];\nconverted.get_thread_buffer()[number<21>{}] = cross_stage.get_thread_buffer()[number<13>{}];\nconverted.get_thread_buffer()[number<22>{}] = cross_stage.get_thread_buffer()[number<14>{}];\nconverted.get_thread_buffer()[number<23>{}] = cross_stage.get_thread_buffer()[number<15>{}];\nconverted.get_thread_buffer()[number<24>{}] = cross_stage.get_thread_buffer()[number<20>{}];\nconverted.get_thread_buffer()[number<25>{}] = cross_stage.get_thread_buffer()[number<21>{}];\nconverted.get_thread_buffer()[number<26>{}] = cross_stage.get_thread_buffer()[number<22>{}];\nconverted.get_thread_buffer()[number<27>{}] = cross_stage.get_thread_buffer()[number<23>{}];\nconverted.get_thread_buffer()[number<28>{}] = cross_stage.get_thread_buffer()[number<28>{}];\nconverted.get_thread_buffer()[number<29>{}] = cross_stage.get_thread_buffer()[number<29>{}];\nconverted.get_thread_buffer()[number<30>{}] = cross_stage.get_thread_buffer()[number<30>{}];\nconverted.get_thread_buffer()[number<31>{}] = cross_stage.get_thread_buffer()[number<31>{}];\nreturn converted;\n}();",
+            "row_view_helper": "auto permute_query_rows = [](auto view) {\n            auto width = view.get_tensor_descriptor().get_length(number<1>{});\n            auto split = transform_tensor_view(view,\n                make_tuple(make_unmerge_transform(make_tuple(number<12>{}, number<2>{}, number<4>{}, number<16>{})), make_pass_through_transform(width)),\n                make_tuple(sequence<0>{}, sequence<1>{}), make_tuple(sequence<0,1,2,3>{}, sequence<4>{}));\n            return transform_tensor_view(split,\n                make_tuple(make_merge_transform(make_tuple(number<12>{}, number<4>{}, number<2>{}, number<16>{})), make_pass_through_transform(width)),\n                make_tuple(sequence<0,2,1,3>{}, sequence<4>{}), make_tuple(sequence<0>{}, sequence<1>{}));\n        };\n        ",
+            "pipeline_sha256": "4a398560a0397d8e9ddee2c92e6668710669deaf0be4759636f5d8aa40427a8c",
+            "bit_permutation": [
+              0,
+              1,
+              2,
+              3,
+              5,
+              8,
+              6,
+              7,
+              9,
+              10,
+              4
+            ],
+            "bit_swap_steps": [
+              [
+                4,
+                5
+              ],
+              [
+                5,
+                8
+              ],
+              [
+                8,
+                9
+              ],
+              [
+                9,
+                10
+              ]
+            ],
+            "cpu_composition_verified_elements": 2048
+          },
+          "qk16_pv32": {
+            "elements": 8192,
+            "cross_wave": 0,
+            "generated_shuffles": 48,
+            "conversion": "const auto s = [&]() {\nconst int lane = threadIdx.x % 64;\nconst bool high_lane = (lane & 32) != 0;\nconst int swapped_lane = (lane & 15) | ((lane & 16) << 1) | ((lane & 32) >> 1);\nauto cross_stage = decltype(s_acc){};\nSBlockTileType converted{};\n{\nconst float a = s_acc.get_thread_buffer()[number<0>{}];\nconst float b = s_acc.get_thread_buffer()[number<16>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<0>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<4>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = s_acc.get_thread_buffer()[number<1>{}];\nconst float b = s_acc.get_thread_buffer()[number<17>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<1>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<5>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = s_acc.get_thread_buffer()[number<2>{}];\nconst float b = s_acc.get_thread_buffer()[number<18>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<2>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<6>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = s_acc.get_thread_buffer()[number<3>{}];\nconst float b = s_acc.get_thread_buffer()[number<19>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<3>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<7>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = s_acc.get_thread_buffer()[number<4>{}];\nconst float b = s_acc.get_thread_buffer()[number<20>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<8>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<12>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = s_acc.get_thread_buffer()[number<5>{}];\nconst float b = s_acc.get_thread_buffer()[number<21>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<9>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<13>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = s_acc.get_thread_buffer()[number<6>{}];\nconst float b = s_acc.get_thread_buffer()[number<22>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<10>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<14>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = s_acc.get_thread_buffer()[number<7>{}];\nconst float b = s_acc.get_thread_buffer()[number<23>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<11>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<15>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = s_acc.get_thread_buffer()[number<8>{}];\nconst float b = s_acc.get_thread_buffer()[number<24>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<16>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<20>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = s_acc.get_thread_buffer()[number<9>{}];\nconst float b = s_acc.get_thread_buffer()[number<25>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<17>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<21>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = s_acc.get_thread_buffer()[number<10>{}];\nconst float b = s_acc.get_thread_buffer()[number<26>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<18>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<22>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = s_acc.get_thread_buffer()[number<11>{}];\nconst float b = s_acc.get_thread_buffer()[number<27>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<19>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<23>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = s_acc.get_thread_buffer()[number<12>{}];\nconst float b = s_acc.get_thread_buffer()[number<28>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<24>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<28>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = s_acc.get_thread_buffer()[number<13>{}];\nconst float b = s_acc.get_thread_buffer()[number<29>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<25>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<29>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = s_acc.get_thread_buffer()[number<14>{}];\nconst float b = s_acc.get_thread_buffer()[number<30>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<26>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<30>{}] = high_lane ? b : exchanged;\n}\n{\nconst float a = s_acc.get_thread_buffer()[number<15>{}];\nconst float b = s_acc.get_thread_buffer()[number<31>{}];\nconst float exchanged = __shfl_xor(high_lane ? a : b, 32, 64);\ncross_stage.get_thread_buffer()[number<27>{}] = high_lane ? exchanged : a;\ncross_stage.get_thread_buffer()[number<31>{}] = high_lane ? b : exchanged;\n}\nconverted.get_thread_buffer()[number<0>{}] = __shfl(cross_stage.get_thread_buffer()[number<0>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<1>{}] = __shfl(cross_stage.get_thread_buffer()[number<1>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<2>{}] = __shfl(cross_stage.get_thread_buffer()[number<2>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<3>{}] = __shfl(cross_stage.get_thread_buffer()[number<3>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<4>{}] = __shfl(cross_stage.get_thread_buffer()[number<4>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<5>{}] = __shfl(cross_stage.get_thread_buffer()[number<5>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<6>{}] = __shfl(cross_stage.get_thread_buffer()[number<6>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<7>{}] = __shfl(cross_stage.get_thread_buffer()[number<7>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<8>{}] = __shfl(cross_stage.get_thread_buffer()[number<8>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<9>{}] = __shfl(cross_stage.get_thread_buffer()[number<9>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<10>{}] = __shfl(cross_stage.get_thread_buffer()[number<10>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<11>{}] = __shfl(cross_stage.get_thread_buffer()[number<11>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<12>{}] = __shfl(cross_stage.get_thread_buffer()[number<12>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<13>{}] = __shfl(cross_stage.get_thread_buffer()[number<13>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<14>{}] = __shfl(cross_stage.get_thread_buffer()[number<14>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<15>{}] = __shfl(cross_stage.get_thread_buffer()[number<15>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<16>{}] = __shfl(cross_stage.get_thread_buffer()[number<16>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<17>{}] = __shfl(cross_stage.get_thread_buffer()[number<17>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<18>{}] = __shfl(cross_stage.get_thread_buffer()[number<18>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<19>{}] = __shfl(cross_stage.get_thread_buffer()[number<19>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<20>{}] = __shfl(cross_stage.get_thread_buffer()[number<20>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<21>{}] = __shfl(cross_stage.get_thread_buffer()[number<21>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<22>{}] = __shfl(cross_stage.get_thread_buffer()[number<22>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<23>{}] = __shfl(cross_stage.get_thread_buffer()[number<23>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<24>{}] = __shfl(cross_stage.get_thread_buffer()[number<24>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<25>{}] = __shfl(cross_stage.get_thread_buffer()[number<25>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<26>{}] = __shfl(cross_stage.get_thread_buffer()[number<26>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<27>{}] = __shfl(cross_stage.get_thread_buffer()[number<27>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<28>{}] = __shfl(cross_stage.get_thread_buffer()[number<28>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<29>{}] = __shfl(cross_stage.get_thread_buffer()[number<29>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<30>{}] = __shfl(cross_stage.get_thread_buffer()[number<30>{}], swapped_lane, 64);\nconverted.get_thread_buffer()[number<31>{}] = __shfl(cross_stage.get_thread_buffer()[number<31>{}], swapped_lane, 64);\nreturn converted;\n}();",
+            "row_view_helper": "auto permute_query_rows = [](auto view) {\n            auto width = view.get_tensor_descriptor().get_length(number<1>{});\n            auto split = transform_tensor_view(view,\n                make_tuple(make_unmerge_transform(make_tuple(number<12>{}, number<4>{}, number<2>{}, number<16>{})), make_pass_through_transform(width)),\n                make_tuple(sequence<0>{}, sequence<1>{}), make_tuple(sequence<0,1,2,3>{}, sequence<4>{}));\n            return transform_tensor_view(split,\n                make_tuple(make_merge_transform(make_tuple(number<12>{}, number<2>{}, number<4>{}, number<16>{})), make_pass_through_transform(width)),\n                make_tuple(sequence<0,2,1,3>{}, sequence<4>{}), make_tuple(sequence<0>{}, sequence<1>{}));\n        };\n        ",
+            "pipeline_sha256": "972953208145fa3a30fe74b86e75bb3cdacfbc6de27621c6a6f8f7e38f70ff62",
+            "bit_permutation": [
+              0,
+              1,
+              2,
+              3,
+              10,
+              4,
+              6,
+              7,
+              5,
+              8,
+              9
+            ],
+            "bit_swap_steps": [
+              [
+                9,
+                10
+              ],
+              [
+                8,
+                9
+              ],
+              [
+                5,
+                8
+              ],
+              [
+                4,
+                5
+              ]
+            ],
+            "cpu_composition_verified_elements": 2048
+          }
+        },
+        "source_sha256": "5ec9ab3929c83a4b86b5b3b76e64299d14e4de894fe36d8ab949f3a4566ef0ff",
+        "builds": [
+          {
+            "name": "qk32_pv16",
+            "command": [
+              "/opt/rocm/bin/hipcc",
+              "-O3",
+              "-std=c++17",
+              "-fPIC",
+              "-shared",
+              "--offload-arch=gfx90a",
+              "-I/media/IntelSSD/fireprot/runtime/ck_row_permute_butterfly/qk32_pv16",
+              "-I/media/IntelSSD/fireprot/runtime/ck_row_permute_butterfly",
+              "-I/opt/rocm/include",
+              "-DBM=128",
+              "-DWM=4",
+              "-DG0M=32",
+              "-DG0K=8",
+              "-DG1M=16",
+              "-DG1K=16",
+              "runtime/ck_row_permute_butterfly/probe.cpp",
+              "-o",
+              "runtime/ck_row_permute_butterfly/qk32_pv16.so"
+            ],
+            "returncode": 0
+          },
+          {
+            "name": "qk16_pv32",
+            "command": [
+              "/opt/rocm/bin/hipcc",
+              "-O3",
+              "-std=c++17",
+              "-fPIC",
+              "-shared",
+              "--offload-arch=gfx90a",
+              "-I/media/IntelSSD/fireprot/runtime/ck_row_permute_butterfly/qk16_pv32",
+              "-I/media/IntelSSD/fireprot/runtime/ck_row_permute_butterfly",
+              "-I/opt/rocm/include",
+              "-DBM=128",
+              "-DWM=4",
+              "-DG0M=16",
+              "-DG0K=16",
+              "-DG1M=32",
+              "-DG1K=8",
+              "runtime/ck_row_permute_butterfly/probe.cpp",
+              "-o",
+              "runtime/ck_row_permute_butterfly/qk16_pv32.so"
+            ],
+            "returncode": 0
+          }
+        ]
+      },
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "863950484",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "525136905",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1084010749",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "756899255",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "613638927",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "612056279",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451389175",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533754801",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "6",
+        "selected_physical_index": 6,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "q_stride": [
+        196608,
+        32,
+        128,
+        1
+      ],
+      "bias_stride": [
+        4,
+        1,
+        6144,
+        4
+      ],
+      "libraries": {
+        "qk32_pv16.so": "29dc700a0a224beac892a6cac0c0d47ba7a46e99421a84352f8396e8bde1d737",
+        "qk16_pv32.so": "688aaaca45f1dd5e2f6d49f30a59422f30eab35f4df2245db70547b93d42f125"
+      },
+      "status": "ok",
+      "gpu_process_monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 6,
+        "allowed_pid": 755872,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    }
+  },
+  "probe_cpp": "// FP32 CK Tile attention candidate. AMD CK headers are MIT licensed.\n// Exact observed N=1000/B=1000 or N=1536/B=512, H=4, D=32; no explicit mask.\n#include \"ck_tile/core.hpp\"\n#include \"ck_tile/host.hpp\"\n#include \"ck_tile/ops/gemm.hpp\"\n#include \"ck_tile/ops/fmha.hpp\"\n#include \"ck_tile/ops/epilogue/default_2d_epilogue.hpp\"\n#include \"ck_tile/ops/fmha/block/variants.hpp\"\n#include <tuple>\nnamespace ck_tile::impl::warp_gemm_dispatcher {\ntemplate<> struct Dispatcher<float,float,float,32,32,8,true,false> {\n using Type = WarpGemmImpl<WarpGemmAttributeMfmaIterateKAndTransposedCDistribution<\n  WarpGemmAttributeMfmaImplF32F32F32M32N32K2<WGAttrCtlEnum::Default_>,4>>;\n};\ntemplate<> struct Dispatcher<float,float,float,32,32,8,true,true> {\n using Type = WarpGemmImpl<WarpGemmAttributeMfmaIterateKAndTransposedCDistribution<\n  WarpGemmAttributeMfmaImplF32F32F32M32N32K2<WGAttrCtlEnum::Default_>,4>>;\n};\n}\nnamespace ct = ck_tile;\n#ifndef BM\n#define BM 128\n#endif\n#ifndef BN\n#define BN 64\n#endif\n#ifndef WM\n#define WM 4\n#endif\nusing Shape = ct::TileFmhaShape<ct::sequence<BM,BN,16,32,BN,32>,\n    ct::sequence<WM,1,1>,ct::sequence<G0M,G0M,G0K>,\n    ct::sequence<WM,1,1>,ct::sequence<G1M,G1M,G1K>,true>;\nusing Traits = ct::TileFmhaTraits<true,true,false,false,false,\n    ct::BlockAttentionBiasEnum::ELEMENTWISE_BIAS,false,false,false,\n    ct::BlockAttentionQuantScaleEnum::NO_SCALE>;\nusing Variant = ct::ComposedAttention<0, CK_TILE_FMHA_FWD_FAST_EXP2>;\nusing Problem = ct::BlockFmhaPipelineProblem<float,float,float,float,float,float,\n    uint8_t,float,float,float,float,Shape,false,Variant,\n    ct::SimplifiedGenericAttentionMask<false>,false,Traits>;\nusing Pipeline = ct::BlockFmhaPipelineQRKSVS<Problem>;\nusing Epilogue = ct::Default2DEpilogue<ct::Default2DEpilogueProblem<float,float,true,false>>;\nusing Kernel = ct::FmhaFwdKernel<Pipeline,Epilogue>;\nextern \"C\" int ck_attention(float* q,float* k,float* v,float* b,float* o,int batch,int n,void* stream) {\n    if(!(batch==512 && n==1536)) return 2;\n    auto args=Kernel::MakeKargs(q,k,v,b,nullptr,nullptr,nullptr,nullptr,nullptr,o,\n        n,n,32,32,4,1,1.0f,0.0f,\n        128,128,128,n==1536?n+16:n,0,128, 0,0,0,\n        32,32,32,n*(n==1536?n+16:n),0,0,32, 0,0,0,\n        n*128,n*128,n*128,0,0,0,n*128, 0,0,0,\n        -1,-1,0,0,0.0f,false,std::tuple<uint64_t,uint64_t>{0,0},0,0);\n    ct::stream_config config{static_cast<hipStream_t>(stream),false};\n    auto launch=ct::make_kernel<Kernel::kBlockPerCu>(Kernel{},dim3(8,(n+BM-1)/BM,4*(batch/8)),Kernel::BlockSize(),0,args);\n    launch(config);\n    return static_cast<int>(hipGetLastError());\n}\n",
+  "pipeline_base": "runtime/ck_mixed_mfma_redistribute; exact base source replacements retained in provenance/protenix_attention_mixed_mfma_6d42e2f.json",
+  "limits": [
+    "All candidates passed operator gates but remain slower than SDPA; no model integration or incremental E2E gain claimed",
+    "Exact unmasked FP32 B512 H4 N1536 D32 only; query blocks must be 128-row aligned",
+    "One seed, five warmups, twenty measured calls; compilation excluded",
+    "The 48-shuffle decomposition was checked on all 2048 wave elements before GPU validation"
+  ]
+}

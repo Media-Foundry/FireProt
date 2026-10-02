@@ -440,7 +440,8 @@ cross-wave count to zero. **This is only a mapping proof.** A corresponding
 GPU kernel must apply the permutation consistently to Q and bias row loads,
 then convert logits into the PV-compatible distribution before softmax.
 K/V and the logical output order must retain their original semantics.
-That kernel and its performance have not yet been tested.
+At that point the kernel had not been tested. The subsequent GPU study
+below implements and measures these permutations.
 
 [Wave-conversion evidence](../provenance/protenix_attention_wave_shuffle_a8d7e33.json)
 records the generated conversion, compiler commands, mappings, library
@@ -459,3 +460,43 @@ of lines for the PV-compatible softmax distribution. Each integer encodes
 `row*64 + column` in thread-buffer order. This executable launches no GPU
 kernels. Use BM=128/WM=4 for the four-wave mapping, or exchange the G0/G1
 macro pairs for the reverse direction.
+
+### Four-wave row-permuted GPU implementation
+
+The mapping proof was implemented in private CK pipeline overlays. Q and
+bias tensor views are split into 128-row blocks and transformed by swapping
+their middle row-index dimensions. K/V retain their original addressing.
+The converted logits and softmax row statistics use the PV-compatible
+distribution, preserving the logical output order. The diagnostic C ABI
+rejects lengths other than B512/N1536; this is not a generic masked kernel.
+
+The first implementation generated 64 wave shuffles. A second decomposed
+the full 11-bit lane/register permutation into adjacent bit swaps: one
+lane-bit swap, one lane/register-bit exchange, and register-only reindexing.
+Composition was checked for all 2,048 elements of each wave. This reduces
+the generated shuffle count to 48 without an LDS round trip or additional
+block synchronization.
+
+| M128/N64/W4, bias padding 16, batch group 8 | 64 shuffles | 48 shuffles |
+| --- | ---: | ---: |
+| MFMA32 QK / MFMA16 PV | 39.336 ms | 39.255 ms |
+| MFMA16 QK / MFMA32 PV | 38.813 ms | 38.659 ms |
+| SDPA, final control | 34.830 ms | 34.804 ms |
+
+Both implementations passed the full operator gate (maximum absolute delta
+at most `6.07967377e-6`) and continuous GPU 6 isolation checks. The protocol
+retained FP32, seed 419, five warmups, twenty measured calls, bias packing
+and output allocation. The best result remains slower than SDPA and the
+preceding MFMA16 CK batch-group configuration. No model path is changed,
+and no incremental model speedup is claimed. These results substantially
+reduce the cost of the earlier LDS conversion but do not justify promotion.
+See [GPU row-permutation evidence](../provenance/protenix_attention_row_permute_878074e.json).
+
+Further attention tuning now has a measured diminishing return. The next
+operator priority is the packed triangle contraction: outgoing calls use
+`bmm(a, b.transpose(-1, -2))`, incoming calls use
+`bmm(a.transpose(-1, -2), b)`, with contiguous physical channel-first
+projections. At N1536 the logical batches are `[128,1536,1536]`. The existing
+dimension-only BLAS replay does not preserve these transpose strides, so
+these exact contractions need their own CK/BLAS comparison before choosing
+a replacement.

@@ -644,3 +644,37 @@ The CShuffle probe retains compile-time `FIREPROT_TILE` and
 `FIREPROT_PIPELINE` options (pipeline numbers 1 through 5 map to CK v1–v5).
 Full commands, logs, binary hashes, numerical and monitoring results are
 in [CShuffle evidence](../provenance/protenix_packed_bmm_cshuffle_0c7ad00.json).
+
+### Explicit per-operation hipBLASLt probe
+
+A standalone C ABI now calls hipBLASLt directly while the PyTorch process
+policy remains hipBLAS. It uses FP32 compute, the first heuristic algorithm,
+and column-major descriptors with reversed physical operands to implement
+the original outgoing NT and incoming TN row-major results. No global
+policy mutation is needed. All elements of both outputs passed the saved
+hipBLAS reference gate (maximum delta `3.2783e-7` and zero respectively).
+
+On GPU 6, seed 443, TF32 disabled, five warmups and twenty repetitions:
+
+| Implementation | Outgoing median ms | Incoming median ms |
+| --- | ---: | ---: |
+| Explicit Lt | 25.939 | 25.740 |
+| hipBLAS final control | 29.605 | 29.424 |
+
+Both process monitors passed. This preserves the isolated Lt advantage
+without changing the process BLAS policy. It does not establish a model
+speedup. With 72 calls per direction, multiplying these differences gives
+about 0.53 seconds, an estimate that excludes any integration effects.
+
+The diagnostic is explicitly single-device and single-thread. Each
+direction owns a persistent 32 MiB `hipMalloc` workspace; their combined
+64 MiB is recorded separately and is outside PyTorch's peak allocation.
+The apparent PyTorch allocation difference must not be claimed as model
+memory savings. Setup and heuristic selection occur before warm timing.
+A model implementation needs PyTorch-managed workspace, safe stream/device
+ownership, exact capability gates and fallback before full-model testing.
+
+Reproduce using `benchmark_packed_bmm --backend direct_lt --library <so>`
+with the existing reference directory. Compile flags, source/library
+hashes and full measurements are retained in
+[direct Lt evidence](../provenance/protenix_packed_bmm_direct_lt_ed3d91e.json).

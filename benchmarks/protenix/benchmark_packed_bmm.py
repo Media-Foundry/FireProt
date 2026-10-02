@@ -20,7 +20,7 @@ from benchmarks.protenix.profile_inference import (
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--backend', choices=('hipblas', 'hipblaslt', 'ck', 'direct_ck'), required=True)
+    parser.add_argument('--backend', choices=('hipblas', 'hipblaslt', 'ck', 'direct_ck', 'direct_lt'), required=True)
     parser.add_argument('--library', type=pathlib.Path)
     parser.add_argument('--length', type=int, choices=(1000, 1536), default=1536)
     parser.add_argument('--reference-dir', type=pathlib.Path, required=True)
@@ -31,8 +31,8 @@ def main() -> int:
         parser.error('Select physical GPU 6 or 7')
     if args.write_reference and args.backend != 'hipblas':
         parser.error('Only hipBLAS may write the native reference')
-    if args.backend == 'direct_ck' and (args.library is None or args.length != 1536):
-        parser.error('Direct CK requires --library and length 1536')
+    if args.backend in {'direct_ck', 'direct_lt'} and (args.library is None or args.length != 1536):
+        parser.error('Direct library requires --library and length 1536')
     args.reference_dir.mkdir(parents=True, exist_ok=True)
     report = dict(schema_version=1, backend=args.backend, shape=[128, args.length, args.length],
                   seed=443, dtype='float32', tf32=False, warmups=5, repetitions=20,
@@ -52,19 +52,22 @@ def main() -> int:
 
         if not torch.version.hip or torch.cuda.get_device_properties(0).gcnArchName.split(':')[0] != 'gfx90a':
             raise RuntimeError('Requires gfx90a HIP')
-        report['policy'] = configure_process_blas('hipblas' if args.backend == 'direct_ck' else args.backend)
+        report['policy'] = configure_process_blas('hipblas' if args.backend in {'direct_ck', 'direct_lt'} else args.backend)
         report.update(torch=torch.__version__, hip=torch.version.hip)
         torch.backends.cuda.matmul.allow_tf32 = False
         torch.manual_seed(443)
         n = args.length
         direct = None
-        if args.backend == 'direct_ck':
+        if args.backend in {'direct_ck', 'direct_lt'}:
             library = ctypes.CDLL(str(args.library.resolve()))
-            direct = library.ck_packed_bmm
+            direct = getattr(library, 'ck_packed_bmm' if args.backend == 'direct_ck' else 'lt_packed_bmm')
             direct.argtypes = [ctypes.c_void_p] * 3 + [ctypes.c_int] * 3 + [ctypes.c_void_p]
             direct.restype = ctypes.c_int
             report['library_sha256'] = _sha256(args.library)
             report['library'] = str(args.library.resolve())
+            if args.backend == 'direct_lt':
+                report['external_workspace_bytes'] = 2 * 32 * 1024 * 1024
+                report['memory_note'] = 'Two persistent Lt workspaces are outside PyTorch peak allocation; diagnostic only'
         with torch.inference_mode():
             a, b = [torch.randn(128, n, n, device='cuda').div_(n**0.5) for _ in range(2)]
             for direction in ('outgoing', 'incoming'):
@@ -79,7 +82,7 @@ def main() -> int:
                     status = direct(a.data_ptr(), b.data_ptr(), output.data_ptr(), 128, n,
                                     int(direction == 'outgoing'), torch.cuda.current_stream().cuda_stream)
                     if status:
-                        raise RuntimeError(f'Direct CK returned status {status}')
+                        raise RuntimeError(f'Direct library returned status {status}')
                     return output
 
                 result = reference = None

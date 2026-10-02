@@ -996,6 +996,35 @@ def _worker_main(spec_path: pathlib.Path) -> int:
         ):
             setattr(owner, name, recorder.wrap_gpu_stage(getattr(owner, name), label))
 
+        if spec["measurement"].get("profile_packed_contraction", False):
+            from fireprot.backends.amd import lt_bmm
+
+            original_contraction = lt_bmm.packed_bmm
+            contraction_timers = {
+                direction: recorder.wrap_gpu_stage(
+                    original_contraction,
+                    "packed_contraction_" + ("outgoing" if direction else "incoming"),
+                )
+                for direction in (False, True)
+            }
+            contraction_layouts: dict[str, Any] = {}
+            run_manifest["packed_contraction_layouts"] = contraction_layouts
+
+            def measured_contraction(a: Any, b: Any, outgoing: bool) -> Any:
+                key = repr((tuple(a.shape), tuple(a.stride()), tuple(b.stride()),
+                            str(a.dtype), str(b.dtype), str(a.device), str(b.device), outgoing))
+                if key not in contraction_layouts:
+                    contraction_layouts[key] = {
+                        "a_shape": list(a.shape), "b_shape": list(b.shape),
+                        "a_stride": list(a.stride()), "b_stride": list(b.stride()),
+                        "a_dtype": str(a.dtype), "b_dtype": str(b.dtype),
+                        "device": str(a.device), "outgoing": outgoing, "calls": 0,
+                    }
+                contraction_layouts[key]["calls"] += 1
+                return contraction_timers[outgoing](a, b, outgoing)
+
+            lt_bmm.packed_bmm = measured_contraction
+
         original_preprocess = batch_inference.preprocess_input
         batch_inference.preprocess_input = recorder.wrap_wall_stage(
             original_preprocess, "preprocess"

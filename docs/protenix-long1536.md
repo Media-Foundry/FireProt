@@ -728,3 +728,47 @@ smaller than the isolated-operator estimate. The route remains opt-in.
 The next diagnostic should time the exact contraction boundary in the
 model, separating its contribution from surrounding projection and
 normalization work. See [runtime/model evidence](../provenance/protenix_long1536_lt_runtime_d4ffc2c.json).
+
+### Exact contraction timing explains the limited model opportunity
+
+The benchmark now accepts `measurement.profile_packed_contraction=true`.
+It wraps the actual packed-contraction boundary in deferred GPU events,
+separately labels outgoing/incoming, and records input layouts and counts.
+It does not synchronize each contraction. This is optional instrumentation;
+normal benchmark configurations retain their preceding timing boundaries.
+
+A diagnostic used unchanged model source `0d2acbc`, the separately hashed
+benchmark patch, GPU 7, Mini-default N1536 FP32 C4/S1 seed 101 sample 1,
+one warmup and two measured calls. Order was **enabled then disabled**.
+Both continuous isolation checks passed. The actual physical tensors were
+contiguous `[128,1536,1536]` with stride `[2359296,1536,1]`; there were
+72 calls in each direction per model invocation, as expected.
+
+| Diagnostic median | Lt disabled | Lt enabled |
+| --- | ---: | ---: |
+| Outgoing contraction | 2.062 s | 1.857 s |
+| Incoming contraction | 1.971 s | 1.842 s |
+| Total contraction | 4.033 s | 3.699 s |
+| Triangle multiplication | 11.115 s | 11.045 s |
+| Model | 36.513 s | 36.369 s |
+
+Lt saves about 0.334 s at the exact contraction boundary. The remaining
+triangle-multiplication work increases by about 0.263 s in this diagnostic,
+offsetting much of that saving. Two measured calls do not establish a
+systematic regression in the surrounding operations or identify its cause.
+The diagnostic model numbers include additional instrumentation and are
+not a replacement for the earlier formal comparison.
+
+A same-GPU standalone control subsequently measured hipBLAS at
+28.836/28.851 ms and integrated Lt at 25.959/25.767 ms (outgoing/incoming).
+All full-output and isolation checks passed. This narrows part of the
+previous extrapolation gap, which used GPU 6 operators and GPU 7 models,
+but standalone timing still does not match every model call. Hardware
+identity and execution context matter even with identical tensor strides.
+
+The exact contraction accounts for about 11% of model time, whereas the
+triangle-attention stage remains about 18.8 s. The next optimization priority
+is the larger attention and surrounding-operation work. Lt remains opt-in;
+no stable E2E improvement is asserted. Full manifests, per-call stage data,
+layout counts, source hash and same-GPU controls are retained in
+[contraction diagnosis](../provenance/protenix_contraction_diagnosis_0d2acbc.json).

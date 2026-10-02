@@ -727,7 +727,7 @@ def _worker_main(spec_path: pathlib.Path) -> int:
     run_dir = pathlib.Path(spec["run_dir"])
     manifest_path = run_dir / "manifest.json"
     started = time.perf_counter()
-    manifest: dict[str, Any] = {
+    run_manifest: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
         "status": "running",
         "created_at": _utc_now(),
@@ -739,7 +739,7 @@ def _worker_main(spec_path: pathlib.Path) -> int:
     }
     try:
         rocm_preflight = _rocm_preflight(spec["measurement"])
-        manifest["rocm_preflight"] = rocm_preflight
+        run_manifest["rocm_preflight"] = rocm_preflight
         exclusive = rocm_preflight["exclusive_check"]
         if exclusive["required"] and not exclusive["passed"]:
             raise RuntimeError(
@@ -753,10 +753,13 @@ def _worker_main(spec_path: pathlib.Path) -> int:
             raise RuntimeError("A CUDA-compatible PyTorch device is required")
         fireprot_manifest = None
         if spec["backend"] == "fireprot":
-            from fireprot.adapters.protenix.runtime import install, manifest
+            from fireprot.adapters.protenix.runtime import (
+                install,
+                manifest as runtime_manifest,
+            )
 
             install(spec["blas_backend"])
-            fireprot_manifest = manifest
+            fireprot_manifest = runtime_manifest
         elif spec["blas_backend"] != "auto":
             torch.backends.cuda.preferred_blas_library(spec["blas_backend"])
 
@@ -897,7 +900,7 @@ def _worker_main(spec_path: pathlib.Path) -> int:
                 "operators": str(operators_path),
                 "operator_rows_written": min(500, len(operator_rows)),
             }
-        manifest.update(
+        run_manifest.update(
             {
                 "status": "ok",
                 "completed_at": _utc_now(),
@@ -935,7 +938,7 @@ def _worker_main(spec_path: pathlib.Path) -> int:
             }
         )
     except Exception as error:
-        manifest.update(
+        run_manifest.update(
             {
                 "status": "error",
                 "completed_at": _utc_now(),
@@ -948,12 +951,13 @@ def _worker_main(spec_path: pathlib.Path) -> int:
             }
         )
         manifest_path.write_text(
-            json.dumps(manifest, indent=2, default=str) + "\n", encoding="utf-8"
+            json.dumps(run_manifest, indent=2, default=str) + "\n",
+            encoding="utf-8",
         )
         raise
 
     manifest_path.write_text(
-        json.dumps(manifest, indent=2, default=str) + "\n", encoding="utf-8"
+        json.dumps(run_manifest, indent=2, default=str) + "\n", encoding="utf-8"
     )
     return 0
 

@@ -772,3 +772,42 @@ is the larger attention and surrounding-operation work. Lt remains opt-in;
 no stable E2E improvement is asserted. Full manifests, per-call stage data,
 layout counts, source hash and same-GPU controls are retained in
 [contraction diagnosis](../provenance/protenix_contraction_diagnosis_0d2acbc.json).
+
+### Attention projection and gate-fusion experiments
+
+A standalone benchmark now covers QKV preparation, output gate/projection,
+and their combined SDPA attention operation at the actual B512/N1536/H4/D32
+chunk. Inputs and randomly initialized projection weights (standard
+ deviation 0.02) use seed 719. Measurements retain FP32, hipBLAS, TF32 off,
+GPU 6 isolation, five warmups and twenty repetitions. All candidate outputs
+pass full `atol=rtol=2e-5` checks. The input and attention temporary remain
+unmodified by the out-of-place HIP gate kernel.
+
+| Operation / candidate | Native median ms | Candidate median ms |
+| --- | ---: | ---: |
+| QKV: merged projection, three contiguous copies | 3.601 | 5.152 |
+| QKV: merged projection, HIP split and Q scaling | 3.601 | 4.664 |
+| QKV: merged projection, direct strided views | 3.602 | 3.412 |
+| Gate and output projection: fused HIP gate | 3.614 | 2.919 |
+| Complete attention: gate fusion only | 41.552 | 40.944 |
+| Complete attention: merged QKV with HIP split + gate | 41.519 | 41.966 |
+| Complete attention: direct QKV views + gate | 41.505 | 40.823 |
+
+Each candidate is followed by a native repeat; complete-attention repeats
+remain about 41.53–41.56 ms. Combining GEMMs is insufficient when restoring
+contiguous QKV adds more memory traffic. Even one HIP split/scale kernel
+fails to overcome that cost. Direct views avoid the copies, but add only a
+small complete-operation gain beyond the gate fusion alone. They also
+change QKV strides and would need a separate dispatch gate and safe merged
+weight caching before integration. Merged weights were prepared outside
+timing, while all required activation copies were included.
+
+The out-of-place HIP gate combines sigmoid and multiplication before the
+existing output projection. It improves the complete attention operator
+by about 1.015x, without increasing measured complete-operation peak
+allocation (3,695,706,112 bytes). No full-model gain is claimed. Gate fusion
+is the next model-integration candidate; QKV merging remains standalone.
+The benchmark sets `LAYERNORM_TYPE=torch` before importing Protenix,
+matching the existing benchmark environment and avoiding unrelated CUDA
+LayerNorm compilation. See
+[attention surround evidence](../provenance/protenix_attention_surround_4bfadb8.json).

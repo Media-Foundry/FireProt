@@ -678,3 +678,28 @@ Reproduce using `benchmark_packed_bmm --backend direct_lt --library <so>`
 with the existing reference directory. Compile flags, source/library
 hashes and full measurements are retained in
 [direct Lt evidence](../provenance/protenix_packed_bmm_direct_lt_ed3d91e.json).
+
+### Experimental model route for per-operation Lt
+
+`FIREPROT_ENABLE_LT_BMM_1536=1` now enables an experimental replacement only
+inside packed triangle contraction. It additionally requires contiguous
+physical `[128,1536,1536]` FP32 inputs on the same gfx90a device, aligned
+pointers, disabled TF32, no gradients and no active stream capture.
+Unmatched inputs and unavailable extension builds use the original BMM.
+Runtime launch failures are surfaced instead of hidden by another kernel.
+The process BLAS preference is unchanged.
+
+The caller allocates a 32 MiB PyTorch workspace on the current stream for
+each invocation. Lt descriptors are cached by device and direction, with
+host initialization and launch serialization; asynchronous operations use
+separate workspace allocations. Source, compiler, headers and library
+installation identity fingerprint the lazy build. The runtime manifest
+records build identity, errors and successful/fallback call counts.
+
+Focused GPU 6 tests passed for both directions on non-default streams,
+including immediate allocator reuse of the released workspace. Local
+regression tests passed (108 passed, 21 skipped); focused GPU tests passed
+(3 passed). The integrated operator measures 25.963/25.772 ms outgoing /
+incoming and passes full saved-output checks. Unlike the standalone probe,
+its PyTorch peak allocation includes the temporary workspace. The path
+remains opt-in pending a same-source full-model comparison.

@@ -20,7 +20,7 @@ from benchmarks.protenix.profile_inference import (
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--backend', choices=('hipblas', 'hipblaslt', 'ck', 'direct_ck', 'direct_lt'), required=True)
+    parser.add_argument('--backend', choices=('hipblas', 'hipblaslt', 'ck', 'direct_ck', 'direct_lt', 'runtime_lt'), required=True)
     parser.add_argument('--library', type=pathlib.Path)
     parser.add_argument('--length', type=int, choices=(1000, 1536), default=1536)
     parser.add_argument('--reference-dir', type=pathlib.Path, required=True)
@@ -52,7 +52,7 @@ def main() -> int:
 
         if not torch.version.hip or torch.cuda.get_device_properties(0).gcnArchName.split(':')[0] != 'gfx90a':
             raise RuntimeError('Requires gfx90a HIP')
-        report['policy'] = configure_process_blas('hipblas' if args.backend in {'direct_ck', 'direct_lt'} else args.backend)
+        report['policy'] = configure_process_blas('hipblas' if args.backend in {'direct_ck', 'direct_lt', 'runtime_lt'} else args.backend)
         report.update(torch=torch.__version__, hip=torch.version.hip)
         torch.backends.cuda.matmul.allow_tf32 = False
         torch.manual_seed(443)
@@ -76,6 +76,12 @@ def main() -> int:
                 left, right = (a, b.transpose(-1, -2)) if direction == 'outgoing' else (a.transpose(-1, -2), b)
                 record = dict(direction=direction, left_stride=list(left.stride()), right_stride=list(right.stride()))
                 def contract():
+                    if args.backend == 'runtime_lt':
+                        from fireprot.backends.amd.lt_bmm import packed_bmm, extension_status
+                        output = packed_bmm(a,b,direction == 'outgoing')
+                        if not extension_status()['loaded']:
+                            raise RuntimeError(f'Lt extension unavailable: {extension_status()}')
+                        return output
                     if direct is None:
                         return torch.bmm(left, right)
                     output = torch.empty_like(a)
@@ -133,6 +139,9 @@ def main() -> int:
                 report['records'].append(record)
                 print(json.dumps({k:v for k,v in record.items() if k not in {'values_ms', 'reference_metadata'}}), flush=True)
                 gc.collect()
+        if args.backend == 'runtime_lt':
+            from fireprot.backends.amd.lt_bmm import extension_status
+            report['lt_bmm'] = extension_status()
         report['status'] = 'ok' if all(r['status'] == 'ok' for r in report['records']) else 'rejected'
     except Exception as error:
         report.update(status='error', error=str(error))

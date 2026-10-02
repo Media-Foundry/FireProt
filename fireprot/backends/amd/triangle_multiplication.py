@@ -272,10 +272,8 @@ def _long_sequence_packed(
     b = extension.sigmoid_pack_f32_128(
         module.linear_b_g(normalized), module.linear_b_p(normalized)
     )
-    if module._outgoing:
-        contracted = torch.bmm(a, b.transpose(-1, -2))
-    else:
-        contracted = torch.bmm(a.transpose(-1, -2), b)
+    from fireprot.backends.amd.lt_bmm import packed_bmm
+    contracted = packed_bmm(a, b, module._outgoing)
     del a, b
     norm = module.layer_norm_out
     output = extension.packed_layer_norm_f32_128(

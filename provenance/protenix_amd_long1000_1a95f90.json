@@ -1,0 +1,244 @@
+{
+  "schema_version": 1,
+  "status": "measured-development-result",
+  "date": "2026-10-03",
+  "scope": {
+    "model": "protenix_mini_default_v0.5.0",
+    "input_id": "umem_L01000_462bb697ecdcce2f",
+    "token_count": 1000,
+    "dtype": "fp32",
+    "cycles": 4,
+    "diffusion_steps": 1,
+    "samples": 1,
+    "seed": 101,
+    "cache_state": "warm-within-process",
+    "use_msa": false,
+    "use_template": false,
+    "enable_tf32": false,
+    "blas_backend": "hipblas"
+  },
+  "source": {
+    "fireprot_code_commit": "1a95f90",
+    "protenix_commit": "77218da70a9c84b101049aa0adf87cb0be461d15",
+    "protenix_upstream_baseline": "d3b4db6a121dd4584edd85e93744239325a2b72e",
+    "profile_script_sha256": "511213a16ed1e820e0976cec4903638f589c2d1d3bdd657c26bbd14e13ff7b4a",
+    "benchmark_config_sha256": "883c3d53ef6c76e7799eaf80ec3546c7166345827e2d087b288e7e4e5b31355b",
+    "input_sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac",
+    "sequence_sha256": "462bb697ecdcce2f979b00075e60d96fbfcd1b18ba3d92f5427cb03befbcc570",
+    "note": "DiamondHill excludes top-level Git metadata during synchronization; the measured source files map to FireProt code commit 1a95f90."
+  },
+  "environment": {
+    "host": "DiamondHill",
+    "physical_device": 6,
+    "validation_device": 6,
+    "gpu_test_device": 7,
+    "device": "AMD Instinct MI250X / MI250",
+    "architecture": "gfx90a:sramecc+:xnack-",
+    "device_memory_bytes": 68702699520,
+    "python": "3.12.13",
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850"
+  },
+  "measurement": {
+    "warmups": 1,
+    "repetitions": 3,
+    "device_policy": "exclusive",
+    "continuous_process_monitor": true,
+    "native_monitor_passed": true,
+    "fireprot_monitor_passed": true,
+    "external_gpu_pids": [],
+    "gpu_events_exclude_model_load_preprocessing_and_serialization": true,
+    "native_reference_reused": true,
+    "native_reference_reason": "The promoted changes alter only FireProt capability-gated paths; the native Protenix path and fixed workload are unchanged."
+  },
+  "performance": {
+    "native": {
+      "model_ms": {
+        "values": [
+          45309.72265625,
+          45158.48046875,
+          45861.7890625
+        ],
+        "median": 45309.72265625,
+        "p95": 45806.582421875
+      },
+      "pairformer_ms": {
+        "values": [
+          41480.4609375,
+          41304.03125,
+          41500.06640625
+        ],
+        "median": 41480.4609375
+      },
+      "triangle_attention_ms": {
+        "values": [
+          29485.626571655273,
+          29372.996704101562,
+          29970.56088256836
+        ],
+        "median": 29485.626571655273
+      },
+      "triangle_multiplication_ms": {
+        "values": [
+          12459.949699401855,
+          12408.016220092773,
+          12495.1103515625
+        ],
+        "median": 12459.949699401855
+      },
+      "peak_allocated_bytes": 39499758592,
+      "peak_reserved_bytes": 42756734976,
+      "inference_wall_ms": 223610.4301540181,
+      "process_wall_ms": 227040.4818560346
+    },
+    "fireprot": {
+      "model_ms": {
+        "values": [
+          20893.03125,
+          20866.376953125,
+          20885.54296875
+        ],
+        "median": 20885.54296875,
+        "p95": 20893.03125
+      },
+      "pairformer_ms": {
+        "values": [
+          19444.626953125,
+          19421.189453125,
+          19433.220703125
+        ],
+        "median": 19433.220703125
+      },
+      "triangle_attention_ms": {
+        "values": [
+          7086.5445556640625,
+          7073.191837310791,
+          7079.343494415283
+        ],
+        "median": 7079.343494415283
+      },
+      "triangle_multiplication_ms": {
+        "values": [
+          11325.848190307617,
+          11315.376113891602,
+          11325.561813354492
+        ],
+        "median": 11325.561813354492
+      },
+      "peak_allocated_bytes": 10037256704,
+      "peak_reserved_bytes": 14686355456,
+      "inference_wall_ms": 125839.18207499664,
+      "process_wall_ms": 129170.58266996173
+    },
+    "speedup": {
+      "model_median": 2.1694299604297904,
+      "model_p95": 2.1924335379470126,
+      "pairformer_median": 2.1345129338663686,
+      "triangle_attention_median": 4.165022730556265,
+      "triangle_multiplication_median": 1.1001617319071761,
+      "repeated_inference_wall": 1.7769539380886354,
+      "benchmark_process_wall": 1.7576794744058413
+    },
+    "memory_reduction_fraction": {
+      "peak_allocated": 0.7458906823285529,
+      "peak_reserved": 0.6565136354718462
+    }
+  },
+  "incremental_results": {
+    "long_layer_norm": {
+      "validated_row_counts": [
+        244000,
+        256000,
+        1000000
+      ],
+      "operator_speedup_range": [
+        6.276039053186097,
+        6.362686750817522
+      ],
+      "operator_max_abs_error": 2.86102294921875e-06,
+      "selected_calls_across_warmup_and_measurement": 3480,
+      "disabled_model_median_ms": 22977.38671875,
+      "enabled_model_median_ms": 21303.03515625,
+      "model_median_speedup": 1.0785968548715825,
+      "disabled_model_p95_ms": 23012.021484375,
+      "enabled_model_p95_ms": 21493.419921875,
+      "model_p95_speedup": 1.0706542545588307
+    },
+    "long_transition": {
+      "validated_shape": [
+        1000,
+        1000,
+        128
+      ],
+      "operator_native_median_ms": 27.612747192382812,
+      "operator_fireprot_median_ms": 23.734920501708984,
+      "operator_speedup": 1.163380647952649,
+      "operator_max_abs_error": 0.0,
+      "selected_calls_across_warmup_and_measurement": 288,
+      "native_fallback_calls_across_warmup_and_measurement": 288,
+      "disabled_model_median_ms": 21153.052734375,
+      "enabled_model_median_ms": 20885.54296875,
+      "model_median_speedup": 1.0128083701738213,
+      "disabled_model_p95_ms": 21168.693359375,
+      "enabled_model_p95_ms": 20893.03125,
+      "model_p95_speedup": 1.0131939739177387,
+      "peak_allocated_reduction_bytes": 512000000
+    }
+  },
+  "selected_implementations": [
+    {
+      "operation": "triangle_attention",
+      "implementation": "amd-gfx90a-efficient-sdpa",
+      "count_across_warmup_and_measurement": 576
+    },
+    {
+      "operation": "triangle_multiplication",
+      "implementation": "amd-gfx90a-hip-triangle-gates-f32-n1000-c128",
+      "count_across_warmup_and_measurement": 576
+    },
+    {
+      "operation": "layer_norm",
+      "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+      "count_across_warmup_and_measurement": 3480
+    },
+    {
+      "operation": "gated_transition",
+      "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+      "count_across_warmup_and_measurement": 288
+    }
+  ],
+  "numerical_validation": {
+    "passed": true,
+    "atom_count": 7979,
+    "finite": true,
+    "raw_rmsd_angstrom": 9.317272315643592e-05,
+    "aligned_rmsd_angstrom": 9.276972337290581e-05,
+    "max_abs_coordinate_delta_angstrom": 0.0009765625,
+    "max_abs_confidence_delta": 3.814697265625e-06,
+    "coordinate_tolerance_angstrom": 0.001,
+    "confidence_tolerance": 0.001,
+    "missing_confidence_fields": [],
+    "extra_confidence_fields": []
+  },
+  "artifacts_on_diamondhill": {
+    "native": "outputs/benchmarks/long1000-formal-523f922-native",
+    "fireprot": "outputs/benchmarks/long1000-transition-ab-enabled",
+    "long_layer_norm_disabled": "outputs/benchmarks/long1000-layernorm-ab-disabled",
+    "long_layer_norm_enabled": "outputs/benchmarks/long1000-layernorm-ab-enabled",
+    "long_transition_disabled": "outputs/benchmarks/long1000-transition-ab-disabled",
+    "long_transition_enabled": "outputs/benchmarks/long1000-transition-ab-enabled",
+    "fireprot_validation": "outputs/benchmarks/long1000-transition-validation-enabled",
+    "comparison": "outputs/benchmarks/long1000-transition-validation-enabled/comparison-vs-native.json"
+  },
+  "tests": {
+    "local": "93 passed, 3 skipped",
+    "diamondhill": "95 passed, 1 skipped"
+  },
+  "limits": [
+    "The input is a performance-only workload without an experimental-coordinate mapping.",
+    "The result covers one exact 1,000-token Mini-default FP32 C4/S1 bucket.",
+    "The native timing reference was reused because the native path and workload did not change.",
+    "The comparison fixes hipBLAS for both backends but does not establish the best process BLAS policy for long sequences.",
+    "Base weights, other lengths, complexes, ligands, reduced precision, gfx942, and multi-GPU execution remain unmeasured."
+  ]
+}

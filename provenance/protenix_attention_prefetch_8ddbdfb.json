@@ -1,0 +1,547 @@
+{
+  "scope": "N1536 attention operator scheduling diagnosis",
+  "seed": 419,
+  "shape": [
+    512,
+    4,
+    1536,
+    32
+  ],
+  "dtype": "float32",
+  "tf32": false,
+  "warmups": 5,
+  "repetitions": 20,
+  "cache_state": "warm",
+  "physical_device": "6",
+  "records": [
+    {
+      "name": "sdpa",
+      "status": "ok",
+      "median_ms": 34.87871170043945,
+      "p95_ms": 34.9412727355957,
+      "values_ms": [
+        34.876155853271484,
+        34.9412727355957,
+        34.89375686645508,
+        34.843994140625,
+        34.92638397216797,
+        34.83534240722656,
+        34.86271286010742,
+        34.75631332397461,
+        34.90703201293945,
+        34.88991165161133,
+        34.89070510864258,
+        34.86142349243164,
+        34.88126754760742,
+        34.88270950317383,
+        34.85759353637695,
+        35.09358215332031,
+        34.89614486694336,
+        34.83070373535156,
+        34.792152404785156,
+        34.82127380371094
+      ],
+      "max_abs_delta": 0.0,
+      "peak_allocated_bytes": 2491416576
+    },
+    {
+      "name": "ck_padded",
+      "status": "ok",
+      "median_ms": 39.09682655334473,
+      "p95_ms": 39.16386413574219,
+      "values_ms": [
+        39.0987434387207,
+        39.110904693603516,
+        39.09490966796875,
+        39.12530517578125,
+        39.16386413574219,
+        39.14178466796875,
+        39.085792541503906,
+        39.06963348388672,
+        39.200828552246094,
+        39.114593505859375,
+        39.13970947265625,
+        39.12034606933594,
+        39.05187225341797,
+        39.0766716003418,
+        39.09186935424805,
+        39.06162643432617,
+        39.092506408691406,
+        39.07554626464844,
+        39.08850860595703,
+        39.15138626098633
+      ],
+      "max_abs_delta": 5.9604644775390625e-06,
+      "peak_allocated_bytes": 2089156608
+    },
+    {
+      "name": "sdpa_batch_head_swap",
+      "status": "ok",
+      "median_ms": 36.61729621887207,
+      "p95_ms": 36.694496154785156,
+      "values_ms": [
+        36.589378356933594,
+        36.685054779052734,
+        36.630821228027344,
+        36.651615142822266,
+        36.63657760620117,
+        36.59641647338867,
+        36.655296325683594,
+        36.61897659301758,
+        36.598655700683594,
+        36.58777618408203,
+        36.595619201660156,
+        36.61561584472656,
+        36.67657470703125,
+        36.56729507446289,
+        36.694496154785156,
+        36.566654205322266,
+        36.63401412963867,
+        36.60761642456055,
+        36.70073699951172,
+        36.50905990600586
+      ],
+      "max_abs_delta": 0.0,
+      "peak_allocated_bytes": 2491416576
+    },
+    {
+      "name": "ck_after_gemm",
+      "status": "ok",
+      "median_ms": 38.35116767883301,
+      "p95_ms": 38.43316650390625,
+      "values_ms": [
+        38.330772399902344,
+        38.33588790893555,
+        38.46548843383789,
+        38.35188674926758,
+        38.368526458740234,
+        38.38068771362305,
+        38.34469223022461,
+        38.36308670043945,
+        38.363407135009766,
+        38.35044860839844,
+        38.3726921081543,
+        38.359092712402344,
+        38.34773254394531,
+        38.34532928466797,
+        38.334293365478516,
+        38.43316650390625,
+        38.35381317138672,
+        38.34069061279297,
+        38.32085037231445,
+        38.34517288208008
+      ],
+      "max_abs_delta": 5.9604644775390625e-06,
+      "peak_allocated_bytes": 2089156608
+    },
+    {
+      "name": "ck_after_softmax",
+      "status": "ok",
+      "median_ms": 40.72062683105469,
+      "p95_ms": 40.761104583740234,
+      "values_ms": [
+        43.47910690307617,
+        40.761104583740234,
+        40.715667724609375,
+        40.72382736206055,
+        40.72638702392578,
+        40.722225189208984,
+        40.72894287109375,
+        40.72734451293945,
+        40.716468811035156,
+        40.71550750732422,
+        40.71038818359375,
+        40.722862243652344,
+        40.71086883544922,
+        40.72782897949219,
+        40.71902847290039,
+        40.705108642578125,
+        40.6998291015625,
+        40.70014953613281,
+        40.71470260620117,
+        40.7260627746582
+      ],
+      "max_abs_delta": 5.9604644775390625e-06,
+      "peak_allocated_bytes": 2089156608
+    },
+    {
+      "name": "ck_fast_exp2",
+      "status": "ok",
+      "median_ms": 39.9644889831543,
+      "p95_ms": 40.004966735839844,
+      "values_ms": [
+        39.964969635009766,
+        39.94624710083008,
+        39.972808837890625,
+        40.004966735839844,
+        39.96432876586914,
+        39.966888427734375,
+        39.95457077026367,
+        39.9633674621582,
+        39.96272659301758,
+        39.96256637573242,
+        39.967369079589844,
+        39.95488739013672,
+        39.958248138427734,
+        39.958248138427734,
+        39.96848678588867,
+        39.965126037597656,
+        40.04176712036133,
+        40.004486083984375,
+        39.963050842285156,
+        39.96464920043945
+      ],
+      "max_abs_delta": 6.4373016357421875e-06,
+      "peak_allocated_bytes": 2089156608
+    },
+    {
+      "name": "sdpa_repeat",
+      "status": "ok",
+      "median_ms": 34.82279396057129,
+      "p95_ms": 34.89263153076172,
+      "values_ms": [
+        34.89263153076172,
+        34.76671600341797,
+        34.8651123046875,
+        34.8054313659668,
+        34.83503341674805,
+        34.80895233154297,
+        34.783992767333984,
+        34.86687088012695,
+        34.79551696777344,
+        34.90367126464844,
+        34.84959030151367,
+        34.86383056640625,
+        34.791996002197266,
+        34.857112884521484,
+        34.81055450439453,
+        34.591041564941406,
+        34.863670349121094,
+        34.7585563659668,
+        34.836151123046875,
+        34.7095947265625
+      ],
+      "max_abs_delta": 0.0,
+      "peak_allocated_bytes": 2491416576
+    }
+  ],
+  "probe_contiguous_qkv": false,
+  "script_sha256": "775c03968fe71ae8430839bf739378e04e9f983eab445a729a333cde8738fdf0",
+  "ck_build": {
+    "enabled": true,
+    "long1536_enabled": false,
+    "loaded": true,
+    "error": null,
+    "build": {
+      "source_sha256": "bf0d12eface75e642675f6149709439c53c2592021fe1f8cabdbe7f150e22cbd",
+      "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+      "header_count": 581,
+      "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+      "command": [
+        "/opt/rocm/bin/hipcc",
+        "-O3",
+        "-std=c++17",
+        "-fPIC",
+        "-shared",
+        "--offload-arch=gfx90a",
+        "-I/opt/rocm/include",
+        "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+        "-o",
+        "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_8935f4f00fbacbfd/attention.pending.so"
+      ],
+      "library_sha256": "e3c84fb80fac9a688f4539d9b9497e69dabf2d7bc4a5e8764fecf164a74c6b1a",
+      "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_8935f4f00fbacbfd/attention.so",
+      "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+    }
+  },
+  "probe_build": {
+    "scope": "N1536 QRKSVS V prefetch point and exp2 ablation, batch group8",
+    "original_pipeline_sha256": "84c129287dcfb88fa7d1c422246ad87f382de33284e01571aad112004f24b20e",
+    "source_sha256": "312c103b6639999f776928f024b51c67d37c7c038441b8e54ebbbf6272fbc090",
+    "builds": [
+      {
+        "name": "after_gemm",
+        "command": [
+          "/opt/rocm/bin/hipcc",
+          "-O3",
+          "-std=c++17",
+          "-fPIC",
+          "-shared",
+          "--offload-arch=gfx90a",
+          "-I/media/IntelSSD/fireprot/runtime/ck_prefetch_diagnosis/after_gemm",
+          "-I/opt/rocm/include",
+          "-DBG=8",
+          "runtime/ck_prefetch_diagnosis/probe.cpp",
+          "-o",
+          "runtime/ck_prefetch_diagnosis/after_gemm.so"
+        ],
+        "returncode": 0,
+        "header_sha256": "a229bc5e0a1db19523a8f2b68884343c5631ecc0773e31faaa094ecd5fbafc4b"
+      },
+      {
+        "name": "after_softmax",
+        "command": [
+          "/opt/rocm/bin/hipcc",
+          "-O3",
+          "-std=c++17",
+          "-fPIC",
+          "-shared",
+          "--offload-arch=gfx90a",
+          "-I/media/IntelSSD/fireprot/runtime/ck_prefetch_diagnosis/after_softmax",
+          "-I/opt/rocm/include",
+          "-DBG=8",
+          "runtime/ck_prefetch_diagnosis/probe.cpp",
+          "-o",
+          "runtime/ck_prefetch_diagnosis/after_softmax.so"
+        ],
+        "returncode": 0,
+        "header_sha256": "ffd3045210b94a1d7dab7b2145be8d91a76c8bab1753e30c14e13488b0323f9f"
+      },
+      {
+        "name": "fast_exp2",
+        "command": [
+          "/opt/rocm/bin/hipcc",
+          "-O3",
+          "-std=c++17",
+          "-fPIC",
+          "-shared",
+          "--offload-arch=gfx90a",
+          "-I/media/IntelSSD/fireprot/runtime/ck_prefetch_diagnosis/fast_exp2",
+          "-I/opt/rocm/include",
+          "-DBG=8",
+          "-DCK_TILE_FMHA_FWD_FAST_EXP2=1",
+          "runtime/ck_prefetch_diagnosis/probe.cpp",
+          "-o",
+          "runtime/ck_prefetch_diagnosis/fast_exp2.so"
+        ],
+        "returncode": 0,
+        "header_sha256": "84c129287dcfb88fa7d1c422246ad87f382de33284e01571aad112004f24b20e"
+      }
+    ]
+  },
+  "preflight": {
+    "available": true,
+    "command": [
+      "/usr/bin/rocm-smi",
+      "--showpids",
+      "--showuse",
+      "--showmeminfo",
+      "vram",
+      "--showclocks",
+      "--json"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "data": {
+      "card0": {
+        "mclk clock speed:": "(1600Mhz)",
+        "mclk clock level:": "3",
+        "sclk clock speed:": "(800Mhz)",
+        "sclk clock level:": "1",
+        "socclk clock speed:": "(1090Mhz)",
+        "socclk clock level:": "3",
+        "GPU use (%)": "0",
+        "GFX Activity": "863949210",
+        "VRAM Total Memory (B)": "68702699520",
+        "VRAM Total Used Memory (B)": "11014144"
+      },
+      "card1": {
+        "mclk clock speed:": "(1600Mhz)",
+        "mclk clock level:": "3",
+        "sclk clock speed:": "(800Mhz)",
+        "sclk clock level:": "1",
+        "socclk clock speed:": "(1090Mhz)",
+        "socclk clock level:": "3",
+        "GPU use (%)": "0",
+        "GFX Activity": "525135632",
+        "VRAM Total Memory (B)": "68702699520",
+        "VRAM Total Used Memory (B)": "11014144"
+      },
+      "card2": {
+        "mclk clock speed:": "(1600Mhz)",
+        "mclk clock level:": "3",
+        "sclk clock speed:": "(800Mhz)",
+        "sclk clock level:": "1",
+        "socclk clock speed:": "(1090Mhz)",
+        "socclk clock level:": "3",
+        "GPU use (%)": "0",
+        "GFX Activity": "1084009482",
+        "VRAM Total Memory (B)": "68702699520",
+        "VRAM Total Used Memory (B)": "10981376"
+      },
+      "card3": {
+        "mclk clock speed:": "(1600Mhz)",
+        "mclk clock level:": "3",
+        "sclk clock speed:": "(800Mhz)",
+        "sclk clock level:": "1",
+        "socclk clock speed:": "(1090Mhz)",
+        "socclk clock level:": "3",
+        "GPU use (%)": "0",
+        "GFX Activity": "756897990",
+        "VRAM Total Memory (B)": "68702699520",
+        "VRAM Total Used Memory (B)": "11014144"
+      },
+      "card4": {
+        "mclk clock speed:": "(1600Mhz)",
+        "mclk clock level:": "3",
+        "sclk clock speed:": "(800Mhz)",
+        "sclk clock level:": "1",
+        "socclk clock speed:": "(1090Mhz)",
+        "socclk clock level:": "3",
+        "GPU use (%)": "0",
+        "GFX Activity": "606492039",
+        "VRAM Total Memory (B)": "68702699520",
+        "VRAM Total Used Memory (B)": "11014144"
+      },
+      "card5": {
+        "mclk clock speed:": "(1600Mhz)",
+        "mclk clock level:": "3",
+        "sclk clock speed:": "(800Mhz)",
+        "sclk clock level:": "1",
+        "socclk clock speed:": "(1090Mhz)",
+        "socclk clock level:": "3",
+        "GPU use (%)": "0",
+        "GFX Activity": "577402968",
+        "VRAM Total Memory (B)": "68702699520",
+        "VRAM Total Used Memory (B)": "11014144"
+      },
+      "card6": {
+        "mclk clock speed:": "(1600Mhz)",
+        "mclk clock level:": "3",
+        "sclk clock speed:": "(800Mhz)",
+        "sclk clock level:": "1",
+        "socclk clock speed:": "(1090Mhz)",
+        "socclk clock level:": "3",
+        "GPU use (%)": "0",
+        "GFX Activity": "451387904",
+        "VRAM Total Memory (B)": "68702699520",
+        "VRAM Total Used Memory (B)": "11014144"
+      },
+      "card7": {
+        "mclk clock speed:": "(1600Mhz)",
+        "mclk clock level:": "3",
+        "sclk clock speed:": "(800Mhz)",
+        "sclk clock level:": "1",
+        "socclk clock speed:": "(1090Mhz)",
+        "socclk clock level:": "3",
+        "GPU use (%)": "0",
+        "GFX Activity": "533753528",
+        "VRAM Total Memory (B)": "68702699520",
+        "VRAM Total Used Memory (B)": "11014144"
+      }
+    },
+    "visible_devices": "6",
+    "selected_physical_index": 6,
+    "exclusive_check": {
+      "required": true,
+      "passed": true,
+      "gpu_use_percent": 0,
+      "vram_used_bytes": 11014144,
+      "max_gpu_use_percent": 5,
+      "max_vram_used_bytes": 268435456
+    }
+  },
+  "torch": "2.12.0a0+git78258b9",
+  "hip": "7.14.60850",
+  "q_stride": [
+    196608,
+    32,
+    128,
+    1
+  ],
+  "bias_stride": [
+    4,
+    1,
+    6144,
+    4
+  ],
+  "libraries": {
+    "after_gemm.so": "0760807f66ff3d83cc5877ac822d05ff72c12accb78cb88a6591f6d8608bc495",
+    "after_softmax.so": "0cca345a9f958e625dae704206e4f68bad114bad14133e82ef422ff7a6f9d92f",
+    "fast_exp2.so": "e2e623c2bdaa81cb7b337b7a0c690bb51a043db266b059765d543d2ad6b64772"
+  },
+  "status": "ok",
+  "gpu_process_monitor": {
+    "available": true,
+    "command": [
+      "/usr/bin/amd-smi",
+      "process",
+      "--json"
+    ],
+    "physical_device_index": 6,
+    "interval_seconds": 1.0,
+    "samples": 6,
+    "allowed_pid": 734611,
+    "external_pids": [],
+    "errors": [],
+    "passed": true
+  },
+  "wholek_build": {
+    "scope": "Whole-K prefetch pipeline with group8",
+    "source_sha256": "bcdfcc14ca16878e17ee3a038afeffaaccb246d59215f979b6d940de5ac57af2",
+    "builds": [
+      {
+        "name": "wholek_m64",
+        "command": [
+          "/opt/rocm/bin/hipcc",
+          "-O3",
+          "-std=c++17",
+          "-fPIC",
+          "-shared",
+          "--offload-arch=gfx90a",
+          "-I/media/IntelSSD/fireprot/runtime/ck_wholek_diagnosis",
+          "-I/opt/rocm/include",
+          "-DBG=8",
+          "-DBM=64",
+          "-DWM=2",
+          "runtime/ck_wholek_diagnosis/probe.cpp",
+          "-o",
+          "runtime/ck_wholek_diagnosis/wholek_m64.so"
+        ],
+        "returncode": 1,
+        "log_sha256": "38e0489ae4cf7a1d3c11d443acfce51eb24efea23d9e748222e4111d39c149a3",
+        "errors": [
+          "/opt/rocm/core-10.0/include/ck_tile/ops/fmha/pipeline/block_fmha_pipeline_qr_ks_vs_whole_k_prefetch_default_policy.hpp:657:31: error: static assertion failed: Not supported data types!",
+          "/opt/rocm/core-10.0/include/ck_tile/ops/fmha/pipeline/block_fmha_pipeline_qr_ks_vs_whole_k_prefetch_default_policy.hpp:624:14: error: variable has incomplete type 'void'",
+          "/opt/rocm/core-10.0/include/ck_tile/ops/fmha/pipeline/block_fmha_pipeline_qr_ks_vs_whole_k_prefetch_default_policy.hpp:78:16: error: type 'WG' (aka 'int') cannot be used prior to '::' because it has no members",
+          "/opt/rocm/core-10.0/include/ck_tile/ops/fmha/pipeline/block_fmha_pipeline_qr_ks_vs_whole_k_prefetch_default_policy.hpp:126:22: error: constexpr if condition is not a constant expression",
+          "/opt/rocm/core-10.0/include/ck_tile/ops/fmha/pipeline/block_fmha_pipeline_qr_ks_vs_whole_k_prefetch_default_policy.hpp:206:27: error: constexpr variable 'kKPack' must be initialized by a constant expression",
+          "/opt/rocm/core-10.0/include/ck_tile/ops/fmha/pipeline/block_fmha_pipeline_qr_ks_vs_whole_k_prefetch_default_policy.hpp:214:27: error: no matching function for call to 'GetQKWarpGemmKPerThreadSize'"
+        ]
+      },
+      {
+        "name": "wholek_m128",
+        "command": [
+          "/opt/rocm/bin/hipcc",
+          "-O3",
+          "-std=c++17",
+          "-fPIC",
+          "-shared",
+          "--offload-arch=gfx90a",
+          "-I/media/IntelSSD/fireprot/runtime/ck_wholek_diagnosis",
+          "-I/opt/rocm/include",
+          "-DBG=8",
+          "-DBM=128",
+          "-DWM=4",
+          "runtime/ck_wholek_diagnosis/probe.cpp",
+          "-o",
+          "runtime/ck_wholek_diagnosis/wholek_m128.so"
+        ],
+        "returncode": 1,
+        "log_sha256": "083225901064e01dab0bae05916ef93110586a5472bd32e6ed8a4718cf0c63b7",
+        "errors": [
+          "/opt/rocm/core-10.0/include/ck_tile/ops/fmha/pipeline/block_fmha_pipeline_qr_ks_vs_whole_k_prefetch_default_policy.hpp:657:31: error: static assertion failed: Not supported data types!",
+          "/opt/rocm/core-10.0/include/ck_tile/ops/fmha/pipeline/block_fmha_pipeline_qr_ks_vs_whole_k_prefetch_default_policy.hpp:624:14: error: variable has incomplete type 'void'",
+          "/opt/rocm/core-10.0/include/ck_tile/ops/fmha/pipeline/block_fmha_pipeline_qr_ks_vs_whole_k_prefetch_default_policy.hpp:78:16: error: type 'WG' (aka 'int') cannot be used prior to '::' because it has no members",
+          "/opt/rocm/core-10.0/include/ck_tile/ops/fmha/pipeline/block_fmha_pipeline_qr_ks_vs_whole_k_prefetch_default_policy.hpp:126:22: error: constexpr if condition is not a constant expression",
+          "/opt/rocm/core-10.0/include/ck_tile/ops/fmha/pipeline/block_fmha_pipeline_qr_ks_vs_whole_k_prefetch_default_policy.hpp:206:27: error: constexpr variable 'kKPack' must be initialized by a constant expression",
+          "/opt/rocm/core-10.0/include/ck_tile/ops/fmha/pipeline/block_fmha_pipeline_qr_ks_vs_whole_k_prefetch_default_policy.hpp:214:27: error: no matching function for call to 'GetQKWarpGemmKPerThreadSize'"
+        ]
+      }
+    ]
+  },
+  "limits": [
+    "No pipeline candidate promoted; the batch-group8 reference from the preceding controlled study was about 37.95 ms",
+    "Whole-K candidates did not compile; no performance or numerical claim for them"
+  ]
+}

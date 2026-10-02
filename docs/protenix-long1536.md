@@ -261,3 +261,27 @@ HIP_VISIBLE_DEVICES=6 PYTHONPATH=.:Protenix python -m benchmarks.protenix.benchm
 Use `--tile 64` with the builder for the two-wave variant. For contiguous
 QKV use `--contiguous-qkv` with both commands and a distinct output directory.
 The builder modifies a private header overlay and never the ROCm installation.
+
+### Pipeline follow-up
+
+With M128/N64/W4 and batch group 8 held fixed, moving V prefetch until after
+the QK tail measured 38.35 ms; delaying it until after softmax measured
+40.72 ms. Enabling the CK fast-exp2 path measured 39.96 ms. All passed the
+operator gate, but none beat the preceding 37.95 ms configuration. SDPA
+before/after measured 34.88/34.82 ms. The installed whole-K prefetch policy
+rejected both M64 and M128 FP32 candidates at compile time with
+`Not supported data types!`; no runtime result is claimed for those builds.
+See [pipeline evidence](../provenance/protenix_attention_prefetch_8ddbdfb.json).
+
+### Pair epilogue candidate
+
+`FIREPROT_ENABLE_LONG1536_EPILOGUES=1`, together with the length opt-in,
+extends the existing HIP LayerNorm and gated transition to the exact
+1536-by-1536 pair bucket. This remains independently experimental pending
+model agreement and controlled model timing. It preserves FP32 and C4.
+Random-weight, full-operation measurements on GPU 6 (seed 641, five warmups,
+twenty repetitions) measured LayerNorm at 11.729 ms native versus 1.931 ms
+HIP, and gated transition at 63.811 versus 46.657 ms. Native repeats were
+11.736 and 63.557 ms. Numerical gates and continuous isolation checks passed.
+Regression tests passed locally (102 passed, 20 skipped) and on GPU 6
+(121 passed, 1 skipped). These are operator results, not model speedups.

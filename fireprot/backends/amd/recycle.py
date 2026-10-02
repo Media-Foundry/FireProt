@@ -16,6 +16,12 @@ PAIR_ROWS = 124 * 124
 PAIR_CHANNELS = 128
 LONG_LAYER_NORM_ROWS = frozenset({1000 * 244, 1000 * 256, 1000 * 1000})
 LONG_TRANSITION_SHAPE = (1000, 1000, PAIR_CHANNELS)
+LONG1536_ROWS = 1536 * 1536
+LONG1536_TRANSITION_SHAPE = (1536, 1536, PAIR_CHANNELS)
+_long1536_epilogues_enabled = (
+    os.environ.get("FIREPROT_ENABLE_LONG1536") == "1"
+    and os.environ.get("FIREPROT_ENABLE_LONG1536_EPILOGUES") == "1"
+)
 LAYER_NORM_OPERATION = "layer_norm"
 TRANSITION_OPERATION = "gated_transition"
 LAYER_NORM_IMPLEMENTATION = "amd-gfx90a-hip-layernorm-f32-c128"
@@ -102,7 +108,9 @@ def _supports_long_layer_norm(
 ) -> bool | tuple[bool, str]:
     if not _long_layer_norm_enabled:
         return False, "disabled by FIREPROT_DISABLE_LONG_LAYERNORM"
-    supported = _base_support(signature, validated_rows=LONG_LAYER_NORM_ROWS)
+    rows = (LONG_LAYER_NORM_ROWS | {LONG1536_ROWS}
+            if _long1536_epilogues_enabled else LONG_LAYER_NORM_ROWS)
+    supported = _base_support(signature, validated_rows=rows)
     if supported is not True:
         return supported
     attributes = dict(signature.attributes)
@@ -159,11 +167,13 @@ def _supports_long_transition(
 ) -> bool | tuple[bool, str]:
     if not _long_transition_enabled:
         return False, "disabled by FIREPROT_DISABLE_LONG_TRANSITION"
-    if signature.shape != LONG_TRANSITION_SHAPE:
-        return False, "shape is not the validated 1000x1000x128 bucket"
+    if signature.shape != LONG_TRANSITION_SHAPE and not (
+        _long1536_epilogues_enabled and signature.shape == LONG1536_TRANSITION_SHAPE
+    ):
+        return False, "shape is not an enabled exact long bucket"
     supported = _base_support(
         signature,
-        validated_rows=frozenset({1000 * 1000}),
+        validated_rows=frozenset({_row_count(signature.shape)}),
     )
     if supported is not True:
         return supported
@@ -277,7 +287,10 @@ def dispatch_layer_norm(
     import torch
 
     rows = _row_count(tuple(x.shape)) if x.shape else 0
-    long_bucket = _long_layer_norm_enabled and rows in LONG_LAYER_NORM_ROWS
+    long_bucket = _long_layer_norm_enabled and (
+        rows in LONG_LAYER_NORM_ROWS
+        or (_long1536_epilogues_enabled and rows == LONG1536_ROWS)
+    )
     common = (
         x.device.type == "cuda"
         and _architecture(x) == "gfx90a"
@@ -323,7 +336,10 @@ def dispatch_transition(
     import torch
 
     shape = tuple(x.shape)
-    long_bucket = _long_transition_enabled and shape == LONG_TRANSITION_SHAPE
+    long_bucket = _long_transition_enabled and (
+        shape == LONG_TRANSITION_SHAPE
+        or (_long1536_epilogues_enabled and shape == LONG1536_TRANSITION_SHAPE)
+    )
     supported = (
         x.device.type == "cuda"
         and _architecture(x) == "gfx90a"
@@ -353,6 +369,7 @@ def fast_path_manifest() -> dict[str, Any]:
         "channel_first_layer_norm_enabled": _channel_first_layer_norm_enabled,
         "long_layer_norm_enabled": _long_layer_norm_enabled,
         "long_transition_enabled": _long_transition_enabled,
+        "long1536_epilogues_enabled": _long1536_epilogues_enabled,
         "selection_counts": [
             {"operation": operation, "implementation": implementation, "count": count}
             for (operation, implementation), count in sorted(_fast_path_counts.items())

@@ -9,6 +9,8 @@ This report covers Protenix Mini-default v0.5.0 on AMD Instinct MI250X/MI250 gfx
 Source identities:
 
 - measured FireProt commit: `773999ae404c561309391fa72902641e5be3fb95`
+- direct CK candidate commit: `619db00e21d942f3ff4f3d202b0b02b93bfe5695`
+- channel-first LayerNorm commit: `47850407da303a21ec84a6327300424082ac4875`
 - independent Protenix integration commit: `316f5778e80965015a80339de632291f1abbb7f5`
 - Protenix upstream baseline: `d3b4db6a121dd4584edd85e93744239325a2b72e`
 - profiler SHA-256: `511213a16ed1e820e0976cec4903638f589c2d1d3bdd657c26bbd14e13ff7b4a`
@@ -52,11 +54,13 @@ On the native C4/S1 run, `get_pairformer_output` took 399.94 ms of the 457.86 ms
 | Triangle multiplication | `amd-short-sequence-torch` | gfx90a, FP32, inference/no-grad, contiguous unbatched pair tensor, `N <= 256`, in-place-safe Protenix path |
 | Triangle attention | `amd-gfx90a-efficient-sdpa` | gfx90a, FP32, QKV `[124,4,124,32]`, observed strided layout and two additive bias shapes |
 | Pair LayerNorm | `amd-gfx90a-hip-layernorm-f32-c128` | gfx90a, FP32, inference/no-grad, contiguous 15,376 by 128 rows, epsilon `1e-5`, supported affine forms |
+| Channel-first pair LayerNorm | `amd-gfx90a-hip-layernorm-f32-c128-channel-first` | gfx90a, FP32, inference/no-grad, exact `[124,124,128]` shape and `[124,1,15376]` stride, full affine parameters, epsilon `1e-5` |
 | Gated transition epilogue | `amd-gfx90a-hip-transition-f32-c128` | gfx90a, FP32, contiguous `[124,124,128]`, expansion factor four |
 
 The new recycle-trunk operations are small handwritten HIP kernels with CK-style static specialization:
 
 - LayerNorm assigns one wave64 to each 128-value row, processes two values per lane, and places four waves in a block. Separate kernels cover full affine, scale-only, and no-affine forms.
+- Channel-first LayerNorm tiles the triangle-contraction output in LDS, reads the physical `[128,124,124]` storage with coalesced accesses, and writes contiguous `[124,124,128]` output while applying normalization, scale, and bias.
 - The transition keeps its three linear layers library-backed and fuses `SiLU(activation) * gate` into a vectorized `float4` kernel.
 - Sources compile lazily through the PyTorch C++ extension loader into excluded `runtime/torch_extensions/`. A missing compiler, unsupported ROCm build, unsupported signature, training/autograd call, or disabled extension falls back to native Protenix.
 
@@ -80,6 +84,12 @@ The dominant 1,588-call matrix multiply is 1.402x faster with hipBLAS than auto 
 
 Global CK is rejected for this bucket. CK remains a candidate for future per-signature kernels, BF16 buckets, and shapes from other model adapters.
 
+### Direct CK candidate
+
+A separate direct CK wrapper calls the PyTorch HIP `gemm_internal_ck<float>` entry point and is built independently from the promoted handwritten HIP extension. Across the same 57 observed signatures, it supported 29 and won only `mm 124x64 @ 64x32`. That signature occurs eight times in the OuterProductMean projections. Its medians were 47.34 us for auto, 30.22 us for hipBLAS, and 26.39 us for direct CK. The isolated advantage over hipBLAS projects only 30.70 us per inference.
+
+Same-seed output validation passed, but formal 30-repetition A/B runs did not improve model medians: C4/S1 changed from 321.03 to 321.68 ms and C4/S5 from 390.06 to 396.30 ms. Direct CK is therefore not promoted. It requires `FIREPROT_ENABLE_CK_OPS=1`, and `FIREPROT_DISABLE_CK_OPS=1` overrides the opt-in. The wrapper uses an internal ATen API, so compilation failure or a version mismatch records the error and returns to the native route without disabling other FireProt kernels.
+
 ## End-to-end performance
 
 | Workload | Metric | Native | FireProt | Native / FireProt |
@@ -96,6 +106,25 @@ Global CK is rejected for this bucket. CK remains a candidate for future per-sig
 | C4/S5 | triangle attention median | 135.45 ms | 94.43 ms | 1.434x |
 
 The C4/S1 FireProt run selected the HIP LayerNorm 15,330 times, the fused transition 2,520 times, triangle multiplication 5,040 times, and triangle attention 5,040 times across warmup and measured calls. Shape-gated native fallbacks remained active for other LayerNorm and transition signatures.
+
+## Incremental channel-first LayerNorm result
+
+The current profile exposed 144 LayerNorm calls per model invocation with logical shape `[124,124,128]` and stride `[124,1,15376]`. They are the channel-first outputs of triangle multiplication. The original route materialized a contiguous layout before applying LayerNorm. The new HIP kernel fuses that layout conversion with normalization, scale, and bias.
+
+On physical GCD 7, 25 warmups and 300 operator measurements produced:
+
+| Metric | Native torch | Fused HIP | Native / HIP |
+| --- | ---: | ---: | ---: |
+| median | 117.48 us | 82.74 us | 1.420x |
+| p95 | 118.59 us | 83.38 us | 1.422x |
+
+The maximum operator error was `2.8610e-6` and RMS error was `1.2336e-7`. A C4/S1 same-seed prediction comparison passed the locked `1e-3` coordinate and confidence gates: aligned coordinate RMSD was `8.5654e-5 A`, maximum coordinate delta was `4.8828e-4 A`, and maximum confidence delta was `1.5259e-5`.
+
+The first formal 30-repetition C4/S1 A/B improved model median from 327.57 to 321.47 ms, a 6.10 ms reduction (`1.019x`), and p95 from 335.06 to 327.17 ms (`1.024x`). Pairformer median improved from 268.09 to 264.58 ms (`1.013x`). All runs passed continuous process monitoring with no external PID.
+
+C4/S5 was sensitive to execution order. A disabled-then-enabled run changed median from 387.64 to 389.74 ms while improving p95 from 418.81 to 408.41 ms. A second enabled-then-disabled run changed median from 387.16 to 384.21 ms while p95 changed from 408.72 to 414.74 ms; its Pairformer median improved from 268.91 to 264.58 ms. The exact operator speedup is established, and the path remains capability-gated with native fallback. The evidence does not establish a stable incremental C4/S5 whole-model speedup.
+
+The path is enabled for its exact validated capability. `FIREPROT_DISABLE_CHANNEL_FIRST_LAYERNORM=1` disables it for diagnosis or A/B measurement.
 
 ## Peak memory
 
@@ -136,7 +165,7 @@ A future early-exit policy requires an independent evaluation set and a converge
 
 1. Capture fresh operator traces for longer token buckets, Base weights, complexes, and the other model adapters before sharing tuning rules.
 2. Revisit the 144-call `bmm 128x124x124` triangle contraction. Auto is 13.60 us faster per isolated call than global hipBLAS, but any local override must beat its dispatch cost and improve end-to-end p95.
-3. Evaluate stride-aware triangle kernels that remove transpose/contiguous copies and fuse residual epilogues. Keep contraction GEMMs library-backed unless a specialized CK or HIP kernel wins end to end.
+3. Extend stride-aware kernels beyond the promoted channel-first LayerNorm and evaluate residual epilogues. Keep contraction GEMMs library-backed unless a specialized CK or HIP kernel wins end to end.
 4. Add BF16 only after operator and end-to-end distributional validation. Existing evidence does not support promoting it.
 5. Implement approximate recycle early exit only after the independent quality protocol above is available.
 
@@ -146,4 +175,4 @@ A future early-exit policy requires an independent evaluation set and a converge
 - The BLAS call inventory comes from a C4/S1 FireProt/auto trace with the same model shape. Custom LayerNorm changes non-BLAS operator counts but does not change the listed GEMM dimensions.
 - Base weights, longer sequences, complexes, ligands, production diffusion-step counts, BF16/FP16, gfx942, and multi-GPU execution are unmeasured.
 - The installed environment does not provide the optional Triton package required by Protenix's `triattention` implementation. FireProt uses PyTorch ROCm efficient attention for the promoted signature.
-- Raw manifests, predictions, and profiler traces remain on DiamondHill under excluded `outputs/` paths. The compact machine-readable record is in `provenance/protenix_amd_benchmark.json`.
+- Raw manifests, predictions, and profiler traces remain on DiamondHill under excluded `outputs/` paths. Compact machine-readable records are in `provenance/protenix_amd_benchmark.json` and `provenance/protenix_amd_incremental_4785040.json`.

@@ -10,15 +10,16 @@ Protenix v1.1.0 is the first working adapter target. The repository now contains
 - same-seed coordinate and confidence validation;
 - a model-neutral operator registry with deterministic capability checks and native fallback;
 - measured process-start BLAS selection for PyTorch ROCm and a matrix covering every observed GEMM signature;
-- validated FP32 gfx90a paths for short-sequence Protenix triangle multiplication, triangle attention, pair LayerNorm, and the gated transition epilogue;
+- validated FP32 gfx90a paths for short-sequence Protenix triangle multiplication, triangle attention, contiguous pair LayerNorm, channel-first pair LayerNorm, and the gated transition epilogue;
 - lazily compiled handwritten HIP kernels with exact capability gates and native fallback;
+- a direct CK GEMM candidate for observed Protenix signatures, kept behind an experimental opt-in when end-to-end measurements do not justify promotion;
 - an independent Protenix patch branch that exposes FireProt dispatch without changing native defaults.
 
 AtlasFold, OpenFold, ESMFold, Base-model coverage, BF16 promotion, long-sequence tuning, and multi-GPU execution remain future work.
 
-## Verified MI250 result
+## Verified primary MI250 result
 
-The current promoted bucket is Protenix Mini-default, 124 tokens, FP32, four cycles, seed 101, one sample, warm in-process caches, no MSA/template search, and either one or five diffusion steps. Each latency result used five warmups and thirty measured repetitions on one exclusively checked gfx90a GCD.
+The primary comparison bucket is Protenix Mini-default, 124 tokens, FP32, four cycles, seed 101, one sample, warm in-process caches, no MSA/template search, and either one or five diffusion steps. Each latency result used five warmups and thirty measured repetitions on one exclusively checked gfx90a GCD. Incremental operator studies are reported below and are not folded into this historical native/FireProt table.
 
 | Workload | Native median | FireProt median | Median speedup | Native p95 | FireProt p95 | p95 speedup |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -28,6 +29,10 @@ The current promoted bucket is Protenix Mini-default, 124 tokens, FP32, four cyc
 Maximum measured PyTorch peak allocated memory fell from 850,018,304 to 757,955,584 bytes. Maximum reserved memory fell from 1,029,701,632 to 920,649,728 bytes. Same-seed Mini-default C4/S1 and C4/S5 comparisons passed the locked 1e-3 coordinate and confidence thresholds.
 
 The observed BLAS matrix covers 57 FP32 `mm`, `bmm`, and `addmm` signatures and 3,132 calls. hipBLAS won the dominant 1,588-call signature and is the validated process policy for this exact bucket. CK won five isolated signatures, was slower on the dominant signature, and did not support 15 signatures, so global CK is not promoted. CK and custom HIP remain per-operation candidates.
+
+A later direct CK matrix found one winner among the 57 signatures: the eight OuterProductMean `124x64 @ 64x32` calls. Direct CK measured 26.39 us versus 30.22 us for hipBLAS, but formal C4/S1 and C4/S5 runs did not improve end-to-end medians. That route therefore requires `FIREPROT_ENABLE_CK_OPS=1` and is not a default optimization.
+
+The promoted channel-first LayerNorm kernel targets the 144 triangle-multiplication outputs with exact shape `[124,124,128]` and stride `[124,1,15376]`. It fuses layout conversion, normalization, scale, and bias. The operator median improved from 117.48 to 82.74 us (`1.420x`) with a maximum absolute error of `2.86e-6`. A 30-repetition C4/S1 A/B saved 6.10 ms at the model median (`1.019x`) and improved p95 by `1.024x`. Two C4/S5 orders produced mixed whole-model results, so no stable incremental C4/S5 speedup is claimed.
 
 Reducing four recycle cycles to one, two, or three measured 2.700x, 1.768x, and 1.289x speedups over C4. Those outputs differed from C4 by 5.760, 2.691, and 4.221 A aligned RMSD on this development case. Cycle reduction therefore remains an explicit approximate choice; the default stays at four cycles.
 
@@ -55,6 +60,8 @@ FIREPROT_BACKEND=fireprot FIREPROT_BLAS_BACKEND=hipblas \
 
 `FIREPROT_BLAS_BACKEND` accepts `auto`, `hipblaslt`, `hipblas`, or `ck`. It is fixed once at process start. `hipblas` is validated only for the measured Mini/124-token/FP32 bucket; use `auto` for unmeasured buckets until they have their own matrix and end-to-end gate. The promoted operator implementations select only validated gfx90a/FP32/inference signatures. Unsupported architectures, dtypes, shapes, layouts, masks, training/autograd calls, aliasing modes, or extension builds use the upstream torch path.
 
+The exact channel-first LayerNorm path is enabled by the FireProt backend and can be disabled for A/B diagnosis with `FIREPROT_DISABLE_CHANNEL_FIRST_LAYERNORM=1`. The direct CK OuterProductMean candidate is experimental and requires `FIREPROT_ENABLE_CK_OPS=1`; `FIREPROT_DISABLE_CK_OPS=1` overrides that opt-in.
+
 ## Benchmark
 
 ```bash
@@ -72,7 +79,7 @@ HIP_VISIBLE_DEVICES=6 PYTHONPATH=. python -m benchmarks.protenix.benchmark_blas 
   --output-dir outputs/benchmarks/blas-all-calls
 ```
 
-Raw predictions, profiler traces, weights, and hardware-local tuning data remain under excluded `outputs/` and `runtime/` paths. The compact measured record is [provenance/protenix_amd_benchmark.json](provenance/protenix_amd_benchmark.json).
+Raw predictions, profiler traces, weights, and hardware-local tuning data remain under excluded `outputs/` and `runtime/` paths. Compact measured records are [the primary Protenix benchmark](provenance/protenix_amd_benchmark.json) and [the incremental CK and channel-first LayerNorm study](provenance/protenix_amd_incremental_4785040.json).
 
 ## Repository layout
 

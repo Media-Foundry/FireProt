@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "status": "measured-development-result",
+  "created_at": "2026-10-02",
+  "scope": {
+    "model": "protenix_mini_default_v0.5.0",
+    "input": "cases/1izr_L124/input.json",
+    "token_count": 124,
+    "dtype": "fp32",
+    "cycles": 4,
+    "samples": 1,
+    "seed": 101,
+    "msa": false,
+    "templates": false,
+    "cache_state": "warm-within-process",
+    "blas_backend": "hipblas",
+    "hardware": "AMD Instinct MI250X / MI250 gfx90a",
+    "allowed_physical_devices": [6, 7]
+  },
+  "sources": {
+    "protenix_upstream_commit": "d3b4db6a121dd4584edd85e93744239325a2b72e",
+    "direct_ck_candidate_commit": "619db00e21d942f3ff4f3d202b0b02b93bfe5695",
+    "channel_first_layer_norm_commit": "47850407da303a21ec84a6327300424082ac4875",
+    "profile_script_sha256": "511213a16ed1e820e0976cec4903638f589c2d1d3bdd657c26bbd14e13ff7b4a",
+    "blas_benchmark_script_sha256": "5560b5efe2b1e3ff586f481bbcf1f049d9db7445d2766fe1e3483dcaf2f7e477",
+    "benchmark_config_sha256": "ee8de5227f50f1f9348fde4980127cc81ad20bfc898a8281dd87554accaabffa",
+    "amd_kernel_sha256": "9a81c009675839c0a08fd0742b0995d25ee277df2273113a610301c6d1f3e935",
+    "ck_wrapper_sha256": "f82f123bf12b6f9a5bea05acaac11dc2c646e126c6553dbdf24e9c81747829f0"
+  },
+  "runtime": {
+    "python": "3.12.13",
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850",
+    "process_monitor": "amd-smi process --json",
+    "all_accepted_runs_passed_process_monitor": true,
+    "external_pids": []
+  },
+  "direct_ck_opm_candidate": {
+    "status": "implemented-experimental-not-promoted",
+    "operation": "bias-free FP32 GEMM for OuterProductMean linear_1 and linear_2",
+    "signature": "mm 124x64 @ 64x32",
+    "implementation": "ATen native HIP gemm_internal_ck<float>",
+    "observed_calls_per_inference": 8,
+    "all_call_matrix": {
+      "physical_device": 7,
+      "signature_count": 57,
+      "direct_ck_supported_signatures": 29,
+      "direct_ck_selected_signatures": 1,
+      "auto_median_us": 47.33600094914436,
+      "hipblas_median_us": 30.223999172449112,
+      "direct_ck_median_us": 26.38700045645237,
+      "direct_ck_p95_us": 27.02699974179268,
+      "projected_savings_over_auto_us": 167.59200394153595,
+      "projected_savings_over_hipblas_us": 30.695989727973938
+    },
+    "same_seed_validation": {
+      "coordinate_tolerance_angstrom": 0.001,
+      "confidence_tolerance": 0.001,
+      "atoms": 945,
+      "raw_rmsd_angstrom": 0.00008460374740674977,
+      "aligned_rmsd_angstrom": 0.00008340140727841825,
+      "max_abs_coordinate_delta_angstrom": 0.00048828125,
+      "max_abs_confidence_delta": 0.0000152587890625,
+      "passed": true
+    },
+    "end_to_end_ab": {
+      "warmups": 5,
+      "repetitions": 30,
+      "physical_device": 6,
+      "c4_s1": {
+        "disabled_median_ms": 321.026123046875,
+        "enabled_median_ms": 321.6783142089844,
+        "median_speedup": 0.9979725361228868,
+        "disabled_p95_ms": 332.1265563964844,
+        "enabled_p95_ms": 324.8121643066406,
+        "p95_speedup": 1.0225188367112341
+      },
+      "c4_s5": {
+        "disabled_median_ms": 390.05938720703125,
+        "enabled_median_ms": 396.2980499267578,
+        "median_speedup": 0.9842576497136951,
+        "disabled_p95_ms": 394.0518493652344,
+        "enabled_p95_ms": 419.6572265625,
+        "p95_speedup": 0.9389850202104116
+      }
+    },
+    "runtime_policy": "FIREPROT_ENABLE_CK_OPS=1 is required; FIREPROT_DISABLE_CK_OPS=1 overrides it.",
+    "conclusion": "Direct CK wins the isolated signature but the eight calls do not produce an end-to-end speedup. The route remains an explicit experimental candidate."
+  },
+  "channel_first_layer_norm": {
+    "status": "promoted-for-exact-capability",
+    "operation": "fused channel-first layout conversion, FP32 LayerNorm, scale, and bias",
+    "input_shape": [124, 124, 128],
+    "input_stride": [124, 1, 15376],
+    "output_layout": "contiguous",
+    "epsilon": 0.00001,
+    "observed_calls_per_inference": 144,
+    "operator_benchmark": {
+      "physical_device": 7,
+      "warmups": 25,
+      "iterations": 300,
+      "native_median_us": 117.4750030040741,
+      "candidate_median_us": 82.74400234222412,
+      "median_speedup": 1.419740400255292,
+      "native_p95_us": 118.59499663114548,
+      "candidate_p95_us": 83.38499814271927,
+      "p95_speedup": 1.4222581911935985,
+      "max_abs_error": 0.00000286102294921875,
+      "rms_error": 0.00000012336418819813844
+    },
+    "same_seed_validation": {
+      "coordinate_tolerance_angstrom": 0.001,
+      "confidence_tolerance": 0.001,
+      "atoms": 945,
+      "raw_rmsd_angstrom": 0.00008827699745902214,
+      "aligned_rmsd_angstrom": 0.00008565427055944494,
+      "max_abs_coordinate_delta_angstrom": 0.00048828125,
+      "max_abs_confidence_delta": 0.0000152587890625,
+      "passed": true
+    },
+    "end_to_end_ab": {
+      "warmups": 5,
+      "repetitions": 30,
+      "c4_s1": {
+        "physical_device": 7,
+        "disabled_median_ms": 327.56858825683594,
+        "enabled_median_ms": 321.4728088378906,
+        "median_savings_ms": 6.0957794189453125,
+        "median_speedup": 1.0189620373834456,
+        "disabled_p95_ms": 335.0585632324219,
+        "enabled_p95_ms": 327.16741943359375,
+        "p95_speedup": 1.0241195893297983,
+        "disabled_pairformer_median_ms": 268.09119033813477,
+        "enabled_pairformer_median_ms": 264.5848298072815,
+        "pairformer_median_speedup": 1.0132523113037404
+      },
+      "c4_s5_first_order": {
+        "physical_device": 7,
+        "order": "disabled-then-enabled",
+        "disabled_median_ms": 387.64161682128906,
+        "enabled_median_ms": 389.73541259765625,
+        "median_speedup": 0.9946276481205245,
+        "disabled_p95_ms": 418.81439208984375,
+        "enabled_p95_ms": 408.40777587890625,
+        "p95_speedup": 1.0254809453334774,
+        "disabled_pairformer_median_ms": 267.703369140625,
+        "enabled_pairformer_median_ms": 269.74355602264404,
+        "pairformer_median_speedup": 0.9924365685983328
+      },
+      "c4_s5_reverse_order": {
+        "physical_device": 6,
+        "order": "enabled-then-disabled",
+        "disabled_median_ms": 387.1642608642578,
+        "enabled_median_ms": 384.20790100097656,
+        "median_savings_ms": 2.95635986328125,
+        "median_speedup": 1.007694687838483,
+        "disabled_p95_ms": 408.7216491699219,
+        "enabled_p95_ms": 414.7418212890625,
+        "p95_speedup": 0.9854845308331114,
+        "disabled_pairformer_median_ms": 268.9097213745117,
+        "enabled_pairformer_median_ms": 264.57835721969604,
+        "pairformer_median_speedup": 1.016370818083276
+      }
+    },
+    "selection_counts_per_model_call": {
+      "channel_first_layer_norm": 144,
+      "contiguous_layer_norm": 438,
+      "native_layer_norm": 223
+    },
+    "disable_switch": "FIREPROT_DISABLE_CHANNEL_FIRST_LAYERNORM=1",
+    "conclusion": "The exact operator is faster and numerically valid. C4/S1 improves end to end. C4/S5 whole-model medians and p95 are order-sensitive, so no stable C4/S5 end-to-end speedup is claimed."
+  },
+  "tests": {
+    "local": "74 passed, 2 skipped",
+    "diamondhill_hip": "75 passed, 1 skipped",
+    "diamondhill_visible_devices": "7"
+  },
+  "limits": [
+    "All measurements use one 124-token development input and Mini-default weights.",
+    "The direct CK path uses an internal PyTorch ATen HIP API and is version-gated by compilation with native fallback.",
+    "The channel-first kernel is promoted only for gfx90a, FP32 inference, exact shape and stride, full affine parameters, and epsilon 1e-5.",
+    "C4/S5 whole-model incremental results are mixed across execution order, so they do not establish a stable end-to-end improvement.",
+    "Raw manifests, predictions, and traces remain in excluded DiamondHill outputs directories."
+  ]
+}

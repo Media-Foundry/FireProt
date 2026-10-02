@@ -123,6 +123,36 @@ def test_exclusive_preflight_rejects_busy_selected_device() -> None:
     }
 
 
+def test_amd_smi_process_ids_selects_physical_device_and_skips_bad_rows() -> None:
+    payload = [
+        {
+            "gpu": "6",
+            "process_list": [
+                {"process_info": {"pid": "123"}},
+                {"process_info": {"pid": 456}},
+                {"process_info": {}},
+            ],
+        },
+        {"gpu": 7, "process_list": [{"process_info": {"pid": 789}}]},
+    ]
+
+    assert profile_inference._amd_smi_process_ids(payload, 6) == {123, 456}
+    assert profile_inference._amd_smi_process_ids(payload, 7) == {789}
+    assert profile_inference._amd_smi_process_ids(payload, 5) == set()
+
+
+def test_gpu_process_monitor_fails_closed_when_amd_smi_is_unavailable() -> None:
+    with mock.patch.object(profile_inference.shutil, "which", return_value=None):
+        monitor = profile_inference._GpuProcessMonitor(6, 123, 1.0)
+
+    monitor.start()
+    report = monitor.stop()
+
+    assert report["available"] is False
+    assert report["samples"] == 0
+    assert report["passed"] is False
+
+
 def test_rocprof_import_groups_kernel_categories(tmp_path: pathlib.Path) -> None:
     source = tmp_path / "kernel_stats.csv"
     source.write_text(

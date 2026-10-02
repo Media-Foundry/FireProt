@@ -19,9 +19,11 @@ from typing import Any
 from benchmarks.protenix.profile_inference import (
     DEFAULT_CONFIG,
     REPO_ROOT,
+    _GpuProcessMonitor,
     _git_commit,
     _json_load,
     _rocm_preflight,
+    _selected_physical_device,
     _sha256,
 )
 from fireprot.backends.amd.blas import (
@@ -406,8 +408,8 @@ def main() -> int:
             "config_path": str(config_path),
             "config_sha256": _sha256(config_path),
             "source": {
-                "fireprot_commit": _git_commit(REPO_ROOT)
-                or os.environ.get("FIREPROT_SOURCE_COMMIT"),
+                "fireprot_commit": os.environ.get("FIREPROT_SOURCE_COMMIT")
+                or _git_commit(REPO_ROOT),
                 "benchmark_script_sha256": _sha256(
                     pathlib.Path(__file__).resolve()
                 ),
@@ -417,7 +419,9 @@ def main() -> int:
         }
         spec_path = output_dir / f"{backend}-spec.json"
         spec_path.write_text(json.dumps(spec, indent=2) + "\n", encoding="utf-8")
-        completed = subprocess.run(
+        environment = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
+        _, physical_index = _selected_physical_device(environment)
+        process = subprocess.Popen(
             [
                 sys.executable,
                 str(pathlib.Path(__file__).resolve()),
@@ -427,16 +431,54 @@ def main() -> int:
                 str(spec_path),
             ],
             cwd=REPO_ROOT,
-            env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"},
-            check=False,
+            env=environment,
         )
-        if completed.returncode != 0:
-            report = _json_load(output)
+        monitor = _GpuProcessMonitor(
+            physical_index,
+            process.pid,
+            spec["measurement"].get("process_monitor_interval_seconds", 1.0),
+        )
+        monitor.start()
+        try:
+            returncode = process.wait()
+        finally:
+            monitor_report = monitor.stop()
+
+        if not output.is_file():
+            raise RuntimeError(
+                f"BLAS worker for {backend} exited with {returncode} without {output}"
+            )
+        report = _json_load(output)
+        report["gpu_process_monitor"] = monitor_report
+        if (
+            spec["measurement"].get("reject_external_gpu_processes", False)
+            and not monitor_report["passed"]
+        ):
+            report.update(
+                {
+                    "status": "contaminated",
+                    "contamination": {
+                        "type": "external_gpu_process",
+                        "reason": monitor_report.get("reason"),
+                    },
+                }
+            )
+        output.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+        if returncode != 0:
             if report.get("error", {}).get("message", "").startswith(
                 "Exclusive-device preflight failed:"
             ):
                 raise RuntimeError(report["error"]["message"])
-        reports[backend] = _json_load(output)
+            raise RuntimeError(
+                f"BLAS worker for {backend} failed with exit code {returncode}; "
+                f"see {output}"
+            )
+        if report.get("status") == "contaminated":
+            raise RuntimeError(
+                f"BLAS worker for {backend} was contaminated by another GPU process; "
+                f"see {output}"
+            )
+        reports[backend] = report
 
     summary = {
         "schema_version": 1,

@@ -25,6 +25,7 @@ import shutil
 import statistics
 import subprocess
 import sys
+import threading
 import time
 import traceback
 from collections import defaultdict
@@ -109,14 +110,7 @@ def _rocm_preflight(measurement: dict[str, Any]) -> dict[str, Any]:
                 ]
             ),
         }
-    visible = os.environ.get("HIP_VISIBLE_DEVICES") or os.environ.get(
-        "ROCR_VISIBLE_DEVICES"
-    )
-    physical_index = None
-    if visible:
-        first = visible.split(",", 1)[0].strip()
-        if first.isdigit():
-            physical_index = int(first)
+    visible, physical_index = _selected_physical_device(os.environ)
     result["visible_devices"] = visible
     result["selected_physical_index"] = physical_index
     result["exclusive_check"] = {"required": False, "passed": None}
@@ -166,6 +160,106 @@ def _rocm_preflight(measurement: dict[str, Any]) -> dict[str, Any]:
     if not check["passed"]:
         check["reason"] = "selected device is already active"
     return result
+
+
+def _selected_physical_device(environment: Any) -> tuple[str | None, int | None]:
+    """Resolve the first physical GPU selected by the ROCm visibility variables."""
+    visible = environment.get("HIP_VISIBLE_DEVICES") or environment.get(
+        "ROCR_VISIBLE_DEVICES"
+    )
+    if not visible:
+        return visible, None
+    first = visible.split(",", 1)[0].strip()
+    return visible, int(first) if first.isdigit() else None
+
+
+def _amd_smi_process_ids(payload: Any, device_index: int) -> set[int]:
+    """Return PIDs attached to one physical GPU from `amd-smi process --json`."""
+    if not isinstance(payload, list):
+        return set()
+    for gpu_record in payload:
+        if not isinstance(gpu_record, dict):
+            continue
+        try:
+            record_device_index = int(gpu_record.get("gpu"))
+        except (TypeError, ValueError):
+            continue
+        if record_device_index != device_index:
+            continue
+        result = set()
+        for process in gpu_record.get("process_list", []):
+            try:
+                result.add(int(process["process_info"]["pid"]))
+            except (KeyError, TypeError, ValueError):
+                continue
+        return result
+    return set()
+
+
+class _GpuProcessMonitor:
+    """Detect another process joining the selected GPU after preflight."""
+
+    def __init__(self, device_index: int | None, allowed_pid: int, interval: float):
+        self.device_index = device_index
+        self.allowed_pid = allowed_pid
+        self.interval = max(0.1, float(interval))
+        self.command = shutil.which("amd-smi")
+        self.samples = 0
+        self.external_pids: set[int] = set()
+        self.errors: list[str] = []
+        self._stop = threading.Event()
+        self._thread: threading.Thread | None = None
+
+    def start(self) -> None:
+        if self.device_index is None or self.command is None:
+            return
+        self._thread = threading.Thread(target=self._run, daemon=True)
+        self._thread.start()
+
+    def _run(self) -> None:
+        while not self._stop.is_set():
+            result = _run_json_command([self.command, "process", "--json"])
+            self.samples += 1
+            if result.get("returncode") == 0 and "data" in result:
+                pids = _amd_smi_process_ids(result["data"], self.device_index or 0)
+                self.external_pids.update(pids - {self.allowed_pid})
+            else:
+                error = result.get("error") or result.get("stderr") or "unknown error"
+                if str(error) not in self.errors:
+                    self.errors.append(str(error))
+            self._stop.wait(self.interval)
+
+    def stop(self) -> dict[str, Any]:
+        self._stop.set()
+        if self._thread is not None:
+            self._thread.join(timeout=max(2.0, self.interval * 4))
+        available = self.command is not None and self.device_index is not None
+        passed = (
+            available
+            and self.samples > 0
+            and not self.external_pids
+            and not self.errors
+        )
+        report = {
+            "available": available,
+            "command": [self.command, "process", "--json"] if self.command else None,
+            "physical_device_index": self.device_index,
+            "interval_seconds": self.interval,
+            "samples": self.samples,
+            "allowed_pid": self.allowed_pid,
+            "external_pids": sorted(self.external_pids),
+            "errors": self.errors,
+            "passed": passed,
+        }
+        if not available:
+            report["reason"] = "amd-smi or the selected physical device is unavailable"
+        elif self.samples == 0:
+            report["reason"] = "no process-monitor samples were collected"
+        elif self.external_pids:
+            report["reason"] = "another process used the selected device during measurement"
+        elif self.errors:
+            report["reason"] = "one or more process-monitor samples failed"
+        return report
 
 
 def _stats(values: list[float]) -> dict[str, float | int] | None:
@@ -421,9 +515,17 @@ def _run_worker(spec: dict[str, Any]) -> pathlib.Path:
             "PYTHONDONTWRITEBYTECODE": "1",
         }
     )
-    command = [sys.executable, str(pathlib.Path(__file__).resolve()), "--_worker-spec", str(spec_path)]
+    command = [
+        sys.executable,
+        str(pathlib.Path(__file__).resolve()),
+        "--_worker-spec",
+        str(spec_path),
+    ]
+    _, physical_index = _selected_physical_device(environment)
+    process: subprocess.Popen[str] | None = None
+    monitor: _GpuProcessMonitor | None = None
     with log_path.open("w", encoding="utf-8") as log:
-        completed = subprocess.run(
+        process = subprocess.Popen(
             command,
             cwd=PROTENIX_ROOT,
             env=environment,
@@ -431,14 +533,51 @@ def _run_worker(spec: dict[str, Any]) -> pathlib.Path:
             stderr=subprocess.STDOUT,
             text=True,
         )
-    if completed.returncode != 0:
+        monitor = _GpuProcessMonitor(
+            physical_index,
+            process.pid,
+            spec["measurement"].get("process_monitor_interval_seconds", 1.0),
+        )
+        monitor.start()
+        try:
+            returncode = process.wait()
+        finally:
+            monitor_report = monitor.stop()
+
+    manifest_path = run_dir / "manifest.json"
+    if manifest_path.is_file():
+        manifest = _json_load(manifest_path)
+        manifest["gpu_process_monitor"] = monitor_report
+        reject_external = bool(
+            spec["measurement"].get("reject_external_gpu_processes", False)
+        )
+        if reject_external and not monitor_report["passed"]:
+            manifest.update(
+                {
+                    "status": "contaminated",
+                    "contamination": {
+                        "type": "external_gpu_process",
+                        "reason": monitor_report.get("reason"),
+                    },
+                }
+            )
+        manifest_path.write_text(
+            json.dumps(manifest, indent=2, default=str) + "\n", encoding="utf-8"
+        )
+
+    if returncode != 0:
         raise RuntimeError(
             f"Worker failed for {spec['workload']['id']} with exit code "
-            f"{completed.returncode}; see {log_path}"
+            f"{returncode}; see {log_path}"
         )
-    manifest_path = run_dir / "manifest.json"
     if not manifest_path.is_file():
         raise RuntimeError(f"Worker did not write {manifest_path}")
+    manifest = _json_load(manifest_path)
+    if manifest.get("status") == "contaminated":
+        raise RuntimeError(
+            f"Worker result for {spec['workload']['id']} was contaminated by "
+            f"another GPU process; see {manifest_path}"
+        )
     return manifest_path
 
 

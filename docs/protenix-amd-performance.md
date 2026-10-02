@@ -1,6 +1,6 @@
 # Protenix AMD performance report
 
-Status: measured development result, 2026-10-02.
+Status: measured development result, 2026-10-03.
 
 ## Scope and provenance
 
@@ -8,7 +8,7 @@ This report covers Protenix Mini-default v0.5.0 on AMD Instinct MI250X/MI250 gfx
 
 Source identities:
 
-- long-sequence FireProt code commit: `1a95f90`
+- long-sequence FireProt code commit: `14eb9f7` (packed candidate: `dc5c923`)
 - long-sequence Protenix integration commit: `77218da70a9c84b101049aa0adf87cb0be461d15`
 - long-sequence input SHA-256: `f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac`
 - long-sequence sequence SHA-256: `462bb697ecdcce2f979b00075e60d96fbfcd1b18ba3d92f5427cb03befbcc570`
@@ -49,7 +49,7 @@ flowchart TD
 
 Each Pairformer block performs two triangle multiplications, two triangle attentions, a pair transition, and single-state work. Recycling repeats the complete sixteen-block trunk. The confidence head also contains Pairformer work, so raw `PairformerStack.forward` event counts include one post-recycle confidence stack; the `get_pairformer_output` stage is the clean recycle-trunk boundary.
 
-On the native 1,000-token C4/S1 run, `get_pairformer_output` took 41.480 seconds of the 45.310-second model median. Triangle attention took 29.486 seconds and triangle multiplication took 12.460 seconds. The recycle trunk is therefore the dominant long-sequence optimization target, with triangle attention as its largest measured component. This split is measured for one Mini-default input and does not establish the same mix for Base weights, complexes, or other models.
+On the freshly repeated native 1,000-token C4/S1 run, `get_pairformer_output` took 41.530 seconds of the 45.350-second model median. Triangle attention took 29.468 seconds and triangle multiplication took 12.505 seconds. The recycle trunk is therefore the dominant long-sequence optimization target, with triangle attention as its largest measured component. This split is measured for one Mini-default input and does not establish the same mix for Base weights, complexes, or other models.
 
 ## Promoted implementation set
 
@@ -57,7 +57,8 @@ On the native 1,000-token C4/S1 run, `get_pairformer_output` took 41.480 seconds
 | --- | --- | --- |
 | Process BLAS | PyTorch `hipblas` preference | Fixed comparison policy for the measured 124- and 1,000-token buckets; backend optimality was established only for the 124-token matrix |
 | Triangle multiplication | `amd-short-sequence-torch` | gfx90a, FP32, inference/no-grad, contiguous unbatched pair tensor, `N <= 256`, in-place-safe Protenix path |
-| Long triangle multiplication gates | `amd-gfx90a-hip-triangle-gates-f32-n1000-c128` | gfx90a, FP32, inference/no-grad, exact contiguous `[1000,1000,128]`, in-place-safe chunked Protenix path, implicit pair mask |
+| Long packed triangle multiplication | `amd-gfx90a-hip-triangle-packed-f32-n1000-c128` | gfx90a, FP32, inference/no-grad, exact contiguous `[1000,1000,128]`, implicit mask, in-place add or overwrite |
+| Long triangle multiplication gates (diagnostic fallback) | `amd-gfx90a-hip-triangle-gates-f32-n1000-c128` | gfx90a, FP32, inference/no-grad, exact contiguous `[1000,1000,128]`, in-place-safe chunked Protenix path, implicit pair mask |
 | Triangle attention | `amd-gfx90a-efficient-sdpa` | gfx90a, FP32, QKV `[124,4,124,32]`, observed strided layout and two additive bias shapes |
 | Long triangle attention | `amd-gfx90a-efficient-sdpa` | gfx90a, FP32, QKV `[1000,4,1000,32]`, observed strided layout, four heads, head dimension 32, exact implicit-mask or dense-mask bias shapes |
 | Pair LayerNorm | `amd-gfx90a-hip-layernorm-f32-c128` | gfx90a, FP32, inference/no-grad, contiguous 15,376 by 128 rows, epsilon `1e-5`, supported affine forms |
@@ -73,7 +74,7 @@ The new recycle-trunk operations are small handwritten HIP kernels with CK-style
 - The transition keeps its three linear layers library-backed and fuses `SiLU(activation) * gate` into a vectorized `float4` kernel. The long path is limited to the exact measured pair tensor.
 - Sources compile lazily through the PyTorch C++ extension loader into excluded `runtime/torch_extensions/`. A missing compiler, unsupported ROCm build, unsupported signature, training/autograd call, or disabled extension falls back to native Protenix.
 
-Triangle attention uses ROCm memory-efficient scaled dot-product attention with an outer batch chunk of 64. For the measured long input, the Protenix integration omits an implicit all-ones pair mask and its zero additive bias, then broadcasts only the triangle bias into each SDPA chunk. This avoids the native full `[1000,4,1000,1000]` attention matrix. Triangle multiplication selects the direct non-chunked update for the validated short sequence. The 1,000-token path retains Protenix's chunked in-place contraction and uses handwritten HIP to fuse `sigmoid(gate) * projection` and `sigmoid(gate) * output` epilogues.
+Triangle attention uses ROCm memory-efficient scaled dot-product attention with an outer batch chunk of 64. For the measured long input, the Protenix integration omits an implicit all-ones pair mask and its zero additive bias, then broadcasts only the triangle bias into each SDPA chunk. This avoids the native full `[1000,4,1000,1000]` attention matrix. Triangle multiplication selects the direct non-chunked update for the validated short sequence. The default 1,000-token path normalizes once, fuses sigmoid projection with channel-first packing, performs a library BMM, and fuses unpacking with output LayerNorm. The original chunked gate path remains available through `FIREPROT_DISABLE_LONG_TRIANGLE_PACKED=1`. See [the packed triangle implementation study](protenix-packed-triangle.md) for mathematical directions, memory tradeoffs, operator tests, and the incremental A/B.
 
 ## Primary 1,000-token end-to-end result
 
@@ -81,21 +82,27 @@ The primary workload is Mini-default, C4/S1, FP32, seed 101, one sample, no MSA/
 
 | Metric | Native median | FireProt median | Native / FireProt |
 | --- | ---: | ---: | ---: |
-| Model | 45.310 s | 20.886 s | 2.169x |
-| Model p95 | 45.807 s | 20.893 s | 2.192x |
-| Pairformer/recycle trunk | 41.480 s | 19.433 s | 2.135x |
-| Triangle attention | 29.486 s | 7.079 s | 4.165x |
-| Triangle multiplication | 12.460 s | 11.326 s | 1.100x |
+| Model | 45.350 s | 13.501 s | 3.359x |
+| Model p95 | 45.416 s | 13.556 s | 3.350x |
+| Pairformer/recycle trunk | 41.530 s | 12.456 s | 3.334x |
+| Triangle attention | 29.468 s | 7.085 s | 4.159x |
+| Triangle multiplication | 12.505 s | 3.914 s | 3.195x |
 
-The three native model samples were 45.310, 45.158, and 45.862 seconds. The three FireProt samples were 20.893, 20.866, and 20.886 seconds. Peak allocated memory fell from 39,499,758,592 to 10,037,256,704 bytes, a `74.59%` reduction. Peak reserved memory fell from 42,756,734,976 to 14,686,355,456 bytes, a `65.65%` reduction. Across warmup and measured calls, the accelerated run selected long triangle attention and long triangle-gate fusion 576 times each, long pair LayerNorm 3,480 times, and the long gated transition 288 times. Another 7,804 LayerNorm and 288 transition calls did not match the promoted signatures and used native behavior.
+The freshly repeated native model samples were 45.416, 45.350, and 44.703 seconds. The default FireProt samples were 13.556, 13.501, and 13.477 seconds. Both timing runs identify FireProt source `14eb9f7` and Protenix source `77218da`, and both passed continuous physical-GPU-6 process monitoring. The reported p95 uses nearest rank on three samples and is descriptive, not a production tail-latency estimate.
 
-The numerical gate compared native and default FireProt predictions with the same model, input, C4/S1 settings, seed, and cache policy. Across 7,979 atoms, raw coordinate RMSD was `9.32e-5 A`, aligned RMSD was `9.28e-5 A`, and maximum coordinate delta was `9.77e-4 A`. The maximum numeric confidence delta was `3.81e-6`; schemas matched and all values were finite. The locked coordinate and confidence tolerances were `1e-3`, so the comparison passed.
+Peak allocated memory fell from 39,499,758,592 to 10,037,256,704 bytes (`74.59%`). Peak reserved memory fell from 42,756,734,976 to 13,912,506,368 bytes (`67.46%`). Long triangle attention and packed triangle multiplication were each selected 576 times across warmup and measured calls. The packed implementation uses more temporary memory inside triangle multiplication than the chunked implementation, but it did not increase the whole-model allocated peak for this exact bucket.
 
-The synchronized GPU model timings exclude model loading, preprocessing, and serialization. The full repeated-inference wall time, which includes one warmup and three measured calls, improved from 223.610 to 125.839 seconds (`1.777x`). The complete benchmark worker wall time improved from 227.040 to 129.171 seconds (`1.758x`). These repeated-run wall measurements are not a single-request cold-start result.
+A same-source incremental A/B at candidate commit `dc5c923` changed the model median from 20.865 to 13.495 seconds (`1.546x`) and triangle multiplication from 11.324 to 3.919 seconds (`2.889x`). This comparison isolates the new packing and normalization flow from the preceding acceleration set.
+
+The final default-path numerical validation covered 7,979 atoms: raw coordinate RMSD was `9.59e-5 A`, aligned RMSD `9.46e-5 A`, and maximum coordinate delta `9.77e-4 A`. Maximum confidence delta was `7.63e-6`; all values were finite and schemas matched. The locked aligned-RMSD and confidence tolerances of `1e-3` passed. The numerical reference came from the unchanged native Protenix path; the timing reference was freshly measured.
+
+GPU model timings exclude loading, preprocessing, and serialization. Repeated-inference wall time, including one warmup and three measured calls, improved from 223.146 to 96.662 seconds (`2.309x`). Complete benchmark worker wall time improved from 226.715 to 100.260 seconds (`2.261x`). These are repeated-run wall measurements, not single-request cold-start results.
 
 This input has no experimental-coordinate mapping in FireProt. The numerical gate establishes agreement with native Protenix, while the timing and memory results establish performance for this exact workload. They do not establish structure accuracy or generalization.
 
 ## Incremental long LayerNorm and transition results
+
+These studies predate packed triangle multiplication and are retained as incremental evidence for the preceding acceleration set.
 
 The existing wave64 LayerNorm kernel was measured at each row count observed in the 1,000-token profile. Against PyTorch LayerNorm, medians improved by 6.276x at 244,000 rows, 6.308x at 256,000 rows, and 6.363x at 1,000,000 rows. Maximum absolute error across these shapes was `2.86e-6`. A same-source end-to-end A/B selected the kernel 3,480 times across warmup and measured calls and improved model median from 22.977 to 21.303 seconds (`1.079x`) and p95 from 23.012 to 21.493 seconds (`1.071x`).
 
@@ -103,7 +110,13 @@ The exact long gated transition keeps its three GEMMs unchanged and replaces the
 
 `FIREPROT_DISABLE_LONG_LAYERNORM=1` and `FIREPROT_DISABLE_LONG_TRANSITION=1` disable these paths for diagnostic A/B runs. They are default enabled only for the measured capabilities.
 
-## Complete observed BLAS call matrix
+## Long-sequence BLAS matrix
+
+The 1,000-token profile preceding packed triangle multiplication supplied 62 FP32 BLAS signatures. Auto, hipBLAS, and hipBLASLt supported all 62; process-wide CK supported 48, and the direct CK extension supported 31. Every backend run passed continuous GPU-7 process monitoring. The major projection GEMMs were slower with the measured CK routes. The complete compact matrix is `provenance/protenix_amd_long1000_blas_a8bbfef.json`.
+
+The isolated benchmark replays contiguous operands with observed dimensions and does not preserve the original strides. Process-wide preferences can also internally fall back. These results screen candidates; end-to-end measurements decide promotion. With packed triangle multiplication, hipBLASLt measured 13.431 seconds against hipBLAS at 13.495 seconds, with about 78 MB more allocated memory. This small three-sample difference did not justify changing the reported hipBLAS policy.
+
+## Historical short-sequence BLAS call matrix
 
 A C4/S1 operator trace contained 57 distinct FP32 `mm`, `bmm`, and `addmm` signatures, 3,132 calls, and 132.926 ms of summed operator device time. Every signature was benchmarked in isolated processes with `auto`, `hipblaslt`, `hipblas`, and `ck`; all four processes passed continuous GPU process monitoring.
 
@@ -202,8 +215,8 @@ A future early-exit policy requires an independent evaluation set and a converge
 
 ## Remaining work
 
-1. Optimize the remaining 11.326-second long-sequence triangle-multiplication stage. Its chunked contraction BMMs and layout copies now dominate the accelerated Pairformer; benchmark CK, hipBLAS, hipBLASLt, and specialized grouped/batched kernels at the observed `1000/256/244` shapes before changing dispatch.
-2. Classify the remaining 7,804 native LayerNorm and 288 native transition calls by shape and cumulative time. Add a capability only when its measured contribution justifies the extra surface.
+1. Profile the remaining 7.085-second triangle-attention stage. Separate SDPA, projection, and layout costs on the new execution mix before selecting another CK or handwritten HIP kernel.
+2. Optimize the remaining 3.914-second packed triangle-multiplication stage and evaluate workspace-bounded packing for larger lengths. Rebuild the BLAS inventory when packing changes operand dimensions and strides.
 3. Measure several additional 1,000+ token inputs, length buckets, Base weights, and complexes. The exact 1,000-token capability must not be generalized from a single shape.
 4. Add OpenFold, ESMFold, and AtlasFold profiles and map their long-sequence attention and pair-update contracts into shared operation signatures where semantics match.
 5. Add BF16 only after operator and end-to-end distributional validation. Existing evidence does not support promoting it.
@@ -212,7 +225,7 @@ A future early-exit policy requires an independent evaluation set and a converge
 ## Limits
 
 - The eight repository cases are development inputs, not an independent test set. The 1,000-token input is a separate performance-only workload without experimental coordinates. The long result covers one sequence and one exact token bucket.
-- The complete BLAS call inventory comes from the historical 124-token C4/S1 FireProt/auto trace. It does not describe the 1,000-token matrix shapes.
+- The historical 124-token matrix and newer 62-signature long matrix describe distinct execution paths. Isolated dimension replay does not preserve operand strides; changing packed contraction requires a new inventory.
 - Base weights, lengths other than the exact 1,000-token and historical short buckets, complexes, ligands, production diffusion-step counts, BF16/FP16, gfx942, and multi-GPU execution are unmeasured.
 - The installed environment does not provide the optional Triton package required by Protenix's `triattention` implementation. FireProt uses PyTorch ROCm efficient attention for the promoted signature.
-- Raw manifests, predictions, and profiler traces remain on DiamondHill under excluded `outputs/` paths. Compact machine-readable records are in `provenance/protenix_amd_long1000_1a95f90.json`, `provenance/protenix_amd_long1000_523f922.json`, `provenance/protenix_amd_benchmark.json`, and `provenance/protenix_amd_incremental_4785040.json`.
+- Raw manifests, predictions, and profiler traces remain on DiamondHill under excluded `outputs/` paths. Compact machine-readable records are in `provenance/protenix_amd_long1000_14eb9f7.json`, `provenance/protenix_amd_long1000_blas_a8bbfef.json`, `provenance/protenix_amd_long1000_1a95f90.json`, `provenance/protenix_amd_long1000_523f922.json`, `provenance/protenix_amd_benchmark.json`, and `provenance/protenix_amd_incremental_4785040.json`.

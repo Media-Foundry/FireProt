@@ -11,7 +11,7 @@ Protenix v1.1.0 is the first working adapter target. The repository now contains
 - a model-neutral operator registry with deterministic capability checks and native fallback;
 - measured process-start BLAS selection for PyTorch ROCm and a matrix covering every observed GEMM signature;
 - validated FP32 gfx90a paths for short-sequence Protenix triangle multiplication, triangle attention, contiguous pair LayerNorm, channel-first pair LayerNorm, and the gated transition epilogue;
-- validated FP32 gfx90a long-sequence paths for the exact 1,000-token bucket, including memory-efficient triangle attention, chunked triangle-gate fusion, pair LayerNorm, and gated transitions;
+- validated FP32 gfx90a long-sequence paths for the exact 1,000-token bucket, including memory-efficient triangle attention, packed triangle contraction with fused HIP layouts, pair LayerNorm, and gated transitions;
 - lazily compiled handwritten HIP kernels with exact capability gates and native fallback;
 - a direct CK GEMM candidate for observed Protenix signatures, kept behind an experimental opt-in when end-to-end measurements do not justify promotion;
 - an independent Protenix patch branch that exposes FireProt dispatch without changing native defaults.
@@ -24,16 +24,16 @@ The primary optimization target is long-sequence folding. The measured workload 
 
 | Metric | Native median | FireProt median | Speedup |
 | --- | ---: | ---: | ---: |
-| Model | 45.310 s | 20.886 s | 2.169x |
-| Pairformer/recycle trunk | 41.480 s | 19.433 s | 2.135x |
-| Triangle attention | 29.486 s | 7.079 s | 4.165x |
-| Triangle multiplication | 12.460 s | 11.326 s | 1.100x |
+| Model | 45.350 s | 13.501 s | 3.359x |
+| Pairformer/recycle trunk | 41.530 s | 12.456 s | 3.334x |
+| Triangle attention | 29.468 s | 7.085 s | 4.159x |
+| Triangle multiplication | 12.505 s | 3.914 s | 3.195x |
 
-Model p95 improved from 45.807 s to 20.893 s (`2.192x`). Peak allocated memory fell from 39,499,758,592 to 10,037,256,704 bytes (`74.59%`), and peak reserved memory fell from 42,756,734,976 to 14,686,355,456 bytes (`65.65%`). Across warmup and measured calls, the accelerated run selected long triangle attention and triangle-gate fusion 576 times each, long pair LayerNorm 3,480 times, and the exact long gated transition 288 times.
+Model p95 improved from 45.416 s to 13.556 s (`3.350x`). Peak allocated memory fell from 39,499,758,592 to 10,037,256,704 bytes (`74.59%`), and peak reserved memory fell from 42,756,734,976 to 13,912,506,368 bytes (`67.46%`). Across warmup and measured calls, the accelerated run selected long triangle attention and packed triangle multiplication 576 times each. These GPU model times exclude loading, preprocessing, and serialization. The complete benchmark worker, including one warmup and three measured calls, improved from 226.715 to 100.260 seconds (`2.261x`); this is not a single-request cold-start measurement.
 
-The same-seed validation covered 7,979 output atoms and passed the locked `1e-3` coordinate and confidence gates: aligned coordinate RMSD was `8.97e-5 A`, maximum coordinate delta was `9.77e-4 A`, and maximum confidence delta was `3.81e-6`. The input is a performance workload without an experimental-coordinate mapping, so these checks establish agreement with native Protenix rather than structural accuracy.
+The same-seed validation covered 7,979 output atoms and passed the locked `1e-3` coordinate and confidence gates: aligned coordinate RMSD was `9.46e-5 A`, maximum coordinate delta was `9.77e-4 A`, and maximum confidence delta was `7.63e-6`. The input is a performance workload without an experimental-coordinate mapping, so these checks establish agreement with native Protenix rather than structural accuracy.
 
-The long attention path prevents materialization of the native `[1000,4,1000,1000]` attention matrix by using ROCm memory-efficient SDPA in outer chunks. When the pair mask is implicit, the Protenix adapter also omits the all-ones mask and its zero additive bias. The chunked triangle-multiplication path keeps its contraction library-backed and fuses projection and output sigmoid gates with handwritten HIP kernels. A wave64 HIP LayerNorm covers the measured 244,000-, 256,000-, and 1,000,000-row contiguous tensors, while the exact `[1000,1000,128]` transition fuses SiLU with its gate multiply. Exact capability predicates preserve native fallback for other lengths, dtypes, layouts, masks, architectures, training, and autograd.
+The long attention path prevents materialization of the native `[1000,4,1000,1000]` attention matrix by using ROCm memory-efficient SDPA in outer chunks. When the pair mask is implicit, the Protenix adapter also omits the all-ones mask and its zero additive bias. The packed triangle path normalizes once, fuses sigmoid projection with channel-first packing, contracts through library BMM, then fuses unpacking with output LayerNorm. The preceding chunked path remains available as a diagnostic fallback. A wave64 HIP LayerNorm covers the measured 244,000-, 256,000-, and 1,000,000-row contiguous tensors, while the exact `[1000,1000,128]` transition fuses SiLU with its gate multiply. Exact capability predicates preserve native fallback for other lengths, dtypes, layouts, masks, architectures, training, and autograd. See [packed triangle design and results](docs/protenix-packed-triangle.md).
 
 ## Historical 124-token MI250 result
 
@@ -80,7 +80,7 @@ FIREPROT_BACKEND=fireprot FIREPROT_BLAS_BACKEND=hipblas \
 
 The exact channel-first LayerNorm path is enabled by the FireProt backend and can be disabled for A/B diagnosis with `FIREPROT_DISABLE_CHANNEL_FIRST_LAYERNORM=1`. The direct CK OuterProductMean candidate is experimental and requires `FIREPROT_ENABLE_CK_OPS=1`; `FIREPROT_DISABLE_CK_OPS=1` overrides that opt-in.
 
-The validated 1,000-token paths are enabled by default after their end-to-end and numerical gates. Use `FIREPROT_DISABLE_LONG_TRIANGLE_ATTENTION=1`, `FIREPROT_DISABLE_LONG_TRIANGLE_GATES=1`, `FIREPROT_DISABLE_LONG_LAYERNORM=1`, or `FIREPROT_DISABLE_LONG_TRANSITION=1` only for diagnostic A/B runs. Other long lengths fall back until measured and promoted.
+The validated 1,000-token paths are enabled by default after their end-to-end and numerical gates. Use `FIREPROT_DISABLE_LONG_TRIANGLE_PACKED=1` to return to the preceding chunked gate path. `FIREPROT_DISABLE_LONG_TRIANGLE_GATES=1` disables both long multiplication implementations. Other diagnostic switches are `FIREPROT_DISABLE_LONG_TRIANGLE_ATTENTION=1`, `FIREPROT_DISABLE_LONG_LAYERNORM=1`, and `FIREPROT_DISABLE_LONG_TRANSITION=1`. Other long lengths fall back until measured and promoted.
 
 ## Benchmark
 
@@ -108,7 +108,7 @@ HIP_VISIBLE_DEVICES=6 python benchmarks/protenix/profile_inference.py \
   --backend fireprot --blas-backend hipblas
 ```
 
-Raw predictions, profiler traces, weights, and hardware-local tuning data remain under excluded `outputs/` and `runtime/` paths. Compact measured records are [the current 1,000-token benchmark](provenance/protenix_amd_long1000_1a95f90.json), [the preceding long attention and triangle-gate result](provenance/protenix_amd_long1000_523f922.json), [the historical short Protenix benchmark](provenance/protenix_amd_benchmark.json), and [the incremental CK and channel-first LayerNorm study](provenance/protenix_amd_incremental_4785040.json).
+Raw predictions, profiler traces, weights, and hardware-local tuning data remain under excluded `outputs/` and `runtime/` paths. Compact records include [the current packed-triangle result](provenance/protenix_amd_long1000_14eb9f7.json), [all 62 long BLAS signatures](provenance/protenix_amd_long1000_blas_a8bbfef.json), [the preceding long result](provenance/protenix_amd_long1000_1a95f90.json), [the original long attention result](provenance/protenix_amd_long1000_523f922.json), and [the historical short benchmark](provenance/protenix_amd_benchmark.json).
 
 ## Repository layout
 

@@ -548,3 +548,36 @@ HIP_VISIBLE_DEVICES=6 PYTHONPATH=.:Protenix python -m benchmarks.protenix.benchm
 Create the full reference first with `--backend hipblas --write-reference`
 and the same reference directory, omitting `--library`. Each process fixes
 its BLAS policy once. References and output files stay outside Git.
+
+### Global hipBLASLt does not improve the complete N1536 model
+
+A same-source follow-up retained the current SDPA, packed multiplication,
+and HIP epilogues, changing only the process BLAS preference. Source
+`e6dfa14f47150678450c573f5d793e71d8f5910f`, GPU 7 with GPU 6 idle,
+Mini-default FP32 C4/S1, seed 101, sample 1, one warmup and three measured
+calls were used. Both runs dumped predictions outside the GPU model interval.
+Continuous isolation checks passed. The fixed run order was hipBLAS then Lt.
+
+| Metric | hipBLAS | hipBLASLt |
+| --- | ---: | ---: |
+| Model median | 36.481 s | 36.788 s |
+| Model p95 | 36.900 s | 37.282 s |
+| Triangle multiplication median | 11.168 s | 11.252 s |
+| Triangle attention median | 18.804 s | 19.106 s |
+| Peak allocated memory | 22,721,185,792 B | 22,800,877,568 B |
+
+The model speedup is 0.992x: no observed benefit from global Lt. Three
+samples in a fixed order do not establish a small regression statistically.
+Both runs selected SDPA 1,728 times and packed triangle multiplication 576
+times across warmup and measured calls. All three same-seed output pairs
+passed the locked coordinate/confidence gates over 12,139 atoms each.
+The isolated BMM advantage therefore does not justify a global switch.
+A per-operation Lt implementation or real-call kernel trace is needed to
+separate contraction improvements from projection changes and runtime dispatch.
+
+Before this comparison, a checksum audit detected one stale remote HIP
+source file; it was restored to the committed version before either run.
+Model-source and benchmark checksums were then consistent, excluding
+hardware-local generated LayerNorm build artifacts. This audit does not
+retroactively establish the source state of earlier runs. See
+[complete model evidence](../provenance/protenix_long1536_blas_e6dfa14.json).

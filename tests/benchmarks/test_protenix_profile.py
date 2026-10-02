@@ -140,3 +140,44 @@ def test_rocprof_import_groups_kernel_categories(tmp_path: pathlib.Path) -> None
     assert report["categories"]["layernorm"]["percentage"] == 50
     assert report["categories"]["gemm"]["percentage"] == 40
     assert report["categories"]["softmax"]["percentage"] == 10
+
+
+def test_explicit_source_commits_override_synced_git_metadata(
+    tmp_path: pathlib.Path,
+) -> None:
+    config_path = tmp_path / "config.json"
+    config_path.write_text("{}", encoding="utf-8")
+    input_path = tmp_path / "input.json"
+    input_path.write_text('[{"name": "case"}]', encoding="utf-8")
+    config = {"measurement": {"warmups": 0, "repetitions": 1}}
+    workload = {"id": "case", "input": str(input_path)}
+
+    with (
+        mock.patch.dict(
+            profile_inference.os.environ,
+            {
+                "FIREPROT_SOURCE_COMMIT": "fireprot-explicit",
+                "FIREPROT_PROTENIX_COMMIT": "protenix-explicit",
+            },
+        ),
+        mock.patch.object(
+            profile_inference, "_git_commit", return_value="remote-stale"
+        ),
+    ):
+        spec = profile_inference._build_spec(
+            config_path=config_path,
+            config=config,
+            workload=workload,
+            backend="native",
+            blas_backend="auto",
+            output_root=tmp_path / "outputs",
+            warmups=0,
+            repetitions=1,
+            profile_one=True,
+            torch_profile=False,
+        )
+
+    assert spec["source"] == {
+        "fireprot_commit": "fireprot-explicit",
+        "protenix_commit": "protenix-explicit",
+    }

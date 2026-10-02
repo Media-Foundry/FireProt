@@ -377,9 +377,10 @@ def _build_spec(
         "profile_one": profile_one,
         "torch_profile": torch_profile,
         "source": {
-            "fireprot_commit": _git_commit(REPO_ROOT)
-            or os.environ.get("FIREPROT_SOURCE_COMMIT"),
-            "protenix_commit": _git_commit(PROTENIX_ROOT),
+            "fireprot_commit": os.environ.get("FIREPROT_SOURCE_COMMIT")
+            or _git_commit(REPO_ROOT),
+            "protenix_commit": os.environ.get("FIREPROT_PROTENIX_COMMIT")
+            or _git_commit(PROTENIX_ROOT),
         },
         "measurement": {
             **config["measurement"],

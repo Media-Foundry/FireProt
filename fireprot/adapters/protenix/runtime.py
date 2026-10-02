@@ -23,6 +23,7 @@ _OPTIONAL_REGISTRATION_MODULES = (
     "fireprot.backends.amd.ck_gemm",
     "fireprot.backends.amd.triangle_multiplication",
     "fireprot.backends.amd.triangle_attention",
+    "fireprot.backends.amd.ck_attention",
     "fireprot.backends.amd.recycle",
 )
 _installed: dict[str, Any] | None = None
@@ -51,10 +52,13 @@ def install(blas_backend: str | None = None) -> dict[str, Any]:
 
 
 def manifest() -> dict[str, Any]:
+    from fireprot.backends.amd.ck_attention import extension_status
+
     result = {
         **(_installed or {"adapter": "protenix", "installed": False}),
         "blas": configuration_manifest(),
         "operations": registry.manifest(),
+        "ck_attention": extension_status(),
     }
     if _installed is not None:
         from fireprot.adapters.protenix import hooks

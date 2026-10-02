@@ -203,6 +203,13 @@ def dispatch_triangle_attention(
         attributes={
             "bias_count": len(biases),
             "bias_shapes": repr(bias_shapes),
+            "qkv_strides": repr(tuple(tuple(tensor.stride()) for tensor in (q, k, v))),
+            "ck_tile_compatible": (
+                all(tensor.shape == q.shape and tensor.dtype == q.dtype
+                    and tensor.device == q.device and tensor.data_ptr() % 16 == 0
+                    for tensor in (q, k, v))
+                and all(bias.dtype == q.dtype and bias.device == q.device for bias in biases)
+            ),
             "heads": q.shape[-3] if q.ndim >= 3 else -1,
             "head_dim": q.shape[-1] if q.ndim else -1,
         },

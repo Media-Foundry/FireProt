@@ -91,6 +91,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=pathlib.Path, required=True)
     parser.add_argument("--include-ck", action="store_true")
+    parser.add_argument("--include-ck-tile", action="store_true")
     parser.add_argument("--ck-set", choices=("all", "tuned"), default="all")
     parser.add_argument("--rocm-root", type=pathlib.Path, default=pathlib.Path("/opt/rocm"))
     parser.add_argument("--warmups", type=int, default=5)
@@ -109,10 +110,18 @@ def main() -> int:
                       "benchmarks/protenix/csrc/ck_attention_probe.cpp",
                       "patches/ck/attention-cache-q-fp32.patch",
                       "fireprot/backends/amd/triangle_attention.py",
+                      "fireprot/backends/amd/ck_attention.py",
+                      "fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
                   )}, records=[])
     monitor = None
     try:
         libraries, report["ck_build"] = _build_ck(args.rocm_root, args.ck_set) if args.include_ck else ([], None)
+        if args.include_ck_tile:
+            from fireprot.backends.amd import ck_attention
+
+            if ck_attention.load_extension() is None:
+                raise RuntimeError(str(ck_attention.extension_status()))
+            report["ck_tile_build"] = ck_attention.extension_status()
         measurement = _json_load(REPO_ROOT / "benchmarks/protenix/configs/mi250-long.json")["measurement"]
         report["preflight"] = _rocm_preflight(measurement)
         if not report["preflight"]["exclusive_check"]["passed"]:
@@ -155,6 +164,8 @@ def main() -> int:
                     return output.transpose(1, 2)
 
                 functions.append((name, ck_call))
+            if args.include_ck_tile:
+                functions.append(("ck_tile_attention", lambda: ck_attention.attention(**keywords)))
             functions.append(("direct_sdpa_repeat", lambda: _direct_sdpa(**keywords)))
             for name, function in functions:
                 torch.cuda.empty_cache()

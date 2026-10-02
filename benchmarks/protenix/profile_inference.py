@@ -201,6 +201,12 @@ def _summarize_records(records: list[dict[str, Any]]) -> dict[str, Any]:
             "model_wall_ms": _stats(
                 [record["model_wall_ms"] for record in selected]
             ),
+            "peak_memory_allocated_bytes": _stats(
+                [record["peak_memory_allocated_bytes"] for record in selected]
+            ),
+            "peak_memory_reserved_bytes": _stats(
+                [record["peak_memory_reserved_bytes"] for record in selected]
+            ),
             "stages_gpu_ms": {
                 stage: _stats(
                     [
@@ -564,6 +570,7 @@ class _Recorder:
             start = self._new_event()
             end = self._new_event()
             wall_start = time.perf_counter()
+            self.torch.cuda.reset_peak_memory_stats()
             start.record()
             try:
                 return original(*args, **kwargs)
@@ -585,6 +592,12 @@ class _Recorder:
                     {
                         "call_id": call_id,
                         "wall_ms": (time.perf_counter() - wall_start) * 1000,
+                        "peak_memory_allocated_bytes": (
+                            self.torch.cuda.max_memory_allocated()
+                        ),
+                        "peak_memory_reserved_bytes": (
+                            self.torch.cuda.max_memory_reserved()
+                        ),
                     }
                 )
                 self.current_call.reset(token)
@@ -662,6 +675,14 @@ class _Recorder:
                 ),
                 None,
             )
+            memory = next(
+                (
+                    item
+                    for item in self.wall_events["model"]
+                    if item["call_id"] == call_id
+                ),
+                {},
+            )
             stage_values: dict[str, list[float]] = {}
             for stage, events in self.gpu_events.items():
                 if stage == "model":
@@ -679,6 +700,12 @@ class _Recorder:
                     **label,
                     "model_gpu_ms": model_gpu,
                     "model_wall_ms": model_wall,
+                    "peak_memory_allocated_bytes": memory.get(
+                        "peak_memory_allocated_bytes"
+                    ),
+                    "peak_memory_reserved_bytes": memory.get(
+                        "peak_memory_reserved_bytes"
+                    ),
                     "stages_gpu_ms": stage_values,
                 }
             )

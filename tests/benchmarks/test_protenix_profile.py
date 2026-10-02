@@ -50,18 +50,24 @@ def test_timing_summary_separates_warmup_and_measurement() -> None:
             "phase": "warmup",
             "model_gpu_ms": 10.0,
             "model_wall_ms": 11.0,
+            "peak_memory_allocated_bytes": 100,
+            "peak_memory_reserved_bytes": 200,
             "stages_gpu_ms": {"pairformer": [6.0], "diffusion": [2.0]},
         },
         {
             "phase": "measure",
             "model_gpu_ms": 4.0,
             "model_wall_ms": 5.0,
+            "peak_memory_allocated_bytes": 80,
+            "peak_memory_reserved_bytes": 180,
             "stages_gpu_ms": {"pairformer": [2.0, 1.0], "diffusion": [0.5]},
         },
         {
             "phase": "measure",
             "model_gpu_ms": 6.0,
             "model_wall_ms": 7.0,
+            "peak_memory_allocated_bytes": 120,
+            "peak_memory_reserved_bytes": 220,
             "stages_gpu_ms": {"pairformer": [4.0], "diffusion": [1.5]},
         },
     ]
@@ -72,6 +78,8 @@ def test_timing_summary_separates_warmup_and_measurement() -> None:
     assert summary["measure"]["model_gpu_ms"]["median"] == 5.0
     assert summary["measure"]["stages_gpu_ms"]["pairformer"]["median"] == 3.5
     assert summary["measure"]["stages_gpu_ms"]["diffusion"]["p95"] == 1.5
+    assert summary["measure"]["peak_memory_allocated_bytes"]["median"] == 100
+    assert summary["measure"]["peak_memory_reserved_bytes"]["p95"] == 220
 
 
 def test_exclusive_preflight_rejects_busy_selected_device() -> None:
@@ -220,6 +228,18 @@ def test_model_recorder_retains_failures_swallowed_by_outer_runner() -> None:
             assert enable_timing is True
             return FakeEvent()
 
+        @staticmethod
+        def reset_peak_memory_stats() -> None:
+            pass
+
+        @staticmethod
+        def max_memory_allocated() -> int:
+            return 123
+
+        @staticmethod
+        def max_memory_reserved() -> int:
+            return 456
+
     fake_torch = type("FakeTorch", (), {"cuda": FakeCuda})()
     recorder = profile_inference._Recorder(fake_torch, [])
 
@@ -232,3 +252,5 @@ def test_model_recorder_retains_failures_swallowed_by_outer_runner() -> None:
     assert recorder.model_failures == [
         {"call_id": 0, "type": "ValueError", "message": "bad prediction"}
     ]
+    assert recorder.wall_events["model"][0]["peak_memory_allocated_bytes"] == 123
+    assert recorder.wall_events["model"][0]["peak_memory_reserved_bytes"] == 456

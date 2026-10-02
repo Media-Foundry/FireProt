@@ -392,3 +392,70 @@ CK allocation peak from 3,095,789,568 to 2,089,156,608 bytes and final SDPA
 peak from 3,498,049,536 to 2,491,416,576 bytes. The earlier affected peak
 records are retained with an explicit limitation; they are not model memory
 claims. This cleanup is outside the timed GPU interval.
+
+### Wave-local conversion and a four-wave mapping proof
+
+A CPU coordinate exporter now evaluates CK's own distributed-coordinate
+functions for every thread-buffer element. For the measured M128/N64/W4
+mixed mappings, both directions form complete 8,192-element bijections,
+but **6,144 elements (75%) cross wave boundaries**. A wave shuffle alone
+cannot implement those mappings.
+
+For M64/N64/W1, each direction forms a complete 4,096-element bijection
+within one wave. Affine lane/register expressions were checked against all
+64 lanes, then used to generate 128 shuffle calls per conversion. Every
+source-register shuffle executes before the destination selects its value,
+avoiding reads from inactive lanes. These candidates passed the GPU operator
+gate without the LDS conversion, but were too slow:
+
+| M64/N64/W1 candidate | Median ms |
+| --- | ---: |
+| MFMA32 QK / MFMA16 PV, wave shuffle | 59.837 |
+| MFMA16 QK / MFMA32 PV, wave shuffle | 55.483 |
+| MFMA16 / MFMA16 control, no conversion | 61.677 |
+| SDPA before / after | 34.909 / 34.832 |
+
+The improvement relative to the single-wave control does not justify
+promotion over the existing multi-wave path or SDPA. All numerical gates
+passed (maximum absolute delta at most `6.07967377e-6`), as did continuous
+GPU 6 isolation. The test retained the full B512/N1536 shape, FP32, seed 419,
+five warmups, twenty measured calls, bias packing and output allocation.
+
+A further CPU proof removes cross-wave dependencies while retaining four
+waves by permuting rows inside each 128-row query block. For QK32/PV16,
+the local row permutation is:
+
+```text
+p(m) = (m & 15) | ((m & 16) << 2) | ((m & 96) >> 1)
+```
+
+For QK16/PV32, use its inverse:
+
+```text
+p_inverse(m) = (m & 15) | ((m & 64) >> 2) | ((m & 48) << 1)
+```
+
+Both retain all 8,192 logical tile elements and reduce the verified
+cross-wave count to zero. **This is only a mapping proof.** A corresponding
+GPU kernel must apply the permutation consistently to Q and bias row loads,
+then convert logits into the PV-compatible distribution before softmax.
+K/V and the logical output order must retain their original semantics.
+That kernel and its performance have not yet been tested.
+
+[Wave-conversion evidence](../provenance/protenix_attention_wave_shuffle_a8d7e33.json)
+records the generated conversion, compiler commands, mappings, library
+hashes and GPU results. The standalone CPU mapping tool can be reproduced
+against the measured CK installation:
+
+```bash
+/opt/rocm/bin/hipcc -O2 -std=c++17 --offload-arch=gfx90a -I/opt/rocm/include \
+  -DBM=64 -DWM=1 -DG0M=32 -DG0K=8 -DG1M=16 -DG1K=16 \
+  benchmarks/protenix/csrc/ck_attention_mapping.cpp -o /tmp/ck_attention_mapping
+HIP_VISIBLE_DEVICES=6 LD_LIBRARY_PATH=/opt/rocm/lib /tmp/ck_attention_mapping > /tmp/ck_mapping.txt
+```
+
+The first `WM*64` lines describe QK coordinates, followed by the same number
+of lines for the PV-compatible softmax distribution. Each integer encodes
+`row*64 + column` in thread-buffer order. This executable launches no GPU
+kernels. Use BM=128/WM=4 for the four-wave mapping, or exchange the G0/G1
+macro pairs for the reverse direction.

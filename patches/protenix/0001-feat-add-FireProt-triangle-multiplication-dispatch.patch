@@ -1,0 +1,83 @@
+From 9066d96a86953e2d3afe5005455870f9ff60ca32 Mon Sep 17 00:00:00 2001
+From: HUSRCF <shuang886@connect.hkust-gz.edu.cn>
+Date: Fri, 2 Oct 2026 15:39:43 +0800
+Subject: [PATCH 1/2] feat: add FireProt triangle multiplication dispatch
+
+---
+ protenix/model/triangular/triangular.py | 25 ++++++++++++++++++++++++-
+ runner/batch_inference.py               |  8 ++++++--
+ 2 files changed, 30 insertions(+), 3 deletions(-)
+
+diff --git a/protenix/model/triangular/triangular.py b/protenix/model/triangular/triangular.py
+index 69dffd3..f441216 100644
+--- a/protenix/model/triangular/triangular.py
++++ b/protenix/model/triangular/triangular.py
+@@ -487,6 +487,28 @@ class TriangleMultiplicativeUpdate(BaseTriangleMultiplicativeUpdate):
+         """
+         _input_inplace_safe = inplace_safe is True
+ 
++        if triangle_multiplicative == "fireprot":
++            from fireprot.backends.amd.triangle_multiplication import (
++                dispatch_triangle_multiplication,
++            )
++
++            return dispatch_triangle_multiplication(
++                module=self,
++                z=z,
++                mask=mask,
++                inplace_safe=inplace_safe,
++                add_with_inplace=_add_with_inplace,
++                inplace_chunk_size=_inplace_chunk_size,
++                native=lambda **_: self.forward(
++                    z=z,
++                    mask=mask,
++                    inplace_safe=inplace_safe,
++                    _add_with_inplace=_add_with_inplace,
++                    _inplace_chunk_size=_inplace_chunk_size,
++                    triangle_multiplicative="torch",
++                ),
++            )
++
+         # Note: cuequivariance requires that the hidden dimension c must equal c_z.
+         # If this condition is not met, an AssertionError will be raised.
+         # Therefore, we include a check here: if c != c_z, we fall back to using plain PyTorch.
+@@ -566,7 +588,8 @@ class TriangleMultiplicativeUpdate(BaseTriangleMultiplicativeUpdate):
+             return x
+         else:
+             raise ValueError(
+-                f"triangle_multiplicative must be 'cuequivariance' or 'torch', but got {triangle_multiplicative}"
++                "triangle_multiplicative must be 'cuequivariance', 'fireprot', "
++                f"or 'torch', but got {triangle_multiplicative}"
+             )
+ 
+ 
+diff --git a/runner/batch_inference.py b/runner/batch_inference.py
+index 6fd001c..f2dd6cf 100644
+--- a/runner/batch_inference.py
++++ b/runner/batch_inference.py
+@@ -616,7 +616,10 @@ def protenix_cli() -> None:
+     "--trimul_kernel",
+     type=str,
+     default="cuequivariance",
+-    help="Triangle multiplicative update kernel ('cuequivariance' or 'torch').",
++    help=(
++        "Triangle multiplicative update kernel "
++        "('cuequivariance', 'fireprot', or 'torch')."
++    ),
+ )
+ @click.option(
+     "--triatt_kernel",
+@@ -844,8 +847,9 @@ def predict(
+     )
+     assert trimul_kernel in [
+         "cuequivariance",
++        "fireprot",
+         "torch",
+-    ], "Invalid trimul_kernel. Options: 'cuequivariance', 'torch'."
++    ], "Invalid trimul_kernel. Options: 'cuequivariance', 'fireprot', 'torch'."
+     assert triatt_kernel in [
+         "triattention",
+         "cuequivariance",
+-- 
+2.43.0
+

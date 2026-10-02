@@ -76,6 +76,7 @@ Raw predictions, profiler traces, weights, and hardware-local tuning data remain
 | `benchmarks/protenix/` | Fixed workload configuration, inference profiler, BLAS matrix, and output comparison |
 | `tests/` | Registry, backend, numerical, adapter, and profiler tests |
 | `Protenix/` | Independent upstream Git checkout with FireProt integration commits |
+| `patches/protenix/` | Exported patches that reproduce the independent Protenix integration branch |
 | `cases/` | Eight short single-chain development cases; not an independent test set |
 | `scripts/` | Inference and DiamondHill synchronization entry points |
 | `provenance/` | Compact source, runtime, asset, smoke, and performance records |

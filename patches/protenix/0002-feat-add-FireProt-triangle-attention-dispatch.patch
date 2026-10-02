@@ -1,0 +1,90 @@
+From 316f5778e80965015a80339de632291f1abbb7f5 Mon Sep 17 00:00:00 2001
+From: HUSRCF <shuang886@connect.hkust-gz.edu.cn>
+Date: Fri, 2 Oct 2026 16:31:45 +0800
+Subject: [PATCH 2/2] feat: add FireProt triangle attention dispatch
+
+---
+ protenix/model/triangular/layers.py | 19 ++++++++++++++++++-
+ runner/batch_inference.py           |  5 +++--
+ 2 files changed, 21 insertions(+), 3 deletions(-)
+
+diff --git a/protenix/model/triangular/layers.py b/protenix/model/triangular/layers.py
+index d4ff17a..8ce20d0 100644
+--- a/protenix/model/triangular/layers.py
++++ b/protenix/model/triangular/layers.py
+@@ -415,6 +415,7 @@ class Attention(nn.Module):
+             triangle_attention: Triangle attention implementation type.
+                 - "torch" (default): PyTorch native implementation
+                 - "triattention": Optimized tri-attention module
++                - "fireprot": FireProt capability-gated AMD implementation
+                 - "deepspeed": DeepSpeed's fused attention kernel
+                 - "cuequivariance": nvidia cuequivariance attention kernel
+         Returns
+@@ -423,6 +424,7 @@ class Attention(nn.Module):
+         assert triangle_attention in [
+             "torch",
+             "deepspeed",
++            "fireprot",
+             "triattention",
+             "cuequivariance",
+         ]
+@@ -432,7 +434,9 @@ class Attention(nn.Module):
+ 
+         # DeepSpeed attention kernel applies scaling internally
+         q, k, v = self._prep_qkv(
+-            q_x, kv_x, apply_scale=triangle_attention in ["torch", "triattention"]
++            q_x,
++            kv_x,
++            apply_scale=triangle_attention in ["torch", "triattention", "fireprot"],
+         )
+ 
+         if q.shape[-2] <= 16:
+@@ -447,6 +451,19 @@ class Attention(nn.Module):
+             o = _deepspeed_evo_attn(q, k, v, biases)
+         elif triangle_attention == "triattention":
+             o = _tri_attention(q, k, v, biases)
++        elif triangle_attention == "fireprot":
++            from fireprot.backends.amd.triangle_attention import (
++                dispatch_triangle_attention,
++            )
++
++            o = dispatch_triangle_attention(
++                module=self,
++                q=q,
++                k=k,
++                v=v,
++                biases=biases,
++                native=lambda **_: _attention(q, k, v, biases).transpose(-2, -3),
++            )
+         elif triangle_attention == "cuequivariance":
+             # Notes:
+             #     (1) Context is saved for backward pass. You don't need to save it manually.
+diff --git a/runner/batch_inference.py b/runner/batch_inference.py
+index f2dd6cf..2075586 100644
+--- a/runner/batch_inference.py
++++ b/runner/batch_inference.py
+@@ -627,7 +627,7 @@ def protenix_cli() -> None:
+     default="cuequivariance",
+     help=(
+         "Triangle attention kernel ('triattention', 'cuequivariance', "
+-        "'deepspeed', or 'torch')."
++        "'deepspeed', 'fireprot', or 'torch')."
+     ),
+ )
+ @click.option(
+@@ -854,10 +854,11 @@ def predict(
+         "triattention",
+         "cuequivariance",
+         "deepspeed",
++        "fireprot",
+         "torch",
+     ], (
+         "Invalid triatt_kernel. Options: 'triattention', "
+-        "'cuequivariance', 'deepspeed', 'torch'."
++        "'cuequivariance', 'deepspeed', 'fireprot', 'torch'."
+     )
+     seeds = list(map(int, seeds.split(",")))
+ 
+-- 
+2.43.0
+

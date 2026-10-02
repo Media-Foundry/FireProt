@@ -22,7 +22,7 @@ AtlasFold, OpenFold, ESMFold, Base-model coverage, BF16 promotion, additional lo
 ## Experimental 1,536-residue workload
 
 A real **1,536-residue** input and opt-in attention experiments are now
-available. SDPA has passed full-model native-agreement validation. Padding
+available. SDPA and padded CK have passed full-model native-agreement validation. Padding
 the physical CK bias row stride reduced its operator time from about 48.4
 to 39.4 ms, but SDPA remains faster at about 34.8 ms; CK is therefore not
 promoted for this bucket. Controlled warm model speedups at N1536 remain

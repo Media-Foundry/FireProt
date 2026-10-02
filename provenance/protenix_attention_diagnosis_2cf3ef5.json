@@ -1377,7 +1377,7 @@
   ],
   "integrated_candidate": {
     "artifact": "outputs/benchmarks/long1536-attention-padded-candidate.json",
-    "retrieval": "Complete JSON still on DiamondHill; SSH outage prevented retrieval. Summary captured from successful CLI stdout.",
+    "retrieval": "Full report retrieved after temporary SSH outage; all recorded source hashes match the committed local files.",
     "command": "HIP_VISIBLE_DEVICES=6 PYTHONPATH=.:Protenix python -m benchmarks.protenix.benchmark_attention --length 1536 --include-ck-tile --output outputs/benchmarks/long1536-attention-padded-candidate.json",
     "exit_code": 0,
     "seed": 419,
@@ -1406,6 +1406,355 @@
       "benchmarks/protenix/benchmark_attention.py": "425365c5f9a0e039a2e7f49eaebf57d413e0fc35bbf1f3bb53d485f39cb2ec65",
       "fireprot/backends/amd/ck_attention.py": "7e4e11134bb90ad8a39d2fbd15ea65f286e3cb98673704a3a3d8c05d3fa7d042",
       "fireprot/backends/amd/csrc/fireprot_ck_attention.cpp": "bf0d12eface75e642675f6149709439c53c2592021fe1f8cabdbe7f150e22cbd"
+    },
+    "report": {
+      "schema_version": 1,
+      "status": "ok",
+      "seed": 419,
+      "shape": [
+        512,
+        4,
+        1536,
+        32
+      ],
+      "sequence_length": 1536,
+      "upstream_outer_chunks": 3,
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "cache_state": "warm within process; compilation excluded",
+      "scope": "random QKV and bias, observed strides; no checkpoint or model speedup",
+      "source_commit": null,
+      "source_sha256": {
+        "benchmarks/protenix/benchmark_attention.py": "425365c5f9a0e039a2e7f49eaebf57d413e0fc35bbf1f3bb53d485f39cb2ec65",
+        "benchmarks/protenix/csrc/ck_attention_probe.cpp": "9eb881612bb1c2a3bdc4090378dbc108ee20cec17cc8204edeac4a88cced7609",
+        "patches/ck/attention-cache-q-fp32.patch": "c6940fb8ced64289870df6849802f1399724f06cd18eb2cc7e77cd8712f3ee99",
+        "fireprot/backends/amd/triangle_attention.py": "62c4154d8f85a9c283afdb54d860fb542f7bf4a740bdb77690e64ece9685234e",
+        "fireprot/backends/amd/ck_attention.py": "7e4e11134bb90ad8a39d2fbd15ea65f286e3cb98673704a3a3d8c05d3fa7d042",
+        "fireprot/backends/amd/csrc/fireprot_ck_attention.cpp": "bf0d12eface75e642675f6149709439c53c2592021fe1f8cabdbe7f150e22cbd"
+      },
+      "records": [
+        {
+          "name": "chunked_sdpa",
+          "median_ms": 36.34435844421387,
+          "p95_ms": 36.414703369140625,
+          "values_ms": [
+            36.42350387573242,
+            36.414703369140625,
+            36.36924362182617,
+            36.39051818847656,
+            36.34939193725586,
+            36.3909912109375,
+            36.33483123779297,
+            36.3673095703125,
+            36.38522720336914,
+            36.35050964355469,
+            36.372108459472656,
+            36.315467834472656,
+            36.339324951171875,
+            36.31036376953125,
+            36.32811737060547,
+            36.30747604370117,
+            36.33643341064453,
+            36.3162727355957,
+            36.18075180053711,
+            36.3194694519043
+          ],
+          "peak_allocated_bytes": 2189426688,
+          "max_abs_delta": 0.0,
+          "output_stride": [
+            196608,
+            32,
+            49152,
+            1
+          ]
+        },
+        {
+          "name": "direct_sdpa",
+          "median_ms": 34.83759307861328,
+          "p95_ms": 34.92911148071289,
+          "values_ms": [
+            34.837432861328125,
+            34.835350036621094,
+            34.76079177856445,
+            34.883026123046875,
+            34.86335372924805,
+            34.92911148071289,
+            34.809593200683594,
+            34.83775329589844,
+            34.909427642822266,
+            34.86158752441406,
+            34.815513610839844,
+            34.87743377685547,
+            34.864952087402344,
+            34.787193298339844,
+            34.93919372558594,
+            34.8697509765625,
+            34.80287170410156,
+            34.803993225097656,
+            34.77055358886719,
+            34.801273345947266
+          ],
+          "peak_allocated_bytes": 2491416576,
+          "max_abs_delta": 0.0,
+          "output_stride": [
+            196608,
+            128,
+            32,
+            1
+          ]
+        },
+        {
+          "name": "ck_tile_attention",
+          "median_ms": 39.41522407531738,
+          "p95_ms": 39.548824310302734,
+          "values_ms": [
+            39.45314407348633,
+            39.41426467895508,
+            39.4376220703125,
+            39.419864654541016,
+            39.34162521362305,
+            39.465301513671875,
+            39.41618347167969,
+            39.35074234008789,
+            39.46450424194336,
+            39.287227630615234,
+            39.43618392944336,
+            39.33586883544922,
+            39.548824310302734,
+            39.18707275390625,
+            39.21907043457031,
+            39.561458587646484,
+            39.35554885864258,
+            39.34818649291992,
+            39.539058685302734,
+            39.1899528503418
+          ],
+          "peak_allocated_bytes": 2089156608,
+          "max_abs_delta": 5.9604644775390625e-06,
+          "output_stride": [
+            196608,
+            128,
+            32,
+            1
+          ]
+        },
+        {
+          "name": "direct_sdpa_repeat",
+          "median_ms": 34.828792572021484,
+          "p95_ms": 34.899513244628906,
+          "values_ms": [
+            34.84223175048828,
+            34.82207107543945,
+            34.76335525512695,
+            34.87807083129883,
+            34.85151290893555,
+            35.029747009277344,
+            34.829593658447266,
+            34.872310638427734,
+            34.899513244628906,
+            34.82655334472656,
+            34.86271286010742,
+            34.78383255004883,
+            34.70847702026367,
+            34.799190521240234,
+            34.8279914855957,
+            34.75375747680664,
+            34.7750358581543,
+            34.88111114501953,
+            34.86751174926758,
+            34.061614990234375
+          ],
+          "peak_allocated_bytes": 2491416576,
+          "max_abs_delta": 0.0,
+          "output_stride": [
+            196608,
+            128,
+            32,
+            1
+          ]
+        }
+      ],
+      "ck_build": null,
+      "ck_tile_build": {
+        "enabled": true,
+        "long1536_enabled": false,
+        "loaded": true,
+        "error": null,
+        "build": {
+          "source_sha256": "bf0d12eface75e642675f6149709439c53c2592021fe1f8cabdbe7f150e22cbd",
+          "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+          "header_count": 581,
+          "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a",
+            "-I/opt/rocm/include",
+            "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_8935f4f00fbacbfd/attention.pending.so"
+          ],
+          "library_sha256": "e3c84fb80fac9a688f4539d9b9497e69dabf2d7bc4a5e8764fecf164a74c6b1a",
+          "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_8935f4f00fbacbfd/attention.so",
+          "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+        }
+      },
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "863948105",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "525134528",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1084008387",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "756896897",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "600236068",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "470816729",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451386808",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533752432",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "6",
+        "selected_physical_index": 6,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "q_stride": [
+        196608,
+        32,
+        128,
+        1
+      ],
+      "bias_stride": [
+        4,
+        1,
+        6144,
+        4
+      ],
+      "gpu_process_monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 4,
+        "allowed_pid": 718036,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
     }
   },
   "tests": {
@@ -1415,7 +1764,10 @@
     "scope": "pytest tests; includes explicit Torch reference for full B512 N1536 attention on a nondefault stream"
   },
   "remaining": [
-    "Padded CK full-model native-agreement run has not started because DiamondHill SSH became unreachable.",
-    "Warm repeated N1536 model latency comparisons remain unmeasured."
-  ]
+    "Controlled warm N1536 model latency comparisons remain unmeasured; CK remains slower than SDPA at operator level."
+  ],
+  "completed_followup": {
+    "padded_ck_model_agreement": "protenix_long1536_ck_validation_475d9f7.json",
+    "status": "passed after SSH connectivity recovered"
+  }
 }

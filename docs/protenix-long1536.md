@@ -79,9 +79,16 @@ repeat **34.829/34.900 ms**. Its maximum absolute operator delta was
 it retains its independent opt-in and is not promoted for this bucket.
 Local regression tests passed (100 passed, 14 skipped), as did GPU 6 tests
 (113 passed, 1 skipped), including the full B512/N1536 explicit Torch
-attention reference. A full-model native-agreement run of **padded CK** has
-not started: DiamondHill SSH became unreachable after the operator tests.
-The successful full-model comparison above covers SDPA only.
+attention reference. After a temporary DiamondHill SSH outage recovered,
+**padded CK also passed full-model native agreement** at source
+`475d9f7a548420f060b8ee4eaf9f8a2da62c7eab`, using the same allocator,
+model, input, dtype, cycles, steps, sample count, and random seed. The run
+selected the N1536 CK implementation 432 times and passed continuous
+GPU 7 process monitoring. Across 12,139 atoms, aligned RMSD was
+`1.05254271e-4 A`, maximum coordinate component delta was `9.765625e-4 A`,
+and maximum confidence delta was `3.81469727e-6`. Its single validation
+model call took 69.848 s; it is not a warm performance comparison.
+See [padded CK model evidence](../provenance/protenix_long1536_ck_validation_475d9f7.json).
 
 ## Counter evidence and rejected hypotheses
 

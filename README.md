@@ -20,6 +20,10 @@ AtlasFold, OpenFold, ESMFold, Base-model coverage, BF16 promotion, additional lo
 
 ## Verified 1,000-token MI250 result
 
+The latest attention refinement measures **13.124 s** model median, with unchanged peak allocated memory. Same-source A/B runs confirm a further **1.026–1.028x** improvement over the packed-triangle result below. The tuned CK attention candidate improved from **45.641 to 36.139 ms**, close to SDPA's **36.00–36.02 ms**, and remains experimental. See [SDPA/CK investigation and model validation](docs/protenix-attention-tuning.md).
+
+### Packed triangle comparison
+
 The primary optimization target is long-sequence folding. The measured workload is Protenix Mini-default, a real 1,000-residue protein sequence, FP32, four cycles, one diffusion step, seed 101, one sample, warm in-process caches, and no MSA/template search. Native and FireProt used the same physical gfx90a GCD, hipBLAS process policy, one warmup, and three measured repetitions. Continuous process monitoring found no external GPU PID.
 
 | Metric | Native median | FireProt median | Speedup |
@@ -33,7 +37,7 @@ Model p95 improved from 45.416 s to 13.556 s (`3.350x`). Peak allocated memory f
 
 The same-seed validation covered 7,979 output atoms and passed the locked `1e-3` coordinate and confidence gates: aligned coordinate RMSD was `9.46e-5 A`, maximum coordinate delta was `9.77e-4 A`, and maximum confidence delta was `7.63e-6`. The input is a performance workload without an experimental-coordinate mapping, so these checks establish agreement with native Protenix rather than structural accuracy.
 
-The long attention path prevents materialization of the native `[1000,4,1000,1000]` attention matrix by using ROCm memory-efficient SDPA in outer chunks. When the pair mask is implicit, the Protenix adapter also omits the all-ones mask and its zero additive bias. The packed triangle path normalizes once, fuses sigmoid projection with channel-first packing, contracts through library BMM, then fuses unpacking with output LayerNorm. The preceding chunked path remains available as a diagnostic fallback. A wave64 HIP LayerNorm covers the measured 244,000-, 256,000-, and 1,000,000-row contiguous tensors, while the exact `[1000,1000,128]` transition fuses SiLU with its gate multiply. Exact capability predicates preserve native fallback for other lengths, dtypes, layouts, masks, architectures, training, and autograd. See [packed triangle design and results](docs/protenix-packed-triangle.md).
+The long attention path prevents materialization of the native `[1000,4,1000,1000]` attention matrix by using ROCm memory-efficient SDPA. The comparison above used outer chunks; the latest exact unmasked path uses one call with head-last output storage to remove chunk assignments and layout copies. When the pair mask is implicit, the Protenix adapter also omits the all-ones mask and its zero additive bias. The packed triangle path normalizes once, fuses sigmoid projection with channel-first packing, contracts through library BMM, then fuses unpacking with output LayerNorm. The preceding chunked paths remain available as diagnostic fallbacks. A wave64 HIP LayerNorm covers the measured 244,000-, 256,000-, and 1,000,000-row contiguous tensors, while the exact `[1000,1000,128]` transition fuses SiLU with its gate multiply. Exact capability predicates preserve native fallback for other lengths, dtypes, layouts, masks, architectures, training, and autograd. See [packed triangle design and results](docs/protenix-packed-triangle.md).
 
 ## Historical 124-token MI250 result
 
@@ -81,6 +85,8 @@ FIREPROT_BACKEND=fireprot FIREPROT_BLAS_BACKEND=hipblas \
 The exact channel-first LayerNorm path is enabled by the FireProt backend and can be disabled for A/B diagnosis with `FIREPROT_DISABLE_CHANNEL_FIRST_LAYERNORM=1`. The direct CK OuterProductMean candidate is experimental and requires `FIREPROT_ENABLE_CK_OPS=1`; `FIREPROT_DISABLE_CK_OPS=1` overrides that opt-in.
 
 The validated 1,000-token paths are enabled by default after their end-to-end and numerical gates. Use `FIREPROT_DISABLE_LONG_TRIANGLE_PACKED=1` to return to the preceding chunked gate path. `FIREPROT_DISABLE_LONG_TRIANGLE_GATES=1` disables both long multiplication implementations. Other diagnostic switches are `FIREPROT_DISABLE_LONG_TRIANGLE_ATTENTION=1`, `FIREPROT_DISABLE_LONG_LAYERNORM=1`, and `FIREPROT_DISABLE_LONG_TRANSITION=1`. Other long lengths fall back until measured and promoted.
+
+`FIREPROT_DISABLE_LONG_DIRECT_ATTENTION=1` restores outer-chunked SDPA for the exact unmasked 1,000-token bucket. The separate CK attention probe is invoked with `python -m benchmarks.protenix.benchmark_attention --include-ck --ck-set tuned --output outputs/benchmarks/attention.json`; it is not selected by model dispatch. Its version-pinned header overlay leaves installed ROCm headers unchanged.
 
 ## Benchmark
 
@@ -132,6 +138,7 @@ Raw predictions, profiler traces, weights, and hardware-local tuning data remain
 
 - [Architecture](docs/architecture.md)
 - [Measured Protenix AMD performance](docs/protenix-amd-performance.md)
+- [Long attention: SDPA, CK tuning, and incremental model results](docs/protenix-attention-tuning.md)
 - [Implementation plan](docs/plans/2026-10-02-gitnexus-plan-protenix-amd-acceleration.md)
 - [Historical Protenix baseline notes](.agents/protenix_baseline.md) (Chinese, retained as recorded)
 - [Project context](.agents/project_context.md)

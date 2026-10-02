@@ -2,6 +2,8 @@
 
 Status: measured development result, 2026-10-03.
 
+The latest [attention investigation](protenix-attention-tuning.md) adds a 13.124-second default model verification and CK/SDPA source, resource, and tuning comparisons. The paired packed-triangle and historical short results below remain their original measurements. The newer report also corrects the full Protenix integration SHA label using a complete deployed-source audit; archived raw manifests retain their original labels.
+
 ## Scope and provenance
 
 This report covers Protenix Mini-default v0.5.0 on AMD Instinct MI250X/MI250 gfx90a GCDs 6 and 7. The primary input is `benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json`, a real 1,000-residue protein sequence retained from an existing local OpenFold benchmark corpus. The historical short-sequence results use `cases/1izr_L124/input.json`. Results apply to FP32 inference with seed 101, one sample, warm in-process caches, no MSA/template search, TF32 disabled, four recycling cycles, and one or five diffusion steps as stated per workload.
@@ -9,7 +11,7 @@ This report covers Protenix Mini-default v0.5.0 on AMD Instinct MI250X/MI250 gfx
 Source identities:
 
 - long-sequence FireProt code commit: `14eb9f7` (packed candidate: `dc5c923`)
-- long-sequence Protenix integration commit: `77218da70a9c84b101049aa0adf87cb0be461d15`
+- long-sequence Protenix integration commit: `77218da6f5ccf8562a76577dd568869785e6b45b` (corrected full SHA; see the source audit above)
 - long-sequence input SHA-256: `f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac`
 - long-sequence sequence SHA-256: `462bb697ecdcce2f979b00075e60d96fbfcd1b18ba3d92f5427cb03befbcc570`
 - long-sequence benchmark configuration SHA-256: `883c3d53ef6c76e7799eaf80ec3546c7166345827e2d087b288e7e4e5b31355b`

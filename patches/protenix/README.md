@@ -5,12 +5,15 @@ These patches reproduce the FireProt integration commits in the independent `Pro
 ```bash
 cd Protenix
 git checkout d3b4db6a121dd4584edd85e93744239325a2b72e
-git am ../patches/protenix/0001-*.patch ../patches/protenix/0002-*.patch
+git am ../patches/protenix/0001-*.patch \
+  ../patches/protenix/0002-*.patch \
+  ../patches/protenix/0003-*.patch
 ```
 
 | Patch | SHA-256 | Purpose |
 | --- | --- | --- |
 | `0001-feat-add-FireProt-triangle-multiplication-dispatch.patch` | `78b09c161fe97f1dba9aa80153e463048c67f0f219d56e961bcb1a6007d05703` | Add the capability-gated triangle multiplication dispatch choice |
 | `0002-feat-add-FireProt-triangle-attention-dispatch.patch` | `cd271e7ce9046bebd99d6214d9283cee521365a3c0a4e846657eb28c3d00f2ad` | Add the capability-gated triangle attention dispatch choice |
+| `0003-perf-skip-unused-triangle-std-in-fp32.patch` | `83bfa9a201085e4090366978e06bd7ad2c7659f294644bcdbab795e81164c312` | Skip triangle-projection standard deviations whose values are used only by the FP16 overflow guard |
 
-The patches do not change upstream defaults. Native Protenix continues to select its existing kernels unless `fireprot` is requested explicitly.
+The dispatch patches do not change upstream kernel defaults. Native Protenix continues to select its existing kernels unless `fireprot` is requested explicitly. The FP32 reduction patch removes unused work without changing the requested dtype, operation order of retained tensors, or output contract.

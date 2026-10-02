@@ -1,0 +1,88 @@
+"""FireProt bootstrap for the independent Protenix checkout."""
+
+from __future__ import annotations
+
+import argparse
+import importlib
+import importlib.util
+import json
+import os
+import pathlib
+import runpy
+import sys
+from typing import Any
+
+from fireprot.backends.amd.blas import (
+    configuration_manifest,
+    configure_process_blas,
+)
+from fireprot.ops.registry import registry
+
+
+_OPTIONAL_REGISTRATION_MODULES = (
+    "fireprot.backends.amd.triangle_multiplication",
+    "fireprot.backends.amd.triangle_attention",
+)
+_installed: dict[str, Any] | None = None
+
+
+def install(blas_backend: str | None = None) -> dict[str, Any]:
+    """Install FireProt runtime policy before constructing a Protenix model."""
+    global _installed
+    requested = blas_backend or os.environ.get("FIREPROT_BLAS_BACKEND", "auto")
+    blas = configure_process_blas(requested)
+    imported = []
+    for module_name in _OPTIONAL_REGISTRATION_MODULES:
+        if importlib.util.find_spec(module_name) is not None:
+            importlib.import_module(module_name)
+            imported.append(module_name)
+    _installed = {
+        "adapter": "protenix",
+        "blas": blas,
+        "registration_modules": imported,
+    }
+    return manifest()
+
+
+def manifest() -> dict[str, Any]:
+    return {
+        **(_installed or {"adapter": "protenix", "installed": False}),
+        "blas": configuration_manifest(),
+        "operations": registry.manifest(),
+    }
+
+
+def _parse_args(argv: list[str]) -> tuple[argparse.Namespace, list[str]]:
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument(
+        "--fireprot-blas-backend",
+        choices=("auto", "hipblaslt", "hipblas", "ck"),
+        default=os.environ.get("FIREPROT_BLAS_BACKEND", "auto"),
+    )
+    parser.add_argument("--fireprot-manifest", type=pathlib.Path)
+    return parser.parse_known_args(argv)
+
+
+def main(argv: list[str] | None = None) -> int:
+    options, protenix_args = _parse_args(list(argv or sys.argv[1:]))
+    if protenix_args[:1] == ["--"]:
+        protenix_args = protenix_args[1:]
+    install(options.fireprot_blas_backend)
+    sys.argv = ["runner.batch_inference", *protenix_args]
+    exit_code = 0
+    try:
+        runpy.run_module("runner.batch_inference", run_name="__main__")
+    except SystemExit as error:
+        if error.code not in (None, 0):
+            exit_code = int(error.code)
+    finally:
+        if options.fireprot_manifest is not None:
+            options.fireprot_manifest.parent.mkdir(parents=True, exist_ok=True)
+            options.fireprot_manifest.write_text(
+                json.dumps(manifest(), indent=2) + "\n", encoding="utf-8"
+            )
+    return exit_code
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

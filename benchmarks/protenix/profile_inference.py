@@ -750,13 +750,13 @@ def _worker_main(spec_path: pathlib.Path) -> int:
 
         if not torch.cuda.is_available():
             raise RuntimeError("A CUDA-compatible PyTorch device is required")
-        if spec["blas_backend"] != "auto":
-            torch.backends.cuda.preferred_blas_library(spec["blas_backend"])
-
+        fireprot_runtime = None
         if spec["backend"] == "fireprot":
             from fireprot.adapters.protenix.runtime import install
 
-            install()
+            fireprot_runtime = install(spec["blas_backend"])
+        elif spec["blas_backend"] != "auto":
+            torch.backends.cuda.preferred_blas_library(spec["blas_backend"])
 
         from protenix.model.modules.confidence import ConfidenceHead
         from protenix.model.modules.diffusion import DiffusionModule
@@ -919,6 +919,7 @@ def _worker_main(spec_path: pathlib.Path) -> int:
                 },
                 "timing": timing,
                 "torch_profiler": profiler_artifacts,
+                "fireprot_runtime": fireprot_runtime,
                 "inference_wall_ms": (time.perf_counter() - inference_started)
                 * 1000,
                 "process_wall_ms": (time.perf_counter() - started) * 1000,

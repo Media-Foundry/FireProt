@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from collections.abc import Callable, Sequence
 from typing import Any
 
@@ -16,7 +17,14 @@ OPERATION = "triangle_attention"
 IMPLEMENTATION = "amd-gfx90a-efficient-sdpa"
 SUPPORTED_QKV_SHAPE = (124, 4, 124, 32)
 SUPPORTED_BIAS_SHAPES = ((124, 1, 1, 124), (1, 4, 124, 124))
+SUPPORTED_UNMASKED_BIAS_SHAPES = ((1, 4, 124, 124),)
+LONG_QKV_SHAPE = (1000, 4, 1000, 32)
+LONG_BIAS_SHAPES = ((1000, 1, 1, 1000), (1, 4, 1000, 1000))
+LONG_UNMASKED_BIAS_SHAPES = ((1, 4, 1000, 1000),)
 OUTER_BATCH_CHUNK = 64
+_long_sequence_enabled = (
+    os.environ.get("FIREPROT_ENABLE_LONG_TRIANGLE_ATTENTION") == "1"
+)
 
 
 def _architecture(tensor: Any) -> str:
@@ -43,9 +51,21 @@ def _supports_efficient_sdpa(
         return False, "training or autograd is enabled"
     if signature.layout != "strided":
         return False, "projected Q must use the observed head-major strided layout"
-    if signature.shape != SUPPORTED_QKV_SHAPE:
-        return False, f"QKV shape is not the validated {SUPPORTED_QKV_SHAPE}"
-    if attributes.get("bias_shapes") != repr(SUPPORTED_BIAS_SHAPES):
+    if signature.shape == SUPPORTED_QKV_SHAPE:
+        expected_bias_shapes = {
+            repr(SUPPORTED_BIAS_SHAPES),
+            repr(SUPPORTED_UNMASKED_BIAS_SHAPES),
+        }
+    elif signature.shape == LONG_QKV_SHAPE:
+        if not _long_sequence_enabled:
+            return False, "long-sequence path is not enabled"
+        expected_bias_shapes = {
+            repr(LONG_BIAS_SHAPES),
+            repr(LONG_UNMASKED_BIAS_SHAPES),
+        }
+    else:
+        return False, "QKV shape is not a validated short or long bucket"
+    if attributes.get("bias_shapes") not in expected_bias_shapes:
         return False, "mask and triangle bias shapes are not validated"
     return True
 
@@ -66,14 +86,16 @@ def _efficient_sdpa(
     # Protenix produces the triangle bias with heads as the fastest-moving
     # dimension. Materializing it in Q/K order before broadcasting avoids an
     # implicit SDPA input copy that is larger than the attention kernel itself.
-    triangle_bias = biases[1].contiguous()
+    triangle_bias = biases[-1].contiguous()
     if q.shape[0] <= OUTER_BATCH_CHUNK:
-        combined_bias = biases[0] + triangle_bias
+        attention_bias = (
+            triangle_bias if len(biases) == 1 else biases[0] + triangle_bias
+        )
         output = functional.scaled_dot_product_attention(
             q,
             k,
             v,
-            attn_mask=combined_bias,
+            attn_mask=attention_bias,
             dropout_p=0.0,
             scale=1.0,
         )
@@ -81,12 +103,16 @@ def _efficient_sdpa(
         output = q.new_empty(q.shape)
         for start in range(0, q.shape[0], OUTER_BATCH_CHUNK):
             stop = min(start + OUTER_BATCH_CHUNK, q.shape[0])
-            combined_bias = biases[0][start:stop] + triangle_bias
+            attention_bias = (
+                triangle_bias
+                if len(biases) == 1
+                else biases[0][start:stop] + triangle_bias
+            )
             output[start:stop] = functional.scaled_dot_product_attention(
                 q[start:stop],
                 k[start:stop],
                 v[start:stop],
-                attn_mask=combined_bias,
+                attn_mask=attention_bias,
                 dropout_p=0.0,
                 scale=1.0,
             )
@@ -129,7 +155,13 @@ def dispatch_triangle_attention(
         q,
         architecture=_architecture(q),
         mode=mode,
-        mask="additive-mask-and-triangle-bias" if len(biases) == 2 else "unsupported",
+        mask=(
+            "triangle-bias"
+            if len(biases) == 1
+            else "additive-mask-and-triangle-bias"
+            if len(biases) == 2
+            else "unsupported"
+        ),
         inplace=False,
         attributes={
             "bias_count": len(biases),

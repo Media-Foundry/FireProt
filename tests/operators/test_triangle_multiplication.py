@@ -10,6 +10,7 @@ os.environ["LAYERNORM_TYPE"] = "torch"
 from fireprot.backends.amd.triangle_multiplication import (
     _short_sequence_torch,
     _supports_fused_gates,
+    _supports_long_fused_gates,
     _supports_short_sequence,
     dispatch_triangle_multiplication,
 )
@@ -118,6 +119,78 @@ def test_fused_gate_capability_is_limited_to_validated_bucket(monkeypatch) -> No
     no_mask = OperationSignature.create(**{**base, "mask": "none"})
     assert _supports_fused_gates(wrong_shape)[0] is False
     assert _supports_fused_gates(no_mask) is True
+
+
+def test_long_fused_gate_capability_requires_opt_in(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "fireprot.backends.amd.triangle_multiplication.load_amd_extension",
+        lambda: object(),
+    )
+    base = {
+        "operation": "triangle_multiplication",
+        "device_type": "cuda",
+        "architecture": "gfx90a",
+        "dtype": "float32",
+        "shape": (1000, 1000, 128),
+        "layout": "contiguous",
+        "mode": "inference",
+        "mask": "none",
+        "inplace": True,
+        "attributes": {"c_z": 128, "c_hidden": 128},
+    }
+    signature = OperationSignature.create(**base)
+    monkeypatch.setattr(
+        "fireprot.backends.amd.triangle_multiplication._long_fused_gate_enabled",
+        False,
+    )
+    assert _supports_long_fused_gates(signature)[0] is False
+    monkeypatch.setattr(
+        "fireprot.backends.amd.triangle_multiplication._long_fused_gate_enabled",
+        True,
+    )
+    assert _supports_long_fused_gates(signature) is True
+
+
+@pytest.mark.parametrize(
+    "module_class", [TriangleMultiplicationOutgoing, TriangleMultiplicationIncoming]
+)
+@pytest.mark.parametrize("add_with_inplace", [False, True])
+def test_inference_fusion_callbacks_preserve_no_mask_semantics(
+    module_class: type, add_with_inplace: bool
+) -> None:
+    torch.manual_seed(107)
+    module = module_class(c_z=8, c_hidden=8).eval()
+    with torch.no_grad():
+        for parameter in module.parameters():
+            parameter.normal_(mean=0.0, std=0.2)
+        source = torch.randn(7, 7, 8)
+        expected = module(
+            source.clone(),
+            mask=None,
+            inplace_safe=True,
+            _add_with_inplace=add_with_inplace,
+            triangle_multiplicative="torch",
+        ).clone()
+
+        def projection_fusion(gate, projection, mask):
+            assert mask is None
+            return torch.sigmoid(gate) * projection
+
+        def gate_fusion(gate, output):
+            return output * torch.sigmoid(gate)
+
+        actual_input = source.clone()
+        actual = module._inference_forward(
+            actual_input,
+            mask=None,
+            inplace_chunk_size=256,
+            with_add=add_with_inplace,
+            projection_fusion=projection_fusion,
+            gate_fusion=gate_fusion,
+        )
+
+    assert actual.data_ptr() == actual_input.data_ptr()
+    torch.testing.assert_close(actual, expected, rtol=2e-4, atol=2e-4)
 
 
 @pytest.mark.skipif(

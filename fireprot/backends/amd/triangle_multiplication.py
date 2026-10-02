@@ -17,9 +17,14 @@ from fireprot.ops.registry import (
 OPERATION = "triangle_multiplication"
 IMPLEMENTATION = "amd-short-sequence-torch"
 FUSED_GATE_IMPLEMENTATION = "amd-gfx90a-hip-triangle-gates-f32-n124-c128"
+LONG_FUSED_GATE_IMPLEMENTATION = "amd-gfx90a-hip-triangle-gates-f32-n1000-c128"
 MAX_TOKENS = 256
 VALIDATED_SHAPE = (124, 124, 128)
+LONG_VALIDATED_SHAPE = (1000, 1000, 128)
 _fused_gate_enabled = os.environ.get("FIREPROT_DISABLE_TRIANGLE_GATE_FUSION") != "1"
+_long_fused_gate_enabled = (
+    os.environ.get("FIREPROT_ENABLE_LONG_TRIANGLE_GATES") == "1"
+)
 
 
 def _architecture(tensor: Any) -> str:
@@ -167,6 +172,79 @@ def _short_sequence_hip_fused(
     return z
 
 
+def _supports_long_fused_gates(
+    signature: OperationSignature,
+) -> bool | tuple[bool, str]:
+    if not _long_fused_gate_enabled:
+        return False, "disabled unless FIREPROT_ENABLE_LONG_TRIANGLE_GATES=1"
+    if signature.device_type != "cuda":
+        return False, "device is not CUDA/HIP"
+    if signature.architecture != "gfx90a":
+        return False, "architecture is not gfx90a"
+    if signature.dtype != "float32":
+        return False, "dtype is not float32"
+    if signature.mode != "inference":
+        return False, "training or autograd is enabled"
+    if signature.layout != "contiguous":
+        return False, "input is not contiguous"
+    if not signature.inplace:
+        return False, "long path requires inplace inference"
+    if signature.shape != LONG_VALIDATED_SHAPE:
+        return False, "shape is not the validated 1000x1000x128 bucket"
+    if signature.mask != "none":
+        return False, "the validated long-sequence bucket has no explicit mask"
+    attributes = dict(signature.attributes)
+    if attributes.get("c_z") != "128" or attributes.get("c_hidden") != "128":
+        return False, "c_z and c_hidden must both be 128"
+    if load_amd_extension() is None:
+        return False, "FireProt AMD extension is unavailable"
+    return True
+
+
+def _long_sequence_hip_fused(
+    *,
+    module: Any,
+    z: Any,
+    mask: Any,
+    inplace_safe: bool,
+    add_with_inplace: bool,
+    inplace_chunk_size: int | None,
+    native: Callable[[], Any],
+) -> Any:
+    del inplace_safe
+    extension = load_amd_extension()
+    if extension is None or mask is not None:
+        return native()
+
+    def projection_fusion(gate: Any, projection: Any, projection_mask: Any) -> Any:
+        if projection_mask is None:
+            return extension.sigmoid_mul_f32(gate, projection)
+        gate.sigmoid_()
+        projection.mul_(gate)
+        projection.mul_(projection_mask)
+        return projection
+
+    def gate_fusion(gate: Any, output: Any) -> Any:
+        return extension.sigmoid_mul_f32(gate, output)
+
+    return module._inference_forward(
+        z,
+        mask,
+        inplace_chunk_size=inplace_chunk_size,
+        with_add=add_with_inplace,
+        projection_fusion=projection_fusion,
+        gate_fusion=gate_fusion,
+    )
+
+
+registry.register(
+    operation=OPERATION,
+    name=LONG_FUSED_GATE_IMPLEMENTATION,
+    function=_long_sequence_hip_fused,
+    supports=_supports_long_fused_gates,
+    priority=30,
+    version="1",
+)
 registry.register(
     operation=OPERATION,
     name=FUSED_GATE_IMPLEMENTATION,

@@ -1,0 +1,135 @@
+From 6e116a336f28934669b00e2ea57885ae0c6927e7 Mon Sep 17 00:00:00 2001
+From: HUSRCF <shuang886@connect.hkust-gz.edu.cn>
+Date: Fri, 2 Oct 2026 23:06:18 +0800
+Subject: [PATCH] feat: expose triangle inference fusion callbacks
+
+---
+ protenix/model/triangular/triangular.py | 59 ++++++++++++++++---------
+ 1 file changed, 39 insertions(+), 20 deletions(-)
+
+diff --git a/protenix/model/triangular/triangular.py b/protenix/model/triangular/triangular.py
+index 1b37493..129c3e2 100644
+--- a/protenix/model/triangular/triangular.py
++++ b/protenix/model/triangular/triangular.py
+@@ -16,7 +16,7 @@
+ 
+ from abc import ABC, abstractmethod
+ from functools import partial, partialmethod
+-from typing import List, Optional
++from typing import Callable, List, Optional
+ 
+ import torch
+ import torch.nn as nn
+@@ -202,6 +202,12 @@ class TriangleMultiplicativeUpdate(BaseTriangleMultiplicativeUpdate):
+         mask: Optional[torch.Tensor] = None,
+         inplace_chunk_size: Optional[int] = None,
+         with_add: bool = True,
++        projection_fusion: Optional[
++            Callable[[torch.Tensor, torch.Tensor, Optional[torch.Tensor]], torch.Tensor]
++        ] = None,
++        gate_fusion: Optional[
++            Callable[[torch.Tensor, torch.Tensor], torch.Tensor]
++        ] = None,
+     ) -> torch.Tensor:
+         """
+         Args:
+@@ -262,10 +268,10 @@ class TriangleMultiplicativeUpdate(BaseTriangleMultiplicativeUpdate):
+         consumption is just 2.5x the size of z, disregarding memory used for
+         chunks and other small variables.
+         """
+-        if mask is None:
++        if mask is None and projection_fusion is None:
+             mask = z.new_ones(z.shape[:-1])
+-
+-        mask = mask.unsqueeze(-1)
++        if mask is not None:
++            mask = mask.unsqueeze(-1)
+ 
+         def compute_projection_helper(pair, mask, a=True):
+             if a:
+@@ -276,10 +282,15 @@ class TriangleMultiplicativeUpdate(BaseTriangleMultiplicativeUpdate):
+                 linear_p = self.linear_b_p
+ 
+             pair = self.layer_norm_in(pair)
+-            p = linear_g(pair)
+-            p.sigmoid_()
+-            p *= linear_p(pair)
+-            p *= mask
++            if projection_fusion is None:
++                p = linear_g(pair)
++                p.sigmoid_()
++                p *= linear_p(pair)
++                p *= mask
++            else:
++                gate = linear_g(pair)
++                projection = linear_p(pair)
++                p = projection_fusion(gate, projection, mask)
+             p = permute_final_dims(p, (2, 0, 1))
+             return p
+ 
+@@ -298,10 +309,14 @@ class TriangleMultiplicativeUpdate(BaseTriangleMultiplicativeUpdate):
+                 p = pair.new_zeros(out_shape)
+                 for i in range(0, pair.shape[-3], inplace_chunk_size):
+                     pair_chunk = pair[..., i : i + inplace_chunk_size, :, :]
+-                    mask_chunk = mask[..., i : i + inplace_chunk_size, :, :]
++                    mask_chunk = (
++                        None
++                        if mask is None
++                        else mask[..., i : i + inplace_chunk_size, :, :]
++                    )
+                     pair_chunk = compute_projection_helper(
+                         pair[..., i : i + inplace_chunk_size, :, :],
+-                        mask[..., i : i + inplace_chunk_size, :, :],
++                        mask_chunk,
+                         a,
+                     )
+                     if need_transpose:
+@@ -394,11 +409,10 @@ class TriangleMultiplicativeUpdate(BaseTriangleMultiplicativeUpdate):
+                     i + offset,
+                     b_chunk_dim,
+                 )
+-                mask_chunk = slice_tensor(
+-                    mask,
+-                    i,
+-                    i + offset,
+-                    b_chunk_dim,
++                mask_chunk = (
++                    None
++                    if mask is None
++                    else slice_tensor(mask, i, i + offset, b_chunk_dim)
+                 )
+ 
+                 z_chunk_b = z_chunk_b.clone()
+@@ -440,10 +454,12 @@ class TriangleMultiplicativeUpdate(BaseTriangleMultiplicativeUpdate):
+                 # overwrites in z. We can extract the g chunk normally.
+                 z_chunk_g = slice_tensor(z, i, i + offset, col_dim)
+                 g_chunk = self.linear_g(self.layer_norm_in(z_chunk_g))
+-                g_chunk.sigmoid_()
+                 del z_chunk_g
+-
+-                x_chunk *= g_chunk
++                if gate_fusion is None:
++                    g_chunk.sigmoid_()
++                    x_chunk *= g_chunk
++                else:
++                    x_chunk = gate_fusion(g_chunk, x_chunk)
+ 
+                 # Write the columns into z in-place
+                 z_slicer = empty_slicer(z)
+@@ -458,8 +474,11 @@ class TriangleMultiplicativeUpdate(BaseTriangleMultiplicativeUpdate):
+             x = self.layer_norm_out(x)
+             x = self.linear_z(x)
+             g = self.linear_g(z)
+-            g.sigmoid_()
+-            x *= g
++            if gate_fusion is None:
++                g.sigmoid_()
++                x *= g
++            else:
++                x = gate_fusion(g, x)
+             if with_add:
+                 z += x
+             else:
+-- 
+2.43.0
+

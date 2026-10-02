@@ -1,0 +1,54 @@
+From 77218da6f5ccf8562a76577dd568869785e6b45b Mon Sep 17 00:00:00 2001
+From: HUSRCF <shuang886@connect.hkust-gz.edu.cn>
+Date: Fri, 2 Oct 2026 23:09:55 +0800
+Subject: [PATCH] perf: omit implicit all-ones triangle mask
+
+---
+ protenix/model/triangular/triangular.py | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/protenix/model/triangular/triangular.py b/protenix/model/triangular/triangular.py
+index 129c3e2..ac49e6d 100644
+--- a/protenix/model/triangular/triangular.py
++++ b/protenix/model/triangular/triangular.py
+@@ -712,7 +712,7 @@ class TriangleAttention(nn.Module):
+         Returns:
+             [*, I, J, C_in] output tensor
+         """
+-        if mask is None:
++        if mask is None and triangle_attention != "fireprot":
+             # [*, I, J]
+             mask = x.new_ones(
+                 x.shape[:-1],
+@@ -720,13 +720,17 @@ class TriangleAttention(nn.Module):
+ 
+         if not self.starting:
+             x = x.transpose(-2, -3)
+-            mask = mask.transpose(-1, -2)
++            if mask is not None:
++                mask = mask.transpose(-1, -2)
+ 
+         # [*, I, J, C_in]
+         x = self.layer_norm(x)
+ 
+         # [*, I, 1, 1, J]
+-        mask_bias = (self.inf * (mask - 1))[..., :, None, None, :]
++        biases = []
++        if mask is not None:
++            mask_bias = (self.inf * (mask - 1))[..., :, None, None, :]
++            biases.append(mask_bias)
+ 
+         # [*, H, I, J]
+         triangle_bias = permute_final_dims(self.linear(x), (2, 0, 1))
+@@ -734,7 +738,7 @@ class TriangleAttention(nn.Module):
+         # [*, 1, H, I, J]
+         triangle_bias = triangle_bias.unsqueeze(-4)
+ 
+-        biases = [mask_bias, triangle_bias]
++        biases.append(triangle_bias)
+ 
+         if chunk_size is not None:
+             x = self._chunk(
+-- 
+2.43.0
+

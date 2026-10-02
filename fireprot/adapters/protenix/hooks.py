@@ -16,6 +16,13 @@ _ck_enabled = False
 _hook_names: list[str] = []
 
 
+def _ck_ops_enabled() -> bool:
+    return (
+        os.environ.get("FIREPROT_ENABLE_CK_OPS") == "1"
+        and os.environ.get("FIREPROT_DISABLE_CK_OPS") != "1"
+    )
+
+
 def install() -> dict[str, Any]:
     """Install idempotent inference hooks before Protenix model construction."""
     global _ck_enabled, _enabled, _hook_names, _installed, _recycle_enabled
@@ -23,7 +30,7 @@ def install() -> dict[str, Any]:
         if _installed:
             return manifest()
         recycle_disabled = os.environ.get("FIREPROT_DISABLE_RECYCLE_OPS") == "1"
-        ck_disabled = os.environ.get("FIREPROT_DISABLE_CK_OPS") == "1"
+        ck_disabled = not _ck_ops_enabled()
         if recycle_disabled and ck_disabled:
             _installed = True
             _enabled = False

@@ -11,6 +11,9 @@ namespace {
 constexpr int kWaveSize = 64;
 constexpr int kLayerNormWidth = 128;
 constexpr int kWavesPerBlock = 4;
+constexpr int kChannelFirstRows = 124 * 124;
+constexpr int kChannelFirstTileRows = 64;
+constexpr int kChannelFirstTileStride = kChannelFirstTileRows + 1;
 
 __device__ __forceinline__ float wave_sum(float value) {
 #pragma unroll
@@ -57,6 +60,65 @@ __global__ void layer_norm_f32_128_kernel(
       (first - mean) * inverse_std * first_scale + first_offset;
   output[base + lane + kWaveSize] =
       (second - mean) * inverse_std * second_scale + second_offset;
+}
+
+__global__ void layer_norm_f32_128_channel_first_kernel(
+    const float* __restrict__ input,
+    const float* __restrict__ weight,
+    const float* __restrict__ bias,
+    float* __restrict__ output,
+    float epsilon) {
+  __shared__ float tile[kLayerNormWidth][kChannelFirstTileStride];
+  __shared__ float means[kChannelFirstTileRows];
+  __shared__ float inverse_stds[kChannelFirstTileRows];
+
+  const int row_base = blockIdx.x * kChannelFirstTileRows;
+  constexpr int tile_elements = kLayerNormWidth * kChannelFirstTileRows;
+  for (int index = threadIdx.x; index < tile_elements; index += blockDim.x) {
+    const int channel = index / kChannelFirstTileRows;
+    const int local_row = index % kChannelFirstTileRows;
+    const int row = row_base + local_row;
+    tile[channel][local_row] =
+        row < kChannelFirstRows
+        ? input[static_cast<std::int64_t>(channel) * kChannelFirstRows + row]
+        : 0.0f;
+  }
+  __syncthreads();
+
+  if (threadIdx.x < kChannelFirstTileRows) {
+    const int local_row = threadIdx.x;
+    const int row = row_base + local_row;
+    if (row < kChannelFirstRows) {
+      float sum = 0.0f;
+      float square_sum = 0.0f;
+#pragma unroll
+      for (int channel = 0; channel < kLayerNormWidth; ++channel) {
+        const float value = tile[channel][local_row];
+        sum += value;
+        square_sum += value * value;
+      }
+      const float mean = sum * (1.0f / static_cast<float>(kLayerNormWidth));
+      const float variance = fmaxf(
+          square_sum * (1.0f / static_cast<float>(kLayerNormWidth)) -
+              mean * mean,
+          0.0f);
+      means[local_row] = mean;
+      inverse_stds[local_row] = rsqrtf(variance + epsilon);
+    }
+  }
+  __syncthreads();
+
+  for (int index = threadIdx.x; index < tile_elements; index += blockDim.x) {
+    const int local_row = index / kLayerNormWidth;
+    const int channel = index % kLayerNormWidth;
+    const int row = row_base + local_row;
+    if (row < kChannelFirstRows) {
+      const float value = tile[channel][local_row];
+      output[static_cast<std::int64_t>(row) * kLayerNormWidth + channel] =
+          (value - means[local_row]) * inverse_stds[local_row] * weight[channel] +
+          bias[channel];
+    }
+  }
 }
 
 __device__ __forceinline__ float silu(float value) {
@@ -162,6 +224,53 @@ torch::Tensor fireprot_layer_norm_f32_128_plain(
   TORCH_CHECK(epsilon > 0.0, "epsilon must be positive");
   return launch_layer_norm_f32_128<false, false>(
       input, nullptr, nullptr, epsilon);
+}
+
+torch::Tensor fireprot_layer_norm_f32_128_channel_first(
+    torch::Tensor input,
+    torch::Tensor weight,
+    torch::Tensor bias,
+    double epsilon) {
+  TORCH_CHECK(input.is_cuda(), "input must be a HIP tensor");
+  TORCH_CHECK(input.scalar_type() == at::kFloat, "input must be FP32");
+  check_common(weight, "weight");
+  check_common(bias, "bias");
+  TORCH_CHECK(
+      input.dim() == 3 && input.size(0) == 124 && input.size(1) == 124 &&
+          input.size(2) == kLayerNormWidth,
+      "input shape must be [124, 124, 128]");
+  TORCH_CHECK(
+      input.stride(0) == 124 && input.stride(1) == 1 &&
+          input.stride(2) == kChannelFirstRows,
+      "input stride must be [124, 1, 15376]");
+  TORCH_CHECK(
+      weight.numel() == kLayerNormWidth && bias.numel() == kLayerNormWidth,
+      "weight and bias must each contain 128 values");
+  TORCH_CHECK(
+      input.get_device() == weight.get_device() &&
+          input.get_device() == bias.get_device(),
+      "input, weight, and bias must be on the same device");
+  TORCH_CHECK(epsilon > 0.0, "epsilon must be positive");
+
+  auto output = torch::empty(input.sizes(), input.options());
+  constexpr int threads = 256;
+  const dim3 blocks(
+      (kChannelFirstRows + kChannelFirstTileRows - 1) /
+      kChannelFirstTileRows);
+  const auto stream = c10::hip::getCurrentHIPStream(input.get_device());
+  hipLaunchKernelGGL(
+      layer_norm_f32_128_channel_first_kernel,
+      blocks,
+      dim3(threads),
+      0,
+      stream.stream(),
+      input.data_ptr<float>(),
+      weight.data_ptr<float>(),
+      bias.data_ptr<float>(),
+      output.data_ptr<float>(),
+      static_cast<float>(epsilon));
+  C10_CUDA_KERNEL_LAUNCH_CHECK();
+  return output;
 }
 
 torch::Tensor fireprot_silu_mul_f32(

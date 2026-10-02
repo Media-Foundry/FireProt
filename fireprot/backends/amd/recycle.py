@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from collections import Counter
 from collections.abc import Callable
 from functools import lru_cache
@@ -16,8 +17,14 @@ PAIR_CHANNELS = 128
 LAYER_NORM_OPERATION = "layer_norm"
 TRANSITION_OPERATION = "gated_transition"
 LAYER_NORM_IMPLEMENTATION = "amd-gfx90a-hip-layernorm-f32-c128"
+CHANNEL_FIRST_LAYER_NORM_IMPLEMENTATION = (
+    "amd-gfx90a-hip-layernorm-f32-c128-channel-first"
+)
 TRANSITION_IMPLEMENTATION = "amd-gfx90a-hip-transition-f32-c128"
 _fast_path_counts: Counter[tuple[str, str]] = Counter()
+_channel_first_layer_norm_enabled = (
+    os.environ.get("FIREPROT_DISABLE_CHANNEL_FIRST_LAYERNORM") != "1"
+)
 
 
 def _architecture(tensor: Any) -> str:
@@ -76,6 +83,35 @@ def _supports_layer_norm(
     return True
 
 
+def _supports_channel_first_layer_norm(
+    signature: OperationSignature,
+) -> bool | tuple[bool, str]:
+    attributes = dict(signature.attributes)
+    if not _channel_first_layer_norm_enabled:
+        return False, "disabled by FIREPROT_DISABLE_CHANNEL_FIRST_LAYERNORM"
+    if signature.device_type != "cuda":
+        return False, "device is not CUDA/HIP"
+    if signature.architecture != "gfx90a":
+        return False, "architecture is not gfx90a"
+    if signature.dtype != "float32":
+        return False, "dtype is not float32"
+    if signature.mode != "inference":
+        return False, "training or autograd is enabled"
+    if signature.shape != (124, 124, PAIR_CHANNELS):
+        return False, "shape is not the validated 124x124x128 bucket"
+    if signature.layout != "strided":
+        return False, "input is not strided"
+    if attributes.get("stride") != "(124, 1, 15376)":
+        return False, "stride is not the validated channel-first layout"
+    if attributes.get("scale") != "True" or attributes.get("offset") != "True":
+        return False, "full affine LayerNorm is required"
+    if attributes.get("epsilon") != "1e-05":
+        return False, "epsilon is not the validated 1e-5"
+    if load_amd_extension() is None:
+        return False, "FireProt AMD extension is unavailable"
+    return True
+
+
 def _supports_transition(
     signature: OperationSignature,
 ) -> bool | tuple[bool, str]:
@@ -123,12 +159,31 @@ def _hip_transition(
     return output.reshape(original_shape)
 
 
+def _hip_channel_first_layer_norm(
+    *, module: Any, x: Any, native: Callable[[], Any]
+) -> Any:
+    extension = load_amd_extension()
+    if extension is None:
+        return native()
+    return extension.layer_norm_f32_128_channel_first(
+        x, module.weight, module.bias, module.eps
+    )
+
+
 registry.register(
     operation=LAYER_NORM_OPERATION,
     name=LAYER_NORM_IMPLEMENTATION,
     function=_hip_layer_norm,
     supports=_supports_layer_norm,
     priority=20,
+    version="1",
+)
+registry.register(
+    operation=LAYER_NORM_OPERATION,
+    name=CHANNEL_FIRST_LAYER_NORM_IMPLEMENTATION,
+    function=_hip_channel_first_layer_norm,
+    supports=_supports_channel_first_layer_norm,
+    priority=25,
     version="1",
 )
 registry.register(
@@ -156,18 +211,32 @@ def dispatch_layer_norm(
 ) -> Any:
     import torch
 
-    supported = (
+    common = (
         x.device.type == "cuda"
         and _architecture(x) == "gfx90a"
         and x.dtype is torch.float32
         and _mode(module, x) == "inference"
-        and x.is_contiguous()
         and x.shape[-1:] == (PAIR_CHANNELS,)
         and _row_count(tuple(x.shape)) == PAIR_ROWS
         and not (module.weight is None and module.bias is not None)
         and module.eps == 1e-5
     )
-    if supported:
+    channel_first = (
+        _channel_first_layer_norm_enabled
+        and common
+        and tuple(x.shape) == (124, 124, PAIR_CHANNELS)
+        and tuple(x.stride()) == (124, 1, PAIR_ROWS)
+        and module.weight is not None
+        and module.bias is not None
+    )
+    if channel_first:
+        extension = load_amd_extension()
+        if extension is not None:
+            _fast_path_counts[
+                (LAYER_NORM_OPERATION, CHANNEL_FIRST_LAYER_NORM_IMPLEMENTATION)
+            ] += 1
+            return _hip_channel_first_layer_norm(module=module, x=x, native=native)
+    if common and x.is_contiguous():
         extension = load_amd_extension()
         if extension is not None:
             _fast_path_counts[(LAYER_NORM_OPERATION, LAYER_NORM_IMPLEMENTATION)] += 1
@@ -202,6 +271,7 @@ def dispatch_transition(
 
 def fast_path_manifest() -> dict[str, Any]:
     return {
+        "channel_first_layer_norm_enabled": _channel_first_layer_norm_enabled,
         "selection_counts": [
             {"operation": operation, "implementation": implementation, "count": count}
             for (operation, implementation), count in sorted(_fast_path_counts.items())

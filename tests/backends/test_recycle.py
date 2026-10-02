@@ -65,11 +65,62 @@ def test_valid_capabilities_require_the_extension() -> None:
             is True
         )
         assert (
+            recycle._supports_channel_first_layer_norm(
+                _signature(
+                    recycle.LAYER_NORM_OPERATION,
+                    layout="strided",
+                    attributes={
+                        "scale": True,
+                        "offset": True,
+                        "epsilon": 1e-5,
+                        "stride": (124, 1, 15376),
+                    },
+                )
+            )
+            is True
+        )
+        assert (
             recycle._supports_transition(
                 _signature(recycle.TRANSITION_OPERATION)
             )
             is True
         )
+
+
+@pytest.mark.parametrize(
+    "change",
+    [
+        {"architecture": "gfx942"},
+        {"dtype": "bfloat16"},
+        {"shape": (124, 125, 128)},
+        {"layout": "contiguous"},
+        {
+            "attributes": {
+                "scale": True,
+                "offset": True,
+                "epsilon": 1e-5,
+                "stride": (15872, 128, 1),
+            }
+        },
+    ],
+)
+def test_channel_first_layer_norm_rejects_unvalidated_signatures(
+    change: dict[str, object],
+) -> None:
+    values: dict[str, object] = {
+        "layout": "strided",
+        "attributes": {
+            "scale": True,
+            "offset": True,
+            "epsilon": 1e-5,
+            "stride": (124, 1, 15376),
+        },
+    }
+    values.update(change)
+    result = recycle._supports_channel_first_layer_norm(
+        _signature(recycle.LAYER_NORM_OPERATION, **values)
+    )
+    assert result is not True
 
 
 def test_dispatches_fall_back_on_cpu() -> None:
@@ -95,6 +146,64 @@ def test_dispatches_fall_back_on_cpu() -> None:
             )
             == "native"
         )
+
+
+def test_channel_first_layer_norm_preserves_reference_expression() -> None:
+    class _FakeExtension:
+        @staticmethod
+        def layer_norm_f32_128_channel_first(
+            x: torch.Tensor,
+            weight: torch.Tensor,
+            bias: torch.Tensor,
+            epsilon: float,
+        ) -> torch.Tensor:
+            assert x.stride() == (124, 1, 15376)
+            return functional.layer_norm(x, (128,), weight, bias, epsilon)
+
+    torch.manual_seed(107)
+    storage = torch.randn(128, 124, 124)
+    tensor = storage.permute(1, 2, 0)
+    module = SimpleNamespace(
+        weight=torch.randn(128),
+        bias=torch.randn(128),
+        eps=1e-5,
+    )
+    expected = functional.layer_norm(
+        tensor, (128,), module.weight, module.bias, module.eps
+    )
+    with mock.patch.object(
+        recycle, "load_amd_extension", return_value=_FakeExtension()
+    ):
+        actual = recycle._hip_channel_first_layer_norm(
+            module=module,
+            x=tensor,
+            native=lambda: None,
+        )
+
+    assert actual.is_contiguous()
+    torch.testing.assert_close(actual, expected)
+
+
+@pytest.mark.skipif(
+    os.environ.get("FIREPROT_RUN_HIP_TESTS") != "1"
+    or not torch.cuda.is_available()
+    or torch.version.hip is None,
+    reason="requires FIREPROT_RUN_HIP_TESTS=1 with PyTorch HIP",
+)
+def test_channel_first_layer_norm_hip_extension_matches_torch() -> None:
+    torch.manual_seed(109)
+    storage = torch.randn(128, 124, 124, device="cuda", dtype=torch.float32)
+    tensor = storage.permute(1, 2, 0)
+    weight = torch.randn(128, device="cuda", dtype=torch.float32)
+    bias = torch.randn(128, device="cuda", dtype=torch.float32)
+    expected = functional.layer_norm(tensor, (128,), weight, bias, 1e-5)
+    extension = recycle.load_amd_extension(torch_module=torch)
+
+    assert extension is not None
+    actual = extension.layer_norm_f32_128_channel_first(
+        tensor, weight, bias, 1e-5
+    )
+    torch.testing.assert_close(actual, expected, rtol=2e-5, atol=5e-6)
 
 
 def test_fused_transition_preserves_reference_expression() -> None:

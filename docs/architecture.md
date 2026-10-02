@@ -1,6 +1,14 @@
 # FireProt architecture
 
-Status: design proposal, 2026-10-02. The interfaces and stages below are targets, not implemented features.
+Status: partially implemented, 2026-10-02. The Protenix measurement, validation, registry, runtime bootstrap, BLAS policy, and first two gfx90a operator paths are implemented. The full cross-model adapter API and additional model adapters remain proposed interfaces.
+
+## Implementation snapshot
+
+The current implementation provides a model-neutral operation registry under `fireprot/ops`, AMD backends under `fireprot/backends/amd`, a Protenix bootstrap under `fireprot/adapters/protenix`, numerical validation under `fireprot/validation`, and reproducible Protenix tooling under `benchmarks/protenix`. The independent Protenix checkout exposes `fireprot` choices for triangle multiplication and triangle attention while retaining its upstream torch defaults.
+
+Two exact FP32 inference signatures are promoted on gfx90a for the measured 124-token Mini workload. Triangle multiplication replaces the upstream chunked inference path with a direct update while preserving in-place aliasing. Triangle attention uses PyTorch ROCm memory-efficient SDPA, makes the Protenix head-last triangle bias contiguous, and limits its outer batch workspace to 64 rows. The registry falls back to native behavior for every unmatched signature.
+
+The complete adapter contract described below has not yet been implemented as a stable public API. The current Protenix bootstrap is the first integration seam from which that API will be extracted after a second model is studied.
 
 ## 1. Scope
 
@@ -58,11 +66,11 @@ A result manifest should record coordinate artifacts and formats, native confide
 
 ## 5. AMD operator layer
 
-Replace operators at explicit PyTorch call boundaries. Start with a PyTorch/ROCm reference and fallback for each operator; then evaluate CK, hipBLASLt, or custom HIP implementations. Select targets from real profiling. No current evidence establishes Pairformer, diffusion, or a particular GEMM as the bottleneck.
+Replace operators at explicit PyTorch call boundaries. Start with a PyTorch/ROCm reference and fallback for each operator; then evaluate CK, hipBLASLt, or custom HIP implementations. Select targets from real profiling and remeasure whenever the model, shape, dtype, or hardware bucket changes.
 
 Each operator entry point must define its mathematical expression, tensor layouts and strides, shape range, dtype, accumulation precision, mask and broadcasting semantics, determinism requirement, workspace, output format, and error tolerance. Dispatch depends on these capabilities and device properties. Record the selected backend explicitly; never silently change model semantics. Validate each GPU architecture, ROCm version, and library version separately.
 
-Candidates for profiling include linear layers/GEMM, attention, triangle multiplication and attention, LayerNorm, fused residual operations, and repeated diffusion matrix operations. Evaluate hipBLASLt for supported matrix multiplication paths and CK for tensor kernels worth specializing. Decide from shape distributions, end-to-end benefit, compile cost, numerical error, and memory use.
+Measured Mini-default 124-token profiles establish Pairformer as the dominant stage for the current development bucket. They do not establish the hotspot mix for Base weights, long sequences, complexes, ligands, or other model families. Remaining candidates include linear layers/GEMM, LayerNorm, fused residual operations, layout copies, and repeated diffusion matrix operations. Evaluate hipBLASLt for supported matrix multiplication paths and CK for tensor kernels worth specializing. Decide from shape distributions, end-to-end benefit, compile cost, numerical error, and memory use.
 
 The operator library may contain many implementations, but should expose a small, stable public interface. Build benchmark records indexed by operator, shape/layout/dtype, GPU architecture, and backend. Enable an optimization only for validated combinations; otherwise fall back to PyTorch. Record operator package versions and build flags.
 
@@ -76,12 +84,12 @@ The operator library may contain many implementations, but should expose a small
 
 ## 7. Implementation stages
 
-| Stage | Deliverable and acceptance |
-| --- | --- |
-| A: Protenix baseline | Repeated timing on fixed configurations and hardware; manifests include versions, cache state, and stage timings; compare against the current native CLI |
-| B: Minimal framework | Task schema, coordinator, Protenix adapter, and PyTorch operator path; CLI reproduces Stage A |
-| C: First AMD operator | Choose one profiled call site; provide optimized implementation, capability checks, numerical tests, fallback, and measured end-to-end impact |
-| D: Additional models | Add OpenFold, ESMFold, and AtlasFold one at a time; each has capability declarations, a native baseline, end-to-end smoke, and result manifests |
-| E: Operator expansion | Extend CK/hipBLASLt/HIP implementations based on cross-model shape distributions and measured benefit; maintain compatibility and performance matrices |
+| Stage | Status | Deliverable and acceptance |
+| --- | --- | --- |
+| A: Protenix baseline | Implemented for the initial Mini/124-token matrix | Repeated timing on fixed configurations and hardware; manifests include versions, cache state, stage timings, and peak memory; compare against the current native CLI |
+| B: Minimal framework | Partially implemented | Registry, AMD backend boundary, Protenix bootstrap, validation, and measurement exist; the stable task/result coordinator API remains to be extracted |
+| C: First AMD operator | Implemented for exact gfx90a FP32 signatures | Triangle multiplication and triangle attention have capability checks, tests, native fallback, numerical gates, and measured end-to-end impact |
+| D: Additional models | Not started | Add OpenFold, ESMFold, and AtlasFold one at a time; each has capability declarations, a native baseline, end-to-end smoke, and result manifests |
+| E: Operator expansion | Exploratory | The BLAS matrix and residual profile exist; extend CK/hipBLASLt/HIP implementations only where cross-model shapes and repeated measurements justify them |
 
 Preserve source, weight, and input provenance throughout. Establish correctness before reporting speed. Stage D's order can change with source and weight availability or user priorities.

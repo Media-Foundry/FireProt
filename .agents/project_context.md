@@ -1,25 +1,34 @@
 # Project context
 
-FireProt aims to be an AMD GPU protein structure inference framework. It may support Protenix, AtlasFold, OpenFold, ESMFold, and other models, with operator implementations based on CK, hipBLASLt, or other AMD technologies where measurements justify them. At present, only the public Protenix baseline runs. The shared framework, other adapters, and accelerated operators are not implemented. See `docs/architecture.md` for the proposed design and `.agents/protenix_baseline.md` for historical run details.
+FireProt is an AMD GPU protein structure inference framework. Its architecture separates model-specific adapters from semantic operation contracts and AMD implementations. Protenix is the first integration target; AtlasFold, OpenFold, ESMFold, and other model adapters remain future work.
+
+## Implemented state
+
+The top-level repository now provides a Protenix benchmark harness, same-seed numerical validation, a model-neutral capability registry, process-start BLAS policy, Protenix runtime bootstrap, and two promoted gfx90a FP32 inference paths for the measured 124-token Mini bucket. Unsupported signatures fall back to the native Protenix implementation.
+
+Final measured sources are FireProt `d31013ac643bdb7e033dd378795d216e29ecf448` and independent Protenix integration commit `316f5778e80965015a80339de632291f1abbb7f5`, based on upstream Protenix v1.1.0 commit `d3b4db6a121dd4584edd85e93744239325a2b72e`.
+
+On one exclusively checked DiamondHill MI250 gfx90a GCD, Mini-default FP32 C4/S1 and C4/S5 warm model medians improved by 1.213x and 1.184x. Both p95 values improved, maximum peak allocated and reserved memory decreased, and same-seed coordinate/confidence checks passed the locked 1e-3 thresholds. These are development results for one 124-token case.
 
 ## Current paths
 
 | Path | Role |
 | --- | --- |
-| `Protenix/` | Independent upstream Git repository and first model baseline |
-| `cases/` | Eight 124–164 residue single-chain development cases |
-| `scripts/` | Inference, synchronization, and smoke-test scripts |
-| `provenance/` | Source, asset, case-hash, and smoke-test records |
-| `outputs/` | Local smoke predictions, excluded from top-level Git |
-| Remote `runtime/` | Weights, ESM, and CCD assets on DiamondHill |
-| `docs/` | Proposed framework architecture |
+| `fireprot/ops/` | Model-neutral operation registry and capability signatures |
+| `fireprot/backends/amd/` | BLAS policy and promoted AMD operator paths |
+| `fireprot/adapters/protenix/` | FireProt bootstrap for the independent Protenix checkout |
+| `fireprot/validation/` | Coordinate, confidence, and ground-truth validation |
+| `benchmarks/protenix/` | Repeated inference, rocprof import, BLAS matrix, and output comparison |
+| `Protenix/` | Independent upstream repository with local FireProt integration commits |
+| `cases/` | Eight short single-chain development cases |
+| `runtime/` | DiamondHill-only weights and CCD assets, excluded from Git |
+| `outputs/` | Predictions, manifests, and profiler traces, excluded from Git |
+| `provenance/` | Compact versioned evidence records |
 
-## Run baseline
+## Runtime defaults
 
-`scripts/infer.sh` defaults to Mini-ESM, four cycles, one diffusion step, one sample, FP32, seed 101, no external MSA/template search, and PyTorch triangle kernels. Its default Python is `/home/pc/anaconda3/envs/fold/bin/python` on DiamondHill. The local machine lacks the required weights.
-
-On 2026-10-02, smoke runs on `1izr_L124` completed for Mini-ESM, Mini-default, and Tiny-default. Each prediction had 945 atoms with finite coordinates. The 68-second figure is wall time for concurrent runs, not single-model latency or a speedup.
+`scripts/infer.sh` uses Mini-ESM, four cycles, one diffusion step, one sample, FP32, seed 101, no MSA/template search, TF32 disabled, and torch LayerNorm. `FIREPROT_BACKEND=native` selects upstream torch triangle kernels. `FIREPROT_BACKEND=fireprot` installs the registry and selects FireProt triangle multiplication and attention only when capability predicates match.
 
 ## Next measurement
 
-Establish repeatable baseline timings for load, preprocessing/ESM, Pairformer, diffusion, and end-to-end execution. Separate cold and warm cache runs. Accuracy comparisons must account for the native CLI sampler, augmentation, and dropout settings, and score only experimentally observed ground-truth atoms. Then implement the Protenix adapter and a first AMD operator selected by profiling.
+Extend the matrix to untouched evaluation inputs, multiple token-length buckets, Base weights, complexes, ligands, and production diffusion-step counts. The final residual profile ranks GEMM, elementwise work, layout copies, and LayerNorm as the next categories, but no additional optimization should be promoted without operator and end-to-end numerical, p95, and peak-memory gates.

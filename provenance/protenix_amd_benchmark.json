@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "status": "measured-development-result",
+  "date": "2026-10-02",
+  "source": {
+    "fireprot_commit": "d31013ac643bdb7e033dd378795d216e29ecf448",
+    "protenix_integration_commit": "316f5778e80965015a80339de632291f1abbb7f5",
+    "protenix_upstream_baseline": "d3b4db6a121dd4584edd85e93744239325a2b72e",
+    "profile_script_sha256": "812972eb94817a421172630d3bf839eece467361d48bf2215fbec9771b229eb3",
+    "input_sha256": "b2873a9a704806759aca651c7b0287239f7e346ffffcba1a3972efc1cbc9768e",
+    "weight_sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81"
+  },
+  "environment": {
+    "host": "DiamondHill",
+    "device": "AMD Instinct MI250X / MI250",
+    "architecture": "gfx90a:sramecc+:xnack-",
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850"
+  },
+  "measurement": {
+    "model": "protenix_mini_default_v0.5.0",
+    "input": "cases/1izr_L124/input.json",
+    "tokens": 124,
+    "dtype": "fp32",
+    "cycles": 4,
+    "samples": 1,
+    "seed": 101,
+    "cache_state": "warm-within-process",
+    "use_msa": false,
+    "use_template": false,
+    "enable_tf32": false,
+    "warmups": 5,
+    "repetitions": 30,
+    "device_policy": "exclusive",
+    "preflight_gpu_use_percent": 0,
+    "preflight_vram_used_bytes": 11014144
+  },
+  "workloads": {
+    "c4_s1": {
+      "diffusion_steps": 1,
+      "native": {
+        "model_gpu_ms": {"median": 453.52622985839844, "p95": 457.51043701171875},
+        "pairformer_gpu_ms": {"median": 397.19384765625, "p95": 398.6498718261719},
+        "triangle_multiplication_gpu_ms": {"median": 193.2707261443138, "p95": 194.0635324716568},
+        "triangle_attention_gpu_ms": {"median": 135.18611446022987, "p95": 136.47004467248917},
+        "peak_memory_allocated_bytes_max": 850018304,
+        "peak_memory_reserved_bytes_max": 1029701632
+      },
+      "fireprot": {
+        "model_gpu_ms": {"median": 373.93896484375, "p95": 406.0614929199219},
+        "pairformer_gpu_ms": {"median": 320.71070861816406, "p95": 352.515869140625},
+        "triangle_multiplication_gpu_ms": {"median": 135.78107130527496, "p95": 137.40437668561935},
+        "triangle_attention_gpu_ms": {"median": 111.73459258675575, "p95": 113.76494836807251},
+        "peak_memory_allocated_bytes_max": 837647360,
+        "peak_memory_reserved_bytes_max": 1000341504,
+        "triangle_multiplication_selections": 5040,
+        "triangle_attention_selections": 5040
+      },
+      "speedup": {"model_median": 1.212835, "model_p95": 1.126702}
+    },
+    "c4_s5": {
+      "diffusion_steps": 5,
+      "native": {
+        "model_gpu_ms": {"median": 518.4280700683594, "p95": 541.4475708007812},
+        "pairformer_gpu_ms": {"median": 393.3095245361328, "p95": 417.8134460449219},
+        "triangle_multiplication_gpu_ms": {"median": 190.0720518231392, "p95": 220.73554408550262},
+        "triangle_attention_gpu_ms": {"median": 134.5504942536354, "p95": 136.2451336979866},
+        "peak_memory_allocated_bytes_max": 850018304,
+        "peak_memory_reserved_bytes_max": 1029701632
+      },
+      "fireprot": {
+        "model_gpu_ms": {"median": 437.85520935058594, "p95": 468.26580810546875},
+        "pairformer_gpu_ms": {"median": 316.68507385253906, "p95": 322.82489013671875},
+        "triangle_multiplication_gpu_ms": {"median": 134.16162076592445, "p95": 134.75650763511658},
+        "triangle_attention_gpu_ms": {"median": 111.20084315538406, "p95": 117.84242981672287},
+        "peak_memory_allocated_bytes_max": 837647360,
+        "peak_memory_reserved_bytes_max": 1000341504,
+        "triangle_multiplication_selections": 5040,
+        "triangle_attention_selections": 5040
+      },
+      "speedup": {"model_median": 1.184017, "model_p95": 1.156283}
+    }
+  },
+  "numerical_validation": {
+    "coordinate_tolerance_angstrom": 0.001,
+    "confidence_tolerance": 0.001,
+    "c4_s1": {
+      "atoms": 945,
+      "aligned_rmsd_angstrom": 0.00010758358965066059,
+      "max_abs_coordinate_delta_angstrom": 0.0009765625,
+      "max_abs_confidence_delta": 0.000034332275390625,
+      "passed": true
+    },
+    "c4_s5": {
+      "atoms": 945,
+      "aligned_rmsd_angstrom": 0.00006028994853708303,
+      "max_abs_coordinate_delta_angstrom": 0.00029277801513671875,
+      "max_abs_confidence_delta": 0.00003814697265625,
+      "passed": true
+    }
+  },
+  "rocprof": {
+    "workload": "c4_s1_profile_one",
+    "kernel_count": 135,
+    "dispatch_count": 14809,
+    "aggregate_kernel_duration_ns": 349316757,
+    "category_percent": {
+      "gemm": 37.938727628803676,
+      "elementwise": 20.089401265110222,
+      "copy_or_layout": 16.831001611525895,
+      "layernorm": 15.046055176791876,
+      "other": 6.2840031461760075,
+      "reduction": 3.641015996263815,
+      "softmax": 0.16979517532850563
+    },
+    "host_to_device_copy_calls": 1851,
+    "host_to_device_copy_duration_ns": 52895189,
+    "allocation_calls": 178,
+    "free_calls": 87
+  },
+  "limits": [
+    "The repeated performance result covers one 124-token development case.",
+    "Base weights, long sequences, complexes, ligands, BF16/FP16, gfx942, and multi-GPU execution are unmeasured.",
+    "Raw manifests, outputs, and profiler traces remain excluded from Git on DiamondHill."
+  ]
+}

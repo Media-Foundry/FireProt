@@ -1,4 +1,4 @@
-"""Experimental, exact-layout FP32 CK Tile triangle attention on gfx90a."""
+"""Validated exact-layout FP32 CK Tile triangle attention on gfx90a."""
 from __future__ import annotations
 
 import ctypes
@@ -15,7 +15,10 @@ from fireprot.ops.registry import OperationSignature, registry
 
 IMPLEMENTATION = "amd-gfx90a-ck-tile-attention-f32-n1000"
 STRIDES = (128000, 32, 128, 1)
-_enabled = os.environ.get("FIREPROT_ENABLE_CK_ATTENTION") == "1"
+_enabled = (
+    os.environ.get("FIREPROT_ENABLE_CK_ATTENTION", "1") == "1"
+    and os.environ.get("FIREPROT_DISABLE_CK_ATTENTION") != "1"
+)
 _lock = threading.RLock()
 _library: Any = None
 _entry: Any = None
@@ -94,7 +97,7 @@ def extension_status() -> dict[str, Any]:
 
 def _supports(signature: OperationSignature) -> bool | tuple[bool, str]:
     if not _enabled:
-        return False, "CK Tile attention requires FIREPROT_ENABLE_CK_ATTENTION=1"
+        return False, "CK Tile attention disabled by environment"
     if signature.shape != ta.LONG_QKV_SHAPE:
         return False, "CK Tile attention requires N1000"
     attributes = dict(signature.attributes)
@@ -102,7 +105,7 @@ def _supports(signature: OperationSignature) -> bool | tuple[bool, str]:
         return False, "CK Tile attention requires implicit pair mask"
     if attributes.get("qkv_strides") != repr((STRIDES,) * 3) or attributes.get("ck_tile_compatible") != "True":
         return False, "CK Tile attention requires exact QKV shape, strides, dtype, device and alignment"
-    supported = ta._supports_efficient_sdpa(signature)
+    supported = ta._supports_long_direct(signature)
     if supported is not True:
         return supported
     if load_extension() is None:
@@ -127,4 +130,4 @@ def attention(*, module: Any, q: Any, k: Any, v: Any, biases: Any, native: Any) 
 
 
 registry.register(operation=ta.OPERATION, name=IMPLEMENTATION, function=attention,
-                  supports=_supports, priority=30, version="experimental-1")
+                  supports=_supports, priority=30, version="1")

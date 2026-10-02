@@ -24,7 +24,11 @@ def test_ck_attention_capability_and_build_fallback(monkeypatch):
     assert ck._supports(signature)[0] is False
     monkeypatch.setattr(ck, "_enabled", True)
     monkeypatch.setattr(ta, "_long_sequence_enabled", True)
+    monkeypatch.setattr(ta, "_long_direct_enabled", True)
     assert ck._supports(signature) is True
+    monkeypatch.setattr(ta, "_long_direct_enabled", False)
+    assert ck._supports(signature)[0] is False
+    monkeypatch.setattr(ta, "_long_direct_enabled", True)
     for changes in (dict(dtype="bfloat16"), dict(architecture="gfx942"),
                     dict(mode="training"), dict(shape=ta.SUPPORTED_QKV_SHAPE)):
         assert ck._supports(dataclasses.replace(signature, **changes))[0] is False

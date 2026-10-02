@@ -16,6 +16,7 @@ OPERATION = "triangle_attention"
 IMPLEMENTATION = "amd-gfx90a-efficient-sdpa"
 SUPPORTED_QKV_SHAPE = (124, 4, 124, 32)
 SUPPORTED_BIAS_SHAPES = ((124, 1, 1, 124), (1, 4, 124, 124))
+OUTER_BATCH_CHUNK = 64
 
 
 def _architecture(tensor: Any) -> str:
@@ -65,15 +66,30 @@ def _efficient_sdpa(
     # Protenix produces the triangle bias with heads as the fastest-moving
     # dimension. Materializing it in Q/K order before broadcasting avoids an
     # implicit SDPA input copy that is larger than the attention kernel itself.
-    combined_bias = biases[0] + biases[1].contiguous()
-    output = functional.scaled_dot_product_attention(
-        q,
-        k,
-        v,
-        attn_mask=combined_bias,
-        dropout_p=0.0,
-        scale=1.0,
-    )
+    triangle_bias = biases[1].contiguous()
+    if q.shape[0] <= OUTER_BATCH_CHUNK:
+        combined_bias = biases[0] + triangle_bias
+        output = functional.scaled_dot_product_attention(
+            q,
+            k,
+            v,
+            attn_mask=combined_bias,
+            dropout_p=0.0,
+            scale=1.0,
+        )
+    else:
+        output = q.new_empty(q.shape)
+        for start in range(0, q.shape[0], OUTER_BATCH_CHUNK):
+            stop = min(start + OUTER_BATCH_CHUNK, q.shape[0])
+            combined_bias = biases[0][start:stop] + triangle_bias
+            output[start:stop] = functional.scaled_dot_product_attention(
+                q[start:stop],
+                k[start:stop],
+                v[start:stop],
+                attn_mask=combined_bias,
+                dropout_p=0.0,
+                scale=1.0,
+            )
     return output.transpose(-2, -3)
 
 

@@ -22,6 +22,7 @@ from fireprot.ops.registry import registry
 _OPTIONAL_REGISTRATION_MODULES = (
     "fireprot.backends.amd.triangle_multiplication",
     "fireprot.backends.amd.triangle_attention",
+    "fireprot.backends.amd.recycle",
 )
 _installed: dict[str, Any] | None = None
 
@@ -36,20 +37,29 @@ def install(blas_backend: str | None = None) -> dict[str, Any]:
         if importlib.util.find_spec(module_name) is not None:
             importlib.import_module(module_name)
             imported.append(module_name)
+    from fireprot.adapters.protenix import hooks
+
+    hook_manifest = hooks.install()
     _installed = {
         "adapter": "protenix",
         "blas": blas,
         "registration_modules": imported,
+        "hooks": hook_manifest,
     }
     return manifest()
 
 
 def manifest() -> dict[str, Any]:
-    return {
+    result = {
         **(_installed or {"adapter": "protenix", "installed": False}),
         "blas": configuration_manifest(),
         "operations": registry.manifest(),
     }
+    if _installed is not None:
+        from fireprot.adapters.protenix import hooks
+
+        result["hooks"] = hooks.manifest()
+    return result
 
 
 def _parse_args(argv: list[str]) -> tuple[argparse.Namespace, list[str]]:

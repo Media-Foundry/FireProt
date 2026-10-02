@@ -23,7 +23,7 @@ LONG_BIAS_SHAPES = ((1000, 1, 1, 1000), (1, 4, 1000, 1000))
 LONG_UNMASKED_BIAS_SHAPES = ((1, 4, 1000, 1000),)
 OUTER_BATCH_CHUNK = 64
 _long_sequence_enabled = (
-    os.environ.get("FIREPROT_ENABLE_LONG_TRIANGLE_ATTENTION") == "1"
+    os.environ.get("FIREPROT_DISABLE_LONG_TRIANGLE_ATTENTION") != "1"
 )
 
 
@@ -58,7 +58,7 @@ def _supports_efficient_sdpa(
         }
     elif signature.shape == LONG_QKV_SHAPE:
         if not _long_sequence_enabled:
-            return False, "long-sequence path is not enabled"
+            return False, "disabled by FIREPROT_DISABLE_LONG_TRIANGLE_ATTENTION"
         expected_bias_shapes = {
             repr(LONG_BIAS_SHAPES),
             repr(LONG_UNMASKED_BIAS_SHAPES),

@@ -23,7 +23,7 @@ VALIDATED_SHAPE = (124, 124, 128)
 LONG_VALIDATED_SHAPE = (1000, 1000, 128)
 _fused_gate_enabled = os.environ.get("FIREPROT_DISABLE_TRIANGLE_GATE_FUSION") != "1"
 _long_fused_gate_enabled = (
-    os.environ.get("FIREPROT_ENABLE_LONG_TRIANGLE_GATES") == "1"
+    os.environ.get("FIREPROT_DISABLE_LONG_TRIANGLE_GATES") != "1"
 )
 
 
@@ -176,7 +176,7 @@ def _supports_long_fused_gates(
     signature: OperationSignature,
 ) -> bool | tuple[bool, str]:
     if not _long_fused_gate_enabled:
-        return False, "disabled unless FIREPROT_ENABLE_LONG_TRIANGLE_GATES=1"
+        return False, "disabled by FIREPROT_DISABLE_LONG_TRIANGLE_GATES"
     if signature.device_type != "cuda":
         return False, "device is not CUDA/HIP"
     if signature.architecture != "gfx90a":

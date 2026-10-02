@@ -125,7 +125,7 @@ def test_capability_accepts_only_validated_gfx90a_signature() -> None:
         assert _supports_efficient_sdpa(signature)[0] is False
 
 
-def test_long_capability_requires_explicit_opt_in(monkeypatch) -> None:
+def test_long_capability_can_be_disabled(monkeypatch) -> None:
     base = {
         "operation": "triangle_attention",
         "device_type": "cuda",

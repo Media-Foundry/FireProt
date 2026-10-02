@@ -121,7 +121,7 @@ def test_fused_gate_capability_is_limited_to_validated_bucket(monkeypatch) -> No
     assert _supports_fused_gates(no_mask) is True
 
 
-def test_long_fused_gate_capability_requires_opt_in(monkeypatch) -> None:
+def test_long_fused_gate_capability_can_be_disabled(monkeypatch) -> None:
     monkeypatch.setattr(
         "fireprot.backends.amd.triangle_multiplication.load_amd_extension",
         lambda: object(),

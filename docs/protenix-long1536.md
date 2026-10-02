@@ -703,3 +703,28 @@ regression tests passed (108 passed, 21 skipped); focused GPU tests passed
 incoming and passes full saved-output checks. Unlike the standalone probe,
 its PyTorch peak allocation includes the temporary workspace. The path
 remains opt-in pending a same-source full-model comparison.
+
+At candidate `d4ffc2c43d4e11c6854a5e1422aaf4cf2708ac38`, the first controlled
+model comparison on GPU 7 (GPU 6 idle) retained Mini-default FP32 C4/S1,
+sample 1, seed 101, one warmup and three measured calls. Run order was
+Lt disabled then enabled; both runs used hipBLAS process policy and
+expandable segments. GPU isolation passed, as did all three coordinate /
+confidence comparisons over 12,139 atoms (maximum aligned RMSD
+`0.000105095 A`, maximum confidence delta `3.8147e-6`).
+
+| Metric | Lt disabled | Lt enabled |
+| --- | ---: | ---: |
+| Model median | 36.495 s | 36.337 s |
+| Model p95 | 37.041 s | 36.678 s |
+| Triangle multiplication median | 11.194 s | 11.041 s |
+| Pairformer stack median | 33.590 s | 33.429 s |
+| Peak allocated memory | 22,721,185,792 B | 22,721,185,792 B |
+| Successful Lt calls, including warmup | 0 | 576 |
+| Packed contraction native fallbacks | 576 | 0 |
+
+The observed median reduction is only 0.43% (1.0043x), below the spread
+within these runs. It does not establish a stable E2E improvement and is
+smaller than the isolated-operator estimate. The route remains opt-in.
+The next diagnostic should time the exact contraction boundary in the
+model, separating its contribution from surrounding projection and
+normalization work. See [runtime/model evidence](../provenance/protenix_long1536_lt_runtime_d4ffc2c.json).

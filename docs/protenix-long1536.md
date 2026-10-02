@@ -275,13 +275,37 @@ See [pipeline evidence](../provenance/protenix_attention_prefetch_8ddbdfb.json).
 
 ### Pair epilogue candidate
 
-`FIREPROT_ENABLE_LONG1536_EPILOGUES=1`, together with the length opt-in,
-extends the existing HIP LayerNorm and gated transition to the exact
-1536-by-1536 pair bucket. This remains independently experimental pending
-model agreement and controlled model timing. It preserves FP32 and C4.
+The length opt-in now also enables the existing HIP LayerNorm and gated
+transition for the exact 1536-by-1536 pair bucket. Set
+`FIREPROT_ENABLE_LONG1536_EPILOGUES=0` to disable them for comparisons.
+The bucket remains opt-in and preserves FP32 and C4.
 Random-weight, full-operation measurements on GPU 6 (seed 641, five warmups,
 twenty repetitions) measured LayerNorm at 11.729 ms native versus 1.931 ms
 HIP, and gated transition at 63.811 versus 46.657 ms. Native repeats were
 11.736 and 63.557 ms. Numerical gates and continuous isolation checks passed.
 Regression tests passed locally (102 passed, 20 skipped) and on GPU 6
 (121 passed, 1 skipped). These are operator results, not model speedups.
+
+At source `547880cb5d225215a0b6a7018099509aaf7ca2fa`, a same-source model
+comparison on GPU 7 (GPU 6 idle, one warmup, three measured calls, fixed
+disabled/enabled order) measured **41.444 s disabled versus 36.664 s enabled**:
+**1.130x** speedup, or **11.53%** less model time. Nearest-rank p95 was
+41.711 versus 36.744 s. Peak allocated memory decreased from 23,929,145,344
+to 22,721,185,792 bytes. Both continuous process monitors passed.
+
+The model agreement run passed over 12,139 atoms: aligned RMSD
+`0.00012953505 A`, maximum coordinate component delta `0.0009765625 A`,
+and confidence maximum delta `0.00000381470`. It selected 438 accelerated
+LayerNorm calls and 72 accelerated transitions; unsupported shapes continued
+to use native code. The attention-stage median also drops from 20.228 to
+18.829 s because its surrounding LayerNorm work is included in that stage;
+the SDPA kernel itself is unchanged. See
+[epilogue model evidence](../provenance/protenix_long1536_epilogues_547880c.json).
+
+An isolated FP32 adaptation of the whole-K policy subsequently compiled
+after adding FP32 dispatch, a no-sink compatibility declaration, K1=32,
+and K-pack=2 for M128. Both candidates passed the operator gate (maximum
+absolute delta `1.37090683e-6`) but measured 42.80 ms for M64 and 40.72 ms
+for M128, versus SDPA's 34.86/34.80 ms. They remain excluded from model
+dispatch. This rejects the tested whole-K configurations, not all possible
+FP32 prefetch designs.

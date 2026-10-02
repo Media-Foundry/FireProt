@@ -32,6 +32,13 @@ one warmup and three measured calls on GPU 7. Further CK batch scheduling
 reaches 37.93 ms but still trails SDPA; it remains a standalone experiment.
 See [long-sequence diagnosis](docs/protenix-long1536.md).
 
+A subsequent same-source epilogue comparison improves **41.444 to 36.664 s
+(1.130x)** and reduces peak allocation from 23.929 to 22.721 GB. HIP pair
+LayerNorm and gated transition now follow `FIREPROT_ENABLE_LONG1536=1` by
+default; set `FIREPROT_ENABLE_LONG1536_EPILOGUES=0` to disable them. Native
+agreement passed. These results retain the same Mini-default FP32 C4/S1
+workload and are warm model timings, excluding loading and preprocessing.
+
 ## Verified 1,000-token MI250 result
 
 The latest CK Tile attention path improves the model median from **13.120 to 12.580 s (1.043x)** in a same-source, five-repetition comparison, with unchanged peak allocated memory. The complete attention operator measures **32.711 ms** versus SDPA's **36.35–36.36 ms**. CK Tile is now the default for this exact validated bucket. See [CK Tile implementation and model validation](docs/protenix-ck-tile.md). The preceding [generic CK/SDPA investigation](docs/protenix-attention-tuning.md) remains historical evidence; its generic CK candidate was not promoted.

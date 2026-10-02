@@ -1,0 +1,2272 @@
+{
+  "schema_version": 1,
+  "verified_candidate_source": "547880cb5d225215a0b6a7018099509aaf7ca2fa",
+  "source_note": "Operator source_commit was unset because remote Git metadata was unavailable; implementation hashes were subsequently verified against the candidate commit. Model runs set the verified source explicitly.",
+  "operator": {
+    "schema_version": 1,
+    "status": "ok",
+    "preflight": {
+      "available": true,
+      "command": [
+        "/usr/bin/rocm-smi",
+        "--showpids",
+        "--showuse",
+        "--showmeminfo",
+        "vram",
+        "--showclocks",
+        "--json"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "data": {
+        "card0": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "863949344",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card1": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "525135767",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card2": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "1084009616",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "10981376"
+        },
+        "card3": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "756898124",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card4": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "607211047",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "19168514048"
+        },
+        "card5": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "577403105",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card6": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "451388035",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card7": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "533753660",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        }
+      },
+      "visible_devices": "6",
+      "selected_physical_index": 6,
+      "exclusive_check": {
+        "required": true,
+        "passed": true,
+        "gpu_use_percent": 0,
+        "vram_used_bytes": 11014144,
+        "max_gpu_use_percent": 5,
+        "max_vram_used_bytes": 268435456
+      }
+    },
+    "shape": [
+      1536,
+      1536,
+      128
+    ],
+    "dtype": "float32",
+    "seed": 641,
+    "tf32": false,
+    "warmups": 5,
+    "repetitions": 20,
+    "scope": "complete random-weight operators; not model performance",
+    "cache_state": "warm within process; compilation excluded",
+    "records": [
+      {
+        "operation": "layer_norm",
+        "implementation": "native",
+        "median_ms": 11.729116439819336,
+        "p95_ms": 11.734076499938965,
+        "values_ms": [
+          11.727834701538086,
+          11.728633880615234,
+          11.731675148010254,
+          11.726393699645996,
+          11.728154182434082,
+          11.731194496154785,
+          11.730398178100586,
+          11.730557441711426,
+          11.728476524353027,
+          11.727996826171875,
+          11.734076499938965,
+          11.731038093566895,
+          11.734878540039062,
+          11.730558395385742,
+          11.730717658996582,
+          11.729598999023438,
+          11.72671890258789,
+          11.723198890686035,
+          11.724639892578125,
+          11.718879699707031
+        ],
+        "peak_allocated_bytes": 3643540480,
+        "max_abs_delta": 0.0
+      },
+      {
+        "operation": "layer_norm",
+        "implementation": "hip",
+        "median_ms": 1.9305874705314636,
+        "p95_ms": 1.9346669912338257,
+        "values_ms": [
+          1.9306679964065552,
+          1.9439469575881958,
+          1.9322669506072998,
+          1.9322669506072998,
+          1.933387041091919,
+          1.9247469902038574,
+          1.933387041091919,
+          1.9319469928741455,
+          1.9250680208206177,
+          1.9260269403457642,
+          1.9271470308303833,
+          1.9269880056381226,
+          1.930506944656372,
+          1.9253870248794556,
+          1.9247479438781738,
+          1.9346669912338257,
+          1.9306679964065552,
+          1.923467993736267,
+          1.919306993484497,
+          1.9322669506072998
+        ],
+        "peak_allocated_bytes": 3624666112,
+        "max_abs_delta": 1.1920928955078125e-07
+      },
+      {
+        "operation": "layer_norm",
+        "implementation": "native_repeat",
+        "median_ms": 11.73623514175415,
+        "p95_ms": 11.743195533752441,
+        "values_ms": [
+          11.738238334655762,
+          11.732638359069824,
+          11.738556861877441,
+          11.738077163696289,
+          11.735676765441895,
+          11.730877876281738,
+          11.740955352783203,
+          11.733115196228027,
+          11.736475944519043,
+          11.731675148010254,
+          11.73183536529541,
+          11.72575569152832,
+          11.737756729125977,
+          11.739995956420898,
+          11.73039722442627,
+          11.743195533752441,
+          11.764155387878418,
+          11.737436294555664,
+          11.735994338989258,
+          11.727514266967773
+        ],
+        "peak_allocated_bytes": 3643540480,
+        "max_abs_delta": 0.0
+      },
+      {
+        "operation": "gated_transition",
+        "implementation": "native",
+        "median_ms": 63.81142997741699,
+        "p95_ms": 65.33483123779297,
+        "values_ms": [
+          65.2906723022461,
+          65.33483123779297,
+          65.32666778564453,
+          65.3719482421875,
+          65.24427032470703,
+          63.917266845703125,
+          63.5828742980957,
+          63.539039611816406,
+          63.774871826171875,
+          63.76015090942383,
+          63.679195404052734,
+          63.912628173828125,
+          63.61807632446289,
+          63.710391998291016,
+          63.86526870727539,
+          63.77519226074219,
+          63.85758972167969,
+          63.701751708984375,
+          63.68623733520508,
+          63.8476676940918
+        ],
+        "peak_allocated_bytes": 18153735168,
+        "max_abs_delta": 0.0
+      },
+      {
+        "operation": "gated_transition",
+        "implementation": "hip",
+        "median_ms": 46.656545639038086,
+        "p95_ms": 47.928592681884766,
+        "values_ms": [
+          47.928592681884766,
+          47.966670989990234,
+          47.81531524658203,
+          47.8327522277832,
+          47.90059280395508,
+          47.73595428466797,
+          46.438873291015625,
+          46.726863861083984,
+          46.50239181518555,
+          46.82478332519531,
+          46.501590728759766,
+          46.55567169189453,
+          46.62350845336914,
+          46.68958282470703,
+          46.51247024536133,
+          46.34159469604492,
+          46.54751205444336,
+          46.47087097167969,
+          46.690547943115234,
+          46.568153381347656
+        ],
+        "peak_allocated_bytes": 13321896960,
+        "max_abs_delta": 3.725290298461914e-09
+      },
+      {
+        "operation": "gated_transition",
+        "implementation": "native_repeat",
+        "median_ms": 63.55703926086426,
+        "p95_ms": 63.789432525634766,
+        "values_ms": [
+          63.75087356567383,
+          63.41936492919922,
+          63.54304122924805,
+          63.51327896118164,
+          63.63264083862305,
+          63.646240234375,
+          63.7455940246582,
+          63.540321350097656,
+          63.789432525634766,
+          63.42528533935547,
+          63.58607864379883,
+          63.95903015136719,
+          63.39392852783203,
+          63.55567932128906,
+          63.69823455810547,
+          63.42752456665039,
+          63.48096466064453,
+          63.69375991821289,
+          63.475364685058594,
+          63.55839920043945
+        ],
+        "peak_allocated_bytes": 18153735168,
+        "max_abs_delta": 0.0
+      }
+    ],
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850",
+    "fast_paths": {
+      "channel_first_layer_norm_enabled": true,
+      "long_layer_norm_enabled": true,
+      "long_transition_enabled": true,
+      "long1536_epilogues_enabled": true,
+      "selection_counts": [
+        {
+          "operation": "gated_transition",
+          "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+          "count": 25
+        },
+        {
+          "operation": "layer_norm",
+          "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+          "count": 50
+        }
+      ]
+    },
+    "source_commit": null,
+    "source_sha256": {
+      "benchmarks/protenix/benchmark_epilogues.py": "404cd6874d31bd5bcafc39bb3d884b26d5757ffe24de51eaf2b47651e0ea08f6",
+      "fireprot/backends/amd/recycle.py": "88a5d8ba97b27a79a9ee596f2eff6b3500fad1f220bb4c8e02a6e550c20813b5",
+      "fireprot/backends/amd/csrc/fireprot_amd_ops.cu": "81f43f369e9105a114dd88b5f77b7f4b30cbc0c4e23c2db68332f80f7b432149"
+    },
+    "gpu_process_monitor": {
+      "available": true,
+      "command": [
+        "/usr/bin/amd-smi",
+        "process",
+        "--json"
+      ],
+      "physical_device_index": 6,
+      "interval_seconds": 1.0,
+      "samples": 9,
+      "allowed_pid": 735133,
+      "external_pids": [],
+      "errors": [],
+      "passed": true
+    }
+  },
+  "validation_manifest": {
+    "schema_version": 1,
+    "status": "ok",
+    "created_at": "2026-10-02T21:18:58.292979+00:00",
+    "spec": {
+      "schema_version": 1,
+      "created_at": "2026-10-02T21:18:58.239771+00:00",
+      "config_path": "/media/IntelSSD/fireprot/benchmarks/protenix/configs/mi250-long1536-validation.json",
+      "config_sha256": "c56c01e2782dae4920e2700aadcb597aedb8c33bacf3808842131de037e5b2fa",
+      "repo_root": "/media/IntelSSD/fireprot",
+      "protenix_root": "/media/IntelSSD/fireprot/Protenix",
+      "run_dir": "/media/IntelSSD/fireprot/outputs/benchmarks/long1536-epilogues-547880c/validation/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot",
+      "backend": "fireprot",
+      "blas_backend": "hipblas",
+      "profile_one": false,
+      "torch_profile": false,
+      "source": {
+        "fireprot_commit": "547880cb5d225215a0b6a7018099509aaf7ca2fa",
+        "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b"
+      },
+      "measurement": {
+        "warmups": 0,
+        "repetitions": 1,
+        "dump_outputs": true,
+        "cache_state": "warm-within-process",
+        "device_policy": "exclusive",
+        "exclusive_max_gpu_use_percent": 5,
+        "exclusive_max_vram_used_bytes": 268435456,
+        "process_monitor_interval_seconds": 1.0,
+        "reject_external_gpu_processes": true,
+        "clock_policy": "record-current"
+      },
+      "workload": {
+        "id": "mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32",
+        "input": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+        "token_count": 1536,
+        "model_name": "protenix_mini_default_v0.5.0",
+        "dtype": "fp32",
+        "cycles": 4,
+        "diffusion_steps": 1,
+        "samples": 1,
+        "seeds": [
+          101
+        ],
+        "cache": true,
+        "use_msa": false,
+        "use_template": false,
+        "enable_fusion": true,
+        "enable_tf32": false,
+        "trimul_kernel": "torch",
+        "triatt_kernel": "torch"
+      }
+    },
+    "allocator_environment": {
+      "PYTORCH_ALLOC_CONF": "expandable_segments:True",
+      "PYTORCH_CUDA_ALLOC_CONF": null
+    },
+    "source": {
+      "fireprot_commit": "547880cb5d225215a0b6a7018099509aaf7ca2fa",
+      "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b",
+      "profile_script_sha256": "e50e41ad138713c1f43b329a7b66d1a12b56a72c44b8ac9fbce3acfab0611242"
+    },
+    "rocm_preflight": {
+      "available": true,
+      "command": [
+        "/usr/bin/rocm-smi",
+        "--showpids",
+        "--showuse",
+        "--showmeminfo",
+        "vram",
+        "--showclocks",
+        "--json"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "data": {
+        "card0": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "863949517",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card1": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "525135939",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card2": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "1084009789",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "10981376"
+        },
+        "card3": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "756898296",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card4": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "608009450",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card5": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "577403282",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card6": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "451388208",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card7": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "533753833",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        }
+      },
+      "visible_devices": "7",
+      "selected_physical_index": 7,
+      "exclusive_check": {
+        "required": true,
+        "passed": true,
+        "gpu_use_percent": 0,
+        "vram_used_bytes": 11014144,
+        "max_gpu_use_percent": 5,
+        "max_vram_used_bytes": 268435456
+      }
+    },
+    "completed_at": "2026-10-02T21:20:16.217744+00:00",
+    "software": {
+      "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:38:16) [GCC 14.3.0]",
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "miopen": null,
+      "miopen_available": false,
+      "preferred_blas": "_BlasBackend.Cublas"
+    },
+    "hardware": {
+      "hostname": "DiamondHill",
+      "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.39",
+      "device_index": 0,
+      "device_name": "AMD Instinct MI250X / MI250",
+      "device_arch": [
+        9,
+        0
+      ],
+      "gcn_arch_name": "gfx90a:sramecc+:xnack-",
+      "total_memory_bytes": 68702699520
+    },
+    "input": {
+      "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+      "sha256": "3f3c19af52b40972ce1961eba6800afeba548d28c643fc23da0a9321485989a1",
+      "token_count": 1536,
+      "atom_count": null
+    },
+    "timing": {
+      "records": [
+        {
+          "call_id": 0,
+          "phase": "measure",
+          "iteration": 0,
+          "input_name": "umem_L01536_6b140cc19f02d9b9",
+          "record_name": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_000",
+          "model_gpu_ms": 42938.88671875,
+          "model_wall_ms": 42939.06391301425,
+          "peak_memory_allocated_bytes": 21472384512,
+          "peak_memory_reserved_bytes": 22458400768,
+          "stages_gpu_ms": {
+            "diffusion_transformer": [
+              231.1522216796875,
+              11.935993194580078,
+              1306.547607421875,
+              11.936471939086914
+            ],
+            "atom_attention_encoder": [
+              3078.398681640625,
+              23.244962692260742
+            ],
+            "triangle_multiplication": [
+              81.58159637451172,
+              80.05220794677734,
+              81.78704071044922,
+              80.30227661132812,
+              81.0128173828125,
+              79.71397399902344,
+              81.31600952148438,
+              79.85733032226562,
+              81.03777313232422,
+              79.61253356933594,
+              81.31488800048828,
+              79.78997039794922,
+              81.00625610351562,
+              79.81460571289062,
+              81.27921295166016,
+              79.81556701660156,
+              81.27521514892578,
+              79.61221313476562,
+              81.2718505859375,
+              79.91893005371094,
+              81.07697296142578,
+              79.61685943603516,
+              86.28339385986328,
+              79.75061798095703,
+              81.25281524658203,
+              79.6955795288086,
+              81.30144500732422,
+              79.67093658447266,
+              81.08385467529297,
+              79.68021392822266,
+              81.18801879882812,
+              79.71221923828125,
+              81.03089904785156,
+              79.62933349609375,
+              81.30065155029297,
+              79.88804626464844,
+              81.64031982421875,
+              80.1894760131836,
+              81.05857849121094,
+              79.6811752319336,
+              81.29792785644531,
+              79.82341003417969,
+              81.20929718017578,
+              79.67525482177734,
+              81.34513092041016,
+              79.70197296142578,
+              81.12273406982422,
+              119.48184204101562,
+              81.137939453125,
+              79.7259750366211,
+              81.13105773925781,
+              79.64805603027344,
+              81.2961654663086,
+              79.8298110961914,
+              81.2142562866211,
+              79.5574951171875,
+              81.16737365722656,
+              79.65077209472656,
+              81.06129455566406,
+              79.61653900146484,
+              81.28384399414062,
+              79.8011703491211,
+              81.0281753540039,
+              79.6739730834961,
+              81.23153686523438,
+              79.59717559814453,
+              81.0185775756836,
+              79.58597564697266,
+              81.24161529541016,
+              79.78068542480469,
+              81.58751678466797,
+              80.19860076904297,
+              81.10897827148438,
+              79.5890121459961,
+              81.11761474609375,
+              79.66485595703125,
+              81.12561798095703,
+              79.57477569580078,
+              81.1400146484375,
+              79.78277587890625,
+              81.05841827392578,
+              79.6814956665039,
+              81.1827392578125,
+              79.73381805419922,
+              81.06737518310547,
+              79.61941528320312,
+              81.4094467163086,
+              79.95956420898438,
+              81.08209228515625,
+              79.64661407470703,
+              81.44176483154297,
+              79.6707763671875,
+              80.99905395507812,
+              79.52517700195312,
+              81.21953582763672,
+              79.64341735839844,
+              80.97745513916016,
+              79.5574951171875,
+              81.15601348876953,
+              79.6814956665039,
+              81.0009765625,
+              79.53877258300781,
+              81.4424057006836,
+              79.83509063720703,
+              81.68672180175781,
+              80.14820098876953,
+              81.01649475097656,
+              79.57477569580078,
+              81.22705841064453,
+              79.74197387695312,
+              80.93170166015625,
+              79.57925415039062,
+              81.15265655517578,
+              79.83428955078125,
+              81.1550521850586,
+              79.66053771972656,
+              81.2547378540039,
+              79.78213500976562,
+              81.24337768554688,
+              79.55957794189453,
+              81.18241882324219,
+              79.73109436035156,
+              81.13169860839844,
+              79.6274185180664,
+              81.16961669921875,
+              79.70469665527344,
+              80.85938262939453,
+              79.5918960571289,
+              81.20753479003906,
+              79.58805847167969,
+              80.91938018798828,
+              79.51702117919922,
+              81.22513580322266,
+              79.74053955078125,
+              80.92626190185547,
+              79.62997436523438,
+              79.23414611816406,
+              77.5383529663086,
+              79.4343032836914,
+              78.22281646728516,
+              79.38582611083984,
+              78.17385864257812,
+              79.2594223022461,
+              78.08505249023438
+            ],
+            "triangle_attention": [
+              130.75257873535156,
+              130.8428192138672,
+              130.812255859375,
+              130.8903350830078,
+              130.56314086914062,
+              130.67706298828125,
+              130.66697692871094,
+              130.93417358398438,
+              130.63880920410156,
+              130.73353576660156,
+              130.88121032714844,
+              130.83145141601562,
+              130.4252166748047,
+              130.67657470703125,
+              130.6164093017578,
+              130.79241943359375,
+              130.80345153808594,
+              130.84841918945312,
+              130.7893829345703,
+              130.74217224121094,
+              130.8919219970703,
+              130.69577026367188,
+              130.60377502441406,
+              130.68185424804688,
+              130.62696838378906,
+              130.5597686767578,
+              130.55801391601562,
+              130.5391387939453,
+              130.86216735839844,
+              130.482666015625,
+              130.539306640625,
+              130.7044219970703,
+              130.50698852539062,
+              130.30857849121094,
+              130.6524200439453,
+              130.69129943847656,
+              130.64361572265625,
+              130.93496704101562,
+              130.6639404296875,
+              130.86026000976562,
+              130.57513427734375,
+              130.8738555908203,
+              130.70057678222656,
+              130.66648864746094,
+              130.60025024414062,
+              130.56729125976562,
+              130.59432983398438,
+              130.61801147460938,
+              130.5292205810547,
+              130.6663360595703,
+              130.68569946289062,
+              130.7842559814453,
+              130.6024932861328,
+              130.78314208984375,
+              130.47482299804688,
+              130.60121154785156,
+              130.666015625,
+              134.30799865722656,
+              130.5836181640625,
+              130.3812255859375,
+              130.55145263671875,
+              130.38426208496094,
+              130.55882263183594,
+              130.57577514648438,
+              130.46282958984375,
+              130.6263427734375,
+              130.48602294921875,
+              130.44586181640625,
+              130.54666137695312,
+              130.55162048339844,
+              130.76377868652344,
+              130.70921325683594,
+              130.58714294433594,
+              130.56361389160156,
+              130.40890502929688,
+              130.77545166015625,
+              130.59210205078125,
+              130.39450073242188,
+              130.4309844970703,
+              130.57801818847656,
+              130.28570556640625,
+              130.5154571533203,
+              130.40826416015625,
+              130.3737030029297,
+              130.57449340820312,
+              130.69290161132812,
+              130.45977783203125,
+              130.45755004882812,
+              130.70040893554688,
+              130.43130493164062,
+              130.6373748779297,
+              141.775634765625,
+              130.7327423095703,
+              130.5880889892578,
+              130.51979064941406,
+              130.5581817626953,
+              130.56793212890625,
+              130.63897705078125,
+              130.57977294921875,
+              130.3361053466797,
+              130.4138641357422,
+              130.5340118408203,
+              133.40081787109375,
+              130.1410675048828,
+              130.63002014160156,
+              130.793701171875,
+              130.59193420410156,
+              130.6114501953125,
+              130.5648956298828,
+              130.63816833496094,
+              130.44778442382812,
+              130.54249572753906,
+              130.55897521972656,
+              130.73497009277344,
+              130.38890075683594,
+              130.4375457763672,
+              130.47689819335938,
+              130.63465881347656,
+              130.61529541015625,
+              130.7391357421875,
+              130.43865966796875,
+              130.6018524169922,
+              130.5087432861328,
+              130.5552978515625,
+              130.4610595703125,
+              130.36138916015625,
+              130.66969299316406,
+              130.51513671875,
+              130.41307067871094,
+              130.46922302246094,
+              130.42442321777344,
+              130.53977966308594,
+              130.5642547607422,
+              130.48170471191406,
+              130.57225036621094,
+              130.46298217773438,
+              136.76425170898438,
+              131.44886779785156,
+              130.66665649414062,
+              130.79849243164062,
+              130.64761352539062,
+              130.52154541015625,
+              130.3765869140625,
+              130.25802612304688
+            ],
+            "pairformer_stack": [
+              8051.71533203125,
+              8086.103515625,
+              8050.974609375,
+              8039.9501953125,
+              2001.1141357421875
+            ],
+            "pairformer_output": [
+              38092.03125
+            ],
+            "atom_attention_decoder": [
+              12.095027923583984
+            ],
+            "diffusion_module": [
+              1420.6302490234375
+            ],
+            "sample_diffusion": [
+              1475.16259765625
+            ],
+            "confidence_head": [
+              2097.692626953125
+            ],
+            "confidence": [
+              2097.700927734375
+            ]
+          }
+        }
+      ],
+      "wall_events": {
+        "preprocess": [
+          {
+            "call_id": null,
+            "wall_ms": 0.26205601170659065,
+            "skipped": false
+          }
+        ],
+        "model": [
+          {
+            "call_id": 0,
+            "wall_ms": 42939.06391301425,
+            "peak_memory_allocated_bytes": 21472384512,
+            "peak_memory_reserved_bytes": 22458400768
+          }
+        ],
+        "serialization": [
+          {
+            "call_id": null,
+            "wall_ms": 252.55131197627634,
+            "skipped": false
+          }
+        ]
+      },
+      "unassigned_gpu_events": {
+        "diffusion_transformer": 0,
+        "atom_attention_encoder": 0,
+        "triangle_multiplication": 0,
+        "triangle_attention": 0,
+        "pairformer_stack": 0,
+        "pairformer_output": 0,
+        "atom_attention_decoder": 0,
+        "diffusion_module": 0,
+        "sample_diffusion": 0,
+        "confidence_head": 0,
+        "confidence": 0
+      },
+      "summary": {
+        "warmup": {
+          "model_gpu_ms": null,
+          "model_wall_ms": null,
+          "peak_memory_allocated_bytes": null,
+          "peak_memory_reserved_bytes": null,
+          "stages_gpu_ms": {}
+        },
+        "measure": {
+          "model_gpu_ms": {
+            "count": 1,
+            "min": 42938.88671875,
+            "median": 42938.88671875,
+            "p95": 42938.88671875,
+            "max": 42938.88671875,
+            "mean": 42938.88671875
+          },
+          "model_wall_ms": {
+            "count": 1,
+            "min": 42939.06391301425,
+            "median": 42939.06391301425,
+            "p95": 42939.06391301425,
+            "max": 42939.06391301425,
+            "mean": 42939.06391301425
+          },
+          "peak_memory_allocated_bytes": {
+            "count": 1,
+            "min": 21472384512,
+            "median": 21472384512,
+            "p95": 21472384512,
+            "max": 21472384512,
+            "mean": 21472384512.0
+          },
+          "peak_memory_reserved_bytes": {
+            "count": 1,
+            "min": 22458400768,
+            "median": 22458400768,
+            "p95": 22458400768,
+            "max": 22458400768,
+            "mean": 22458400768.0
+          },
+          "stages_gpu_ms": {
+            "atom_attention_decoder": {
+              "count": 1,
+              "min": 12.095027923583984,
+              "median": 12.095027923583984,
+              "p95": 12.095027923583984,
+              "max": 12.095027923583984,
+              "mean": 12.095027923583984
+            },
+            "atom_attention_encoder": {
+              "count": 1,
+              "min": 3101.6436443328857,
+              "median": 3101.6436443328857,
+              "p95": 3101.6436443328857,
+              "max": 3101.6436443328857,
+              "mean": 3101.6436443328857
+            },
+            "confidence": {
+              "count": 1,
+              "min": 2097.700927734375,
+              "median": 2097.700927734375,
+              "p95": 2097.700927734375,
+              "max": 2097.700927734375,
+              "mean": 2097.700927734375
+            },
+            "confidence_head": {
+              "count": 1,
+              "min": 2097.692626953125,
+              "median": 2097.692626953125,
+              "p95": 2097.692626953125,
+              "max": 2097.692626953125,
+              "mean": 2097.692626953125
+            },
+            "diffusion_module": {
+              "count": 1,
+              "min": 1420.6302490234375,
+              "median": 1420.6302490234375,
+              "p95": 1420.6302490234375,
+              "max": 1420.6302490234375,
+              "mean": 1420.6302490234375
+            },
+            "diffusion_transformer": {
+              "count": 1,
+              "min": 1561.5722942352295,
+              "median": 1561.5722942352295,
+              "p95": 1561.5722942352295,
+              "max": 1561.5722942352295,
+              "mean": 1561.5722942352295
+            },
+            "pairformer_output": {
+              "count": 1,
+              "min": 38092.03125,
+              "median": 38092.03125,
+              "p95": 38092.03125,
+              "max": 38092.03125,
+              "mean": 38092.03125
+            },
+            "pairformer_stack": {
+              "count": 1,
+              "min": 34229.85778808594,
+              "median": 34229.85778808594,
+              "p95": 34229.85778808594,
+              "max": 34229.85778808594,
+              "mean": 34229.85778808594
+            },
+            "sample_diffusion": {
+              "count": 1,
+              "min": 1475.16259765625,
+              "median": 1475.16259765625,
+              "p95": 1475.16259765625,
+              "max": 1475.16259765625,
+              "mean": 1475.16259765625
+            },
+            "triangle_attention": {
+              "count": 1,
+              "min": 18830.43389892578,
+              "median": 18830.43389892578,
+              "p95": 18830.43389892578,
+              "max": 18830.43389892578,
+              "mean": 18830.43389892578
+            },
+            "triangle_multiplication": {
+              "count": 1,
+              "min": 11616.695335388184,
+              "median": 11616.695335388184,
+              "p95": 11616.695335388184,
+              "max": 11616.695335388184,
+              "mean": 11616.695335388184
+            }
+          }
+        }
+      }
+    },
+    "torch_profiler": null,
+    "fireprot_runtime": {
+      "adapter": "protenix",
+      "blas": {
+        "requested": "hipblas",
+        "before": "_BlasBackend.Cublaslt",
+        "effective": "_BlasBackend.Cublas",
+        "changed": true
+      },
+      "registration_modules": [
+        "fireprot.backends.amd.ck_gemm",
+        "fireprot.backends.amd.triangle_multiplication",
+        "fireprot.backends.amd.triangle_attention",
+        "fireprot.backends.amd.ck_attention",
+        "fireprot.backends.amd.recycle"
+      ],
+      "hooks": {
+        "installed": true,
+        "enabled": true,
+        "hooks": [
+          "OpenFoldLayerNorm.forward",
+          "Transition.forward"
+        ],
+        "fast_paths": {
+          "selection_counts": [
+            {
+              "operation": "gated_transition",
+              "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+              "count": 72
+            },
+            {
+              "operation": "gated_transition",
+              "implementation": "native",
+              "count": 72
+            },
+            {
+              "operation": "layer_norm",
+              "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+              "count": 438
+            },
+            {
+              "operation": "layer_norm",
+              "implementation": "native",
+              "count": 223
+            }
+          ],
+          "backends": {
+            "recycle": {
+              "channel_first_layer_norm_enabled": true,
+              "long_layer_norm_enabled": true,
+              "long_transition_enabled": true,
+              "long1536_epilogues_enabled": true,
+              "selection_counts": [
+                {
+                  "operation": "gated_transition",
+                  "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+                  "count": 72
+                },
+                {
+                  "operation": "gated_transition",
+                  "implementation": "native",
+                  "count": 72
+                },
+                {
+                  "operation": "layer_norm",
+                  "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                  "count": 438
+                },
+                {
+                  "operation": "layer_norm",
+                  "implementation": "native",
+                  "count": 223
+                }
+              ]
+            }
+          }
+        }
+      },
+      "operations": {
+        "implementations": {
+          "gated_transition": [
+            {
+              "name": "amd-gfx90a-hip-transition-f32-c128-long",
+              "priority": 30,
+              "version": "1"
+            },
+            {
+              "name": "amd-gfx90a-hip-transition-f32-c128",
+              "priority": 20,
+              "version": "1"
+            }
+          ],
+          "layer_norm": [
+            {
+              "name": "amd-gfx90a-hip-layernorm-f32-c128-long",
+              "priority": 30,
+              "version": "1"
+            },
+            {
+              "name": "amd-gfx90a-hip-layernorm-f32-c128-channel-first",
+              "priority": 25,
+              "version": "1"
+            },
+            {
+              "name": "amd-gfx90a-hip-layernorm-f32-c128",
+              "priority": 20,
+              "version": "1"
+            }
+          ],
+          "linear": [
+            {
+              "name": "amd-ck-gemm-f32-m124-k64-n32",
+              "priority": 30,
+              "version": "1"
+            }
+          ],
+          "triangle_attention": [
+            {
+              "name": "amd-gfx90a-ck-tile-attention-f32-n1000",
+              "priority": 30,
+              "version": "1"
+            },
+            {
+              "name": "amd-gfx90a-ck-tile-attention-f32-n1536",
+              "priority": 30,
+              "version": "experimental-2"
+            },
+            {
+              "name": "amd-gfx90a-efficient-sdpa-direct-n1000",
+              "priority": 20,
+              "version": "1"
+            },
+            {
+              "name": "amd-gfx90a-efficient-sdpa-direct-n1536",
+              "priority": 20,
+              "version": "experimental-1"
+            },
+            {
+              "name": "amd-gfx90a-efficient-sdpa",
+              "priority": 10,
+              "version": "1"
+            }
+          ],
+          "triangle_multiplication": [
+            {
+              "name": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+              "priority": 40,
+              "version": "1"
+            },
+            {
+              "name": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+              "priority": 40,
+              "version": "experimental-1"
+            },
+            {
+              "name": "amd-gfx90a-hip-triangle-gates-f32-n1000-c128",
+              "priority": 30,
+              "version": "1"
+            },
+            {
+              "name": "amd-gfx90a-hip-triangle-gates-f32-n124-c128",
+              "priority": 20,
+              "version": "1"
+            },
+            {
+              "name": "amd-short-sequence-torch",
+              "priority": 10,
+              "version": "1"
+            }
+          ]
+        },
+        "selection_counts": [
+          {
+            "operation": "triangle_attention",
+            "implementation": "amd-gfx90a-efficient-sdpa-direct-n1536",
+            "count": 432
+          },
+          {
+            "operation": "triangle_multiplication",
+            "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+            "count": 144
+          }
+        ],
+        "decisions": [
+          {
+            "signature": {
+              "operation": "triangle_attention",
+              "device_type": "cuda",
+              "architecture": "gfx90a",
+              "dtype": "float32",
+              "shape": [
+                512,
+                4,
+                1536,
+                32
+              ],
+              "layout": "strided",
+              "mode": "inference",
+              "mask": "triangle-bias",
+              "inplace": false,
+              "attributes": {
+                "bias_count": "1",
+                "bias_shapes": "((1, 4, 1536, 1536),)",
+                "ck_tile_compatible": "True",
+                "head_dim": "32",
+                "heads": "4",
+                "qkv_strides": "((196608, 32, 128, 1), (196608, 32, 128, 1), (196608, 32, 128, 1))"
+              }
+            },
+            "selected": "amd-gfx90a-efficient-sdpa-direct-n1536",
+            "rejected": [
+              {
+                "implementation": "amd-gfx90a-ck-tile-attention-f32-n1000",
+                "reason": "CK Tile attention requires an exact measured bucket"
+              },
+              {
+                "implementation": "amd-gfx90a-ck-tile-attention-f32-n1536",
+                "reason": "experimental CK N1536 requires FIREPROT_ENABLE_CK_ATTENTION_1536=1"
+              },
+              {
+                "implementation": "amd-gfx90a-efficient-sdpa-direct-n1000",
+                "reason": "direct attention requires the exact unmasked long bucket"
+              }
+            ]
+          },
+          {
+            "signature": {
+              "operation": "triangle_multiplication",
+              "device_type": "cuda",
+              "architecture": "gfx90a",
+              "dtype": "float32",
+              "shape": [
+                1536,
+                1536,
+                128
+              ],
+              "layout": "contiguous",
+              "mode": "inference",
+              "mask": "none",
+              "inplace": true,
+              "attributes": {
+                "add_with_inplace": "True",
+                "c_hidden": "128",
+                "c_z": "128",
+                "direction": "incoming"
+              }
+            },
+            "selected": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+            "rejected": [
+              {
+                "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                "reason": "shape is not the exact supported long bucket"
+              }
+            ]
+          },
+          {
+            "signature": {
+              "operation": "triangle_multiplication",
+              "device_type": "cuda",
+              "architecture": "gfx90a",
+              "dtype": "float32",
+              "shape": [
+                1536,
+                1536,
+                128
+              ],
+              "layout": "contiguous",
+              "mode": "inference",
+              "mask": "none",
+              "inplace": true,
+              "attributes": {
+                "add_with_inplace": "True",
+                "c_hidden": "128",
+                "c_z": "128",
+                "direction": "outgoing"
+              }
+            },
+            "selected": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+            "rejected": [
+              {
+                "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                "reason": "shape is not the exact supported long bucket"
+              }
+            ]
+          }
+        ]
+      },
+      "ck_attention": {
+        "enabled": true,
+        "long1536_enabled": false,
+        "loaded": false,
+        "error": null,
+        "build": {}
+      }
+    },
+    "inference_wall_ms": 74565.4088120209,
+    "process_wall_ms": 77927.81787802232,
+    "gpu_process_monitor": {
+      "available": true,
+      "command": [
+        "/usr/bin/amd-smi",
+        "process",
+        "--json"
+      ],
+      "physical_device_index": 7,
+      "interval_seconds": 1.0,
+      "samples": 63,
+      "allowed_pid": 736996,
+      "external_pids": [],
+      "errors": [],
+      "passed": true
+    }
+  },
+  "agreement": {
+    "schema_version": 1,
+    "created_at": "2026-10-02T21:20:19.929564+00:00",
+    "reference_root": "/media/IntelSSD/fireprot/outputs/benchmarks/long1536-native-expandable-2cf3ef5/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/native/predictions",
+    "candidate_root": "/media/IntelSSD/fireprot/outputs/benchmarks/long1536-epilogues-547880c/validation/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions",
+    "passed": true,
+    "comparisons": [
+      {
+        "case": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_000",
+        "seed": 101,
+        "sample": 0,
+        "reference": {
+          "cif": "outputs/benchmarks/long1536-native-expandable-2cf3ef5/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/native/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000_sample_0.cif",
+          "confidence": "outputs/benchmarks/long1536-native-expandable-2cf3ef5/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/native/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000_summary_confidence_sample_0.json"
+        },
+        "candidate": {
+          "cif": "outputs/benchmarks/long1536-epilogues-547880c/validation/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000_sample_0.cif",
+          "confidence": "outputs/benchmarks/long1536-epilogues-547880c/validation/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000_summary_confidence_sample_0.json"
+        },
+        "coordinate_tolerance_angstrom": 0.001,
+        "confidence_tolerance": 0.001,
+        "coordinates": {
+          "atom_count": 12139,
+          "finite": true,
+          "raw_rmsd_angstrom": 0.0001316436214618785,
+          "aligned_rmsd_angstrom": 0.00012953504688251565,
+          "max_abs_coordinate_delta_angstrom": 0.0009765625
+        },
+        "confidence": {
+          "numeric_leaf_count": 15,
+          "finite": true,
+          "max_abs_delta": 3.814697265625e-06,
+          "mean_abs_delta": 5.21540641784668e-07,
+          "missing_from_candidate": [],
+          "extra_in_candidate": []
+        },
+        "passed": true
+      }
+    ]
+  },
+  "limits": [
+    "Single real N1536 performance case with no experimental-coordinate mapping",
+    "One warmup, three measured calls per arm; fixed order disabled then enabled",
+    "Warm model time excludes loading, preprocessing and serialization; nested stage timings overlap"
+  ],
+  "runs": {
+    "disabled": {
+      "summary": {
+        "values_ms": [
+          41710.90625,
+          41252.09765625,
+          41443.67578125
+        ],
+        "median_ms": 41443.67578125,
+        "p95_nearest_rank_ms": 41710.90625,
+        "peak_allocated_bytes": 23929145344,
+        "peak_reserved_bytes": 24954011648,
+        "stage_median_ms": {
+          "diffusion_transformer": 85.96918773651123,
+          "atom_attention_encoder": 57.27343559265137,
+          "triangle_multiplication": 12468.539192199707,
+          "triangle_attention": 20228.45343017578,
+          "pairformer_stack": 38220.593994140625,
+          "pairformer_output": 38413.48046875,
+          "atom_attention_decoder": 12.069616317749023,
+          "diffusion_module": 100.93025207519531,
+          "sample_diffusion": 101.82207489013672,
+          "confidence_head": 2368.74365234375,
+          "confidence": 2368.752197265625
+        }
+      },
+      "spec": {
+        "schema_version": 1,
+        "created_at": "2026-10-02T21:20:20.017650+00:00",
+        "config_path": "/media/IntelSSD/fireprot/benchmarks/protenix/configs/mi250-long1536.json",
+        "config_sha256": "4d642c0965f7cea1a42680569fb569e4dd1d62c6eb622fe101447ea09d2ff23b",
+        "repo_root": "/media/IntelSSD/fireprot",
+        "protenix_root": "/media/IntelSSD/fireprot/Protenix",
+        "run_dir": "/media/IntelSSD/fireprot/outputs/benchmarks/long1536-epilogues-547880c/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot",
+        "backend": "fireprot",
+        "blas_backend": "hipblas",
+        "profile_one": false,
+        "torch_profile": false,
+        "source": {
+          "fireprot_commit": "547880cb5d225215a0b6a7018099509aaf7ca2fa",
+          "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b"
+        },
+        "measurement": {
+          "warmups": 1,
+          "repetitions": 3,
+          "dump_outputs": false,
+          "cache_state": "warm-within-process",
+          "device_policy": "exclusive",
+          "exclusive_max_gpu_use_percent": 5,
+          "exclusive_max_vram_used_bytes": 268435456,
+          "process_monitor_interval_seconds": 1.0,
+          "reject_external_gpu_processes": true,
+          "clock_policy": "record-current"
+        },
+        "workload": {
+          "id": "mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32",
+          "input": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "token_count": 1536,
+          "model_name": "protenix_mini_default_v0.5.0",
+          "dtype": "fp32",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "seeds": [
+            101
+          ],
+          "cache": true,
+          "use_msa": false,
+          "use_template": false,
+          "enable_fusion": true,
+          "enable_tf32": false,
+          "trimul_kernel": "torch",
+          "triatt_kernel": "torch"
+        }
+      },
+      "source": {
+        "fireprot_commit": "547880cb5d225215a0b6a7018099509aaf7ca2fa",
+        "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b",
+        "profile_script_sha256": "e50e41ad138713c1f43b329a7b66d1a12b56a72c44b8ac9fbce3acfab0611242"
+      },
+      "allocator_environment": {
+        "PYTORCH_ALLOC_CONF": "expandable_segments:True",
+        "PYTORCH_CUDA_ALLOC_CONF": null
+      },
+      "software": {
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:38:16) [GCC 14.3.0]",
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "miopen": null,
+        "miopen_available": false,
+        "preferred_blas": "_BlasBackend.Cublas"
+      },
+      "hardware": {
+        "hostname": "DiamondHill",
+        "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.39",
+        "device_index": 0,
+        "device_name": "AMD Instinct MI250X / MI250",
+        "device_arch": [
+          9,
+          0
+        ],
+        "gcn_arch_name": "gfx90a:sramecc+:xnack-",
+        "total_memory_bytes": 68702699520
+      },
+      "input": {
+        "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+        "sha256": "3f3c19af52b40972ce1961eba6800afeba548d28c643fc23da0a9321485989a1",
+        "token_count": 1536,
+        "atom_count": null
+      },
+      "fireprot_runtime": {
+        "adapter": "protenix",
+        "blas": {
+          "requested": "hipblas",
+          "before": "_BlasBackend.Cublaslt",
+          "effective": "_BlasBackend.Cublas",
+          "changed": true
+        },
+        "registration_modules": [
+          "fireprot.backends.amd.ck_gemm",
+          "fireprot.backends.amd.triangle_multiplication",
+          "fireprot.backends.amd.triangle_attention",
+          "fireprot.backends.amd.ck_attention",
+          "fireprot.backends.amd.recycle"
+        ],
+        "hooks": {
+          "installed": true,
+          "enabled": true,
+          "hooks": [
+            "OpenFoldLayerNorm.forward",
+            "Transition.forward"
+          ],
+          "fast_paths": {
+            "selection_counts": [
+              {
+                "operation": "gated_transition",
+                "implementation": "native",
+                "count": 576
+              },
+              {
+                "operation": "layer_norm",
+                "implementation": "native",
+                "count": 2644
+              }
+            ],
+            "backends": {
+              "recycle": {
+                "channel_first_layer_norm_enabled": true,
+                "long_layer_norm_enabled": true,
+                "long_transition_enabled": true,
+                "long1536_epilogues_enabled": false,
+                "selection_counts": [
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "native",
+                    "count": 576
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "native",
+                    "count": 2644
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "operations": {
+          "implementations": {
+            "gated_transition": [
+              {
+                "name": "amd-gfx90a-hip-transition-f32-c128-long",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-transition-f32-c128",
+                "priority": 20,
+                "version": "1"
+              }
+            ],
+            "layer_norm": [
+              {
+                "name": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-layernorm-f32-c128-channel-first",
+                "priority": 25,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-layernorm-f32-c128",
+                "priority": 20,
+                "version": "1"
+              }
+            ],
+            "linear": [
+              {
+                "name": "amd-ck-gemm-f32-m124-k64-n32",
+                "priority": 30,
+                "version": "1"
+              }
+            ],
+            "triangle_attention": [
+              {
+                "name": "amd-gfx90a-ck-tile-attention-f32-n1000",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-ck-tile-attention-f32-n1536",
+                "priority": 30,
+                "version": "experimental-2"
+              },
+              {
+                "name": "amd-gfx90a-efficient-sdpa-direct-n1000",
+                "priority": 20,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-efficient-sdpa-direct-n1536",
+                "priority": 20,
+                "version": "experimental-1"
+              },
+              {
+                "name": "amd-gfx90a-efficient-sdpa",
+                "priority": 10,
+                "version": "1"
+              }
+            ],
+            "triangle_multiplication": [
+              {
+                "name": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                "priority": 40,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+                "priority": 40,
+                "version": "experimental-1"
+              },
+              {
+                "name": "amd-gfx90a-hip-triangle-gates-f32-n1000-c128",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-triangle-gates-f32-n124-c128",
+                "priority": 20,
+                "version": "1"
+              },
+              {
+                "name": "amd-short-sequence-torch",
+                "priority": 10,
+                "version": "1"
+              }
+            ]
+          },
+          "selection_counts": [
+            {
+              "operation": "triangle_attention",
+              "implementation": "amd-gfx90a-efficient-sdpa-direct-n1536",
+              "count": 1728
+            },
+            {
+              "operation": "triangle_multiplication",
+              "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+              "count": 576
+            }
+          ],
+          "decisions": [
+            {
+              "signature": {
+                "operation": "triangle_attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  512,
+                  4,
+                  1536,
+                  32
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "triangle-bias",
+                "inplace": false,
+                "attributes": {
+                  "bias_count": "1",
+                  "bias_shapes": "((1, 4, 1536, 1536),)",
+                  "ck_tile_compatible": "True",
+                  "head_dim": "32",
+                  "heads": "4",
+                  "qkv_strides": "((196608, 32, 128, 1), (196608, 32, 128, 1), (196608, 32, 128, 1))"
+                }
+              },
+              "selected": "amd-gfx90a-efficient-sdpa-direct-n1536",
+              "rejected": [
+                {
+                  "implementation": "amd-gfx90a-ck-tile-attention-f32-n1000",
+                  "reason": "CK Tile attention requires an exact measured bucket"
+                },
+                {
+                  "implementation": "amd-gfx90a-ck-tile-attention-f32-n1536",
+                  "reason": "experimental CK N1536 requires FIREPROT_ENABLE_CK_ATTENTION_1536=1"
+                },
+                {
+                  "implementation": "amd-gfx90a-efficient-sdpa-direct-n1000",
+                  "reason": "direct attention requires the exact unmasked long bucket"
+                }
+              ]
+            },
+            {
+              "signature": {
+                "operation": "triangle_multiplication",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1536,
+                  1536,
+                  128
+                ],
+                "layout": "contiguous",
+                "mode": "inference",
+                "mask": "none",
+                "inplace": true,
+                "attributes": {
+                  "add_with_inplace": "True",
+                  "c_hidden": "128",
+                  "c_z": "128",
+                  "direction": "incoming"
+                }
+              },
+              "selected": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+              "rejected": [
+                {
+                  "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                  "reason": "shape is not the exact supported long bucket"
+                }
+              ]
+            },
+            {
+              "signature": {
+                "operation": "triangle_multiplication",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1536,
+                  1536,
+                  128
+                ],
+                "layout": "contiguous",
+                "mode": "inference",
+                "mask": "none",
+                "inplace": true,
+                "attributes": {
+                  "add_with_inplace": "True",
+                  "c_hidden": "128",
+                  "c_z": "128",
+                  "direction": "outgoing"
+                }
+              },
+              "selected": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+              "rejected": [
+                {
+                  "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                  "reason": "shape is not the exact supported long bucket"
+                }
+              ]
+            }
+          ]
+        },
+        "ck_attention": {
+          "enabled": true,
+          "long1536_enabled": false,
+          "loaded": false,
+          "error": null,
+          "build": {}
+        }
+      },
+      "gpu_process_monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 7,
+        "interval_seconds": 1.0,
+        "samples": 176,
+        "allowed_pid": 737983,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      },
+      "process_wall_ms": 226433.51258401526
+    },
+    "enabled": {
+      "summary": {
+        "values_ms": [
+          36744.3515625,
+          36290.296875,
+          36664.09765625
+        ],
+        "median_ms": 36664.09765625,
+        "p95_nearest_rank_ms": 36744.3515625,
+        "peak_allocated_bytes": 22721185792,
+        "peak_reserved_bytes": 23758635008,
+        "stage_median_ms": {
+          "diffusion_transformer": 86.00045585632324,
+          "atom_attention_encoder": 57.29683876037598,
+          "triangle_multiplication": 11235.655586242676,
+          "triangle_attention": 18829.463577270508,
+          "pairformer_stack": 33752.5263671875,
+          "pairformer_output": 33971.484375,
+          "atom_attention_decoder": 12.088824272155762,
+          "diffusion_module": 90.61314392089844,
+          "sample_diffusion": 91.49105072021484,
+          "confidence_head": 2072.416259765625,
+          "confidence": 2072.4248046875
+        }
+      },
+      "spec": {
+        "schema_version": 1,
+        "created_at": "2026-10-02T21:24:10.122266+00:00",
+        "config_path": "/media/IntelSSD/fireprot/benchmarks/protenix/configs/mi250-long1536.json",
+        "config_sha256": "4d642c0965f7cea1a42680569fb569e4dd1d62c6eb622fe101447ea09d2ff23b",
+        "repo_root": "/media/IntelSSD/fireprot",
+        "protenix_root": "/media/IntelSSD/fireprot/Protenix",
+        "run_dir": "/media/IntelSSD/fireprot/outputs/benchmarks/long1536-epilogues-547880c/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot",
+        "backend": "fireprot",
+        "blas_backend": "hipblas",
+        "profile_one": false,
+        "torch_profile": false,
+        "source": {
+          "fireprot_commit": "547880cb5d225215a0b6a7018099509aaf7ca2fa",
+          "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b"
+        },
+        "measurement": {
+          "warmups": 1,
+          "repetitions": 3,
+          "dump_outputs": false,
+          "cache_state": "warm-within-process",
+          "device_policy": "exclusive",
+          "exclusive_max_gpu_use_percent": 5,
+          "exclusive_max_vram_used_bytes": 268435456,
+          "process_monitor_interval_seconds": 1.0,
+          "reject_external_gpu_processes": true,
+          "clock_policy": "record-current"
+        },
+        "workload": {
+          "id": "mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32",
+          "input": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "token_count": 1536,
+          "model_name": "protenix_mini_default_v0.5.0",
+          "dtype": "fp32",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "seeds": [
+            101
+          ],
+          "cache": true,
+          "use_msa": false,
+          "use_template": false,
+          "enable_fusion": true,
+          "enable_tf32": false,
+          "trimul_kernel": "torch",
+          "triatt_kernel": "torch"
+        }
+      },
+      "source": {
+        "fireprot_commit": "547880cb5d225215a0b6a7018099509aaf7ca2fa",
+        "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b",
+        "profile_script_sha256": "e50e41ad138713c1f43b329a7b66d1a12b56a72c44b8ac9fbce3acfab0611242"
+      },
+      "allocator_environment": {
+        "PYTORCH_ALLOC_CONF": "expandable_segments:True",
+        "PYTORCH_CUDA_ALLOC_CONF": null
+      },
+      "software": {
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:38:16) [GCC 14.3.0]",
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "miopen": null,
+        "miopen_available": false,
+        "preferred_blas": "_BlasBackend.Cublas"
+      },
+      "hardware": {
+        "hostname": "DiamondHill",
+        "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.39",
+        "device_index": 0,
+        "device_name": "AMD Instinct MI250X / MI250",
+        "device_arch": [
+          9,
+          0
+        ],
+        "gcn_arch_name": "gfx90a:sramecc+:xnack-",
+        "total_memory_bytes": 68702699520
+      },
+      "input": {
+        "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+        "sha256": "3f3c19af52b40972ce1961eba6800afeba548d28c643fc23da0a9321485989a1",
+        "token_count": 1536,
+        "atom_count": null
+      },
+      "fireprot_runtime": {
+        "adapter": "protenix",
+        "blas": {
+          "requested": "hipblas",
+          "before": "_BlasBackend.Cublaslt",
+          "effective": "_BlasBackend.Cublas",
+          "changed": true
+        },
+        "registration_modules": [
+          "fireprot.backends.amd.ck_gemm",
+          "fireprot.backends.amd.triangle_multiplication",
+          "fireprot.backends.amd.triangle_attention",
+          "fireprot.backends.amd.ck_attention",
+          "fireprot.backends.amd.recycle"
+        ],
+        "hooks": {
+          "installed": true,
+          "enabled": true,
+          "hooks": [
+            "OpenFoldLayerNorm.forward",
+            "Transition.forward"
+          ],
+          "fast_paths": {
+            "selection_counts": [
+              {
+                "operation": "gated_transition",
+                "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+                "count": 288
+              },
+              {
+                "operation": "gated_transition",
+                "implementation": "native",
+                "count": 288
+              },
+              {
+                "operation": "layer_norm",
+                "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                "count": 1752
+              },
+              {
+                "operation": "layer_norm",
+                "implementation": "native",
+                "count": 892
+              }
+            ],
+            "backends": {
+              "recycle": {
+                "channel_first_layer_norm_enabled": true,
+                "long_layer_norm_enabled": true,
+                "long_transition_enabled": true,
+                "long1536_epilogues_enabled": true,
+                "selection_counts": [
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+                    "count": 288
+                  },
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "native",
+                    "count": 288
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                    "count": 1752
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "native",
+                    "count": 892
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "operations": {
+          "implementations": {
+            "gated_transition": [
+              {
+                "name": "amd-gfx90a-hip-transition-f32-c128-long",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-transition-f32-c128",
+                "priority": 20,
+                "version": "1"
+              }
+            ],
+            "layer_norm": [
+              {
+                "name": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-layernorm-f32-c128-channel-first",
+                "priority": 25,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-layernorm-f32-c128",
+                "priority": 20,
+                "version": "1"
+              }
+            ],
+            "linear": [
+              {
+                "name": "amd-ck-gemm-f32-m124-k64-n32",
+                "priority": 30,
+                "version": "1"
+              }
+            ],
+            "triangle_attention": [
+              {
+                "name": "amd-gfx90a-ck-tile-attention-f32-n1000",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-ck-tile-attention-f32-n1536",
+                "priority": 30,
+                "version": "experimental-2"
+              },
+              {
+                "name": "amd-gfx90a-efficient-sdpa-direct-n1000",
+                "priority": 20,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-efficient-sdpa-direct-n1536",
+                "priority": 20,
+                "version": "experimental-1"
+              },
+              {
+                "name": "amd-gfx90a-efficient-sdpa",
+                "priority": 10,
+                "version": "1"
+              }
+            ],
+            "triangle_multiplication": [
+              {
+                "name": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                "priority": 40,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+                "priority": 40,
+                "version": "experimental-1"
+              },
+              {
+                "name": "amd-gfx90a-hip-triangle-gates-f32-n1000-c128",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-triangle-gates-f32-n124-c128",
+                "priority": 20,
+                "version": "1"
+              },
+              {
+                "name": "amd-short-sequence-torch",
+                "priority": 10,
+                "version": "1"
+              }
+            ]
+          },
+          "selection_counts": [
+            {
+              "operation": "triangle_attention",
+              "implementation": "amd-gfx90a-efficient-sdpa-direct-n1536",
+              "count": 1728
+            },
+            {
+              "operation": "triangle_multiplication",
+              "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+              "count": 576
+            }
+          ],
+          "decisions": [
+            {
+              "signature": {
+                "operation": "triangle_attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  512,
+                  4,
+                  1536,
+                  32
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "triangle-bias",
+                "inplace": false,
+                "attributes": {
+                  "bias_count": "1",
+                  "bias_shapes": "((1, 4, 1536, 1536),)",
+                  "ck_tile_compatible": "True",
+                  "head_dim": "32",
+                  "heads": "4",
+                  "qkv_strides": "((196608, 32, 128, 1), (196608, 32, 128, 1), (196608, 32, 128, 1))"
+                }
+              },
+              "selected": "amd-gfx90a-efficient-sdpa-direct-n1536",
+              "rejected": [
+                {
+                  "implementation": "amd-gfx90a-ck-tile-attention-f32-n1000",
+                  "reason": "CK Tile attention requires an exact measured bucket"
+                },
+                {
+                  "implementation": "amd-gfx90a-ck-tile-attention-f32-n1536",
+                  "reason": "experimental CK N1536 requires FIREPROT_ENABLE_CK_ATTENTION_1536=1"
+                },
+                {
+                  "implementation": "amd-gfx90a-efficient-sdpa-direct-n1000",
+                  "reason": "direct attention requires the exact unmasked long bucket"
+                }
+              ]
+            },
+            {
+              "signature": {
+                "operation": "triangle_multiplication",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1536,
+                  1536,
+                  128
+                ],
+                "layout": "contiguous",
+                "mode": "inference",
+                "mask": "none",
+                "inplace": true,
+                "attributes": {
+                  "add_with_inplace": "True",
+                  "c_hidden": "128",
+                  "c_z": "128",
+                  "direction": "incoming"
+                }
+              },
+              "selected": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+              "rejected": [
+                {
+                  "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                  "reason": "shape is not the exact supported long bucket"
+                }
+              ]
+            },
+            {
+              "signature": {
+                "operation": "triangle_multiplication",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1536,
+                  1536,
+                  128
+                ],
+                "layout": "contiguous",
+                "mode": "inference",
+                "mask": "none",
+                "inplace": true,
+                "attributes": {
+                  "add_with_inplace": "True",
+                  "c_hidden": "128",
+                  "c_z": "128",
+                  "direction": "outgoing"
+                }
+              },
+              "selected": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+              "rejected": [
+                {
+                  "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                  "reason": "shape is not the exact supported long bucket"
+                }
+              ]
+            }
+          ]
+        },
+        "ck_attention": {
+          "enabled": true,
+          "long1536_enabled": false,
+          "loaded": false,
+          "error": null,
+          "build": {}
+        }
+      },
+      "gpu_process_monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 7,
+        "interval_seconds": 1.0,
+        "samples": 161,
+        "allowed_pid": 739431,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      },
+      "process_wall_ms": 205964.80712201446
+    }
+  },
+  "speedup": 1.1303612643030707
+}

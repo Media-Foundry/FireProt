@@ -541,7 +541,439 @@
     ]
   },
   "limits": [
-    "No pipeline candidate promoted; the batch-group8 reference from the preceding controlled study was about 37.95 ms",
-    "Whole-K candidates did not compile; no performance or numerical claim for them"
-  ]
+    "No attention pipeline candidate promoted; all measured complete operators remain slower than SDPA",
+    "Original whole-K candidates did not compile; adapted FP32 variants compiled and passed numerical checks but regressed"
+  ],
+  "wholek_fp32_followup": {
+    "scope": "N1536 attention operator scheduling diagnosis",
+    "seed": 419,
+    "shape": [
+      512,
+      4,
+      1536,
+      32
+    ],
+    "dtype": "float32",
+    "tf32": false,
+    "warmups": 5,
+    "repetitions": 20,
+    "cache_state": "warm",
+    "physical_device": "6",
+    "records": [
+      {
+        "name": "sdpa",
+        "status": "ok",
+        "median_ms": 34.8627815246582,
+        "p95_ms": 34.9066162109375,
+        "values_ms": [
+          34.86743927001953,
+          34.92839431762695,
+          34.850467681884766,
+          34.871742248535156,
+          34.895572662353516,
+          34.892051696777344,
+          34.7608642578125,
+          34.85942459106445,
+          34.80534362792969,
+          34.890140533447266,
+          34.855255126953125,
+          34.9066162109375,
+          34.7928581237793,
+          34.87701416015625,
+          34.81174087524414,
+          34.82085418701172,
+          34.86613845825195,
+          34.89318084716797,
+          34.771263122558594,
+          34.83237838745117
+        ],
+        "max_abs_delta": 0.0,
+        "peak_allocated_bytes": 2491416576
+      },
+      {
+        "name": "ck_padded",
+        "status": "ok",
+        "median_ms": 39.36706352233887,
+        "p95_ms": 39.49049758911133,
+        "values_ms": [
+          39.31866455078125,
+          39.310184478759766,
+          39.38842010498047,
+          39.302181243896484,
+          39.33882522583008,
+          39.35626220703125,
+          39.27994918823242,
+          39.420902252197266,
+          39.48666000366211,
+          39.544578552246094,
+          39.26314926147461,
+          39.31354904174805,
+          39.49049758911133,
+          39.393856048583984,
+          39.44858169555664,
+          39.25770568847656,
+          39.43914031982422,
+          39.25690460205078,
+          39.41370391845703,
+          39.377864837646484
+        ],
+        "max_abs_delta": 5.9604644775390625e-06,
+        "peak_allocated_bytes": 2089156608
+      },
+      {
+        "name": "sdpa_batch_head_swap",
+        "status": "ok",
+        "median_ms": 37.41991424560547,
+        "p95_ms": 37.45231246948242,
+        "values_ms": [
+          37.41615295410156,
+          37.40255355834961,
+          37.44063186645508,
+          37.46879196166992,
+          37.44655227661133,
+          37.423675537109375,
+          37.42959213256836,
+          37.448631286621094,
+          37.39663314819336,
+          37.38623046875,
+          37.430870056152344,
+          37.431671142578125,
+          37.34335708618164,
+          37.40079116821289,
+          37.374237060546875,
+          37.433433532714844,
+          37.37407684326172,
+          37.336795806884766,
+          37.45231246948242,
+          37.38703536987305
+        ],
+        "max_abs_delta": 0.0,
+        "peak_allocated_bytes": 2491416576
+      },
+      {
+        "name": "ck_wholek_m64",
+        "status": "ok",
+        "median_ms": 42.79857635498047,
+        "p95_ms": 42.843692779541016,
+        "values_ms": [
+          42.80081558227539,
+          42.78209686279297,
+          42.78785705566406,
+          42.772335052490234,
+          42.7785758972168,
+          42.800174713134766,
+          42.78657531738281,
+          42.801456451416016,
+          42.80721664428711,
+          42.81905746459961,
+          42.80305480957031,
+          42.79761505126953,
+          42.78529739379883,
+          42.782413482666016,
+          42.799537658691406,
+          42.84977340698242,
+          42.843692779541016,
+          42.78417205810547,
+          42.81697463989258,
+          42.79345703125
+        ],
+        "max_abs_delta": 1.3709068298339844e-06,
+        "peak_allocated_bytes": 2089156608
+      },
+      {
+        "name": "ck_wholek_m128_kpack2",
+        "status": "ok",
+        "median_ms": 40.72455024719238,
+        "p95_ms": 40.75446701049805,
+        "values_ms": [
+          40.75446701049805,
+          40.73414611816406,
+          40.725830078125,
+          40.71687316894531,
+          40.72454833984375,
+          40.721187591552734,
+          40.72279357910156,
+          40.72359085083008,
+          40.71479034423828,
+          40.737030029296875,
+          40.73143005371094,
+          40.73462677001953,
+          40.72199249267578,
+          40.83558654785156,
+          40.732872009277344,
+          40.72151184082031,
+          40.72007369995117,
+          40.72663116455078,
+          40.724552154541016,
+          40.7181510925293
+        ],
+        "max_abs_delta": 1.3709068298339844e-06,
+        "peak_allocated_bytes": 2089156608
+      },
+      {
+        "name": "sdpa_repeat",
+        "status": "ok",
+        "median_ms": 34.8049430847168,
+        "p95_ms": 34.896385192871094,
+        "values_ms": [
+          34.810943603515625,
+          34.92597961425781,
+          34.878944396972656,
+          34.762142181396484,
+          34.758785247802734,
+          34.85190200805664,
+          34.68790817260742,
+          34.715267181396484,
+          34.694149017333984,
+          34.73334503173828,
+          34.76278305053711,
+          34.826622009277344,
+          34.83318328857422,
+          34.79142379760742,
+          34.896385192871094,
+          34.893821716308594,
+          34.85414505004883,
+          34.79206466674805,
+          34.87942123413086,
+          34.79894256591797
+        ],
+        "max_abs_delta": 0.0,
+        "peak_allocated_bytes": 2491416576
+      }
+    ],
+    "probe_contiguous_qkv": false,
+    "script_sha256": "775c03968fe71ae8430839bf739378e04e9f983eab445a729a333cde8738fdf0",
+    "ck_build": {
+      "enabled": true,
+      "long1536_enabled": false,
+      "loaded": true,
+      "error": null,
+      "build": {
+        "source_sha256": "bf0d12eface75e642675f6149709439c53c2592021fe1f8cabdbe7f150e22cbd",
+        "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+        "header_count": 581,
+        "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+        "command": [
+          "/opt/rocm/bin/hipcc",
+          "-O3",
+          "-std=c++17",
+          "-fPIC",
+          "-shared",
+          "--offload-arch=gfx90a",
+          "-I/opt/rocm/include",
+          "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+          "-o",
+          "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_8935f4f00fbacbfd/attention.pending.so"
+        ],
+        "library_sha256": "e3c84fb80fac9a688f4539d9b9497e69dabf2d7bc4a5e8764fecf164a74c6b1a",
+        "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_8935f4f00fbacbfd/attention.so",
+        "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+      }
+    },
+    "probe_build": {
+      "scope": "Isolated compiled FP32 whole-K candidates; runtime gates pending",
+      "builds": [
+        {
+          "name": "wholek_m64",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a",
+            "-I/media/IntelSSD/fireprot/runtime/ck_wholek_float_v2",
+            "-I/opt/rocm/include",
+            "-DBG=8",
+            "-DBM=64",
+            "-DWM=2",
+            "runtime/ck_wholek_float_v2/probe.cpp",
+            "-o",
+            "runtime/ck_wholek_float_v2/wholek_m64.so"
+          ],
+          "returncode": 0,
+          "policy_sha256": "6db239657234a5560fd59f8e729381d24581e084246b4e8129d6ce1f5656f21e",
+          "source_sha256": "191efdb2b153dd0352d363fa160351b25a854602cd74f3ee902dea9b95302cc7"
+        },
+        {
+          "name": "wholek_m128_kpack2",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a",
+            "-I/media/IntelSSD/fireprot/runtime/ck_wholek_float_kpack2",
+            "-I/opt/rocm/include",
+            "-DBG=8",
+            "-DBM=128",
+            "-DWM=4",
+            "runtime/ck_wholek_float_kpack2/probe.cpp",
+            "-o",
+            "runtime/ck_wholek_float_kpack2/wholek_m128_kpack2.so"
+          ],
+          "returncode": 0,
+          "policy_sha256": "b8d39a44e91cc64574c0b06744bfcbbb315c151037ad58bf2301acb96742c322",
+          "source_sha256": "191efdb2b153dd0352d363fa160351b25a854602cd74f3ee902dea9b95302cc7"
+        }
+      ]
+    },
+    "preflight": {
+      "available": true,
+      "command": [
+        "/usr/bin/rocm-smi",
+        "--showpids",
+        "--showuse",
+        "--showmeminfo",
+        "vram",
+        "--showclocks",
+        "--json"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "data": {
+        "card0": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "863949896",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card1": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "525136317",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card2": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "1084010164",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "10981376"
+        },
+        "card3": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "756898671",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card4": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "608009824",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card5": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "612055690",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card6": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "451388583",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card7": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "533754209",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        }
+      },
+      "visible_devices": "6",
+      "selected_physical_index": 6,
+      "exclusive_check": {
+        "required": true,
+        "passed": true,
+        "gpu_use_percent": 0,
+        "vram_used_bytes": 11014144,
+        "max_gpu_use_percent": 5,
+        "max_vram_used_bytes": 268435456
+      }
+    },
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850",
+    "q_stride": [
+      196608,
+      32,
+      128,
+      1
+    ],
+    "bias_stride": [
+      4,
+      1,
+      6144,
+      4
+    ],
+    "libraries": {
+      "wholek_m64.so": "f0340b5be83c86b0619e4812e3151c00c6c4649a18bdb174a755fc2f0f968e28",
+      "wholek_m128_kpack2.so": "04a00da11b542150356ba289d5bde453611804a26c2fd748aec235b58a6111c3"
+    },
+    "status": "ok",
+    "gpu_process_monitor": {
+      "available": true,
+      "command": [
+        "/usr/bin/amd-smi",
+        "process",
+        "--json"
+      ],
+      "physical_device_index": 6,
+      "interval_seconds": 1.0,
+      "samples": 6,
+      "allowed_pid": 740338,
+      "external_pids": [],
+      "errors": [],
+      "passed": true
+    }
+  }
 }

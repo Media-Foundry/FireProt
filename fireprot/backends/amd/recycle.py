@@ -20,7 +20,7 @@ LONG1536_ROWS = 1536 * 1536
 LONG1536_TRANSITION_SHAPE = (1536, 1536, PAIR_CHANNELS)
 _long1536_epilogues_enabled = (
     os.environ.get("FIREPROT_ENABLE_LONG1536") == "1"
-    and os.environ.get("FIREPROT_ENABLE_LONG1536_EPILOGUES") == "1"
+    and os.environ.get("FIREPROT_ENABLE_LONG1536_EPILOGUES", "1") == "1"
 )
 LAYER_NORM_OPERATION = "layer_norm"
 TRANSITION_OPERATION = "gated_transition"

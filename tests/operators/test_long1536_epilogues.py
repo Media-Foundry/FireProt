@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import os
+import subprocess
+import sys
 from types import SimpleNamespace
 
 import pytest
@@ -10,6 +12,23 @@ import torch.nn.functional as F
 
 from fireprot.backends.amd import recycle
 from fireprot.ops.registry import OperationSignature
+
+
+@pytest.mark.parametrize("length,epilogues,expected", [
+    (None, None, False), (None, "1", False), ("1", None, True), ("1", "0", False),
+])
+def test_long1536_epilogue_environment_gate(length, epilogues, expected):
+    environment = os.environ.copy()
+    for name, value in (("FIREPROT_ENABLE_LONG1536", length),
+                        ("FIREPROT_ENABLE_LONG1536_EPILOGUES", epilogues)):
+        environment.pop(name, None)
+        if value is not None:
+            environment[name] = value
+    result = subprocess.check_output([
+        sys.executable, "-c",
+        "from fireprot.backends.amd import recycle; print(recycle._long1536_epilogues_enabled)",
+    ], env=environment, text=True)
+    assert result.strip() == str(expected)
 
 
 def test_long1536_epilogues_require_opt_in_and_exact_shape(monkeypatch):

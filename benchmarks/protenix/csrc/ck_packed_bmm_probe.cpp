@@ -12,8 +12,17 @@ template<int... Values> using S = ck::Sequence<Values...>;
 #ifndef XDL
 #define XDL 32
 #endif
+#ifndef TILE
+#define TILE 128
+#endif
 #ifndef REP
-#define REP 2
+#define REP (TILE / (2 * XDL))
+#endif
+#ifndef FIREPROT_K0
+#define FIREPROT_K0 8
+#endif
+#ifndef PREFETCH
+#define PREFETCH 1
 #endif
 
 template<bool Outgoing>
@@ -21,15 +30,15 @@ using Op = ck::tensor_operation::device::DeviceBatchedGemmXdl<
     float, float, float, float,
     std::conditional_t<Outgoing, Row, Col>,
     std::conditional_t<Outgoing, Col, Row>, Row, Pass, Pass, Pass,
-    256, 128, 128, 8, 4, XDL, XDL, REP, REP,
-    std::conditional_t<Outgoing, S<8,16,2>, S<4,64,1>>,
+    256, TILE, TILE, FIREPROT_K0, 4, XDL, XDL, REP, REP,
+    std::conditional_t<Outgoing, S<8,16,2>, S<(TILE == 64 ? 8 : 4),(TILE == 64 ? 32 : 64),1>>,
     std::conditional_t<Outgoing, S<1,0,2>, S<0,2,1>>,
     std::conditional_t<Outgoing, S<1,0,2>, S<0,2,1>>,
     Outgoing ? 2 : 1, 2, Outgoing ? 2 : 4, true,
-    std::conditional_t<Outgoing, S<8,16,2>, S<4,64,1>>,
+    std::conditional_t<Outgoing, S<8,16,2>, S<(TILE == 64 ? 8 : 4),(TILE == 64 ? 32 : 64),1>>,
     std::conditional_t<Outgoing, S<1,0,2>, S<0,2,1>>,
     std::conditional_t<Outgoing, S<1,0,2>, S<0,2,1>>,
-    Outgoing ? 2 : 1, 2, Outgoing ? 2 : 4, true, 7, 1>;
+    Outgoing ? 2 : 1, 2, Outgoing ? 2 : 4, true, 7, 1, PREFETCH>;
 
 template<bool Outgoing>
 int launch(float* a, float* b, float* c, void* stream) {

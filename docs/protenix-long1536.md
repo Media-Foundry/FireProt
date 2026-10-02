@@ -581,3 +581,35 @@ Model-source and benchmark checksums were then consistent, excluding
 hardware-local generated LayerNorm build artifacts. This audit does not
 retroactively establish the source state of earlier runs. See
 [complete model evidence](../provenance/protenix_long1536_blas_e6dfa14.json).
+
+### CK BMM tile and prefetch tuning
+
+A follow-up kept FP32 MFMA32 and 256 threads, while varying tile size,
+K-block depth and prefetch stages. The same full-output references,
+seed 443, GPU 6, five warmups and twenty repetitions were retained.
+All executable candidates passed numerical and continuous isolation gates.
+
+| CK configuration | Outgoing median ms | Incoming median ms |
+| --- | ---: | ---: |
+| 64x64, K32, one prefetch stage | 30.268 | 29.777 |
+| 64x64, K64, one prefetch stage | 43.098 | 45.787 |
+| 128x128, K32, two prefetch stages | 41.484 | 37.354 |
+| hipBLAS, final control | 29.591 | 29.481 |
+
+The 64x64 K32 candidate improves on the earlier explicit CK 128x128
+configuration (36.690/33.952 ms), but remains slower than hipBLAS in both
+directions. Smaller incoming tiles need a different transfer cluster to
+retain vectorized loading. This candidate emits no occupancy warning;
+the K64 configuration does. These compiler observations do not establish
+achieved runtime occupancy or isolate the cause of the timing difference.
+The 128x128 K64 candidate fails compilation because its 66,016-byte LDS
+request exceeds the 65,536-byte limit. No runtime result is assigned to it.
+
+The probe now exposes `TILE`, `FIREPROT_K0` (K-block divided by four), and
+`PREFETCH` compile-time options, preserving the original default instance.
+An initial `K0` macro collided with CK header identifiers and was renamed;
+an initial 64-tile transfer cluster violated vector-width constraints and
+was corrected before the results above. No model dispatch changed. The
+next useful candidate is a different writeback/pipeline implementation,
+rather than promoting a contraction that still loses to the baseline.
+See [tuning evidence](../provenance/protenix_packed_bmm_tuning_5b6c5bd.json).

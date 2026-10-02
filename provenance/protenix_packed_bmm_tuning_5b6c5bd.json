@@ -1,0 +1,1190 @@
+{
+  "schema_version": 1,
+  "base_commit": "5b6c5bd5c483181b1d7ea708bdf40fd8672fa4a2",
+  "scope": "N1536 B128 FP32 actual outgoing/incoming BMM layouts, GPU6, seed443, warmups5 repetitions20; no model integration",
+  "builds": [
+    {
+      "name": "t64k32",
+      "command": [
+        "/opt/rocm/bin/hipcc",
+        "-O3",
+        "-std=c++17",
+        "-fPIC",
+        "-shared",
+        "--offload-arch=gfx90a",
+        "-I/opt/rocm/include",
+        "-DTILE=64",
+        "benchmarks/protenix/csrc/ck_packed_bmm_probe.cpp",
+        "-o",
+        "runtime/ck_packed_bmm_sweep_v2/t64k32.so"
+      ],
+      "build_returncode": 0,
+      "source_sha256": "6a2170bcf1583e8f9c88ba36e8670afc60f7786aeda9860c66ca5718abb57588",
+      "benchmark_returncode": 0
+    },
+    {
+      "name": "t64k64",
+      "command": [
+        "/opt/rocm/bin/hipcc",
+        "-O3",
+        "-std=c++17",
+        "-fPIC",
+        "-shared",
+        "--offload-arch=gfx90a",
+        "-I/opt/rocm/include",
+        "-DTILE=64",
+        "-DFIREPROT_K0=16",
+        "benchmarks/protenix/csrc/ck_packed_bmm_probe.cpp",
+        "-o",
+        "runtime/ck_packed_bmm_sweep_v2/t64k64.so"
+      ],
+      "build_returncode": 0,
+      "source_sha256": "6a2170bcf1583e8f9c88ba36e8670afc60f7786aeda9860c66ca5718abb57588",
+      "benchmark_returncode": 0
+    },
+    {
+      "name": "t128k64",
+      "command": [
+        "/opt/rocm/bin/hipcc",
+        "-O3",
+        "-std=c++17",
+        "-fPIC",
+        "-shared",
+        "--offload-arch=gfx90a",
+        "-I/opt/rocm/include",
+        "-DFIREPROT_K0=16",
+        "benchmarks/protenix/csrc/ck_packed_bmm_probe.cpp",
+        "-o",
+        "runtime/ck_packed_bmm_sweep_v2/t128k64.so"
+      ],
+      "build_returncode": 1,
+      "source_sha256": "6a2170bcf1583e8f9c88ba36e8670afc60f7786aeda9860c66ca5718abb57588"
+    },
+    {
+      "name": "t128p2",
+      "command": [
+        "/opt/rocm/bin/hipcc",
+        "-O3",
+        "-std=c++17",
+        "-fPIC",
+        "-shared",
+        "--offload-arch=gfx90a",
+        "-I/opt/rocm/include",
+        "-DPREFETCH=2",
+        "benchmarks/protenix/csrc/ck_packed_bmm_probe.cpp",
+        "-o",
+        "runtime/ck_packed_bmm_sweep_v2/t128p2.so"
+      ],
+      "build_returncode": 0,
+      "source_sha256": "6a2170bcf1583e8f9c88ba36e8670afc60f7786aeda9860c66ca5718abb57588",
+      "benchmark_returncode": 0
+    }
+  ],
+  "runs": {
+    "hipblas_after": {
+      "schema_version": 1,
+      "backend": "hipblas",
+      "shape": [
+        128,
+        1536,
+        1536
+      ],
+      "seed": 443,
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "cache_state": "warm; reference serialization and checking excluded",
+      "scope": "Exact packed triangle contraction layouts; not model performance",
+      "script_sha256": "0939c03726e6e6251a6fb4af2b15256f4adeae323d020bed2787ede447693a0e",
+      "records": [
+        {
+          "direction": "outgoing",
+          "left_stride": [
+            2359296,
+            1536,
+            1
+          ],
+          "right_stride": [
+            2359296,
+            1,
+            1536
+          ],
+          "status": "ok",
+          "median_ms": 29.590864181518555,
+          "p95_ms": 29.648462295532227,
+          "values_ms": [
+            28.95199966430664,
+            28.932640075683594,
+            28.94256019592285,
+            28.943679809570312,
+            28.91680145263672,
+            29.021440505981445,
+            29.23455238342285,
+            29.511184692382812,
+            29.514543533325195,
+            29.578224182128906,
+            29.61838150024414,
+            29.630064010620117,
+            29.654861450195312,
+            29.648462295532227,
+            29.603504180908203,
+            29.622220993041992,
+            29.640779495239258,
+            29.643020629882812,
+            29.63726043701172,
+            29.63566017150879
+          ],
+          "max_abs_delta": 0.0,
+          "peak_allocated_bytes": 3657433088,
+          "reference_metadata": {
+            "seed": 443,
+            "shape": [
+              128,
+              1536,
+              1536
+            ],
+            "dtype": "float32",
+            "tf32": false,
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "direction": "outgoing",
+            "sha256": "806f60428baec2ffb8f850ab846e1f75313b2d9069bbbbac4aa917c781602934"
+          }
+        },
+        {
+          "direction": "incoming",
+          "left_stride": [
+            2359296,
+            1,
+            1536
+          ],
+          "right_stride": [
+            2359296,
+            1536,
+            1
+          ],
+          "status": "ok",
+          "median_ms": 29.481104850769043,
+          "p95_ms": 29.538063049316406,
+          "values_ms": [
+            27.573640823364258,
+            27.582279205322266,
+            27.674755096435547,
+            28.283538818359375,
+            29.076156616210938,
+            29.501903533935547,
+            29.607982635498047,
+            29.506704330444336,
+            29.421907424926758,
+            29.42734718322754,
+            29.43630599975586,
+            29.471664428710938,
+            29.497425079345703,
+            29.496946334838867,
+            29.508466720581055,
+            29.498546600341797,
+            29.538063049316406,
+            29.458547592163086,
+            29.49054527282715,
+            29.492464065551758
+          ],
+          "max_abs_delta": 0.0,
+          "peak_allocated_bytes": 3657433088,
+          "reference_metadata": {
+            "seed": 443,
+            "shape": [
+              128,
+              1536,
+              1536
+            ],
+            "dtype": "float32",
+            "tf32": false,
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "direction": "incoming",
+            "sha256": "06b29f9b75d6c6bd4f7dbcfc57ed24307a5bd7b9ed3421ed772b0a0f331b6e98"
+          }
+        }
+      ],
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "863951423",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "525137844",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1084011681",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "756900188",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "616079362",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "641249879",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451390115",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533755742",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "6",
+        "selected_physical_index": 6,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "policy": {
+        "requested": "hipblas",
+        "before": "_BlasBackend.Cublaslt",
+        "effective": "_BlasBackend.Cublas",
+        "changed": true
+      },
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "status": "ok",
+      "gpu_process_monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 8,
+        "allowed_pid": 766890,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "t64k32": {
+      "schema_version": 1,
+      "backend": "direct_ck",
+      "shape": [
+        128,
+        1536,
+        1536
+      ],
+      "seed": 443,
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "cache_state": "warm; reference serialization and checking excluded",
+      "scope": "Exact packed triangle contraction layouts; not model performance",
+      "script_sha256": "0939c03726e6e6251a6fb4af2b15256f4adeae323d020bed2787ede447693a0e",
+      "records": [
+        {
+          "direction": "outgoing",
+          "left_stride": [
+            2359296,
+            1536,
+            1
+          ],
+          "right_stride": [
+            2359296,
+            1,
+            1536
+          ],
+          "status": "ok",
+          "median_ms": 30.267964363098145,
+          "p95_ms": 30.40924072265625,
+          "values_ms": [
+            28.993764877319336,
+            28.994722366333008,
+            28.987844467163086,
+            29.15423583984375,
+            32.78133773803711,
+            29.243831634521484,
+            29.814855575561523,
+            30.231163024902344,
+            30.384920120239258,
+            30.40924072265625,
+            30.31964111328125,
+            30.281404495239258,
+            30.24092674255371,
+            30.24284553527832,
+            30.260604858398438,
+            30.27532386779785,
+            30.305404663085938,
+            30.280282974243164,
+            30.295164108276367,
+            30.29500389099121
+          ],
+          "max_abs_delta": 1.4156103134155273e-07,
+          "peak_allocated_bytes": 3623878656,
+          "reference_metadata": {
+            "seed": 443,
+            "shape": [
+              128,
+              1536,
+              1536
+            ],
+            "dtype": "float32",
+            "tf32": false,
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "direction": "outgoing",
+            "sha256": "806f60428baec2ffb8f850ab846e1f75313b2d9069bbbbac4aa917c781602934"
+          }
+        },
+        {
+          "direction": "incoming",
+          "left_stride": [
+            2359296,
+            1,
+            1536
+          ],
+          "right_stride": [
+            2359296,
+            1536,
+            1
+          ],
+          "status": "ok",
+          "median_ms": 29.77725887298584,
+          "p95_ms": 29.871976852416992,
+          "values_ms": [
+            28.061784744262695,
+            28.06546401977539,
+            28.129783630371094,
+            28.627849578857422,
+            29.370548248291016,
+            29.788938522338867,
+            29.85085678100586,
+            29.8028564453125,
+            29.766538619995117,
+            29.779178619384766,
+            29.78285789489746,
+            29.777097702026367,
+            29.774858474731445,
+            29.78125762939453,
+            29.77149772644043,
+            29.884775161743164,
+            29.777420043945312,
+            29.712459564208984,
+            29.826698303222656,
+            29.871976852416992
+          ],
+          "max_abs_delta": 1.4901161193847656e-07,
+          "peak_allocated_bytes": 3623878656,
+          "reference_metadata": {
+            "seed": 443,
+            "shape": [
+              128,
+              1536,
+              1536
+            ],
+            "dtype": "float32",
+            "tf32": false,
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "direction": "incoming",
+            "sha256": "06b29f9b75d6c6bd4f7dbcfc57ed24307a5bd7b9ed3421ed772b0a0f331b6e98"
+          }
+        }
+      ],
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "863951242",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "525137665",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1084011502",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "756900009",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "615463144",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "641249700",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451389935",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533755562",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "6",
+        "selected_physical_index": 6,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "policy": {
+        "requested": "hipblas",
+        "before": "_BlasBackend.Cublaslt",
+        "effective": "_BlasBackend.Cublas",
+        "changed": true
+      },
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "library_sha256": "273d0b80583aff60b527d282078dce51d27c4aa2c8e45ce0ab96ddd67a14e29e",
+      "library": "/media/IntelSSD/fireprot/runtime/ck_packed_bmm_sweep_v2/t64k32.so",
+      "status": "ok",
+      "gpu_process_monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 6,
+        "allowed_pid": 766023,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "t64k64": {
+      "schema_version": 1,
+      "backend": "direct_ck",
+      "shape": [
+        128,
+        1536,
+        1536
+      ],
+      "seed": 443,
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "cache_state": "warm; reference serialization and checking excluded",
+      "scope": "Exact packed triangle contraction layouts; not model performance",
+      "script_sha256": "0939c03726e6e6251a6fb4af2b15256f4adeae323d020bed2787ede447693a0e",
+      "records": [
+        {
+          "direction": "outgoing",
+          "left_stride": [
+            2359296,
+            1536,
+            1
+          ],
+          "right_stride": [
+            2359296,
+            1,
+            1536
+          ],
+          "status": "ok",
+          "median_ms": 43.09849548339844,
+          "p95_ms": 43.32345199584961,
+          "values_ms": [
+            43.32345199584961,
+            43.108577728271484,
+            47.00974655151367,
+            43.09513473510742,
+            43.128414154052734,
+            43.086814880371094,
+            43.06185531616211,
+            43.07289505004883,
+            43.08009719848633,
+            43.088096618652344,
+            43.07722091674805,
+            43.098175048828125,
+            43.10249710083008,
+            43.09881591796875,
+            43.09785461425781,
+            42.853065490722656,
+            43.13545608520508,
+            43.13017654418945,
+            43.13721466064453,
+            43.10985565185547
+          ],
+          "max_abs_delta": 2.1606683731079102e-07,
+          "peak_allocated_bytes": 3623878656,
+          "reference_metadata": {
+            "seed": 443,
+            "shape": [
+              128,
+              1536,
+              1536
+            ],
+            "dtype": "float32",
+            "tf32": false,
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "direction": "outgoing",
+            "sha256": "806f60428baec2ffb8f850ab846e1f75313b2d9069bbbbac4aa917c781602934"
+          }
+        },
+        {
+          "direction": "incoming",
+          "left_stride": [
+            2359296,
+            1,
+            1536
+          ],
+          "right_stride": [
+            2359296,
+            1536,
+            1
+          ],
+          "status": "ok",
+          "median_ms": 45.787302017211914,
+          "p95_ms": 45.89729690551758,
+          "values_ms": [
+            45.865779876708984,
+            45.80289840698242,
+            45.81153869628906,
+            45.82225799560547,
+            45.77938461303711,
+            45.78322219848633,
+            45.764503479003906,
+            45.749305725097656,
+            45.758583068847656,
+            45.757301330566406,
+            45.89729690551758,
+            45.886417388916016,
+            45.8872184753418,
+            45.902095794677734,
+            45.8377799987793,
+            45.789459228515625,
+            45.7851448059082,
+            45.757144927978516,
+            45.7584228515625,
+            45.73170471191406
+          ],
+          "max_abs_delta": 1.7508864402770996e-07,
+          "peak_allocated_bytes": 3623878656,
+          "reference_metadata": {
+            "seed": 443,
+            "shape": [
+              128,
+              1536,
+              1536
+            ],
+            "dtype": "float32",
+            "tf32": false,
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "direction": "incoming",
+            "sha256": "06b29f9b75d6c6bd4f7dbcfc57ed24307a5bd7b9ed3421ed772b0a0f331b6e98"
+          }
+        }
+      ],
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "863951305",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "525137727",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1084011565",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "756900071",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "615624934",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "641249763",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451389997",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533755624",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "6",
+        "selected_physical_index": 6,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "policy": {
+        "requested": "hipblas",
+        "before": "_BlasBackend.Cublaslt",
+        "effective": "_BlasBackend.Cublas",
+        "changed": true
+      },
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "library_sha256": "6fb2ad1d36a1dc73511aecfc3552462e371a0344df4e14e71256602c3f35b16f",
+      "library": "/media/IntelSSD/fireprot/runtime/ck_packed_bmm_sweep_v2/t64k64.so",
+      "status": "ok",
+      "gpu_process_monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 6,
+        "allowed_pid": 766260,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "t128p2": {
+      "schema_version": 1,
+      "backend": "direct_ck",
+      "shape": [
+        128,
+        1536,
+        1536
+      ],
+      "seed": 443,
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "cache_state": "warm; reference serialization and checking excluded",
+      "scope": "Exact packed triangle contraction layouts; not model performance",
+      "script_sha256": "0939c03726e6e6251a6fb4af2b15256f4adeae323d020bed2787ede447693a0e",
+      "records": [
+        {
+          "direction": "outgoing",
+          "left_stride": [
+            2359296,
+            1536,
+            1
+          ],
+          "right_stride": [
+            2359296,
+            1,
+            1536
+          ],
+          "status": "ok",
+          "median_ms": 41.483978271484375,
+          "p95_ms": 41.53085708618164,
+          "values_ms": [
+            41.44526290893555,
+            41.530059814453125,
+            45.402748107910156,
+            41.52493667602539,
+            41.47246170043945,
+            41.4850959777832,
+            41.46189498901367,
+            41.53085708618164,
+            41.48286056518555,
+            41.46110153198242,
+            41.478694915771484,
+            41.518856048583984,
+            41.49421691894531,
+            41.520294189453125,
+            41.482059478759766,
+            41.49677658081055,
+            41.47837448120117,
+            41.501895904541016,
+            41.471500396728516,
+            41.47949981689453
+          ],
+          "max_abs_delta": 1.4156103134155273e-07,
+          "peak_allocated_bytes": 3623878656,
+          "reference_metadata": {
+            "seed": 443,
+            "shape": [
+              128,
+              1536,
+              1536
+            ],
+            "dtype": "float32",
+            "tf32": false,
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "direction": "outgoing",
+            "sha256": "806f60428baec2ffb8f850ab846e1f75313b2d9069bbbbac4aa917c781602934"
+          }
+        },
+        {
+          "direction": "incoming",
+          "left_stride": [
+            2359296,
+            1,
+            1536
+          ],
+          "right_stride": [
+            2359296,
+            1536,
+            1
+          ],
+          "status": "ok",
+          "median_ms": 37.35393142700195,
+          "p95_ms": 37.36537170410156,
+          "values_ms": [
+            37.35817337036133,
+            37.36537170410156,
+            37.36201095581055,
+            37.31273651123047,
+            37.35625076293945,
+            37.2860107421875,
+            37.365211486816406,
+            37.36585235595703,
+            37.353851318359375,
+            37.35257339477539,
+            37.35817337036133,
+            37.35288619995117,
+            37.35369110107422,
+            37.34393310546875,
+            37.354331970214844,
+            37.34905242919922,
+            37.35401153564453,
+            37.359771728515625,
+            37.34153366088867,
+            37.319297790527344
+          ],
+          "max_abs_delta": 1.4901161193847656e-07,
+          "peak_allocated_bytes": 3623878656,
+          "reference_metadata": {
+            "seed": 443,
+            "shape": [
+              128,
+              1536,
+              1536
+            ],
+            "dtype": "float32",
+            "tf32": false,
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "direction": "incoming",
+            "sha256": "06b29f9b75d6c6bd4f7dbcfc57ed24307a5bd7b9ed3421ed772b0a0f331b6e98"
+          }
+        }
+      ],
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "863951364",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "525137785",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1084011623",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "756900129",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "615865784",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "641249820",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451390056",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533755683",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "6",
+        "selected_physical_index": 6,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "policy": {
+        "requested": "hipblas",
+        "before": "_BlasBackend.Cublaslt",
+        "effective": "_BlasBackend.Cublas",
+        "changed": true
+      },
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "library_sha256": "967f72ac394437046f71406c1be46499c724cabe740397238af6556055dc734e",
+      "library": "/media/IntelSSD/fireprot/runtime/ck_packed_bmm_sweep_v2/t128p2.so",
+      "status": "ok",
+      "gpu_process_monitor": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 6,
+        "allowed_pid": 766499,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    }
+  },
+  "build_logs": {
+    "t128k64.log": "In file included from benchmarks/protenix/csrc/ck_packed_bmm_probe.cpp:4:\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: error: local memory (66016) exceeds limit (65536) in 'void ck::tensor_operation::device::kernel_batched_gemm_xdlops_v2r3<ck::tensor_operation::device::DeviceBatchedGemmXdl<float, float, float, float, ck::tensor_layout::gemm::RowMajor, ck::tensor_layout::gemm::ColumnMajor, ck::tensor_layout::gemm::RowMajor, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, 256, 128, 128, 16, 4, 32, 32, 2, 2, ck::Sequence<8, 16, 2>, ck::Sequence<1, 0, 2>, ck::Sequence<1, 0, 2>, 2, 2, 2, true, ck::Sequence<8, 16, 2>, ck::Sequence<1, 0, 2>, ck::Sequence<1, 0, 2>, 2, 2, 2, true, 7, 1, 1, (ck::LoopScheduler)0, (ck::PipelineVersion)0>, ck::GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_ext<256, float, float, float, (ck::InMemoryDataOperationEnum)0, ck::tensor_layout::gemm::RowMajor, ck::tensor_layout::gemm::ColumnMajor, ck::tensor_layout::gemm::RowMajor, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, (ck::tensor_operation::device::GemmSpecialization)7, 128, 128, 16, 32, 32, 4, 2, 2, ck::Sequence<8, 16, 2>, ck::Sequence<1, 0, 2>, ck::Sequence<1, 0, 2>, 2, 2, 2, false, true, ck::Sequence<8, 16, 2>, ck::Sequence<1, 0, 2>, ck::Sequence<1, 0, 2>, 2, 2, 2, false, true, ck::Sequence<2, 3, 0, 1, 7, 5, 4, 6>, 7, 1, 1, (ck::LoopScheduler)0, (ck::PipelineVersion)0>, true>(ck::tensor_operation::device::DeviceBatchedGemmXdl<float, float, float, float, ck::tensor_layout::gemm::RowMajor, ck::tensor_layout::gemm::ColumnMajor, ck::tensor_layout::gemm::RowMajor, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, 256, 128, 128, 16, 4, 32, 32, 2, 2, ck::Sequence<8, 16, 2>, ck::Sequence<1, 0, 2>, ck::Sequence<1, 0, 2>, 2, 2, 2, true, ck::Sequence<8, 16, 2>, ck::Sequence<1, 0, 2>, ck::Sequence<1, 0, 2>, 2, 2, 2, true, 7, 1, 1, (ck::LoopScheduler)0, (ck::PipelineVersion)0>::Argument)'\n   57 |     kernel_batched_gemm_xdlops_v2r3(const typename DeviceOp::Argument karg)\n      |     ^\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: warning: failed to meet occupancy target given by 'amdgpu-waves-per-eu' in '_ZN2ck16tensor_operation6device31kernel_batched_gemm_xdlops_v2r3INS1_20DeviceBatchedGemmXdlIffffNS_13tensor_layout4gemm8RowMajorENS5_11ColumnMajorES6_NS0_12element_wise11PassThroughES9_S9_Li256ELi128ELi128ELi16ELi4ELi32ELi32ELi2ELi2ENS_8SequenceIJLi8ELi16ELi2EEEENSA_IJLi1ELi0ELi2EEEESC_Li2ELi2ELi2ELb1ESB_SC_SC_Li2ELi2ELi2ELb1ELi7ELi1ELi1ELNS_13LoopSchedulerE0ELNS_15PipelineVersionE0EEENS_43GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_extILi256EfffLNS_25InMemoryDataOperationEnumE0ES6_S7_S6_S9_S9_S9_LNS1_18GemmSpecializationE7ELi128ELi128ELi16ELi32ELi32ELi4ELi2ELi2ESB_SC_SC_Li2ELi2ELi2ELb0ELb1ESB_SC_SC_Li2ELi2ELi2ELb0ELb1ENSA_IJLi2ELi3ELi0ELi1ELi7ELi5ELi4ELi6EEEELi7ELi1ELi1ELSD_0ELSE_0EEELb1EEEvNT_8ArgumentE': desired occupancy was 2, final occupancy is 1 [-Wpass-failed]\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: error: local memory (66016) exceeds limit (65536) in 'void ck::tensor_operation::device::kernel_batched_gemm_xdlops_v2r3<ck::tensor_operation::device::DeviceBatchedGemmXdl<float, float, float, float, ck::tensor_layout::gemm::RowMajor, ck::tensor_layout::gemm::ColumnMajor, ck::tensor_layout::gemm::RowMajor, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, 256, 128, 128, 16, 4, 32, 32, 2, 2, ck::Sequence<8, 16, 2>, ck::Sequence<1, 0, 2>, ck::Sequence<1, 0, 2>, 2, 2, 2, true, ck::Sequence<8, 16, 2>, ck::Sequence<1, 0, 2>, ck::Sequence<1, 0, 2>, 2, 2, 2, true, 7, 1, 1, (ck::LoopScheduler)0, (ck::PipelineVersion)0>, ck::GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_ext<256, float, float, float, (ck::InMemoryDataOperationEnum)0, ck::tensor_layout::gemm::RowMajor, ck::tensor_layout::gemm::ColumnMajor, ck::tensor_layout::gemm::RowMajor, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, (ck::tensor_operation::device::GemmSpecialization)7, 128, 128, 16, 32, 32, 4, 2, 2, ck::Sequence<8, 16, 2>, ck::Sequence<1, 0, 2>, ck::Sequence<1, 0, 2>, 2, 2, 2, false, true, ck::Sequence<8, 16, 2>, ck::Sequence<1, 0, 2>, ck::Sequence<1, 0, 2>, 2, 2, 2, false, true, ck::Sequence<2, 3, 0, 1, 7, 5, 4, 6>, 7, 1, 1, (ck::LoopScheduler)0, (ck::PipelineVersion)0>, false>(ck::tensor_operation::device::DeviceBatchedGemmXdl<float, float, float, float, ck::tensor_layout::gemm::RowMajor, ck::tensor_layout::gemm::ColumnMajor, ck::tensor_layout::gemm::RowMajor, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, 256, 128, 128, 16, 4, 32, 32, 2, 2, ck::Sequence<8, 16, 2>, ck::Sequence<1, 0, 2>, ck::Sequence<1, 0, 2>, 2, 2, 2, true, ck::Sequence<8, 16, 2>, ck::Sequence<1, 0, 2>, ck::Sequence<1, 0, 2>, 2, 2, 2, true, 7, 1, 1, (ck::LoopScheduler)0, (ck::PipelineVersion)0>::Argument)'\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: warning: failed to meet occupancy target given by 'amdgpu-waves-per-eu' in '_ZN2ck16tensor_operation6device31kernel_batched_gemm_xdlops_v2r3INS1_20DeviceBatchedGemmXdlIffffNS_13tensor_layout4gemm8RowMajorENS5_11ColumnMajorES6_NS0_12element_wise11PassThroughES9_S9_Li256ELi128ELi128ELi16ELi4ELi32ELi32ELi2ELi2ENS_8SequenceIJLi8ELi16ELi2EEEENSA_IJLi1ELi0ELi2EEEESC_Li2ELi2ELi2ELb1ESB_SC_SC_Li2ELi2ELi2ELb1ELi7ELi1ELi1ELNS_13LoopSchedulerE0ELNS_15PipelineVersionE0EEENS_43GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_extILi256EfffLNS_25InMemoryDataOperationEnumE0ES6_S7_S6_S9_S9_S9_LNS1_18GemmSpecializationE7ELi128ELi128ELi16ELi32ELi32ELi4ELi2ELi2ESB_SC_SC_Li2ELi2ELi2ELb0ELb1ESB_SC_SC_Li2ELi2ELi2ELb0ELb1ENSA_IJLi2ELi3ELi0ELi1ELi7ELi5ELi4ELi6EEEELi7ELi1ELi1ELSD_0ELSE_0EEELb0EEEvNT_8ArgumentE': desired occupancy was 2, final occupancy is 1 [-Wpass-failed]\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: error: local memory (66016) exceeds limit (65536) in 'void ck::tensor_operation::device::kernel_batched_gemm_xdlops_v2r3<ck::tensor_operation::device::DeviceBatchedGemmXdl<float, float, float, float, ck::tensor_layout::gemm::ColumnMajor, ck::tensor_layout::gemm::RowMajor, ck::tensor_layout::gemm::RowMajor, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, 256, 128, 128, 16, 4, 32, 32, 2, 2, ck::Sequence<4, 64, 1>, ck::Sequence<0, 2, 1>, ck::Sequence<0, 2, 1>, 1, 2, 4, true, ck::Sequence<4, 64, 1>, ck::Sequence<0, 2, 1>, ck::Sequence<0, 2, 1>, 1, 2, 4, true, 7, 1, 1, (ck::LoopScheduler)0, (ck::PipelineVersion)0>, ck::GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_ext<256, float, float, float, (ck::InMemoryDataOperationEnum)0, ck::tensor_layout::gemm::ColumnMajor, ck::tensor_layout::gemm::RowMajor, ck::tensor_layout::gemm::RowMajor, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, (ck::tensor_operation::device::GemmSpecialization)7, 128, 128, 16, 32, 32, 4, 2, 2, ck::Sequence<4, 64, 1>, ck::Sequence<0, 2, 1>, ck::Sequence<0, 2, 1>, 1, 2, 4, false, true, ck::Sequence<4, 64, 1>, ck::Sequence<0, 2, 1>, ck::Sequence<0, 2, 1>, 1, 2, 4, false, true, ck::Sequence<2, 3, 0, 1, 7, 5, 4, 6>, 7, 1, 1, (ck::LoopScheduler)0, (ck::PipelineVersion)0>, true>(ck::tensor_operation::device::DeviceBatchedGemmXdl<float, float, float, float, ck::tensor_layout::gemm::ColumnMajor, ck::tensor_layout::gemm::RowMajor, ck::tensor_layout::gemm::RowMajor, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, 256, 128, 128, 16, 4, 32, 32, 2, 2, ck::Sequence<4, 64, 1>, ck::Sequence<0, 2, 1>, ck::Sequence<0, 2, 1>, 1, 2, 4, true, ck::Sequence<4, 64, 1>, ck::Sequence<0, 2, 1>, ck::Sequence<0, 2, 1>, 1, 2, 4, true, 7, 1, 1, (ck::LoopScheduler)0, (ck::PipelineVersion)0>::Argument)'\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: warning: failed to meet occupancy target given by 'amdgpu-waves-per-eu' in '_ZN2ck16tensor_operation6device31kernel_batched_gemm_xdlops_v2r3INS1_20DeviceBatchedGemmXdlIffffNS_13tensor_layout4gemm11ColumnMajorENS5_8RowMajorES7_NS0_12element_wise11PassThroughES9_S9_Li256ELi128ELi128ELi16ELi4ELi32ELi32ELi2ELi2ENS_8SequenceIJLi4ELi64ELi1EEEENSA_IJLi0ELi2ELi1EEEESC_Li1ELi2ELi4ELb1ESB_SC_SC_Li1ELi2ELi4ELb1ELi7ELi1ELi1ELNS_13LoopSchedulerE0ELNS_15PipelineVersionE0EEENS_43GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_extILi256EfffLNS_25InMemoryDataOperationEnumE0ES6_S7_S7_S9_S9_S9_LNS1_18GemmSpecializationE7ELi128ELi128ELi16ELi32ELi32ELi4ELi2ELi2ESB_SC_SC_Li1ELi2ELi4ELb0ELb1ESB_SC_SC_Li1ELi2ELi4ELb0ELb1ENSA_IJLi2ELi3ELi0ELi1ELi7ELi5ELi4ELi6EEEELi7ELi1ELi1ELSD_0ELSE_0EEELb1EEEvNT_8ArgumentE': desired occupancy was 2, final occupancy is 1 [-Wpass-failed]\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: error: local memory (66016) exceeds limit (65536) in 'void ck::tensor_operation::device::kernel_batched_gemm_xdlops_v2r3<ck::tensor_operation::device::DeviceBatchedGemmXdl<float, float, float, float, ck::tensor_layout::gemm::ColumnMajor, ck::tensor_layout::gemm::RowMajor, ck::tensor_layout::gemm::RowMajor, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, 256, 128, 128, 16, 4, 32, 32, 2, 2, ck::Sequence<4, 64, 1>, ck::Sequence<0, 2, 1>, ck::Sequence<0, 2, 1>, 1, 2, 4, true, ck::Sequence<4, 64, 1>, ck::Sequence<0, 2, 1>, ck::Sequence<0, 2, 1>, 1, 2, 4, true, 7, 1, 1, (ck::LoopScheduler)0, (ck::PipelineVersion)0>, ck::GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_ext<256, float, float, float, (ck::InMemoryDataOperationEnum)0, ck::tensor_layout::gemm::ColumnMajor, ck::tensor_layout::gemm::RowMajor, ck::tensor_layout::gemm::RowMajor, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, (ck::tensor_operation::device::GemmSpecialization)7, 128, 128, 16, 32, 32, 4, 2, 2, ck::Sequence<4, 64, 1>, ck::Sequence<0, 2, 1>, ck::Sequence<0, 2, 1>, 1, 2, 4, false, true, ck::Sequence<4, 64, 1>, ck::Sequence<0, 2, 1>, ck::Sequence<0, 2, 1>, 1, 2, 4, false, true, ck::Sequence<2, 3, 0, 1, 7, 5, 4, 6>, 7, 1, 1, (ck::LoopScheduler)0, (ck::PipelineVersion)0>, false>(ck::tensor_operation::device::DeviceBatchedGemmXdl<float, float, float, float, ck::tensor_layout::gemm::ColumnMajor, ck::tensor_layout::gemm::RowMajor, ck::tensor_layout::gemm::RowMajor, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, 256, 128, 128, 16, 4, 32, 32, 2, 2, ck::Sequence<4, 64, 1>, ck::Sequence<0, 2, 1>, ck::Sequence<0, 2, 1>, 1, 2, 4, true, ck::Sequence<4, 64, 1>, ck::Sequence<0, 2, 1>, ck::Sequence<0, 2, 1>, 1, 2, 4, true, 7, 1, 1, (ck::LoopScheduler)0, (ck::PipelineVersion)0>::Argument)'\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: warning: failed to meet occupancy target given by 'amdgpu-waves-per-eu' in '_ZN2ck16tensor_operation6device31kernel_batched_gemm_xdlops_v2r3INS1_20DeviceBatchedGemmXdlIffffNS_13tensor_layout4gemm11ColumnMajorENS5_8RowMajorES7_NS0_12element_wise11PassThroughES9_S9_Li256ELi128ELi128ELi16ELi4ELi32ELi32ELi2ELi2ENS_8SequenceIJLi4ELi64ELi1EEEENSA_IJLi0ELi2ELi1EEEESC_Li1ELi2ELi4ELb1ESB_SC_SC_Li1ELi2ELi4ELb1ELi7ELi1ELi1ELNS_13LoopSchedulerE0ELNS_15PipelineVersionE0EEENS_43GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_extILi256EfffLNS_25InMemoryDataOperationEnumE0ES6_S7_S7_S9_S9_S9_LNS1_18GemmSpecializationE7ELi128ELi128ELi16ELi32ELi32ELi4ELi2ELi2ESB_SC_SC_Li1ELi2ELi4ELb0ELb1ESB_SC_SC_Li1ELi2ELi4ELb0ELb1ENSA_IJLi2ELi3ELi0ELi1ELi7ELi5ELi4ELi6EEEELi7ELi1ELi1ELSD_0ELSE_0EEELb0EEEvNT_8ArgumentE': desired occupancy was 2, final occupancy is 1 [-Wpass-failed]\n4 warnings and 4 errors generated when compiling for gfx90a.\nfailed to execute:/opt/rocm/core-10.0/lib/llvm/bin/clang++  --offload-arch=gfx90a --driver-mode=g++ --hip-link  -O3 -std=c++17 -fPIC -shared -I/opt/rocm/include -DFIREPROT_K0=16 -x hip benchmarks/protenix/csrc/ck_packed_bmm_probe.cpp -o \"runtime/ck_packed_bmm_sweep_v2/t128k64.so\"\n",
+    "t64k32.log": "",
+    "t64k64.log": "In file included from benchmarks/protenix/csrc/ck_packed_bmm_probe.cpp:4:\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: warning: failed to meet occupancy target given by 'amdgpu-waves-per-eu' in '_ZN2ck16tensor_operation6device31kernel_batched_gemm_xdlops_v2r3INS1_20DeviceBatchedGemmXdlIffffNS_13tensor_layout4gemm8RowMajorENS5_11ColumnMajorES6_NS0_12element_wise11PassThroughES9_S9_Li256ELi64ELi64ELi16ELi4ELi32ELi32ELi1ELi1ENS_8SequenceIJLi8ELi16ELi2EEEENSA_IJLi1ELi0ELi2EEEESC_Li2ELi2ELi2ELb1ESB_SC_SC_Li2ELi2ELi2ELb1ELi7ELi1ELi1ELNS_13LoopSchedulerE0ELNS_15PipelineVersionE0EEENS_43GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_extILi256EfffLNS_25InMemoryDataOperationEnumE0ES6_S7_S6_S9_S9_S9_LNS1_18GemmSpecializationE7ELi64ELi64ELi16ELi32ELi32ELi4ELi1ELi1ESB_SC_SC_Li2ELi2ELi2ELb0ELb1ESB_SC_SC_Li2ELi2ELi2ELb0ELb1ENSA_IJLi2ELi3ELi0ELi1ELi7ELi5ELi4ELi6EEEELi7ELi1ELi1ELSD_0ELSE_0EEELb1EEEvNT_8ArgumentE': desired occupancy was 2, final occupancy is 1 [-Wpass-failed]\n   57 |     kernel_batched_gemm_xdlops_v2r3(const typename DeviceOp::Argument karg)\n      |     ^\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: warning: failed to meet occupancy target given by 'amdgpu-waves-per-eu' in '_ZN2ck16tensor_operation6device31kernel_batched_gemm_xdlops_v2r3INS1_20DeviceBatchedGemmXdlIffffNS_13tensor_layout4gemm8RowMajorENS5_11ColumnMajorES6_NS0_12element_wise11PassThroughES9_S9_Li256ELi64ELi64ELi16ELi4ELi32ELi32ELi1ELi1ENS_8SequenceIJLi8ELi16ELi2EEEENSA_IJLi1ELi0ELi2EEEESC_Li2ELi2ELi2ELb1ESB_SC_SC_Li2ELi2ELi2ELb1ELi7ELi1ELi1ELNS_13LoopSchedulerE0ELNS_15PipelineVersionE0EEENS_43GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_extILi256EfffLNS_25InMemoryDataOperationEnumE0ES6_S7_S6_S9_S9_S9_LNS1_18GemmSpecializationE7ELi64ELi64ELi16ELi32ELi32ELi4ELi1ELi1ESB_SC_SC_Li2ELi2ELi2ELb0ELb1ESB_SC_SC_Li2ELi2ELi2ELb0ELb1ENSA_IJLi2ELi3ELi0ELi1ELi7ELi5ELi4ELi6EEEELi7ELi1ELi1ELSD_0ELSE_0EEELb0EEEvNT_8ArgumentE': desired occupancy was 2, final occupancy is 1 [-Wpass-failed]\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: warning: failed to meet occupancy target given by 'amdgpu-waves-per-eu' in '_ZN2ck16tensor_operation6device31kernel_batched_gemm_xdlops_v2r3INS1_20DeviceBatchedGemmXdlIffffNS_13tensor_layout4gemm11ColumnMajorENS5_8RowMajorES7_NS0_12element_wise11PassThroughES9_S9_Li256ELi64ELi64ELi16ELi4ELi32ELi32ELi1ELi1ENS_8SequenceIJLi8ELi32ELi1EEEENSA_IJLi0ELi2ELi1EEEESC_Li1ELi2ELi4ELb1ESB_SC_SC_Li1ELi2ELi4ELb1ELi7ELi1ELi1ELNS_13LoopSchedulerE0ELNS_15PipelineVersionE0EEENS_43GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_extILi256EfffLNS_25InMemoryDataOperationEnumE0ES6_S7_S7_S9_S9_S9_LNS1_18GemmSpecializationE7ELi64ELi64ELi16ELi32ELi32ELi4ELi1ELi1ESB_SC_SC_Li1ELi2ELi4ELb0ELb1ESB_SC_SC_Li1ELi2ELi4ELb0ELb1ENSA_IJLi2ELi3ELi0ELi1ELi7ELi5ELi4ELi6EEEELi7ELi1ELi1ELSD_0ELSE_0EEELb1EEEvNT_8ArgumentE': desired occupancy was 2, final occupancy is 1 [-Wpass-failed]\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: warning: failed to meet occupancy target given by 'amdgpu-waves-per-eu' in '_ZN2ck16tensor_operation6device31kernel_batched_gemm_xdlops_v2r3INS1_20DeviceBatchedGemmXdlIffffNS_13tensor_layout4gemm11ColumnMajorENS5_8RowMajorES7_NS0_12element_wise11PassThroughES9_S9_Li256ELi64ELi64ELi16ELi4ELi32ELi32ELi1ELi1ENS_8SequenceIJLi8ELi32ELi1EEEENSA_IJLi0ELi2ELi1EEEESC_Li1ELi2ELi4ELb1ESB_SC_SC_Li1ELi2ELi4ELb1ELi7ELi1ELi1ELNS_13LoopSchedulerE0ELNS_15PipelineVersionE0EEENS_43GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_extILi256EfffLNS_25InMemoryDataOperationEnumE0ES6_S7_S7_S9_S9_S9_LNS1_18GemmSpecializationE7ELi64ELi64ELi16ELi32ELi32ELi4ELi1ELi1ESB_SC_SC_Li1ELi2ELi4ELb0ELb1ESB_SC_SC_Li1ELi2ELi4ELb0ELb1ENSA_IJLi2ELi3ELi0ELi1ELi7ELi5ELi4ELi6EEEELi7ELi1ELi1ELSD_0ELSE_0EEELb0EEEvNT_8ArgumentE': desired occupancy was 2, final occupancy is 1 [-Wpass-failed]\n4 warnings generated when compiling for gfx90a.\n",
+    "t128p2.log": "In file included from benchmarks/protenix/csrc/ck_packed_bmm_probe.cpp:4:\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: warning: failed to meet occupancy target given by 'amdgpu-waves-per-eu' in '_ZN2ck16tensor_operation6device31kernel_batched_gemm_xdlops_v2r3INS1_20DeviceBatchedGemmXdlIffffNS_13tensor_layout4gemm8RowMajorENS5_11ColumnMajorES6_NS0_12element_wise11PassThroughES9_S9_Li256ELi128ELi128ELi8ELi4ELi32ELi32ELi2ELi2ENS_8SequenceIJLi8ELi16ELi2EEEENSA_IJLi1ELi0ELi2EEEESC_Li2ELi2ELi2ELb1ESB_SC_SC_Li2ELi2ELi2ELb1ELi7ELi1ELi2ELNS_13LoopSchedulerE0ELNS_15PipelineVersionE0EEENS_43GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_extILi256EfffLNS_25InMemoryDataOperationEnumE0ES6_S7_S6_S9_S9_S9_LNS1_18GemmSpecializationE7ELi128ELi128ELi8ELi32ELi32ELi4ELi2ELi2ESB_SC_SC_Li2ELi2ELi2ELb0ELb1ESB_SC_SC_Li2ELi2ELi2ELb0ELb1ENSA_IJLi2ELi3ELi0ELi1ELi7ELi5ELi4ELi6EEEELi7ELi1ELi2ELSD_0ELSE_0EEELb1EEEvNT_8ArgumentE': desired occupancy was 2, final occupancy is 1 [-Wpass-failed]\n   57 |     kernel_batched_gemm_xdlops_v2r3(const typename DeviceOp::Argument karg)\n      |     ^\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: warning: failed to meet occupancy target given by 'amdgpu-waves-per-eu' in '_ZN2ck16tensor_operation6device31kernel_batched_gemm_xdlops_v2r3INS1_20DeviceBatchedGemmXdlIffffNS_13tensor_layout4gemm8RowMajorENS5_11ColumnMajorES6_NS0_12element_wise11PassThroughES9_S9_Li256ELi128ELi128ELi8ELi4ELi32ELi32ELi2ELi2ENS_8SequenceIJLi8ELi16ELi2EEEENSA_IJLi1ELi0ELi2EEEESC_Li2ELi2ELi2ELb1ESB_SC_SC_Li2ELi2ELi2ELb1ELi7ELi1ELi2ELNS_13LoopSchedulerE0ELNS_15PipelineVersionE0EEENS_43GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_extILi256EfffLNS_25InMemoryDataOperationEnumE0ES6_S7_S6_S9_S9_S9_LNS1_18GemmSpecializationE7ELi128ELi128ELi8ELi32ELi32ELi4ELi2ELi2ESB_SC_SC_Li2ELi2ELi2ELb0ELb1ESB_SC_SC_Li2ELi2ELi2ELb0ELb1ENSA_IJLi2ELi3ELi0ELi1ELi7ELi5ELi4ELi6EEEELi7ELi1ELi2ELSD_0ELSE_0EEELb0EEEvNT_8ArgumentE': desired occupancy was 2, final occupancy is 1 [-Wpass-failed]\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: warning: failed to meet occupancy target given by 'amdgpu-waves-per-eu' in '_ZN2ck16tensor_operation6device31kernel_batched_gemm_xdlops_v2r3INS1_20DeviceBatchedGemmXdlIffffNS_13tensor_layout4gemm11ColumnMajorENS5_8RowMajorES7_NS0_12element_wise11PassThroughES9_S9_Li256ELi128ELi128ELi8ELi4ELi32ELi32ELi2ELi2ENS_8SequenceIJLi4ELi64ELi1EEEENSA_IJLi0ELi2ELi1EEEESC_Li1ELi2ELi4ELb1ESB_SC_SC_Li1ELi2ELi4ELb1ELi7ELi1ELi2ELNS_13LoopSchedulerE0ELNS_15PipelineVersionE0EEENS_43GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_extILi256EfffLNS_25InMemoryDataOperationEnumE0ES6_S7_S7_S9_S9_S9_LNS1_18GemmSpecializationE7ELi128ELi128ELi8ELi32ELi32ELi4ELi2ELi2ESB_SC_SC_Li1ELi2ELi4ELb0ELb1ESB_SC_SC_Li1ELi2ELi4ELb0ELb1ENSA_IJLi2ELi3ELi0ELi1ELi7ELi5ELi4ELi6EEEELi7ELi1ELi2ELSD_0ELSE_0EEELb1EEEvNT_8ArgumentE': desired occupancy was 2, final occupancy is 1 [-Wpass-failed]\n/opt/rocm/core-10.0/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_xdl.hpp:57:5: warning: failed to meet occupancy target given by 'amdgpu-waves-per-eu' in '_ZN2ck16tensor_operation6device31kernel_batched_gemm_xdlops_v2r3INS1_20DeviceBatchedGemmXdlIffffNS_13tensor_layout4gemm11ColumnMajorENS5_8RowMajorES7_NS0_12element_wise11PassThroughES9_S9_Li256ELi128ELi128ELi8ELi4ELi32ELi32ELi2ELi2ENS_8SequenceIJLi4ELi64ELi1EEEENSA_IJLi0ELi2ELi1EEEESC_Li1ELi2ELi4ELb1ESB_SC_SC_Li1ELi2ELi4ELb1ELi7ELi1ELi2ELNS_13LoopSchedulerE0ELNS_15PipelineVersionE0EEENS_43GridwiseGemm_k0mk1_k0nk1_mn_xdlops_v2r3_extILi256EfffLNS_25InMemoryDataOperationEnumE0ES6_S7_S7_S9_S9_S9_LNS1_18GemmSpecializationE7ELi128ELi128ELi8ELi32ELi32ELi4ELi2ELi2ESB_SC_SC_Li1ELi2ELi4ELb0ELb1ESB_SC_SC_Li1ELi2ELi4ELb0ELb1ENSA_IJLi2ELi3ELi0ELi1ELi7ELi5ELi4ELi6EEEELi7ELi1ELi2ELSD_0ELSE_0EEELb0EEEvNT_8ArgumentE': desired occupancy was 2, final occupancy is 1 [-Wpass-failed]\n4 warnings generated when compiling for gfx90a.\n"
+  },
+  "decision": "64x64 K32 improves explicit CK but remains slower than repeated hipBLAS. No promotion. 128x128 K64 exceeds gfx90a LDS limit. Larger K and two-stage prefetch did not help tested configurations."
+}

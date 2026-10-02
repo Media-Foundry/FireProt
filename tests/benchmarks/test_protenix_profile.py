@@ -1,0 +1,142 @@
+from __future__ import annotations
+
+import json
+import pathlib
+from unittest import mock
+
+import pytest
+
+from benchmarks.protenix import profile_inference
+
+
+def test_repeated_input_labels_warmup_and_measurement(tmp_path: pathlib.Path) -> None:
+    source = tmp_path / "input.json"
+    source.write_text(
+        json.dumps([{"name": "case", "sequences": [{"proteinChain": {}}]}]),
+        encoding="utf-8",
+    )
+    destination = tmp_path / "repeated.json"
+
+    labels = profile_inference._make_repeated_input(source, destination, 1, 2)
+    payload = json.loads(destination.read_text(encoding="utf-8"))
+
+    assert [(item["phase"], item["iteration"]) for item in labels] == [
+        ("warmup", 0),
+        ("measure", 0),
+        ("measure", 1),
+    ]
+    assert [item["name"] for item in payload] == [
+        "case__fireprot_warmup_000",
+        "case__fireprot_measure_000",
+        "case__fireprot_measure_001",
+    ]
+
+
+def test_repeated_input_rejects_multiple_source_records(
+    tmp_path: pathlib.Path,
+) -> None:
+    source = tmp_path / "input.json"
+    source.write_text(json.dumps([{"name": "a"}, {"name": "b"}]), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="exactly one"):
+        profile_inference._make_repeated_input(
+            source, tmp_path / "repeated.json", 1, 1
+        )
+
+
+def test_timing_summary_separates_warmup_and_measurement() -> None:
+    records = [
+        {
+            "phase": "warmup",
+            "model_gpu_ms": 10.0,
+            "model_wall_ms": 11.0,
+            "stages_gpu_ms": {"pairformer": [6.0], "diffusion": [2.0]},
+        },
+        {
+            "phase": "measure",
+            "model_gpu_ms": 4.0,
+            "model_wall_ms": 5.0,
+            "stages_gpu_ms": {"pairformer": [2.0, 1.0], "diffusion": [0.5]},
+        },
+        {
+            "phase": "measure",
+            "model_gpu_ms": 6.0,
+            "model_wall_ms": 7.0,
+            "stages_gpu_ms": {"pairformer": [4.0], "diffusion": [1.5]},
+        },
+    ]
+
+    summary = profile_inference._summarize_records(records)
+
+    assert summary["warmup"]["model_gpu_ms"]["median"] == 10.0
+    assert summary["measure"]["model_gpu_ms"]["median"] == 5.0
+    assert summary["measure"]["stages_gpu_ms"]["pairformer"]["median"] == 3.5
+    assert summary["measure"]["stages_gpu_ms"]["diffusion"]["p95"] == 1.5
+
+
+def test_exclusive_preflight_rejects_busy_selected_device() -> None:
+    snapshot = {
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+            "card3": {
+                "GPU use (%)": "91",
+                "VRAM Total Used Memory (B)": str(2 * 1024**3),
+            }
+        },
+    }
+    measurement = {
+        "device_policy": "exclusive",
+        "exclusive_max_gpu_use_percent": 5,
+        "exclusive_max_vram_used_bytes": 256 * 1024**2,
+    }
+
+    with (
+        mock.patch.object(profile_inference.shutil, "which", return_value="/bin/rocm-smi"),
+        mock.patch.object(
+            profile_inference, "_run_json_command", return_value=snapshot
+        ),
+        mock.patch.dict(
+            profile_inference.os.environ,
+            {"HIP_VISIBLE_DEVICES": "3"},
+            clear=False,
+        ),
+    ):
+        result = profile_inference._rocm_preflight(measurement)
+
+    assert result["exclusive_check"] == {
+        "required": True,
+        "passed": False,
+        "gpu_use_percent": 91,
+        "vram_used_bytes": 2 * 1024**3,
+        "max_gpu_use_percent": 5,
+        "max_vram_used_bytes": 256 * 1024**2,
+        "reason": "selected device is already active",
+    }
+
+
+def test_rocprof_import_groups_kernel_categories(tmp_path: pathlib.Path) -> None:
+    source = tmp_path / "kernel_stats.csv"
+    source.write_text(
+        "\n".join(
+            [
+                '"Name","Calls","TotalDurationNs","AverageNs","Percentage","MinNs","MaxNs","StdDev"',
+                '"vectorized_layer_norm_kernel",2,200,100,50,90,110,10',
+                '"Cijk_example",4,160,40,40,35,45,5',
+                '"softmax_kernel",1,40,40,10,40,40,0',
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    output = tmp_path / "summary.json"
+
+    assert profile_inference._import_rocprof(source, output) == 0
+    report = json.loads(output.read_text(encoding="utf-8"))
+
+    assert report["kernel_count"] == 3
+    assert report["dispatch_count"] == 7
+    assert report["total_duration_ns"] == 400
+    assert report["categories"]["layernorm"]["percentage"] == 50
+    assert report["categories"]["gemm"]["percentage"] == 40
+    assert report["categories"]["softmax"]["percentage"] == 10

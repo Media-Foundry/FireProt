@@ -347,3 +347,48 @@ HIP_VISIBLE_DEVICES=6 PYTHONPATH=.:Protenix python -m benchmarks.protenix.benchm
 
 The schedule directory must first be produced by the scheduling builder
 above with its default BSHD layout. This scan does not register a kernel.
+
+### Mixed MFMA32 mappings require an explicit distribution contract
+
+The next study separated the two GEMMs: QK-only MFMA32, PV-only MFMA32,
+and MFMA32 in both. It retained M128/N64/W4, bias padding 16, batch group 8,
+FP32 and the same operator measurement protocol. The prior numerically
+correct, unswizzled transposed MFMA32 adapter was used.
+
+Both one-sided substitutions failed the numerical gate by large margins
+(maximum absolute errors about 1399.68 and 30.07). They were rejected before
+timing. The installed gfx90a pipeline passes the softmax result directly
+to PV, and indexes row statistics using the output accumulator's distributed
+spans. It therefore relies on compatible QK/PV thread distributions.
+Changing only the instruction type does not preserve that contract.
+
+A private pipeline overlay converted QK logits through LDS into a distribution
+constructed from the PV warp shape, before softmax. It also derived the
+softmax row-statistic type from that converted distribution. This restored
+operator correctness for both mixed variants, supporting the distribution
+diagnosis. All converted candidates had maximum absolute delta at most
+`6.07967377e-6`, but their complete-operator timings regressed:
+
+| QK / PV mapping | Without conversion | With LDS conversion |
+| --- | ---: | ---: |
+| MFMA32 / MFMA16 | Numerical failure | 49.211 ms |
+| MFMA16 / MFMA32 | Numerical failure | 52.376 ms |
+| MFMA32 / MFMA32 | 40.204 ms | 51.997 ms |
+
+SDPA measured 34.83–34.89 ms. The conversion adds an LDS round trip and
+barriers, and raises the requested shared-memory footprint to at least
+32 KiB per block. It is a correctness reference, not a promoted optimization.
+A future mixed mapping needs a cheaper lane/register redistribution and
+must preserve both P and row-statistic distributions. No model path changed.
+The [mixed-mapping evidence](../provenance/protenix_attention_mixed_mfma_6d42e2f.json)
+includes exact diagnostic C++ source, pipeline replacement text, compile
+commands, numerical failures, timings and continuous GPU 6 isolation checks.
+
+This study also found that failed `torch.testing.assert_close` diagnostics
+could retain tensors through traceback cycles. The standalone scheduling
+benchmark now releases candidate outputs and collects cycles before the
+next candidate. A repeat with the same two failures restored the subsequent
+CK allocation peak from 3,095,789,568 to 2,089,156,608 bytes and final SDPA
+peak from 3,498,049,536 to 2,491,416,576 bytes. The earlier affected peak
+records are retained with an explicit limitation; they are not model memory
+claims. This cleanup is outside the timed GPU interval.

@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 import ctypes
+import gc
 import json
 import os
 import pathlib
@@ -114,6 +115,9 @@ def main() -> int:
                 functions.append((f"ck_{build['name']}", call))
             functions.append(('sdpa_repeat', lambda: _direct_sdpa(**kw)))
             for name, function in functions:
+                # Assertion diagnostics can retain tensor-bearing traceback
+                # cycles even after the candidate output has been released.
+                gc.collect()
                 try:
                     result = function()
                     torch.testing.assert_close(result, reference, atol=2e-5, rtol=2e-5)
@@ -136,6 +140,10 @@ def main() -> int:
                                   max_abs_delta=delta, peak_allocated_bytes=torch.cuda.max_memory_allocated())
                 except (RuntimeError, AssertionError) as error:
                     record = dict(name=name, status='rejected', error=str(error))
+                finally:
+                    # Failed numerical gates must not retain a large candidate
+                    # output during the following candidate's memory measurement.
+                    result = None
                 report['records'].append(record)
                 print(json.dumps({k:v for k,v in record.items() if k != 'values_ms'}), flush=True)
         report['status'] = 'ok'

@@ -309,3 +309,41 @@ absolute delta `1.37090683e-6`) but measured 42.80 ms for M64 and 40.72 ms
 for M128, versus SDPA's 34.86/34.80 ms. They remain excluded from model
 dispatch. This rejects the tested whole-K configurations, not all possible
 FP32 prefetch designs.
+
+### Bias row-stride sweep with fixed batch scheduling
+
+A subsequent complete-operator sweep held M128/N64/W4 and batch group 8
+fixed and varied only the physical bias row stride. All candidates used
+one binary with a runtime stride argument; logical sequence length stayed
+1536. On GPU 6, seed 419, FP32, five warmups and twenty measured calls:
+
+| Extra elements per bias row | Median ms |
+| --- | ---: |
+| 0 | 44.447 |
+| 4 | 37.830 |
+| 8 | 37.702 |
+| 16 | 37.955 |
+| 32 | 38.047 |
+| 48 | 37.946 |
+| 64 | 43.950 |
+| 96 | 38.048 |
+| 128 | 43.771 |
+| 256 | 43.083 |
+
+SDPA before/after measured 34.888/34.826 ms. Every CK candidate passed the
+operator gate with maximum absolute delta `5.96046448e-6`; continuous GPU
+isolation passed. Bias packing and output allocation are included. The
+best tested stride is only about 0.7% faster than +16 and still slower than
+SDPA, so no model dispatch change follows this sweep. The regressions at
+some larger strides establish address-layout sensitivity, but do not prove
+a particular cache-set or memory-channel conflict. The fixed test order
+and single seed further limit interpretation of small differences.
+See [stride evidence](../provenance/protenix_attention_bias_stride_fb06beb.json).
+
+```bash
+HIP_VISIBLE_DEVICES=6 PYTHONPATH=.:Protenix python -m benchmarks.protenix.benchmark_attention_bias_stride \
+  --schedule-dir runtime/ck_schedule --output outputs/benchmarks/ck_bias_stride.json
+```
+
+The schedule directory must first be produced by the scheduling builder
+above with its default BSHD layout. This scan does not register a kernel.

@@ -1,0 +1,90 @@
+--- ck/tensor_operation/gpu/grid/gridwise_batched_gemm_multiple_d_softmax_gemm_xdl_cshuffle_v1.hpp
++++ ck/tensor_operation/gpu/grid/gridwise_batched_gemm_multiple_d_softmax_gemm_xdl_cshuffle_v1.hpp
+@@ -1074,6 +1074,8 @@
+ 
+         // gemm1 K loop
+         index_t gemm1_k_block_outer_index = 0;
++        if constexpr(!HasMainKBlockLoop)
++            a_blockwise_copy.RunRead(a_grid_desc_ak0_m_ak1, a_grid_buf);
+         do
+         {
+             auto n_block_data_idx_on_grid =
+@@ -1084,6 +1086,18 @@
+                 continue;
+             }
+             // gemm0
++            if constexpr(!HasMainKBlockLoop)
++            {
++                b_blockwise_copy.RunRead(b_grid_desc_bk0_n_bk1, b_grid_buf);
++                b_blockwise_copy.MoveSrcSliceWindow(b_grid_desc_bk0_n_bk1, b_block_slice_copy_step);
++                acc_thread_buf.Clear();
++                a_blockwise_copy.RunWrite(a_block_desc_ak0_m_ak1, a_block_buf);
++                b_blockwise_copy.RunWrite(b_block_desc_bk0_n_bk1, b_block_buf);
++                block_sync_lds();
++                blockwise_gemm.Run(a_block_buf, b_block_buf, acc_thread_buf);
++            }
++            else
++            {
+             gridwise_gemm_pipeline.template Run<HasMainKBlockLoop>(a_grid_desc_ak0_m_ak1,
+                                                                    a_block_desc_ak0_m_ak1,
+                                                                    a_blockwise_copy,
+@@ -1099,6 +1113,7 @@
+                                                                    blockwise_gemm,
+                                                                    acc_thread_buf,
+                                                                    num_k_block_main_loop);
++            }
+             // multiple d
+             if constexpr(NumD0Tensor)
+             {
+@@ -1291,16 +1306,16 @@
+                 FloatGemmAcc acc1 = acc1_thread_buf[I]; // P*V
+                 FloatGemmAcc c    = c_thread_buf[I];    // O
+                 FloatGemmAcc c_new =
+-                    (running_sum[iM] * math::exp(running_max[iM] - running_max_new[iM]) * c +
+-                     math::exp(max[iM] - running_max_new[iM]) * acc1) /
+-                    running_sum_new[iM]; // Formula by Dao et al.,
+-                                         // https://arxiv.org/pdf/2205.14135v2.pdf section 3.1
++                    math::exp(running_max[iM] - running_max_new[iM]) * c +
++                    math::exp(max[iM] - running_max_new[iM]) * acc1;
++                // Retain an unnormalized numerator until all key blocks finish.
+ 
+                 c_thread_buf(I) = c_new; // O_new
+             });
+ 
+-            a_blockwise_copy.MoveSrcSliceWindow(a_grid_desc_ak0_m_ak1,
+-                                                a_block_reset_copy_step); // rewind K
++            if constexpr(HasMainKBlockLoop)
++                a_blockwise_copy.MoveSrcSliceWindow(a_grid_desc_ak0_m_ak1,
++                                                    a_block_reset_copy_step);
+             b_blockwise_copy.MoveSrcSliceWindow(b_grid_desc_bk0_n_bk1,
+                                                 b_block_reset_copy_step); // rewind K and step N
+ 
+@@ -1310,6 +1325,28 @@
+ 
+             block_sync_lds(); // wait for gemm1 LDS read
+         } while(++gemm1_k_block_outer_index < num_gemm1_k_block_outer_loop); // end j loop
++
++            constexpr auto c_thread_desc_m0_n0_m1_n1_m2_n2_n3_n4 =
++                gemm1_blockwise_gemm.GetCThreadDescriptor_M0_N0_M1_N1_M2_N2_N3_N4();
++            constexpr auto cm0 = c_thread_desc_m0_n0_m1_n1_m2_n2_n3_n4.GetLength(I0);
++            constexpr auto cn0 = c_thread_desc_m0_n0_m1_n1_m2_n2_n3_n4.GetLength(I1);
++            constexpr auto cm1 = c_thread_desc_m0_n0_m1_n1_m2_n2_n3_n4.GetLength(I2);
++            constexpr auto cn1 = c_thread_desc_m0_n0_m1_n1_m2_n2_n3_n4.GetLength(I3);
++            constexpr auto cm2 = c_thread_desc_m0_n0_m1_n1_m2_n2_n3_n4.GetLength(I4);
++            constexpr auto cn2 = c_thread_desc_m0_n0_m1_n1_m2_n2_n3_n4.GetLength(I5);
++            constexpr auto cn3 = c_thread_desc_m0_n0_m1_n1_m2_n2_n3_n4.GetLength(I6);
++            constexpr auto cn4 = c_thread_desc_m0_n0_m1_n1_m2_n2_n3_n4.GetLength(I7);
++            constexpr auto c_thread_slice_desc_m_n = make_naive_tensor_descriptor_packed(
++                make_tuple(cm0 * cm1 * cm2, cn0 * cn1 * cn2 * cn3 * cn4));
++            constexpr auto c_thread_buf_slice_m = c_thread_slice_desc_m_n.GetLength(I0);
++            constexpr auto c_thread_buf_slice_n = c_thread_slice_desc_m_n.GetLength(I1);
++
++            static_ford<Sequence<c_thread_buf_slice_m, c_thread_buf_slice_n>>{}([&](auto ii) {
++                constexpr auto iM = Number<ii[Number<0>{}]>{};
++                constexpr auto iN = Number<ii[Number<1>{}]>{};
++                auto I = Number<c_thread_slice_desc_m_n.CalculateOffset(make_tuple(iM, iN))>{};
++                c_thread_buf(I) /= running_sum[iM];
++            });
+ 
+         // shuffle C and write out
+         Base::template RunEpilogue<CGlobalMemoryDataOperation, false, true>(

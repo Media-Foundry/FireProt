@@ -613,3 +613,34 @@ was corrected before the results above. No model dispatch changed. The
 next useful candidate is a different writeback/pipeline implementation,
 rather than promoting a contraction that still loses to the baseline.
 See [tuning evidence](../provenance/protenix_packed_bmm_tuning_5b6c5bd.json).
+
+### CShuffle pipeline comparison
+
+An explicit `DeviceBatchedGemmMultiD_Xdl_CShuffle_V3` probe now implements
+the same FP32 contractions with no D tensors, scalar pass-through epilogues,
+and vectorized CShuffle writeback. This is a separate diagnostic C ABI;
+it is not registered in model execution. The actual NT/TN layouts,
+full hipBLAS reference checks, GPU 6 isolation, seed 443, five warmups and
+twenty repetitions were preserved. All candidates compiled and passed.
+
+| Tile / pipeline | Outgoing ms | Incoming ms |
+| --- | ---: | ---: |
+| 64x64 / v1 | 31.229 | 29.724 |
+| 128x128 / v1 | 38.500 | 36.200 |
+| 64x64 / v3 | 30.533 | 29.077 |
+| 64x64 / v4 | 34.705 | 36.422 |
+| 64x64 / v5 | 30.597 | 29.115 |
+| hipBLAS control | 29.641 | 29.496 |
+| hipBLASLt control | 25.918 | 25.728 |
+| 64x64 / v3 repeat after controls | 30.558 | 29.073 |
+
+The v3 incoming contraction has a repeatable isolated advantage of about
+1.4% over hipBLAS. Outgoing still regresses, and both directions remain
+slower than hipBLASLt. These results do not establish model speedup or
+justify replacing both contractions. The next priority is to measure an
+explicit per-operation Lt path while retaining hipBLAS for other GEMMs,
+so the earlier global-policy comparison cannot confound that experiment.
+The CShuffle probe retains compile-time `FIREPROT_TILE` and
+`FIREPROT_PIPELINE` options (pipeline numbers 1 through 5 map to CK v1–v5).
+Full commands, logs, binary hashes, numerical and monitoring results are
+in [CShuffle evidence](../provenance/protenix_packed_bmm_cshuffle_0c7ad00.json).

@@ -15,6 +15,7 @@ from fireprot.ops.registry import (
 
 OPERATION = "triangle_attention"
 IMPLEMENTATION = "amd-gfx90a-efficient-sdpa"
+LONG_DIRECT_IMPLEMENTATION = "amd-gfx90a-efficient-sdpa-direct-n1000"
 SUPPORTED_QKV_SHAPE = (124, 4, 124, 32)
 SUPPORTED_BIAS_SHAPES = ((124, 1, 1, 124), (1, 4, 124, 124))
 SUPPORTED_UNMASKED_BIAS_SHAPES = ((1, 4, 124, 124),)
@@ -25,6 +26,7 @@ OUTER_BATCH_CHUNK = 64
 _long_sequence_enabled = (
     os.environ.get("FIREPROT_DISABLE_LONG_TRIANGLE_ATTENTION") != "1"
 )
+_long_direct_enabled = os.environ.get("FIREPROT_ENABLE_LONG_DIRECT_ATTENTION") == "1"
 
 
 def _architecture(tensor: Any) -> str:
@@ -117,6 +119,41 @@ def _efficient_sdpa(
                 scale=1.0,
             )
     return output.transpose(-2, -3)
+
+
+def _supports_long_direct(signature: OperationSignature) -> bool | tuple[bool, str]:
+    if not _long_direct_enabled:
+        return False, "experimental direct attention requires opt-in"
+    if signature.shape != LONG_QKV_SHAPE or dict(signature.attributes).get(
+        "bias_shapes"
+    ) != repr(LONG_UNMASKED_BIAS_SHAPES):
+        return False, "direct attention requires the exact unmasked long bucket"
+    return _supports_efficient_sdpa(signature)
+
+
+def _direct_sdpa(
+    *, module: Any, q: Any, k: Any, v: Any,
+    biases: Sequence[Any], native: Callable[..., Any],
+) -> Any:
+    """Keep the head-last output layout without an outer copy/assembly loop."""
+    import torch.nn.functional as functional
+
+    if len(biases) != 1:
+        return _efficient_sdpa(module=module, q=q, k=k, v=v, biases=biases, native=native)
+    output = functional.scaled_dot_product_attention(
+        q, k, v, attn_mask=biases[0].contiguous(), dropout_p=0.0, scale=1.0,
+    )
+    return output.transpose(-2, -3)
+
+
+registry.register(
+    operation=OPERATION,
+    name=LONG_DIRECT_IMPLEMENTATION,
+    function=_direct_sdpa,
+    supports=_supports_long_direct,
+    priority=20,
+    version="1",
+)
 
 
 registry.register(

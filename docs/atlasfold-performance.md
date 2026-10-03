@@ -238,8 +238,70 @@ differ by up to 0.125 at N1024 and 0.0625 for N1536 incoming multiplication.
 It is not integrated. Explicitly materializing the transposed BMM operand in
 the native physical layout removes every observed delta for both lengths and
 directions. Input/output packing then measures about 64.5 to 36.9 ms at N1024
-and 151.3 to 84.3 ms at N1536. Full-model validation is pending. Layout-copy
+and 151.3 to 84.3 ms at N1536. Full-model validation is recorded below. Layout-copy
 correctness alone does not establish equivalent GEMM rounding.
 
 The packaged-adapter, N1536, and softmax records and probe sources are in
 [`atlasfold_adapter_validation.json`](../provenance/atlasfold_adapter_validation.json).
+
+## Packaged softmax and multiplication fusion
+
+`--backend hip-fused` explicitly selects the sequential mask/bias/softmax
+fusion plus tiled BF16 input/output packing for triangle multiplication.
+Native remains the default. Both N1000 (bucket1024, 24 masked residues) and
+explicit `--allow-long1536` retain all five trunk passes, AtlasLM-3B calls,
+30/100 native diffusion steps, one sample, and native mixed precision.
+The softmax reduction is gated to the tested Torch `2.12.0a0+git78258b9`,
+HIP `7.14.60850`, and gfx90a. Other versions or failed compilation fall back
+to chunked native attention and original multiplication, with manifest counts.
+The new kernels are handwritten HIP, not CK library calls.
+
+Combined probe results, seed101, stage events enabled:
+
+| Length | Reference first request | Combined first request | Ratio |
+| --- | ---: | ---: | ---: |
+| 1000 | 184.476 s native | 88.388 s | 2.087x |
+| 1536 | 551.132 s chunked native math | 219.493 s | 2.511x |
+
+All saved fields match raw bytes; N1000 also passes its second prediction
+(81.104 s warm prediction). N1536 unchunked upstream still OOMs, so its ratio
+must not be described as a completed unmodified upstream comparison.
+
+The packaged backend additionally passes full N1536 validation: 220.848 s
+first request, 215.485 s prediction, 23.432 GB peak allocated, 528 fused
+attention and 528 packed multiplication calls, zero fallbacks. This run has
+stage events disabled, so it validates packaging and does not form a matched
+uninstrumented ratio against the earlier instrumented reference.
+
+A second random seed (102), same physical SMI5 GCD, fresh model per process,
+and **stage events disabled on both sides** also passes every output byte:
+
+| N1000 measurement | Native | Packaged hip-fused | Ratio |
+| --- | ---: | ---: | ---: |
+| First complete request | 184.581 s | 88.998 s | 2.074x |
+| Prediction | 179.677 s | 83.675 s | 2.147x |
+
+These request timers include loading, adapter setup, features, prediction, and
+serialization, with warm filesystem/extension caches; imports, hashing, and
+preflight are excluded. Selected-device isolation passes. These remain single
+process pairs, not repeated medians or independent structural-quality tests.
+All coordinates, pLDDT, PAE, and pTM are compared at identical random state.
+Final validation: 32 GPU tests pass; local suite 167 passed / 82 skipped.
+The N1536 packaged run preceded only the final Torch/HIP version guard; final
+GPU tests and the seed102 N1000 run include it.
+
+### Continuing targets
+
+A further batched transpose preserves native physical BMM input layouts and
+passes four exact operator comparisons: about 34.0 ms at bucket1024 and
+78.1 ms at N1536, versus the preceding packing candidate's 36.9/84.3 ms.
+It is not packaged or full-model validated yet.
+
+A diagnostic N1536 fused ending-attention profile attributes about 149.6 ms
+of 278.4 ms to the fused softmax and 79.1 ms to QK/PV BMM. This makes softmax
+throughput the next major target. The profiler reported a duplicate ROCTracer
+flow; the sample guides investigation and is not an E2E timing result.
+Neither numerical tolerances nor requested inference work have been reduced.
+
+Raw reports and probe sources:
+[`atlasfold_fused_pair_validation.json`](../provenance/atlasfold_fused_pair_validation.json).

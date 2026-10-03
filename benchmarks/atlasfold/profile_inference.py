@@ -115,7 +115,7 @@ def main():
     parser.add_argument('--model-path', type=Path, default=ASSET_ROOT/'weights/atlasfold/snapshot/weights/atlasfold-260703.pth')
     parser.add_argument('--lm-path', type=Path, default=ASSET_ROOT/'weights/atlaslm3b/snapshot/weights/atlaslm_3b_base.pth')
     parser.add_argument('--kernel', choices=('torch', 'triton'), default='torch')
-    parser.add_argument('--backend', choices=('native', 'chunked', 'hip'), default='native')
+    parser.add_argument('--backend', choices=('native', 'chunked', 'hip', 'hip-fused'), default='native')
     parser.add_argument('--allow-long1536', action='store_true')
     parser.add_argument('--stage-events', choices=('all', 'stages', 'off'), default='all')
     parser.add_argument('--seed', type=int, default=101)

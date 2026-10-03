@@ -153,3 +153,15 @@ measure 9.919 to 9.745 s (N1000, 1.018x) and 28.519 to 28.127 s (N1536, 1.014x),
 with unchanged allocated memory and passing prediction comparisons.
 `FIREPROT_ENABLE_QKV_PROJECTION=0` disables this increment. N1536 retains its
 length opt-in. See [QKV model evidence](protenix-qkv-projection.md#same-source-model-comparison).
+
+### AtlasFold fused pair backend
+
+The explicit AtlasFold `hip-fused` route combines model-specific dispatch in
+`fireprot/adapters/atlasfold/runtime.py` with model-neutral HIP softmax and
+BF16 transpose kernels in `fireprot/backends/amd/pair_fusions.py` and `csrc/`.
+It preserves native physical BLAS operand layouts and BF16 rounding boundaries.
+The measured Torch/HIP version is part of the softmax capability contract.
+Unsupported calls retain upstream methods; unavailable builds use bounded
+native attention and original multiplication. Source hashes and route counts
+are captured per request. See `docs/atlasfold-performance.md` for exact scope,
+paired measurements, numerical validation, and experimental follow-ups.

@@ -25,8 +25,10 @@ AtlasFold monomer plus AtlasLM-3B now has an opt-in adapter and benchmark entry
 point with dual-checkpoint provenance, complete LM/recycle timing, PCI-based
 GPU monitoring, and repeated-output validation. A HIP mask/bias path is available
 for the exact 1000-residue input bucket and explicitly enabled N1536 experiments.
-A further softmax-fusion experiment has passed N1000 full-model byte comparisons
-but is not yet the packaged default. See [AtlasFold performance work](docs/atlasfold-performance.md)
+The explicit `hip-fused` backend adds validated softmax fusion and multiplication
+packing. A matched N1000 seed102 process pair improves complete request time
+from 184.581 to 88.998 seconds (2.074x), with all output bytes unchanged;
+N1536 also passes full-output validation against bounded-memory native math. See [AtlasFold performance work](docs/atlasfold-performance.md)
 and [DiamondHill checkpoint locations](docs/diamondhill-checkpoints.md).
 
 ## Latest single-request E2E comparison

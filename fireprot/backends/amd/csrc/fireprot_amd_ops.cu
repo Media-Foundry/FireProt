@@ -563,3 +563,84 @@ torch::Tensor fireprot_sigmoid_mul_out_f32(torch::Tensor activation,torch::Tenso
   C10_CUDA_KERNEL_LAUNCH_CHECK();
   return output;
 }
+
+namespace {
+template<int Rows>
+__global__ void triangle_vector_pack_kernel(const float4* gate,const float4* projection,float4* output,int rows) {
+    __shared__ float tile[Rows][129];
+    int base=blockIdx.x*Rows;
+    for(int i=threadIdx.x;i<Rows*32;i+=blockDim.x) {
+        int r=i/32,c=(i%32)*4;
+        if(base+r<rows) {
+            float4 g=gate[(base+r)*32+c/4],p=projection[(base+r)*32+c/4];
+            tile[r][c]=(1.0f/(1.0f+expf(-g.x)))*p.x;
+            tile[r][c+1]=(1.0f/(1.0f+expf(-g.y)))*p.y;
+            tile[r][c+2]=(1.0f/(1.0f+expf(-g.z)))*p.z;
+            tile[r][c+3]=(1.0f/(1.0f+expf(-g.w)))*p.w;
+        }
+    }
+    __syncthreads();
+    for(int i=threadIdx.x;i<128*(Rows/4);i+=blockDim.x) {
+        int c=i/(Rows/4),r=(i%(Rows/4))*4;
+        if(base+r<rows) output[(c*rows+base+r)/4]=make_float4(
+            tile[r][c],tile[r+1][c],tile[r+2][c],tile[r+3][c]);
+    }
+}
+__device__ float triangle_residual_value(float g, float x, float z, bool add) {
+    #pragma clang fp contract(off)
+    float value = (1.0f / (1.0f + expf(-g))) * x;
+    return add ? z + value : value;
+}
+__global__ void triangle_residual_kernel(const float4* gate, const float4* value, float4* z,
+                         std::int64_t count, bool add) {
+    std::int64_t i = static_cast<std::int64_t>(blockIdx.x) * blockDim.x + threadIdx.x;
+    if(i >= count) return;
+    float4 g = gate[i], v = value[i], old = add ? z[i] : make_float4(0,0,0,0);
+    z[i] = make_float4(triangle_residual_value(g.x,v.x,old.x,add),triangle_residual_value(g.y,v.y,old.y,add),
+                      triangle_residual_value(g.z,v.z,old.z,add),triangle_residual_value(g.w,v.w,old.w,add));
+}
+
+void check_triangle_vector_tensor(const torch::Tensor& tensor) {
+  check_common(tensor, "triangle tensor");
+  TORCH_CHECK(tensor.dim()==3 && tensor.size(0)==tensor.size(1) &&
+      (tensor.size(0)==1000 || tensor.size(0)==1536) && tensor.size(2)==128,
+      "requires exact [1000,1000,128] or [1536,1536,128]");
+  TORCH_CHECK(reinterpret_cast<std::uintptr_t>(tensor.data_ptr())%16==0,
+      "requires 16-byte alignment");
+}
+} // namespace
+
+torch::Tensor fireprot_triangle_vector_pack(torch::Tensor gate, torch::Tensor value) {
+  check_triangle_vector_tensor(gate); check_triangle_vector_tensor(value);
+  TORCH_CHECK(gate.sizes()==value.sizes() && gate.device()==value.device(),
+      "shape and device must match");
+  const c10::DeviceGuard guard(gate.device());
+  const int n=gate.size(0),rows=n*n;
+  auto output=torch::empty({128,n,n},gate.options());
+  const auto stream=c10::hip::getCurrentHIPStream(gate.get_device());
+  hipLaunchKernelGGL(HIP_KERNEL_NAME(triangle_vector_pack_kernel<64>),
+      dim3((rows+63)/64),dim3(256),0,stream.stream(),
+      reinterpret_cast<const float4*>(gate.data_ptr<float>()),
+      reinterpret_cast<const float4*>(value.data_ptr<float>()),
+      reinterpret_cast<float4*>(output.data_ptr<float>()),rows);
+  C10_CUDA_KERNEL_LAUNCH_CHECK();
+  return output;
+}
+
+torch::Tensor fireprot_triangle_residual(torch::Tensor gate,torch::Tensor value,
+                                          torch::Tensor z,bool add) {
+  check_triangle_vector_tensor(gate); check_triangle_vector_tensor(value);
+  check_triangle_vector_tensor(z);
+  TORCH_CHECK(gate.sizes()==z.sizes() && value.sizes()==z.sizes() &&
+      gate.device()==z.device() && value.device()==z.device(), "shape and device must match");
+  TORCH_CHECK(!z.is_alias_of(gate) && !z.is_alias_of(value), "residual target must not alias inputs");
+  const c10::DeviceGuard guard(z.device());
+  const auto count=z.numel()/4;
+  const auto stream=c10::hip::getCurrentHIPStream(z.get_device());
+  hipLaunchKernelGGL(triangle_residual_kernel,dim3((count+255)/256),dim3(256),0,stream.stream(),
+      reinterpret_cast<const float4*>(gate.data_ptr<float>()),
+      reinterpret_cast<const float4*>(value.data_ptr<float>()),
+      reinterpret_cast<float4*>(z.data_ptr<float>()),count,add);
+  C10_CUDA_KERNEL_LAUNCH_CHECK();
+  return z;
+}

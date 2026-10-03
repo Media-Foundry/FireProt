@@ -97,3 +97,20 @@ source/library hashes, build commands, distributions, stage diagnostics and
 isolation results. Earlier residual-only reports predate the benchmark's
 optional vector-pack argument; their recorded script hashes therefore
 intentionally differ from the final combined reports.
+
+## Experimental production integration
+
+`FIREPROT_ENABLE_TRIANGLE_VECTOR=1` enables the 64-row vector pack and
+fused gated residual through the existing AMD extension for exact N1000
+and opt-in N1536 triangles. The default remains disabled pending model
+validation. The shared extension fingerprints both edited C++/HIP sources.
+Bindings check dtype, contiguity, exact dimensions, device consistency,
+16-byte alignment and residual-target storage aliasing. The residual
+helper explicitly disables floating-point contraction to preserve separate
+multiply/add rounding. Existing operation capability gates and native
+build fallback continue to apply.
+
+The runtime manifest adds `triangle_vector.enabled` and separate N1000,
+N1536 and fallback call counts. Model comparisons must check these counts
+in addition to the existing registry selections, since both implementations
+share the same registered triangle operation.

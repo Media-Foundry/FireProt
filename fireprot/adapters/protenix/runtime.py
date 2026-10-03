@@ -56,6 +56,7 @@ def manifest() -> dict[str, Any]:
     from fireprot.backends.amd.lt_bmm import extension_status as lt_status
     from fireprot.backends.amd.attention_gate import manifest as gate_manifest
     from fireprot.backends.amd.two_gcd_attention import manifest as two_gcd_manifest
+    from fireprot.backends.amd.triangle_multiplication import vector_manifest
 
     result = {
         **(_installed or {"adapter": "protenix", "installed": False}),
@@ -65,6 +66,7 @@ def manifest() -> dict[str, Any]:
         "lt_bmm": lt_status(),
         "attention_gate": gate_manifest(),
         "two_gcd_attention": two_gcd_manifest(),
+        "triangle_vector": vector_manifest(),
     }
     if _installed is not None:
         from fireprot.adapters.protenix import hooks

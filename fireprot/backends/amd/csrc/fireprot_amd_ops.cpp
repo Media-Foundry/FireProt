@@ -42,7 +42,12 @@ torch::Tensor fireprot_sigmoid_mul_mask_f32(
 
 torch::Tensor fireprot_sigmoid_mul_out_f32(torch::Tensor activation,torch::Tensor value);
 
+torch::Tensor fireprot_triangle_vector_pack(torch::Tensor gate,torch::Tensor value);
+torch::Tensor fireprot_triangle_residual(torch::Tensor gate,torch::Tensor value,torch::Tensor z,bool add);
+
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, module) {
+  module.def("triangle_vector_pack", &fireprot_triangle_vector_pack);
+  module.def("triangle_residual", &fireprot_triangle_residual);
   module.def("sigmoid_mul_out_f32", &fireprot_sigmoid_mul_out_f32,
       "FireProt out-of-place FP32 sigmoid gate fusion");
   module.def("sigmoid_pack_f32_128", &fireprot_sigmoid_pack_f32_128,

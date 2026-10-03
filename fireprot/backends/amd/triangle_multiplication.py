@@ -30,6 +30,13 @@ _long_fused_gate_enabled = (
     os.environ.get("FIREPROT_DISABLE_LONG_TRIANGLE_GATES") != "1"
 )
 _long_packed_enabled = os.environ.get("FIREPROT_DISABLE_LONG_TRIANGLE_PACKED") != "1"
+_vector_packed_enabled = os.environ.get("FIREPROT_ENABLE_TRIANGLE_VECTOR") == "1"
+_vector_counts = {"n1000": 0, "n1536": 0, "fallback": 0}
+
+
+def vector_manifest() -> dict[str, Any]:
+    return {"enabled": _vector_packed_enabled, "counts": dict(_vector_counts)}
+
 
 
 def _architecture(tensor: Any) -> str:
@@ -265,11 +272,14 @@ def _long_sequence_packed(
     extension = load_amd_extension()
     if extension is None or mask is not None:
         return native()
+    vector = (_vector_packed_enabled and tuple(z.shape) in (LONG_VALIDATED_SHAPE, LONG1536_SHAPE)
+              and z.is_contiguous() and z.data_ptr() % 16 == 0)
+    pack = extension.triangle_vector_pack if vector else extension.sigmoid_pack_f32_128
     normalized = module.layer_norm_in(z)
-    a = extension.sigmoid_pack_f32_128(
+    a = pack(
         module.linear_a_g(normalized), module.linear_a_p(normalized)
     )
-    b = extension.sigmoid_pack_f32_128(
+    b = pack(
         module.linear_b_g(normalized), module.linear_b_p(normalized)
     )
     from fireprot.backends.amd.lt_bmm import packed_bmm
@@ -281,6 +291,11 @@ def _long_sequence_packed(
     )
     del contracted
     output = module.linear_z(output)
+    if vector:
+        result = extension.triangle_residual(module.linear_g(normalized), output, z, add_with_inplace)
+        _vector_counts[f"n{z.shape[0]}"] += 1
+        return result
+    _vector_counts["fallback"] += 1
     output = extension.sigmoid_mul_f32(module.linear_g(normalized), output)
     del normalized
     if add_with_inplace:

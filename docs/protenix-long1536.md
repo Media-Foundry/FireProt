@@ -875,3 +875,72 @@ Gate fusion remains **disabled by default**. The failed coverage attempt
 and the corrected full-coverage comparison are separate evidence records;
 only the latter evaluates trunk fusion. See
 [full-coverage model evidence](../provenance/protenix_attention_gate_model_bba3682.json).
+
+### Outer-batch granularity and two-GCD attention probes
+
+Two standalone probes at base `79cf12d` investigate scheduling beyond
+small projection/gate changes. They do not change model dispatch.
+
+The single-GCD probe covers the complete `[1536,1536,128]` attention module,
+including projections, per-chunk bias packing, gate and output assembly.
+It uses GPU 6, FP32, TF32 off, hipBLAS, seed 727, random weights with
+standard deviation 0.02, five warmups and twenty GPU-event measurements.
+All outputs match the 512-row reference exactly and isolation passes.
+
+| Outer chunk | Median ms | Peak allocated bytes |
+| --- | ---: | ---: |
+| 512, before | 127.045 | 5,306,122,240 |
+| 256 | 128.079 | 3,896,836,096 |
+| 768 | 126.580 | 6,715,408,384 |
+| 1536 | 124.403 | 9,735,307,264 |
+| 512, after | 126.975 | 5,306,122,240 |
+
+Removing chunks saves about 2.1% in this probe while raising its peak
+allocation substantially. The probe preserves its input with out-of-place
+assembly; upstream model chunking can reuse input storage. These memory
+numbers are therefore not model-memory predictions.
+
+The two-GCD probe instead isolates the SDPA core at `[512,4,1536,32]`.
+Physical GPU 7 owns inputs and final output; GPU 6 handles a batch shard.
+It includes bias packing, every Q/K/V and bias peer copy, output return,
+concatenation, allocations and synchronization of both devices. Timing is
+host wall time, not directly comparable to the full-module GPU events
+above. FP32, TF32 off, seed 419, five warmups and twenty repetitions apply.
+Both device monitors pass, bidirectional peer access is available, and
+all clean runs have zero maximum output delta against single-GCD SDPA.
+
+| Primary / secondary batch | Primary copy stream | Dual median ms | Single controls ms |
+| --- | --- | ---: | ---: |
+| 256 / 256 | Shared with compute | 25.416 | 34.973 / 34.932 |
+| 256 / 256 | Separate | 27.294 | 34.933 / 34.916 |
+| 320 / 192 | Shared with compute | 28.105 | 34.923 / 34.903 |
+| 320 / 192 | Separate | 24.682 | 34.919 / 34.932 |
+| 320 / 192, repeat | Separate | 24.699 | 34.923 / 34.919 |
+
+The best measured combination is approximately **1.41x** faster using
+**two GCDs instead of one**. It adds 792,723,456 bytes of peak allocated
+memory on the secondary GCD; the primary peak remains 2,088,763,392 bytes
+in this isolated probe. Separate streams alone do not improve the equal
+split. The asymmetric split and stream arrangement must be evaluated
+together; no particular hardware contention mechanism is established.
+
+An additional untimed trace of the initial equal split shows attention
+kernels on physical GPUs 6 and 7 overlapping for about 18.43 ms, after
+input copies and before the return copy. However, ROCm profiler teardown
+aborted with a 30-second timeout for five HSA copy callbacks, exit 255,
+after writing its report. Its JSON `status: ok` is not proof of successful
+process completion. This run is retained as diagnostic evidence only and
+excluded from clean-run validation. The regular runs do not enable the
+profiler and exit successfully.
+
+```bash
+HIP_VISIBLE_DEVICES=6,7 PYTHONPATH=.:Protenix python -m benchmarks.protenix.benchmark_attention_two_gcd \
+  --overlap-inputs --remote-batch 192 --output outputs/benchmarks/two_gcd.json
+```
+
+Full-model integration still needs explicit secondary-device ownership,
+stream/lifetime checks under real model execution, compatible model-harness
+monitoring of both GPUs, and same-source C4/S1 timing and coordinate gates.
+No E2E speedup, CK improvement, or default promotion follows from these
+SDPA scheduling probes. See
+[granularity evidence](../provenance/protenix_attention_granularity_79cf12d.json).

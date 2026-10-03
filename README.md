@@ -22,6 +22,8 @@ AtlasFold, OpenFold, ESMFold, Base-model coverage, BF16 promotion, additional lo
 
 ## Experimental 1,536-residue workload
 
+The latest vector packing and residual fusion improves warm model median from **31.524 to 30.096 s (1.047x)** over the CK attention baseline, with unchanged peak allocated memory and passing output comparisons. It follows this bucket's existing length opt-in; `FIREPROT_ENABLE_TRIANGLE_VECTOR=0` restores the previous triangle multiplication. See [model validation](docs/protenix-triangle-vector-probes.md#same-source-model-validation).
+
 A real **1,536-residue** input is available under
 `FIREPROT_ENABLE_LONG1536=1`. The exact FP32 CK attention specialization is
 now the default within this opt-in bucket: a same-source Mini-default
@@ -57,6 +59,8 @@ the model. It remains disabled; see the
 [two-GCD model comparison](docs/protenix-long1536.md#synchronized-two-gcd-model-validation).
 
 ## Verified 1,000-token MI250 result
+
+Vector packing and residual fusion now improve the warm model from **10.759 to 10.465 s (1.028x)** over the preceding CK attention baseline, with unchanged peak allocated memory and three passing output comparisons. Use `FIREPROT_ENABLE_TRIANGLE_VECTOR=0` to restore the preceding triangle multiplication. See [model evidence](docs/protenix-triangle-vector-probes.md#same-source-model-validation).
 
 The latest bias-vectorized CK specialization improves warm model median from **12.615 to 10.745 s (1.174x)** versus the previous CK kernel, with unchanged peak allocated memory and three passing coordinate/confidence comparisons. It retains FP32 and C4/S1. This is now the exact N1000 default; `FIREPROT_ENABLE_CK_VECTOR_BIAS1000=0` restores the previous CK kernel. See [vectorization and model evidence](docs/protenix-ck-vector1000.md).
 

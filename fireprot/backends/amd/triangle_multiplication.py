@@ -30,7 +30,7 @@ _long_fused_gate_enabled = (
     os.environ.get("FIREPROT_DISABLE_LONG_TRIANGLE_GATES") != "1"
 )
 _long_packed_enabled = os.environ.get("FIREPROT_DISABLE_LONG_TRIANGLE_PACKED") != "1"
-_vector_packed_enabled = os.environ.get("FIREPROT_ENABLE_TRIANGLE_VECTOR") == "1"
+_vector_packed_enabled = os.environ.get("FIREPROT_ENABLE_TRIANGLE_VECTOR", "1") == "1"
 _vector_counts = {"n1000": 0, "n1536": 0, "fallback": 0}
 
 

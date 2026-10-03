@@ -63,3 +63,13 @@ def test_full_triangle_vector_add_and_overwrite(n,monkeypatch):
                 torch.testing.assert_close(actual,reference,atol=2e-5,rtol=2e-5)
             del module,source,target,reference,actual
     torch.cuda.synchronize()
+
+
+@pytest.mark.parametrize('flag,expected',[(None,True),('0',False),('1',True)])
+def test_vector_environment_default(flag,expected):
+    import subprocess
+    import sys
+    env=os.environ.copy();env.pop('FIREPROT_ENABLE_TRIANGLE_VECTOR',None)
+    if flag is not None:env['FIREPROT_ENABLE_TRIANGLE_VECTOR']=flag
+    code='from fireprot.backends.amd.triangle_multiplication import vector_manifest; print(vector_manifest()["enabled"])'
+    assert subprocess.check_output([sys.executable,'-c',code],env=env,text=True).strip()==str(expected)

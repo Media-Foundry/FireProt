@@ -23,6 +23,8 @@ promoted execution strategy. See [N1536 evidence](protenix-long1536.md).
 
 The complete adapter contract described below has not yet been implemented as a stable public API. The current Protenix bootstrap is the first integration seam from which that API will be extracted after a second model is studied.
 
+The long packed triangle path now defaults to 64-row vectorized HIP sigmoid packing and a fused gated residual update. Same-source Mini FP32 C4/S1 comparisons improve warm model median 10.759 to 10.465 seconds at N1000 and 31.524 to 30.096 seconds at opt-in N1536, with unchanged peak allocated memory and passing coordinate/confidence checks. `FIREPROT_ENABLE_TRIANGLE_VECTOR=0` restores the previous implementation. See [validation](protenix-triangle-vector-probes.md#same-source-model-validation).
+
 ## 1. Scope
 
 FireProt targets protein structure **inference on AMD GPUs**. It should reproduce upstream model semantics and reduce latency or resource use only where measurements support an optimization. Model adapters own model-specific scientific behavior. The framework owns configuration, resources, execution, observation, and validation. Optimized operators must be independently selectable, reversible, and testable.

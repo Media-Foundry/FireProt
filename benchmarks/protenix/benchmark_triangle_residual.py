@@ -54,6 +54,7 @@ def main():
         from fireprot.backends.amd.lt_bmm import packed_bmm
         from protenix.model.triangular.triangular import TriangleMultiplicativeUpdate
         install('hipblas'); ext=load_amd_extension(); assert ext is not None
+        tm._vector_packed_enabled = False  # Keep the pre-promotion control explicit.
         pack = ext.sigmoid_pack_f32_128
         if args.vector_pack:
             pack_source=REPO_ROOT/'benchmarks/protenix/csrc/triangle_pack_vector_probe.cpp'

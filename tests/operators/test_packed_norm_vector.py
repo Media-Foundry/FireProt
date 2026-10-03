@@ -40,6 +40,7 @@ def test_packed_norm_complete_triangle(n,monkeypatch):
     from fireprot.adapters.protenix.runtime import install
     from protenix.model.triangular.triangular import TriangleMultiplicativeUpdate
     install('hipblas');assert load_amd_extension() is not None
+    monkeypatch.setattr(tm,"_dual_projection_enabled",False)
     torch.manual_seed(977);torch.backends.cuda.matmul.allow_tf32=False
     monkeypatch.setattr(tm,'_vector_packed_enabled',True)
     with torch.inference_mode():

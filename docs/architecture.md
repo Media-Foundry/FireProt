@@ -119,3 +119,16 @@ The operator library may contain many implementations, but should expose a small
 | E: Operator expansion | Active for long-sequence attention and larger buckets | Short and long BLAS inventories, packed triangle contraction, efficient attention, and recycle HIP kernels exist; extend CK, hipBLAS, hipBLASLt, and HIP implementations where measured shapes and repeated comparisons justify them |
 
 Preserve source, weight, and input provenance throughout. Establish correctness before reporting speed. Stage D's order can change with source and weight availability or user priorities.
+
+
+## Latest triangle projection implementation
+
+The exact gfx90a FP32 N1000 and opt-in N1536 packed triangle paths now use
+handwritten MFMA dual projection with shared input/weight tiles and fused
+sigmoid/channel-first output. Capability checks retain the preceding path
+for unsupported tensors or biased projections. The fixed C64/K16 kernel
+preserves precision and cycle count. Same-source warm Mini-default C4/S1
+model comparisons measure 10.370 to 9.932 s (N1000, 1.044x) and 29.930 to
+28.916 s (N1536, 1.035x), with unchanged allocated memory and passing output
+checks. `FIREPROT_ENABLE_DUAL_PROJECTION=0` disables this increment. See
+[implementation and evidence](protenix-dual-projection.md#same-source-model-comparison).

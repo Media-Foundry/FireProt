@@ -100,4 +100,6 @@ HIP_VISIBLE_DEVICES=7 PYTHONPATH=.:Protenix FIREPROT_ENABLE_LONG1536=1 python \
 
 The subsequent [dual projection HIP investigation](protenix-dual-projection.md)
 shares both projections in one kernel and improves complete-triangle timings.
-It remains experimental pending model validation.
+The dual-projection implementation subsequently passed model validation and is
+now enabled in its validated buckets; the single CK projection above remains
+experimental.

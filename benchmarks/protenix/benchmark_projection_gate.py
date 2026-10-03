@@ -13,6 +13,7 @@ def run_triangle(torch,ext,handle,n,report,dual_entry=None):
     from protenix.model.triangular.triangular import TriangleMultiplicativeUpdate
     install('hipblas')
     tm._vector_packed_enabled=True;tm._vector_norm_enabled=True
+    tm._dual_projection_enabled=False  # Preserve the measured pre-dual control.
     entry=handle.ck_projection_gate_rows
     entry.argtypes=[ctypes.c_void_p]*4+[ctypes.c_int]*3+[ctypes.c_void_p]
     entry.restype=ctypes.c_int

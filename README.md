@@ -22,6 +22,8 @@ AtlasFold, OpenFold, ESMFold, Base-model coverage, BF16 promotion, additional lo
 
 ## Experimental 1,536-residue workload
 
+Fused dual projection improves the warm model from **29.930 to 28.916 s (1.035x)** in a five-repetition same-source comparison. It is now enabled inside the existing length opt-in; `FIREPROT_ENABLE_DUAL_PROJECTION=0` restores the preceding projections. Peak allocated memory is unchanged and all prediction comparisons pass. See [model validation](docs/protenix-dual-projection.md#same-source-model-comparison).
+
 Vectorized packed LayerNorm subsequently improves the warm model from **30.237 to 29.859 s (1.013x)** in a five-repetition same-source comparison. It is enabled inside the existing length opt-in; `FIREPROT_ENABLE_VECTOR_PACKED_NORM=0` restores the preceding LayerNorm. See [validation](docs/protenix-packed-norm-vector.md#same-source-model-result).
 
 The latest vector packing and residual fusion improves warm model median from **31.524 to 30.096 s (1.047x)** over the CK attention baseline, with unchanged peak allocated memory and passing output comparisons. It follows this bucket's existing length opt-in; `FIREPROT_ENABLE_TRIANGLE_VECTOR=0` restores the previous triangle multiplication. See [model validation](docs/protenix-triangle-vector-probes.md#same-source-model-validation).
@@ -61,6 +63,8 @@ the model. It remains disabled; see the
 [two-GCD model comparison](docs/protenix-long1536.md#synchronized-two-gcd-model-validation).
 
 ## Verified 1,000-token MI250 result
+
+Fused dual projection improves the warm model from **10.370 to 9.932 s (1.044x)** over five same-source repetitions. It is now the default in this validated bucket; use `FIREPROT_ENABLE_DUAL_PROJECTION=0` for the previous projections. Peak allocated memory is unchanged and all prediction comparisons pass. See [model validation](docs/protenix-dual-projection.md#same-source-model-comparison).
 
 The latest packed LayerNorm increment improves warm model median from **10.466 to 10.360 s (1.010x)** over five repetitions, with unchanged peak allocated memory and passing output comparisons. Use `FIREPROT_ENABLE_VECTOR_PACKED_NORM=0` to restore the preceding LayerNorm. See [model evidence](docs/protenix-packed-norm-vector.md#same-source-model-result).
 

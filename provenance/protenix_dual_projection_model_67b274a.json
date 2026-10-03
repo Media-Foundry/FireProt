@@ -1,0 +1,4254 @@
+{
+  "candidate_commit": "67b274aee128c064da5522bd38bc6a482b26080e",
+  "scope": "Same-source warm Mini-default FP32 C4/S1 model A/B; worker wall includes one warmup and five predictions, not single-request cold start",
+  "build": {
+    "extension": "fireprot_amd_ops_8870aa7c48bd",
+    "library_sha256": "f94db7524af94bc40084b98c216f79e333e1ecfa89e40eb9c4a8c22c4e5628a5",
+    "source_sha256": {
+      "fireprot/backends/amd/csrc/fireprot_amd_ops.cpp": "154f6a236c25b435e0c8bf38d1d9b669e7be5511363853a8f7375c7d5b00e742",
+      "fireprot/backends/amd/csrc/fireprot_amd_ops.cu": "e9d46f13698e2e6301325ad4fc04a9631d4b8f1ec7b2218d7bcd0cca2b63abab"
+    },
+    "compiler": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n"
+  },
+  "integrated_tests": {
+    "exit_code": 0,
+    "monitors": [
+      {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 39,
+        "allowed_pid": 882597,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      },
+      {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 7,
+        "interval_seconds": 1.0,
+        "samples": 39,
+        "allowed_pid": 882597,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    ]
+  },
+  "lengths": {
+    "1000": {
+      "order": [
+        "enabled",
+        "disabled"
+      ],
+      "runs": {
+        "disabled": {
+          "status": "ok",
+          "spec": {
+            "schema_version": 1,
+            "created_at": "2026-10-03T07:40:28.330432+00:00",
+            "config_path": "/tmp/fireprot-dual-model-1000.json",
+            "config_sha256": "1fcc44b44f2146f6a8cd7b6b943c5e8113683c660b53a69c36107c23d7b20252",
+            "repo_root": "/media/IntelSSD/fireprot",
+            "protenix_root": "/media/IntelSSD/fireprot/Protenix",
+            "run_dir": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot",
+            "backend": "fireprot",
+            "blas_backend": "hipblas",
+            "profile_one": false,
+            "torch_profile": false,
+            "source": {
+              "fireprot_commit": "67b274aee128c064da5522bd38bc6a482b26080e",
+              "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b"
+            },
+            "measurement": {
+              "warmups": 1,
+              "repetitions": 5,
+              "dump_outputs": true,
+              "cache_state": "warm-within-process",
+              "device_policy": "exclusive",
+              "exclusive_max_gpu_use_percent": 5,
+              "exclusive_max_vram_used_bytes": 268435456,
+              "process_monitor_interval_seconds": 1.0,
+              "reject_external_gpu_processes": true,
+              "clock_policy": "record-current",
+              "additional_physical_devices": [
+                6
+              ]
+            },
+            "workload": {
+              "id": "mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32",
+              "input": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+              "token_count": 1000,
+              "model_name": "protenix_mini_default_v0.5.0",
+              "dtype": "fp32",
+              "cycles": 4,
+              "diffusion_steps": 1,
+              "samples": 1,
+              "seeds": [
+                101
+              ],
+              "cache": true,
+              "use_msa": false,
+              "use_template": false,
+              "enable_fusion": true,
+              "enable_tf32": false,
+              "trimul_kernel": "torch",
+              "triatt_kernel": "torch"
+            }
+          },
+          "source": {
+            "fireprot_commit": "67b274aee128c064da5522bd38bc6a482b26080e",
+            "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b",
+            "profile_script_sha256": "4ee824921e41bfe3842bc9f7bb6fc35e67fbe43eced78dcba4d57f4ad26b5dee"
+          },
+          "allocator_environment": {
+            "PYTORCH_ALLOC_CONF": "expandable_segments:True",
+            "PYTORCH_CUDA_ALLOC_CONF": null
+          },
+          "software": {
+            "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:38:16) [GCC 14.3.0]",
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "miopen": null,
+            "miopen_available": false,
+            "preferred_blas": "_BlasBackend.Cublas"
+          },
+          "hardware": {
+            "hostname": "DiamondHill",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.39",
+            "device_index": 0,
+            "device_name": "AMD Instinct MI250X / MI250",
+            "device_arch": [
+              9,
+              0
+            ],
+            "gcn_arch_name": "gfx90a:sramecc+:xnack-",
+            "total_memory_bytes": 68702699520
+          },
+          "input": {
+            "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+            "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac",
+            "token_count": 1000,
+            "atom_count": null
+          },
+          "fireprot_runtime": {
+            "adapter": "protenix",
+            "blas": {
+              "requested": "hipblas",
+              "before": "_BlasBackend.Cublaslt",
+              "effective": "_BlasBackend.Cublas",
+              "changed": true
+            },
+            "registration_modules": [
+              "fireprot.backends.amd.ck_gemm",
+              "fireprot.backends.amd.triangle_multiplication",
+              "fireprot.backends.amd.triangle_attention",
+              "fireprot.backends.amd.ck_attention",
+              "fireprot.backends.amd.recycle"
+            ],
+            "hooks": {
+              "installed": true,
+              "enabled": true,
+              "hooks": [
+                "OpenFoldLayerNorm.forward",
+                "Transition.forward"
+              ],
+              "fast_paths": {
+                "selection_counts": [
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+                    "count": 432
+                  },
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "native",
+                    "count": 432
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                    "count": 2628
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "native",
+                    "count": 1338
+                  }
+                ],
+                "backends": {
+                  "recycle": {
+                    "channel_first_layer_norm_enabled": true,
+                    "long_layer_norm_enabled": true,
+                    "long_transition_enabled": true,
+                    "long1536_epilogues_enabled": true,
+                    "selection_counts": [
+                      {
+                        "operation": "gated_transition",
+                        "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+                        "count": 432
+                      },
+                      {
+                        "operation": "gated_transition",
+                        "implementation": "native",
+                        "count": 432
+                      },
+                      {
+                        "operation": "layer_norm",
+                        "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                        "count": 2628
+                      },
+                      {
+                        "operation": "layer_norm",
+                        "implementation": "native",
+                        "count": 1338
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "operations": {
+              "implementations": {
+                "gated_transition": [
+                  {
+                    "name": "amd-gfx90a-hip-transition-f32-c128-long",
+                    "priority": 30,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-transition-f32-c128",
+                    "priority": 20,
+                    "version": "1"
+                  }
+                ],
+                "layer_norm": [
+                  {
+                    "name": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                    "priority": 30,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-layernorm-f32-c128-channel-first",
+                    "priority": 25,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-layernorm-f32-c128",
+                    "priority": 20,
+                    "version": "1"
+                  }
+                ],
+                "linear": [
+                  {
+                    "name": "amd-ck-gemm-f32-m124-k64-n32",
+                    "priority": 30,
+                    "version": "1"
+                  }
+                ],
+                "triangle_attention": [
+                  {
+                    "name": "amd-gfx90a-ck-tile-attention-f32-n1000",
+                    "priority": 30,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-ck-tile-attention-f32-n1536",
+                    "priority": 30,
+                    "version": "exact-shape-1"
+                  },
+                  {
+                    "name": "amd-gfx90a-efficient-sdpa-direct-n1000",
+                    "priority": 20,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-efficient-sdpa-direct-n1536",
+                    "priority": 20,
+                    "version": "experimental-1"
+                  },
+                  {
+                    "name": "amd-gfx90a-efficient-sdpa",
+                    "priority": 10,
+                    "version": "1"
+                  }
+                ],
+                "triangle_multiplication": [
+                  {
+                    "name": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                    "priority": 40,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+                    "priority": 40,
+                    "version": "experimental-1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-triangle-gates-f32-n1000-c128",
+                    "priority": 30,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-triangle-gates-f32-n124-c128",
+                    "priority": 20,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-short-sequence-torch",
+                    "priority": 10,
+                    "version": "1"
+                  }
+                ]
+              },
+              "selection_counts": [
+                {
+                  "operation": "triangle_attention",
+                  "implementation": "amd-gfx90a-ck-tile-attention-f32-n1000",
+                  "count": 864
+                },
+                {
+                  "operation": "triangle_multiplication",
+                  "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                  "count": 864
+                }
+              ],
+              "decisions": [
+                {
+                  "signature": {
+                    "operation": "triangle_attention",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "float32",
+                    "shape": [
+                      1000,
+                      4,
+                      1000,
+                      32
+                    ],
+                    "layout": "strided",
+                    "mode": "inference",
+                    "mask": "triangle-bias",
+                    "inplace": false,
+                    "attributes": {
+                      "bias_count": "1",
+                      "bias_shapes": "((1, 4, 1000, 1000),)",
+                      "ck_tile_compatible": "True",
+                      "head_dim": "32",
+                      "heads": "4",
+                      "qkv_strides": "((128000, 32, 128, 1), (128000, 32, 128, 1), (128000, 32, 128, 1))"
+                    }
+                  },
+                  "selected": "amd-gfx90a-ck-tile-attention-f32-n1000",
+                  "rejected": []
+                },
+                {
+                  "signature": {
+                    "operation": "triangle_multiplication",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "float32",
+                    "shape": [
+                      1000,
+                      1000,
+                      128
+                    ],
+                    "layout": "contiguous",
+                    "mode": "inference",
+                    "mask": "none",
+                    "inplace": true,
+                    "attributes": {
+                      "add_with_inplace": "True",
+                      "c_hidden": "128",
+                      "c_z": "128",
+                      "direction": "incoming"
+                    }
+                  },
+                  "selected": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                  "rejected": []
+                },
+                {
+                  "signature": {
+                    "operation": "triangle_multiplication",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "float32",
+                    "shape": [
+                      1000,
+                      1000,
+                      128
+                    ],
+                    "layout": "contiguous",
+                    "mode": "inference",
+                    "mask": "none",
+                    "inplace": true,
+                    "attributes": {
+                      "add_with_inplace": "True",
+                      "c_hidden": "128",
+                      "c_z": "128",
+                      "direction": "outgoing"
+                    }
+                  },
+                  "selected": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                  "rejected": []
+                }
+              ]
+            },
+            "ck_attention": {
+              "enabled": true,
+              "long1536_enabled": true,
+              "exact1536_enabled": true,
+              "vector1000_enabled": true,
+              "loaded": true,
+              "error": null,
+              "build": {
+                "source_sha256": "d50865b27a66956b391a331cc0daf9e33962c1fd1c0d93b3243fab9d25af016c",
+                "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+                "header_count": 581,
+                "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+                "command": [
+                  "/opt/rocm/bin/hipcc",
+                  "-O3",
+                  "-std=c++17",
+                  "-fPIC",
+                  "-shared",
+                  "--offload-arch=gfx90a",
+                  "-I/opt/rocm/include",
+                  "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+                  "-o",
+                  "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.pending.so"
+                ],
+                "library_sha256": "e0db29648fbc9e4895663604a93c3729503039310761abdf19ed8e637d49ca63",
+                "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.so",
+                "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+              }
+            },
+            "lt_bmm": {
+              "enabled": false,
+              "loaded": false,
+              "error": null,
+              "build": {},
+              "counts": {
+                "outgoing": 0,
+                "incoming": 0,
+                "fallback": 864
+              },
+              "workspace_bytes_per_call": 33554432
+            },
+            "attention_gate": {
+              "enabled": false,
+              "counts": {
+                "selected": 0,
+                "fallback": 0
+              },
+              "fallback_signatures": []
+            },
+            "two_gcd_attention": {
+              "enabled": false,
+              "synchronize": false,
+              "counts": {},
+              "primary_batch": 320,
+              "secondary_batch": 192
+            },
+            "triangle_vector": {
+              "enabled": true,
+              "counts": {
+                "n1000": 864,
+                "n1536": 0,
+                "fallback": 0
+              },
+              "packed_norm_enabled": true,
+              "packed_norm_counts": {
+                "n1000": 864,
+                "n1536": 0
+              },
+              "dual_projection_enabled": false,
+              "dual_projection_counts": {
+                "n1000": 0,
+                "n1536": 0,
+                "fallback": 0
+              }
+            }
+          },
+          "inference_wall_ms": 111775.1567090163,
+          "process_wall_ms": 115106.34670697618,
+          "gpu_process_monitor": {
+            "available": true,
+            "command": [
+              "/usr/bin/amd-smi",
+              "process",
+              "--json"
+            ],
+            "physical_device_index": 7,
+            "interval_seconds": 1.0,
+            "samples": 90,
+            "allowed_pid": 887265,
+            "external_pids": [],
+            "errors": [],
+            "passed": true
+          },
+          "additional_device_preflight": {
+            "6": {
+              "gpu_use_percent": 0,
+              "vram_used_bytes": 11014144,
+              "passed": true
+            }
+          },
+          "additional_gpu_process_monitors": [
+            {
+              "available": true,
+              "command": [
+                "/usr/bin/amd-smi",
+                "process",
+                "--json"
+              ],
+              "physical_device_index": 6,
+              "interval_seconds": 1.0,
+              "samples": 90,
+              "allowed_pid": 887265,
+              "external_pids": [],
+              "errors": [],
+              "passed": true
+            }
+          ],
+          "timing": {
+            "summary": {
+              "warmup": {
+                "model_gpu_ms": {
+                  "count": 1,
+                  "min": 16317.05078125,
+                  "median": 16317.05078125,
+                  "p95": 16317.05078125,
+                  "max": 16317.05078125,
+                  "mean": 16317.05078125
+                },
+                "model_wall_ms": {
+                  "count": 1,
+                  "min": 16317.181889957283,
+                  "median": 16317.181889957283,
+                  "p95": 16317.181889957283,
+                  "max": 16317.181889957283,
+                  "mean": 16317.181889957283
+                },
+                "peak_memory_allocated_bytes": {
+                  "count": 1,
+                  "min": 9481004032,
+                  "median": 9481004032,
+                  "p95": 9481004032,
+                  "max": 9481004032,
+                  "mean": 9481004032.0
+                },
+                "peak_memory_reserved_bytes": {
+                  "count": 1,
+                  "min": 9940500480,
+                  "median": 9940500480,
+                  "p95": 9940500480,
+                  "max": 9940500480,
+                  "mean": 9940500480.0
+                },
+                "stages_gpu_ms": {
+                  "atom_attention_decoder": {
+                    "count": 1,
+                    "min": 7.728702068328857,
+                    "median": 7.728702068328857,
+                    "p95": 7.728702068328857,
+                    "max": 7.728702068328857,
+                    "mean": 7.728702068328857
+                  },
+                  "atom_attention_encoder": {
+                    "count": 1,
+                    "min": 3043.507392883301,
+                    "median": 3043.507392883301,
+                    "p95": 3043.507392883301,
+                    "max": 3043.507392883301,
+                    "mean": 3043.507392883301
+                  },
+                  "confidence": {
+                    "count": 1,
+                    "min": 640.7278442382812,
+                    "median": 640.7278442382812,
+                    "p95": 640.7278442382812,
+                    "max": 640.7278442382812,
+                    "mean": 640.7278442382812
+                  },
+                  "confidence_head": {
+                    "count": 1,
+                    "min": 640.7195434570312,
+                    "median": 640.7195434570312,
+                    "p95": 640.7195434570312,
+                    "max": 640.7195434570312,
+                    "mean": 640.7195434570312
+                  },
+                  "diffusion_module": {
+                    "count": 1,
+                    "min": 1442.0738525390625,
+                    "median": 1442.0738525390625,
+                    "p95": 1442.0738525390625,
+                    "max": 1442.0738525390625,
+                    "mean": 1442.0738525390625
+                  },
+                  "diffusion_transformer": {
+                    "count": 1,
+                    "min": 1607.4260611534119,
+                    "median": 1607.4260611534119,
+                    "p95": 1607.4260611534119,
+                    "max": 1607.4260611534119,
+                    "mean": 1607.4260611534119
+                  },
+                  "pairformer_output": {
+                    "count": 1,
+                    "min": 13237.2529296875,
+                    "median": 13237.2529296875,
+                    "p95": 13237.2529296875,
+                    "max": 13237.2529296875,
+                    "mean": 13237.2529296875
+                  },
+                  "pairformer_stack": {
+                    "count": 1,
+                    "min": 9384.258972167969,
+                    "median": 9384.258972167969,
+                    "p95": 9384.258972167969,
+                    "max": 9384.258972167969,
+                    "mean": 9384.258972167969
+                  },
+                  "sample_diffusion": {
+                    "count": 1,
+                    "min": 1513.0421142578125,
+                    "median": 1513.0421142578125,
+                    "p95": 1513.0421142578125,
+                    "max": 1513.0421142578125,
+                    "mean": 1513.0421142578125
+                  },
+                  "triangle_attention": {
+                    "count": 1,
+                    "min": 4436.956804275513,
+                    "median": 4436.956804275513,
+                    "p95": 4436.956804275513,
+                    "max": 4436.956804275513,
+                    "mean": 4436.956804275513
+                  },
+                  "triangle_multiplication": {
+                    "count": 1,
+                    "min": 3534.2638816833496,
+                    "median": 3534.2638816833496,
+                    "p95": 3534.2638816833496,
+                    "max": 3534.2638816833496,
+                    "mean": 3534.2638816833496
+                  }
+                }
+              },
+              "measure": {
+                "model_gpu_ms": {
+                  "count": 5,
+                  "min": 10346.048828125,
+                  "median": 10369.6748046875,
+                  "p95": 10393.302734375,
+                  "max": 10393.302734375,
+                  "mean": 10371.6138671875
+                },
+                "model_wall_ms": {
+                  "count": 5,
+                  "min": 10346.150629979093,
+                  "median": 10369.762665999588,
+                  "p95": 10393.387100019027,
+                  "max": 10393.387100019027,
+                  "mean": 10371.704213996418
+                },
+                "peak_memory_allocated_bytes": {
+                  "count": 5,
+                  "min": 10011042304,
+                  "median": 10011042304,
+                  "p95": 10011042304,
+                  "max": 10011042304,
+                  "mean": 10011042304.0
+                },
+                "peak_memory_reserved_bytes": {
+                  "count": 5,
+                  "min": 10443816960,
+                  "median": 10464788480,
+                  "p95": 10548674560,
+                  "max": 10548674560,
+                  "mean": 10485760000.0
+                },
+                "stages_gpu_ms": {
+                  "atom_attention_decoder": {
+                    "count": 5,
+                    "min": 7.706622123718262,
+                    "median": 7.711902141571045,
+                    "p95": 7.726781845092773,
+                    "max": 7.726781845092773,
+                    "mean": 7.71484603881836
+                  },
+                  "atom_attention_encoder": {
+                    "count": 5,
+                    "min": 36.732258796691895,
+                    "median": 36.76857948303223,
+                    "p95": 36.88090133666992,
+                    "max": 36.88090133666992,
+                    "mean": 36.78569984436035
+                  },
+                  "confidence": {
+                    "count": 5,
+                    "min": 584.896728515625,
+                    "median": 587.0430297851562,
+                    "p95": 590.2581176757812,
+                    "max": 590.2581176757812,
+                    "mean": 587.2472045898437
+                  },
+                  "confidence_head": {
+                    "count": 5,
+                    "min": 584.8883666992188,
+                    "median": 587.03466796875,
+                    "p95": 590.2496337890625,
+                    "max": 590.2496337890625,
+                    "mean": 587.2387939453125
+                  },
+                  "diffusion_module": {
+                    "count": 5,
+                    "min": 48.4991569519043,
+                    "median": 48.820926666259766,
+                    "p95": 49.393104553222656,
+                    "max": 49.393104553222656,
+                    "mean": 48.87443161010742
+                  },
+                  "diffusion_transformer": {
+                    "count": 5,
+                    "min": 52.978644371032715,
+                    "median": 52.99352550506592,
+                    "p95": 53.040406227111816,
+                    "max": 53.040406227111816,
+                    "mean": 53.000405406951906
+                  },
+                  "pairformer_output": {
+                    "count": 5,
+                    "min": 9484.3681640625,
+                    "median": 9505.3984375,
+                    "p95": 9525.5263671875,
+                    "max": 9525.5263671875,
+                    "mean": 9505.150390625
+                  },
+                  "pairformer_stack": {
+                    "count": 5,
+                    "min": 9380.429565429688,
+                    "median": 9396.462158203125,
+                    "p95": 9431.847229003906,
+                    "max": 9431.847229003906,
+                    "mean": 9403.841979980469
+                  },
+                  "sample_diffusion": {
+                    "count": 5,
+                    "min": 49.35086441040039,
+                    "median": 49.6164665222168,
+                    "p95": 50.14064407348633,
+                    "max": 50.14064407348633,
+                    "mean": 49.67131881713867
+                  },
+                  "triangle_attention": {
+                    "count": 5,
+                    "min": 4319.460088729858,
+                    "median": 4336.464422225952,
+                    "p95": 4357.417514801025,
+                    "max": 4357.417514801025,
+                    "mean": 4335.33242149353
+                  },
+                  "triangle_multiplication": {
+                    "count": 5,
+                    "min": 3508.7526092529297,
+                    "median": 3523.791244506836,
+                    "p95": 3542.436761856079,
+                    "max": 3542.436761856079,
+                    "mean": 3524.8582778930663
+                  }
+                }
+              }
+            },
+            "records": [
+              {
+                "call_id": 0,
+                "phase": "warmup",
+                "iteration": 0,
+                "input_name": "umem_L01000_462bb697ecdcce2f",
+                "record_name": "umem_L01000_462bb697ecdcce2f__fireprot_warmup_000",
+                "model_gpu_ms": 16317.05078125,
+                "model_wall_ms": 16317.181889957283,
+                "peak_memory_allocated_bytes": 9481004032,
+                "peak_memory_reserved_bytes": 9940500480,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 1607.4260611534119,
+                  "atom_attention_encoder": 3043.507392883301,
+                  "triangle_multiplication": 3534.2638816833496,
+                  "triangle_attention": 4436.956804275513,
+                  "pairformer_stack": 9384.258972167969,
+                  "pairformer_output": 13237.2529296875,
+                  "atom_attention_decoder": 7.728702068328857,
+                  "diffusion_module": 1442.0738525390625,
+                  "sample_diffusion": 1513.0421142578125,
+                  "confidence_head": 640.7195434570312,
+                  "confidence": 640.7278442382812
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              },
+              {
+                "call_id": 1,
+                "phase": "measure",
+                "iteration": 0,
+                "input_name": "umem_L01000_462bb697ecdcce2f",
+                "record_name": "umem_L01000_462bb697ecdcce2f__fireprot_measure_000",
+                "model_gpu_ms": 10383.265625,
+                "model_wall_ms": 10383.35170398932,
+                "peak_memory_allocated_bytes": 10011042304,
+                "peak_memory_reserved_bytes": 10443816960,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 52.996084690093994,
+                  "atom_attention_encoder": 36.88090133666992,
+                  "triangle_multiplication": 3508.7526092529297,
+                  "triangle_attention": 4336.464422225952,
+                  "pairformer_stack": 9418.549133300781,
+                  "pairformer_output": 9512.427734375,
+                  "atom_attention_decoder": 7.711902141571045,
+                  "diffusion_module": 48.778682708740234,
+                  "sample_diffusion": 49.576148986816406,
+                  "confidence_head": 586.2099609375,
+                  "confidence": 586.2183227539062
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              },
+              {
+                "call_id": 2,
+                "phase": "measure",
+                "iteration": 1,
+                "input_name": "umem_L01000_462bb697ecdcce2f",
+                "record_name": "umem_L01000_462bb697ecdcce2f__fireprot_measure_001",
+                "model_gpu_ms": 10393.302734375,
+                "model_wall_ms": 10393.387100019027,
+                "peak_memory_allocated_bytes": 10011042304,
+                "peak_memory_reserved_bytes": 10548674560,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 53.040406227111816,
+                  "atom_attention_encoder": 36.788259506225586,
+                  "triangle_multiplication": 3542.436761856079,
+                  "triangle_attention": 4357.417514801025,
+                  "pairformer_stack": 9431.847229003906,
+                  "pairformer_output": 9525.5263671875,
+                  "atom_attention_decoder": 7.726781845092773,
+                  "diffusion_module": 48.880287170410156,
+                  "sample_diffusion": 49.67247009277344,
+                  "confidence_head": 590.2496337890625,
+                  "confidence": 590.2581176757812
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              },
+              {
+                "call_id": 3,
+                "phase": "measure",
+                "iteration": 2,
+                "input_name": "umem_L01000_462bb697ecdcce2f",
+                "record_name": "umem_L01000_462bb697ecdcce2f__fireprot_measure_002",
+                "model_gpu_ms": 10369.6748046875,
+                "model_wall_ms": 10369.762665999588,
+                "peak_memory_allocated_bytes": 10011042304,
+                "peak_memory_reserved_bytes": 10464788480,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 52.978644371032715,
+                  "atom_attention_encoder": 36.75850009918213,
+                  "triangle_multiplication": 3523.791244506836,
+                  "triangle_attention": 4319.460088729858,
+                  "pairformer_stack": 9380.429565429688,
+                  "pairformer_output": 9505.3984375,
+                  "atom_attention_decoder": 7.706622123718262,
+                  "diffusion_module": 48.4991569519043,
+                  "sample_diffusion": 49.35086441040039,
+                  "confidence_head": 587.03466796875,
+                  "confidence": 587.0430297851562
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              },
+              {
+                "call_id": 4,
+                "phase": "measure",
+                "iteration": 3,
+                "input_name": "umem_L01000_462bb697ecdcce2f",
+                "record_name": "umem_L01000_462bb697ecdcce2f__fireprot_measure_003",
+                "model_gpu_ms": 10365.77734375,
+                "model_wall_ms": 10365.868969995063,
+                "peak_memory_allocated_bytes": 10011042304,
+                "peak_memory_reserved_bytes": 10464788480,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 52.99336624145508,
+                  "atom_attention_encoder": 36.732258796691895,
+                  "triangle_multiplication": 3521.771713256836,
+                  "triangle_attention": 4337.89662361145,
+                  "pairformer_stack": 9396.462158203125,
+                  "pairformer_output": 9498.03125,
+                  "atom_attention_decoder": 7.711902141571045,
+                  "diffusion_module": 48.820926666259766,
+                  "sample_diffusion": 49.6164665222168,
+                  "confidence_head": 584.8883666992188,
+                  "confidence": 584.896728515625
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              },
+              {
+                "call_id": 5,
+                "phase": "measure",
+                "iteration": 4,
+                "input_name": "umem_L01000_462bb697ecdcce2f",
+                "record_name": "umem_L01000_462bb697ecdcce2f__fireprot_measure_004",
+                "model_gpu_ms": 10346.048828125,
+                "model_wall_ms": 10346.150629979093,
+                "peak_memory_allocated_bytes": 10011042304,
+                "peak_memory_reserved_bytes": 10506731520,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 52.99352550506592,
+                  "atom_attention_encoder": 36.76857948303223,
+                  "triangle_multiplication": 3527.5390605926514,
+                  "triangle_attention": 4325.423458099365,
+                  "pairformer_stack": 9391.921813964844,
+                  "pairformer_output": 9484.3681640625,
+                  "atom_attention_decoder": 7.717021942138672,
+                  "diffusion_module": 49.393104553222656,
+                  "sample_diffusion": 50.14064407348633,
+                  "confidence_head": 587.8113403320312,
+                  "confidence": 587.81982421875
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              }
+            ]
+          }
+        },
+        "enabled": {
+          "status": "ok",
+          "spec": {
+            "schema_version": 1,
+            "created_at": "2026-10-03T07:38:31.964148+00:00",
+            "config_path": "/tmp/fireprot-dual-model-1000.json",
+            "config_sha256": "1fcc44b44f2146f6a8cd7b6b943c5e8113683c660b53a69c36107c23d7b20252",
+            "repo_root": "/media/IntelSSD/fireprot",
+            "protenix_root": "/media/IntelSSD/fireprot/Protenix",
+            "run_dir": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot",
+            "backend": "fireprot",
+            "blas_backend": "hipblas",
+            "profile_one": false,
+            "torch_profile": false,
+            "source": {
+              "fireprot_commit": "67b274aee128c064da5522bd38bc6a482b26080e",
+              "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b"
+            },
+            "measurement": {
+              "warmups": 1,
+              "repetitions": 5,
+              "dump_outputs": true,
+              "cache_state": "warm-within-process",
+              "device_policy": "exclusive",
+              "exclusive_max_gpu_use_percent": 5,
+              "exclusive_max_vram_used_bytes": 268435456,
+              "process_monitor_interval_seconds": 1.0,
+              "reject_external_gpu_processes": true,
+              "clock_policy": "record-current",
+              "additional_physical_devices": [
+                6
+              ]
+            },
+            "workload": {
+              "id": "mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32",
+              "input": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+              "token_count": 1000,
+              "model_name": "protenix_mini_default_v0.5.0",
+              "dtype": "fp32",
+              "cycles": 4,
+              "diffusion_steps": 1,
+              "samples": 1,
+              "seeds": [
+                101
+              ],
+              "cache": true,
+              "use_msa": false,
+              "use_template": false,
+              "enable_fusion": true,
+              "enable_tf32": false,
+              "trimul_kernel": "torch",
+              "triatt_kernel": "torch"
+            }
+          },
+          "source": {
+            "fireprot_commit": "67b274aee128c064da5522bd38bc6a482b26080e",
+            "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b",
+            "profile_script_sha256": "4ee824921e41bfe3842bc9f7bb6fc35e67fbe43eced78dcba4d57f4ad26b5dee"
+          },
+          "allocator_environment": {
+            "PYTORCH_ALLOC_CONF": "expandable_segments:True",
+            "PYTORCH_CUDA_ALLOC_CONF": null
+          },
+          "software": {
+            "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:38:16) [GCC 14.3.0]",
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "miopen": null,
+            "miopen_available": false,
+            "preferred_blas": "_BlasBackend.Cublas"
+          },
+          "hardware": {
+            "hostname": "DiamondHill",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.39",
+            "device_index": 0,
+            "device_name": "AMD Instinct MI250X / MI250",
+            "device_arch": [
+              9,
+              0
+            ],
+            "gcn_arch_name": "gfx90a:sramecc+:xnack-",
+            "total_memory_bytes": 68702699520
+          },
+          "input": {
+            "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+            "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac",
+            "token_count": 1000,
+            "atom_count": null
+          },
+          "fireprot_runtime": {
+            "adapter": "protenix",
+            "blas": {
+              "requested": "hipblas",
+              "before": "_BlasBackend.Cublaslt",
+              "effective": "_BlasBackend.Cublas",
+              "changed": true
+            },
+            "registration_modules": [
+              "fireprot.backends.amd.ck_gemm",
+              "fireprot.backends.amd.triangle_multiplication",
+              "fireprot.backends.amd.triangle_attention",
+              "fireprot.backends.amd.ck_attention",
+              "fireprot.backends.amd.recycle"
+            ],
+            "hooks": {
+              "installed": true,
+              "enabled": true,
+              "hooks": [
+                "OpenFoldLayerNorm.forward",
+                "Transition.forward"
+              ],
+              "fast_paths": {
+                "selection_counts": [
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+                    "count": 432
+                  },
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "native",
+                    "count": 432
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                    "count": 2628
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "native",
+                    "count": 1338
+                  }
+                ],
+                "backends": {
+                  "recycle": {
+                    "channel_first_layer_norm_enabled": true,
+                    "long_layer_norm_enabled": true,
+                    "long_transition_enabled": true,
+                    "long1536_epilogues_enabled": true,
+                    "selection_counts": [
+                      {
+                        "operation": "gated_transition",
+                        "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+                        "count": 432
+                      },
+                      {
+                        "operation": "gated_transition",
+                        "implementation": "native",
+                        "count": 432
+                      },
+                      {
+                        "operation": "layer_norm",
+                        "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                        "count": 2628
+                      },
+                      {
+                        "operation": "layer_norm",
+                        "implementation": "native",
+                        "count": 1338
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "operations": {
+              "implementations": {
+                "gated_transition": [
+                  {
+                    "name": "amd-gfx90a-hip-transition-f32-c128-long",
+                    "priority": 30,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-transition-f32-c128",
+                    "priority": 20,
+                    "version": "1"
+                  }
+                ],
+                "layer_norm": [
+                  {
+                    "name": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                    "priority": 30,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-layernorm-f32-c128-channel-first",
+                    "priority": 25,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-layernorm-f32-c128",
+                    "priority": 20,
+                    "version": "1"
+                  }
+                ],
+                "linear": [
+                  {
+                    "name": "amd-ck-gemm-f32-m124-k64-n32",
+                    "priority": 30,
+                    "version": "1"
+                  }
+                ],
+                "triangle_attention": [
+                  {
+                    "name": "amd-gfx90a-ck-tile-attention-f32-n1000",
+                    "priority": 30,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-ck-tile-attention-f32-n1536",
+                    "priority": 30,
+                    "version": "exact-shape-1"
+                  },
+                  {
+                    "name": "amd-gfx90a-efficient-sdpa-direct-n1000",
+                    "priority": 20,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-efficient-sdpa-direct-n1536",
+                    "priority": 20,
+                    "version": "experimental-1"
+                  },
+                  {
+                    "name": "amd-gfx90a-efficient-sdpa",
+                    "priority": 10,
+                    "version": "1"
+                  }
+                ],
+                "triangle_multiplication": [
+                  {
+                    "name": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                    "priority": 40,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+                    "priority": 40,
+                    "version": "experimental-1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-triangle-gates-f32-n1000-c128",
+                    "priority": 30,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-triangle-gates-f32-n124-c128",
+                    "priority": 20,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-short-sequence-torch",
+                    "priority": 10,
+                    "version": "1"
+                  }
+                ]
+              },
+              "selection_counts": [
+                {
+                  "operation": "triangle_attention",
+                  "implementation": "amd-gfx90a-ck-tile-attention-f32-n1000",
+                  "count": 864
+                },
+                {
+                  "operation": "triangle_multiplication",
+                  "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                  "count": 864
+                }
+              ],
+              "decisions": [
+                {
+                  "signature": {
+                    "operation": "triangle_attention",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "float32",
+                    "shape": [
+                      1000,
+                      4,
+                      1000,
+                      32
+                    ],
+                    "layout": "strided",
+                    "mode": "inference",
+                    "mask": "triangle-bias",
+                    "inplace": false,
+                    "attributes": {
+                      "bias_count": "1",
+                      "bias_shapes": "((1, 4, 1000, 1000),)",
+                      "ck_tile_compatible": "True",
+                      "head_dim": "32",
+                      "heads": "4",
+                      "qkv_strides": "((128000, 32, 128, 1), (128000, 32, 128, 1), (128000, 32, 128, 1))"
+                    }
+                  },
+                  "selected": "amd-gfx90a-ck-tile-attention-f32-n1000",
+                  "rejected": []
+                },
+                {
+                  "signature": {
+                    "operation": "triangle_multiplication",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "float32",
+                    "shape": [
+                      1000,
+                      1000,
+                      128
+                    ],
+                    "layout": "contiguous",
+                    "mode": "inference",
+                    "mask": "none",
+                    "inplace": true,
+                    "attributes": {
+                      "add_with_inplace": "True",
+                      "c_hidden": "128",
+                      "c_z": "128",
+                      "direction": "incoming"
+                    }
+                  },
+                  "selected": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                  "rejected": []
+                },
+                {
+                  "signature": {
+                    "operation": "triangle_multiplication",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "float32",
+                    "shape": [
+                      1000,
+                      1000,
+                      128
+                    ],
+                    "layout": "contiguous",
+                    "mode": "inference",
+                    "mask": "none",
+                    "inplace": true,
+                    "attributes": {
+                      "add_with_inplace": "True",
+                      "c_hidden": "128",
+                      "c_z": "128",
+                      "direction": "outgoing"
+                    }
+                  },
+                  "selected": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                  "rejected": []
+                }
+              ]
+            },
+            "ck_attention": {
+              "enabled": true,
+              "long1536_enabled": true,
+              "exact1536_enabled": true,
+              "vector1000_enabled": true,
+              "loaded": true,
+              "error": null,
+              "build": {
+                "source_sha256": "d50865b27a66956b391a331cc0daf9e33962c1fd1c0d93b3243fab9d25af016c",
+                "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+                "header_count": 581,
+                "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+                "command": [
+                  "/opt/rocm/bin/hipcc",
+                  "-O3",
+                  "-std=c++17",
+                  "-fPIC",
+                  "-shared",
+                  "--offload-arch=gfx90a",
+                  "-I/opt/rocm/include",
+                  "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+                  "-o",
+                  "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.pending.so"
+                ],
+                "library_sha256": "e0db29648fbc9e4895663604a93c3729503039310761abdf19ed8e637d49ca63",
+                "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.so",
+                "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+              }
+            },
+            "lt_bmm": {
+              "enabled": false,
+              "loaded": false,
+              "error": null,
+              "build": {},
+              "counts": {
+                "outgoing": 0,
+                "incoming": 0,
+                "fallback": 864
+              },
+              "workspace_bytes_per_call": 33554432
+            },
+            "attention_gate": {
+              "enabled": false,
+              "counts": {
+                "selected": 0,
+                "fallback": 0
+              },
+              "fallback_signatures": []
+            },
+            "two_gcd_attention": {
+              "enabled": false,
+              "synchronize": false,
+              "counts": {},
+              "primary_batch": 320,
+              "secondary_batch": 192
+            },
+            "triangle_vector": {
+              "enabled": true,
+              "counts": {
+                "n1000": 864,
+                "n1536": 0,
+                "fallback": 0
+              },
+              "packed_norm_enabled": true,
+              "packed_norm_counts": {
+                "n1000": 864,
+                "n1536": 0
+              },
+              "dual_projection_enabled": true,
+              "dual_projection_counts": {
+                "n1000": 864,
+                "n1536": 0,
+                "fallback": 0
+              }
+            }
+          },
+          "inference_wall_ms": 109264.11811902653,
+          "process_wall_ms": 112588.65872502793,
+          "gpu_process_monitor": {
+            "available": true,
+            "command": [
+              "/usr/bin/amd-smi",
+              "process",
+              "--json"
+            ],
+            "physical_device_index": 7,
+            "interval_seconds": 1.0,
+            "samples": 87,
+            "allowed_pid": 886373,
+            "external_pids": [],
+            "errors": [],
+            "passed": true
+          },
+          "additional_device_preflight": {
+            "6": {
+              "gpu_use_percent": 0,
+              "vram_used_bytes": 11014144,
+              "passed": true
+            }
+          },
+          "additional_gpu_process_monitors": [
+            {
+              "available": true,
+              "command": [
+                "/usr/bin/amd-smi",
+                "process",
+                "--json"
+              ],
+              "physical_device_index": 6,
+              "interval_seconds": 1.0,
+              "samples": 87,
+              "allowed_pid": 886373,
+              "external_pids": [],
+              "errors": [],
+              "passed": true
+            }
+          ],
+          "timing": {
+            "summary": {
+              "warmup": {
+                "model_gpu_ms": {
+                  "count": 1,
+                  "min": 16060.11328125,
+                  "median": 16060.11328125,
+                  "p95": 16060.11328125,
+                  "max": 16060.11328125,
+                  "mean": 16060.11328125
+                },
+                "model_wall_ms": {
+                  "count": 1,
+                  "min": 16060.2528739837,
+                  "median": 16060.2528739837,
+                  "p95": 16060.2528739837,
+                  "max": 16060.2528739837,
+                  "mean": 16060.2528739837
+                },
+                "peak_memory_allocated_bytes": {
+                  "count": 1,
+                  "min": 9481004032,
+                  "median": 9481004032,
+                  "p95": 9481004032,
+                  "max": 9481004032,
+                  "mean": 9481004032.0
+                },
+                "peak_memory_reserved_bytes": {
+                  "count": 1,
+                  "min": 9940500480,
+                  "median": 9940500480,
+                  "p95": 9940500480,
+                  "max": 9940500480,
+                  "mean": 9940500480.0
+                },
+                "stages_gpu_ms": {
+                  "atom_attention_decoder": {
+                    "count": 1,
+                    "min": 7.734945774078369,
+                    "median": 7.734945774078369,
+                    "p95": 7.734945774078369,
+                    "max": 7.734945774078369,
+                    "mean": 7.734945774078369
+                  },
+                  "atom_attention_encoder": {
+                    "count": 1,
+                    "min": 3054.324903488159,
+                    "median": 3054.324903488159,
+                    "p95": 3054.324903488159,
+                    "max": 3054.324903488159,
+                    "mean": 3054.324903488159
+                  },
+                  "confidence": {
+                    "count": 1,
+                    "min": 615.7838745117188,
+                    "median": 615.7838745117188,
+                    "p95": 615.7838745117188,
+                    "max": 615.7838745117188,
+                    "mean": 615.7838745117188
+                  },
+                  "confidence_head": {
+                    "count": 1,
+                    "min": 615.7755737304688,
+                    "median": 615.7755737304688,
+                    "p95": 615.7755737304688,
+                    "max": 615.7755737304688,
+                    "mean": 615.7755737304688
+                  },
+                  "diffusion_module": {
+                    "count": 1,
+                    "min": 1408.9942626953125,
+                    "median": 1408.9942626953125,
+                    "p95": 1408.9942626953125,
+                    "max": 1408.9942626953125,
+                    "mean": 1408.9942626953125
+                  },
+                  "diffusion_transformer": {
+                    "count": 1,
+                    "min": 1574.0334568023682,
+                    "median": 1574.0334568023682,
+                    "p95": 1574.0334568023682,
+                    "max": 1574.0334568023682,
+                    "mean": 1574.0334568023682
+                  },
+                  "pairformer_output": {
+                    "count": 1,
+                    "min": 13050.2568359375,
+                    "median": 13050.2568359375,
+                    "p95": 13050.2568359375,
+                    "max": 13050.2568359375,
+                    "mean": 13050.2568359375
+                  },
+                  "pairformer_stack": {
+                    "count": 1,
+                    "min": 8991.762084960938,
+                    "median": 8991.762084960938,
+                    "p95": 8991.762084960938,
+                    "max": 8991.762084960938,
+                    "mean": 8991.762084960938
+                  },
+                  "sample_diffusion": {
+                    "count": 1,
+                    "min": 1477.31884765625,
+                    "median": 1477.31884765625,
+                    "p95": 1477.31884765625,
+                    "max": 1477.31884765625,
+                    "mean": 1477.31884765625
+                  },
+                  "triangle_attention": {
+                    "count": 1,
+                    "min": 4443.815725326538,
+                    "median": 4443.815725326538,
+                    "p95": 4443.815725326538,
+                    "max": 4443.815725326538,
+                    "mean": 4443.815725326538
+                  },
+                  "triangle_multiplication": {
+                    "count": 1,
+                    "min": 3118.0923194885254,
+                    "median": 3118.0923194885254,
+                    "p95": 3118.0923194885254,
+                    "max": 3118.0923194885254,
+                    "mean": 3118.0923194885254
+                  }
+                }
+              },
+              "measure": {
+                "model_gpu_ms": {
+                  "count": 5,
+                  "min": 9921.01953125,
+                  "median": 9931.5048828125,
+                  "p95": 9979.7939453125,
+                  "max": 9979.7939453125,
+                  "mean": 9945.326171875
+                },
+                "model_wall_ms": {
+                  "count": 5,
+                  "min": 9921.105528017506,
+                  "median": 9931.606623984408,
+                  "p95": 9979.883716034237,
+                  "max": 9979.883716034237,
+                  "mean": 9945.425926998723
+                },
+                "peak_memory_allocated_bytes": {
+                  "count": 5,
+                  "min": 10011042304,
+                  "median": 10011042304,
+                  "p95": 10011042304,
+                  "max": 10011042304,
+                  "mean": 10011042304.0
+                },
+                "peak_memory_reserved_bytes": {
+                  "count": 5,
+                  "min": 10443816960,
+                  "median": 10464788480,
+                  "p95": 10548674560,
+                  "max": 10548674560,
+                  "mean": 10485760000.0
+                },
+                "stages_gpu_ms": {
+                  "atom_attention_decoder": {
+                    "count": 5,
+                    "min": 7.702944755554199,
+                    "median": 7.711744785308838,
+                    "p95": 7.724225044250488,
+                    "max": 7.724225044250488,
+                    "mean": 7.71318473815918
+                  },
+                  "atom_attention_encoder": {
+                    "count": 5,
+                    "min": 36.63354778289795,
+                    "median": 36.65482807159424,
+                    "p95": 36.7426700592041,
+                    "max": 36.7426700592041,
+                    "mean": 36.67006072998047
+                  },
+                  "confidence": {
+                    "count": 5,
+                    "min": 557.2943115234375,
+                    "median": 563.8186645507812,
+                    "p95": 566.1595458984375,
+                    "max": 566.1595458984375,
+                    "mean": 562.45
+                  },
+                  "confidence_head": {
+                    "count": 5,
+                    "min": 557.2858276367188,
+                    "median": 563.8101806640625,
+                    "p95": 566.1510620117188,
+                    "max": 566.1510620117188,
+                    "mean": 562.4414794921875
+                  },
+                  "diffusion_module": {
+                    "count": 5,
+                    "min": 48.2308464050293,
+                    "median": 49.005428314208984,
+                    "p95": 49.28719711303711,
+                    "max": 49.28719711303711,
+                    "mean": 48.960531616210936
+                  },
+                  "diffusion_transformer": {
+                    "count": 5,
+                    "min": 52.99722480773926,
+                    "median": 53.02154588699341,
+                    "p95": 53.03194570541382,
+                    "max": 53.03194570541382,
+                    "mean": 53.019016933441165
+                  },
+                  "pairformer_output": {
+                    "count": 5,
+                    "min": 9079.8916015625,
+                    "median": 9090.234375,
+                    "p95": 9138.115234375,
+                    "max": 9138.115234375,
+                    "mean": 9103.914453125
+                  },
+                  "pairformer_stack": {
+                    "count": 5,
+                    "min": 8987.927307128906,
+                    "median": 8989.835998535156,
+                    "p95": 9045.405578613281,
+                    "max": 9045.405578613281,
+                    "mean": 9008.140856933594
+                  },
+                  "sample_diffusion": {
+                    "count": 5,
+                    "min": 48.968467712402344,
+                    "median": 49.87201690673828,
+                    "p95": 50.072021484375,
+                    "max": 50.072021484375,
+                    "mean": 49.74340286254883
+                  },
+                  "triangle_attention": {
+                    "count": 5,
+                    "min": 4317.9924030303955,
+                    "median": 4348.622417449951,
+                    "p95": 4370.760021209717,
+                    "max": 4370.760021209717,
+                    "mean": 4346.480656433106
+                  },
+                  "triangle_multiplication": {
+                    "count": 5,
+                    "min": 3084.775043487549,
+                    "median": 3100.0959186553955,
+                    "p95": 3119.0987453460693,
+                    "max": 3119.0987453460693,
+                    "mean": 3100.8979881286623
+                  }
+                }
+              }
+            },
+            "records": [
+              {
+                "call_id": 0,
+                "phase": "warmup",
+                "iteration": 0,
+                "input_name": "umem_L01000_462bb697ecdcce2f",
+                "record_name": "umem_L01000_462bb697ecdcce2f__fireprot_warmup_000",
+                "model_gpu_ms": 16060.11328125,
+                "model_wall_ms": 16060.2528739837,
+                "peak_memory_allocated_bytes": 9481004032,
+                "peak_memory_reserved_bytes": 9940500480,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 1574.0334568023682,
+                  "atom_attention_encoder": 3054.324903488159,
+                  "triangle_multiplication": 3118.0923194885254,
+                  "triangle_attention": 4443.815725326538,
+                  "pairformer_stack": 8991.762084960938,
+                  "pairformer_output": 13050.2568359375,
+                  "atom_attention_decoder": 7.734945774078369,
+                  "diffusion_module": 1408.9942626953125,
+                  "sample_diffusion": 1477.31884765625,
+                  "confidence_head": 615.7755737304688,
+                  "confidence": 615.7838745117188
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              },
+              {
+                "call_id": 1,
+                "phase": "measure",
+                "iteration": 0,
+                "input_name": "umem_L01000_462bb697ecdcce2f",
+                "record_name": "umem_L01000_462bb697ecdcce2f__fireprot_measure_000",
+                "model_gpu_ms": 9965.53125,
+                "model_wall_ms": 9965.66093194997,
+                "peak_memory_allocated_bytes": 10011042304,
+                "peak_memory_reserved_bytes": 10443816960,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 53.02154588699341,
+                  "atom_attention_encoder": 36.7426700592041,
+                  "triangle_multiplication": 3100.0959186553955,
+                  "triangle_attention": 4361.605659484863,
+                  "pairformer_stack": 9027.937316894531,
+                  "pairformer_output": 9126.3212890625,
+                  "atom_attention_decoder": 7.71814489364624,
+                  "diffusion_module": 49.00366973876953,
+                  "sample_diffusion": 49.87201690673828,
+                  "confidence_head": 557.2858276367188,
+                  "confidence": 557.2943115234375
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              },
+              {
+                "call_id": 2,
+                "phase": "measure",
+                "iteration": 1,
+                "input_name": "umem_L01000_462bb697ecdcce2f",
+                "record_name": "umem_L01000_462bb697ecdcce2f__fireprot_measure_001",
+                "model_gpu_ms": 9928.78125,
+                "model_wall_ms": 9928.872835007496,
+                "peak_memory_allocated_bytes": 10011042304,
+                "peak_memory_reserved_bytes": 10548674560,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 53.02842426300049,
+                  "atom_attention_encoder": 36.6657075881958,
+                  "triangle_multiplication": 3084.775043487549,
+                  "triangle_attention": 4348.622417449951,
+                  "pairformer_stack": 8987.927307128906,
+                  "pairformer_output": 9085.009765625,
+                  "atom_attention_decoder": 7.711744785308838,
+                  "diffusion_module": 49.005428314208984,
+                  "sample_diffusion": 49.77457046508789,
+                  "confidence_head": 564.9801635742188,
+                  "confidence": 564.9884643554688
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              },
+              {
+                "call_id": 3,
+                "phase": "measure",
+                "iteration": 2,
+                "input_name": "umem_L01000_462bb697ecdcce2f",
+                "record_name": "umem_L01000_462bb697ecdcce2f__fireprot_measure_002",
+                "model_gpu_ms": 9979.7939453125,
+                "model_wall_ms": 9979.883716034237,
+                "peak_memory_allocated_bytes": 10011042304,
+                "peak_memory_reserved_bytes": 10464788480,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 52.99722480773926,
+                  "atom_attention_encoder": 36.63354778289795,
+                  "triangle_multiplication": 3119.0987453460693,
+                  "triangle_attention": 4370.760021209717,
+                  "pairformer_stack": 9045.405578613281,
+                  "pairformer_output": 9138.115234375,
+                  "atom_attention_decoder": 7.708864212036133,
+                  "diffusion_module": 48.2308464050293,
+                  "sample_diffusion": 48.968467712402344,
+                  "confidence_head": 566.1510620117188,
+                  "confidence": 566.1595458984375
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              },
+              {
+                "call_id": 4,
+                "phase": "measure",
+                "iteration": 3,
+                "input_name": "umem_L01000_462bb697ecdcce2f",
+                "record_name": "umem_L01000_462bb697ecdcce2f__fireprot_measure_003",
+                "model_gpu_ms": 9931.5048828125,
+                "model_wall_ms": 9931.606623984408,
+                "peak_memory_allocated_bytes": 10011042304,
+                "peak_memory_reserved_bytes": 10464788480,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 53.03194570541382,
+                  "atom_attention_encoder": 36.65482807159424,
+                  "triangle_multiplication": 3093.154005050659,
+                  "triangle_attention": 4333.422780990601,
+                  "pairformer_stack": 8989.835998535156,
+                  "pairformer_output": 9090.234375,
+                  "atom_attention_decoder": 7.724225044250488,
+                  "diffusion_module": 49.275516510009766,
+                  "sample_diffusion": 50.072021484375,
+                  "confidence_head": 559.9801635742188,
+                  "confidence": 559.989013671875
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              },
+              {
+                "call_id": 5,
+                "phase": "measure",
+                "iteration": 4,
+                "input_name": "umem_L01000_462bb697ecdcce2f",
+                "record_name": "umem_L01000_462bb697ecdcce2f__fireprot_measure_004",
+                "model_gpu_ms": 9921.01953125,
+                "model_wall_ms": 9921.105528017506,
+                "peak_memory_allocated_bytes": 10011042304,
+                "peak_memory_reserved_bytes": 10506731520,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 53.01594400405884,
+                  "atom_attention_encoder": 36.653550148010254,
+                  "triangle_multiplication": 3107.3662281036377,
+                  "triangle_attention": 4317.9924030303955,
+                  "pairformer_stack": 8989.598083496094,
+                  "pairformer_output": 9079.8916015625,
+                  "atom_attention_decoder": 7.702944755554199,
+                  "diffusion_module": 49.28719711303711,
+                  "sample_diffusion": 50.029937744140625,
+                  "confidence_head": 563.8101806640625,
+                  "confidence": 563.8186645507812
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "comparison": {
+        "schema_version": 1,
+        "created_at": "2026-10-03T07:43:05.458506+00:00",
+        "reference_root": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions",
+        "candidate_root": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions",
+        "passed": true,
+        "comparisons": [
+          {
+            "case": "umem_L01000_462bb697ecdcce2f__fireprot_measure_000",
+            "seed": 101,
+            "sample": 0,
+            "reference": {
+              "cif": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000_sample_0.cif",
+              "confidence": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000_summary_confidence_sample_0.json"
+            },
+            "candidate": {
+              "cif": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000_sample_0.cif",
+              "confidence": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000_summary_confidence_sample_0.json"
+            },
+            "coordinate_tolerance_angstrom": 0.001,
+            "confidence_tolerance": 0.001,
+            "coordinates": {
+              "atom_count": 7979,
+              "finite": true,
+              "raw_rmsd_angstrom": 0.00010196667453962132,
+              "aligned_rmsd_angstrom": 9.946396753201671e-05,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "finite": true,
+              "max_abs_delta": 1.1444091796875e-05,
+              "mean_abs_delta": 7.688999176025391e-07,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "passed": true
+          },
+          {
+            "case": "umem_L01000_462bb697ecdcce2f__fireprot_measure_001",
+            "seed": 101,
+            "sample": 0,
+            "reference": {
+              "cif": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_001/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_001_sample_0.cif",
+              "confidence": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_001/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_001_summary_confidence_sample_0.json"
+            },
+            "candidate": {
+              "cif": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_001/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_001_sample_0.cif",
+              "confidence": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_001/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_001_summary_confidence_sample_0.json"
+            },
+            "coordinate_tolerance_angstrom": 0.001,
+            "confidence_tolerance": 0.001,
+            "coordinates": {
+              "atom_count": 7979,
+              "finite": true,
+              "raw_rmsd_angstrom": 9.668251962719391e-05,
+              "aligned_rmsd_angstrom": 9.462252774512847e-05,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "finite": true,
+              "max_abs_delta": 1.4901161193847656e-08,
+              "mean_abs_delta": 2.2351741790771484e-09,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "passed": true
+          },
+          {
+            "case": "umem_L01000_462bb697ecdcce2f__fireprot_measure_002",
+            "seed": 101,
+            "sample": 0,
+            "reference": {
+              "cif": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_002/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_002_sample_0.cif",
+              "confidence": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_002/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_002_summary_confidence_sample_0.json"
+            },
+            "candidate": {
+              "cif": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_002/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_002_sample_0.cif",
+              "confidence": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_002/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_002_summary_confidence_sample_0.json"
+            },
+            "coordinate_tolerance_angstrom": 0.001,
+            "confidence_tolerance": 0.001,
+            "coordinates": {
+              "atom_count": 7979,
+              "finite": true,
+              "raw_rmsd_angstrom": 8.851307480642008e-05,
+              "aligned_rmsd_angstrom": 8.791705456528902e-05,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "finite": true,
+              "max_abs_delta": 4.470348358154297e-08,
+              "mean_abs_delta": 6.7055225372314455e-09,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "passed": true
+          },
+          {
+            "case": "umem_L01000_462bb697ecdcce2f__fireprot_measure_003",
+            "seed": 101,
+            "sample": 0,
+            "reference": {
+              "cif": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_003/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_003_sample_0.cif",
+              "confidence": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_003/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_003_summary_confidence_sample_0.json"
+            },
+            "candidate": {
+              "cif": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_003/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_003_sample_0.cif",
+              "confidence": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_003/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_003_summary_confidence_sample_0.json"
+            },
+            "coordinate_tolerance_angstrom": 0.001,
+            "confidence_tolerance": 0.001,
+            "coordinates": {
+              "atom_count": 7979,
+              "finite": true,
+              "raw_rmsd_angstrom": 9.209175333565583e-05,
+              "aligned_rmsd_angstrom": 9.05832976979271e-05,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "finite": true,
+              "max_abs_delta": 7.62939453125e-06,
+              "mean_abs_delta": 7.033348083496094e-07,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "passed": true
+          },
+          {
+            "case": "umem_L01000_462bb697ecdcce2f__fireprot_measure_004",
+            "seed": 101,
+            "sample": 0,
+            "reference": {
+              "cif": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_004/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_004_sample_0.cif",
+              "confidence": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_004/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_004_summary_confidence_sample_0.json"
+            },
+            "candidate": {
+              "cif": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_004/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_004_sample_0.cif",
+              "confidence": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_004/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_004_summary_confidence_sample_0.json"
+            },
+            "coordinate_tolerance_angstrom": 0.001,
+            "confidence_tolerance": 0.001,
+            "coordinates": {
+              "atom_count": 7979,
+              "finite": true,
+              "raw_rmsd_angstrom": 9.871461013545109e-05,
+              "aligned_rmsd_angstrom": 9.789345765483652e-05,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "finite": true,
+              "max_abs_delta": 9.5367431640625e-07,
+              "mean_abs_delta": 1.358489195505778e-07,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "passed": true
+          }
+        ]
+      },
+      "model_median_speedup": 1.0441191870764015
+    },
+    "1536": {
+      "order": [
+        "disabled",
+        "enabled"
+      ],
+      "runs": {
+        "disabled": {
+          "status": "ok",
+          "spec": {
+            "schema_version": 1,
+            "created_at": "2026-10-03T07:30:03.126432+00:00",
+            "config_path": "/tmp/fireprot-dual-model-1536.json",
+            "config_sha256": "f24f3d4c26b0f4ff07f93d6ab50e8df613d5fd62675d924981f3e5df119e6c1f",
+            "repo_root": "/media/IntelSSD/fireprot",
+            "protenix_root": "/media/IntelSSD/fireprot/Protenix",
+            "run_dir": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot",
+            "backend": "fireprot",
+            "blas_backend": "hipblas",
+            "profile_one": false,
+            "torch_profile": false,
+            "source": {
+              "fireprot_commit": "67b274aee128c064da5522bd38bc6a482b26080e",
+              "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b"
+            },
+            "measurement": {
+              "warmups": 1,
+              "repetitions": 5,
+              "dump_outputs": true,
+              "cache_state": "warm-within-process",
+              "device_policy": "exclusive",
+              "exclusive_max_gpu_use_percent": 5,
+              "exclusive_max_vram_used_bytes": 268435456,
+              "process_monitor_interval_seconds": 1.0,
+              "reject_external_gpu_processes": true,
+              "clock_policy": "record-current",
+              "additional_physical_devices": [
+                6
+              ]
+            },
+            "workload": {
+              "id": "mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32",
+              "input": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+              "token_count": 1536,
+              "model_name": "protenix_mini_default_v0.5.0",
+              "dtype": "fp32",
+              "cycles": 4,
+              "diffusion_steps": 1,
+              "samples": 1,
+              "seeds": [
+                101
+              ],
+              "cache": true,
+              "use_msa": false,
+              "use_template": false,
+              "enable_fusion": true,
+              "enable_tf32": false,
+              "trimul_kernel": "torch",
+              "triatt_kernel": "torch"
+            }
+          },
+          "source": {
+            "fireprot_commit": "67b274aee128c064da5522bd38bc6a482b26080e",
+            "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b",
+            "profile_script_sha256": "4ee824921e41bfe3842bc9f7bb6fc35e67fbe43eced78dcba4d57f4ad26b5dee"
+          },
+          "allocator_environment": {
+            "PYTORCH_ALLOC_CONF": "expandable_segments:True",
+            "PYTORCH_CUDA_ALLOC_CONF": null
+          },
+          "software": {
+            "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:38:16) [GCC 14.3.0]",
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "miopen": null,
+            "miopen_available": false,
+            "preferred_blas": "_BlasBackend.Cublas"
+          },
+          "hardware": {
+            "hostname": "DiamondHill",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.39",
+            "device_index": 0,
+            "device_name": "AMD Instinct MI250X / MI250",
+            "device_arch": [
+              9,
+              0
+            ],
+            "gcn_arch_name": "gfx90a:sramecc+:xnack-",
+            "total_memory_bytes": 68702699520
+          },
+          "input": {
+            "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+            "sha256": "3f3c19af52b40972ce1961eba6800afeba548d28c643fc23da0a9321485989a1",
+            "token_count": 1536,
+            "atom_count": null
+          },
+          "fireprot_runtime": {
+            "adapter": "protenix",
+            "blas": {
+              "requested": "hipblas",
+              "before": "_BlasBackend.Cublaslt",
+              "effective": "_BlasBackend.Cublas",
+              "changed": true
+            },
+            "registration_modules": [
+              "fireprot.backends.amd.ck_gemm",
+              "fireprot.backends.amd.triangle_multiplication",
+              "fireprot.backends.amd.triangle_attention",
+              "fireprot.backends.amd.ck_attention",
+              "fireprot.backends.amd.recycle"
+            ],
+            "hooks": {
+              "installed": true,
+              "enabled": true,
+              "hooks": [
+                "OpenFoldLayerNorm.forward",
+                "Transition.forward"
+              ],
+              "fast_paths": {
+                "selection_counts": [
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+                    "count": 432
+                  },
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "native",
+                    "count": 432
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                    "count": 2628
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "native",
+                    "count": 1338
+                  }
+                ],
+                "backends": {
+                  "recycle": {
+                    "channel_first_layer_norm_enabled": true,
+                    "long_layer_norm_enabled": true,
+                    "long_transition_enabled": true,
+                    "long1536_epilogues_enabled": true,
+                    "selection_counts": [
+                      {
+                        "operation": "gated_transition",
+                        "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+                        "count": 432
+                      },
+                      {
+                        "operation": "gated_transition",
+                        "implementation": "native",
+                        "count": 432
+                      },
+                      {
+                        "operation": "layer_norm",
+                        "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                        "count": 2628
+                      },
+                      {
+                        "operation": "layer_norm",
+                        "implementation": "native",
+                        "count": 1338
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "operations": {
+              "implementations": {
+                "gated_transition": [
+                  {
+                    "name": "amd-gfx90a-hip-transition-f32-c128-long",
+                    "priority": 30,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-transition-f32-c128",
+                    "priority": 20,
+                    "version": "1"
+                  }
+                ],
+                "layer_norm": [
+                  {
+                    "name": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                    "priority": 30,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-layernorm-f32-c128-channel-first",
+                    "priority": 25,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-layernorm-f32-c128",
+                    "priority": 20,
+                    "version": "1"
+                  }
+                ],
+                "linear": [
+                  {
+                    "name": "amd-ck-gemm-f32-m124-k64-n32",
+                    "priority": 30,
+                    "version": "1"
+                  }
+                ],
+                "triangle_attention": [
+                  {
+                    "name": "amd-gfx90a-ck-tile-attention-f32-n1000",
+                    "priority": 30,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-ck-tile-attention-f32-n1536",
+                    "priority": 30,
+                    "version": "exact-shape-1"
+                  },
+                  {
+                    "name": "amd-gfx90a-efficient-sdpa-direct-n1000",
+                    "priority": 20,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-efficient-sdpa-direct-n1536",
+                    "priority": 20,
+                    "version": "experimental-1"
+                  },
+                  {
+                    "name": "amd-gfx90a-efficient-sdpa",
+                    "priority": 10,
+                    "version": "1"
+                  }
+                ],
+                "triangle_multiplication": [
+                  {
+                    "name": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                    "priority": 40,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+                    "priority": 40,
+                    "version": "experimental-1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-triangle-gates-f32-n1000-c128",
+                    "priority": 30,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-triangle-gates-f32-n124-c128",
+                    "priority": 20,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-short-sequence-torch",
+                    "priority": 10,
+                    "version": "1"
+                  }
+                ]
+              },
+              "selection_counts": [
+                {
+                  "operation": "triangle_attention",
+                  "implementation": "amd-gfx90a-ck-tile-attention-f32-n1536",
+                  "count": 2592
+                },
+                {
+                  "operation": "triangle_multiplication",
+                  "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+                  "count": 864
+                }
+              ],
+              "decisions": [
+                {
+                  "signature": {
+                    "operation": "triangle_attention",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "float32",
+                    "shape": [
+                      512,
+                      4,
+                      1536,
+                      32
+                    ],
+                    "layout": "strided",
+                    "mode": "inference",
+                    "mask": "triangle-bias",
+                    "inplace": false,
+                    "attributes": {
+                      "bias_count": "1",
+                      "bias_shapes": "((1, 4, 1536, 1536),)",
+                      "ck_tile_compatible": "True",
+                      "head_dim": "32",
+                      "heads": "4",
+                      "qkv_strides": "((196608, 32, 128, 1), (196608, 32, 128, 1), (196608, 32, 128, 1))"
+                    }
+                  },
+                  "selected": "amd-gfx90a-ck-tile-attention-f32-n1536",
+                  "rejected": [
+                    {
+                      "implementation": "amd-gfx90a-ck-tile-attention-f32-n1000",
+                      "reason": "CK Tile attention requires an exact measured bucket"
+                    }
+                  ]
+                },
+                {
+                  "signature": {
+                    "operation": "triangle_multiplication",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "float32",
+                    "shape": [
+                      1536,
+                      1536,
+                      128
+                    ],
+                    "layout": "contiguous",
+                    "mode": "inference",
+                    "mask": "none",
+                    "inplace": true,
+                    "attributes": {
+                      "add_with_inplace": "True",
+                      "c_hidden": "128",
+                      "c_z": "128",
+                      "direction": "incoming"
+                    }
+                  },
+                  "selected": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+                  "rejected": [
+                    {
+                      "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                      "reason": "shape is not the exact supported long bucket"
+                    }
+                  ]
+                },
+                {
+                  "signature": {
+                    "operation": "triangle_multiplication",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "float32",
+                    "shape": [
+                      1536,
+                      1536,
+                      128
+                    ],
+                    "layout": "contiguous",
+                    "mode": "inference",
+                    "mask": "none",
+                    "inplace": true,
+                    "attributes": {
+                      "add_with_inplace": "True",
+                      "c_hidden": "128",
+                      "c_z": "128",
+                      "direction": "outgoing"
+                    }
+                  },
+                  "selected": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+                  "rejected": [
+                    {
+                      "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                      "reason": "shape is not the exact supported long bucket"
+                    }
+                  ]
+                }
+              ]
+            },
+            "ck_attention": {
+              "enabled": true,
+              "long1536_enabled": true,
+              "exact1536_enabled": true,
+              "vector1000_enabled": true,
+              "loaded": true,
+              "error": null,
+              "build": {
+                "source_sha256": "d50865b27a66956b391a331cc0daf9e33962c1fd1c0d93b3243fab9d25af016c",
+                "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+                "header_count": 581,
+                "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+                "command": [
+                  "/opt/rocm/bin/hipcc",
+                  "-O3",
+                  "-std=c++17",
+                  "-fPIC",
+                  "-shared",
+                  "--offload-arch=gfx90a",
+                  "-I/opt/rocm/include",
+                  "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+                  "-o",
+                  "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.pending.so"
+                ],
+                "library_sha256": "e0db29648fbc9e4895663604a93c3729503039310761abdf19ed8e637d49ca63",
+                "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.so",
+                "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+              }
+            },
+            "lt_bmm": {
+              "enabled": false,
+              "loaded": false,
+              "error": null,
+              "build": {},
+              "counts": {
+                "outgoing": 0,
+                "incoming": 0,
+                "fallback": 864
+              },
+              "workspace_bytes_per_call": 33554432
+            },
+            "attention_gate": {
+              "enabled": false,
+              "counts": {
+                "selected": 0,
+                "fallback": 0
+              },
+              "fallback_signatures": []
+            },
+            "two_gcd_attention": {
+              "enabled": false,
+              "synchronize": false,
+              "counts": {},
+              "primary_batch": 320,
+              "secondary_batch": 192
+            },
+            "triangle_vector": {
+              "enabled": true,
+              "counts": {
+                "n1000": 0,
+                "n1536": 864,
+                "fallback": 0
+              },
+              "packed_norm_enabled": true,
+              "packed_norm_counts": {
+                "n1000": 0,
+                "n1536": 864
+              },
+              "dual_projection_enabled": false,
+              "dual_projection_counts": {
+                "n1000": 0,
+                "n1536": 0,
+                "fallback": 0
+              }
+            }
+          },
+          "inference_wall_ms": 250029.77125102188,
+          "process_wall_ms": 253360.97088997485,
+          "gpu_process_monitor": {
+            "available": true,
+            "command": [
+              "/usr/bin/amd-smi",
+              "process",
+              "--json"
+            ],
+            "physical_device_index": 7,
+            "interval_seconds": 1.0,
+            "samples": 196,
+            "allowed_pid": 883257,
+            "external_pids": [],
+            "errors": [],
+            "passed": true
+          },
+          "additional_device_preflight": {
+            "6": {
+              "gpu_use_percent": 0,
+              "vram_used_bytes": 11014144,
+              "passed": true
+            }
+          },
+          "additional_gpu_process_monitors": [
+            {
+              "available": true,
+              "command": [
+                "/usr/bin/amd-smi",
+                "process",
+                "--json"
+              ],
+              "physical_device_index": 6,
+              "interval_seconds": 1.0,
+              "samples": 196,
+              "allowed_pid": 883257,
+              "external_pids": [],
+              "errors": [],
+              "passed": true
+            }
+          ],
+          "timing": {
+            "summary": {
+              "warmup": {
+                "model_gpu_ms": {
+                  "count": 1,
+                  "min": 36088.6953125,
+                  "median": 36088.6953125,
+                  "p95": 36088.6953125,
+                  "max": 36088.6953125,
+                  "mean": 36088.6953125
+                },
+                "model_wall_ms": {
+                  "count": 1,
+                  "min": 36088.78365601413,
+                  "median": 36088.78365601413,
+                  "p95": 36088.78365601413,
+                  "max": 36088.78365601413,
+                  "mean": 36088.78365601413
+                },
+                "peak_memory_allocated_bytes": {
+                  "count": 1,
+                  "min": 21472384512,
+                  "median": 21472384512,
+                  "p95": 21472384512,
+                  "max": 21472384512,
+                  "mean": 21472384512.0
+                },
+                "peak_memory_reserved_bytes": {
+                  "count": 1,
+                  "min": 22458400768,
+                  "median": 22458400768,
+                  "p95": 22458400768,
+                  "max": 22458400768,
+                  "mean": 22458400768.0
+                },
+                "stages_gpu_ms": {
+                  "atom_attention_decoder": {
+                    "count": 1,
+                    "min": 12.114740371704102,
+                    "median": 12.114740371704102,
+                    "p95": 12.114740371704102,
+                    "max": 12.114740371704102,
+                    "mean": 12.114740371704102
+                  },
+                  "atom_attention_encoder": {
+                    "count": 1,
+                    "min": 3098.0004501342773,
+                    "median": 3098.0004501342773,
+                    "p95": 3098.0004501342773,
+                    "max": 3098.0004501342773,
+                    "mean": 3098.0004501342773
+                  },
+                  "confidence": {
+                    "count": 1,
+                    "min": 1747.0145263671875,
+                    "median": 1747.0145263671875,
+                    "p95": 1747.0145263671875,
+                    "max": 1747.0145263671875,
+                    "mean": 1747.0145263671875
+                  },
+                  "confidence_head": {
+                    "count": 1,
+                    "min": 1747.00634765625,
+                    "median": 1747.00634765625,
+                    "p95": 1747.00634765625,
+                    "max": 1747.00634765625,
+                    "mean": 1747.00634765625
+                  },
+                  "diffusion_module": {
+                    "count": 1,
+                    "min": 1509.7677001953125,
+                    "median": 1509.7677001953125,
+                    "p95": 1509.7677001953125,
+                    "max": 1509.7677001953125,
+                    "mean": 1509.7677001953125
+                  },
+                  "diffusion_transformer": {
+                    "count": 1,
+                    "min": 1646.4294691085815,
+                    "median": 1646.4294691085815,
+                    "p95": 1646.4294691085815,
+                    "max": 1646.4294691085815,
+                    "mean": 1646.4294691085815
+                  },
+                  "pairformer_output": {
+                    "count": 1,
+                    "min": 31514.037109375,
+                    "median": 31514.037109375,
+                    "p95": 31514.037109375,
+                    "max": 31514.037109375,
+                    "mean": 31514.037109375
+                  },
+                  "pairformer_stack": {
+                    "count": 1,
+                    "min": 27497.028076171875,
+                    "median": 27497.028076171875,
+                    "p95": 27497.028076171875,
+                    "max": 27497.028076171875,
+                    "mean": 27497.028076171875
+                  },
+                  "sample_diffusion": {
+                    "count": 1,
+                    "min": 1567.6019287109375,
+                    "median": 1567.6019287109375,
+                    "p95": 1567.6019287109375,
+                    "max": 1567.6019287109375,
+                    "mean": 1567.6019287109375
+                  },
+                  "triangle_attention": {
+                    "count": 1,
+                    "min": 13636.389572143555,
+                    "median": 13636.389572143555,
+                    "p95": 13636.389572143555,
+                    "max": 13636.389572143555,
+                    "mean": 13636.389572143555
+                  },
+                  "triangle_multiplication": {
+                    "count": 1,
+                    "min": 9884.428436279297,
+                    "median": 9884.428436279297,
+                    "p95": 9884.428436279297,
+                    "max": 9884.428436279297,
+                    "mean": 9884.428436279297
+                  }
+                }
+              },
+              "measure": {
+                "model_gpu_ms": {
+                  "count": 5,
+                  "min": 29571.8359375,
+                  "median": 29930.158203125,
+                  "p95": 30084.109375,
+                  "max": 30084.109375,
+                  "mean": 29894.471484375
+                },
+                "model_wall_ms": {
+                  "count": 5,
+                  "min": 29571.95957400836,
+                  "median": 29930.24019099539,
+                  "p95": 30084.216849005315,
+                  "max": 30084.216849005315,
+                  "mean": 29894.581021403428
+                },
+                "peak_memory_allocated_bytes": {
+                  "count": 5,
+                  "min": 22721185792,
+                  "median": 22721185792,
+                  "p95": 22721185792,
+                  "max": 22721185792,
+                  "mean": 22721185792.0
+                },
+                "peak_memory_reserved_bytes": {
+                  "count": 5,
+                  "min": 23024631808,
+                  "median": 23737663488,
+                  "p95": 23779606528,
+                  "max": 23779606528,
+                  "mean": 23536336896.0
+                },
+                "stages_gpu_ms": {
+                  "atom_attention_decoder": {
+                    "count": 5,
+                    "min": 12.070419311523438,
+                    "median": 12.078258514404297,
+                    "p95": 12.0897798538208,
+                    "max": 12.0897798538208,
+                    "mean": 12.078099060058594
+                  },
+                  "atom_attention_encoder": {
+                    "count": 5,
+                    "min": 57.21536636352539,
+                    "median": 57.31985092163086,
+                    "p95": 57.35713291168213,
+                    "max": 57.35713291168213,
+                    "mean": 57.30519485473633
+                  },
+                  "confidence": {
+                    "count": 5,
+                    "min": 1677.209716796875,
+                    "median": 1699.5618896484375,
+                    "p95": 1724.530029296875,
+                    "max": 1724.530029296875,
+                    "mean": 1701.87080078125
+                  },
+                  "confidence_head": {
+                    "count": 5,
+                    "min": 1677.2010498046875,
+                    "median": 1699.5535888671875,
+                    "p95": 1724.521728515625,
+                    "max": 1724.521728515625,
+                    "mean": 1701.8623779296875
+                  },
+                  "diffusion_module": {
+                    "count": 5,
+                    "min": 90.86878967285156,
+                    "median": 91.48768615722656,
+                    "p95": 92.03506469726562,
+                    "max": 92.03506469726562,
+                    "mean": 91.43837432861328
+                  },
+                  "diffusion_transformer": {
+                    "count": 5,
+                    "min": 85.90145111083984,
+                    "median": 86.01009750366211,
+                    "p95": 86.03345489501953,
+                    "max": 86.03345489501953,
+                    "mean": 85.99073657989501
+                  },
+                  "pairformer_output": {
+                    "count": 5,
+                    "min": 27244.3671875,
+                    "median": 27628.77734375,
+                    "p95": 27742.0625,
+                    "max": 27742.0625,
+                    "mean": 27571.06796875
+                  },
+                  "pairformer_stack": {
+                    "count": 5,
+                    "min": 27076.151245117188,
+                    "median": 27400.499389648438,
+                    "p95": 27533.598876953125,
+                    "max": 27533.598876953125,
+                    "mean": 27366.7708984375
+                  },
+                  "sample_diffusion": {
+                    "count": 5,
+                    "min": 91.76113891601562,
+                    "median": 92.25138854980469,
+                    "p95": 92.80709075927734,
+                    "max": 92.80709075927734,
+                    "mean": 92.2839370727539
+                  },
+                  "triangle_attention": {
+                    "count": 5,
+                    "min": 13567.619003295898,
+                    "median": 13614.121109008789,
+                    "p95": 13631.496131896973,
+                    "max": 13631.496131896973,
+                    "mean": 13603.343756103515
+                  },
+                  "triangle_multiplication": {
+                    "count": 5,
+                    "min": 9604.40202331543,
+                    "median": 9716.577865600586,
+                    "p95": 9727.351913452148,
+                    "max": 9727.351913452148,
+                    "mean": 9696.282112121582
+                  }
+                }
+              }
+            },
+            "records": [
+              {
+                "call_id": 0,
+                "phase": "warmup",
+                "iteration": 0,
+                "input_name": "umem_L01536_6b140cc19f02d9b9",
+                "record_name": "umem_L01536_6b140cc19f02d9b9__fireprot_warmup_000",
+                "model_gpu_ms": 36088.6953125,
+                "model_wall_ms": 36088.78365601413,
+                "peak_memory_allocated_bytes": 21472384512,
+                "peak_memory_reserved_bytes": 22458400768,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 1646.4294691085815,
+                  "atom_attention_encoder": 3098.0004501342773,
+                  "triangle_multiplication": 9884.428436279297,
+                  "triangle_attention": 13636.389572143555,
+                  "pairformer_stack": 27497.028076171875,
+                  "pairformer_output": 31514.037109375,
+                  "atom_attention_decoder": 12.114740371704102,
+                  "diffusion_module": 1509.7677001953125,
+                  "sample_diffusion": 1567.6019287109375,
+                  "confidence_head": 1747.00634765625,
+                  "confidence": 1747.0145263671875
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              },
+              {
+                "call_id": 1,
+                "phase": "measure",
+                "iteration": 0,
+                "input_name": "umem_L01536_6b140cc19f02d9b9",
+                "record_name": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_000",
+                "model_gpu_ms": 29930.158203125,
+                "model_wall_ms": 29930.24019099539,
+                "peak_memory_allocated_bytes": 22721185792,
+                "peak_memory_reserved_bytes": 23737663488,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 86.01009750366211,
+                  "atom_attention_encoder": 57.30817222595215,
+                  "triangle_multiplication": 9727.351913452148,
+                  "triangle_attention": 13631.496131896973,
+                  "pairformer_stack": 27381.544189453125,
+                  "pairformer_output": 27586.22265625,
+                  "atom_attention_decoder": 12.073458671569824,
+                  "diffusion_module": 90.86878967285156,
+                  "sample_diffusion": 91.76113891601562,
+                  "confidence_head": 1699.5535888671875,
+                  "confidence": 1699.5618896484375
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              },
+              {
+                "call_id": 2,
+                "phase": "measure",
+                "iteration": 1,
+                "input_name": "umem_L01536_6b140cc19f02d9b9",
+                "record_name": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_001",
+                "model_gpu_ms": 30084.109375,
+                "model_wall_ms": 30084.216849005315,
+                "peak_memory_allocated_bytes": 22721185792,
+                "peak_memory_reserved_bytes": 23758635008,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 86.03345489501953,
+                  "atom_attention_encoder": 57.32545185089111,
+                  "triangle_multiplication": 9707.77944946289,
+                  "triangle_attention": 13627.350509643555,
+                  "pairformer_stack": 27533.598876953125,
+                  "pairformer_output": 27742.0625,
+                  "atom_attention_decoder": 12.0897798538208,
+                  "diffusion_module": 91.08207702636719,
+                  "sample_diffusion": 92.025146484375,
+                  "confidence_head": 1724.521728515625,
+                  "confidence": 1724.530029296875
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              },
+              {
+                "call_id": 3,
+                "phase": "measure",
+                "iteration": 2,
+                "input_name": "umem_L01536_6b140cc19f02d9b9",
+                "record_name": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_002",
+                "model_gpu_ms": 29970.484375,
+                "model_wall_ms": 29970.60140001122,
+                "peak_memory_allocated_bytes": 22721185792,
+                "peak_memory_reserved_bytes": 23381147648,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 86.01617908477783,
+                  "atom_attention_encoder": 57.35713291168213,
+                  "triangle_multiplication": 9716.577865600586,
+                  "triangle_attention": 13614.121109008789,
+                  "pairformer_stack": 27442.060791015625,
+                  "pairformer_output": 27653.91015625,
+                  "atom_attention_decoder": 12.078258514404297,
+                  "diffusion_module": 91.71825408935547,
+                  "sample_diffusion": 92.57492065429688,
+                  "confidence_head": 1696.554931640625,
+                  "confidence": 1696.5633544921875
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              },
+              {
+                "call_id": 4,
+                "phase": "measure",
+                "iteration": 3,
+                "input_name": "umem_L01536_6b140cc19f02d9b9",
+                "record_name": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_003",
+                "model_gpu_ms": 29915.76953125,
+                "model_wall_ms": 29915.887092996854,
+                "peak_memory_allocated_bytes": 22721185792,
+                "peak_memory_reserved_bytes": 23024631808,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 85.99250030517578,
+                  "atom_attention_encoder": 57.31985092163086,
+                  "triangle_multiplication": 9725.299308776855,
+                  "triangle_attention": 13576.132026672363,
+                  "pairformer_stack": 27400.499389648438,
+                  "pairformer_output": 27628.77734375,
+                  "atom_attention_decoder": 12.070419311523438,
+                  "diffusion_module": 92.03506469726562,
+                  "sample_diffusion": 92.80709075927734,
+                  "confidence_head": 1677.2010498046875,
+                  "confidence": 1677.209716796875
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              },
+              {
+                "call_id": 5,
+                "phase": "measure",
+                "iteration": 4,
+                "input_name": "umem_L01536_6b140cc19f02d9b9",
+                "record_name": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_004",
+                "model_gpu_ms": 29571.8359375,
+                "model_wall_ms": 29571.95957400836,
+                "peak_memory_allocated_bytes": 22721185792,
+                "peak_memory_reserved_bytes": 23779606528,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 85.90145111083984,
+                  "atom_attention_encoder": 57.21536636352539,
+                  "triangle_multiplication": 9604.40202331543,
+                  "triangle_attention": 13567.619003295898,
+                  "pairformer_stack": 27076.151245117188,
+                  "pairformer_output": 27244.3671875,
+                  "atom_attention_decoder": 12.07857894897461,
+                  "diffusion_module": 91.48768615722656,
+                  "sample_diffusion": 92.25138854980469,
+                  "confidence_head": 1711.4805908203125,
+                  "confidence": 1711.489013671875
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              }
+            ]
+          }
+        },
+        "enabled": {
+          "status": "ok",
+          "spec": {
+            "schema_version": 1,
+            "created_at": "2026-10-03T07:34:20.471510+00:00",
+            "config_path": "/tmp/fireprot-dual-model-1536.json",
+            "config_sha256": "f24f3d4c26b0f4ff07f93d6ab50e8df613d5fd62675d924981f3e5df119e6c1f",
+            "repo_root": "/media/IntelSSD/fireprot",
+            "protenix_root": "/media/IntelSSD/fireprot/Protenix",
+            "run_dir": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot",
+            "backend": "fireprot",
+            "blas_backend": "hipblas",
+            "profile_one": false,
+            "torch_profile": false,
+            "source": {
+              "fireprot_commit": "67b274aee128c064da5522bd38bc6a482b26080e",
+              "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b"
+            },
+            "measurement": {
+              "warmups": 1,
+              "repetitions": 5,
+              "dump_outputs": true,
+              "cache_state": "warm-within-process",
+              "device_policy": "exclusive",
+              "exclusive_max_gpu_use_percent": 5,
+              "exclusive_max_vram_used_bytes": 268435456,
+              "process_monitor_interval_seconds": 1.0,
+              "reject_external_gpu_processes": true,
+              "clock_policy": "record-current",
+              "additional_physical_devices": [
+                6
+              ]
+            },
+            "workload": {
+              "id": "mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32",
+              "input": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+              "token_count": 1536,
+              "model_name": "protenix_mini_default_v0.5.0",
+              "dtype": "fp32",
+              "cycles": 4,
+              "diffusion_steps": 1,
+              "samples": 1,
+              "seeds": [
+                101
+              ],
+              "cache": true,
+              "use_msa": false,
+              "use_template": false,
+              "enable_fusion": true,
+              "enable_tf32": false,
+              "trimul_kernel": "torch",
+              "triatt_kernel": "torch"
+            }
+          },
+          "source": {
+            "fireprot_commit": "67b274aee128c064da5522bd38bc6a482b26080e",
+            "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b",
+            "profile_script_sha256": "4ee824921e41bfe3842bc9f7bb6fc35e67fbe43eced78dcba4d57f4ad26b5dee"
+          },
+          "allocator_environment": {
+            "PYTORCH_ALLOC_CONF": "expandable_segments:True",
+            "PYTORCH_CUDA_ALLOC_CONF": null
+          },
+          "software": {
+            "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:38:16) [GCC 14.3.0]",
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "miopen": null,
+            "miopen_available": false,
+            "preferred_blas": "_BlasBackend.Cublas"
+          },
+          "hardware": {
+            "hostname": "DiamondHill",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.39",
+            "device_index": 0,
+            "device_name": "AMD Instinct MI250X / MI250",
+            "device_arch": [
+              9,
+              0
+            ],
+            "gcn_arch_name": "gfx90a:sramecc+:xnack-",
+            "total_memory_bytes": 68702699520
+          },
+          "input": {
+            "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+            "sha256": "3f3c19af52b40972ce1961eba6800afeba548d28c643fc23da0a9321485989a1",
+            "token_count": 1536,
+            "atom_count": null
+          },
+          "fireprot_runtime": {
+            "adapter": "protenix",
+            "blas": {
+              "requested": "hipblas",
+              "before": "_BlasBackend.Cublaslt",
+              "effective": "_BlasBackend.Cublas",
+              "changed": true
+            },
+            "registration_modules": [
+              "fireprot.backends.amd.ck_gemm",
+              "fireprot.backends.amd.triangle_multiplication",
+              "fireprot.backends.amd.triangle_attention",
+              "fireprot.backends.amd.ck_attention",
+              "fireprot.backends.amd.recycle"
+            ],
+            "hooks": {
+              "installed": true,
+              "enabled": true,
+              "hooks": [
+                "OpenFoldLayerNorm.forward",
+                "Transition.forward"
+              ],
+              "fast_paths": {
+                "selection_counts": [
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+                    "count": 432
+                  },
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "native",
+                    "count": 432
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                    "count": 2628
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "native",
+                    "count": 1338
+                  }
+                ],
+                "backends": {
+                  "recycle": {
+                    "channel_first_layer_norm_enabled": true,
+                    "long_layer_norm_enabled": true,
+                    "long_transition_enabled": true,
+                    "long1536_epilogues_enabled": true,
+                    "selection_counts": [
+                      {
+                        "operation": "gated_transition",
+                        "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+                        "count": 432
+                      },
+                      {
+                        "operation": "gated_transition",
+                        "implementation": "native",
+                        "count": 432
+                      },
+                      {
+                        "operation": "layer_norm",
+                        "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                        "count": 2628
+                      },
+                      {
+                        "operation": "layer_norm",
+                        "implementation": "native",
+                        "count": 1338
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "operations": {
+              "implementations": {
+                "gated_transition": [
+                  {
+                    "name": "amd-gfx90a-hip-transition-f32-c128-long",
+                    "priority": 30,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-transition-f32-c128",
+                    "priority": 20,
+                    "version": "1"
+                  }
+                ],
+                "layer_norm": [
+                  {
+                    "name": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                    "priority": 30,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-layernorm-f32-c128-channel-first",
+                    "priority": 25,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-layernorm-f32-c128",
+                    "priority": 20,
+                    "version": "1"
+                  }
+                ],
+                "linear": [
+                  {
+                    "name": "amd-ck-gemm-f32-m124-k64-n32",
+                    "priority": 30,
+                    "version": "1"
+                  }
+                ],
+                "triangle_attention": [
+                  {
+                    "name": "amd-gfx90a-ck-tile-attention-f32-n1000",
+                    "priority": 30,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-ck-tile-attention-f32-n1536",
+                    "priority": 30,
+                    "version": "exact-shape-1"
+                  },
+                  {
+                    "name": "amd-gfx90a-efficient-sdpa-direct-n1000",
+                    "priority": 20,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-efficient-sdpa-direct-n1536",
+                    "priority": 20,
+                    "version": "experimental-1"
+                  },
+                  {
+                    "name": "amd-gfx90a-efficient-sdpa",
+                    "priority": 10,
+                    "version": "1"
+                  }
+                ],
+                "triangle_multiplication": [
+                  {
+                    "name": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                    "priority": 40,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+                    "priority": 40,
+                    "version": "experimental-1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-triangle-gates-f32-n1000-c128",
+                    "priority": 30,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-gfx90a-hip-triangle-gates-f32-n124-c128",
+                    "priority": 20,
+                    "version": "1"
+                  },
+                  {
+                    "name": "amd-short-sequence-torch",
+                    "priority": 10,
+                    "version": "1"
+                  }
+                ]
+              },
+              "selection_counts": [
+                {
+                  "operation": "triangle_attention",
+                  "implementation": "amd-gfx90a-ck-tile-attention-f32-n1536",
+                  "count": 2592
+                },
+                {
+                  "operation": "triangle_multiplication",
+                  "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+                  "count": 864
+                }
+              ],
+              "decisions": [
+                {
+                  "signature": {
+                    "operation": "triangle_attention",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "float32",
+                    "shape": [
+                      512,
+                      4,
+                      1536,
+                      32
+                    ],
+                    "layout": "strided",
+                    "mode": "inference",
+                    "mask": "triangle-bias",
+                    "inplace": false,
+                    "attributes": {
+                      "bias_count": "1",
+                      "bias_shapes": "((1, 4, 1536, 1536),)",
+                      "ck_tile_compatible": "True",
+                      "head_dim": "32",
+                      "heads": "4",
+                      "qkv_strides": "((196608, 32, 128, 1), (196608, 32, 128, 1), (196608, 32, 128, 1))"
+                    }
+                  },
+                  "selected": "amd-gfx90a-ck-tile-attention-f32-n1536",
+                  "rejected": [
+                    {
+                      "implementation": "amd-gfx90a-ck-tile-attention-f32-n1000",
+                      "reason": "CK Tile attention requires an exact measured bucket"
+                    }
+                  ]
+                },
+                {
+                  "signature": {
+                    "operation": "triangle_multiplication",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "float32",
+                    "shape": [
+                      1536,
+                      1536,
+                      128
+                    ],
+                    "layout": "contiguous",
+                    "mode": "inference",
+                    "mask": "none",
+                    "inplace": true,
+                    "attributes": {
+                      "add_with_inplace": "True",
+                      "c_hidden": "128",
+                      "c_z": "128",
+                      "direction": "incoming"
+                    }
+                  },
+                  "selected": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+                  "rejected": [
+                    {
+                      "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                      "reason": "shape is not the exact supported long bucket"
+                    }
+                  ]
+                },
+                {
+                  "signature": {
+                    "operation": "triangle_multiplication",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "float32",
+                    "shape": [
+                      1536,
+                      1536,
+                      128
+                    ],
+                    "layout": "contiguous",
+                    "mode": "inference",
+                    "mask": "none",
+                    "inplace": true,
+                    "attributes": {
+                      "add_with_inplace": "True",
+                      "c_hidden": "128",
+                      "c_z": "128",
+                      "direction": "outgoing"
+                    }
+                  },
+                  "selected": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+                  "rejected": [
+                    {
+                      "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                      "reason": "shape is not the exact supported long bucket"
+                    }
+                  ]
+                }
+              ]
+            },
+            "ck_attention": {
+              "enabled": true,
+              "long1536_enabled": true,
+              "exact1536_enabled": true,
+              "vector1000_enabled": true,
+              "loaded": true,
+              "error": null,
+              "build": {
+                "source_sha256": "d50865b27a66956b391a331cc0daf9e33962c1fd1c0d93b3243fab9d25af016c",
+                "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+                "header_count": 581,
+                "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+                "command": [
+                  "/opt/rocm/bin/hipcc",
+                  "-O3",
+                  "-std=c++17",
+                  "-fPIC",
+                  "-shared",
+                  "--offload-arch=gfx90a",
+                  "-I/opt/rocm/include",
+                  "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+                  "-o",
+                  "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.pending.so"
+                ],
+                "library_sha256": "e0db29648fbc9e4895663604a93c3729503039310761abdf19ed8e637d49ca63",
+                "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.so",
+                "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+              }
+            },
+            "lt_bmm": {
+              "enabled": false,
+              "loaded": false,
+              "error": null,
+              "build": {},
+              "counts": {
+                "outgoing": 0,
+                "incoming": 0,
+                "fallback": 864
+              },
+              "workspace_bytes_per_call": 33554432
+            },
+            "attention_gate": {
+              "enabled": false,
+              "counts": {
+                "selected": 0,
+                "fallback": 0
+              },
+              "fallback_signatures": []
+            },
+            "two_gcd_attention": {
+              "enabled": false,
+              "synchronize": false,
+              "counts": {},
+              "primary_batch": 320,
+              "secondary_batch": 192
+            },
+            "triangle_vector": {
+              "enabled": true,
+              "counts": {
+                "n1000": 0,
+                "n1536": 864,
+                "fallback": 0
+              },
+              "packed_norm_enabled": true,
+              "packed_norm_counts": {
+                "n1000": 0,
+                "n1536": 864
+              },
+              "dual_projection_enabled": true,
+              "dual_projection_counts": {
+                "n1000": 0,
+                "n1536": 864,
+                "fallback": 0
+              }
+            }
+          },
+          "inference_wall_ms": 244238.13326796517,
+          "process_wall_ms": 247573.1598190032,
+          "gpu_process_monitor": {
+            "available": true,
+            "command": [
+              "/usr/bin/amd-smi",
+              "process",
+              "--json"
+            ],
+            "physical_device_index": 7,
+            "interval_seconds": 1.0,
+            "samples": 190,
+            "allowed_pid": 884918,
+            "external_pids": [],
+            "errors": [],
+            "passed": true
+          },
+          "additional_device_preflight": {
+            "6": {
+              "gpu_use_percent": 0,
+              "vram_used_bytes": 11014144,
+              "passed": true
+            }
+          },
+          "additional_gpu_process_monitors": [
+            {
+              "available": true,
+              "command": [
+                "/usr/bin/amd-smi",
+                "process",
+                "--json"
+              ],
+              "physical_device_index": 6,
+              "interval_seconds": 1.0,
+              "samples": 190,
+              "allowed_pid": 884918,
+              "external_pids": [],
+              "errors": [],
+              "passed": true
+            }
+          ],
+          "timing": {
+            "summary": {
+              "warmup": {
+                "model_gpu_ms": {
+                  "count": 1,
+                  "min": 34769.16796875,
+                  "median": 34769.16796875,
+                  "p95": 34769.16796875,
+                  "max": 34769.16796875,
+                  "mean": 34769.16796875
+                },
+                "model_wall_ms": {
+                  "count": 1,
+                  "min": 34769.3020250299,
+                  "median": 34769.3020250299,
+                  "p95": 34769.3020250299,
+                  "max": 34769.3020250299,
+                  "mean": 34769.3020250299
+                },
+                "peak_memory_allocated_bytes": {
+                  "count": 1,
+                  "min": 21472384512,
+                  "median": 21472384512,
+                  "p95": 21472384512,
+                  "max": 21472384512,
+                  "mean": 21472384512.0
+                },
+                "peak_memory_reserved_bytes": {
+                  "count": 1,
+                  "min": 22521315328,
+                  "median": 22521315328,
+                  "p95": 22521315328,
+                  "max": 22521315328,
+                  "mean": 22521315328.0
+                },
+                "stages_gpu_ms": {
+                  "atom_attention_decoder": {
+                    "count": 1,
+                    "min": 12.10131549835205,
+                    "median": 12.10131549835205,
+                    "p95": 12.10131549835205,
+                    "max": 12.10131549835205,
+                    "mean": 12.10131549835205
+                  },
+                  "atom_attention_encoder": {
+                    "count": 1,
+                    "min": 3132.377752304077,
+                    "median": 3132.377752304077,
+                    "p95": 3132.377752304077,
+                    "max": 3132.377752304077,
+                    "mean": 3132.377752304077
+                  },
+                  "confidence": {
+                    "count": 1,
+                    "min": 1702.023193359375,
+                    "median": 1702.023193359375,
+                    "p95": 1702.023193359375,
+                    "max": 1702.023193359375,
+                    "mean": 1702.023193359375
+                  },
+                  "confidence_head": {
+                    "count": 1,
+                    "min": 1702.0146484375,
+                    "median": 1702.0146484375,
+                    "p95": 1702.0146484375,
+                    "max": 1702.0146484375,
+                    "mean": 1702.0146484375
+                  },
+                  "diffusion_module": {
+                    "count": 1,
+                    "min": 1474.90185546875,
+                    "median": 1474.90185546875,
+                    "p95": 1474.90185546875,
+                    "max": 1474.90185546875,
+                    "mean": 1474.90185546875
+                  },
+                  "diffusion_transformer": {
+                    "count": 1,
+                    "min": 1627.9490451812744,
+                    "median": 1627.9490451812744,
+                    "p95": 1627.9490451812744,
+                    "max": 1627.9490451812744,
+                    "mean": 1627.9490451812744
+                  },
+                  "pairformer_output": {
+                    "count": 1,
+                    "min": 30267.900390625,
+                    "median": 30267.900390625,
+                    "p95": 30267.900390625,
+                    "max": 30267.900390625,
+                    "mean": 30267.900390625
+                  },
+                  "pairformer_stack": {
+                    "count": 1,
+                    "min": 26399.934692382812,
+                    "median": 26399.934692382812,
+                    "p95": 26399.934692382812,
+                    "max": 26399.934692382812,
+                    "mean": 26399.934692382812
+                  },
+                  "sample_diffusion": {
+                    "count": 1,
+                    "min": 1530.6197509765625,
+                    "median": 1530.6197509765625,
+                    "p95": 1530.6197509765625,
+                    "max": 1530.6197509765625,
+                    "mean": 1530.6197509765625
+                  },
+                  "triangle_attention": {
+                    "count": 1,
+                    "min": 13646.0796585083,
+                    "median": 13646.0796585083,
+                    "p95": 13646.0796585083,
+                    "max": 13646.0796585083,
+                    "mean": 13646.0796585083
+                  },
+                  "triangle_multiplication": {
+                    "count": 1,
+                    "min": 8752.585006713867,
+                    "median": 8752.585006713867,
+                    "p95": 8752.585006713867,
+                    "max": 8752.585006713867,
+                    "mean": 8752.585006713867
+                  }
+                }
+              },
+              "measure": {
+                "model_gpu_ms": {
+                  "count": 5,
+                  "min": 28725.5234375,
+                  "median": 28916.029296875,
+                  "p95": 28939.435546875,
+                  "max": 28939.435546875,
+                  "mean": 28883.730078125
+                },
+                "model_wall_ms": {
+                  "count": 5,
+                  "min": 28725.604637991637,
+                  "median": 28916.108082979918,
+                  "p95": 28939.530579023995,
+                  "max": 28939.530579023995,
+                  "mean": 28883.819113404024
+                },
+                "peak_memory_allocated_bytes": {
+                  "count": 5,
+                  "min": 22721185792,
+                  "median": 22721185792,
+                  "p95": 22721185792,
+                  "max": 22721185792,
+                  "mean": 22721185792.0
+                },
+                "peak_memory_reserved_bytes": {
+                  "count": 5,
+                  "min": 23779606528,
+                  "median": 23821549568,
+                  "p95": 23842521088,
+                  "max": 23842521088,
+                  "mean": 23813160960.0
+                },
+                "stages_gpu_ms": {
+                  "atom_attention_decoder": {
+                    "count": 5,
+                    "min": 12.063554763793945,
+                    "median": 12.072196006774902,
+                    "p95": 12.084356307983398,
+                    "max": 12.084356307983398,
+                    "mean": 12.074499320983886
+                  },
+                  "atom_attention_encoder": {
+                    "count": 5,
+                    "min": 57.244083404541016,
+                    "median": 57.29560661315918,
+                    "p95": 57.317365646362305,
+                    "max": 57.317365646362305,
+                    "mean": 57.28802146911621
+                  },
+                  "confidence": {
+                    "count": 5,
+                    "min": 1626.7999267578125,
+                    "median": 1631.746337890625,
+                    "p95": 1651.1619873046875,
+                    "max": 1651.1619873046875,
+                    "mean": 1635.4581298828125
+                  },
+                  "confidence_head": {
+                    "count": 5,
+                    "min": 1626.7911376953125,
+                    "median": 1631.7376708984375,
+                    "p95": 1651.1539306640625,
+                    "max": 1651.1539306640625,
+                    "mean": 1635.4497314453124
+                  },
+                  "diffusion_module": {
+                    "count": 5,
+                    "min": 90.72347259521484,
+                    "median": 91.2870101928711,
+                    "p95": 91.70365905761719,
+                    "max": 91.70365905761719,
+                    "mean": 91.2626220703125
+                  },
+                  "diffusion_transformer": {
+                    "count": 5,
+                    "min": 85.85980796813965,
+                    "median": 85.9932508468628,
+                    "p95": 86.04844951629639,
+                    "max": 86.04844951629639,
+                    "mean": 85.98576202392579
+                  },
+                  "pairformer_output": {
+                    "count": 5,
+                    "min": 26436.001953125,
+                    "median": 26656.583984375,
+                    "p95": 26671.85546875,
+                    "max": 26671.85546875,
+                    "mean": 26614.9953125
+                  },
+                  "pairformer_stack": {
+                    "count": 5,
+                    "min": 26231.6689453125,
+                    "median": 26431.951171875,
+                    "p95": 26472.49072265625,
+                    "max": 26472.49072265625,
+                    "mean": 26398.238989257814
+                  },
+                  "sample_diffusion": {
+                    "count": 5,
+                    "min": 91.5329360961914,
+                    "median": 92.04942321777344,
+                    "p95": 92.45104217529297,
+                    "max": 92.45104217529297,
+                    "mean": 92.04171600341797
+                  },
+                  "triangle_attention": {
+                    "count": 5,
+                    "min": 13559.71378326416,
+                    "median": 13568.113800048828,
+                    "p95": 13650.576454162598,
+                    "max": 13650.576454162598,
+                    "mean": 13589.072149658203
+                  },
+                  "triangle_multiplication": {
+                    "count": 5,
+                    "min": 8522.21293258667,
+                    "median": 8620.598880767822,
+                    "p95": 8831.088954925537,
+                    "max": 8831.088954925537,
+                    "mean": 8664.267754364013
+                  }
+                }
+              }
+            },
+            "records": [
+              {
+                "call_id": 0,
+                "phase": "warmup",
+                "iteration": 0,
+                "input_name": "umem_L01536_6b140cc19f02d9b9",
+                "record_name": "umem_L01536_6b140cc19f02d9b9__fireprot_warmup_000",
+                "model_gpu_ms": 34769.16796875,
+                "model_wall_ms": 34769.3020250299,
+                "peak_memory_allocated_bytes": 21472384512,
+                "peak_memory_reserved_bytes": 22521315328,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 1627.9490451812744,
+                  "atom_attention_encoder": 3132.377752304077,
+                  "triangle_multiplication": 8752.585006713867,
+                  "triangle_attention": 13646.0796585083,
+                  "pairformer_stack": 26399.934692382812,
+                  "pairformer_output": 30267.900390625,
+                  "atom_attention_decoder": 12.10131549835205,
+                  "diffusion_module": 1474.90185546875,
+                  "sample_diffusion": 1530.6197509765625,
+                  "confidence_head": 1702.0146484375,
+                  "confidence": 1702.023193359375
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              },
+              {
+                "call_id": 1,
+                "phase": "measure",
+                "iteration": 0,
+                "input_name": "umem_L01536_6b140cc19f02d9b9",
+                "record_name": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_000",
+                "model_gpu_ms": 28725.5234375,
+                "model_wall_ms": 28725.604637991637,
+                "peak_memory_allocated_bytes": 22721185792,
+                "peak_memory_reserved_bytes": 23800578048,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 86.04844951629639,
+                  "atom_attention_encoder": 57.317365646362305,
+                  "triangle_multiplication": 8522.21293258667,
+                  "triangle_attention": 13650.576454162598,
+                  "pairformer_stack": 26231.6689453125,
+                  "pairformer_output": 26436.001953125,
+                  "atom_attention_decoder": 12.084356307983398,
+                  "diffusion_module": 91.20172119140625,
+                  "sample_diffusion": 92.01326751708984,
+                  "confidence_head": 1639.7557373046875,
+                  "confidence": 1639.76416015625
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              },
+              {
+                "call_id": 2,
+                "phase": "measure",
+                "iteration": 1,
+                "input_name": "umem_L01536_6b140cc19f02d9b9",
+                "record_name": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_001",
+                "model_gpu_ms": 28916.029296875,
+                "model_wall_ms": 28916.108082979918,
+                "peak_memory_allocated_bytes": 22721185792,
+                "peak_memory_reserved_bytes": 23821549568,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 86.03597259521484,
+                  "atom_attention_encoder": 57.31032657623291,
+                  "triangle_multiplication": 8598.40351486206,
+                  "triangle_attention": 13564.102653503418,
+                  "pairformer_stack": 26402.2216796875,
+                  "pairformer_output": 26656.583984375,
+                  "atom_attention_decoder": 12.081954956054688,
+                  "diffusion_module": 90.72347259521484,
+                  "sample_diffusion": 91.5329360961914,
+                  "confidence_head": 1627.8101806640625,
+                  "confidence": 1627.8182373046875
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              },
+              {
+                "call_id": 3,
+                "phase": "measure",
+                "iteration": 2,
+                "input_name": "umem_L01536_6b140cc19f02d9b9",
+                "record_name": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_002",
+                "model_gpu_ms": 28914.322265625,
+                "model_wall_ms": 28914.419445034582,
+                "peak_memory_allocated_bytes": 22721185792,
+                "peak_memory_reserved_bytes": 23821549568,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 85.9932508468628,
+                  "atom_attention_encoder": 57.272725105285645,
+                  "triangle_multiplication": 8620.598880767822,
+                  "triangle_attention": 13602.854057312012,
+                  "pairformer_stack": 26431.951171875,
+                  "pairformer_output": 26648.20703125,
+                  "atom_attention_decoder": 12.0704345703125,
+                  "diffusion_module": 91.39724731445312,
+                  "sample_diffusion": 92.16191101074219,
+                  "confidence_head": 1631.7376708984375,
+                  "confidence": 1631.746337890625
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              },
+              {
+                "call_id": 4,
+                "phase": "measure",
+                "iteration": 3,
+                "input_name": "umem_L01536_6b140cc19f02d9b9",
+                "record_name": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_003",
+                "model_gpu_ms": 28923.33984375,
+                "model_wall_ms": 28923.43282198999,
+                "peak_memory_allocated_bytes": 22721185792,
+                "peak_memory_reserved_bytes": 23842521088,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 85.85980796813965,
+                  "atom_attention_encoder": 57.244083404541016,
+                  "triangle_multiplication": 8749.034488677979,
+                  "triangle_attention": 13568.113800048828,
+                  "pairformer_stack": 26452.862426757812,
+                  "pairformer_output": 26671.85546875,
+                  "atom_attention_decoder": 12.063554763793945,
+                  "diffusion_module": 91.70365905761719,
+                  "sample_diffusion": 92.45104217529297,
+                  "confidence_head": 1626.7911376953125,
+                  "confidence": 1626.7999267578125
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              },
+              {
+                "call_id": 5,
+                "phase": "measure",
+                "iteration": 4,
+                "input_name": "umem_L01536_6b140cc19f02d9b9",
+                "record_name": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_004",
+                "model_gpu_ms": 28939.435546875,
+                "model_wall_ms": 28939.530579023995,
+                "peak_memory_allocated_bytes": 22721185792,
+                "peak_memory_reserved_bytes": 23779606528,
+                "stages_gpu_total_ms": {
+                  "diffusion_transformer": 85.99132919311523,
+                  "atom_attention_encoder": 57.29560661315918,
+                  "triangle_multiplication": 8831.088954925537,
+                  "triangle_attention": 13559.71378326416,
+                  "pairformer_stack": 26472.49072265625,
+                  "pairformer_output": 26662.328125,
+                  "atom_attention_decoder": 12.072196006774902,
+                  "diffusion_module": 91.2870101928711,
+                  "sample_diffusion": 92.04942321777344,
+                  "confidence_head": 1651.1539306640625,
+                  "confidence": 1651.1619873046875
+                },
+                "stage_call_counts": {
+                  "diffusion_transformer": 4,
+                  "atom_attention_encoder": 2,
+                  "triangle_multiplication": 144,
+                  "triangle_attention": 144,
+                  "pairformer_stack": 5,
+                  "pairformer_output": 1,
+                  "atom_attention_decoder": 1,
+                  "diffusion_module": 1,
+                  "sample_diffusion": 1,
+                  "confidence_head": 1,
+                  "confidence": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "comparison": {
+        "schema_version": 1,
+        "created_at": "2026-10-03T07:39:11.157607+00:00",
+        "reference_root": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions",
+        "candidate_root": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions",
+        "passed": true,
+        "comparisons": [
+          {
+            "case": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_000",
+            "seed": 101,
+            "sample": 0,
+            "reference": {
+              "cif": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000_sample_0.cif",
+              "confidence": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000_summary_confidence_sample_0.json"
+            },
+            "candidate": {
+              "cif": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000_sample_0.cif",
+              "confidence": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000_summary_confidence_sample_0.json"
+            },
+            "coordinate_tolerance_angstrom": 0.001,
+            "confidence_tolerance": 0.001,
+            "coordinates": {
+              "atom_count": 12139,
+              "finite": true,
+              "raw_rmsd_angstrom": 8.511278326913504e-05,
+              "aligned_rmsd_angstrom": 8.46328510193059e-05,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "finite": true,
+              "max_abs_delta": 9.5367431640625e-07,
+              "mean_abs_delta": 1.4454126358032226e-07,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "passed": true
+          },
+          {
+            "case": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_001",
+            "seed": 101,
+            "sample": 0,
+            "reference": {
+              "cif": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_001/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_001_sample_0.cif",
+              "confidence": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_001/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_001_summary_confidence_sample_0.json"
+            },
+            "candidate": {
+              "cif": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_001/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_001_sample_0.cif",
+              "confidence": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_001/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_001_summary_confidence_sample_0.json"
+            },
+            "coordinate_tolerance_angstrom": 0.001,
+            "confidence_tolerance": 0.001,
+            "coordinates": {
+              "atom_count": 12139,
+              "finite": true,
+              "raw_rmsd_angstrom": 9.845370597453293e-05,
+              "aligned_rmsd_angstrom": 9.725421412309751e-05,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "finite": true,
+              "max_abs_delta": 1.430511474609375e-06,
+              "mean_abs_delta": 1.9297003746032714e-07,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "passed": true
+          },
+          {
+            "case": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_002",
+            "seed": 101,
+            "sample": 0,
+            "reference": {
+              "cif": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_002/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_002_sample_0.cif",
+              "confidence": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_002/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_002_summary_confidence_sample_0.json"
+            },
+            "candidate": {
+              "cif": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_002/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_002_sample_0.cif",
+              "confidence": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_002/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_002_summary_confidence_sample_0.json"
+            },
+            "coordinate_tolerance_angstrom": 0.001,
+            "confidence_tolerance": 0.001,
+            "coordinates": {
+              "atom_count": 12139,
+              "finite": true,
+              "raw_rmsd_angstrom": 9.679302611274807e-05,
+              "aligned_rmsd_angstrom": 9.605699009316402e-05,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "finite": true,
+              "max_abs_delta": 7.62939453125e-06,
+              "mean_abs_delta": 5.168219407399495e-07,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "passed": true
+          },
+          {
+            "case": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_003",
+            "seed": 101,
+            "sample": 0,
+            "reference": {
+              "cif": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_003/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_003_sample_0.cif",
+              "confidence": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_003/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_003_summary_confidence_sample_0.json"
+            },
+            "candidate": {
+              "cif": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_003/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_003_sample_0.cif",
+              "confidence": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_003/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_003_summary_confidence_sample_0.json"
+            },
+            "coordinate_tolerance_angstrom": 0.001,
+            "confidence_tolerance": 0.001,
+            "coordinates": {
+              "atom_count": 12139,
+              "finite": true,
+              "raw_rmsd_angstrom": 8.725588343538208e-05,
+              "aligned_rmsd_angstrom": 8.658772193379721e-05,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "finite": true,
+              "max_abs_delta": 2.9802322387695312e-08,
+              "mean_abs_delta": 4.221995671590169e-09,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "passed": true
+          },
+          {
+            "case": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_004",
+            "seed": 101,
+            "sample": 0,
+            "reference": {
+              "cif": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_004/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_004_sample_0.cif",
+              "confidence": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_004/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_004_summary_confidence_sample_0.json"
+            },
+            "candidate": {
+              "cif": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_004/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_004_sample_0.cif",
+              "confidence": "/media/IntelSSD/fireprot/outputs/benchmarks/dual-projection-model-67b274a/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_004/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_004_summary_confidence_sample_0.json"
+            },
+            "coordinate_tolerance_angstrom": 0.001,
+            "confidence_tolerance": 0.001,
+            "coordinates": {
+              "atom_count": 12139,
+              "finite": true,
+              "raw_rmsd_angstrom": 9.069910634687939e-05,
+              "aligned_rmsd_angstrom": 8.966938730108709e-05,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "finite": true,
+              "max_abs_delta": 7.62939453125e-06,
+              "mean_abs_delta": 8.327265580495198e-07,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "passed": true
+          }
+        ]
+      },
+      "model_median_speedup": 1.0350715133062753
+    }
+  },
+  "promotion_tests": {
+    "exit_code": 0,
+    "monitors": [
+      {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 10,
+        "allowed_pid": 888555,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      },
+      {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 7,
+        "interval_seconds": 1.0,
+        "samples": 10,
+        "allowed_pid": 888555,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    ],
+    "source_sha256": {
+      "fireprot/backends/amd/csrc/fireprot_amd_ops.cpp": "154f6a236c25b435e0c8bf38d1d9b669e7be5511363853a8f7375c7d5b00e742",
+      "fireprot/backends/amd/csrc/fireprot_amd_ops.cu": "e9d46f13698e2e6301325ad4fc04a9631d4b8f1ec7b2218d7bcd0cca2b63abab"
+    }
+  },
+  "cpu_tests": {
+    "passed": 129,
+    "hip_skipped": 39
+  },
+  "record_compaction": "Per-call stage event lists are stored as totals and call counts; complete model samples and summary distributions are retained. Raw manifests remain under the recorded run directories."
+}

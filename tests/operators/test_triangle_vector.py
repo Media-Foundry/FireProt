@@ -46,6 +46,7 @@ def test_full_triangle_vector_add_and_overwrite(n,monkeypatch):
     from fireprot.adapters.protenix.runtime import install
     from protenix.model.triangular.triangular import TriangleMultiplicativeUpdate
     install('hipblas');assert load_amd_extension() is not None
+    monkeypatch.setattr(tm,"_dual_projection_enabled",False)
     torch.manual_seed(953)
     with torch.inference_mode():
         for outgoing in (True,False):

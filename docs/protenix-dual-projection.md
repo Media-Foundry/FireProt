@@ -2,10 +2,11 @@
 
 ## Status
 
-A handwritten gfx90a FP32 MFMA candidate now accelerates the complete
-triangle multiplication operator by approximately 1.12–1.15x on the tested
-random-weight workloads. It remains a benchmark candidate. No production
-dispatch change or model/E2E speedup is established by this investigation.
+The handwritten gfx90a FP32 MFMA implementation is now the default inside
+the validated packed triangle paths. Same-source model validation improves
+N1000 from 10.370 to 9.932 s (1.044x) and N1536 from 29.930 to 28.916 s
+(1.035x). These are warm model times; see the model comparison below.
+The earlier random-weight operator investigation is retained in this document.
 
 ## Design and tuning
 
@@ -75,13 +76,11 @@ include allocations; complete-triangle input reset is outside timing.
 Both continuous process monitors pass in every report. These isolated
 workloads have no model cycle, diffusion step or sample setting.
 
-## Next gate
+## Validation gates
 
-Integrate the C64/K16 candidate behind an explicit opt-in, with tensor/device/
-alignment guards and native fallback. Add checkpoint-weight and edge-value
-validation, repeated asynchronous launches and source-preservation checks.
-Then run a same-source Mini-default FP32 C4/S1 model A/B at both lengths,
-with unchanged 1e-3 coordinate/confidence gates, before default promotion.
+The integration and model gates below are complete for the two measured
+lengths. Additional lengths, dtypes, architectures, model weights and
+production diffusion-step counts require independent validation.
 
 [Evidence](../provenance/protenix_dual_projection_probe.json) includes the
 rejected mapping experiment and subsequent successful reports, source and
@@ -98,10 +97,10 @@ HIP_VISIBLE_DEVICES=7 PYTHONPATH=.:Protenix FIREPROT_ENABLE_LONG1536=1 python \
   --output outputs/benchmarks/dual-projection-triangle.json
 ```
 
-## Experimental integration
+## Integration
 
-`FIREPROT_ENABLE_DUAL_PROJECTION=1` enables the C64/K16 candidate inside the
-existing packed triangle route. It defaults to off. N1536 additionally
+`FIREPROT_ENABLE_DUAL_PROJECTION` defaults to `1` inside the existing packed
+triangle route. Set it to `0` to restore the preceding projection path. N1536 additionally
 requires `FIREPROT_ENABLE_LONG1536=1`. Only gfx90a, FP32, contiguous aligned
 N1000/N1536 inputs and bias-free contiguous aligned 128x128 projection
 weights are accepted. Training/autograd and unsupported weights use the
@@ -114,4 +113,49 @@ nondefault streams, zero/positive/negative constant input rows, malformed
 weights, dtype/layout/alignment rejection, autograd rejection, both triangle
 directions and residual modes, and bias fallback. CPU suite: 129 passed,
 39 HIP skips. GPU regression subset: 21 passed, both GPU process monitors
-passed. Same-source model validation is pending; the default remains off.
+passed. The C++/HIP sources used for model validation are unchanged by
+default promotion. Historical projection, vector packing and packed-norm
+benchmarks/tests explicitly disable dual projection in their controls.
+
+
+## Same-source model comparison
+
+Candidate commit `67b274aee128c064da5522bd38bc6a482b26080e`, independent Protenix
+integration `77218da6f5ccf8562a76577dd568869785e6b45b`. Both sides use
+Mini-default v0.5.0, FP32, TF32 disabled, four cycles, one diffusion step,
+one sample, seed 101, no MSA/template search, hipBLAS, one warmup and five
+measured predictions with warm in-process caches. GPU 7 runs inference;
+GPU 6 is monitored as idle. Expandable allocator segments are enabled.
+Other experimental attention/two-GCD/hipBLASLt routes are disabled. All
+previously promoted vector packing, residual and LayerNorm paths stay on.
+
+N1536 runs disabled then enabled; N1000 runs enabled then disabled. In each
+comparison the candidate maximum is below the control minimum. Both GPU
+process monitors pass in all four runs. Candidate manifests record 864
+accelerated triangle calls per length (two projection kernels per triangle),
+with zero fallback; controls record zero dual-projection calls.
+
+| Metric | N1000 disabled / enabled | N1536 disabled / enabled |
+| --- | ---: | ---: |
+| Warm model median | 10.370 / 9.932 s | 29.930 / 28.916 s |
+| Warm model p95 | 10.393 / 9.980 s | 30.084 / 28.939 s |
+| Triangle multiplication median | 3.524 / 3.100 s | 9.717 / 8.621 s |
+| Peak allocated bytes | 10,011,042,304, unchanged | 22,721,185,792, unchanged |
+| Complete worker wall time | 115.106 / 112.589 s | 253.361 / 247.573 s |
+
+Warm model gains are **1.044x** and **1.035x**. Whole-model improvements are
+smaller than the isolated operator gain because attention and other stages
+remain unchanged. Model time excludes loading, preprocessing, serialization
+and compilation. Worker wall time includes one warmup and five predictions;
+it is not a repeated single-request cold-start measurement.
+
+All ten same-seed prediction comparisons pass the locked 1e-3 aligned RMSD
+and confidence gates. Maximum aligned RMSD / confidence delta are 9.95e-5
+Angstrom / 1.15e-5 at N1000 (7,979 atoms), and 9.73e-5 Angstrom / 7.63e-6
+at N1536 (12,139 atoms). These establish agreement with the preceding
+implementation on two inputs, not experimental structure accuracy.
+
+[Model evidence](../provenance/protenix_dual_projection_model_67b274a.json)
+records input/configuration identity, source and binary fingerprints,
+all timing samples, dispatch counters and output comparisons. Raw reports
+remain under DiamondHill `outputs/benchmarks/dual-projection-model-67b274a/`.

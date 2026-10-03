@@ -1,4 +1,4 @@
-"""Validate the opt-in fused FP32 dual projection and its dispatch guards."""
+"""Validate the capability-gated fused FP32 dual projection and its dispatch guards."""
 import os
 import subprocess
 import sys
@@ -10,7 +10,7 @@ from fireprot.backends.amd import triangle_multiplication as tm
 HIP = pytest.mark.skipif(os.environ.get('FIREPROT_RUN_HIP_TESTS')!='1' or not torch.version.hip,
                         reason='explicit HIP opt-in required')
 
-@pytest.mark.parametrize('flag,expected',[(None,False),('0',False),('1',True)])
+@pytest.mark.parametrize('flag,expected',[(None,True),('0',False),('1',True)])
 def test_dual_projection_environment(flag,expected):
     env=os.environ.copy();env.pop('FIREPROT_ENABLE_DUAL_PROJECTION',None)
     if flag is not None:env['FIREPROT_ENABLE_DUAL_PROJECTION']=flag

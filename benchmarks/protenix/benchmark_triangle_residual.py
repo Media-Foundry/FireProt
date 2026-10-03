@@ -56,6 +56,7 @@ def main():
         install('hipblas'); ext=load_amd_extension(); assert ext is not None
         tm._vector_packed_enabled = False  # Keep the pre-promotion control explicit.
         tm._vector_norm_enabled = False
+        tm._dual_projection_enabled = False
         pack = ext.sigmoid_pack_f32_128
         if args.vector_pack:
             pack_source=REPO_ROOT/'benchmarks/protenix/csrc/triangle_pack_vector_probe.cpp'

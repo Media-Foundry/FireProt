@@ -89,3 +89,39 @@ fallback. Validate a non-default stream and unsupported inputs, then run
 same-source Mini-default C4/S1 model A/B comparisons at both lengths with
 dispatch counts and the locked coordinate/confidence gates. No new end-to-end
 speedup is established by this experiment, and runtime defaults are unchanged.
+
+## Opt-in integration candidate
+
+Candidate `6ffcc776d282a1370ef60b40db13b2fc61c29ad5` adds
+`FIREPROT_ENABLE_QKV_PROJECTION=1`. Set it before installing the Protenix
+runtime hooks. It remains disabled by default pending model validation.
+The N1536 shape also requires `FIREPROT_ENABLE_LONG1536=1`.
+
+The hook requires identical data pointers, shapes, strides, devices and dtypes
+for query and key/value input, exact measured
+input shapes, contiguous aligned FP32 tensors on gfx90a, inference mode, four
+heads of width 32, and Q scaling enabled. Autocast, biased projections,
+OpenfoldLinear precision overrides, custom linear subclasses, and local
+projection hooks use native preparation. The C++ binding independently checks
+shape, dtype, alignment, device, architecture, and disabled gradient recording,
+allocates distinct output storage, and launches on the input device's current
+HIP stream. Output Q/K/V share one allocation but occupy disjoint regions.
+
+Runtime manifests expose `hooks.qkv_projection` with `enabled` and counters
+`n1000`, `n1536`, and `fallback`. Unsupported attention calls retain native
+preparation. Extension build failure also falls back.
+
+Local regression: 133 passed, 45 HIP tests skipped. GPU 7 validation:
+12 passed across QKV and existing dual-projection tests, with passing isolation
+monitors on GPUs 6 and 7. QKV tests cover both exact shapes, non-default streams,
+repeated calls, zero and positive/negative large input rows, input preservation,
+output strides, unsupported weights, scaling, training, autocast, precision,
+local hooks, bias, and unavailable-extension fallback. Full-model timing and
+prediction agreement are separate gates.
+
+The first model attempt at `6ffcc77` selected zero fused QKV calls: upstream
+chunking independently creates equivalent query and key/value views. The
+initial Python object-identity guard rejected all 2,592 calls in N1536. That
+attempt is not a fused-path performance result. The view regression test fails
+on the initial implementation; the corrected guard accepts identical tensor
+regions while rejecting distinct cross-attention storage.

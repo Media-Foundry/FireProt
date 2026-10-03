@@ -20,7 +20,11 @@ def supported(module: Any, q_x: Any, kv_x: Any, apply_scale: bool) -> bool:
         return False
     if torch.is_autocast_enabled("cuda"):
         return False
-    if q_x is not kv_x or tuple(q_x.shape) not in {(1000, 1000, 128), (512, 1536, 128)}:
+    if tuple(q_x.shape) not in {(1000, 1000, 128), (512, 1536, 128)}:
+        return False
+    if (q_x.shape != kv_x.shape or q_x.stride() != kv_x.stride()
+            or q_x.device != kv_x.device or q_x.dtype != kv_x.dtype
+            or q_x.data_ptr() != kv_x.data_ptr() or kv_x.requires_grad):
         return False
     if q_x.shape[1] == 1536 and os.environ.get("FIREPROT_ENABLE_LONG1536") != "1":
         return False

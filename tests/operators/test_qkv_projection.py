@@ -46,7 +46,7 @@ def test_qkv_stream_numerics_and_guards(batch, n, monkeypatch):
         reference = module._prep_qkv(x, x)
         before = qkv.manifest()["counts"][f"n{n}"]
         for _ in range(3):
-            actual = qkv.prepare(module=module, q_x=x, kv_x=x, apply_scale=True,
+            actual = qkv.prepare(module=module, q_x=x, kv_x=x.view_as(x), apply_scale=True,
                                  native=lambda: pytest.fail("unexpected fallback"))
             for a, b in zip(actual, reference):
                 assert a.shape == (batch, 4, n, 32)
@@ -56,7 +56,8 @@ def test_qkv_stream_numerics_and_guards(batch, n, monkeypatch):
         for t, original in zip((x, *weights), saved):
             torch.testing.assert_close(t, original, atol=0, rtol=0)
         assert not qkv.supported(module, x, x, False)
-        assert not qkv.supported(module, x, x.view_as(x), True)
+        assert qkv.supported(module, x, x.view_as(x), True)
+        assert not qkv.supported(module, x, x.clone(), True)
         assert not qkv.supported(module.train(), x, x, True)
         module.eval()
         with torch.autocast("cuda", dtype=torch.bfloat16):

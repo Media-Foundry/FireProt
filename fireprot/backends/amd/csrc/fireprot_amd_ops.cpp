@@ -45,7 +45,10 @@ torch::Tensor fireprot_sigmoid_mul_out_f32(torch::Tensor activation,torch::Tenso
 torch::Tensor fireprot_triangle_vector_pack(torch::Tensor gate,torch::Tensor value);
 torch::Tensor fireprot_triangle_residual(torch::Tensor gate,torch::Tensor value,torch::Tensor z,bool add);
 
+torch::Tensor fireprot_packed_norm_vector(torch::Tensor input,torch::Tensor weight,torch::Tensor bias,double epsilon);
+
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, module) {
+  module.def("packed_norm_vector", &fireprot_packed_norm_vector);
   module.def("triangle_vector_pack", &fireprot_triangle_vector_pack);
   module.def("triangle_residual", &fireprot_triangle_residual);
   module.def("sigmoid_mul_out_f32", &fireprot_sigmoid_mul_out_f32,

@@ -644,3 +644,65 @@ torch::Tensor fireprot_triangle_residual(torch::Tensor gate,torch::Tensor value,
   C10_CUDA_KERNEL_LAUNCH_CHECK();
   return z;
 }
+
+namespace {
+// Emulate the old wave64 tree with four consecutive channels per lane.
+template<bool Square>
+__device__ float packed_norm_original_tree(float a,float b,float c,float d) {
+    float aa=__shfl_down(a,16,32),bb=__shfl_down(b,16,32);
+    float cc=__shfl_down(c,16,32),dd=__shfl_down(d,16,32);
+    if constexpr(Square) {a=a*a+aa*aa;b=b*b+bb*bb;c=c*c+cc*cc;d=d*d+dd*dd;}
+    else {a+=aa;b+=bb;c+=cc;d+=dd;}
+    for(int shift=8;shift;shift/=2) {
+        a+=__shfl_down(a,shift,32);b+=__shfl_down(b,shift,32);
+        c+=__shfl_down(c,shift,32);d+=__shfl_down(d,shift,32);
+    }
+    return __shfl((a+c)+(b+d),0,32);
+}
+
+__global__ void packed_norm_vector_kernel(const float4* input,const float4* weight,
+    const float4* bias,float4* output,int rows,float eps) {
+  __shared__ float tile[32][129];
+  const int base=blockIdx.x*32;
+  for(int i=threadIdx.x;i<128*8;i+=blockDim.x) {
+    const int c=i/8,r=(i%8)*4;
+    const float4 x=input[(c*rows+base+r)/4];
+    tile[r][c]=x.x;tile[r+1][c]=x.y;tile[r+2][c]=x.z;tile[r+3][c]=x.w;
+  }
+  __syncthreads();
+  const int lane=threadIdx.x%32,group=threadIdx.x/32,c=lane*4;
+  const float4 w=weight[lane],b=bias[lane];
+  for(int r=group;r<32;r+=8) {
+    float a=tile[r][c],d=tile[r][c+1],e=tile[r][c+2],f=tile[r][c+3];
+    const float mean=packed_norm_original_tree<false>(a,d,e,f)/128;
+    a-=mean;d-=mean;e-=mean;f-=mean;
+    const float inv=rsqrtf(packed_norm_original_tree<true>(a,d,e,f)/128+eps);
+    output[(base+r)*32+lane]=make_float4(a*inv*w.x+b.x,d*inv*w.y+b.y,
+                                        e*inv*w.z+b.z,f*inv*w.w+b.w);
+  }
+}
+} // namespace
+
+torch::Tensor fireprot_packed_norm_vector(torch::Tensor input,torch::Tensor weight,
+                                         torch::Tensor bias,double epsilon) {
+  check_common(input,"input");check_common(weight,"weight");check_common(bias,"bias");
+  TORCH_CHECK(input.dim()==3 && input.size(0)==128 && input.size(1)==input.size(2) &&
+      (input.size(1)==1000 || input.size(1)==1536),"requires exact [128,N,N], N1000 or N1536");
+  TORCH_CHECK(weight.numel()==128 && bias.numel()==128,"requires 128 affine values");
+  TORCH_CHECK(input.device()==weight.device() && input.device()==bias.device(),"devices must match");
+  for(const auto& tensor : {input,weight,bias}) {
+    TORCH_CHECK(reinterpret_cast<std::uintptr_t>(tensor.data_ptr())%16==0,"requires 16-byte alignment");
+  }
+  TORCH_CHECK(epsilon>0,"epsilon must be positive");
+  const c10::DeviceGuard guard(input.device());
+  const int n=input.size(1),rows=n*n;
+  auto output=torch::empty({n,n,128},input.options());
+  const auto stream=c10::hip::getCurrentHIPStream(input.get_device());
+  hipLaunchKernelGGL(packed_norm_vector_kernel,dim3(rows/32),dim3(256),0,stream.stream(),
+      reinterpret_cast<const float4*>(input.data_ptr<float>()),
+      reinterpret_cast<const float4*>(weight.data_ptr<float>()),
+      reinterpret_cast<const float4*>(bias.data_ptr<float>()),
+      reinterpret_cast<float4*>(output.data_ptr<float>()),rows,static_cast<float>(epsilon));
+  C10_CUDA_KERNEL_LAUNCH_CHECK();
+  return output;
+}

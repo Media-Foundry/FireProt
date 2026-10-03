@@ -32,10 +32,13 @@ _long_fused_gate_enabled = (
 _long_packed_enabled = os.environ.get("FIREPROT_DISABLE_LONG_TRIANGLE_PACKED") != "1"
 _vector_packed_enabled = os.environ.get("FIREPROT_ENABLE_TRIANGLE_VECTOR", "1") == "1"
 _vector_counts = {"n1000": 0, "n1536": 0, "fallback": 0}
+_vector_norm_enabled = os.environ.get("FIREPROT_ENABLE_VECTOR_PACKED_NORM") == "1"
+_norm_counts = {"n1000": 0, "n1536": 0}
 
 
 def vector_manifest() -> dict[str, Any]:
-    return {"enabled": _vector_packed_enabled, "counts": dict(_vector_counts)}
+    return {"enabled": _vector_packed_enabled, "counts": dict(_vector_counts),
+            "packed_norm_enabled": _vector_norm_enabled, "packed_norm_counts": dict(_norm_counts)}
 
 
 
@@ -286,9 +289,11 @@ def _long_sequence_packed(
     contracted = packed_bmm(a, b, module._outgoing)
     del a, b
     norm = module.layer_norm_out
-    output = extension.packed_layer_norm_f32_128(
-        contracted, norm.weight, norm.bias, norm.eps
-    )
+    vector_norm = _vector_norm_enabled and tuple(z.shape) in (LONG_VALIDATED_SHAPE, LONG1536_SHAPE)
+    norm_fn = extension.packed_norm_vector if vector_norm else extension.packed_layer_norm_f32_128
+    output = norm_fn(contracted, norm.weight, norm.bias, norm.eps)
+    if vector_norm:
+        _norm_counts[f"n{z.shape[0]}"] += 1
     del contracted
     output = module.linear_z(output)
     if vector:

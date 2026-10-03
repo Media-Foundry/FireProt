@@ -209,11 +209,20 @@ def _hip_transition(
     original_shape = x.shape
     matrix = x.reshape(-1, PAIR_CHANNELS)
     normalized = module.layernorm1(matrix)
-    activation = module.linear_no_bias_a(normalized)
-    gate = module.linear_no_bias_b(normalized)
-    del normalized
-    gate = extension.silu_mul_f32(activation, gate)
-    del activation
+    from fireprot.backends.amd.transition_projection import supported
+
+    if supported(module, normalized) and hasattr(extension, "transition_projection"):
+        gate = extension.transition_projection(
+            normalized, module.linear_no_bias_a.weight, module.linear_no_bias_b.weight
+        )
+        _fast_path_counts[(TRANSITION_OPERATION, "amd-gfx90a-transition-projection")] += 1
+        del normalized
+    else:
+        activation = module.linear_no_bias_a(normalized)
+        gate = module.linear_no_bias_b(normalized)
+        del normalized
+        gate = extension.silu_mul_f32(activation, gate)
+        del activation
     output = module.linear_no_bias(gate)
     return output.reshape(original_shape)
 

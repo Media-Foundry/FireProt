@@ -55,7 +55,11 @@ torch::Tensor fireprot_qkv_projection(torch::Tensor input,torch::Tensor wq,torch
 
 torch::Tensor fireprot_transposed_layer_norm(torch::Tensor input,torch::Tensor weight,torch::Tensor bias,double epsilon,bool subgroup);
 
+torch::Tensor fireprot_transition_projection(torch::Tensor input,torch::Tensor wa,torch::Tensor wb);
+
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, module) {
+  module.def("transition_projection", &fireprot_transition_projection,
+      "FireProt FP32 dual transition projection with SiLU gate");
   module.def("transposed_layer_norm", &fireprot_transposed_layer_norm,
       pybind11::arg("input"), pybind11::arg("weight"), pybind11::arg("bias"),
       pybind11::arg("epsilon"), pybind11::arg("subgroup") = false);

@@ -66,6 +66,11 @@ confirm gains without dense operator instrumentation.
 N1000, native mixed precision, seed 101, four recycles (five trunk passes),
 30 diffusion steps, one sample, SMI GPU 5 / PCI `0000:93:00.0`:
 
+The native runner pads 1000 residues to a **1024-residue bucket** with 24 masked
+positions. N1536 uses bucket1536 without padding. Initial operator screening at
+an unpadded N1000 therefore does not reproduce the complete model's dimensions
+or mask. Preserve native buckets when comparing models.
+
 | Measurement | Seconds |
 | --- | ---: |
 | First complete request, as scoped above | 184.476 |
@@ -105,3 +110,61 @@ large intermediate-tensor passes is a higher priority than isolated projections.
 
 All manifests, failed trials, probe sources, and the profiler table are in
 [`provenance/atlasfold_initial_baseline.json`](../provenance/atlasfold_initial_baseline.json).
+
+## Exact padding-mask candidate
+
+The first unpadded-N1000 integration experiment selected **zero** optimized
+calls and fell back 1056 times across two predictions. Its unchanged latency
+and matching outputs do not validate any acceleration.
+
+The corrected candidate accepts the actual `[1,1024,1024,128]` BF16 pair tensor
+and verifies the exact outer-product mask for 1000 valid residues. It chunks
+the outer triangle axis by 128, applies the original negative mask value only
+to padded keys/outer rows, then performs the original bias addition, softmax,
+value contraction, gate, and projection. Other inputs use native fallback.
+
+| N1000 measurement | Native | Padding candidate | Ratio |
+| --- | ---: | ---: | ---: |
+| First complete request | 184.476 s | 136.834 s | 1.348x |
+| First prediction | 179.710 s | 132.086 s | 1.361x |
+| Warm prediction | 177.577 s | 129.794 s | 1.368x |
+| First peak allocated | 54.084 GB | 16.737 GB | 69.05% lower |
+
+All 1056 attention calls select the corrected candidate. Both prediction
+comparisons have zero coordinate, pLDDT, PAE, and pTM deltas. All 240 AtlasLM
+block calls per prediction remain present. Selected-device isolation passes.
+These observations are experimental first/warm pairs, not repeated medians;
+the optimized adapter is not enabled by default.
+
+A handwritten HIP mask/bias fusion additionally passes the initial operator
+comparison with zero output deltas, measuring about 132/136 ms for starting/
+ending attention versus 178/323 ms native at the actual padded shape. It
+retains BF16 rounding between the two additions. Probe source, all
+failed/unselected trials, and manifests:
+[`atlasfold_padding_mask_trials.json`](../provenance/atlasfold_padding_mask_trials.json).
+
+### Handwritten HIP complete-model validation
+
+The HIP fusion now also passes both complete-model comparisons with identical
+raw bytes for coordinates, pLDDT, PAE, and pTM. All 1056 attention calls select
+the candidate, all LM calls remain, and selected-device isolation passes.
+
+| N1000 measurement | Native | HIP candidate | Ratio |
+| --- | ---: | ---: | ---: |
+| First complete request | 184.476 s | 123.126 s | 1.498x |
+| First prediction | 179.710 s | 118.396 s | 1.518x |
+| Warm prediction | 177.577 s | 116.362 s | 1.526x |
+| First peak allocated | 54.084 GB | 16.746 GB | 69.04% lower |
+
+Twelve direct-kernel checks also pass with exact numerical equality (matching
+NaNs), covering fully/partially/unmasked rows, chunk offsets, infinities/NaNs,
+and a non-default stream. The first build failed because an unavailable Torch
+HIP error-checking macro was used; replacing it with the installed equivalent
+resolved compilation. No scientific computation was changed by that fix.
+
+The extension cache is warm and compilation is excluded from request timing.
+This is still one first/warm process pair per route; repeat the measurements
+without dense instrumentation before promotion. The candidate scripts and HIP
+source are archived in provenance; packaging the optimized adapter, validating
+N1536 against the bounded-memory reference, and broader inputs remain active
+work. Neither candidate is a production default yet.

@@ -171,7 +171,11 @@ def main():
         torch.cuda.synchronize()
         report['load_seconds'] = time.perf_counter() - request_start
         report['config'] = dataclasses.asdict(model.cfg)
-        report['sampling'] = dataclasses.asdict(get_sampling_config(len(sequence)))
+        runner = get_runner(model)
+        bucket = runner._get_length_bucket(len(sequence))
+        report['effective_bucket_length'] = bucket
+        report['padding_residues'] = bucket - len(sequence)
+        report['sampling'] = dataclasses.asdict(get_sampling_config(bucket))
         stages = StageEvents(torch)
         for method in ('inference', 'run_trunk', 'run_lm_embedder'):
             stages.wrap(model, method, method)
@@ -183,7 +187,6 @@ def main():
         for module in model.modules():
             if type(module).__name__.startswith('Triangle'):
                 stages.wrap(module, 'forward', type(module).__name__)
-        runner = get_runner(model)
         save()
         for repeat in range(args.repeats):
             stages.events.clear()

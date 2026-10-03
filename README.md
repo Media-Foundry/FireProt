@@ -17,7 +17,7 @@ Protenix v1.1.0 is the first working adapter target. The repository now contains
 - a validated CK Tile FP32 triangle-attention path for the exact unmasked 1,000-token gfx90a bucket, with SDPA fallback;
 - an independent Protenix patch branch that exposes FireProt dispatch without changing native defaults.
 
-AtlasFold, OpenFold, ESMFold, Base-model coverage, BF16 promotion, additional long-sequence buckets, and multi-GPU execution remain future work.
+AtlasFold, OpenFold, ESMFold, Base-model coverage, BF16 promotion, additional long-sequence buckets, and general multi-GPU execution remain future work.
 
 ## Experimental 1,536-residue workload
 
@@ -38,6 +38,13 @@ LayerNorm and gated transition now follow `FIREPROT_ENABLE_LONG1536=1` by
 default; set `FIREPROT_ENABLE_LONG1536_EPILOGUES=0` to disable them. Native
 agreement passed. These results retain the same Mini-default FP32 C4/S1
 workload and are warm model timings, excluding loading and preprocessing.
+
+An opt-in two-GCD attention experiment has now passed model numerical
+checks, but regresses warm model latency from **36.691 to 38.950 s** even
+after correcting temporary-storage lifetimes and adding boundary
+synchronization. Its isolated 1.41x operator speedup does not transfer to
+the model. It remains disabled; see the
+[two-GCD model comparison](docs/protenix-long1536.md#synchronized-two-gcd-model-validation).
 
 ## Verified 1,000-token MI250 result
 

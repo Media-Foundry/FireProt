@@ -944,3 +944,132 @@ monitoring of both GPUs, and same-source C4/S1 timing and coordinate gates.
 No E2E speedup, CK improvement, or default promotion follows from these
 SDPA scheduling probes. See
 [granularity evidence](../provenance/protenix_attention_granularity_79cf12d.json).
+
+### Two-GCD runtime integration and queueing diagnosis
+
+Commit `7ac2c72` adds an opt-in runtime route under
+`FIREPROT_ENABLE_TWO_GCD_ATTENTION=1`. It accepts only FP32 inference with
+exact `[512,4,1536,32]` head-last QKV storage and one triangle bias, both
+explicitly visible physical GPUs 6 and 7, two gfx90a devices and bidirectional
+peer access. Other inputs keep single-device SDPA. The route keeps a
+320-row primary shard and a 192-row secondary shard. The manifest records
+actual dual selections separately from registry SDPA selection counts.
+
+The model harness now supports `measurement.additional_physical_devices`.
+With `HIP_VISIBLE_DEVICES=7,6`, set this list to `[6]`: the primary remains
+physical GPU 7. Both cards are checked before launch and continuously
+monitored against the worker PID. Missing second-device monitoring is an
+error when dual attention is enabled. All remote work joins the caller
+stream before downstream model work and the model end event.
+
+The first same-source comparison retained Mini-default, N1536, FP32,
+TF32 off, hipBLAS, C4/S1, sample 1, seed 101, no MSA/templates,
+`expandable_segments:True`, one warmup and three measured predictions.
+Dual ran before single. Both monitors passed and all 1,728 attention calls
+selected the candidate without fallback.
+
+| Initial model route | Single GCD | Two GCDs |
+| --- | ---: | ---: |
+| Model median | 36.810 s | 41.830 s |
+| Triangle attention median | 18.810 s | 21.408 s |
+| Primary peak allocated | 22,721,185,792 B | 22,721,185,792 B |
+| Primary median peak reserved | 23,737,663,488 B | 68,094,525,440 B |
+
+All three coordinate/confidence comparisons pass the unchanged `1e-3`
+gates over 12,139 atoms each. Correctness does not make the initial route
+a performance improvement. It remains disabled by default.
+
+The follow-up operator diagnostic reproduces actual runtime calls and
+submits groups of eight calls before synchronizing. Times below are wall
+time per call, including both-device completion; five warmup groups and
+twenty measured groups use seed 419 and the exact FP32 shape. All outputs
+match SDPA exactly and both GPU monitors pass.
+
+- Initial runtime: about 38.0 ms with either expandable or ordinary
+  allocator segments, versus single-GCD SDPA at about 34.85 ms.
+- Replacing cross-stream allocator records with explicit storage handoff
+  lowers reserved allocations in the replay but does not restore speed.
+- The same handoff route, synchronizing after each call: 24.70-24.76 ms.
+- A probe-style dedicated local stream also takes about 38.06 ms when
+  eight calls are enqueued without a host wait. Caller default versus
+  explicit stream does not resolve the regression.
+- With `FIREPROT_TWO_GCD_SYNCHRONIZE=1`, the integrated route synchronizes
+  its joined caller stream at the attention boundary. Eight-call groups
+  then recover **24.77-24.80 ms**, including this wait. The unsynchronized
+  probe schedule in the same process remains about 38.04 ms.
+
+This establishes queue-sensitive performance, not a proven explanation
+in terms of a specific HIP dependency, cache or hardware power mechanism.
+The original single-call microbenchmark alone did not predict model
+behavior. Commit `11d9403` retains explicit storage handoff and exposes
+the boundary synchronization experiment. Expanded GPU tests cover both
+modes, non-default caller streams, extreme bias, input preservation,
+repeated allocations, and four full calls enqueued before validation:
+three tests pass under dual GPU monitoring. The local focused suite has
+13 passes and two HIP skips; the earlier full local regression has 113
+passes and 24 skips before the extra GPU parameterization.
+
+```bash
+HIP_VISIBLE_DEVICES=7,6 PYTHONPATH=.:Protenix \
+  PYTORCH_ALLOC_CONF=expandable_segments:True FIREPROT_TWO_GCD_SYNCHRONIZE=1 \
+  python -m benchmarks.protenix.benchmark_two_gcd_runtime \
+  --queued-calls 8 --output outputs/benchmarks/two_gcd_runtime.json
+```
+
+See [initial model and queueing evidence](../provenance/protenix_two_gcd_diagnosis_7ac2c72.json).
+The following section evaluates the synchronized runtime in a separate
+same-source full-model comparison; its operator result alone is not an E2E claim.
+
+### Synchronized two-GCD model validation
+
+The subsequent same-source `11d9403` comparison enables both
+`FIREPROT_ENABLE_TWO_GCD_ATTENTION=1` and
+`FIREPROT_TWO_GCD_SYNCHRONIZE=1` for the candidate. The baseline sets only
+the first flag to zero. The model, input, FP32/TF32 policy, hipBLAS,
+C4/S1, sample count, seed, allocator, warmup/repetition counts and output
+serialization policy match the preceding experiment. Enabled runs first;
+physical GPUs 7 and 6 are monitored for both runs, with GPU 6 idle for the
+single-GCD baseline. Both monitors pass, all 1,728 candidate attention
+calls select the dual path, and no fallback is recorded.
+
+| Metric | Single GCD | Synchronized two GCDs |
+| --- | ---: | ---: |
+| Warm model median | 36.691 s | 38.950 s |
+| Warm model p95 | 36.895 s | 39.097 s |
+| Triangle attention median | 18.806 s | 21.066 s |
+| Primary peak allocated | 22,721,185,792 B | 22,721,185,792 B |
+| Primary median peak reserved | 23,737,663,488 B | 23,905,435,648 B |
+| Entire benchmark worker wall time | 207.491 s | 217.598 s |
+
+The secondary GCD peak allocation is 792,723,456 bytes. Storage handoff
+and boundary synchronization together eliminate the initial model's
+reserved-memory growth, but the candidate remains **6.2% slower** than
+the current single-GCD default. The worker wall time includes one warmup,
+three predictions, loading, preprocessing and output handling; it is not
+a cold single-request latency. Stage boundaries may overlap and are not
+additive. The joined-stream model timer includes all remote work and
+boundary waits.
+
+All three output comparisons pass over 12,139 atoms each. Maximum aligned
+RMSD is `1.12417e-4 A`, and maximum confidence delta is `7.62939e-6`, below
+the locked `1e-3` gates. This validates same-seed agreement with the current
+accelerated single-device baseline, not experimental structural accuracy.
+
+The route remains **disabled by default**. Neither its extra GCD nor the
+single-call microbenchmark justifies an E2E improvement claim. Further
+work must profile the real model's attention region, including projection,
+copy, compute and waits; another isolated tile or stream tweak is
+insufficient evidence for promotion. The checked-in diagnostic config
+retains four cycles and both-device monitoring:
+
+```bash
+HIP_VISIBLE_DEVICES=7,6 PYTHONPATH=.:Protenix \
+  PYTORCH_ALLOC_CONF=expandable_segments:True FIREPROT_ENABLE_LONG1536=1 \
+  FIREPROT_ENABLE_TWO_GCD_ATTENTION=1 FIREPROT_TWO_GCD_SYNCHRONIZE=1 \
+  python benchmarks/protenix/profile_inference.py \
+  --config benchmarks/protenix/configs/mi250-long1536-two-gcd.json \
+  --backend fireprot --blas-backend hipblas \
+  --output-dir outputs/benchmarks/two-gcd-experiment
+```
+
+See [same-source model evidence](../provenance/protenix_two_gcd_model_11d9403.json).

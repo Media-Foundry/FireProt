@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "suite": "protenix-mi250-long1536",
+  "output_root": "outputs/benchmarks/protenix-long1536",
+  "measurement": {
+    "warmups": 1,
+    "repetitions": 3,
+    "dump_outputs": true,
+    "cache_state": "warm-within-process",
+    "device_policy": "exclusive",
+    "exclusive_max_gpu_use_percent": 5,
+    "exclusive_max_vram_used_bytes": 268435456,
+    "process_monitor_interval_seconds": 1.0,
+    "reject_external_gpu_processes": true,
+    "clock_policy": "record-current",
+    "additional_physical_devices": [
+      6
+    ]
+  },
+  "blas_benchmark": {
+    "warmups": 10,
+    "iterations": 50,
+    "bmm_iterations": 25,
+    "minimum_speedup": 1.1,
+    "dtypes": [
+      "float32"
+    ],
+    "shapes": []
+  },
+  "workloads": [
+    {
+      "id": "mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32",
+      "input": "benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+      "token_count": 1536,
+      "model_name": "protenix_mini_default_v0.5.0",
+      "dtype": "fp32",
+      "cycles": 4,
+      "diffusion_steps": 1,
+      "samples": 1,
+      "seeds": [
+        101
+      ],
+      "cache": true,
+      "use_msa": false,
+      "use_template": false,
+      "enable_fusion": true,
+      "enable_tf32": false,
+      "trimul_kernel": "torch",
+      "triatt_kernel": "torch"
+    }
+  ]
+}

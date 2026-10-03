@@ -20,7 +20,18 @@ Protenix v1.1.0 is the first working adapter target. The repository now contains
 
 AtlasFold, OpenFold, ESMFold, Base-model coverage, BF16 promotion, additional long-sequence buckets, and general multi-GPU execution remain future work.
 
-## Latest original-Torch comparison
+## Latest single-request E2E comparison
+
+Fresh-process Mini-default FP32 C4/S1, seed 101, zero warmups, one prediction per worker, three pairs per length:
+
+| Length | Native Torch | Current FireProt | Complete request speedup |
+| --- | ---: | ---: | ---: |
+| 1000 aa | 82.074 s | 27.949 s | **2.937x** |
+| 1536 aa | 177.345 s | 45.596 s | **3.889x** |
+
+All six output comparisons pass. These worker timings include loading, feature preparation, prediction and output writing; filesystem/kernel caches are warm and parent launch/preflight is excluded. Both sides share the current checkout's int64 bond-mask construction; the native route loads no FireProt runtime. See [exact scope, model time, memory and evidence](docs/protenix-native-requests.md).
+
+## Historical warm-model original-Torch comparison
 
 Fresh same-source Mini-default FP32 C4/S1 measurements, seed 101, one warmup and three measured predictions per side:
 

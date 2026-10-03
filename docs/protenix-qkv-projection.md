@@ -100,7 +100,7 @@ The N1536 shape also requires `FIREPROT_ENABLE_LONG1536=1`.
 The hook requires identical data pointers, shapes, strides, devices and dtypes
 for query and key/value input, exact measured
 input shapes, contiguous aligned FP32 tensors on gfx90a, inference mode, four
-heads of width 32, and Q scaling enabled. Autocast, biased projections,
+heads of width 32, and Q scaling enabled. Non-FP32 autocast, biased projections,
 OpenfoldLinear precision overrides, custom linear subclasses, and local
 projection hooks use native preparation. The C++ binding independently checks
 shape, dtype, alignment, device, architecture, and disabled gradient recording,
@@ -125,3 +125,11 @@ initial Python object-identity guard rejected all 2,592 calls in N1536. That
 attempt is not a fused-path performance result. The view regression test fails
 on the initial implementation; the corrected guard accepts identical tensor
 regions while rejecting distinct cross-attention storage.
+
+The subsequent `0aa10b8` attempt selected 144 calls but rejected the other
+2,448 because the FP32 trunk runs inside a FP32 autocast context. A single-call
+diagnostic confirmed the remaining shape/layout/weight checks match. The
+corrected capability check permits FP32 autocast while retaining BF16/FP16
+fallback. The regression now runs within the model's FP32 autocast context;
+it fails before this correction. These incomplete-selection attempts are not
+used to claim a fused-QKV model speedup.

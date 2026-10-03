@@ -18,7 +18,7 @@ def supported(module: Any, q_x: Any, kv_x: Any, apply_scale: bool) -> bool:
         return False
     if module.training or torch.is_grad_enabled() or not apply_scale:
         return False
-    if torch.is_autocast_enabled("cuda"):
+    if torch.is_autocast_enabled("cuda") and torch.get_autocast_dtype("cuda") != torch.float32:
         return False
     if tuple(q_x.shape) not in {(1000, 1000, 128), (512, 1536, 128)}:
         return False

@@ -33,7 +33,7 @@ def test_qkv_stream_numerics_and_guards(batch, n, monkeypatch):
     assert ext is not None
     torch.manual_seed(1021)
     torch.backends.cuda.matmul.allow_tf32 = False
-    with torch.inference_mode(), torch.cuda.stream(torch.cuda.Stream()):
+    with torch.inference_mode(), torch.cuda.stream(torch.cuda.Stream()), torch.autocast("cuda", dtype=torch.float32):
         module = Attention(128, 128, 128, 32, 4).cuda().eval()
         for p in module.parameters():
             p.normal_(0, .1)

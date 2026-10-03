@@ -501,5 +501,340 @@
     "fused_qkv_calls": 0,
     "fallback_calls": 2592,
     "disposition": "Not a fused-path performance result. Remaining batch stopped after the completed enabled manifest showed zero selection."
+  },
+  "fp32_autocast_regression_before": {
+    "preflight": {
+      "available": true,
+      "command": [
+        "/usr/bin/rocm-smi",
+        "--showpids",
+        "--showuse",
+        "--showmeminfo",
+        "vram",
+        "--showclocks",
+        "--json"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "data": {
+        "card0": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "901411222",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card1": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "562499446",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card2": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "1121134209",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "10981376"
+        },
+        "card3": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "794222033",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card4": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "691003861",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card5": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "1109430933",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "10981376"
+        },
+        "card6": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "451402548",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card7": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "533768193",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        }
+      },
+      "visible_devices": "7",
+      "selected_physical_index": 7,
+      "exclusive_check": {
+        "required": true,
+        "passed": true,
+        "gpu_use_percent": 0,
+        "vram_used_bytes": 11014144,
+        "max_gpu_use_percent": 5,
+        "max_vram_used_bytes": 268435456
+      }
+    },
+    "sibling": {
+      "6": {
+        "gpu_use_percent": 0,
+        "vram_used_bytes": 11014144,
+        "passed": true
+      }
+    },
+    "exit_code": 1,
+    "monitors": [
+      {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 3,
+        "allowed_pid": 913965,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      },
+      {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 7,
+        "interval_seconds": 1.0,
+        "samples": 3,
+        "allowed_pid": 913965,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    ]
+  },
+  "fp32_autocast_regression_after": {
+    "preflight": {
+      "available": true,
+      "command": [
+        "/usr/bin/rocm-smi",
+        "--showpids",
+        "--showuse",
+        "--showmeminfo",
+        "vram",
+        "--showclocks",
+        "--json"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "data": {
+        "card0": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "901411281",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card1": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "562499504",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card2": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "1121134266",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "10981376"
+        },
+        "card3": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "794222090",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card4": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "691003916",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card5": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "1109432354",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "10981376"
+        },
+        "card6": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "451402605",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card7": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "533768250",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        }
+      },
+      "visible_devices": "7",
+      "selected_physical_index": 7,
+      "exclusive_check": {
+        "required": true,
+        "passed": true,
+        "gpu_use_percent": 0,
+        "vram_used_bytes": 11014144,
+        "max_gpu_use_percent": 5,
+        "max_vram_used_bytes": 268435456
+      }
+    },
+    "sibling": {
+      "6": {
+        "gpu_use_percent": 0,
+        "vram_used_bytes": 11014144,
+        "passed": true
+      }
+    },
+    "exit_code": 0,
+    "monitors": [
+      {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 3,
+        "allowed_pid": 914514,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      },
+      {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 7,
+        "interval_seconds": 1.0,
+        "samples": 3,
+        "allowed_pid": 914514,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    ]
+  },
+  "view_fixed_model_attempt": {
+    "source": "0aa10b8806305a0e7926d2a889e1ea7140906012",
+    "length": 1536,
+    "fused_qkv_calls": 144,
+    "fallback_calls": 2448,
+    "disposition": "FP32 autocast guard rejected trunk calls. Batch stopped by expected-selection assertion; not used for performance claims."
   }
 }

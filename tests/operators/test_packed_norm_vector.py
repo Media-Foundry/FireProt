@@ -58,3 +58,13 @@ def test_packed_norm_complete_triangle(n,monkeypatch):
                 torch.testing.assert_close(output,reference,atol=2e-5,rtol=2e-5)
             del module,source,z,reference,output
     torch.cuda.synchronize()
+
+
+@pytest.mark.parametrize('flag,expected',[(None,True),('0',False),('1',True)])
+def test_packed_norm_environment_default(flag,expected):
+    import subprocess
+    import sys
+    env=os.environ.copy();env.pop('FIREPROT_ENABLE_VECTOR_PACKED_NORM',None)
+    if flag is not None:env['FIREPROT_ENABLE_VECTOR_PACKED_NORM']=flag
+    code='from fireprot.backends.amd.triangle_multiplication import vector_manifest; print(vector_manifest()["packed_norm_enabled"])'
+    assert subprocess.check_output([sys.executable,'-c',code],env=env,text=True).strip()==str(expected)

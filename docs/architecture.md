@@ -25,6 +25,8 @@ The complete adapter contract described below has not yet been implemented as a 
 
 The long packed triangle path now defaults to 64-row vectorized HIP sigmoid packing and a fused gated residual update. Same-source Mini FP32 C4/S1 comparisons improve warm model median 10.759 to 10.465 seconds at N1000 and 31.524 to 30.096 seconds at opt-in N1536, with unchanged peak allocated memory and passing coordinate/confidence checks. `FIREPROT_ENABLE_TRIANGLE_VECTOR=0` restores the previous implementation. See [validation](protenix-triangle-vector-probes.md#same-source-model-validation).
 
+Packed output LayerNorm now uses vector global accesses and a subgroup reduction that retains the old channel pairing. Five-repetition same-source model comparisons improve N1000 from 10.466 to 10.360 seconds and N1536 from 30.237 to 29.859 seconds, with unchanged peak allocation and passing prediction comparisons. `FIREPROT_ENABLE_VECTOR_PACKED_NORM=0` restores the previous LayerNorm. The naive reordered reduction was rejected for low-variance disagreement. See [validation](protenix-packed-norm-vector.md#same-source-model-result).
+
 ## 1. Scope
 
 FireProt targets protein structure **inference on AMD GPUs**. It should reproduce upstream model semantics and reduce latency or resource use only where measurements support an optimization. Model adapters own model-specific scientific behavior. The framework owns configuration, resources, execution, observation, and validation. Optimized operators must be independently selectable, reversible, and testable.

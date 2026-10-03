@@ -1,0 +1,1832 @@
+{
+  "schema_version": 1,
+  "candidate_commit": "a5af61b00b85a7889c568302ee7fbbf11c9b39d7",
+  "scope": "Same-source packed LayerNorm comparison; five warm model measurements per side, not cold-request latency.",
+  "build": {
+    "extension_name": "fireprot_amd_ops_3c81c7bc8e03",
+    "library_sha256": "97f39a4507ec03daf6867317f14e8058376250432378c81fe7c1cde6e8e9ea2e",
+    "source_sha256": {
+      "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_amd_ops.cpp": "e3520ec21649c6fb4a9818e55ad23c56ee49d5546b2abecbba0b4e8a0ce04e63",
+      "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_amd_ops.cu": "c5a5618d8300e0ac2e53660de58eaf540000748abd234a02e1d106830a45d80a",
+      "fireprot/backends/amd/triangle_multiplication.py": "6d9b910e881229a2e6eedcb24729ece30126792f9b8ab8073c6ef1ec7e23ffb0"
+    }
+  },
+  "workloads": {
+    "1000": {
+      "workload": {
+        "id": "mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32",
+        "input": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+        "token_count": 1000,
+        "model_name": "protenix_mini_default_v0.5.0",
+        "dtype": "fp32",
+        "cycles": 4,
+        "diffusion_steps": 1,
+        "samples": 1,
+        "seeds": [
+          101
+        ],
+        "cache": true,
+        "use_msa": false,
+        "use_template": false,
+        "enable_fusion": true,
+        "enable_tf32": false,
+        "trimul_kernel": "torch",
+        "triatt_kernel": "torch"
+      },
+      "measurement": {
+        "warmups": 1,
+        "repetitions": 5,
+        "dump_outputs": true,
+        "cache_state": "warm-within-process",
+        "device_policy": "exclusive",
+        "exclusive_max_gpu_use_percent": 5,
+        "exclusive_max_vram_used_bytes": 268435456,
+        "process_monitor_interval_seconds": 1.0,
+        "reject_external_gpu_processes": true,
+        "clock_policy": "record-current",
+        "additional_physical_devices": [
+          6
+        ]
+      },
+      "source": {
+        "fireprot_commit": "a5af61b00b85a7889c568302ee7fbbf11c9b39d7",
+        "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b",
+        "profile_script_sha256": "4ee824921e41bfe3842bc9f7bb6fc35e67fbe43eced78dcba4d57f4ad26b5dee"
+      },
+      "input": {
+        "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+        "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac",
+        "token_count": 1000,
+        "atom_count": null
+      },
+      "allocator": {
+        "PYTORCH_ALLOC_CONF": "expandable_segments:True",
+        "PYTORCH_CUDA_ALLOC_CONF": null
+      },
+      "order": [
+        "enabled",
+        "disabled"
+      ],
+      "comparison": {
+        "schema_version": 1,
+        "created_at": "2026-10-03T06:58:53.127596+00:00",
+        "reference_root": "/media/IntelSSD/fireprot/outputs/benchmarks/packed-norm-model-a5af61b/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions",
+        "candidate_root": "/media/IntelSSD/fireprot/outputs/benchmarks/packed-norm-model-a5af61b/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions",
+        "passed": true,
+        "comparisons": [
+          {
+            "case": "umem_L01000_462bb697ecdcce2f__fireprot_measure_000",
+            "seed": 101,
+            "sample": 0,
+            "reference": {
+              "cif": "outputs/benchmarks/packed-norm-model-a5af61b/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000_sample_0.cif",
+              "confidence": "outputs/benchmarks/packed-norm-model-a5af61b/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000_summary_confidence_sample_0.json"
+            },
+            "candidate": {
+              "cif": "outputs/benchmarks/packed-norm-model-a5af61b/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000_sample_0.cif",
+              "confidence": "outputs/benchmarks/packed-norm-model-a5af61b/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000_summary_confidence_sample_0.json"
+            },
+            "coordinate_tolerance_angstrom": 0.001,
+            "confidence_tolerance": 0.001,
+            "coordinates": {
+              "atom_count": 7979,
+              "finite": true,
+              "raw_rmsd_angstrom": 9.972443273380313e-05,
+              "aligned_rmsd_angstrom": 9.757467417207888e-05,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "finite": true,
+              "max_abs_delta": 2.9802322387695312e-08,
+              "mean_abs_delta": 4.221995671590169e-09,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "passed": true
+          },
+          {
+            "case": "umem_L01000_462bb697ecdcce2f__fireprot_measure_001",
+            "seed": 101,
+            "sample": 0,
+            "reference": {
+              "cif": "outputs/benchmarks/packed-norm-model-a5af61b/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_001/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_001_sample_0.cif",
+              "confidence": "outputs/benchmarks/packed-norm-model-a5af61b/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_001/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_001_summary_confidence_sample_0.json"
+            },
+            "candidate": {
+              "cif": "outputs/benchmarks/packed-norm-model-a5af61b/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_001/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_001_sample_0.cif",
+              "confidence": "outputs/benchmarks/packed-norm-model-a5af61b/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_001/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_001_summary_confidence_sample_0.json"
+            },
+            "coordinate_tolerance_angstrom": 0.001,
+            "confidence_tolerance": 0.001,
+            "coordinates": {
+              "atom_count": 7979,
+              "finite": true,
+              "raw_rmsd_angstrom": 8.683358859867016e-05,
+              "aligned_rmsd_angstrom": 8.585369082608927e-05,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "finite": true,
+              "max_abs_delta": 4.76837158203125e-07,
+              "mean_abs_delta": 6.804863611857096e-08,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "passed": true
+          },
+          {
+            "case": "umem_L01000_462bb697ecdcce2f__fireprot_measure_002",
+            "seed": 101,
+            "sample": 0,
+            "reference": {
+              "cif": "outputs/benchmarks/packed-norm-model-a5af61b/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_002/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_002_sample_0.cif",
+              "confidence": "outputs/benchmarks/packed-norm-model-a5af61b/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_002/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_002_summary_confidence_sample_0.json"
+            },
+            "candidate": {
+              "cif": "outputs/benchmarks/packed-norm-model-a5af61b/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_002/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_002_sample_0.cif",
+              "confidence": "outputs/benchmarks/packed-norm-model-a5af61b/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_002/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_002_summary_confidence_sample_0.json"
+            },
+            "coordinate_tolerance_angstrom": 0.001,
+            "confidence_tolerance": 0.001,
+            "coordinates": {
+              "atom_count": 7979,
+              "finite": true,
+              "raw_rmsd_angstrom": 9.986371128839667e-05,
+              "aligned_rmsd_angstrom": 9.960666125935539e-05,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "finite": true,
+              "max_abs_delta": 3.814697265625e-06,
+              "mean_abs_delta": 4.6218434969584146e-07,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "passed": true
+          },
+          {
+            "case": "umem_L01000_462bb697ecdcce2f__fireprot_measure_003",
+            "seed": 101,
+            "sample": 0,
+            "reference": {
+              "cif": "outputs/benchmarks/packed-norm-model-a5af61b/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_003/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_003_sample_0.cif",
+              "confidence": "outputs/benchmarks/packed-norm-model-a5af61b/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_003/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_003_summary_confidence_sample_0.json"
+            },
+            "candidate": {
+              "cif": "outputs/benchmarks/packed-norm-model-a5af61b/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_003/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_003_sample_0.cif",
+              "confidence": "outputs/benchmarks/packed-norm-model-a5af61b/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_003/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_003_summary_confidence_sample_0.json"
+            },
+            "coordinate_tolerance_angstrom": 0.001,
+            "confidence_tolerance": 0.001,
+            "coordinates": {
+              "atom_count": 7979,
+              "finite": true,
+              "raw_rmsd_angstrom": 8.927220668578186e-05,
+              "aligned_rmsd_angstrom": 8.755554702852785e-05,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "finite": true,
+              "max_abs_delta": 4.291534423828125e-06,
+              "mean_abs_delta": 8.307397365570068e-07,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "passed": true
+          },
+          {
+            "case": "umem_L01000_462bb697ecdcce2f__fireprot_measure_004",
+            "seed": 101,
+            "sample": 0,
+            "reference": {
+              "cif": "outputs/benchmarks/packed-norm-model-a5af61b/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_004/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_004_sample_0.cif",
+              "confidence": "outputs/benchmarks/packed-norm-model-a5af61b/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_004/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_004_summary_confidence_sample_0.json"
+            },
+            "candidate": {
+              "cif": "outputs/benchmarks/packed-norm-model-a5af61b/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_004/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_004_sample_0.cif",
+              "confidence": "outputs/benchmarks/packed-norm-model-a5af61b/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_004/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_004_summary_confidence_sample_0.json"
+            },
+            "coordinate_tolerance_angstrom": 0.001,
+            "confidence_tolerance": 0.001,
+            "coordinates": {
+              "atom_count": 7979,
+              "finite": true,
+              "raw_rmsd_angstrom": 9.594270630907843e-05,
+              "aligned_rmsd_angstrom": 9.465338235715439e-05,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "finite": true,
+              "max_abs_delta": 3.814697265625e-06,
+              "mean_abs_delta": 3.1987826029459633e-07,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "passed": true
+          }
+        ]
+      },
+      "runs": {
+        "enabled": {
+          "status": "ok",
+          "software": {
+            "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:38:16) [GCC 14.3.0]",
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "miopen": null,
+            "miopen_available": false,
+            "preferred_blas": "_BlasBackend.Cublas"
+          },
+          "hardware": {
+            "hostname": "DiamondHill",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.39",
+            "device_index": 0,
+            "device_name": "AMD Instinct MI250X / MI250",
+            "device_arch": [
+              9,
+              0
+            ],
+            "gcn_arch_name": "gfx90a:sramecc+:xnack-",
+            "total_memory_bytes": 68702699520
+          },
+          "process_wall_ms": 115865.04744400736,
+          "gpu_process_monitor": {
+            "available": true,
+            "command": [
+              "/usr/bin/amd-smi",
+              "process",
+              "--json"
+            ],
+            "physical_device_index": 7,
+            "interval_seconds": 1.0,
+            "samples": 91,
+            "allowed_pid": 870759,
+            "external_pids": [],
+            "errors": [],
+            "passed": true
+          },
+          "additional_gpu_process_monitors": [
+            {
+              "available": true,
+              "command": [
+                "/usr/bin/amd-smi",
+                "process",
+                "--json"
+              ],
+              "physical_device_index": 6,
+              "interval_seconds": 1.0,
+              "samples": 91,
+              "allowed_pid": 870759,
+              "external_pids": [],
+              "errors": [],
+              "passed": true
+            }
+          ],
+          "timing_summary": {
+            "warmup": {
+              "model_gpu_ms": {
+                "count": 1,
+                "min": 16808.162109375,
+                "median": 16808.162109375,
+                "p95": 16808.162109375,
+                "max": 16808.162109375,
+                "mean": 16808.162109375
+              },
+              "model_wall_ms": {
+                "count": 1,
+                "min": 16808.290268993005,
+                "median": 16808.290268993005,
+                "p95": 16808.290268993005,
+                "max": 16808.290268993005,
+                "mean": 16808.290268993005
+              },
+              "peak_memory_allocated_bytes": {
+                "count": 1,
+                "min": 9481004032,
+                "median": 9481004032,
+                "p95": 9481004032,
+                "max": 9481004032,
+                "mean": 9481004032.0
+              },
+              "peak_memory_reserved_bytes": {
+                "count": 1,
+                "min": 9940500480,
+                "median": 9940500480,
+                "p95": 9940500480,
+                "max": 9940500480,
+                "mean": 9940500480.0
+              },
+              "stages_gpu_ms": {
+                "atom_attention_decoder": {
+                  "count": 1,
+                  "min": 7.724541187286377,
+                  "median": 7.724541187286377,
+                  "p95": 7.724541187286377,
+                  "max": 7.724541187286377,
+                  "mean": 7.724541187286377
+                },
+                "atom_attention_encoder": {
+                  "count": 1,
+                  "min": 3236.028507232666,
+                  "median": 3236.028507232666,
+                  "p95": 3236.028507232666,
+                  "max": 3236.028507232666,
+                  "mean": 3236.028507232666
+                },
+                "confidence": {
+                  "count": 1,
+                  "min": 645.7061157226562,
+                  "median": 645.7061157226562,
+                  "p95": 645.7061157226562,
+                  "max": 645.7061157226562,
+                  "mean": 645.7061157226562
+                },
+                "confidence_head": {
+                  "count": 1,
+                  "min": 645.6978149414062,
+                  "median": 645.6978149414062,
+                  "p95": 645.6978149414062,
+                  "max": 645.6978149414062,
+                  "mean": 645.6978149414062
+                },
+                "diffusion_module": {
+                  "count": 1,
+                  "min": 1443.7215576171875,
+                  "median": 1443.7215576171875,
+                  "p95": 1443.7215576171875,
+                  "max": 1443.7215576171875,
+                  "mean": 1443.7215576171875
+                },
+                "diffusion_transformer": {
+                  "count": 1,
+                  "min": 1617.1657257080078,
+                  "median": 1617.1657257080078,
+                  "p95": 1617.1657257080078,
+                  "max": 1617.1657257080078,
+                  "mean": 1617.1657257080078
+                },
+                "pairformer_output": {
+                  "count": 1,
+                  "min": 13702.3203125,
+                  "median": 13702.3203125,
+                  "p95": 13702.3203125,
+                  "max": 13702.3203125,
+                  "mean": 13702.3203125
+                },
+                "pairformer_stack": {
+                  "count": 1,
+                  "min": 9458.241577148438,
+                  "median": 9458.241577148438,
+                  "p95": 9458.241577148438,
+                  "max": 9458.241577148438,
+                  "mean": 9458.241577148438
+                },
+                "sample_diffusion": {
+                  "count": 1,
+                  "min": 1517.1866455078125,
+                  "median": 1517.1866455078125,
+                  "p95": 1517.1866455078125,
+                  "max": 1517.1866455078125,
+                  "mean": 1517.1866455078125
+                },
+                "triangle_attention": {
+                  "count": 1,
+                  "min": 4496.237771987915,
+                  "median": 4496.237771987915,
+                  "p95": 4496.237771987915,
+                  "max": 4496.237771987915,
+                  "mean": 4496.237771987915
+                },
+                "triangle_multiplication": {
+                  "count": 1,
+                  "min": 3550.755386352539,
+                  "median": 3550.755386352539,
+                  "p95": 3550.755386352539,
+                  "max": 3550.755386352539,
+                  "mean": 3550.755386352539
+                }
+              }
+            },
+            "measure": {
+              "model_gpu_ms": {
+                "count": 5,
+                "min": 10334.3291015625,
+                "median": 10359.7353515625,
+                "p95": 10418.0234375,
+                "max": 10418.0234375,
+                "mean": 10369.814453125
+              },
+              "model_wall_ms": {
+                "count": 5,
+                "min": 10334.4113730127,
+                "median": 10359.816938987933,
+                "p95": 10418.211102951318,
+                "max": 10418.211102951318,
+                "mean": 10369.925360789057
+              },
+              "peak_memory_allocated_bytes": {
+                "count": 5,
+                "min": 10011042304,
+                "median": 10011042304,
+                "p95": 10011042304,
+                "max": 10011042304,
+                "mean": 10011042304.0
+              },
+              "peak_memory_reserved_bytes": {
+                "count": 5,
+                "min": 10443816960,
+                "median": 10464788480,
+                "p95": 10548674560,
+                "max": 10548674560,
+                "mean": 10485760000.0
+              },
+              "stages_gpu_ms": {
+                "atom_attention_decoder": {
+                  "count": 5,
+                  "min": 7.694459915161133,
+                  "median": 7.702939987182617,
+                  "p95": 7.706779956817627,
+                  "max": 7.706779956817627,
+                  "mean": 7.702363967895508
+                },
+                "atom_attention_encoder": {
+                  "count": 5,
+                  "min": 36.55816459655762,
+                  "median": 36.62856578826904,
+                  "p95": 36.84745121002197,
+                  "max": 36.84745121002197,
+                  "mean": 36.67419929504395
+                },
+                "confidence": {
+                  "count": 5,
+                  "min": 580.75,
+                  "median": 586.951171875,
+                  "p95": 595.1752319335938,
+                  "max": 595.1752319335938,
+                  "mean": 587.0630126953125
+                },
+                "confidence_head": {
+                  "count": 5,
+                  "min": 580.7415771484375,
+                  "median": 586.9421997070312,
+                  "p95": 595.1668090820312,
+                  "max": 595.1668090820312,
+                  "mean": 587.0543823242188
+                },
+                "diffusion_module": {
+                  "count": 5,
+                  "min": 48.38266372680664,
+                  "median": 49.17036819458008,
+                  "p95": 49.46381378173828,
+                  "max": 49.46381378173828,
+                  "mean": 49.041497802734376
+                },
+                "diffusion_transformer": {
+                  "count": 5,
+                  "min": 52.90535116195679,
+                  "median": 52.93623208999634,
+                  "p95": 52.99383497238159,
+                  "max": 52.99383497238159,
+                  "mean": 52.95002498626709
+                },
+                "pairformer_output": {
+                  "count": 5,
+                  "min": 9459.3076171875,
+                  "median": 9494.6953125,
+                  "p95": 9534.078125,
+                  "max": 9534.078125,
+                  "mean": 9496.261328125
+                },
+                "pairformer_stack": {
+                  "count": 5,
+                  "min": 9371.899719238281,
+                  "median": 9392.202392578125,
+                  "p95": 9437.55517578125,
+                  "max": 9437.55517578125,
+                  "mean": 9399.989965820312
+                },
+                "sample_diffusion": {
+                  "count": 5,
+                  "min": 49.12716293334961,
+                  "median": 49.93438720703125,
+                  "p95": 50.2420768737793,
+                  "max": 50.2420768737793,
+                  "mean": 49.848303985595706
+                },
+                "triangle_attention": {
+                  "count": 5,
+                  "min": 4317.881805419922,
+                  "median": 4334.489795684814,
+                  "p95": 4364.61785697937,
+                  "max": 4364.61785697937,
+                  "mean": 4334.055703735352
+                },
+                "triangle_multiplication": {
+                  "count": 5,
+                  "min": 3514.985097885132,
+                  "median": 3535.993055343628,
+                  "p95": 3541.921073913574,
+                  "max": 3541.921073913574,
+                  "mean": 3529.4074062347413
+                }
+              }
+            }
+          },
+          "triangle_vector": {
+            "enabled": true,
+            "counts": {
+              "n1000": 864,
+              "n1536": 0,
+              "fallback": 0
+            },
+            "packed_norm_enabled": true,
+            "packed_norm_counts": {
+              "n1000": 864,
+              "n1536": 0
+            }
+          },
+          "selection_counts": [
+            {
+              "operation": "triangle_attention",
+              "implementation": "amd-gfx90a-ck-tile-attention-f32-n1000",
+              "count": 864
+            },
+            {
+              "operation": "triangle_multiplication",
+              "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+              "count": 864
+            }
+          ],
+          "raw_manifest_sha256": "25829ada3e6c4145fd2b7017b687706844e542a5be5006016cd225ba7a0a5130",
+          "raw_manifest": "/media/IntelSSD/fireprot/outputs/benchmarks/packed-norm-model-a5af61b/n1000/enabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/manifest.json"
+        },
+        "disabled": {
+          "status": "ok",
+          "software": {
+            "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:38:16) [GCC 14.3.0]",
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "miopen": null,
+            "miopen_available": false,
+            "preferred_blas": "_BlasBackend.Cublas"
+          },
+          "hardware": {
+            "hostname": "DiamondHill",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.39",
+            "device_index": 0,
+            "device_name": "AMD Instinct MI250X / MI250",
+            "device_arch": [
+              9,
+              0
+            ],
+            "gcn_arch_name": "gfx90a:sramecc+:xnack-",
+            "total_memory_bytes": 68702699520
+          },
+          "process_wall_ms": 116085.29070502846,
+          "gpu_process_monitor": {
+            "available": true,
+            "command": [
+              "/usr/bin/amd-smi",
+              "process",
+              "--json"
+            ],
+            "physical_device_index": 7,
+            "interval_seconds": 1.0,
+            "samples": 90,
+            "allowed_pid": 871559,
+            "external_pids": [],
+            "errors": [],
+            "passed": true
+          },
+          "additional_gpu_process_monitors": [
+            {
+              "available": true,
+              "command": [
+                "/usr/bin/amd-smi",
+                "process",
+                "--json"
+              ],
+              "physical_device_index": 6,
+              "interval_seconds": 1.0,
+              "samples": 90,
+              "allowed_pid": 871559,
+              "external_pids": [],
+              "errors": [],
+              "passed": true
+            }
+          ],
+          "timing_summary": {
+            "warmup": {
+              "model_gpu_ms": {
+                "count": 1,
+                "min": 16736.4453125,
+                "median": 16736.4453125,
+                "p95": 16736.4453125,
+                "max": 16736.4453125,
+                "mean": 16736.4453125
+              },
+              "model_wall_ms": {
+                "count": 1,
+                "min": 16736.583058023825,
+                "median": 16736.583058023825,
+                "p95": 16736.583058023825,
+                "max": 16736.583058023825,
+                "mean": 16736.583058023825
+              },
+              "peak_memory_allocated_bytes": {
+                "count": 1,
+                "min": 9481004032,
+                "median": 9481004032,
+                "p95": 9481004032,
+                "max": 9481004032,
+                "mean": 9481004032.0
+              },
+              "peak_memory_reserved_bytes": {
+                "count": 1,
+                "min": 9940500480,
+                "median": 9940500480,
+                "p95": 9940500480,
+                "max": 9940500480,
+                "mean": 9940500480.0
+              },
+              "stages_gpu_ms": {
+                "atom_attention_decoder": {
+                  "count": 1,
+                  "min": 7.718780040740967,
+                  "median": 7.718780040740967,
+                  "p95": 7.718780040740967,
+                  "max": 7.718780040740967,
+                  "mean": 7.718780040740967
+                },
+                "atom_attention_encoder": {
+                  "count": 1,
+                  "min": 3058.4209003448486,
+                  "median": 3058.4209003448486,
+                  "p95": 3058.4209003448486,
+                  "max": 3058.4209003448486,
+                  "mean": 3058.4209003448486
+                },
+                "confidence": {
+                  "count": 1,
+                  "min": 674.1986083984375,
+                  "median": 674.1986083984375,
+                  "p95": 674.1986083984375,
+                  "max": 674.1986083984375,
+                  "mean": 674.1986083984375
+                },
+                "confidence_head": {
+                  "count": 1,
+                  "min": 674.1900634765625,
+                  "median": 674.1900634765625,
+                  "p95": 674.1900634765625,
+                  "max": 674.1900634765625,
+                  "mean": 674.1900634765625
+                },
+                "diffusion_module": {
+                  "count": 1,
+                  "min": 1447.7132568359375,
+                  "median": 1447.7132568359375,
+                  "p95": 1447.7132568359375,
+                  "max": 1447.7132568359375,
+                  "mean": 1447.7132568359375
+                },
+                "diffusion_transformer": {
+                  "count": 1,
+                  "min": 1606.7794122695923,
+                  "median": 1606.7794122695923,
+                  "p95": 1606.7794122695923,
+                  "max": 1606.7794122695923,
+                  "mean": 1606.7794122695923
+                },
+                "pairformer_output": {
+                  "count": 1,
+                  "min": 13626.6943359375,
+                  "median": 13626.6943359375,
+                  "p95": 13626.6943359375,
+                  "max": 13626.6943359375,
+                  "mean": 13626.6943359375
+                },
+                "pairformer_stack": {
+                  "count": 1,
+                  "min": 9608.683959960938,
+                  "median": 9608.683959960938,
+                  "p95": 9608.683959960938,
+                  "max": 9608.683959960938,
+                  "mean": 9608.683959960938
+                },
+                "sample_diffusion": {
+                  "count": 1,
+                  "min": 1521.76904296875,
+                  "median": 1521.76904296875,
+                  "p95": 1521.76904296875,
+                  "max": 1521.76904296875,
+                  "mean": 1521.76904296875
+                },
+                "triangle_attention": {
+                  "count": 1,
+                  "min": 4478.90931892395,
+                  "median": 4478.90931892395,
+                  "p95": 4478.90931892395,
+                  "max": 4478.90931892395,
+                  "mean": 4478.90931892395
+                },
+                "triangle_multiplication": {
+                  "count": 1,
+                  "min": 3694.145854949951,
+                  "median": 3694.145854949951,
+                  "p95": 3694.145854949951,
+                  "max": 3694.145854949951,
+                  "mean": 3694.145854949951
+                }
+              }
+            },
+            "measure": {
+              "model_gpu_ms": {
+                "count": 5,
+                "min": 10440.982421875,
+                "median": 10465.955078125,
+                "p95": 10527.2919921875,
+                "max": 10527.2919921875,
+                "mean": 10476.2640625
+              },
+              "model_wall_ms": {
+                "count": 5,
+                "min": 10441.075709997676,
+                "median": 10466.045076958835,
+                "p95": 10527.382294007111,
+                "max": 10527.382294007111,
+                "mean": 10476.352193800267
+              },
+              "peak_memory_allocated_bytes": {
+                "count": 5,
+                "min": 10011042304,
+                "median": 10011042304,
+                "p95": 10011042304,
+                "max": 10011042304,
+                "mean": 10011042304.0
+              },
+              "peak_memory_reserved_bytes": {
+                "count": 5,
+                "min": 10443816960,
+                "median": 10464788480,
+                "p95": 10548674560,
+                "max": 10548674560,
+                "mean": 10485760000.0
+              },
+              "stages_gpu_ms": {
+                "atom_attention_decoder": {
+                  "count": 5,
+                  "min": 7.691258907318115,
+                  "median": 7.710939884185791,
+                  "p95": 7.725019931793213,
+                  "max": 7.725019931793213,
+                  "mean": 7.711771774291992
+                },
+                "atom_attention_encoder": {
+                  "count": 5,
+                  "min": 36.63096332550049,
+                  "median": 36.80776882171631,
+                  "p95": 36.84808921813965,
+                  "max": 36.84808921813965,
+                  "mean": 36.77112731933594
+                },
+                "confidence": {
+                  "count": 5,
+                  "min": 587.9749755859375,
+                  "median": 590.165771484375,
+                  "p95": 592.0571899414062,
+                  "max": 592.0571899414062,
+                  "mean": 589.890380859375
+                },
+                "confidence_head": {
+                  "count": 5,
+                  "min": 587.96630859375,
+                  "median": 590.1574096679688,
+                  "p95": 592.0487060546875,
+                  "max": 592.0487060546875,
+                  "mean": 589.8818725585937
+                },
+                "diffusion_module": {
+                  "count": 5,
+                  "min": 48.76346969604492,
+                  "median": 49.0202751159668,
+                  "p95": 49.402366638183594,
+                  "max": 49.402366638183594,
+                  "mean": 49.10552749633789
+                },
+                "diffusion_transformer": {
+                  "count": 5,
+                  "min": 52.92470836639404,
+                  "median": 53.04775047302246,
+                  "p95": 53.09015226364136,
+                  "max": 53.09015226364136,
+                  "mean": 53.01725425720215
+                },
+                "pairformer_output": {
+                  "count": 5,
+                  "min": 9572.5537109375,
+                  "median": 9599.9140625,
+                  "p95": 9657.2294921875,
+                  "max": 9657.2294921875,
+                  "mean": 9607.6298828125
+                },
+                "pairformer_stack": {
+                  "count": 5,
+                  "min": 9479.232299804688,
+                  "median": 9502.644409179688,
+                  "p95": 9555.82373046875,
+                  "max": 9555.82373046875,
+                  "mean": 9509.249328613281
+                },
+                "sample_diffusion": {
+                  "count": 5,
+                  "min": 49.54637145996094,
+                  "median": 49.785255432128906,
+                  "p95": 50.22239303588867,
+                  "max": 50.22239303588867,
+                  "mean": 49.8967170715332
+                },
+                "triangle_attention": {
+                  "count": 5,
+                  "min": 4318.062059402466,
+                  "median": 4341.275178909302,
+                  "p95": 4364.873777389526,
+                  "max": 4364.873777389526,
+                  "mean": 4338.797480773926
+                },
+                "triangle_multiplication": {
+                  "count": 5,
+                  "min": 3630.222608566284,
+                  "median": 3631.5328941345215,
+                  "p95": 3639.2495918273926,
+                  "max": 3639.2495918273926,
+                  "mean": 3633.340327453613
+                }
+              }
+            }
+          },
+          "triangle_vector": {
+            "enabled": true,
+            "counts": {
+              "n1000": 864,
+              "n1536": 0,
+              "fallback": 0
+            },
+            "packed_norm_enabled": false,
+            "packed_norm_counts": {
+              "n1000": 0,
+              "n1536": 0
+            }
+          },
+          "selection_counts": [
+            {
+              "operation": "triangle_attention",
+              "implementation": "amd-gfx90a-ck-tile-attention-f32-n1000",
+              "count": 864
+            },
+            {
+              "operation": "triangle_multiplication",
+              "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+              "count": 864
+            }
+          ],
+          "raw_manifest_sha256": "97310b6f9ffb07f7105ef03434e0b4e968faf296673697057eae47ab87de91d9",
+          "raw_manifest": "/media/IntelSSD/fireprot/outputs/benchmarks/packed-norm-model-a5af61b/n1000/disabled/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/manifest.json"
+        }
+      }
+    },
+    "1536": {
+      "workload": {
+        "id": "mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32",
+        "input": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+        "token_count": 1536,
+        "model_name": "protenix_mini_default_v0.5.0",
+        "dtype": "fp32",
+        "cycles": 4,
+        "diffusion_steps": 1,
+        "samples": 1,
+        "seeds": [
+          101
+        ],
+        "cache": true,
+        "use_msa": false,
+        "use_template": false,
+        "enable_fusion": true,
+        "enable_tf32": false,
+        "trimul_kernel": "torch",
+        "triatt_kernel": "torch"
+      },
+      "measurement": {
+        "warmups": 1,
+        "repetitions": 5,
+        "dump_outputs": true,
+        "cache_state": "warm-within-process",
+        "device_policy": "exclusive",
+        "exclusive_max_gpu_use_percent": 5,
+        "exclusive_max_vram_used_bytes": 268435456,
+        "process_monitor_interval_seconds": 1.0,
+        "reject_external_gpu_processes": true,
+        "clock_policy": "record-current",
+        "additional_physical_devices": [
+          6
+        ]
+      },
+      "source": {
+        "fireprot_commit": "a5af61b00b85a7889c568302ee7fbbf11c9b39d7",
+        "protenix_commit": "77218da6f5ccf8562a76577dd568869785e6b45b",
+        "profile_script_sha256": "4ee824921e41bfe3842bc9f7bb6fc35e67fbe43eced78dcba4d57f4ad26b5dee"
+      },
+      "input": {
+        "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+        "sha256": "3f3c19af52b40972ce1961eba6800afeba548d28c643fc23da0a9321485989a1",
+        "token_count": 1536,
+        "atom_count": null
+      },
+      "allocator": {
+        "PYTORCH_ALLOC_CONF": "expandable_segments:True",
+        "PYTORCH_CUDA_ALLOC_CONF": null
+      },
+      "order": [
+        "disabled",
+        "enabled"
+      ],
+      "comparison": {
+        "schema_version": 1,
+        "created_at": "2026-10-03T06:55:16.482704+00:00",
+        "reference_root": "/media/IntelSSD/fireprot/outputs/benchmarks/packed-norm-model-a5af61b/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions",
+        "candidate_root": "/media/IntelSSD/fireprot/outputs/benchmarks/packed-norm-model-a5af61b/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions",
+        "passed": true,
+        "comparisons": [
+          {
+            "case": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_000",
+            "seed": 101,
+            "sample": 0,
+            "reference": {
+              "cif": "outputs/benchmarks/packed-norm-model-a5af61b/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000_sample_0.cif",
+              "confidence": "outputs/benchmarks/packed-norm-model-a5af61b/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000_summary_confidence_sample_0.json"
+            },
+            "candidate": {
+              "cif": "outputs/benchmarks/packed-norm-model-a5af61b/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000_sample_0.cif",
+              "confidence": "outputs/benchmarks/packed-norm-model-a5af61b/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000_summary_confidence_sample_0.json"
+            },
+            "coordinate_tolerance_angstrom": 0.001,
+            "confidence_tolerance": 0.001,
+            "coordinates": {
+              "atom_count": 12139,
+              "finite": true,
+              "raw_rmsd_angstrom": 9.746792002419117e-05,
+              "aligned_rmsd_angstrom": 9.681262559076477e-05,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "finite": true,
+              "max_abs_delta": 9.5367431640625e-07,
+              "mean_abs_delta": 1.5099843343098958e-07,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "passed": true
+          },
+          {
+            "case": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_001",
+            "seed": 101,
+            "sample": 0,
+            "reference": {
+              "cif": "outputs/benchmarks/packed-norm-model-a5af61b/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_001/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_001_sample_0.cif",
+              "confidence": "outputs/benchmarks/packed-norm-model-a5af61b/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_001/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_001_summary_confidence_sample_0.json"
+            },
+            "candidate": {
+              "cif": "outputs/benchmarks/packed-norm-model-a5af61b/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_001/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_001_sample_0.cif",
+              "confidence": "outputs/benchmarks/packed-norm-model-a5af61b/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_001/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_001_summary_confidence_sample_0.json"
+            },
+            "coordinate_tolerance_angstrom": 0.001,
+            "confidence_tolerance": 0.001,
+            "coordinates": {
+              "atom_count": 12139,
+              "finite": true,
+              "raw_rmsd_angstrom": 9.254397905546621e-05,
+              "aligned_rmsd_angstrom": 9.193132461804457e-05,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "finite": true,
+              "max_abs_delta": 2.9802322387695312e-08,
+              "mean_abs_delta": 4.221995671590169e-09,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "passed": true
+          },
+          {
+            "case": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_002",
+            "seed": 101,
+            "sample": 0,
+            "reference": {
+              "cif": "outputs/benchmarks/packed-norm-model-a5af61b/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_002/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_002_sample_0.cif",
+              "confidence": "outputs/benchmarks/packed-norm-model-a5af61b/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_002/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_002_summary_confidence_sample_0.json"
+            },
+            "candidate": {
+              "cif": "outputs/benchmarks/packed-norm-model-a5af61b/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_002/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_002_sample_0.cif",
+              "confidence": "outputs/benchmarks/packed-norm-model-a5af61b/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_002/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_002_summary_confidence_sample_0.json"
+            },
+            "coordinate_tolerance_angstrom": 0.001,
+            "confidence_tolerance": 0.001,
+            "coordinates": {
+              "atom_count": 12139,
+              "finite": true,
+              "raw_rmsd_angstrom": 0.0001007612531294014,
+              "aligned_rmsd_angstrom": 9.908655052476952e-05,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "finite": true,
+              "max_abs_delta": 2.384185791015625e-06,
+              "mean_abs_delta": 3.178914388020833e-07,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "passed": true
+          },
+          {
+            "case": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_003",
+            "seed": 101,
+            "sample": 0,
+            "reference": {
+              "cif": "outputs/benchmarks/packed-norm-model-a5af61b/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_003/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_003_sample_0.cif",
+              "confidence": "outputs/benchmarks/packed-norm-model-a5af61b/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_003/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_003_summary_confidence_sample_0.json"
+            },
+            "candidate": {
+              "cif": "outputs/benchmarks/packed-norm-model-a5af61b/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_003/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_003_sample_0.cif",
+              "confidence": "outputs/benchmarks/packed-norm-model-a5af61b/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_003/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_003_summary_confidence_sample_0.json"
+            },
+            "coordinate_tolerance_angstrom": 0.001,
+            "confidence_tolerance": 0.001,
+            "coordinates": {
+              "atom_count": 12139,
+              "finite": true,
+              "raw_rmsd_angstrom": 8.637812515977526e-05,
+              "aligned_rmsd_angstrom": 8.59199617054279e-05,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "finite": true,
+              "max_abs_delta": 7.62939453125e-06,
+              "mean_abs_delta": 7.075568040211996e-07,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "passed": true
+          },
+          {
+            "case": "umem_L01536_6b140cc19f02d9b9__fireprot_measure_004",
+            "seed": 101,
+            "sample": 0,
+            "reference": {
+              "cif": "outputs/benchmarks/packed-norm-model-a5af61b/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_004/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_004_sample_0.cif",
+              "confidence": "outputs/benchmarks/packed-norm-model-a5af61b/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_004/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_004_summary_confidence_sample_0.json"
+            },
+            "candidate": {
+              "cif": "outputs/benchmarks/packed-norm-model-a5af61b/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_004/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_004_sample_0.cif",
+              "confidence": "outputs/benchmarks/packed-norm-model-a5af61b/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_004/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_004_summary_confidence_sample_0.json"
+            },
+            "coordinate_tolerance_angstrom": 0.001,
+            "confidence_tolerance": 0.001,
+            "coordinates": {
+              "atom_count": 12139,
+              "finite": true,
+              "raw_rmsd_angstrom": 9.237306472626999e-05,
+              "aligned_rmsd_angstrom": 9.115046446142847e-05,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "finite": true,
+              "max_abs_delta": 3.814697265625e-06,
+              "mean_abs_delta": 3.1987826029459633e-07,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "passed": true
+          }
+        ]
+      },
+      "runs": {
+        "enabled": {
+          "status": "ok",
+          "software": {
+            "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:38:16) [GCC 14.3.0]",
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "miopen": null,
+            "miopen_available": false,
+            "preferred_blas": "_BlasBackend.Cublas"
+          },
+          "hardware": {
+            "hostname": "DiamondHill",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.39",
+            "device_index": 0,
+            "device_name": "AMD Instinct MI250X / MI250",
+            "device_arch": [
+              9,
+              0
+            ],
+            "gcn_arch_name": "gfx90a:sramecc+:xnack-",
+            "total_memory_bytes": 68702699520
+          },
+          "process_wall_ms": 254939.39809000585,
+          "gpu_process_monitor": {
+            "available": true,
+            "command": [
+              "/usr/bin/amd-smi",
+              "process",
+              "--json"
+            ],
+            "physical_device_index": 7,
+            "interval_seconds": 1.0,
+            "samples": 195,
+            "allowed_pid": 868683,
+            "external_pids": [],
+            "errors": [],
+            "passed": true
+          },
+          "additional_gpu_process_monitors": [
+            {
+              "available": true,
+              "command": [
+                "/usr/bin/amd-smi",
+                "process",
+                "--json"
+              ],
+              "physical_device_index": 6,
+              "interval_seconds": 1.0,
+              "samples": 195,
+              "allowed_pid": 868683,
+              "external_pids": [],
+              "errors": [],
+              "passed": true
+            }
+          ],
+          "timing_summary": {
+            "warmup": {
+              "model_gpu_ms": {
+                "count": 1,
+                "min": 36299.15625,
+                "median": 36299.15625,
+                "p95": 36299.15625,
+                "max": 36299.15625,
+                "mean": 36299.15625
+              },
+              "model_wall_ms": {
+                "count": 1,
+                "min": 36299.275616009254,
+                "median": 36299.275616009254,
+                "p95": 36299.275616009254,
+                "max": 36299.275616009254,
+                "mean": 36299.275616009254
+              },
+              "peak_memory_allocated_bytes": {
+                "count": 1,
+                "min": 21472384512,
+                "median": 21472384512,
+                "p95": 21472384512,
+                "max": 21472384512,
+                "mean": 21472384512.0
+              },
+              "peak_memory_reserved_bytes": {
+                "count": 1,
+                "min": 22458400768,
+                "median": 22458400768,
+                "p95": 22458400768,
+                "max": 22458400768,
+                "mean": 22458400768.0
+              },
+              "stages_gpu_ms": {
+                "atom_attention_decoder": {
+                  "count": 1,
+                  "min": 12.100654602050781,
+                  "median": 12.100654602050781,
+                  "p95": 12.100654602050781,
+                  "max": 12.100654602050781,
+                  "mean": 12.100654602050781
+                },
+                "atom_attention_encoder": {
+                  "count": 1,
+                  "min": 3201.0838565826416,
+                  "median": 3201.0838565826416,
+                  "p95": 3201.0838565826416,
+                  "max": 3201.0838565826416,
+                  "mean": 3201.0838565826416
+                },
+                "confidence": {
+                  "count": 1,
+                  "min": 1759.68798828125,
+                  "median": 1759.68798828125,
+                  "p95": 1759.68798828125,
+                  "max": 1759.68798828125,
+                  "mean": 1759.68798828125
+                },
+                "confidence_head": {
+                  "count": 1,
+                  "min": 1759.679443359375,
+                  "median": 1759.679443359375,
+                  "p95": 1759.679443359375,
+                  "max": 1759.679443359375,
+                  "mean": 1759.679443359375
+                },
+                "diffusion_module": {
+                  "count": 1,
+                  "min": 1483.5015869140625,
+                  "median": 1483.5015869140625,
+                  "p95": 1483.5015869140625,
+                  "max": 1483.5015869140625,
+                  "mean": 1483.5015869140625
+                },
+                "diffusion_transformer": {
+                  "count": 1,
+                  "min": 1630.4985914230347,
+                  "median": 1630.4985914230347,
+                  "p95": 1630.4985914230347,
+                  "max": 1630.4985914230347,
+                  "mean": 1630.4985914230347
+                },
+                "pairformer_output": {
+                  "count": 1,
+                  "min": 31735.40234375,
+                  "median": 31735.40234375,
+                  "p95": 31735.40234375,
+                  "max": 31735.40234375,
+                  "mean": 31735.40234375
+                },
+                "pairformer_stack": {
+                  "count": 1,
+                  "min": 27612.91259765625,
+                  "median": 27612.91259765625,
+                  "p95": 27612.91259765625,
+                  "max": 27612.91259765625,
+                  "mean": 27612.91259765625
+                },
+                "sample_diffusion": {
+                  "count": 1,
+                  "min": 1541.1884765625,
+                  "median": 1541.1884765625,
+                  "p95": 1541.1884765625,
+                  "max": 1541.1884765625,
+                  "mean": 1541.1884765625
+                },
+                "triangle_attention": {
+                  "count": 1,
+                  "min": 13678.88882446289,
+                  "median": 13678.88882446289,
+                  "p95": 13678.88882446289,
+                  "max": 13678.88882446289,
+                  "mean": 13678.88882446289
+                },
+                "triangle_multiplication": {
+                  "count": 1,
+                  "min": 9818.086372375488,
+                  "median": 9818.086372375488,
+                  "p95": 9818.086372375488,
+                  "max": 9818.086372375488,
+                  "mean": 9818.086372375488
+                }
+              }
+            },
+            "measure": {
+              "model_gpu_ms": {
+                "count": 5,
+                "min": 29650.525390625,
+                "median": 29858.6484375,
+                "p95": 29960.46484375,
+                "max": 29960.46484375,
+                "mean": 29852.313671875
+              },
+              "model_wall_ms": {
+                "count": 5,
+                "min": 29650.635536003392,
+                "median": 29858.730521053076,
+                "p95": 29960.56378999492,
+                "max": 29960.56378999492,
+                "mean": 29852.428853418678
+              },
+              "peak_memory_allocated_bytes": {
+                "count": 5,
+                "min": 22721185792,
+                "median": 22721185792,
+                "p95": 22721185792,
+                "max": 22721185792,
+                "mean": 22721185792.0
+              },
+              "peak_memory_reserved_bytes": {
+                "count": 5,
+                "min": 23024631808,
+                "median": 23737663488,
+                "p95": 23779606528,
+                "max": 23779606528,
+                "mean": 23536336896.0
+              },
+              "stages_gpu_ms": {
+                "atom_attention_decoder": {
+                  "count": 5,
+                  "min": 12.066893577575684,
+                  "median": 12.070895195007324,
+                  "p95": 12.076973915100098,
+                  "max": 12.076973915100098,
+                  "mean": 12.071534347534179
+                },
+                "atom_attention_encoder": {
+                  "count": 5,
+                  "min": 57.218387603759766,
+                  "median": 57.25694465637207,
+                  "p95": 57.28702926635742,
+                  "max": 57.28702926635742,
+                  "mean": 57.25710620880127
+                },
+                "confidence": {
+                  "count": 5,
+                  "min": 1692.65234375,
+                  "median": 1719.223388671875,
+                  "p95": 1731.261474609375,
+                  "max": 1731.261474609375,
+                  "mean": 1712.3828369140624
+                },
+                "confidence_head": {
+                  "count": 5,
+                  "min": 1692.643798828125,
+                  "median": 1719.2149658203125,
+                  "p95": 1731.2528076171875,
+                  "max": 1731.2528076171875,
+                  "mean": 1712.3742919921874
+                },
+                "diffusion_module": {
+                  "count": 5,
+                  "min": 90.78762817382812,
+                  "median": 91.28717041015625,
+                  "p95": 92.05886840820312,
+                  "max": 92.05886840820312,
+                  "mean": 91.33219299316406
+                },
+                "diffusion_transformer": {
+                  "count": 5,
+                  "min": 85.90125942230225,
+                  "median": 85.96238327026367,
+                  "p95": 85.99358558654785,
+                  "max": 85.99358558654785,
+                  "mean": 85.95521488189698
+                },
+                "pairformer_output": {
+                  "count": 5,
+                  "min": 27307.994140625,
+                  "median": 27539.48046875,
+                  "p95": 27616.73046875,
+                  "max": 27616.73046875,
+                  "mean": 27510.927734375
+                },
+                "pairformer_stack": {
+                  "count": 5,
+                  "min": 27136.697509765625,
+                  "median": 27342.160400390625,
+                  "p95": 27431.330688476562,
+                  "max": 27431.330688476562,
+                  "mean": 27320.799365234376
+                },
+                "sample_diffusion": {
+                  "count": 5,
+                  "min": 91.5294189453125,
+                  "median": 92.03887176513672,
+                  "p95": 92.95809936523438,
+                  "max": 92.95809936523438,
+                  "mean": 92.11180114746094
+                },
+                "triangle_attention": {
+                  "count": 5,
+                  "min": 13597.372634887695,
+                  "median": 13604.515968322754,
+                  "p95": 13612.908416748047,
+                  "max": 13612.908416748047,
+                  "mean": 13605.138067626953
+                },
+                "triangle_multiplication": {
+                  "count": 5,
+                  "min": 9562.22134399414,
+                  "median": 9675.800025939941,
+                  "p95": 9731.583946228027,
+                  "max": 9731.583946228027,
+                  "mean": 9664.14162902832
+                }
+              }
+            }
+          },
+          "triangle_vector": {
+            "enabled": true,
+            "counts": {
+              "n1000": 0,
+              "n1536": 864,
+              "fallback": 0
+            },
+            "packed_norm_enabled": true,
+            "packed_norm_counts": {
+              "n1000": 0,
+              "n1536": 864
+            }
+          },
+          "selection_counts": [
+            {
+              "operation": "triangle_attention",
+              "implementation": "amd-gfx90a-ck-tile-attention-f32-n1536",
+              "count": 2592
+            },
+            {
+              "operation": "triangle_multiplication",
+              "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+              "count": 864
+            }
+          ],
+          "raw_manifest_sha256": "1468775849743c29648a542c38f8759fed6120b0187870d0181f99fd55cdc532",
+          "raw_manifest": "/media/IntelSSD/fireprot/outputs/benchmarks/packed-norm-model-a5af61b/n1536/enabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/manifest.json"
+        },
+        "disabled": {
+          "status": "ok",
+          "software": {
+            "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:38:16) [GCC 14.3.0]",
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "miopen": null,
+            "miopen_available": false,
+            "preferred_blas": "_BlasBackend.Cublas"
+          },
+          "hardware": {
+            "hostname": "DiamondHill",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.39",
+            "device_index": 0,
+            "device_name": "AMD Instinct MI250X / MI250",
+            "device_arch": [
+              9,
+              0
+            ],
+            "gcn_arch_name": "gfx90a:sramecc+:xnack-",
+            "total_memory_bytes": 68702699520
+          },
+          "process_wall_ms": 264130.2692540339,
+          "gpu_process_monitor": {
+            "available": true,
+            "command": [
+              "/usr/bin/amd-smi",
+              "process",
+              "--json"
+            ],
+            "physical_device_index": 7,
+            "interval_seconds": 1.0,
+            "samples": 192,
+            "allowed_pid": 866799,
+            "external_pids": [],
+            "errors": [],
+            "passed": true
+          },
+          "additional_gpu_process_monitors": [
+            {
+              "available": true,
+              "command": [
+                "/usr/bin/amd-smi",
+                "process",
+                "--json"
+              ],
+              "physical_device_index": 6,
+              "interval_seconds": 1.0,
+              "samples": 192,
+              "allowed_pid": 866799,
+              "external_pids": [],
+              "errors": [],
+              "passed": true
+            }
+          ],
+          "timing_summary": {
+            "warmup": {
+              "model_gpu_ms": {
+                "count": 1,
+                "min": 37180.89453125,
+                "median": 37180.89453125,
+                "p95": 37180.89453125,
+                "max": 37180.89453125,
+                "mean": 37180.89453125
+              },
+              "model_wall_ms": {
+                "count": 1,
+                "min": 37180.96286297077,
+                "median": 37180.96286297077,
+                "p95": 37180.96286297077,
+                "max": 37180.96286297077,
+                "mean": 37180.96286297077
+              },
+              "peak_memory_allocated_bytes": {
+                "count": 1,
+                "min": 21472384512,
+                "median": 21472384512,
+                "p95": 21472384512,
+                "max": 21472384512,
+                "mean": 21472384512.0
+              },
+              "peak_memory_reserved_bytes": {
+                "count": 1,
+                "min": 22458400768,
+                "median": 22458400768,
+                "p95": 22458400768,
+                "max": 22458400768,
+                "mean": 22458400768.0
+              },
+              "stages_gpu_ms": {
+                "atom_attention_decoder": {
+                  "count": 1,
+                  "min": 12.11262035369873,
+                  "median": 12.11262035369873,
+                  "p95": 12.11262035369873,
+                  "max": 12.11262035369873,
+                  "mean": 12.11262035369873
+                },
+                "atom_attention_encoder": {
+                  "count": 1,
+                  "min": 3511.9168014526367,
+                  "median": 3511.9168014526367,
+                  "p95": 3511.9168014526367,
+                  "max": 3511.9168014526367,
+                  "mean": 3511.9168014526367
+                },
+                "confidence": {
+                  "count": 1,
+                  "min": 1796.6761474609375,
+                  "median": 1796.6761474609375,
+                  "p95": 1796.6761474609375,
+                  "max": 1796.6761474609375,
+                  "mean": 1796.6761474609375
+                },
+                "confidence_head": {
+                  "count": 1,
+                  "min": 1796.66748046875,
+                  "median": 1796.66748046875,
+                  "p95": 1796.66748046875,
+                  "max": 1796.66748046875,
+                  "mean": 1796.66748046875
+                },
+                "diffusion_module": {
+                  "count": 1,
+                  "min": 1664.035888671875,
+                  "median": 1664.035888671875,
+                  "p95": 1664.035888671875,
+                  "max": 1664.035888671875,
+                  "mean": 1664.035888671875
+                },
+                "diffusion_transformer": {
+                  "count": 1,
+                  "min": 1824.7283325195312,
+                  "median": 1824.7283325195312,
+                  "p95": 1824.7283325195312,
+                  "max": 1824.7283325195312,
+                  "mean": 1824.7283325195312
+                },
+                "pairformer_output": {
+                  "count": 1,
+                  "min": 32287.84765625,
+                  "median": 32287.84765625,
+                  "p95": 32287.84765625,
+                  "max": 32287.84765625,
+                  "mean": 32287.84765625
+                },
+                "pairformer_stack": {
+                  "count": 1,
+                  "min": 27989.035400390625,
+                  "median": 27989.035400390625,
+                  "p95": 27989.035400390625,
+                  "max": 27989.035400390625,
+                  "mean": 27989.035400390625
+                },
+                "sample_diffusion": {
+                  "count": 1,
+                  "min": 1727.783447265625,
+                  "median": 1727.783447265625,
+                  "p95": 1727.783447265625,
+                  "max": 1727.783447265625,
+                  "mean": 1727.783447265625
+                },
+                "triangle_attention": {
+                  "count": 1,
+                  "min": 13664.073524475098,
+                  "median": 13664.073524475098,
+                  "p95": 13664.073524475098,
+                  "max": 13664.073524475098,
+                  "mean": 13664.073524475098
+                },
+                "triangle_multiplication": {
+                  "count": 1,
+                  "min": 10222.972801208496,
+                  "median": 10222.972801208496,
+                  "p95": 10222.972801208496,
+                  "max": 10222.972801208496,
+                  "mean": 10222.972801208496
+                }
+              }
+            },
+            "measure": {
+              "model_gpu_ms": {
+                "count": 5,
+                "min": 30129.171875,
+                "median": 30237.20703125,
+                "p95": 30390.15234375,
+                "max": 30390.15234375,
+                "mean": 30257.98359375
+              },
+              "model_wall_ms": {
+                "count": 5,
+                "min": 30129.30425797822,
+                "median": 30237.338153994642,
+                "p95": 30390.274990990292,
+                "max": 30390.274990990292,
+                "mean": 30258.11105859466
+              },
+              "peak_memory_allocated_bytes": {
+                "count": 5,
+                "min": 22721185792,
+                "median": 22721185792,
+                "p95": 22721185792,
+                "max": 22721185792,
+                "mean": 22721185792.0
+              },
+              "peak_memory_reserved_bytes": {
+                "count": 5,
+                "min": 23024631808,
+                "median": 23737663488,
+                "p95": 23779606528,
+                "max": 23779606528,
+                "mean": 23536336896.0
+              },
+              "stages_gpu_ms": {
+                "atom_attention_decoder": {
+                  "count": 5,
+                  "min": 12.06669807434082,
+                  "median": 12.06973934173584,
+                  "p95": 12.073259353637695,
+                  "max": 12.073259353637695,
+                  "mean": 12.06964282989502
+                },
+                "atom_attention_encoder": {
+                  "count": 5,
+                  "min": 57.2364559173584,
+                  "median": 57.32701778411865,
+                  "p95": 57.40446090698242,
+                  "max": 57.40446090698242,
+                  "mean": 57.32429809570313
+                },
+                "confidence": {
+                  "count": 5,
+                  "min": 1705.8565673828125,
+                  "median": 1750.9464111328125,
+                  "p95": 1756.0782470703125,
+                  "max": 1756.0782470703125,
+                  "mean": 1740.4577880859374
+                },
+                "confidence_head": {
+                  "count": 5,
+                  "min": 1705.84814453125,
+                  "median": 1750.9378662109375,
+                  "p95": 1756.0697021484375,
+                  "max": 1756.0697021484375,
+                  "mean": 1740.449365234375
+                },
+                "diffusion_module": {
+                  "count": 5,
+                  "min": 90.84928894042969,
+                  "median": 91.61859130859375,
+                  "p95": 91.99523162841797,
+                  "max": 91.99523162841797,
+                  "mean": 91.4871597290039
+                },
+                "diffusion_transformer": {
+                  "count": 5,
+                  "min": 85.94116687774658,
+                  "median": 86.00100708007812,
+                  "p95": 86.07812690734863,
+                  "max": 86.07812690734863,
+                  "mean": 85.99895915985107
+                },
+                "pairformer_output": {
+                  "count": 5,
+                  "min": 27790.73828125,
+                  "median": 27812.345703125,
+                  "p95": 27979.9296875,
+                  "max": 27979.9296875,
+                  "mean": 27863.64140625
+                },
+                "pairformer_stack": {
+                  "count": 5,
+                  "min": 27576.494873046875,
+                  "median": 27659.631591796875,
+                  "p95": 27805.088256835938,
+                  "max": 27805.088256835938,
+                  "mean": 27680.585107421874
+                },
+                "sample_diffusion": {
+                  "count": 5,
+                  "min": 91.71619415283203,
+                  "median": 92.3746109008789,
+                  "p95": 92.97942352294922,
+                  "max": 92.97942352294922,
+                  "mean": 92.32711944580078
+                },
+                "triangle_attention": {
+                  "count": 5,
+                  "min": 13580.618286132812,
+                  "median": 13618.261184692383,
+                  "p95": 13647.541397094727,
+                  "max": 13647.541397094727,
+                  "mean": 13617.444529724122
+                },
+                "triangle_multiplication": {
+                  "count": 5,
+                  "min": 9916.552864074707,
+                  "median": 10010.858131408691,
+                  "p95": 10154.73112487793,
+                  "max": 10154.73112487793,
+                  "mean": 10011.310191345216
+                }
+              }
+            }
+          },
+          "triangle_vector": {
+            "enabled": true,
+            "counts": {
+              "n1000": 0,
+              "n1536": 864,
+              "fallback": 0
+            },
+            "packed_norm_enabled": false,
+            "packed_norm_counts": {
+              "n1000": 0,
+              "n1536": 0
+            }
+          },
+          "selection_counts": [
+            {
+              "operation": "triangle_attention",
+              "implementation": "amd-gfx90a-ck-tile-attention-f32-n1536",
+              "count": 2592
+            },
+            {
+              "operation": "triangle_multiplication",
+              "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+              "count": 864
+            }
+          ],
+          "raw_manifest_sha256": "133e22ef72f8da7cda48bda6748e1044048e7c9a57daf534eb54ff5e958058ef",
+          "raw_manifest": "/media/IntelSSD/fireprot/outputs/benchmarks/packed-norm-model-a5af61b/n1536/disabled/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/manifest.json"
+        }
+      }
+    }
+  },
+  "promotion_tests": {
+    "local": "126 passed, 35 HIP skips",
+    "gpu": "31 passed",
+    "source_sha256": {
+      "fireprot/backends/amd/csrc/fireprot_amd_ops.cu": "c5a5618d8300e0ac2e53660de58eaf540000748abd234a02e1d106830a45d80a",
+      "fireprot/backends/amd/csrc/fireprot_amd_ops.cpp": "e3520ec21649c6fb4a9818e55ad23c56ee49d5546b2abecbba0b4e8a0ce04e63"
+    },
+    "monitors": [
+      {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 7,
+        "interval_seconds": 1.0,
+        "samples": 8,
+        "allowed_pid": 873062,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      },
+      {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 8,
+        "allowed_pid": 873062,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    ]
+  }
+}

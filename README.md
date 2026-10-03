@@ -22,6 +22,8 @@ AtlasFold, OpenFold, ESMFold, Base-model coverage, BF16 promotion, additional lo
 
 ## Experimental 1,536-residue workload
 
+Vectorized packed LayerNorm subsequently improves the warm model from **30.237 to 29.859 s (1.013x)** in a five-repetition same-source comparison. It is enabled inside the existing length opt-in; `FIREPROT_ENABLE_VECTOR_PACKED_NORM=0` restores the preceding LayerNorm. See [validation](docs/protenix-packed-norm-vector.md#same-source-model-result).
+
 The latest vector packing and residual fusion improves warm model median from **31.524 to 30.096 s (1.047x)** over the CK attention baseline, with unchanged peak allocated memory and passing output comparisons. It follows this bucket's existing length opt-in; `FIREPROT_ENABLE_TRIANGLE_VECTOR=0` restores the previous triangle multiplication. See [model validation](docs/protenix-triangle-vector-probes.md#same-source-model-validation).
 
 A real **1,536-residue** input is available under
@@ -59,6 +61,8 @@ the model. It remains disabled; see the
 [two-GCD model comparison](docs/protenix-long1536.md#synchronized-two-gcd-model-validation).
 
 ## Verified 1,000-token MI250 result
+
+The latest packed LayerNorm increment improves warm model median from **10.466 to 10.360 s (1.010x)** over five repetitions, with unchanged peak allocated memory and passing output comparisons. Use `FIREPROT_ENABLE_VECTOR_PACKED_NORM=0` to restore the preceding LayerNorm. See [model evidence](docs/protenix-packed-norm-vector.md#same-source-model-result).
 
 Vector packing and residual fusion now improve the warm model from **10.759 to 10.465 s (1.028x)** over the preceding CK attention baseline, with unchanged peak allocated memory and three passing output comparisons. Use `FIREPROT_ENABLE_TRIANGLE_VECTOR=0` to restore the preceding triangle multiplication. See [model evidence](docs/protenix-triangle-vector-probes.md#same-source-model-validation).
 

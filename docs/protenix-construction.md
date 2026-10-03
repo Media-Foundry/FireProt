@@ -55,7 +55,8 @@ establish prediction agreement, GPU inference speed or request-level latency.
 
 ## Integration requirements
 
-This remains a standalone experiment; runtime defaults are unchanged.
+The initial experiment was standalone. The subsequent opt-in runtime
+integration below implements these requirements; runtime defaults are unchanged.
 
 1. Limit the first implementation to the verified inference Runner/model and
    sampler contract. Unsupported versions or initializer arguments must use
@@ -90,3 +91,65 @@ Compare the two reports' loaded-state and pre/post-RNG digests before treating
 the experiment as successful. [Evidence](../provenance/protenix_construction_probe_b54f653.json)
 retains all three profiles, source/checkpoint hashes, SciPy sampler source,
 timings, coverage, state digests, and isolation records.
+
+## Opt-in runtime integration
+
+`FIREPROT_ENABLE_FAST_MODEL_INIT=1` enables the construction adapter for
+Mini-default v0.5.0 FP32. The default remains disabled. The adapter verifies
+all model Python files, the Runner construction/loading methods, initializer
+source, SciPy version and sampler implementation before installing hooks.
+Unknown contracts use native construction. The optimization is independent
+of GPU kernels and does not reduce recycling or diffusion steps.
+
+Interception is scoped to the construction call. Eligibility requires the
+main Python thread with no other active Python threads and the global NumPy
+sampler. Unsupported initializer arguments use native initialization.
+Checkpoint coverage is observed on the actual loaded state dictionary. For
+non-strict missing keys, the entire native model is reconstructed with the
+original RNG state and the already deserialized checkpoint is reapplied;
+the caller's RNG states are restored after recovery. Strict loading errors
+propagate after temporary bindings are cleaned up.
+
+The runtime manifest records source contracts, attempts, selected/recovered
+constructions, native fallback reasons, skipped element counts, construction
+including transfer, and checkpoint loading including recovery. CPU tests
+cover complete/incomplete checkpoints, RNG equality, failure cleanup,
+unsupported configurations, additional Python threads and ordinary tensors.
+
+## Fresh-worker request comparison
+
+The integrated candidate was measured against the same FireProt source with
+the construction flag disabled. Base commit is `3971121`; the exact uncommitted
+adapter and runtime hashes are recorded in the evidence, so the base commit
+alone does not identify the candidate. Existing CK/HIP inference paths are
+identical on both sides.
+
+Mini-default v0.5.0, FP32, TF32 off, hipBLAS, C4/S1, one sample, seed 101,
+no MSA/templates, zero warmups and one prediction per fresh worker. Filesystem
+and compiled-kernel caches are warm. GPU 7 executes serially with continuous
+isolation monitoring of GPUs 7 and 6; all checks pass. N1536 runs enabled then
+disabled; N1000 uses the reverse order.
+
+| Length | Flag disabled | Flag enabled | Request speedup | Saved |
+| --- | ---: | ---: | ---: | ---: |
+| 1000 | 47.326 s | 30.435 s | 1.555x | 16.891 s |
+| 1536 | 70.328 s | 52.097 s | 1.350x | 18.231 s |
+
+These are single paired observations, not medians or a latency distribution.
+The timing is the harness worker's `process_wall_ms`: setup, model loading,
+feature preparation, one prediction and output writing. It excludes parent
+launch/preflight time and is not a cold-filesystem or cold-compilation result.
+This is incremental improvement over current FireProt, not a new comparison
+against original Torch. It does not establish faster warm-model execution.
+
+Both enabled runs select all 621 eligible initializers (97,331,488 elements),
+have zero missing checkpoint keys, and take about 1.48 s for construction
+including transfer plus 0.30 s for loading. Both output comparisons pass the
+unchanged 0.001 Angstrom aligned-RMSD and 0.001 confidence gates. This verifies
+agreement with the disabled path on these performance inputs, not experimental
+structure accuracy. Keep the flag opt-in pending broader model/version coverage
+and repeated fresh-worker measurements.
+
+[Integration evidence](../provenance/protenix_fast_init_3971121.json) includes
+the launch script, source hashes, complete configuration, per-run counters,
+timing, device isolation records and output comparisons.

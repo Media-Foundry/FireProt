@@ -1,14 +1,25 @@
 # FireProt architecture
 
-Status: partially implemented, 2026-10-03. The Protenix measurement, validation, registry, runtime bootstrap, BLAS policy, short-sequence gfx90a operator paths, exact 1,000-token triangle, LayerNorm, and transition paths, and continuous benchmark isolation checks are implemented. The full cross-model adapter API and additional model adapters remain proposed interfaces.
+Status: partially implemented, 2026-10-03. The Protenix measurement, validation, registry, runtime bootstrap, BLAS policy, short-sequence gfx90a operator paths, exact 1,000- and 1,536-token triangle, LayerNorm, and transition paths, and continuous benchmark isolation checks are implemented. The full cross-model adapter API and additional model adapters remain proposed interfaces.
 
 ## Implementation snapshot
 
 The current implementation provides a model-neutral operation registry under `fireprot/ops`, AMD backends under `fireprot/backends/amd`, a Protenix bootstrap under `fireprot/adapters/protenix`, numerical validation under `fireprot/validation`, and reproducible Protenix tooling under `benchmarks/protenix`. The independent Protenix checkout exposes `fireprot` choices for triangle multiplication and triangle attention while retaining its upstream torch defaults.
 
-FP32 inference paths are promoted on gfx90a for measured 124- and exact 1,000-token Mini workloads. Short triangle multiplication replaces the upstream chunked inference path with a direct update while preserving in-place aliasing. Long triangle multiplication normalizes once, uses HIP sigmoid-and-pack kernels to produce contiguous channel-first projections, contracts them with library BMM, and fuses unpacking with output LayerNorm. The previous chunked contraction and its fusion callbacks remain as a diagnostic fallback. Triangle attention uses PyTorch ROCm memory-efficient SDPA, makes the Protenix head-last triangle bias contiguous, limits its outer batch workspace to 64 rows, and omits an implicit all-ones pair mask. Handwritten HIP kernels specialize contiguous 128-wide pair LayerNorm, fuse channel-first layout conversion with pair LayerNorm, and fuse gated activation epilogues. The long capability set includes the measured 244,000-, 256,000-, and 1,000,000-row LayerNorm calls and the exact `[1000,1000,128]` gated transition. The measured comparisons select hipBLAS at process start. The registry and runtime hooks fall back to native behavior for every unmatched signature or unavailable extension build.
+FP32 inference paths are promoted on gfx90a for measured 124-token, exact 1,000-token, and opt-in exact 1,536-token Mini workloads. Short triangle multiplication replaces the upstream chunked inference path with a direct update while preserving in-place aliasing. Long triangle multiplication normalizes once, uses HIP sigmoid-and-pack kernels to produce contiguous channel-first projections, contracts them with library BMM, and fuses unpacking with output LayerNorm. The previous chunked contraction and its fusion callbacks remain as a diagnostic fallback. Triangle attention uses PyTorch ROCm memory-efficient SDPA, makes the Protenix head-last triangle bias contiguous, limits its outer batch workspace to 64 rows, and omits an implicit all-ones pair mask. Handwritten HIP kernels specialize contiguous 128-wide pair LayerNorm, fuse channel-first layout conversion with pair LayerNorm, and fuse gated activation epilogues. The long capability set includes the measured 244,000-, 256,000-, and 1,000,000-row LayerNorm calls and the exact `[1000,1000,128]` gated transition. The measured comparisons select hipBLAS at process start. The registry and runtime hooks fall back to native behavior for every unmatched signature or unavailable extension build.
 
 For the exact unmasked 1,000-token signature, CK Tile QRKSVS attention is now promoted with M128/N64 tiles, four wave64 warps, and FP32 computation. It emits head-last storage and is gated on exact QKV strides, shape, dtype, device, pointer alignment, inference mode and the measured CK version. Its complete operator time is 32.711 ms versus direct SDPA's 36.35–36.36 ms. A reverse-order five-repetition model comparison improves 13.120 to 12.580 seconds (1.043x), with unchanged peak allocation. Lazy compilation uses a source/header/compiler fingerprint and a process lock. Direct SDPA remains the fallback and explicit masks retain chunked SDPA. See [CK Tile results](protenix-ck-tile.md). The preceding generic CK header-patch experiment remains outside model dispatch.
+
+For the opt-in N1536 bucket, a separate exact-sequence CK instantiation now
+uses M128/N32/W4 and disables query/key/output-row padding only because
+1536 divides its sequence tiles exactly. The N1000 padded kernel is kept.
+The C ABI rejects other shapes and the existing Python capability checks
+and SDPA fallback apply. A same-source Mini-default FP32 C4/S1 comparison
+improves warm model time from 36.975 to 31.441 seconds (1.176x), with
+unchanged peak allocated memory and passing same-seed coordinate/confidence
+gates. `FIREPROT_ENABLE_CK_EXACT1536=0` restores SDPA. The separate two-GCD
+experiment remains disabled after full-model regression; it is not a
+promoted execution strategy. See [N1536 evidence](protenix-long1536.md).
 
 The complete adapter contract described below has not yet been implemented as a stable public API. The current Protenix bootstrap is the first integration seam from which that API will be extracted after a second model is studied.
 

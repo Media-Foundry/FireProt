@@ -46,3 +46,16 @@ def test_exact1536_full_outputs_and_stream(monkeypatch):
         torch.cuda.synchronize()
         assert any(x['implementation']==ck.LONG1536_IMPLEMENTATION and x['count']==4 for x in registry.manifest()['selection_counts'])
     finally:registry.clear_runtime_state()
+
+
+@pytest.mark.parametrize("long_flag,exact_flag,expected", [("1",None,True),("1","0",False),("0",None,False)])
+def test_exact1536_environment_default(long_flag,exact_flag,expected):
+    import subprocess
+    import sys
+    environment=os.environ.copy()
+    environment['FIREPROT_ENABLE_LONG1536']=long_flag
+    environment.pop('FIREPROT_ENABLE_CK_EXACT1536',None)
+    if exact_flag is not None:environment['FIREPROT_ENABLE_CK_EXACT1536']=exact_flag
+    code="from fireprot.backends.amd.ck_attention import _exact1536_enabled; print(_exact1536_enabled)"
+    result=subprocess.check_output([sys.executable,'-c',code],env=environment,text=True).strip()
+    assert result==str(expected)

@@ -15,22 +15,32 @@ Protenix v1.1.0 is the first working adapter target. The repository now contains
 - lazily compiled handwritten HIP kernels with exact capability gates and native fallback;
 - a direct CK GEMM candidate for observed Protenix signatures, kept behind an experimental opt-in when end-to-end measurements do not justify promotion;
 - a validated CK Tile FP32 triangle-attention path for the exact unmasked 1,000-token gfx90a bucket, with SDPA fallback;
+- a validated exact-sequence CK FP32 attention specialization for the opt-in 1,536-token gfx90a bucket, with same-source model gains and SDPA fallback;
 - an independent Protenix patch branch that exposes FireProt dispatch without changing native defaults.
 
 AtlasFold, OpenFold, ESMFold, Base-model coverage, BF16 promotion, additional long-sequence buckets, and general multi-GPU execution remain future work.
 
 ## Experimental 1,536-residue workload
 
-A real **1,536-residue** input and opt-in attention experiments are now
-available. SDPA, padded CK, and packed triangle multiplication have passed full-model native-agreement validation. Padding
-the physical CK bias row stride reduced its operator time from about 48.4
-to 39.4 ms, but SDPA remains faster at about 34.8 ms; CK is therefore not
-promoted for this bucket. A same-source comparison now measures **137.709 s
-native, 62.396 s with SDPA, and 41.771 s with SDPA plus packed triangle
-multiplication (3.297x overall)**. This uses Mini-default FP32, C4/S1,
-one warmup and three measured calls on GPU 7. Further CK batch scheduling
-reaches 37.93 ms but still trails SDPA; it remains a standalone experiment.
-See [long-sequence diagnosis](docs/protenix-long1536.md).
+A real **1,536-residue** input is available under
+`FIREPROT_ENABLE_LONG1536=1`. The exact FP32 CK attention specialization is
+now the default within this opt-in bucket: a same-source Mini-default
+C4/S1 comparison improves warm model median from **36.975 to 31.441 s
+(1.176x)** and triangle attention from **18.856 to 13.623 s (1.384x)**,
+with unchanged peak allocated memory. Three output comparisons pass the
+locked coordinate/confidence gates. Use `FIREPROT_ENABLE_CK_EXACT1536=0`
+to return to SDPA. N1000 retains its existing padded CK kernel.
+
+The key change removes unnecessary K-sequence padding handling for the
+exact divisible length; the installed CK generic path also restricts bias
+access alignment when that padding flag is enabled. The integrated
+operator measures **22.759 ms versus SDPA 34.851 ms (1.53x)**. See
+[long-sequence diagnosis and model validation](docs/protenix-long1536.md).
+
+Earlier same-source work measured **137.709 s native, 62.396 s with SDPA,
+and 41.771 s with SDPA plus packed triangle multiplication (3.297x)**.
+These historical comparisons are separate from the new CK increment and
+must not be multiplied into one controlled speedup claim.
 
 A subsequent same-source epilogue comparison improves **41.444 to 36.664 s
 (1.130x)** and reduces peak allocation from 23.929 to 22.721 GB. HIP pair

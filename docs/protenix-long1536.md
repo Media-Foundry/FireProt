@@ -1,14 +1,19 @@
 # Real 1,536-residue inference and CK attention diagnosis
 
-Status: experimental, 2026-10-03. This bucket is opt-in. Enabling
-`FIREPROT_ENABLE_LONG1536=1` selects SDPA attention; additionally setting
-`FIREPROT_ENABLE_CK_ATTENTION_1536=1` selects the slower CK candidate for
-experiments. The validated N1000 default is unchanged.
+Status: validated exact bucket, 2026-10-03; opt-in by length. Enabling
+`FIREPROT_ENABLE_LONG1536=1` now selects exact-sequence FP32 CK attention,
+packed triangle multiplication and measured HIP epilogues. The latest
+same-source comparison improves warm model median **36.975 to 31.441 s
+(1.176x)**; see [current model validation](#exact-sequence-ck-model-validation).
+The validated N1000 padded CK default is unchanged.
 
-The same length opt-in now also enables packed triangle multiplication.
-Set `FIREPROT_DISABLE_LONG_TRIANGLE_PACKED=1` for the SDPA-only comparison.
+Set `FIREPROT_ENABLE_CK_EXACT1536=0` to select SDPA instead. The older padded
+CK experiment additionally requires `FIREPROT_ENABLE_CK_ATTENTION_1536=1`
+with the exact flag disabled. Global `FIREPROT_DISABLE_CK_ATTENTION=1`
+also prevents CK selection. `FIREPROT_DISABLE_LONG_TRIANGLE_PACKED=1`
+disables packed multiplication independently of attention selection.
 
-## Controlled warm model comparison
+## Controlled warm model comparison (historical)
 
 Source `8f31220ccb88dc05ed3e4a3e3c6df64fe791546a` was measured sequentially
 on physical GPU 7 with GPU 6 idle, one warmup and three measured calls per
@@ -1073,3 +1078,129 @@ HIP_VISIBLE_DEVICES=7,6 PYTHONPATH=.:Protenix \
 ```
 
 See [same-source model evidence](../provenance/protenix_two_gcd_model_11d9403.json).
+
+### Exact-sequence CK specialization
+
+After the two-GCD result, a single-GCD replay first confirmed that the
+existing CK/SDPA ranking survives continuous enqueueing. At GPU 6, seed
+419, FP32, TF32 off, five warmup groups and twenty measured groups,
+SDPA takes about 34.8 ms per call and padded/grouped CK about 37.7 ms,
+whether synchronizing every call or every eight calls. Bias packing and
+output allocation are included. The selected GCD and idle sibling are
+both continuously monitored.
+
+Changing the key tile after retaining physical bias padding and batch
+grouping improves CK modestly. In the eight-call protocol:
+
+| CK tile / waves | Bias row +8 | Bias row +16 |
+| --- | ---: | ---: |
+| M128/N64/W4 | 37.654 ms | 37.884 ms |
+| M64/N32/W2 | 39.057 ms | 38.240 ms |
+| M128/N32/W4 | 36.349 ms | 36.872 ms |
+| M64/N128/W2 | 45.971 ms | 47.212 ms |
+| M128/N128/W4 | 39.330 ms | 43.655 ms |
+
+The larger improvement comes from **sequence padding specialization**.
+N1536 divides both the query and key tiles exactly, yet the old shared
+N1000/N1536 instantiation enabled both sequence-padding flags. Disabling
+Q/K sequence padding and output-row padding, while restricting the probe
+C ABI to B512/N1536, reduces grouped M128/N32/W4 to about 22.2 ms. Logical
+sequence length, precision and attention semantics remain unchanged;
+physical bias row padding is a separate layout choice.
+
+A controlled flag ablation with M128/N32/W4, group 8 and bias row +8
+attributes most of the gain to **K sequence padding**:
+
+| Padding handling disabled | Eight-call mean latency median |
+| --- | ---: |
+| None | 36.349 ms |
+| Q only | 36.258 ms |
+| K only | 22.793 ms |
+| Output row only | 36.354 ms |
+| Q, K and output row | 22.235 ms |
+
+Installed CK source explains why this is more than removing a small
+conditional. In `block_fmha_pipeline_qr_ks_vs.hpp`, `kPadSeqLenK` forces
+`kAlignmentBias` to one instead of taking the matrix policy's alignment,
+and enables edge-mask handling. `fmha_fwd_kernel.hpp` uses that alignment
+in the global bias tensor view. These choices change generated memory
+access and masking code. The flag ablation establishes the performance
+contribution of the K-padding path; it does not separately quantify the
+cost of each instruction. The candidate uses row-major V, so the separate
+column-major V-alignment branch is not its explanation.
+
+Commit `7e388b8` adds a separate `ck_attention_exact1536` C ABI with
+M128/N32/W4, no sequence/output-row padding, standard CK grid scheduling,
+and physical bias row stride 1552. It uses installed CK headers directly;
+the experiment's private grid-header overlay is not required at runtime.
+N1000 retains its existing padded instantiation. Exact B512/N1536 checks
+reject unsupported dimensions before pointer access. Existing Python
+shape, stride, dtype, alignment, inference and architecture gates still
+apply. Extension build/binding failure uses SDPA fallback.
+
+The integrated complete operator measures **22.759 ms** versus SDPA
+**34.851/34.824 ms** before/after, approximately **1.53x**. Output is
+contiguous in head-last layout. Maximum absolute delta is `5.0068e-6`,
+passing `atol=rtol=2e-5`. Five monitored GPU tests pass, covering N1000
+regression, N1536 full outputs, fully masked rows, extreme bias, input
+preservation, non-default streams, queued calls and C ABI dimension
+rejection. The local suite has 114 passes and 26 HIP skips.
+
+The initial integration requires `FIREPROT_ENABLE_CK_EXACT1536=1` in
+addition to enabling the N1536 model path. Its same-source full-model
+validation is reported separately below. Operator wins alone are not
+model-performance claims. See
+[operator and ablation evidence](../provenance/protenix_ck_exact1536_diagnosis_e857e1f.json).
+
+### Exact-sequence CK model validation
+
+Candidate `7e388b8` was compared with its own SDPA baseline on physical
+GPU 7 with GPU 6 idle; both were continuously monitored. The only backend
+selection difference is `FIREPROT_ENABLE_CK_EXACT1536=1` versus `0`.
+The legacy N1536 CK, two-GCD, Lt BMM and attention-gate experiments are
+explicitly disabled. Both runs retain Mini-default, the real 1536-residue
+input, FP32, TF32 off, hipBLAS, C4/S1, sample 1, seed 101, no MSA/templates,
+expandable segments, one warmup and three measured predictions. CK runs
+first, followed by SDPA. Both isolation checks pass.
+
+| Metric | SDPA baseline | Exact CK |
+| --- | ---: | ---: |
+| Warm model median | 36.975 s | 31.441 s |
+| Warm model p95 | 37.023 s | 31.891 s |
+| Triangle attention median | 18.856 s | 13.623 s |
+| Peak allocated memory | 22,721,185,792 B | 22,721,185,792 B |
+| Median peak reserved memory | 23,737,663,488 B | 23,737,663,488 B |
+| Entire worker wall time | 208.376 s | 213.763 s |
+
+Warm model latency improves **1.176x**, or about **15.0%** lower latency;
+triangle attention improves **1.384x**. All **1,728** attention calls across
+warmup and measured predictions select the exact CK path, without fallback.
+This is a same-resource single-GCD improvement. Stage boundaries overlap
+and must not be summed.
+
+All three output comparisons pass the locked `1e-3` gates over 12,139 atoms
+each. Maximum aligned RMSD is `1.37919e-4 A`; maximum confidence delta is
+`1.52588e-5`. This establishes agreement with the existing accelerated
+SDPA baseline on one input, not independent experimental-coordinate accuracy.
+
+The distinction between timing scopes matters: warm GPU model times
+exclude loading, preprocessing, serialization and first-use compilation.
+The CK warmup includes the new lazy build and takes about 64 seconds by
+the inference log. The entire worker therefore does not improve in this
+first-build comparison despite the three faster measured predictions.
+No cold-request or complete-pipeline wall-time speedup is claimed.
+
+Following these gates, exact CK now follows `FIREPROT_ENABLE_LONG1536=1`
+by default. `FIREPROT_ENABLE_CK_EXACT1536=0` restores SDPA, and missing or
+unsupported CK builds also fall back. The promoted selection uses the
+same C++ kernel source as the measured explicit opt-in. N1000 still uses
+its previous padded instantiation. These claims remain limited to the
+recorded architecture, dtype, model configuration and exact input bucket.
+
+See [same-source model evidence](../provenance/protenix_ck_exact1536_model_7e388b8.json).
+
+The promoted default additionally passes eight focused GPU tests, including
+fresh-process default/disable environment checks and both N1000 and N1536
+operator tests. The final local regression has 117 passes and 26 HIP skips.
+The promotion test manifest verifies that the C++ source hash is identical
+to the model-tested explicit candidate.

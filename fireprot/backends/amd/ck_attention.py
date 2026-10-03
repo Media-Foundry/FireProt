@@ -20,7 +20,9 @@ _enabled = (
     os.environ.get("FIREPROT_ENABLE_CK_ATTENTION", "1") == "1"
     and os.environ.get("FIREPROT_DISABLE_CK_ATTENTION") != "1"
 )
-_exact1536_enabled = os.environ.get("FIREPROT_ENABLE_CK_EXACT1536") == "1"
+_exact1536_enabled = os.environ.get(
+    "FIREPROT_ENABLE_CK_EXACT1536", "1" if ta._long1536_enabled else "0"
+) == "1"
 _long1536_enabled = _exact1536_enabled or os.environ.get("FIREPROT_ENABLE_CK_ATTENTION_1536") == "1"
 _lock = threading.RLock()
 _library: Any = None
@@ -127,7 +129,7 @@ def _supports(signature: OperationSignature, *, shape=ta.LONG_QKV_SHAPE) -> bool
 
 def _supports_long1536(signature: OperationSignature) -> bool | tuple[bool, str]:
     if not _long1536_enabled:
-        return False, "experimental CK N1536 requires an explicit CK attention opt-in"
+        return False, "CK N1536 requires the exact path or an explicit legacy opt-in"
     return _supports(signature, shape=ta.LONG1536_QKV_SHAPE)
 
 
@@ -158,4 +160,4 @@ def attention(*, module: Any, q: Any, k: Any, v: Any, biases: Any, native: Any) 
 registry.register(operation=ta.OPERATION, name=IMPLEMENTATION, function=attention,
                   supports=_supports, priority=30, version="1")
 registry.register(operation=ta.OPERATION, name=LONG1536_IMPLEMENTATION, function=attention,
-                  supports=_supports_long1536, priority=30, version="experimental-3")
+                  supports=_supports_long1536, priority=30, version="exact-shape-1")

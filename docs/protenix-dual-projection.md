@@ -97,3 +97,21 @@ HIP_VISIBLE_DEVICES=7 PYTHONPATH=.:Protenix FIREPROT_ENABLE_LONG1536=1 python \
   benchmarks/protenix/benchmark_projection_gate.py --dual-hip --full-triangle \
   --output outputs/benchmarks/dual-projection-triangle.json
 ```
+
+## Experimental integration
+
+`FIREPROT_ENABLE_DUAL_PROJECTION=1` enables the C64/K16 candidate inside the
+existing packed triangle route. It defaults to off. N1536 additionally
+requires `FIREPROT_ENABLE_LONG1536=1`. Only gfx90a, FP32, contiguous aligned
+N1000/N1536 inputs and bias-free contiguous aligned 128x128 projection
+weights are accepted. Training/autograd and unsupported weights use the
+preceding projection path. Extension unavailability preserves the existing
+native fallback. The runtime `triangle_vector` manifest records the flag,
+per-length triangle call counts, and candidate fallback counts.
+
+The integrated tests cover input/weight preservation, three queued launches,
+nondefault streams, zero/positive/negative constant input rows, malformed
+weights, dtype/layout/alignment rejection, autograd rejection, both triangle
+directions and residual modes, and bias fallback. CPU suite: 129 passed,
+39 HIP skips. GPU regression subset: 21 passed, both GPU process monitors
+passed. Same-source model validation is pending; the default remains off.

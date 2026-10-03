@@ -34,11 +34,14 @@ _vector_packed_enabled = os.environ.get("FIREPROT_ENABLE_TRIANGLE_VECTOR", "1") 
 _vector_counts = {"n1000": 0, "n1536": 0, "fallback": 0}
 _vector_norm_enabled = os.environ.get("FIREPROT_ENABLE_VECTOR_PACKED_NORM", "1") == "1"
 _norm_counts = {"n1000": 0, "n1536": 0}
+_dual_projection_enabled = os.environ.get("FIREPROT_ENABLE_DUAL_PROJECTION", "0") == "1"
+_dual_counts = {"n1000": 0, "n1536": 0, "fallback": 0}
 
 
 def vector_manifest() -> dict[str, Any]:
     return {"enabled": _vector_packed_enabled, "counts": dict(_vector_counts),
-            "packed_norm_enabled": _vector_norm_enabled, "packed_norm_counts": dict(_norm_counts)}
+            "packed_norm_enabled": _vector_norm_enabled, "packed_norm_counts": dict(_norm_counts),
+            "dual_projection_enabled": _dual_projection_enabled, "dual_projection_counts": dict(_dual_counts)}
 
 
 
@@ -265,6 +268,28 @@ def _supports_long1536_packed(signature: OperationSignature) -> bool | tuple[boo
     return _supports_long_fused_gates(signature, shape=LONG1536_SHAPE)
 
 
+def _supports_dual_projection(module: Any, tensor: Any) -> bool:
+    import torch
+
+    if not _dual_projection_enabled or torch.is_grad_enabled() or module.training:
+        return False
+    if (tuple(tensor.shape) not in (LONG_VALIDATED_SHAPE, LONG1536_SHAPE)
+            or tensor.dtype != torch.float32 or not tensor.is_cuda
+            or not tensor.is_contiguous() or tensor.data_ptr() % 16
+            or _architecture(tensor) != "gfx90a"):
+        return False
+    for name in ("linear_a_g", "linear_a_p", "linear_b_g", "linear_b_p"):
+        layer = getattr(module, name, None)
+        if not isinstance(layer, torch.nn.Linear) or layer.bias is not None:
+            return False
+        weight = layer.weight
+        if (tuple(weight.shape) != (128, 128) or weight.dtype != tensor.dtype
+                or weight.device != tensor.device or not weight.is_contiguous()
+                or weight.data_ptr() % 16):
+            return False
+    return True
+
+
 def _long_sequence_packed(
     *, module: Any, z: Any, mask: Any, inplace_safe: bool,
     add_with_inplace: bool, inplace_chunk_size: int | None,
@@ -279,12 +304,15 @@ def _long_sequence_packed(
               and z.is_contiguous() and z.data_ptr() % 16 == 0)
     pack = extension.triangle_vector_pack if vector else extension.sigmoid_pack_f32_128
     normalized = module.layer_norm_in(z)
-    a = pack(
-        module.linear_a_g(normalized), module.linear_a_p(normalized)
-    )
-    b = pack(
-        module.linear_b_g(normalized), module.linear_b_p(normalized)
-    )
+    if _supports_dual_projection(module, normalized):
+        a = extension.dual_projection(normalized, module.linear_a_g.weight, module.linear_a_p.weight)
+        b = extension.dual_projection(normalized, module.linear_b_g.weight, module.linear_b_p.weight)
+        _dual_counts[f"n{z.shape[0]}"] += 1
+    else:
+        if _dual_projection_enabled:
+            _dual_counts["fallback"] += 1
+        a = pack(module.linear_a_g(normalized), module.linear_a_p(normalized))
+        b = pack(module.linear_b_g(normalized), module.linear_b_p(normalized))
     from fireprot.backends.amd.lt_bmm import packed_bmm
     contracted = packed_bmm(a, b, module._outgoing)
     del a, b

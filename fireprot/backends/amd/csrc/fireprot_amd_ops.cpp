@@ -47,7 +47,10 @@ torch::Tensor fireprot_triangle_residual(torch::Tensor gate,torch::Tensor value,
 
 torch::Tensor fireprot_packed_norm_vector(torch::Tensor input,torch::Tensor weight,torch::Tensor bias,double epsilon);
 
+torch::Tensor fireprot_dual_projection(torch::Tensor input,torch::Tensor gate_weight,torch::Tensor value_weight);
+
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, module) {
+  module.def("dual_projection", &fireprot_dual_projection);
   module.def("packed_norm_vector", &fireprot_packed_norm_vector);
   module.def("triangle_vector_pack", &fireprot_triangle_vector_pack);
   module.def("triangle_residual", &fireprot_triangle_residual);

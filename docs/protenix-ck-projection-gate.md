@@ -97,3 +97,7 @@ HIP_VISIBLE_DEVICES=7 PYTHONPATH=.:Protenix FIREPROT_ENABLE_LONG1536=1 python \
   benchmarks/protenix/benchmark_projection_gate.py \
   --full-triangle --output outputs/benchmarks/projection-triangle.json
 ```
+
+The subsequent [dual projection HIP investigation](protenix-dual-projection.md)
+shares both projections in one kernel and improves complete-triangle timings.
+It remains experimental pending model validation.

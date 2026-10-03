@@ -164,5 +164,5 @@ remain under DiamondHill `outputs/benchmarks/dual-projection-model-67b274a/`.
 
 A subsequent [spatial/wave/stride investigation](protenix-dual-tiles.md)
 finds an additional complete-triangle improvement with C128/R128/K16/W8
-and padded channel storage. It remains experimental pending model validation;
-the model result above uses the promoted C64/R64/K16/W4 implementation.
+and padded channel storage. It has now passed same-source model validation and is the default within
+the validated buckets. The historical model result above uses C64/R64/K16/W4.

@@ -22,6 +22,8 @@ AtlasFold, OpenFold, ESMFold, Base-model coverage, BF16 promotion, additional lo
 
 ## Experimental 1,536-residue workload
 
+The latest tiled dual projection improves warm model median from **28.835 to 28.413 s (1.015x)** over five same-source repetitions. It follows the existing length opt-in; `FIREPROT_ENABLE_TILED_DUAL_PROJECTION=0` restores C64/R64 dual projection. Peak allocated memory is unchanged and all output comparisons pass. See [model validation](docs/protenix-dual-tiles.md#same-source-model-comparison).
+
 Fused dual projection improves the warm model from **29.930 to 28.916 s (1.035x)** in a five-repetition same-source comparison. It is now enabled inside the existing length opt-in; `FIREPROT_ENABLE_DUAL_PROJECTION=0` restores the preceding projections. Peak allocated memory is unchanged and all prediction comparisons pass. See [model validation](docs/protenix-dual-projection.md#same-source-model-comparison).
 
 Vectorized packed LayerNorm subsequently improves the warm model from **30.237 to 29.859 s (1.013x)** in a five-repetition same-source comparison. It is enabled inside the existing length opt-in; `FIREPROT_ENABLE_VECTOR_PACKED_NORM=0` restores the preceding LayerNorm. See [validation](docs/protenix-packed-norm-vector.md#same-source-model-result).
@@ -63,6 +65,8 @@ the model. It remains disabled; see the
 [two-GCD model comparison](docs/protenix-long1536.md#synchronized-two-gcd-model-validation).
 
 ## Verified 1,000-token MI250 result
+
+The latest tiled dual projection improves warm model median from **9.936 to 9.884 s (1.005x)** over five same-source repetitions, with unchanged peak allocated memory and passing output comparisons. Use `FIREPROT_ENABLE_TILED_DUAL_PROJECTION=0` to restore the preceding dual projection. See [model validation](docs/protenix-dual-tiles.md#same-source-model-comparison).
 
 Fused dual projection improves the warm model from **10.370 to 9.932 s (1.044x)** over five same-source repetitions. It is now the default in this validated bucket; use `FIREPROT_ENABLE_DUAL_PROJECTION=0` for the previous projections. Peak allocated memory is unchanged and all prediction comparisons pass. See [model validation](docs/protenix-dual-projection.md#same-source-model-comparison).
 

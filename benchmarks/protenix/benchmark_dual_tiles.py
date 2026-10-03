@@ -19,6 +19,7 @@ def full_triangle(torch,ext,entry,n,padding,report):
     from fireprot.backends.amd.lt_bmm import packed_bmm
     from protenix.model.triangular.triangular import TriangleMultiplicativeUpdate
     install('hipblas');tm._dual_projection_enabled=True
+    tm._dual_tiled_enabled=False  # Preserve the measured C64/R64 control.
     tm._vector_packed_enabled=True;tm._vector_norm_enabled=True
     report['blas']='hipblas'
     report['triangle_config']={'channels':128,'rows':128,'k':16,'waves':8,'padding':padding,

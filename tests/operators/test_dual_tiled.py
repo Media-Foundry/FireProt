@@ -7,7 +7,7 @@ import torch
 from fireprot.backends.amd import triangle_multiplication as tm
 from fireprot.backends.amd.extension import load_amd_extension
 
-@pytest.mark.parametrize('flag,expected',[(None,False),('0',False),('1',True)])
+@pytest.mark.parametrize('flag,expected',[(None,True),('0',False),('1',True)])
 def test_tiled_dual_environment(flag,expected):
     env=os.environ.copy();env.pop('FIREPROT_ENABLE_TILED_DUAL_PROJECTION',None)
     if flag is not None:env['FIREPROT_ENABLE_TILED_DUAL_PROJECTION']=flag

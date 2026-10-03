@@ -132,3 +132,14 @@ model comparisons measure 10.370 to 9.932 s (N1000, 1.044x) and 29.930 to
 28.916 s (N1536, 1.035x), with unchanged allocated memory and passing output
 checks. `FIREPROT_ENABLE_DUAL_PROJECTION=0` disables this increment. See
 [implementation and evidence](protenix-dual-projection.md#same-source-model-comparison).
+
+
+The subsequent C128/R128/K16/W8 dual-projection specialization writes logical
+`[128,N,N]` output with channel stride `N*N+128`. The existing hipBLAS BMM
+consumes that padded batch directly. It is now the default within the
+validated dual-projection paths after same-source warm-model gains of
+9.936 to 9.884 s (N1000, 1.005x) and 28.835 to 28.413 s (N1536, 1.015x),
+with unchanged peak allocation and passing prediction comparisons.
+`FIREPROT_ENABLE_TILED_DUAL_PROJECTION=0` restores C64/R64, while
+`FIREPROT_ENABLE_DUAL_PROJECTION=0` disables both implementations. See
+[tiled projection evidence](protenix-dual-tiles.md#same-source-model-comparison).

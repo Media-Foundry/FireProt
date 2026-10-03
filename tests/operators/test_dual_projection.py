@@ -52,6 +52,7 @@ def test_dual_projection_complete_triangle_and_bias_fallback(n,monkeypatch):
     from fireprot.adapters.protenix.runtime import install
     from protenix.model.triangular.triangular import TriangleMultiplicativeUpdate
     install('hipblas');assert load_amd_extension() is not None
+    monkeypatch.setattr(tm,"_dual_tiled_enabled",False)
     torch.manual_seed(997);torch.backends.cuda.matmul.allow_tf32=False
     with torch.inference_mode():
         for outgoing in (True,False):

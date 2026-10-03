@@ -36,7 +36,7 @@ _vector_norm_enabled = os.environ.get("FIREPROT_ENABLE_VECTOR_PACKED_NORM", "1")
 _norm_counts = {"n1000": 0, "n1536": 0}
 _dual_projection_enabled = os.environ.get("FIREPROT_ENABLE_DUAL_PROJECTION", "1") == "1"
 _dual_counts = {"n1000": 0, "n1536": 0, "fallback": 0}
-_dual_tiled_enabled = os.environ.get("FIREPROT_ENABLE_TILED_DUAL_PROJECTION", "0") == "1"
+_dual_tiled_enabled = os.environ.get("FIREPROT_ENABLE_TILED_DUAL_PROJECTION", "1") == "1"
 _dual_tiled_counts = {"n1000": 0, "n1536": 0}
 
 

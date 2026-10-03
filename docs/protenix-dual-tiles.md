@@ -2,11 +2,12 @@
 
 ## Status
 
-Experimental follow-up to the promoted C64/R64/K16/W4 dual projection at
-`30019c00c76500c7324e5e0959b10cf25d1aba74`. The best new candidate is
-C128/R128/K16/W8 with 128 floats of output channel padding. It improves the
-complete N1536 triangle operator by approximately 1.06–1.07x in these probes.
-Production dispatch is unchanged; no additional model/E2E gain is claimed.
+C128/R128/K16/W8 with 128 floats of output channel padding is now the
+default within the validated dual-projection paths. Same-source warm model
+validation improves N1536 from 28.835 to 28.413 s (1.015x), and N1000 from
+9.936 to 9.884 s (1.005x). See the model comparison below. The preceding
+C64/R64/K16/W4 path at `30019c00c76500c7324e5e0959b10cf25d1aba74` remains
+available through `FIREPROT_ENABLE_TILED_DUAL_PROJECTION=0`.
 
 C is the channel tile, R the spatial row tile, K the reduction tile, and W
 the number of wave64 groups per block. The mathematical operation, FP32
@@ -93,12 +94,12 @@ extends that benefit. The two padded projection outputs add 131,072 bytes
 to peak allocated storage in this operator harness at both lengths. This
 is not a full-model memory result.
 
-## Next validation
+## Validation gates
 
-Integrate the W8 candidate behind a separate switch while retaining the
-current C64/R64 fallback. Verify tensor strides, asynchronous use, and
-model numerical agreement before promotion. Run a same-source model A/B
-with the existing FP32 C4/S1 configuration and locked 1e-3 output gates.
+Tensor strides, asynchronous use and model numerical agreement have passed
+for the two measured lengths. The C64/R64 fallback remains available.
+Additional lengths, architectures, dtypes and model configurations still
+require their own measurements and output gates.
 
 [Evidence](../provenance/protenix_dual_tiles_probe_30019c0.json) contains all
 nine reports, timing samples, source/build fingerprints, guards, monitors
@@ -116,10 +117,10 @@ FIREPROT_ENABLE_LT_BMM_1536=0 python \
   --output outputs/benchmarks/dual-tiles-triangle.json
 ```
 
-## Experimental model integration
+## Model integration
 
 `FIREPROT_ENABLE_TILED_DUAL_PROJECTION=1` selects the C128/R128/K16/W8
-candidate with 128 floats of channel padding. It defaults to off and only
+implementation with 128 floats of channel padding. It defaults to on and only
 applies when the existing dual-projection capability predicate succeeds.
 `FIREPROT_ENABLE_DUAL_PROJECTION=0` disables both dual implementations.
 N1536 still requires its existing length opt-in. The runtime manifest
@@ -132,5 +133,66 @@ shape/dtype/layout/alignment/device/autograd combinations. Tests cover
 three queued projections, nondefault streams, preserved inputs, repeated
 complete-triangle calls in both directions and residual modes, and total
 switch precedence. CPU suite: 132 passed / 43 HIP skips. GPU regression
-subset: 28 passed, both GPU process monitors passed. Model A/B is pending;
-the tiled route remains opt-in.
+subset: 28 passed, both GPU process monitors passed. A fresh-process check
+confirms the new default. Promotion changes the Python default; the tested
+C++/HIP sources are unchanged. Historical tile benchmarks explicitly retain
+the C64/R64 control.
+
+
+## Same-source model comparison
+
+Candidate `3f74b214e42082dc4e6f59df45e36ea72e301fda`, independent Protenix
+integration `77218da6f5ccf8562a76577dd568869785e6b45b`. Both sides use
+Mini-default v0.5.0, FP32, TF32 disabled, C4/S1, one sample, seed 101,
+no MSA/template search, hipBLAS, expandable allocator segments, one warmup
+and five measured predictions with warm in-process caches. GPU 7 runs
+inference; GPU 6 is monitored as idle. Previously promoted vector packing,
+packed LayerNorm and original dual projection remain enabled. Other
+experimental attention/two-GCD/hipBLASLt routes are disabled.
+
+Only the tiled-dual flag changes. N1536 runs enabled then disabled; N1000
+runs disabled then enabled. All four runs pass both GPU process monitors.
+Each side records 864 total dual-projection triangle calls. Candidates
+record 864 tiled calls; controls record zero. No projection fallback occurs.
+
+| Metric | N1000 disabled / enabled | N1536 disabled / enabled |
+| --- | ---: | ---: |
+| Warm model median | 9.936 / 9.884 s | 28.835 / 28.413 s |
+| Warm model p95 | 9.980 / 9.902 s | 29.015 / 28.636 s |
+| Triangle multiplication median | 3.100 / 3.033 s | 8.667 / 8.204 s |
+| Peak allocated bytes | 10,011,042,304, unchanged | 22,721,185,792, unchanged |
+| Complete worker wall time | 112.687 / 112.531 s | 247.484 / 244.463 s |
+
+The incremental warm-model speedups are **1.005x** and **1.015x**. In both
+comparisons the candidate maximum is below the control minimum. This is a
+small whole-model increment despite the larger isolated projection gain.
+Model timing excludes loading, preprocessing, serialization and compilation.
+Worker wall time includes one warmup and five predictions; it is not a
+single-request cold-start benchmark and includes CPU/I/O variation.
+
+All ten prediction comparisons pass the unchanged 1e-3 aligned-coordinate
+RMSD and confidence gates. Maximum aligned RMSD / confidence delta are
+1.094e-4 Angstrom / 2.671e-5 at N1000 (7,979 atoms), and 1.105e-4 Angstrom /
+7.630e-6 at N1536 (12,139 atoms). These establish agreement with the preceding
+implementation, not experimental-coordinate accuracy. The isolated random
+operator tests' exact agreement does not imply bitwise model agreement.
+
+[Model evidence](../provenance/protenix_tiled_dual_model_3f74b21.json) records
+source/build identity, fixed workloads, all model samples, dispatch counts,
+isolation and comparisons. Raw reports remain under DiamondHill
+`outputs/benchmarks/tiled-dual-model-3f74b21/`.
+
+## Remaining attention work
+
+The new enabled model measures triangle attention at 4.334 s for N1000 and
+13.591 s for N1536, over 144 stage calls per prediction. The N1536 CK
+capability is `[512,4,1536,32]`, reflecting an outer-batch chunk; an isolated
+B512 timing must not be treated as the complete N1536 attention stage.
+
+Upstream `Attention._prep_qkv` separately projects Q, K and V, reshapes to
+head-last storage and transposes the head/sequence dimensions. In the
+FireProt path it scales Q before dispatch. A future fused projection must
+preserve that single scaling, the CK input strides, and the original path
+for cross-attention or unsupported shapes. Measuring the real B512/N1536
+and B1000/N1000 projection workloads is the next investigation, not a
+claimed optimization result.

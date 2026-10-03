@@ -284,3 +284,21 @@ def test_model_recorder_retains_failures_swallowed_by_outer_runner() -> None:
     ]
     assert recorder.wall_events["model"][0]["peak_memory_allocated_bytes"] == 123
     assert recorder.wall_events["model"][0]["peak_memory_reserved_bytes"] == 456
+
+
+def test_additional_gpu_monitoring_required_for_dual_attention():
+    import pytest
+    environment = {"HIP_VISIBLE_DEVICES": "7,6", "FIREPROT_ENABLE_TWO_GCD_ATTENTION": "1"}
+    with pytest.raises(ValueError, match="monitoring both"):
+        profile_inference._additional_physical_devices(environment, {})
+    assert profile_inference._additional_physical_devices(environment, {"additional_physical_devices": [6]}) == [6]
+    for devices in ([7], [6,6], [5]):
+        with pytest.raises(ValueError):
+            profile_inference._additional_physical_devices(environment, {"additional_physical_devices": devices})
+
+
+def test_additional_gpu_preflight_rejects_busy_secondary(monkeypatch):
+    import pytest
+    monkeypatch.setattr(profile_inference, "_rocm_preflight", lambda _: dict(available=True,returncode=0,data={"card6":{"GPU use (%)":"99","VRAM Total Used Memory (B)":"0"}}))
+    with pytest.raises(RuntimeError, match="GPU 6"):
+        profile_inference._additional_device_preflight([6], {})

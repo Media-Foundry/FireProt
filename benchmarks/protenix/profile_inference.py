@@ -494,6 +494,39 @@ def _build_spec(
     }
 
 
+def _additional_physical_devices(environment: Any, measurement: dict[str, Any]) -> list[int]:
+    """Explicit additional devices to preflight and monitor for a worker."""
+    visible, primary = _selected_physical_device(environment)
+    requested = measurement.get("additional_physical_devices", [])
+    if not isinstance(requested, list) or any(type(i) is not int for i in requested):
+        raise ValueError("additional_physical_devices must be an integer list")
+    visible_ids = {int(i.strip()) for i in (visible or "").split(",") if i.strip().isdigit()}
+    if len(set(requested)) != len(requested) or primary in requested or not set(requested) <= visible_ids:
+        raise ValueError("additional devices must be distinct visible non-primary devices")
+    if environment.get("FIREPROT_ENABLE_TWO_GCD_ATTENTION") == "1":
+        if visible not in {"6,7", "7,6"} or set(requested) != {6, 7} - {primary}:
+            raise ValueError("two-GCD attention requires monitoring both physical GPUs 6 and 7")
+    return requested
+
+
+def _additional_device_preflight(devices: list[int], measurement: dict[str, Any]) -> dict[str, Any]:
+    if not devices:
+        return {}
+    snapshot = _rocm_preflight(measurement)
+    if not snapshot.get("available") or snapshot.get("returncode") != 0:
+        raise RuntimeError("Additional-device preflight snapshot unavailable")
+    checks = {}
+    for device in devices:
+        card = snapshot.get("data", {}).get(f"card{device}", {})
+        use = int(card.get("GPU use (%)", 101))
+        memory = int(card.get("VRAM Total Used Memory (B)", 2**63))
+        passed = use <= int(measurement.get("exclusive_max_gpu_use_percent", 5)) and memory <= int(measurement.get("exclusive_max_vram_used_bytes", 268435456))
+        checks[str(device)] = dict(gpu_use_percent=use, vram_used_bytes=memory, passed=passed)
+        if not passed:
+            raise RuntimeError(f"Additional physical GPU {device} is unavailable")
+    return checks
+
+
 def _run_worker(spec: dict[str, Any]) -> pathlib.Path:
     run_dir = pathlib.Path(spec["run_dir"])
     run_dir.mkdir(parents=True, exist_ok=True)
@@ -522,6 +555,9 @@ def _run_worker(spec: dict[str, Any]) -> pathlib.Path:
         str(spec_path),
     ]
     _, physical_index = _selected_physical_device(environment)
+    extra_devices = _additional_physical_devices(environment, spec["measurement"])
+    extra_preflight = _additional_device_preflight(extra_devices, spec["measurement"])
+    extra_monitors = []
     process: subprocess.Popen[str] | None = None
     monitor: _GpuProcessMonitor | None = None
     with log_path.open("w", encoding="utf-8") as log:
@@ -539,25 +575,33 @@ def _run_worker(spec: dict[str, Any]) -> pathlib.Path:
             spec["measurement"].get("process_monitor_interval_seconds", 1.0),
         )
         monitor.start()
+        for device in extra_devices:
+            extra = _GpuProcessMonitor(device, process.pid, spec["measurement"].get("process_monitor_interval_seconds", 1.0))
+            extra.start()
+            extra_monitors.append(extra)
         try:
             returncode = process.wait()
         finally:
             monitor_report = monitor.stop()
+            extra_reports = [item.stop() for item in extra_monitors]
 
     manifest_path = run_dir / "manifest.json"
     if manifest_path.is_file():
         manifest = _json_load(manifest_path)
         manifest["gpu_process_monitor"] = monitor_report
+        if extra_devices:
+            manifest["additional_device_preflight"] = extra_preflight
+            manifest["additional_gpu_process_monitors"] = extra_reports
         reject_external = bool(
             spec["measurement"].get("reject_external_gpu_processes", False)
         )
-        if reject_external and not monitor_report["passed"]:
+        if reject_external and not all(item["passed"] for item in [monitor_report, *extra_reports]):
             manifest.update(
                 {
                     "status": "contaminated",
                     "contamination": {
                         "type": "external_gpu_process",
-                        "reason": monitor_report.get("reason"),
+                        "reason": next(item.get("reason") for item in [monitor_report, *extra_reports] if not item["passed"]),
                     },
                 }
             )

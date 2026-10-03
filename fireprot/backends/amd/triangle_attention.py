@@ -154,6 +154,12 @@ def _direct_sdpa(
 
     if len(biases) != 1:
         return _efficient_sdpa(module=module, q=q, k=k, v=v, biases=biases, native=native)
+    if os.environ.get("FIREPROT_ENABLE_TWO_GCD_ATTENTION") == "1":
+        from fireprot.backends.amd.two_gcd_attention import try_attention
+
+        result = try_attention(module=module, q=q, k=k, v=v, biases=biases)
+        if result is not None:
+            return result
     output = functional.scaled_dot_product_attention(
         q, k, v, attn_mask=biases[0].contiguous(), dropout_p=0.0, scale=1.0,
     )

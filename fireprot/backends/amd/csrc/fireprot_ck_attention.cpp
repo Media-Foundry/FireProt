@@ -45,3 +45,38 @@ extern "C" int ck_attention(float* q,float* k,float* v,float* b,float* o,int bat
     launch(config);
     return static_cast<int>(hipGetLastError());
 }
+
+// Separate exact-shape kernel: N1536 is divisible by both sequence tiles.
+// Keep the N1000 instantiation above padded and unchanged.
+namespace exact1536 {
+using ExactShape = ct::TileFmhaShape<ct::sequence<128,32,16,32,32,32>,
+    ct::sequence<4,1,1>,ct::sequence<16,16,16>,
+    ct::sequence<4,1,1>,ct::sequence<16,16,16>,true>;
+using ExactTraits = ct::TileFmhaTraits<false,false,false,false,false,
+    ct::BlockAttentionBiasEnum::ELEMENTWISE_BIAS,false,false,false,
+    ct::BlockAttentionQuantScaleEnum::NO_SCALE>;
+using ExactProblem = ct::BlockFmhaPipelineProblem<float,float,float,float,float,float,
+    uint8_t,float,float,float,float,ExactShape,false,Variant,
+    ct::SimplifiedGenericAttentionMask<false>,false,ExactTraits>;
+using ExactPipeline = ct::BlockFmhaPipelineQRKSVS<ExactProblem>;
+using ExactEpilogue = ct::Default2DEpilogue<ct::Default2DEpilogueProblem<float,float,false,false>>;
+using ExactKernel = ct::FmhaFwdKernel<ExactPipeline,ExactEpilogue>;
+}
+extern "C" int ck_attention_exact1536(float* q,float* k,float* v,float* bias,float* output,
+                                     int batch_size,int seq_len,void* raw_stream) {
+    if(batch_size != 512 || seq_len != 1536) return 2;
+    using exact1536::ExactKernel;
+    constexpr int N = 1536;
+    constexpr int S = 1552; // physical bias row padding only, never extra tokens
+    auto args=ExactKernel::MakeKargs(q,k,v,bias,nullptr,nullptr,nullptr,nullptr,nullptr,output,
+        N,N,32,32,4,1,1.0f,0.0f,
+        128,128,128,S,0,128, 0,0,0,
+        32,32,32,N*S,0,0,32, 0,0,0,
+        N*128,N*128,N*128,0,0,0,N*128, 0,0,0,
+        -1,-1,0,0,0.0f,false,std::tuple<uint64_t,uint64_t>{0,0},0,0);
+    ct::stream_config config{static_cast<hipStream_t>(raw_stream),false};
+    auto launch=ct::make_kernel<ExactKernel::kBlockPerCu>(ExactKernel{},
+        ExactKernel::GridSize(512,4,N,32,false),ExactKernel::BlockSize(),0,args);
+    launch(config);
+    return static_cast<int>(hipGetLastError());
+}

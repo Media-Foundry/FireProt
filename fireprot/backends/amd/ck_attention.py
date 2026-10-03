@@ -20,17 +20,19 @@ _enabled = (
     os.environ.get("FIREPROT_ENABLE_CK_ATTENTION", "1") == "1"
     and os.environ.get("FIREPROT_DISABLE_CK_ATTENTION") != "1"
 )
-_long1536_enabled = os.environ.get("FIREPROT_ENABLE_CK_ATTENTION_1536") == "1"
+_exact1536_enabled = os.environ.get("FIREPROT_ENABLE_CK_EXACT1536") == "1"
+_long1536_enabled = _exact1536_enabled or os.environ.get("FIREPROT_ENABLE_CK_ATTENTION_1536") == "1"
 _lock = threading.RLock()
 _library: Any = None
 _entry: Any = None
+_entry_exact: Any = None
 _error: str | None = None
 _build: dict[str, Any] = {}
 
 
 def load_extension() -> Any:
     """Build a source/header/compiler fingerprinted standalone HIP library once."""
-    global _library, _entry, _error, _build
+    global _library, _entry, _entry_exact, _error, _build
     with _lock:
         if _entry is not None or _error is not None:
             return _entry
@@ -86,7 +88,11 @@ def load_extension() -> Any:
             _entry = _library.ck_attention
             _entry.argtypes = [ctypes.c_void_p] * 5 + [ctypes.c_int] * 2 + [ctypes.c_void_p]
             _entry.restype = ctypes.c_int
+            _entry_exact = _library.ck_attention_exact1536
+            _entry_exact.argtypes = _entry.argtypes
+            _entry_exact.restype = ctypes.c_int
         except Exception as error:
+            _entry = _entry_exact = None
             _error = f"{type(error).__name__}: {error}"
             return None
         return _entry
@@ -94,7 +100,7 @@ def load_extension() -> Any:
 
 def extension_status() -> dict[str, Any]:
     with _lock:
-        return dict(enabled=_enabled, long1536_enabled=_long1536_enabled,
+        return dict(enabled=_enabled, long1536_enabled=_long1536_enabled, exact1536_enabled=_exact1536_enabled,
                     loaded=_entry is not None, error=_error, build=dict(_build))
 
 
@@ -121,7 +127,7 @@ def _supports(signature: OperationSignature, *, shape=ta.LONG_QKV_SHAPE) -> bool
 
 def _supports_long1536(signature: OperationSignature) -> bool | tuple[bool, str]:
     if not _long1536_enabled:
-        return False, "experimental CK N1536 requires FIREPROT_ENABLE_CK_ATTENTION_1536=1"
+        return False, "experimental CK N1536 requires an explicit CK attention opt-in"
     return _supports(signature, shape=ta.LONG1536_QKV_SHAPE)
 
 
@@ -131,6 +137,8 @@ def attention(*, module: Any, q: Any, k: Any, v: Any, biases: Any, native: Any) 
     entry = load_extension()
     if entry is None:
         return ta._direct_sdpa(module=module, q=q, k=k, v=v, biases=biases, native=native)
+    if q.shape[2] == 1536 and _exact1536_enabled:
+        entry = _entry_exact
     with torch.cuda.device(q.device):
         if q.shape[2] == 1536:
             # Break the measured N1536 bias row-stride performance cliff.
@@ -150,4 +158,4 @@ def attention(*, module: Any, q: Any, k: Any, v: Any, biases: Any, native: Any) 
 registry.register(operation=ta.OPERATION, name=IMPLEMENTATION, function=attention,
                   supports=_supports, priority=30, version="1")
 registry.register(operation=ta.OPERATION, name=LONG1536_IMPLEMENTATION, function=attention,
-                  supports=_supports_long1536, priority=30, version="experimental-2")
+                  supports=_supports_long1536, priority=30, version="experimental-3")

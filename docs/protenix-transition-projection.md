@@ -15,8 +15,9 @@ with padded shared-memory rows and no fast-math compiler option. It is a
 handwritten HIP kernel using the existing CK-style tiling approach, not a CK
 library instantiation.
 
-`FIREPROT_ENABLE_TRANSITION_PROJECTION=1` selects the experimental path;
-default is off pending model validation. Inputs must be contiguous FP32
+`FIREPROT_ENABLE_TRANSITION_PROJECTION` now defaults to `1` within the existing
+long-transition capability gates after the model validation below. Set it to
+`0` to restore the preceding hipBLAS projections and HIP SiLU gate. Inputs must be contiguous FP32
 `[1000000,128]` or `[2359296,128]` matrices from the existing long-transition
 path, inference/no-grad, with 16-byte alignment. N1536 retains its length
 opt-in. Both expansion weights must be contiguous same-device FP32
@@ -65,3 +66,50 @@ HIP_VISIBLE_DEVICES=7 PYTHONPATH=.:Protenix python \
   benchmarks/protenix/benchmark_transition_projection.py \
   --output outputs/benchmarks/transition-projection.json
 ```
+
+
+## Same-source model validation
+
+Candidate `c5a24ce`, independent Protenix `bb3be99`. Mini-default v0.5.0 FP32,
+TF32 off, hipBLAS, C4/S1, one sample, seed 101, no MSA/RNA MSA/templates/ESM.
+Each worker performs one warmup and three measured predictions. Pair-layout
+views, subgroup transposed LayerNorm, fast model construction and unused-template
+omission are enabled on both sides; direct int64 bond masks are shared.
+Only the transition-projection flag changes. N1536 runs enabled then disabled;
+N1000 runs disabled then enabled. GPU 7 computes serially and GPU 6 is monitored;
+all isolation checks pass. Filesystem/compiled caches are warm, and measured
+model calls also have warm process caches.
+
+| Length | Disabled warm model median | Enabled median | Speedup | Allocated peak disabled / enabled |
+| --- | ---: | ---: | ---: | ---: |
+| 1000 | 9.515 s | **9.184 s** | **1.036x** | 8.987 / 8.491 GB |
+| 1536 | 27.188 s | **26.408 s** | **1.030x** | 20.305 / 15.473 GB |
+
+Model ranges are 9.502–9.555 versus 9.174–9.230 s at N1000 and
+27.137–27.365 versus 26.222–26.460 s at N1536. Model allocated peaks drop
+5.52% and 23.80%, respectively. Unlike the standalone probe, these are actual
+model-call peaks; the N1000 reduction is limited by other live tensors.
+
+Complete worker wall time improves 60.111 → 58.572 s (1.026x) at N1000 and
+135.073 → 131.482 s (1.027x) at N1536. Each worker includes initialization,
+features/output writing, one warmup and three predictions. This is not a
+single-request cold E2E comparison and excludes parent launch/preflight.
+
+All six measured output comparisons pass the locked aligned-RMSD/confidence
+thresholds of 1e-3. Maximum aligned RMSD is 0.00010660 Å at N1000 and
+0.00010366 Å at N1536; maximum confidence delta is 7.63e-6 and 3.82e-6.
+Enabled workers select the fused projection 288 times (72 per prediction),
+disabled workers zero times. Both sides select subgroup LayerNorm 288 times
+and fast construction once. These are regression results for development
+performance cases, not independent experimental-coordinate accuracy metrics.
+
+The full local suite passes 158 tests with 55 HIP-gated skips. Ten GPU tests
+cover the new production interface and preceding N1536 epilogues. Default
+selection is also exercised by leaving the new flag unset in the production
+numerical test. No weights, cycle count or diffusion count change at promotion.
+
+[Model evidence](../provenance/protenix_transition_projection_model_c5a24ce.json)
+contains exact source/input hashes, the serial launcher, all four worker
+manifests, per-call stage totals, memory, dispatch/isolation records and six
+output comparisons. The incremental model ratios must not be multiplied by
+historical original-Torch results to claim a new controlled baseline.

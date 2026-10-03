@@ -33,13 +33,15 @@ def test_projection_stream_dispatch_and_guards(n,monkeypatch):
         x=torch.randn(n,n,128,device='cuda');x[0,0]=0;x[0,1]=100;x[0,2]=-100
         monkeypatch.setenv('FIREPROT_ENABLE_TRANSITION_PROJECTION','0')
         expected=recycle._hip_transition(module=module,x=x,native=lambda:None)
-        monkeypatch.setenv('FIREPROT_ENABLE_TRANSITION_PROJECTION','1')
+        monkeypatch.delenv('FIREPROT_ENABLE_TRANSITION_PROJECTION',raising=False)
         key=(recycle.TRANSITION_OPERATION,'amd-gfx90a-transition-projection');before=recycle._fast_path_counts[key]
         actual=recycle._hip_transition(module=module,x=x,native=lambda:None)
         assert recycle._fast_path_counts[key]==before+1
         for start in range(0,n,16):torch.testing.assert_close(actual[start:start+16],expected[start:start+16],atol=2e-5,rtol=2e-5)
         assert actual.shape==x.shape and actual.is_contiguous() and actual.data_ptr()!=x.data_ptr()
         matrix=x.reshape(-1,128);assert transition_projection.supported(module,matrix)
+        monkeypatch.setenv('FIREPROT_ENABLE_TRANSITION_PROJECTION','1')
+        assert transition_projection.supported(module,matrix)
         with torch.autocast('cuda',dtype=torch.bfloat16):assert not transition_projection.supported(module,matrix)
         with torch.autocast('cuda',dtype=torch.float32):assert transition_projection.supported(module,matrix)
         hook=module.linear_no_bias_a.register_forward_hook(lambda *args:None)

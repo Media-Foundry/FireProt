@@ -33,6 +33,8 @@ All six prediction comparisons pass. Complete benchmark-worker speedups are **2.
 
 ## Experimental 1,536-residue workload
 
+Fused HIP transition projections and SiLU gating are now enabled for the existing exact FP32 gfx90a long buckets. A same-source three-repetition Mini-default C4/S1 comparison improves warm model median **27.188 → 26.408 s (1.030x)** at N1536 and **9.515 → 9.184 s (1.036x)** at N1000. Model allocated peaks drop **23.80%** and **5.52%**; all six output comparisons pass. `FIREPROT_ENABLE_TRANSITION_PROJECTION=0` restores the preceding projections. See [model and worker timing](docs/protenix-transition-projection.md#same-source-model-validation).
+
 Fused HIP QKV preparation improves warm model median from **28.519 to 28.127 s (1.014x)** over five same-source repetitions. Attention improves from 13.628 to 13.280 s, allocated memory is unchanged, and all prediction comparisons pass. It is now enabled within the existing length opt-in; `FIREPROT_ENABLE_QKV_PROJECTION=0` restores native preparation. See [model validation](docs/protenix-qkv-projection.md#same-source-model-comparison).
 
 An opt-in pair-layout and transposed LayerNorm path reduces N1536 warm model median from **28.090 to 27.719 s (1.013x)** and allocated peak from **22.721 to 20.631 GB** in a three-repetition same-source comparison. Enable both `FIREPROT_ENABLE_PAIR_LAYOUT=1` and `FIREPROT_ENABLE_TRANSPOSED_LAYERNORM=1` with Protenix patch 0006. N1000 also uses less memory, but its latency difference is within overlapping sample ranges. See [scope and validation](docs/protenix-transposed-norm.md#coupled-layout-model-comparison).

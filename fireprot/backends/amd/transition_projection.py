@@ -1,4 +1,4 @@
-"""Opt-in FP32 dual projection and SiLU for exact long pair transitions."""
+"""Validated FP32 dual projection and SiLU for exact long pair transitions."""
 from __future__ import annotations
 import os
 from typing import Any
@@ -6,7 +6,7 @@ from typing import Any
 
 def supported(module: Any, matrix: Any) -> bool:
     import torch
-    if os.environ.get('FIREPROT_ENABLE_TRANSITION_PROJECTION') != '1':
+    if os.environ.get('FIREPROT_ENABLE_TRANSITION_PROJECTION','1') != '1':
         return False
     if module.training or torch.is_grad_enabled() or matrix.requires_grad:
         return False

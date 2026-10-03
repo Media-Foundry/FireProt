@@ -1,0 +1,3419 @@
+{
+  "base_commit": "b74161cb162b61e8cb4e10e9337801d326fcc462",
+  "scope": "Experimental QKV plus gate fusion; rejected by complete-attention numerical gate. No model integration or speedup claim.",
+  "numerically_accepted_for_integration": false,
+  "memory_note": "The middle report retains tensors through failed-assertion traceback cycles; final report collects cycles between candidates. No model memory claim.",
+  "reports": {
+    "initial": {
+      "scope": "both",
+      "status": "error",
+      "seed": 1027,
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "model": "Protenix Attention shape replay; random weights",
+      "cycle_step_sample_count": "Not applicable to operator replay",
+      "cache_state": "warm; allocations included; compilation excluded",
+      "parameters": "Normal inputs and normal(0,0.1) weights; first rows set to 0,+100,-100",
+      "memory_scope": "Whole probe process including references; not model memory",
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "901412560",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "562500783",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1121135545",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "794223369",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "691005200",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1242108274",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451403886",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533769534",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "7",
+        "selected_physical_index": 7,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "sibling_preflight": {
+        "6": {
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "passed": true
+        }
+      },
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "source_sha256": {
+        "benchmarks/protenix/csrc/qkvg_projection_probe.cpp": "5fbe00ab68097bb5060621a67263bc9f4680dc8dd10ed465bb30a6caba1a9d77",
+        "benchmarks/protenix/benchmark_qkvg_projection.py": "1f417d1d8512bc68b58281764f034b1c0fba9d09ac23689e924442dbdffc1635",
+        "fireprot/backends/amd/qkv_projection.py": "6f6ad521b169df46c2e0ec3030195267decda3a7a1bbddac40a9f25b23b6fc02",
+        "fireprot/backends/amd/csrc/fireprot_amd_ops.cpp": "5bfcd03c3e5a70a9c294b51fd720cf05bc428c6ba030b47354c2bc6063b57b84",
+        "fireprot/backends/amd/csrc/fireprot_amd_ops.cu": "66bf04eecc03f827725dd361465cda07237830950e64376e5701578a61884d2a",
+        "Protenix/protenix/model/triangular/layers.py": "c2a709d65ee40ab2fa7bdb100bccdd1f04f6b9036e7341a654510429f8f114ee"
+      },
+      "builds": [
+        {
+          "name": "r128c64k16w16",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-shared",
+            "-fPIC",
+            "--offload-arch=gfx90a",
+            "-DROW_TILE=128",
+            "-DCHANNEL_TILE=64",
+            "-DK_TILE=16",
+            "-DWAVES=16",
+            "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/qkvg_projection_probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/qkvg_projection/425d29e5a46d4a25/r128c64k16w16.pending.so"
+          ],
+          "library_sha256": "0d84679ebeb872657a86ad40e20ea5b16ef00ff8b79dc7a605f56f23d1b4cc44"
+        },
+        {
+          "name": "r128c64k16w8",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-shared",
+            "-fPIC",
+            "--offload-arch=gfx90a",
+            "-DROW_TILE=128",
+            "-DCHANNEL_TILE=64",
+            "-DK_TILE=16",
+            "-DWAVES=8",
+            "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/qkvg_projection_probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/qkvg_projection/425d29e5a46d4a25/r128c64k16w8.pending.so"
+          ],
+          "library_sha256": "8f75bd036ce19c4f5bd3dd9ee90323fdbad07b75675dc522abe2c49aab9c586b"
+        },
+        {
+          "name": "r64c64k16w4",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-shared",
+            "-fPIC",
+            "--offload-arch=gfx90a",
+            "-DROW_TILE=64",
+            "-DCHANNEL_TILE=64",
+            "-DK_TILE=16",
+            "-DWAVES=4",
+            "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/qkvg_projection_probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/qkvg_projection/425d29e5a46d4a25/r64c64k16w4.pending.so"
+          ],
+          "library_sha256": "37467ad7b22c6e2c105dd7a922931e6a420d4b372a59a8aa7d768e417646b4aa"
+        },
+        {
+          "name": "r64c128k16w8",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-shared",
+            "-fPIC",
+            "--offload-arch=gfx90a",
+            "-DROW_TILE=64",
+            "-DCHANNEL_TILE=128",
+            "-DK_TILE=16",
+            "-DWAVES=8",
+            "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/qkvg_projection_probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/qkvg_projection/425d29e5a46d4a25/r64c128k16w8.pending.so"
+          ],
+          "library_sha256": "8aa5fe9cbd3cc76ae1eb2b2e48eeca8bd5b5ec19444a5870834e2ce76affba37"
+        }
+      ],
+      "records": [
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_before",
+          "median_ms": 5.641109943389893,
+          "p95_ms": 5.901937007904053,
+          "values_ms": [
+            5.940317153930664,
+            5.574265003204346,
+            5.703958034515381,
+            5.658061981201172,
+            5.552035808563232,
+            5.551237106323242,
+            5.719151020050049,
+            5.901937007904053,
+            5.531247138977051,
+            5.625277996063232,
+            5.712913990020752,
+            5.720749855041504,
+            5.640789985656738,
+            5.81238317489624,
+            5.743776798248291,
+            5.576023101806641,
+            5.583858966827393,
+            5.547557830810547,
+            5.574903964996338,
+            5.641429901123047
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 7219576832
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r128c64k16w16",
+          "median_ms": 5.963665008544922,
+          "p95_ms": 5.995327949523926,
+          "values_ms": [
+            5.974380016326904,
+            5.951671123504639,
+            5.979657173156738,
+            6.020435810089111,
+            5.954869747161865,
+            5.9619059562683105,
+            5.948792934417725,
+            5.9902119636535645,
+            5.9790167808532715,
+            5.946874141693115,
+            5.9659037590026855,
+            5.95582914352417,
+            5.940796852111816,
+            5.990211009979248,
+            5.95822811126709,
+            5.965424060821533,
+            5.93999719619751,
+            5.995327949523926,
+            5.979816913604736,
+            5.943036079406738
+          ],
+          "max_abs_delta": 2.682209014892578e-06,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6707576832
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r128c64k16w8",
+          "median_ms": 5.845085859298706,
+          "p95_ms": 5.869633197784424,
+          "values_ms": [
+            5.833810806274414,
+            5.839568138122559,
+            5.862436771392822,
+            5.849003791809082,
+            5.845645904541016,
+            5.831092834472656,
+            5.852841854095459,
+            5.847884178161621,
+            5.874270915985107,
+            5.817820072174072,
+            5.834451198577881,
+            5.852362155914307,
+            5.84132719039917,
+            5.869633197784424,
+            5.8445258140563965,
+            5.828373908996582,
+            5.859878063201904,
+            5.86195707321167,
+            5.836849212646484,
+            5.832851886749268
+          ],
+          "max_abs_delta": 2.682209014892578e-06,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6707576832
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r64c64k16w4",
+          "median_ms": 6.595741510391235,
+          "p95_ms": 6.612452983856201,
+          "values_ms": [
+            6.595341205596924,
+            6.099435806274414,
+            6.5961408615112305,
+            6.585906982421875,
+            6.588144779205322,
+            6.6068549156188965,
+            6.589105129241943,
+            6.596780776977539,
+            6.608933925628662,
+            6.3784918785095215,
+            6.602218151092529,
+            6.621407985687256,
+            6.612452983856201,
+            5.996448040008545,
+            6.610692977905273,
+            6.612133026123047,
+            6.59534215927124,
+            6.579349994659424,
+            5.7834367752075195,
+            6.6015777587890625
+          ],
+          "max_abs_delta": 2.682209014892578e-06,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6707576832
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r64c128k16w8",
+          "median_ms": 8.679553508758545,
+          "p95_ms": 8.694585800170898,
+          "values_ms": [
+            8.676196098327637,
+            8.684030532836914,
+            8.682271957397461,
+            8.684030532836914,
+            8.678593635559082,
+            8.671077728271484,
+            8.674595832824707,
+            8.672837257385254,
+            8.682432174682617,
+            8.694585800170898,
+            8.686750411987305,
+            8.67491626739502,
+            8.677793502807617,
+            8.686590194702148,
+            8.678434371948242,
+            8.665801048278809,
+            8.696346282958984,
+            8.680513381958008,
+            8.667719841003418,
+            8.693306922912598
+          ],
+          "max_abs_delta": 2.682209014892578e-06,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6707576832
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_after",
+          "median_ms": 5.627837419509888,
+          "p95_ms": 5.782957077026367,
+          "values_ms": [
+            5.679330825805664,
+            5.6639790534973145,
+            5.539402008056641,
+            5.580501079559326,
+            5.653264045715332,
+            5.584659099578857,
+            5.615203857421875,
+            5.716270923614502,
+            5.576343059539795,
+            5.753053188323975,
+            5.590415954589844,
+            5.609286785125732,
+            5.671494007110596,
+            5.6289567947387695,
+            5.717710018157959,
+            5.575863838195801,
+            5.782957077026367,
+            5.816220760345459,
+            5.626718044281006,
+            5.575064182281494
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 7219576832
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_before",
+          "median_ms": 28.00541400909424,
+          "p95_ms": 28.260404586791992,
+          "values_ms": [
+            28.083372116088867,
+            27.98454475402832,
+            27.823665618896484,
+            27.689016342163086,
+            28.24009132385254,
+            28.091047286987305,
+            27.83917808532715,
+            28.260404586791992,
+            27.705167770385742,
+            28.028039932250977,
+            27.850051879882812,
+            28.062103271484375,
+            27.752822875976562,
+            28.00933265686035,
+            28.001495361328125,
+            29.06207275390625,
+            27.83293914794922,
+            28.05171012878418,
+            28.126712799072266,
+            27.77505111694336
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5170659328
+        }
+      ],
+      "blas": {
+        "requested": "hipblas",
+        "before": "_BlasBackend.Cublaslt",
+        "effective": "_BlasBackend.Cublas",
+        "changed": true
+      },
+      "ck_attention": {
+        "enabled": true,
+        "long1536_enabled": true,
+        "exact1536_enabled": true,
+        "vector1000_enabled": true,
+        "loaded": true,
+        "error": null,
+        "build": {
+          "source_sha256": "d50865b27a66956b391a331cc0daf9e33962c1fd1c0d93b3243fab9d25af016c",
+          "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+          "header_count": 581,
+          "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a",
+            "-I/opt/rocm/include",
+            "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.pending.so"
+          ],
+          "library_sha256": "e0db29648fbc9e4895663604a93c3729503039310761abdf19ed8e637d49ca63",
+          "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.so",
+          "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+        }
+      },
+      "compiler": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+      "error": "Tensor-likes are not close!\n\nMismatched elements: 5 / 128000000 (0.0%)\nGreatest absolute difference: 2.9265880584716797e-05 at index (0, 210, 40) (up to 2e-05 allowed)\nGreatest relative difference: 0.002671097405254841 at index (0, 578, 90) (up to 2e-05 allowed)",
+      "monitors": [
+        {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 6,
+          "interval_seconds": 1.0,
+          "samples": 11,
+          "allowed_pid": 926533,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        },
+        {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 7,
+          "interval_seconds": 1.0,
+          "samples": 11,
+          "allowed_pid": 926533,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
+      ]
+    },
+    "complete_before_gc_cleanup": {
+      "scope": "both",
+      "status": "completed_with_rejections",
+      "seed": 1027,
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "model": "Protenix Attention shape replay; random weights",
+      "cycle_step_sample_count": "Not applicable to operator replay",
+      "cache_state": "warm; allocations included; compilation excluded",
+      "parameters": "Normal inputs and normal(0,0.1) weights; first rows set to 0,+100,-100",
+      "memory_scope": "Whole probe process including references; not model memory",
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "901412643",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "562500866",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1121135630",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "794223455",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "691005284",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1242339411",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451403970",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533769618",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "7",
+        "selected_physical_index": 7,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "sibling_preflight": {
+        "6": {
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "passed": true
+        }
+      },
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "source_sha256": {
+        "benchmarks/protenix/csrc/qkvg_projection_probe.cpp": "5fbe00ab68097bb5060621a67263bc9f4680dc8dd10ed465bb30a6caba1a9d77",
+        "benchmarks/protenix/benchmark_qkvg_projection.py": "36c46cdf8eed342006753073deda31be9a9d0d32a75ec26259a620b6f1c3778c",
+        "fireprot/backends/amd/qkv_projection.py": "6f6ad521b169df46c2e0ec3030195267decda3a7a1bbddac40a9f25b23b6fc02",
+        "fireprot/backends/amd/csrc/fireprot_amd_ops.cpp": "5bfcd03c3e5a70a9c294b51fd720cf05bc428c6ba030b47354c2bc6063b57b84",
+        "fireprot/backends/amd/csrc/fireprot_amd_ops.cu": "66bf04eecc03f827725dd361465cda07237830950e64376e5701578a61884d2a",
+        "Protenix/protenix/model/triangular/layers.py": "c2a709d65ee40ab2fa7bdb100bccdd1f04f6b9036e7341a654510429f8f114ee"
+      },
+      "builds": [
+        {
+          "name": "r128c64k16w16",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-shared",
+            "-fPIC",
+            "--offload-arch=gfx90a",
+            "-DROW_TILE=128",
+            "-DCHANNEL_TILE=64",
+            "-DK_TILE=16",
+            "-DWAVES=16",
+            "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/qkvg_projection_probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/qkvg_projection/425d29e5a46d4a25/r128c64k16w16.pending.so"
+          ],
+          "library_sha256": "0d84679ebeb872657a86ad40e20ea5b16ef00ff8b79dc7a605f56f23d1b4cc44"
+        },
+        {
+          "name": "r128c64k16w8",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-shared",
+            "-fPIC",
+            "--offload-arch=gfx90a",
+            "-DROW_TILE=128",
+            "-DCHANNEL_TILE=64",
+            "-DK_TILE=16",
+            "-DWAVES=8",
+            "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/qkvg_projection_probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/qkvg_projection/425d29e5a46d4a25/r128c64k16w8.pending.so"
+          ],
+          "library_sha256": "8f75bd036ce19c4f5bd3dd9ee90323fdbad07b75675dc522abe2c49aab9c586b"
+        },
+        {
+          "name": "r64c64k16w4",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-shared",
+            "-fPIC",
+            "--offload-arch=gfx90a",
+            "-DROW_TILE=64",
+            "-DCHANNEL_TILE=64",
+            "-DK_TILE=16",
+            "-DWAVES=4",
+            "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/qkvg_projection_probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/qkvg_projection/425d29e5a46d4a25/r64c64k16w4.pending.so"
+          ],
+          "library_sha256": "37467ad7b22c6e2c105dd7a922931e6a420d4b372a59a8aa7d768e417646b4aa"
+        },
+        {
+          "name": "r64c128k16w8",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-shared",
+            "-fPIC",
+            "--offload-arch=gfx90a",
+            "-DROW_TILE=64",
+            "-DCHANNEL_TILE=128",
+            "-DK_TILE=16",
+            "-DWAVES=8",
+            "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/qkvg_projection_probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/qkvg_projection/425d29e5a46d4a25/r64c128k16w8.pending.so"
+          ],
+          "library_sha256": "8aa5fe9cbd3cc76ae1eb2b2e48eeca8bd5b5ec19444a5870834e2ce76affba37"
+        },
+        {
+          "name": "r64c64k16w8",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-shared",
+            "-fPIC",
+            "--offload-arch=gfx90a",
+            "-DROW_TILE=64",
+            "-DCHANNEL_TILE=64",
+            "-DK_TILE=16",
+            "-DWAVES=8",
+            "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/qkvg_projection_probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/qkvg_projection/425d29e5a46d4a25/r64c64k16w8.pending.so"
+          ],
+          "library_sha256": "9e38a8ee39ebf982790567f7c9bb24c39ff2da39b7a1b9e1a1e3178dddb9f9e8"
+        }
+      ],
+      "records": [
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_before",
+          "median_ms": 5.724257469177246,
+          "p95_ms": 5.917438983917236,
+          "values_ms": [
+            5.942385196685791,
+            5.882095813751221,
+            5.917438983917236,
+            5.830923080444336,
+            5.607997894287109,
+            5.578571796417236,
+            5.581611156463623,
+            5.656932830810547,
+            5.774951934814453,
+            5.655172824859619,
+            5.702828884124756,
+            5.5772929191589355,
+            5.6070380210876465,
+            5.851871013641357,
+            5.817809104919434,
+            5.801177024841309,
+            5.577931880950928,
+            5.913439750671387,
+            5.712264060974121,
+            5.736250877380371
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 7219576832
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r128c64k16w16",
+          "median_ms": 5.97900652885437,
+          "p95_ms": 5.999636173248291,
+          "values_ms": [
+            5.980605125427246,
+            5.99627685546875,
+            5.986682891845703,
+            5.981725215911865,
+            6.005873203277588,
+            5.999475955963135,
+            5.976607799530029,
+            5.988921165466309,
+            5.939666748046875,
+            5.977407932281494,
+            5.999636173248291,
+            5.965733051300049,
+            5.973409175872803,
+            5.990681171417236,
+            5.975327968597412,
+            5.95405912399292,
+            5.984282970428467,
+            5.937747955322266,
+            5.931351184844971,
+            5.947502136230469
+          ],
+          "max_abs_delta": 2.682209014892578e-06,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6707576832
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r128c64k16w8",
+          "median_ms": 5.861866474151611,
+          "p95_ms": 5.88081693649292,
+          "values_ms": [
+            5.854270935058594,
+            5.867063999176025,
+            5.874420166015625,
+            5.874259948730469,
+            5.845954895019531,
+            5.884174823760986,
+            5.87362003326416,
+            5.854589939117432,
+            5.869143009185791,
+            5.857468128204346,
+            5.856988906860352,
+            5.848194122314453,
+            5.855869770050049,
+            5.8448357582092285,
+            5.870262145996094,
+            5.88081693649292,
+            5.863225936889648,
+            5.864026069641113,
+            5.860507011413574,
+            5.8461151123046875
+          ],
+          "max_abs_delta": 2.682209014892578e-06,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6707576832
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r64c64k16w4",
+          "median_ms": 6.619157552719116,
+          "p95_ms": 6.641066074371338,
+          "values_ms": [
+            6.587653160095215,
+            6.587172985076904,
+            6.626833915710449,
+            6.629871845245361,
+            6.6157989501953125,
+            6.509613990783691,
+            6.61755895614624,
+            6.621716022491455,
+            6.6471428871154785,
+            6.6210761070251465,
+            6.618998050689697,
+            6.641066074371338,
+            6.625394821166992,
+            6.504816055297852,
+            6.622675895690918,
+            6.611001014709473,
+            6.616757869720459,
+            6.530083179473877,
+            6.619317054748535,
+            6.6236348152160645
+          ],
+          "max_abs_delta": 2.682209014892578e-06,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6707576832
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r64c128k16w8",
+          "median_ms": 8.71328067779541,
+          "p95_ms": 8.728153228759766,
+          "values_ms": [
+            8.70528507232666,
+            8.698887825012207,
+            8.722076416015625,
+            8.72303581237793,
+            8.729433059692383,
+            8.712480545043945,
+            8.720316886901855,
+            8.71312141418457,
+            8.696330070495605,
+            8.704166412353516,
+            8.722875595092773,
+            8.719038009643555,
+            8.712480545043945,
+            8.71343994140625,
+            8.717758178710938,
+            8.728153228759766,
+            8.71024227142334,
+            8.701927185058594,
+            8.721917152404785,
+            8.700008392333984
+          ],
+          "max_abs_delta": 2.682209014892578e-06,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6707576832
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r64c64k16w8",
+          "median_ms": 5.173260927200317,
+          "p95_ms": 5.193170070648193,
+          "values_ms": [
+            5.1615071296691895,
+            5.169823169708252,
+            5.1683831214904785,
+            5.179576873779297,
+            5.167582988739014,
+            5.18357515335083,
+            5.17877721786499,
+            5.171261787414551,
+            5.168063163757324,
+            5.16038703918457,
+            5.1776580810546875,
+            5.167422771453857,
+            5.1830949783325195,
+            5.163266181945801,
+            5.194610118865967,
+            5.175260066986084,
+            5.165665149688721,
+            5.177178859710693,
+            5.177338123321533,
+            5.193170070648193
+          ],
+          "max_abs_delta": 2.682209014892578e-06,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6707576832
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_after",
+          "median_ms": 5.6545329093933105,
+          "p95_ms": 5.754961013793945,
+          "values_ms": [
+            5.718339920043945,
+            5.666526794433594,
+            5.729535102844238,
+            5.642858982086182,
+            5.6935529708862305,
+            5.595044136047363,
+            5.599522113800049,
+            5.6662068367004395,
+            5.766315937042236,
+            5.712742805480957,
+            5.600481033325195,
+            5.703147888183594,
+            5.597123146057129,
+            5.707625865936279,
+            5.618552207946777,
+            5.754961013793945,
+            5.629265785217285,
+            5.541790962219238,
+            5.600320816040039,
+            5.542911052703857
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 7219576832
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_before",
+          "median_ms": 27.942596435546875,
+          "p95_ms": 28.278104782104492,
+          "values_ms": [
+            28.192867279052734,
+            27.752613067626953,
+            27.94803237915039,
+            27.843767166137695,
+            27.93716049194336,
+            28.082683563232422,
+            27.868711471557617,
+            27.992328643798828,
+            27.67649269104004,
+            28.010400772094727,
+            28.126020431518555,
+            27.962743759155273,
+            27.881027221679688,
+            27.72254753112793,
+            27.88742446899414,
+            27.898298263549805,
+            27.879907608032227,
+            28.391483306884766,
+            28.278104782104492,
+            28.03470802307129
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5170659328
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_after",
+          "median_ms": 28.12338352203369,
+          "p95_ms": 28.383329391479492,
+          "values_ms": [
+            27.997928619384766,
+            28.189830780029297,
+            27.942916870117188,
+            28.116586685180664,
+            27.88326644897461,
+            28.26051139831543,
+            27.944196701049805,
+            27.89461898803711,
+            28.004323959350586,
+            27.989452362060547,
+            28.23988151550293,
+            28.13018035888672,
+            28.148090362548828,
+            28.217334747314453,
+            28.02239418029785,
+            28.383329391479492,
+            28.38812828063965,
+            28.047821044921875,
+            28.297771453857422,
+            28.14217185974121
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 8371576832
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "baseline_before",
+          "median_ms": 4.422846078872681,
+          "p95_ms": 4.4511518478393555,
+          "values_ms": [
+            4.427962779998779,
+            4.423326015472412,
+            4.4511518478393555,
+            4.433560848236084,
+            4.385265827178955,
+            4.40445613861084,
+            4.549500942230225,
+            4.407333850860596,
+            4.409732818603516,
+            4.393261909484863,
+            4.422366142272949,
+            4.448273181915283,
+            4.435800075531006,
+            4.4511518478393555,
+            4.417728900909424,
+            4.431642055511475,
+            4.438357830047607,
+            4.380147933959961,
+            4.411491870880127,
+            4.381107807159424
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 9420775424
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r128c64k16w16",
+          "median_ms": 6.007791519165039,
+          "p95_ms": 6.020424842834473,
+          "values_ms": [
+            5.988282203674316,
+            6.041533946990967,
+            5.987482070922852,
+            6.012908935546875,
+            5.98524284362793,
+            5.9395060539245605,
+            6.016746997833252,
+            6.020424842834473,
+            5.958856105804443,
+            6.013868808746338,
+            6.008271217346191,
+            6.019465923309326,
+            5.991960048675537,
+            6.0089111328125,
+            5.956778049468994,
+            6.018186092376709,
+            6.007311820983887,
+            5.993558883666992,
+            5.973410129547119,
+            6.012109756469727
+          ],
+          "max_abs_delta": 1.3113021850585938e-06,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 9018122240
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r128c64k16w8",
+          "median_ms": 5.193730592727661,
+          "p95_ms": 5.222915172576904,
+          "values_ms": [
+            5.183255195617676,
+            5.201006889343262,
+            5.175260066986084,
+            5.197487831115723,
+            5.195888996124268,
+            5.184694766998291,
+            5.1816558837890625,
+            5.173020839691162,
+            5.195408821105957,
+            5.127604007720947,
+            5.222915172576904,
+            5.194930076599121,
+            5.164065837860107,
+            5.192531108856201,
+            5.195728778839111,
+            5.191091060638428,
+            5.185335159301758,
+            5.219236850738525,
+            5.199246883392334,
+            5.228352069854736
+          ],
+          "max_abs_delta": 1.3113021850585938e-06,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 9018122240
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r64c64k16w4",
+          "median_ms": 5.170301914215088,
+          "p95_ms": 5.18341588973999,
+          "values_ms": [
+            5.1762189865112305,
+            5.093222141265869,
+            5.18341588973999,
+            5.169342994689941,
+            4.892045021057129,
+            5.1816558837890625,
+            5.108893871307373,
+            5.175259113311768,
+            5.171260833740234,
+            5.154469966888428,
+            5.173020839691162,
+            5.1210479736328125,
+            5.138477802276611,
+            5.167902946472168,
+            5.166624069213867,
+            5.186453819274902,
+            5.176058769226074,
+            4.562775135040283,
+            5.177019119262695,
+            5.175419807434082
+          ],
+          "max_abs_delta": 1.3113021850585938e-06,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5306122240
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r64c128k16w8",
+          "median_ms": 6.759644985198975,
+          "p95_ms": 6.771238803863525,
+          "values_ms": [
+            6.760523796081543,
+            6.762603759765625,
+            6.752688884735107,
+            6.758446216583252,
+            6.752849102020264,
+            6.771238803863525,
+            6.752529144287109,
+            6.755887031555176,
+            6.762603759765625,
+            6.760684013366699,
+            6.770759105682373,
+            6.76340389251709,
+            6.752687931060791,
+            6.7557268142700195,
+            6.748371124267578,
+            6.769479751586914,
+            6.755887031555176,
+            6.765642166137695,
+            6.758766174316406,
+            6.774117946624756
+          ],
+          "max_abs_delta": 1.3113021850585938e-06,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5306122240
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r64c64k16w8",
+          "median_ms": 4.070946931838989,
+          "p95_ms": 4.131317138671875,
+          "values_ms": [
+            4.062551021575928,
+            4.059193134307861,
+            4.060633182525635,
+            4.073425769805908,
+            4.061593055725098,
+            4.07086706161499,
+            4.069108963012695,
+            4.071506977081299,
+            4.064150810241699,
+            4.08062219619751,
+            4.067190170288086,
+            4.141390800476074,
+            4.075984001159668,
+            4.0643110275268555,
+            4.058873176574707,
+            4.08062219619751,
+            4.077424049377441,
+            4.131317138671875,
+            4.084619998931885,
+            4.071026802062988
+          ],
+          "max_abs_delta": 1.3113021850585938e-06,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5306122240
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "baseline_after",
+          "median_ms": 4.417169094085693,
+          "p95_ms": 4.462026119232178,
+          "values_ms": [
+            4.4202880859375,
+            4.434360980987549,
+            4.386384963989258,
+            4.442516803741455,
+            4.420766830444336,
+            4.416608810424805,
+            4.385425090789795,
+            4.4172492027282715,
+            4.427643775939941,
+            4.419648170471191,
+            4.417088985443115,
+            4.396780014038086,
+            4.400777816772461,
+            4.408614158630371,
+            4.462026119232178,
+            4.470982074737549,
+            4.415968894958496,
+            4.403016090393066,
+            4.414051055908203,
+            4.4378790855407715
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5708775424
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "baseline_before",
+          "median_ms": 28.963911056518555,
+          "p95_ms": 29.03659439086914,
+          "values_ms": [
+            28.966550827026367,
+            28.884191513061523,
+            29.010528564453125,
+            29.03659439086914,
+            28.90194320678711,
+            28.959991455078125,
+            28.982379913330078,
+            28.927209854125977,
+            28.93968391418457,
+            29.00444984436035,
+            28.910417556762695,
+            29.051305770874023,
+            28.959671020507812,
+            28.946720123291016,
+            28.961271286010742,
+            28.9686279296875,
+            29.021242141723633,
+            28.895225524902344,
+            29.032115936279297,
+            29.01628303527832
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 4136304640
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "baseline_after",
+          "median_ms": 28.954715728759766,
+          "p95_ms": 29.012128829956055,
+          "values_ms": [
+            28.938243865966797,
+            28.9867000579834,
+            28.88595199584961,
+            28.94816017150879,
+            28.89618682861328,
+            28.95567512512207,
+            28.926572799682617,
+            28.996774673461914,
+            28.902103424072266,
+            29.00349235534668,
+            28.990217208862305,
+            28.93360710144043,
+            28.920333862304688,
+            28.971508026123047,
+            28.95983123779297,
+            28.93008804321289,
+            29.012128829956055,
+            28.990697860717773,
+            28.95375633239746,
+            29.038511276245117
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6652887040
+        }
+      ],
+      "rejections": [
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r128c64k16w16",
+          "max_abs_delta": 7.62939453125e-05,
+          "error": "Tensor-likes are not close!\n\nMismatched elements: 5 / 128000000 (0.0%)\nGreatest absolute difference: 2.9265880584716797e-05 at index (0, 210, 40) (up to 2e-05 allowed)\nGreatest relative difference: 0.002671097405254841 at index (0, 578, 90) (up to 2e-05 allowed)"
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r128c64k16w8",
+          "max_abs_delta": 7.62939453125e-05,
+          "error": "Tensor-likes are not close!\n\nMismatched elements: 5 / 128000000 (0.0%)\nGreatest absolute difference: 2.9265880584716797e-05 at index (0, 210, 40) (up to 2e-05 allowed)\nGreatest relative difference: 0.002671097405254841 at index (0, 578, 90) (up to 2e-05 allowed)"
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r64c64k16w4",
+          "max_abs_delta": 7.62939453125e-05,
+          "error": "Tensor-likes are not close!\n\nMismatched elements: 5 / 128000000 (0.0%)\nGreatest absolute difference: 2.9265880584716797e-05 at index (0, 210, 40) (up to 2e-05 allowed)\nGreatest relative difference: 0.002671097405254841 at index (0, 578, 90) (up to 2e-05 allowed)"
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r64c128k16w8",
+          "max_abs_delta": 7.62939453125e-05,
+          "error": "Tensor-likes are not close!\n\nMismatched elements: 5 / 128000000 (0.0%)\nGreatest absolute difference: 2.9265880584716797e-05 at index (0, 210, 40) (up to 2e-05 allowed)\nGreatest relative difference: 0.002671097405254841 at index (0, 578, 90) (up to 2e-05 allowed)"
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r64c64k16w8",
+          "max_abs_delta": 7.62939453125e-05,
+          "error": "Tensor-likes are not close!\n\nMismatched elements: 5 / 128000000 (0.0%)\nGreatest absolute difference: 2.9265880584716797e-05 at index (0, 210, 40) (up to 2e-05 allowed)\nGreatest relative difference: 0.002671097405254841 at index (0, 578, 90) (up to 2e-05 allowed)"
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r128c64k16w16",
+          "max_abs_delta": 6.103515625e-05,
+          "error": "Tensor-likes are not close!\n\nMismatched elements: 3 / 100663296 (0.0%)\nGreatest absolute difference: 2.968311309814453e-05 at index (0, 459, 83) (up to 2e-05 allowed)\nGreatest relative difference: 0.0007453341968357563 at index (0, 1443, 9) (up to 2e-05 allowed)"
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r128c64k16w8",
+          "max_abs_delta": 6.103515625e-05,
+          "error": "Tensor-likes are not close!\n\nMismatched elements: 3 / 100663296 (0.0%)\nGreatest absolute difference: 2.968311309814453e-05 at index (0, 459, 83) (up to 2e-05 allowed)\nGreatest relative difference: 0.0007453341968357563 at index (0, 1443, 9) (up to 2e-05 allowed)"
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r64c64k16w4",
+          "max_abs_delta": 6.103515625e-05,
+          "error": "Tensor-likes are not close!\n\nMismatched elements: 3 / 100663296 (0.0%)\nGreatest absolute difference: 2.968311309814453e-05 at index (0, 459, 83) (up to 2e-05 allowed)\nGreatest relative difference: 0.0007453341968357563 at index (0, 1443, 9) (up to 2e-05 allowed)"
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r64c128k16w8",
+          "max_abs_delta": 6.103515625e-05,
+          "error": "Tensor-likes are not close!\n\nMismatched elements: 3 / 100663296 (0.0%)\nGreatest absolute difference: 2.968311309814453e-05 at index (0, 459, 83) (up to 2e-05 allowed)\nGreatest relative difference: 0.0007453341968357563 at index (0, 1443, 9) (up to 2e-05 allowed)"
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r64c64k16w8",
+          "max_abs_delta": 6.103515625e-05,
+          "error": "Tensor-likes are not close!\n\nMismatched elements: 3 / 100663296 (0.0%)\nGreatest absolute difference: 2.968311309814453e-05 at index (0, 459, 83) (up to 2e-05 allowed)\nGreatest relative difference: 0.0007453341968357563 at index (0, 1443, 9) (up to 2e-05 allowed)"
+        }
+      ],
+      "blas": {
+        "requested": "hipblas",
+        "before": "_BlasBackend.Cublaslt",
+        "effective": "_BlasBackend.Cublas",
+        "changed": true
+      },
+      "ck_attention": {
+        "enabled": true,
+        "long1536_enabled": true,
+        "exact1536_enabled": true,
+        "vector1000_enabled": true,
+        "loaded": true,
+        "error": null,
+        "build": {
+          "source_sha256": "d50865b27a66956b391a331cc0daf9e33962c1fd1c0d93b3243fab9d25af016c",
+          "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+          "header_count": 581,
+          "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a",
+            "-I/opt/rocm/include",
+            "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.pending.so"
+          ],
+          "library_sha256": "e0db29648fbc9e4895663604a93c3729503039310761abdf19ed8e637d49ca63",
+          "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.so",
+          "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+        }
+      },
+      "compiler": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+      "qkv_dispatch": {
+        "enabled": true,
+        "counts": {
+          "n1000": 107,
+          "n1536": 107,
+          "fallback": 0
+        }
+      },
+      "monitors": [
+        {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 6,
+          "interval_seconds": 1.0,
+          "samples": 10,
+          "allowed_pid": 928393,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        },
+        {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 7,
+          "interval_seconds": 1.0,
+          "samples": 10,
+          "allowed_pid": 928393,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
+      ]
+    },
+    "final": {
+      "scope": "both",
+      "status": "completed_with_rejections",
+      "seed": 1027,
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "model": "Protenix Attention shape replay; random weights",
+      "cycle_step_sample_count": "Not applicable to operator replay",
+      "cache_state": "warm; allocations included; compilation excluded",
+      "parameters": "Normal inputs and normal(0,0.1) weights; first rows set to 0,+100,-100",
+      "memory_scope": "Whole probe process including references; not model memory",
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "901412729",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "562500951",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1121135718",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "794223543",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "691005371",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1243006902",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451404057",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533769705",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "7",
+        "selected_physical_index": 7,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "sibling_preflight": {
+        "6": {
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "passed": true
+        }
+      },
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "source_sha256": {
+        "benchmarks/protenix/csrc/qkvg_projection_probe.cpp": "5fbe00ab68097bb5060621a67263bc9f4680dc8dd10ed465bb30a6caba1a9d77",
+        "benchmarks/protenix/benchmark_qkvg_projection.py": "fd383e324e016aa8ab80d8ef0f8767b396091cd41480ec9368efa1bde344feb8",
+        "fireprot/backends/amd/qkv_projection.py": "6f6ad521b169df46c2e0ec3030195267decda3a7a1bbddac40a9f25b23b6fc02",
+        "fireprot/backends/amd/csrc/fireprot_amd_ops.cpp": "5bfcd03c3e5a70a9c294b51fd720cf05bc428c6ba030b47354c2bc6063b57b84",
+        "fireprot/backends/amd/csrc/fireprot_amd_ops.cu": "66bf04eecc03f827725dd361465cda07237830950e64376e5701578a61884d2a",
+        "Protenix/protenix/model/triangular/layers.py": "c2a709d65ee40ab2fa7bdb100bccdd1f04f6b9036e7341a654510429f8f114ee"
+      },
+      "builds": [
+        {
+          "name": "r128c64k16w16",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-shared",
+            "-fPIC",
+            "--offload-arch=gfx90a",
+            "-DROW_TILE=128",
+            "-DCHANNEL_TILE=64",
+            "-DK_TILE=16",
+            "-DWAVES=16",
+            "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/qkvg_projection_probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/qkvg_projection/425d29e5a46d4a25/r128c64k16w16.pending.so"
+          ],
+          "library_sha256": "0d84679ebeb872657a86ad40e20ea5b16ef00ff8b79dc7a605f56f23d1b4cc44"
+        },
+        {
+          "name": "r128c64k16w8",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-shared",
+            "-fPIC",
+            "--offload-arch=gfx90a",
+            "-DROW_TILE=128",
+            "-DCHANNEL_TILE=64",
+            "-DK_TILE=16",
+            "-DWAVES=8",
+            "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/qkvg_projection_probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/qkvg_projection/425d29e5a46d4a25/r128c64k16w8.pending.so"
+          ],
+          "library_sha256": "8f75bd036ce19c4f5bd3dd9ee90323fdbad07b75675dc522abe2c49aab9c586b"
+        },
+        {
+          "name": "r64c64k16w4",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-shared",
+            "-fPIC",
+            "--offload-arch=gfx90a",
+            "-DROW_TILE=64",
+            "-DCHANNEL_TILE=64",
+            "-DK_TILE=16",
+            "-DWAVES=4",
+            "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/qkvg_projection_probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/qkvg_projection/425d29e5a46d4a25/r64c64k16w4.pending.so"
+          ],
+          "library_sha256": "37467ad7b22c6e2c105dd7a922931e6a420d4b372a59a8aa7d768e417646b4aa"
+        },
+        {
+          "name": "r64c128k16w8",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-shared",
+            "-fPIC",
+            "--offload-arch=gfx90a",
+            "-DROW_TILE=64",
+            "-DCHANNEL_TILE=128",
+            "-DK_TILE=16",
+            "-DWAVES=8",
+            "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/qkvg_projection_probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/qkvg_projection/425d29e5a46d4a25/r64c128k16w8.pending.so"
+          ],
+          "library_sha256": "8aa5fe9cbd3cc76ae1eb2b2e48eeca8bd5b5ec19444a5870834e2ce76affba37"
+        },
+        {
+          "name": "r64c64k16w8",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-shared",
+            "-fPIC",
+            "--offload-arch=gfx90a",
+            "-DROW_TILE=64",
+            "-DCHANNEL_TILE=64",
+            "-DK_TILE=16",
+            "-DWAVES=8",
+            "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/qkvg_projection_probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/qkvg_projection/425d29e5a46d4a25/r64c64k16w8.pending.so"
+          ],
+          "library_sha256": "9e38a8ee39ebf982790567f7c9bb24c39ff2da39b7a1b9e1a1e3178dddb9f9e8"
+        }
+      ],
+      "records": [
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_before",
+          "median_ms": 5.67156457901001,
+          "p95_ms": 5.929111957550049,
+          "values_ms": [
+            5.801977157592773,
+            5.929111957550049,
+            5.569777011871338,
+            5.60927677154541,
+            5.603199005126953,
+            5.817009925842285,
+            5.862745761871338,
+            5.651655197143555,
+            5.9351887702941895,
+            5.607357978820801,
+            5.691473960876465,
+            5.598081111907959,
+            5.851391792297363,
+            5.629265785217285,
+            5.590246200561523,
+            5.5644989013671875,
+            5.5550642013549805,
+            5.787744045257568,
+            5.809813022613525,
+            5.744087219238281
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 7219576832
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r128c64k16w16",
+          "median_ms": 5.981164932250977,
+          "p95_ms": 6.014348030090332,
+          "values_ms": [
+            5.9860429763793945,
+            5.978686809539795,
+            5.983163833618164,
+            5.995637893676758,
+            5.981564998626709,
+            6.014348030090332,
+            5.954379081726074,
+            5.999794960021973,
+            5.968451976776123,
+            6.020585060119629,
+            5.990361213684082,
+            5.918716907501221,
+            6.011630058288574,
+            5.9327898025512695,
+            5.944942951202393,
+            5.945103168487549,
+            5.968451976776123,
+            6.009069919586182,
+            5.963493824005127,
+            5.980764865875244
+          ],
+          "max_abs_delta": 2.682209014892578e-06,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6707576832
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r128c64k16w8",
+          "median_ms": 5.861227035522461,
+          "p95_ms": 5.879857063293457,
+          "values_ms": [
+            5.879857063293457,
+            5.882415771484375,
+            5.856669902801514,
+            5.8462748527526855,
+            5.869462966918945,
+            5.8125319480896,
+            5.8593878746032715,
+            5.852191925048828,
+            5.83076286315918,
+            5.86306619644165,
+            5.87362003326416,
+            5.870741844177246,
+            5.873940944671631,
+            5.846913814544678,
+            5.874420166015625,
+            5.878578186035156,
+            5.850912094116211,
+            5.865143775939941,
+            5.849472999572754,
+            5.854909896850586
+          ],
+          "max_abs_delta": 2.682209014892578e-06,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6707576832
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r64c64k16w4",
+          "median_ms": 6.632430553436279,
+          "p95_ms": 6.642984867095947,
+          "values_ms": [
+            6.624594211578369,
+            6.559507846832275,
+            6.634988784790039,
+            6.639945983886719,
+            6.636588096618652,
+            6.642185211181641,
+            6.5699028968811035,
+            6.6338701248168945,
+            6.628431797027588,
+            6.6357879638671875,
+            6.62811279296875,
+            6.652259826660156,
+            6.630990028381348,
+            6.630990982055664,
+            6.642984867095947,
+            6.625393867492676,
+            6.6343488693237305,
+            5.6231889724731445,
+            6.628592014312744,
+            6.634509086608887
+          ],
+          "max_abs_delta": 2.682209014892578e-06,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6707576832
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r64c128k16w8",
+          "median_ms": 8.704564571380615,
+          "p95_ms": 8.715198516845703,
+          "values_ms": [
+            8.706404685974121,
+            8.708003997802734,
+            8.703044891357422,
+            8.709922790527344,
+            8.70240592956543,
+            8.70736312866211,
+            8.709602355957031,
+            8.708803176879883,
+            8.691532135009766,
+            8.683856010437012,
+            8.699687957763672,
+            8.70240592956543,
+            8.700966835021973,
+            8.708003044128418,
+            8.700966835021973,
+            8.700326919555664,
+            8.716158866882324,
+            8.700007438659668,
+            8.706084251403809,
+            8.715198516845703
+          ],
+          "max_abs_delta": 2.682209014892578e-06,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6707576832
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r64c64k16w8",
+          "median_ms": 5.175899028778076,
+          "p95_ms": 5.1982879638671875,
+          "values_ms": [
+            5.153030872344971,
+            5.171580791473389,
+            5.167582988739014,
+            5.17861795425415,
+            5.168862819671631,
+            5.177018165588379,
+            5.193809986114502,
+            5.2035651206970215,
+            5.174779891967773,
+            5.175418853759766,
+            5.176379203796387,
+            5.195569038391113,
+            5.160867214202881,
+            5.171741962432861,
+            5.172060966491699,
+            5.177497863769531,
+            5.19460916519165,
+            5.179417133331299,
+            5.17254114151001,
+            5.1982879638671875
+          ],
+          "max_abs_delta": 2.682209014892578e-06,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6707576832
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_after",
+          "median_ms": 5.656296014785767,
+          "p95_ms": 5.885621070861816,
+          "values_ms": [
+            5.554745197296143,
+            5.653573989868164,
+            5.868183135986328,
+            5.595684051513672,
+            5.831562042236328,
+            5.852672100067139,
+            5.7669548988342285,
+            5.769673824310303,
+            5.579851150512695,
+            5.946382999420166,
+            5.607516765594482,
+            5.885621070861816,
+            5.659018039703369,
+            5.629753112792969,
+            5.88546085357666,
+            5.633749961853027,
+            5.616639137268066,
+            5.6822052001953125,
+            5.625114917755127,
+            5.62911319732666
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 7219576832
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_before",
+          "median_ms": 28.08539867401123,
+          "p95_ms": 29.214740753173828,
+          "values_ms": [
+            28.029430389404297,
+            28.007522583007812,
+            27.985612869262695,
+            27.984331130981445,
+            28.09739112854004,
+            28.24979591369629,
+            27.828571319580078,
+            28.17799186706543,
+            27.935556411743164,
+            28.25539207458496,
+            29.528980255126953,
+            28.11210823059082,
+            28.195743560791016,
+            27.97441864013672,
+            28.267547607421875,
+            27.906291961669922,
+            28.411951065063477,
+            29.214740753173828,
+            28.073406219482422,
+            27.808582305908203
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5170659328
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_after",
+          "median_ms": 27.985772132873535,
+          "p95_ms": 28.296812057495117,
+          "values_ms": [
+            28.268827438354492,
+            27.869672775268555,
+            27.803466796875,
+            28.12298011779785,
+            27.86551284790039,
+            27.791791915893555,
+            28.189346313476562,
+            27.886621475219727,
+            28.38396644592285,
+            28.19894027709961,
+            28.05437660217285,
+            27.86199378967285,
+            28.068927764892578,
+            28.0577335357666,
+            27.852880477905273,
+            27.68288803100586,
+            27.865991592407227,
+            28.296812057495117,
+            28.115144729614258,
+            27.91716766357422
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5170659328
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "baseline_before",
+          "median_ms": 4.4252448081970215,
+          "p95_ms": 4.465384006500244,
+          "values_ms": [
+            4.465384006500244,
+            4.5816450119018555,
+            4.4564290046691895,
+            4.431801795959473,
+            4.401896953582764,
+            4.430683135986328,
+            4.413570880889893,
+            4.38942289352417,
+            4.398859024047852,
+            4.427323818206787,
+            4.4540300369262695,
+            4.461546897888184,
+            4.425564765930176,
+            4.424924850463867,
+            4.416769981384277,
+            4.4172492027282715,
+            4.402377128601074,
+            4.448432922363281,
+            4.404295921325684,
+            4.421886920928955
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5708775424
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r128c64k16w16",
+          "median_ms": 6.066241502761841,
+          "p95_ms": 6.117974758148193,
+          "values_ms": [
+            6.065842151641846,
+            6.054166793823242,
+            6.069519996643066,
+            6.078155040740967,
+            6.078794956207275,
+            6.117974758148193,
+            6.019946098327637,
+            6.070159912109375,
+            6.091427803039551,
+            6.054967880249023,
+            6.034176826477051,
+            6.044093132019043,
+            6.066640853881836,
+            6.104221820831299,
+            6.05128812789917,
+            6.050970077514648,
+            6.032419204711914,
+            6.034976959228516,
+            6.1258111000061035,
+            6.095585823059082
+          ],
+          "max_abs_delta": 1.3113021850585938e-06,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5306122240
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r128c64k16w8",
+          "median_ms": 5.187572479248047,
+          "p95_ms": 5.2222747802734375,
+          "values_ms": [
+            5.199087142944336,
+            5.129043102264404,
+            5.211880207061768,
+            5.009583950042725,
+            5.162466049194336,
+            5.202925205230713,
+            4.239580154418945,
+            5.263854026794434,
+            5.2075629234313965,
+            4.566932201385498,
+            5.180377006530762,
+            5.21523904800415,
+            5.176379203796387,
+            5.196847915649414,
+            5.166463851928711,
+            5.2222747802734375,
+            5.189812183380127,
+            5.185812950134277,
+            5.189332008361816,
+            4.780261993408203
+          ],
+          "max_abs_delta": 1.3113021850585938e-06,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5306122240
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r64c64k16w4",
+          "median_ms": 5.272249460220337,
+          "p95_ms": 5.2795257568359375,
+          "values_ms": [
+            4.915072917938232,
+            4.723331928253174,
+            5.279046058654785,
+            5.1982879638671875,
+            5.267531871795654,
+            5.270569801330566,
+            5.275688171386719,
+            5.275688171386719,
+            5.265613079071045,
+            5.273929119110107,
+            5.273448944091797,
+            5.168064117431641,
+            5.275688171386719,
+            4.604352951049805,
+            5.271210193634033,
+            5.27744722366333,
+            5.286081790924072,
+            5.2795257568359375,
+            5.2715301513671875,
+            5.272968769073486
+          ],
+          "max_abs_delta": 1.3113021850585938e-06,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5306122240
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r64c128k16w8",
+          "median_ms": 6.793627023696899,
+          "p95_ms": 6.818893909454346,
+          "values_ms": [
+            6.818893909454346,
+            6.794267177581787,
+            6.79762601852417,
+            6.787869930267334,
+            6.7976250648498535,
+            6.790268898010254,
+            6.787550926208496,
+            6.788829803466797,
+            6.791708946228027,
+            6.782594203948975,
+            6.979452133178711,
+            6.791707992553711,
+            6.7909088134765625,
+            6.792986869812012,
+            6.800663948059082,
+            6.795546054840088,
+            6.797945022583008,
+            6.791388034820557,
+            6.797305107116699,
+            6.800343036651611
+          ],
+          "max_abs_delta": 1.3113021850585938e-06,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5306122240
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r64c64k16w8",
+          "median_ms": 4.194164991378784,
+          "p95_ms": 4.208396911621094,
+          "values_ms": [
+            4.194325923919678,
+            4.208396911621094,
+            4.181210041046143,
+            4.177372932434082,
+            4.191286087036133,
+            4.189365863800049,
+            4.200719833374023,
+            4.186488151550293,
+            4.18248987197876,
+            4.196883201599121,
+            4.2216691970825195,
+            4.1964030265808105,
+            4.194962978363037,
+            4.190645217895508,
+            4.200560092926025,
+            4.200881004333496,
+            4.194004058837891,
+            4.186327934265137,
+            4.192084789276123,
+            4.203918933868408
+          ],
+          "max_abs_delta": 1.3113021850585938e-06,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5306122240
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "baseline_after",
+          "median_ms": 4.428923606872559,
+          "p95_ms": 4.4578680992126465,
+          "values_ms": [
+            4.4212470054626465,
+            4.433560848236084,
+            4.392621040344238,
+            4.4639458656311035,
+            4.425405025482178,
+            4.423006057739258,
+            4.4305219650268555,
+            4.436759948730469,
+            4.4578680992126465,
+            4.428284168243408,
+            4.411491870880127,
+            4.429563045501709,
+            4.420447826385498,
+            4.444275856018066,
+            4.451311111450195,
+            4.398378849029541,
+            4.432440757751465,
+            4.414529800415039,
+            4.411811828613281,
+            4.4305219650268555
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5708775424
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "baseline_before",
+          "median_ms": 28.952075958251953,
+          "p95_ms": 29.233930587768555,
+          "values_ms": [
+            28.9505558013916,
+            28.943199157714844,
+            28.89570426940918,
+            29.01164436340332,
+            28.947677612304688,
+            28.91633415222168,
+            28.95295524597168,
+            28.992294311523438,
+            29.233930587768555,
+            28.7736873626709,
+            28.952476501464844,
+            29.013883590698242,
+            28.951675415039062,
+            29.042667388916016,
+            29.00604820251465,
+            28.987016677856445,
+            29.25807762145996,
+            28.93040657043457,
+            28.90897560119629,
+            28.93792152404785
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 4136304640
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "baseline_after",
+          "median_ms": 28.965747833251953,
+          "p95_ms": 29.205142974853516,
+          "values_ms": [
+            29.079931259155273,
+            28.945919036865234,
+            29.007328033447266,
+            29.205142974853516,
+            28.889148712158203,
+            28.937284469604492,
+            29.050983428955078,
+            29.128543853759766,
+            28.997251510620117,
+            28.940799713134766,
+            28.923690795898438,
+            29.307491302490234,
+            28.793195724487305,
+            28.89682388305664,
+            28.981739044189453,
+            29.070016860961914,
+            28.829660415649414,
+            28.949756622314453,
+            28.892345428466797,
+            29.1016788482666
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 4136304640
+        }
+      ],
+      "rejections": [
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r128c64k16w16",
+          "max_abs_delta": 7.62939453125e-05,
+          "error": "Tensor-likes are not close!\n\nMismatched elements: 5 / 128000000 (0.0%)\nGreatest absolute difference: 2.9265880584716797e-05 at index (0, 210, 40) (up to 2e-05 allowed)\nGreatest relative difference: 0.002671097405254841 at index (0, 578, 90) (up to 2e-05 allowed)"
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r128c64k16w8",
+          "max_abs_delta": 7.62939453125e-05,
+          "error": "Tensor-likes are not close!\n\nMismatched elements: 5 / 128000000 (0.0%)\nGreatest absolute difference: 2.9265880584716797e-05 at index (0, 210, 40) (up to 2e-05 allowed)\nGreatest relative difference: 0.002671097405254841 at index (0, 578, 90) (up to 2e-05 allowed)"
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r64c64k16w4",
+          "max_abs_delta": 7.62939453125e-05,
+          "error": "Tensor-likes are not close!\n\nMismatched elements: 5 / 128000000 (0.0%)\nGreatest absolute difference: 2.9265880584716797e-05 at index (0, 210, 40) (up to 2e-05 allowed)\nGreatest relative difference: 0.002671097405254841 at index (0, 578, 90) (up to 2e-05 allowed)"
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r64c128k16w8",
+          "max_abs_delta": 7.62939453125e-05,
+          "error": "Tensor-likes are not close!\n\nMismatched elements: 5 / 128000000 (0.0%)\nGreatest absolute difference: 2.9265880584716797e-05 at index (0, 210, 40) (up to 2e-05 allowed)\nGreatest relative difference: 0.002671097405254841 at index (0, 578, 90) (up to 2e-05 allowed)"
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r64c64k16w8",
+          "max_abs_delta": 7.62939453125e-05,
+          "error": "Tensor-likes are not close!\n\nMismatched elements: 5 / 128000000 (0.0%)\nGreatest absolute difference: 2.9265880584716797e-05 at index (0, 210, 40) (up to 2e-05 allowed)\nGreatest relative difference: 0.002671097405254841 at index (0, 578, 90) (up to 2e-05 allowed)"
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r128c64k16w16",
+          "max_abs_delta": 6.103515625e-05,
+          "error": "Tensor-likes are not close!\n\nMismatched elements: 3 / 100663296 (0.0%)\nGreatest absolute difference: 2.968311309814453e-05 at index (0, 459, 83) (up to 2e-05 allowed)\nGreatest relative difference: 0.0007453341968357563 at index (0, 1443, 9) (up to 2e-05 allowed)"
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r128c64k16w8",
+          "max_abs_delta": 6.103515625e-05,
+          "error": "Tensor-likes are not close!\n\nMismatched elements: 3 / 100663296 (0.0%)\nGreatest absolute difference: 2.968311309814453e-05 at index (0, 459, 83) (up to 2e-05 allowed)\nGreatest relative difference: 0.0007453341968357563 at index (0, 1443, 9) (up to 2e-05 allowed)"
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r64c64k16w4",
+          "max_abs_delta": 6.103515625e-05,
+          "error": "Tensor-likes are not close!\n\nMismatched elements: 3 / 100663296 (0.0%)\nGreatest absolute difference: 2.968311309814453e-05 at index (0, 459, 83) (up to 2e-05 allowed)\nGreatest relative difference: 0.0007453341968357563 at index (0, 1443, 9) (up to 2e-05 allowed)"
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r64c128k16w8",
+          "max_abs_delta": 6.103515625e-05,
+          "error": "Tensor-likes are not close!\n\nMismatched elements: 3 / 100663296 (0.0%)\nGreatest absolute difference: 2.968311309814453e-05 at index (0, 459, 83) (up to 2e-05 allowed)\nGreatest relative difference: 0.0007453341968357563 at index (0, 1443, 9) (up to 2e-05 allowed)"
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r64c64k16w8",
+          "max_abs_delta": 6.103515625e-05,
+          "error": "Tensor-likes are not close!\n\nMismatched elements: 3 / 100663296 (0.0%)\nGreatest absolute difference: 2.968311309814453e-05 at index (0, 459, 83) (up to 2e-05 allowed)\nGreatest relative difference: 0.0007453341968357563 at index (0, 1443, 9) (up to 2e-05 allowed)"
+        }
+      ],
+      "blas": {
+        "requested": "hipblas",
+        "before": "_BlasBackend.Cublaslt",
+        "effective": "_BlasBackend.Cublas",
+        "changed": true
+      },
+      "ck_attention": {
+        "enabled": true,
+        "long1536_enabled": true,
+        "exact1536_enabled": true,
+        "vector1000_enabled": true,
+        "loaded": true,
+        "error": null,
+        "build": {
+          "source_sha256": "d50865b27a66956b391a331cc0daf9e33962c1fd1c0d93b3243fab9d25af016c",
+          "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+          "header_count": 581,
+          "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a",
+            "-I/opt/rocm/include",
+            "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.pending.so"
+          ],
+          "library_sha256": "e0db29648fbc9e4895663604a93c3729503039310761abdf19ed8e637d49ca63",
+          "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.so",
+          "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+        }
+      },
+      "compiler": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+      "qkv_dispatch": {
+        "enabled": true,
+        "counts": {
+          "n1000": 107,
+          "n1536": 107,
+          "fallback": 0
+        }
+      },
+      "monitors": [
+        {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 6,
+          "interval_seconds": 1.0,
+          "samples": 11,
+          "allowed_pid": 929072,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        },
+        {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 7,
+          "interval_seconds": 1.0,
+          "samples": 11,
+          "allowed_pid": 929072,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
+      ]
+    }
+  }
+}

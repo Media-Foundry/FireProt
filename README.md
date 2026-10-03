@@ -20,6 +20,17 @@ Protenix v1.1.0 is the first working adapter target. The repository now contains
 
 AtlasFold, OpenFold, ESMFold, Base-model coverage, BF16 promotion, additional long-sequence buckets, and general multi-GPU execution remain future work.
 
+## Latest original-Torch comparison
+
+Fresh same-source Mini-default FP32 C4/S1 measurements, seed 101, one warmup and three measured predictions per side:
+
+| Length | Original Torch | Current FireProt | Warm model speedup | Peak allocated memory reduction |
+| --- | ---: | ---: | ---: | ---: |
+| 1000 | 45.248 s | 9.744 s | **4.644x** | 74.64% |
+| 1536 | 137.168 s | 28.096 s | **4.882x** | 57.43% |
+
+All six prediction comparisons pass. Complete benchmark-worker speedups are **2.663x** and **3.510x**, respectively; each worker includes initialization, one warmup and three predictions, not a single cold request. Model times exclude loading and preprocessing. See [protocol, memory and numerical evidence](docs/protenix-native-current.md).
+
 ## Experimental 1,536-residue workload
 
 Fused HIP QKV preparation improves warm model median from **28.519 to 28.127 s (1.014x)** over five same-source repetitions. Attention improves from 13.628 to 13.280 s, allocated memory is unchanged, and all prediction comparisons pass. It is now enabled within the existing length opt-in; `FIREPROT_ENABLE_QKV_PROJECTION=0` restores native preparation. See [model validation](docs/protenix-qkv-projection.md#same-source-model-comparison).

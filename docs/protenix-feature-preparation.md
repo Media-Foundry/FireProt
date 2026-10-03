@@ -61,3 +61,13 @@ HIP_VISIBLE_DEVICES=7 PYTHONPATH=.:Protenix python \
 hashes, native stage timers, tensor shapes and dtypes, RNG-state hashes and
 cProfile own/cumulative leaders for both calls. Full pstats artifacts stay in
 the excluded remote outputs directory.
+
+
+The unused-template candidate has since been implemented as a guarded opt-in
+and validated on retained features, RNG state, full-model outputs and three
+fresh-worker request pairs per length. See [implementation and measured request
+results](protenix-unused-templates.md). The dense `bond_mask` remains unchanged:
+source searches find its explicit model reads in training loss, while inference
+still constructs and transfers it through the generic feature dictionary. An
+inference-only omission requires separate dispatch, retained-feature/RNG tests,
+and model/request validation before promotion.

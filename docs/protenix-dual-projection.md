@@ -159,3 +159,10 @@ implementation on two inputs, not experimental structure accuracy.
 records input/configuration identity, source and binary fingerprints,
 all timing samples, dispatch counters and output comparisons. Raw reports
 remain under DiamondHill `outputs/benchmarks/dual-projection-model-67b274a/`.
+
+## Further tile tuning
+
+A subsequent [spatial/wave/stride investigation](protenix-dual-tiles.md)
+finds an additional complete-triangle improvement with C128/R128/K16/W8
+and padded channel storage. It remains experimental pending model validation;
+the model result above uses the promoted C64/R64/K16/W4 implementation.

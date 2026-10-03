@@ -9,7 +9,8 @@ git am ../patches/protenix/0001-*.patch \
   ../patches/protenix/0002-*.patch \
   ../patches/protenix/0003-*.patch \
   ../patches/protenix/0004-*.patch \
-  ../patches/protenix/0005-*.patch
+  ../patches/protenix/0005-*.patch \
+  ../patches/protenix/0006-*.patch
 ```
 
 | Patch | SHA-256 | Purpose |
@@ -21,3 +22,5 @@ git am ../patches/protenix/0001-*.patch \
 | `0005-perf-omit-implicit-all-ones-triangle-mask.patch` | `0577b14c1157b7b8ca295142873b7921724f32ea435d29beb78b56315f95eb05` | Let the FireProt attention path omit an implicit all-ones mask and its zero additive bias |
 
 The dispatch patches do not change upstream kernel defaults. Native Protenix continues to select its existing kernels unless `fireprot` is requested explicitly. The FP32 reduction patch removes unused work without changing the requested dtype, operation order of retained tensors, or output contract.
+
+Patch `0006-perf-expose-pair-transpose-layout-dispatch.patch` (SHA-256 `5018a23899ae8ce21ce849a8a72bbea80e14c88909da11dd40aededd14d2488c`) exposes opt-in transpose views for the exact long inference layout. Independent integration commit: `fb1f39a`. Both layout and transposed LayerNorm flags are required; native and training paths retain their copies.

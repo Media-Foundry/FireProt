@@ -2,12 +2,20 @@
 
 ## Previously uncovered layout
 
-Ending-node triangle attention transposes its two sequence axes before
-LayerNorm. For an otherwise contiguous `[N,N,128]` pair tensor this gives
+Transposing the two sequence axes of a contiguous `[N,N,128]` pair tensor gives
 strides `[128,N*128,1]`. Existing FireProt LayerNorm supports contiguous long
-inputs and a different short channel-first layout, so this case falls back to
-Torch. The new HIP candidate directly reads transposed rows and writes
+inputs and a different short channel-first layout, so this layout falls back
+to Torch. The new HIP candidate directly reads transposed rows and writes
 contiguous normalized output, avoiding an intermediate contiguous input.
+
+Actual Pairformer execution requires an additional integration change:
+`PairformerBlock` configures both triangle-attention modules as starting-node
+modules and explicitly makes a contiguous transpose before and after its
+ending-node call. Therefore the unmodified model never exposes this strided
+layout to the new LayerNorm dispatcher. The first model candidate completed
+with **zero selections** and was rejected before proceeding to its baseline.
+That run is not evidence of model acceleration. A subsequent diagnostic
+confirmed contiguous C128 inputs throughout the observed model calls.
 
 The kernel uses float4 input groups and a wave64 Welford reduction, including
 empty-lane counts. It follows the arithmetic structure inspected in PyTorch's
@@ -46,6 +54,21 @@ The C++ binding independently checks tensor and device constraints and uses
 the current HIP stream. Unsupported calls and unavailable builds retain the
 existing dispatch/fallback behavior. Existing extension source hashing covers
 the new kernel and binding.
+
+To expose the layout in the actual Pairformer, independent Protenix commit
+`fb1f39a` adds optional transpose dispatch only in the `inplace_safe` FireProt
+branch. `FIREPROT_ENABLE_PAIR_LAYOUT=1` together with the LayerNorm flag allows
+exact long FP32 gfx90a inference tensors to use views instead of the two
+contiguous copies. The second transpose restores the original contiguous
+layout before pair transition. Training, autograd, unsupported shapes and
+layouts, disabled flags or unavailable extensions retain contiguous copies.
+GPU tests verify aliasing, original-stride restoration and exact residual
+update equivalence. The standalone norm flag alone is insufficient to
+accelerate the existing Pairformer.
+
+The constructor optimization currently pins the preceding model source tree;
+on the new Protenix commit it falls back to native construction. Construction
+is disabled on both sides of this layout experiment.
 
 Model numerical agreement and end-to-end improvement remain separate gates.
 The operator result alone does not establish a model speedup.

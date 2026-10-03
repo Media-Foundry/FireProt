@@ -1,0 +1,42 @@
+From fb1f39adb2b5bdd36c456cf5feaeeee76b6d63bc Mon Sep 17 00:00:00 2001
+From: HUSRCF <shuang886@connect.hkust-gz.edu.cn>
+Date: Sat, 3 Oct 2026 19:39:03 +0800
+Subject: [PATCH] perf: expose opt-in pair transpose layout dispatch
+
+---
+ protenix/model/modules/pairformer.py | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/protenix/model/modules/pairformer.py b/protenix/model/modules/pairformer.py
+index e348525..83368d8 100644
+--- a/protenix/model/modules/pairformer.py
++++ b/protenix/model/modules/pairformer.py
+@@ -157,7 +157,12 @@ class PairformerBlock(nn.Module):
+                 inplace_safe=inplace_safe,
+                 chunk_size=chunk_size,
+             )
+-            z = z.transpose(-2, -3).contiguous()
++            if triangle_attention == "fireprot":
++                from fireprot.backends.amd.pair_layout import transpose_pair
++
++                z = transpose_pair(z, training=self.training)
++            else:
++                z = z.transpose(-2, -3).contiguous()
+             z += self.tri_att_end(
+                 z,
+                 mask=pair_mask.transpose(-1, -2) if pair_mask is not None else None,
+@@ -165,7 +170,10 @@ class PairformerBlock(nn.Module):
+                 inplace_safe=inplace_safe,
+                 chunk_size=chunk_size,
+             )
+-            z = z.transpose(-2, -3).contiguous()
++            if triangle_attention == "fireprot":
++                z = transpose_pair(z, training=self.training)
++            else:
++                z = z.transpose(-2, -3).contiguous()
+             z += self.pair_transition(z)
+         else:
+             tmu_update = self.tri_mul_out(
+-- 
+2.43.0
+

@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "ast_verification": {
+    "old_commit": "77218da6f5ccf8562a76577dd568869785e6b45b",
+    "new_commit": "fb1f39adb2b5bdd36c456cf5feaeeee76b6d63bc",
+    "changed_files": [
+      "protenix/model/modules/pairformer.py"
+    ],
+    "ast_equal_outside_pairformer_forward": true,
+    "model_sha256": "6628a5db11d411479f9046005ab5306ba9fb6180bb82190a877e961f1361cf23"
+  },
+  "native": {
+    "mode": "native",
+    "runner_ms": 18839.68018402811,
+    "loaded_state_sha256": "5888e1046a229b8cc0c06d352c4ff710a5995e24d1a3f8088583435c7323c86b",
+    "rng_after": {
+      "python": "f86bcc97c7899c878b49ca7bd7292cf5446e0d1f8536b7ae3e9c4f67d049ce79",
+      "numpy": "0f5a0a347dedd34092bceaed1606cf929c22dd4da3524baa54b64b2c1626a31b",
+      "cpu": "b56dc5b0e409d9adeec8ca29a354c6d357681f1987f32ff8e6a7ec8d59c20665",
+      "gpu": "ec24041292be9d357b2663ab223208d1b53aa4ccabb5ccce861b0091bececef4"
+    },
+    "construction": {
+      "enabled": false,
+      "installed": false,
+      "unavailable": null,
+      "contract": {},
+      "counts": {
+        "attempted": 0,
+        "selected": 0,
+        "recovered": 0,
+        "native": 0,
+        "errors": 0
+      },
+      "native_reasons": {},
+      "records": []
+    },
+    "construction_source_sha256": "d735bb27a32b199e9476983eb7a71415a31169290a4d19d2a63d1d96f5a5d6ac"
+  },
+  "fast": {
+    "mode": "fast",
+    "runner_ms": 1861.8564020143822,
+    "loaded_state_sha256": "5888e1046a229b8cc0c06d352c4ff710a5995e24d1a3f8088583435c7323c86b",
+    "rng_after": {
+      "python": "f86bcc97c7899c878b49ca7bd7292cf5446e0d1f8536b7ae3e9c4f67d049ce79",
+      "numpy": "0f5a0a347dedd34092bceaed1606cf929c22dd4da3524baa54b64b2c1626a31b",
+      "cpu": "b56dc5b0e409d9adeec8ca29a354c6d357681f1987f32ff8e6a7ec8d59c20665",
+      "gpu": "ec24041292be9d357b2663ab223208d1b53aa4ccabb5ccce861b0091bececef4"
+    },
+    "construction": {
+      "enabled": true,
+      "installed": true,
+      "unavailable": null,
+      "contract": {
+        "scipy": "1.18.1",
+        "source_sha256": {
+          "initializer": "72e6ede89fb399efd49db04631802f05cce93eb6f81ee5cf16f11f5d55c1e14d",
+          "init_model": "14b306c00c2427536642f80f85a09f2a15b14b872e825614a186671b802d3c4a",
+          "load_checkpoint": "6da10f959743bb9ef95d4184f64b1def38df3b9874c02ec19021e1de991316ff",
+          "sampler": "bd951a20257379d57e1b9fd97844c7fae6eb6d1f0207f39572f5687fbbcd919a"
+        },
+        "model_sha256": "6628a5db11d411479f9046005ab5306ba9fb6180bb82190a877e961f1361cf23"
+      },
+      "counts": {
+        "attempted": 1,
+        "selected": 1,
+        "recovered": 0,
+        "native": 0,
+        "errors": 0
+      },
+      "native_reasons": {},
+      "records": [
+        {
+          "uniform_calls": 621,
+          "uniform_elements": 97331488,
+          "native_initializer_calls": 0,
+          "initialization_ms": 1478.930520999711,
+          "selected": true,
+          "missing_keys": [],
+          "checkpoint_and_recovery_ms": 291.6210609837435
+        }
+      ]
+    },
+    "construction_source_sha256": "d735bb27a32b199e9476983eb7a71415a31169290a4d19d2a63d1d96f5a5d6ac"
+  },
+  "monitors": [
+    {
+      "available": true,
+      "command": [
+        "/usr/bin/amd-smi",
+        "process",
+        "--json"
+      ],
+      "physical_device_index": 6,
+      "interval_seconds": 1.0,
+      "samples": 23,
+      "allowed_pid": 946040,
+      "external_pids": [],
+      "errors": [],
+      "passed": true
+    },
+    {
+      "available": true,
+      "command": [
+        "/usr/bin/amd-smi",
+        "process",
+        "--json"
+      ],
+      "physical_device_index": 7,
+      "interval_seconds": 1.0,
+      "samples": 23,
+      "allowed_pid": 946040,
+      "external_pids": [],
+      "errors": [],
+      "passed": true
+    }
+  ],
+  "script": "import os,sys,json,pathlib,subprocess,hashlib,pickle,random,time\nfrom benchmarks.protenix.profile_inference import _rocm_preflight,_additional_device_preflight,_GpuProcessMonitor\nroot=pathlib.Path('outputs/benchmarks/construction-layout-08666dc');root.mkdir(parents=True,exist_ok=True)\nif '--worker' in sys.argv:\n import numpy as np,torch\n from runner import batch_inference as batch\n from fireprot.adapters.protenix import construction\n mode=sys.argv[-1];torch.set_num_threads(1);torch.backends.cuda.matmul.allow_tf32=False\n from fireprot.backends.amd.blas import configure_process_blas\n configure_process_blas('hipblas');construction.install()\n random.seed(1031);np.random.seed(1031);torch.manual_seed(1031)\n def rng():\n  return dict(python=hashlib.sha256(pickle.dumps(random.getstate())).hexdigest(),numpy=hashlib.sha256(pickle.dumps(np.random.get_state())).hexdigest(),cpu=hashlib.sha256(torch.get_rng_state().numpy().tobytes()).hexdigest(),gpu=hashlib.sha256(torch.cuda.get_rng_state().cpu().numpy().tobytes()).hexdigest())\n batch.inference_configs['dump_dir']=str(root/'predictions-unused')\n started=time.perf_counter()\n runner=batch.get_default_runner(seeds=[101],n_cycle=4,n_step=1,n_sample=1,dtype='fp32',model_name='protenix_mini_default_v0.5.0',use_msa=False,trimul_kernel='torch',triatt_kernel='torch',enable_cache=True,enable_fusion=True,enable_tf32=False,use_template=False,use_rna_msa=False,use_seeds_in_json=False)\n torch.cuda.synchronize();elapsed=(time.perf_counter()-started)*1000;state=rng()\n h=hashlib.sha256()\n for name,t in sorted(runner.model.state_dict().items()):\n  h.update(json.dumps([name,list(t.shape),str(t.dtype)]).encode());h.update(t.detach().cpu().contiguous().numpy().tobytes())\n report=dict(mode=mode,runner_ms=elapsed,loaded_state_sha256=h.hexdigest(),rng_after=state,construction=construction.manifest(),construction_source_sha256=hashlib.sha256(pathlib.Path('fireprot/adapters/protenix/construction.py').read_bytes()).hexdigest())\n (root/(mode+'.json')).write_text(json.dumps(report,indent=2));print(json.dumps(report),flush=True);raise SystemExit(0)\np={'device_policy':'exclusive'};assert _rocm_preflight(p)['exclusive_check']['passed'];_additional_device_preflight([6],p)\nms=[_GpuProcessMonitor(d,os.getpid(),1) for d in (6,7)]\nfor m in ms:m.start()\ntry:\n for mode in ('native','fast'):\n  env=os.environ.copy();env['FIREPROT_ENABLE_FAST_MODEL_INIT']='1' if mode=='fast' else '0'\n  subprocess.run([sys.executable,__file__,'--worker',mode],env=env,check=True)\nfinally:monitors=[m.stop() for m in ms];(root/'monitors.json').write_text(json.dumps(monitors,indent=2))\na=json.loads((root/'native.json').read_text());b=json.loads((root/'fast.json').read_text())\nassert a['loaded_state_sha256']==b['loaded_state_sha256'] and a['rng_after']==b['rng_after']\nassert b['construction']['counts']['selected']==1\nassert all(m['passed'] for m in monitors)\nprint('CONSTRUCTION STATE AND RNG MATCH',flush=True)\n"
+}

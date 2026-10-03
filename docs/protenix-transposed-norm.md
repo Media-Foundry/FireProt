@@ -66,9 +66,13 @@ GPU tests verify aliasing, original-stride restoration and exact residual
 update equivalence. The standalone norm flag alone is insufficient to
 accelerate the existing Pairformer.
 
-The constructor optimization currently pins the preceding model source tree;
-on the new Protenix commit it falls back to native construction. Construction
-is disabled on both sides of this layout experiment.
+The constructor optimization initially pinned only the preceding model source
+tree and fell back on this commit. Its allowlist now also includes `fb1f39a`
+after AST verification that only `PairformerBlock.forward` changed and a real
+checkpoint test showing identical loaded parameters and Python/NumPy/Torch
+CPU/GPU RNG states. It remains opt-in. Construction is disabled on both sides
+of the layout model experiment. See the
+[compatibility evidence](../provenance/protenix_construction_layout_08666dc.json).
 
 Model numerical agreement and end-to-end improvement remain separate gates.
 The operator result alone does not establish a model speedup.
@@ -78,3 +82,42 @@ HIP_VISIBLE_DEVICES=7 PYTHONPATH=.:Protenix python \
   benchmarks/protenix/benchmark_transposed_norm.py \
   --output outputs/benchmarks/transposed-norm.json
 ```
+
+## Coupled layout model comparison
+
+The corrected pair-layout candidate is top-level commit `08666dc` with
+independent Protenix `fb1f39a`. Runs record base `ae9eca5` plus exact uncommitted
+candidate file hashes; those runtime files were then committed unchanged.
+Mini-default v0.5.0, FP32, TF32 off, hipBLAS, C4/S1, one sample, seed 101,
+no MSA/templates, expandable allocator, one warmup and three measured
+predictions. GPU 7 executes serially and GPU 6 is also monitored; every
+isolation check passes. N1536 runs enabled then disabled, N1000 reverses order.
+The two flags are switched together. Fast construction is disabled on both
+sides. These are warm-model measurements, not fresh-worker single requests.
+
+| N | Disabled median | Enabled median | Ratio | Allocated peak disabled / enabled |
+| --- | ---: | ---: | ---: | ---: |
+| 1000 | 9.734 s | 9.710 s | 1.0025x | 10.011 / 9.100 GB |
+| 1536 | 28.090 s | 27.719 s | 1.0134x | 22.721 / 20.631 GB |
+
+N1000 timing ranges overlap: disabled 9.730–9.749 s, enabled 9.671–9.734 s.
+This is not a demonstrated stable latency improvement. N1536 ranges are
+28.051–28.105 s and 27.706–27.788 s. Each enabled process selects the new
+LayerNorm 288 times across four predictions; both disabled processes select
+it zero times. All six coordinate/confidence comparisons pass the unchanged
+0.001 Angstrom aligned-RMSD and 0.001 confidence gates.
+
+The complete worker (construction, preprocessing, warmup plus three measured
+predictions and output writing) takes 85.371 → 85.548 s at N1000 and
+173.293 → 171.726 s at N1536. Thus the observed worker ratio is 0.998x and
+1.009x respectively. Do not substitute the isolated operator ratio for these
+request-level figures or multiply it by earlier model speedups.
+
+N1536 triangle-attention timing itself rises from 13.279 to 13.709 s because
+the candidate changes the normalization arithmetic/path within that scope;
+removing the two copies outside that scope yields the net model improvement.
+The strongest shared result is approximately 9% lower peak allocation.
+Both flags remain opt-in pending further N1536 memory-access tuning and
+broader model coverage. [Model evidence](../provenance/protenix_pair_layout_model_ae9eca5.json)
+retains the exact sources, script, dispatch counts, individual samples,
+validation and isolation records.

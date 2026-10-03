@@ -20,7 +20,11 @@ _counts = {"attempted": 0, "selected": 0, "recovered": 0, "native": 0, "errors":
 _reasons: dict[str, int] = {}
 _records: list[dict[str, Any]] = []
 _PENDING = "_fireprot_pending_construction"
-_MODEL_SHA256 = "18c2a6eb5f6202ce4d708aedfbef1b71d77359fb0a9a6e7ae775330766374c28"
+_MODEL_SHA256 = {
+    "18c2a6eb5f6202ce4d708aedfbef1b71d77359fb0a9a6e7ae775330766374c28",
+    # Pairformer forward-only layout patch; construction AST is unchanged.
+    "6628a5db11d411479f9046005ab5306ba9fb6180bb82190a877e961f1361cf23",
+}
 _HASHES = {
     "initializer": "72e6ede89fb399efd49db04631802f05cce93eb6f81ee5cf16f11f5d55c1e14d",
     "init_model": "14b306c00c2427536642f80f85a09f2a15b14b872e825614a186671b802d3c4a",
@@ -227,7 +231,7 @@ def install() -> dict[str, Any]:
             _contract = dict(scipy=scipy.__version__, source_sha256=hashes,
                              model_sha256=model_hash)
             if (scipy.__version__ != "1.18.1" or hashes != _HASHES
-                    or model_hash != _MODEL_SHA256
+                    or model_hash not in _MODEL_SHA256
                     or truncnorm._rvs.__func__ is not rv_continuous._rvs
                     or primitives.trunc_normal_init_ is not layers.trunc_normal_init_):
                 _unavailable = "Unverified Protenix or SciPy construction contract"

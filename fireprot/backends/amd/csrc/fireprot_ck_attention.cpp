@@ -7,6 +7,7 @@
 #include "ck_tile/ops/epilogue/default_2d_epilogue.hpp"
 #include "ck_tile/ops/fmha/block/variants.hpp"
 #include <tuple>
+#include <cstdint>
 namespace ct = ck_tile;
 #ifndef BM
 #define BM 128
@@ -77,6 +78,44 @@ extern "C" int ck_attention_exact1536(float* q,float* k,float* v,float* bias,flo
     ct::stream_config config{static_cast<hipStream_t>(raw_stream),false};
     auto launch=ct::make_kernel<ExactKernel::kBlockPerCu>(ExactKernel{},
         ExactKernel::GridSize(512,4,N,32,false),ExactKernel::BlockSize(),0,args);
+    launch(config);
+    return static_cast<int>(hipGetLastError());
+}
+
+// N1000 keeps tail masking but permits aligned four-element bias loads.
+namespace vector1000 {
+using VectorShape = ct::TileFmhaShape<ct::sequence<128,32,16,32,32,32>,
+    ct::sequence<4,1,1>,ct::sequence<16,16,16>,
+    ct::sequence<4,1,1>,ct::sequence<16,16,16>,true>;
+using VectorProblem = ct::BlockFmhaPipelineProblem<float,float,float,float,float,float,
+    uint8_t,float,float,float,float,VectorShape,false,Variant,
+    ct::SimplifiedGenericAttentionMask<false>,false,Traits>;
+using PaddedPipeline = ct::BlockFmhaPipelineQRKSVS<VectorProblem>;
+struct VectorBiasPipeline : PaddedPipeline {
+    static constexpr ct::index_t kAlignmentBias = 4;
+};
+static_assert(PaddedPipeline::kPadSeqLenQ && PaddedPipeline::kPadSeqLenK);
+static_assert(PaddedPipeline::kAlignmentBias == 1);
+using VectorBiasKernel = ct::FmhaFwdKernel<VectorBiasPipeline, Epilogue>;
+
+}
+extern "C" int ck_attention_vector_bias1000(float* q, float* k, float* v, float* bias,
+                                        float* output, int batch_size, int seq_len,
+                                        void* raw_stream) {
+    using vector1000::VectorBiasKernel;
+    if(batch_size != 1000 || seq_len != 1000) return 2;
+    for(const void* pointer : {q,k,v,bias,output})
+        if(pointer == nullptr || reinterpret_cast<uintptr_t>(pointer) % 16) return 3;
+    constexpr int N = 1000; // Row stride and logical K tail both divide four.
+    auto args=VectorBiasKernel::MakeKargs(q,k,v,bias,nullptr,nullptr,nullptr,nullptr,nullptr,output,
+        N,N,32,32,4,1,1.0f,0.0f,
+        128,128,128,N,0,128, 0,0,0,
+        32,32,32,N*N,0,0,32, 0,0,0,
+        N*128,N*128,N*128,0,0,0,N*128, 0,0,0,
+        -1,-1,0,0,0.0f,false,std::tuple<uint64_t,uint64_t>{0,0},0,0);
+    ct::stream_config config{static_cast<hipStream_t>(raw_stream),false};
+    auto launch=ct::make_kernel<VectorBiasKernel::kBlockPerCu>(VectorBiasKernel{},
+        VectorBiasKernel::GridSize(1000,4,N,32,false),VectorBiasKernel::BlockSize(),0,args);
     launch(config);
     return static_cast<int>(hipGetLastError());
 }

@@ -1,0 +1,196 @@
+{
+  "scope": "N1000 CK bias vectorization probe with unchanged padded-tail semantics.",
+  "shape": [
+    1000,
+    4,
+    1000,
+    32
+  ],
+  "dtype": "float32",
+  "tf32": false,
+  "seed": 907,
+  "warmup_groups": 5,
+  "measured_groups": 20,
+  "cache_state": "warm; compilation excluded",
+  "physical_device": 6,
+  "allocator": "expandable_segments:True",
+  "builds": [
+    {
+      "n": 64,
+      "library": "/media/IntelSSD/fireprot/runtime/ck_vector_bias/n64.so",
+      "library_sha256": "54b32e2f8866280e933baba2acf73e8c8f4346749d0e91c1f5bc2a0c67cec5aa",
+      "command": [
+        "/opt/rocm/bin/hipcc",
+        "-O3",
+        "-std=c++17",
+        "-shared",
+        "-fPIC",
+        "--offload-arch=gfx90a",
+        "-I/opt/rocm/include",
+        "-DBN=64",
+        "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/ck_attention_vector_bias.cpp",
+        "-o",
+        "/media/IntelSSD/fireprot/runtime/ck_vector_bias/n64.so"
+      ]
+    },
+    {
+      "n": 32,
+      "library": "/media/IntelSSD/fireprot/runtime/ck_vector_bias/n32.so",
+      "library_sha256": "dbf769a0c96b32402f544e4afa4b562c7c623e774df9523382aa0096b6a0b6dc",
+      "command": [
+        "/opt/rocm/bin/hipcc",
+        "-O3",
+        "-std=c++17",
+        "-shared",
+        "-fPIC",
+        "--offload-arch=gfx90a",
+        "-I/opt/rocm/include",
+        "-DBN=32",
+        "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/ck_attention_vector_bias.cpp",
+        "-o",
+        "/media/IntelSSD/fireprot/runtime/ck_vector_bias/n32.so"
+      ]
+    }
+  ],
+  "sibling_preflight": {
+    "7": {
+      "gpu_use_percent": 0,
+      "vram_used_bytes": 11014144,
+      "passed": true
+    }
+  },
+  "baseline_build": {
+    "enabled": true,
+    "long1536_enabled": false,
+    "exact1536_enabled": false,
+    "loaded": true,
+    "error": null,
+    "build": {
+      "source_sha256": "b5eef2b83778ab3a54204f35057a00f96bd878d1367bdc8981d525e85fac9c0b",
+      "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+      "header_count": 581,
+      "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+      "command": [
+        "/opt/rocm/bin/hipcc",
+        "-O3",
+        "-std=c++17",
+        "-fPIC",
+        "-shared",
+        "--offload-arch=gfx90a",
+        "-I/opt/rocm/include",
+        "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+        "-o",
+        "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_0307f741ac4f5e39/attention.pending.so"
+      ],
+      "library_sha256": "a2236997a7a9ea6602b2dd597fe41086cba04ef7f76ded7e353b60a17c057fc3",
+      "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_0307f741ac4f5e39/attention.so"
+    }
+  },
+  "source_sha256": {
+    "benchmarks/protenix/csrc/ck_attention_vector_bias.cpp": "7814220c6955867770ac344c884d14b9f672d2701438c8919fc5daadf142e0fc",
+    "fireprot/backends/amd/csrc/fireprot_ck_attention.cpp": "b5eef2b83778ab3a54204f35057a00f96bd878d1367bdc8981d525e85fac9c0b",
+    "benchmarks/protenix/benchmark_attention_vector_bias.py": "abf6fb91e98d221f85ec6347166da7eb89abfd6e150b5dd2474e522dab4d2427"
+  },
+  "records": [
+    {
+      "implementation": "ck_baseline_before",
+      "group_size": 1,
+      "median_ms": 32.78631782531738,
+      "p95_ms": 33.00191116333008,
+      "max_abs_delta": 3.933906555175781e-06,
+      "peak_allocated_bytes": 2592000000
+    },
+    {
+      "implementation": "vector_bias_n64",
+      "group_size": 1,
+      "median_ms": 20.75841236114502,
+      "p95_ms": 20.80657196044922,
+      "max_abs_delta": 3.933906555175781e-06,
+      "peak_allocated_bytes": 2592000000
+    },
+    {
+      "implementation": "vector_bias_n32",
+      "group_size": 1,
+      "median_ms": 20.07738208770752,
+      "p95_ms": 20.259540557861328,
+      "max_abs_delta": 6.67572021484375e-06,
+      "peak_allocated_bytes": 2592000000
+    },
+    {
+      "implementation": "ck_baseline_after",
+      "group_size": 1,
+      "median_ms": 32.79791450500488,
+      "p95_ms": 32.98399353027344,
+      "max_abs_delta": 3.933906555175781e-06,
+      "peak_allocated_bytes": 2592000000
+    },
+    {
+      "implementation": "ck_baseline_before",
+      "group_size": 8,
+      "median_ms": 32.68199348449707,
+      "p95_ms": 32.92746353149414,
+      "max_abs_delta": 3.933906555175781e-06,
+      "peak_allocated_bytes": 2592000000
+    },
+    {
+      "implementation": "vector_bias_n64",
+      "group_size": 8,
+      "median_ms": 20.710997581481934,
+      "p95_ms": 20.735204696655273,
+      "max_abs_delta": 3.933906555175781e-06,
+      "peak_allocated_bytes": 2592000000
+    },
+    {
+      "implementation": "vector_bias_n32",
+      "group_size": 8,
+      "median_ms": 20.058420181274414,
+      "p95_ms": 20.101037979125977,
+      "max_abs_delta": 6.67572021484375e-06,
+      "peak_allocated_bytes": 2592000000
+    },
+    {
+      "implementation": "ck_baseline_after",
+      "group_size": 8,
+      "median_ms": 32.674875259399414,
+      "p95_ms": 32.75619888305664,
+      "max_abs_delta": 3.933906555175781e-06,
+      "peak_allocated_bytes": 2592000000
+    }
+  ],
+  "torch": "2.12.0a0+git78258b9",
+  "hip": "7.14.60850",
+  "status": "ok",
+  "monitors": [
+    {
+      "available": true,
+      "command": [
+        "/usr/bin/amd-smi",
+        "process",
+        "--json"
+      ],
+      "physical_device_index": 6,
+      "interval_seconds": 1.0,
+      "samples": 20,
+      "allowed_pid": 828856,
+      "external_pids": [],
+      "errors": [],
+      "passed": true
+    },
+    {
+      "available": true,
+      "command": [
+        "/usr/bin/amd-smi",
+        "process",
+        "--json"
+      ],
+      "physical_device_index": 7,
+      "interval_seconds": 1.0,
+      "samples": 20,
+      "allowed_pid": 828856,
+      "external_pids": [],
+      "errors": [],
+      "passed": true
+    }
+  ],
+  "limitations": "Operator probe only; no model speedup claimed. Probe source hashes refer to the pre-integration source tree."
+}

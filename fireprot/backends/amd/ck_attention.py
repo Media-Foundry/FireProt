@@ -24,17 +24,19 @@ _exact1536_enabled = os.environ.get(
     "FIREPROT_ENABLE_CK_EXACT1536", "1" if ta._long1536_enabled else "0"
 ) == "1"
 _long1536_enabled = _exact1536_enabled or os.environ.get("FIREPROT_ENABLE_CK_ATTENTION_1536") == "1"
+_vector1000_enabled = os.environ.get("FIREPROT_ENABLE_CK_VECTOR_BIAS1000") == "1"
 _lock = threading.RLock()
 _library: Any = None
 _entry: Any = None
 _entry_exact: Any = None
+_entry_vector: Any = None
 _error: str | None = None
 _build: dict[str, Any] = {}
 
 
 def load_extension() -> Any:
     """Build a source/header/compiler fingerprinted standalone HIP library once."""
-    global _library, _entry, _entry_exact, _error, _build
+    global _library, _entry, _entry_exact, _entry_vector, _error, _build
     with _lock:
         if _entry is not None or _error is not None:
             return _entry
@@ -93,8 +95,11 @@ def load_extension() -> Any:
             _entry_exact = _library.ck_attention_exact1536
             _entry_exact.argtypes = _entry.argtypes
             _entry_exact.restype = ctypes.c_int
+            _entry_vector = _library.ck_attention_vector_bias1000
+            _entry_vector.argtypes = _entry.argtypes
+            _entry_vector.restype = ctypes.c_int
         except Exception as error:
-            _entry = _entry_exact = None
+            _entry = _entry_exact = _entry_vector = None
             _error = f"{type(error).__name__}: {error}"
             return None
         return _entry
@@ -103,6 +108,7 @@ def load_extension() -> Any:
 def extension_status() -> dict[str, Any]:
     with _lock:
         return dict(enabled=_enabled, long1536_enabled=_long1536_enabled, exact1536_enabled=_exact1536_enabled,
+                    vector1000_enabled=_vector1000_enabled,
                     loaded=_entry is not None, error=_error, build=dict(_build))
 
 
@@ -141,6 +147,8 @@ def attention(*, module: Any, q: Any, k: Any, v: Any, biases: Any, native: Any) 
         return ta._direct_sdpa(module=module, q=q, k=k, v=v, biases=biases, native=native)
     if q.shape[2] == 1536 and _exact1536_enabled:
         entry = _entry_exact
+    elif q.shape[2] == 1000 and _vector1000_enabled:
+        entry = _entry_vector
     with torch.cuda.device(q.device):
         if q.shape[2] == 1536:
             # Break the measured N1536 bias row-stride performance cliff.
@@ -149,6 +157,9 @@ def attention(*, module: Any, q: Any, k: Any, v: Any, biases: Any, native: Any) 
             bias[..., :1536].copy_(biases[0])
         else:
             bias = biases[0].contiguous()
+            # A contiguous slice may still have a misaligned storage offset.
+            if _vector1000_enabled and bias.data_ptr() % 16:
+                bias = bias.clone()
         output = torch.empty_like(q)
         status = entry(q.data_ptr(), k.data_ptr(), v.data_ptr(), bias.data_ptr(),
                        output.data_ptr(), q.shape[0], q.shape[2], torch.cuda.current_stream(q.device).cuda_stream)

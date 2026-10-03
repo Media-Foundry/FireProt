@@ -77,7 +77,6 @@ def try_attention(*, module: Any, q: Any, k: Any, v: Any, biases: Any) -> Any | 
         transfer.wait_stream(local)
         for tensor in (q, k, v):
             tensor.record_stream(local)
-            tensor.record_stream(transfer)
         with torch.cuda.stream(transfer), torch.cuda.stream(remote):
             rq, rk, rv = [t[320:].to(secondary, non_blocking=True) for t in (q, k, v)]
             rb = packed.to(secondary, non_blocking=True)
@@ -86,8 +85,16 @@ def try_attention(*, module: Any, q: Any, k: Any, v: Any, biases: Any) -> Any | 
         with torch.cuda.stream(transfer), torch.cuda.stream(remote):
             returned = ro.to(primary, non_blocking=True)
         local.wait_stream(remote)
-        returned.record_stream(local)
         result = torch.cat((lo.transpose(1, 2), returned.transpose(1, 2)), dim=0)
+        # returned belongs to the transfer allocator pool. Its final consumer
+        # is on local; hand the storage back through an explicit dependency.
+        # This permits ordered reuse on transfer without accumulating a new
+        # pending record_stream allocation for every CPU-enqueued layer.
+        transfer.wait_stream(local)
+        # Input copies finish before local's remote join above, so local
+        # allocation reuse also needs no additional transfer record_stream.
+    if os.environ.get("FIREPROT_TWO_GCD_SYNCHRONIZE") == "1":
+        local.synchronize()
     with _lock:
         _counts["selected"] += 1
     return result
@@ -97,7 +104,7 @@ def manifest() -> dict[str, Any]:
     import torch
 
     with _lock:
-        result = dict(enabled=enabled(), counts=dict(_counts), primary_batch=320, secondary_batch=192)
+        result = dict(enabled=enabled(), synchronize=os.environ.get("FIREPROT_TWO_GCD_SYNCHRONIZE") == "1", counts=dict(_counts), primary_batch=320, secondary_batch=192)
     if enabled() and torch.cuda.is_initialized() and torch.cuda.device_count() == 2:
         result["peak_allocated_by_logical_device_at_manifest"] = {str(i): torch.cuda.max_memory_allocated(i) for i in (0, 1)}
         result["visible_devices"] = os.environ.get("HIP_VISIBLE_DEVICES")

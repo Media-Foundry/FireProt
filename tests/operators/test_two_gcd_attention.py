@@ -16,11 +16,13 @@ def test_disabled_and_visibility_gate(monkeypatch):
 
 @pytest.mark.skipif(os.environ.get("FIREPROT_RUN_TWO_GCD_TESTS") != "1" or not torch.version.hip,
                     reason="explicit two-GCD test opt-in required")
-def test_full_output_stream_lifetime_and_rejection(monkeypatch):
+@pytest.mark.parametrize("synchronize", [False, True])
+def test_full_output_stream_lifetime_and_rejection(monkeypatch, synchronize):
     from fireprot.backends.amd.triangle_attention import _direct_sdpa
 
     assert os.environ.get("HIP_VISIBLE_DEVICES") in {"6,7", "7,6"}
     monkeypatch.setenv("FIREPROT_ENABLE_TWO_GCD_ATTENTION", "1")
+    monkeypatch.setenv("FIREPROT_TWO_GCD_SYNCHRONIZE", "1" if synchronize else "0")
     torch.manual_seed(743)
     module = SimpleNamespace(training=False)
     caller = torch.cuda.Stream(device=0)
@@ -42,6 +44,13 @@ def test_full_output_stream_lifetime_and_rejection(monkeypatch):
             del actual
             # Exercise allocator reuse after asynchronous peer temporaries die.
             temporary = torch.empty((512,1536,128), device="cuda:0"); temporary.fill_(13); del temporary
+        # Enqueue multiple full calls before synchronization. Per-call
+        # assert_close would hide stream-pool lifetime/reuse problems.
+        queued = [_direct_sdpa(**kwargs, native=lambda: None) for _ in range(4)]
+        caller.synchronize()
+        for output in queued:
+            torch.testing.assert_close(output, reference, atol=2e-5, rtol=2e-5)
+        del queued
         for t, saved in zip((q,k,v,bias), before):
             torch.testing.assert_close(t,saved,atol=0,rtol=0)
         with torch.autocast("cuda",dtype=torch.bfloat16):

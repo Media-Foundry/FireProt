@@ -861,3 +861,95 @@ torch::Tensor fireprot_dual_projection_tiled(torch::Tensor input,torch::Tensor g
   C10_CUDA_KERNEL_LAUNCH_CHECK();
   return output.as_strided({128,n,n},{rows+128,n,1});
 }
+
+namespace qkv_detail {
+using QkvV4=float __attribute__((ext_vector_type(4)));
+constexpr int ChannelWaves=64/16;
+constexpr int RowWaves=16/ChannelWaves;
+constexpr int RowsPerWave=128/RowWaves;
+static_assert(16%ChannelWaves==0 && RowsPerWave%16==0 && 128%64==0);
+__global__ __launch_bounds__(16*64) void project_qkv(const float* __restrict__ x,
+ const float* __restrict__ wq,const float* __restrict__ wk,const float* __restrict__ wv,
+ float* __restrict__ out,int rows) {
+#if defined(__gfx90a__)
+    __shared__ float input[128][16+4];
+    __shared__ float qweight[64][16+4],kweight[64][16+4],vweight[64][16+4];
+    const int tid=threadIdx.x,lane=tid%64,wave=tid/64;
+    const int first=blockIdx.x*128,channel=blockIdx.y*64;
+    const int wave_row=(wave/ChannelWaves)*RowsPerWave,wave_col=(wave%ChannelWaves)*16;
+    QkvV4 q[RowsPerWave/16]={},k[RowsPerWave/16]={},v[RowsPerWave/16]={};
+    for(int base=0;base<128;base+=16){
+        for(int i=tid;i<128*(16/4);i+=16*64){
+            const int r=i/(16/4),c=(i%(16/4))*4;
+            float4 value=make_float4(0,0,0,0);
+            if(first+r<rows)value=*reinterpret_cast<const float4*>(x+(first+r)*128+base+c);
+            *reinterpret_cast<float4*>(&input[r][c])=value;
+        }
+        for(int i=tid;i<64*(16/4);i+=16*64){
+            const int r=i/(16/4),c=(i%(16/4))*4,wi=(channel+r)*128+base+c;
+            *reinterpret_cast<float4*>(&qweight[r][c])=*reinterpret_cast<const float4*>(wq+wi);
+            *reinterpret_cast<float4*>(&kweight[r][c])=*reinterpret_cast<const float4*>(wk+wi);
+            *reinterpret_cast<float4*>(&vweight[r][c])=*reinterpret_cast<const float4*>(wv+wi);
+        }
+        __syncthreads();
+        #pragma unroll
+        for(int kk=0;kk<16;kk+=4){
+            const int c=kk+lane/16,wr=wave_col+lane%16;
+            const float bq=qweight[wr][c],bk=kweight[wr][c],bv=vweight[wr][c];
+            #pragma unroll
+            for(int g=0;g<RowsPerWave/16;g++){
+                const float a=input[wave_row+g*16+lane%16][c];
+                q[g]=__builtin_amdgcn_mfma_f32_16x16x4f32(a,bq,q[g],0,0,0);
+                k[g]=__builtin_amdgcn_mfma_f32_16x16x4f32(a,bk,k[g],0,0,0);
+                v[g]=__builtin_amdgcn_mfma_f32_16x16x4f32(a,bv,v[g],0,0,0);
+            }
+        }
+        __syncthreads();
+    }
+    #pragma unroll
+    for(int g=0;g<RowsPerWave/16;g++){
+        #pragma unroll
+        for(int j=0;j<4;j++){
+            const int r=first+wave_row+g*16+lane/16*4+j,c=channel+wave_col+lane%16;
+            if(r<rows){
+                out[r*128+c]=q[g][j]*0.1767766952966369f;
+                out[(rows+r)*128+c]=k[g][j];
+                out[(2*rows+r)*128+c]=v[g][j];
+            }
+        }
+    }
+#endif
+}
+} // namespace qkv_detail
+
+torch::Tensor fireprot_qkv_projection(torch::Tensor input,torch::Tensor wq,
+                                      torch::Tensor wk,torch::Tensor wv) {
+  TORCH_CHECK(!at::GradMode::is_enabled(), "QKV projection is inference only");
+  check_common(input,"input");
+  TORCH_CHECK(input.dim()==3 && input.size(2)==128 &&
+      ((input.size(0)==1000 && input.size(1)==1000) ||
+       (input.size(0)==512 && input.size(1)==1536)), "unsupported QKV input shape");
+  for(const auto& tensor : {input,wq,wk,wv}) {
+    check_common(tensor,"QKV tensor");
+    TORCH_CHECK(tensor.device()==input.device(),"devices must match");
+    TORCH_CHECK(reinterpret_cast<std::uintptr_t>(tensor.data_ptr())%16==0,
+        "requires 16-byte alignment");
+  }
+  for(const auto& weight : {wq,wk,wv}) {
+    TORCH_CHECK(weight.dim()==2 && weight.size(0)==128 && weight.size(1)==128,
+        "requires [128,128] weights");
+  }
+  const c10::DeviceGuard guard(input.device());
+  hipDeviceProp_t properties{};
+  TORCH_CHECK(hipGetDeviceProperties(&properties,input.get_device())==hipSuccess,
+      "cannot query device properties");
+  TORCH_CHECK(std::string(properties.gcnArchName).substr(0,6)=="gfx90a","requires gfx90a");
+  const int batch=input.size(0),n=input.size(1),rows=batch*n;
+  auto output=torch::empty({3,batch,n,128},input.options());
+  const auto stream=c10::hip::getCurrentHIPStream(input.get_device());
+  hipLaunchKernelGGL(qkv_detail::project_qkv,dim3((rows+127)/128,2),dim3(1024),0,stream.stream(),
+      input.data_ptr<float>(),wq.data_ptr<float>(),wk.data_ptr<float>(),wv.data_ptr<float>(),
+      output.data_ptr<float>(),rows);
+  C10_CUDA_KERNEL_LAUNCH_CHECK();
+  return output;
+}

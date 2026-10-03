@@ -51,7 +51,10 @@ torch::Tensor fireprot_dual_projection(torch::Tensor input,torch::Tensor gate_we
 
 torch::Tensor fireprot_dual_projection_tiled(torch::Tensor input,torch::Tensor gate_weight,torch::Tensor value_weight);
 
+torch::Tensor fireprot_qkv_projection(torch::Tensor input,torch::Tensor wq,torch::Tensor wk,torch::Tensor wv);
+
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, module) {
+  module.def("qkv_projection", &fireprot_qkv_projection);
   module.def("dual_projection_tiled", &fireprot_dual_projection_tiled);
   module.def("dual_projection", &fireprot_dual_projection);
   module.def("packed_norm_vector", &fireprot_packed_norm_vector);

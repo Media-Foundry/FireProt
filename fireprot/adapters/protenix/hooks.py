@@ -32,7 +32,8 @@ def install() -> dict[str, Any]:
         recycle_disabled = os.environ.get("FIREPROT_DISABLE_RECYCLE_OPS") == "1"
         ck_disabled = not _ck_ops_enabled()
         attention_gate_enabled = os.environ.get("FIREPROT_ENABLE_ATTENTION_GATE_1536") == "1"
-        if recycle_disabled and ck_disabled and not attention_gate_enabled:
+        qkv_enabled = os.environ.get("FIREPROT_ENABLE_QKV_PROJECTION") == "1"
+        if recycle_disabled and ck_disabled and not attention_gate_enabled and not qkv_enabled:
             _installed = True
             _enabled = False
             return manifest()
@@ -119,6 +120,20 @@ def install() -> dict[str, Any]:
             Attention._wrap_up = attention_wrap_up
             hook_names.append("Attention._wrap_up")
 
+        if qkv_enabled:
+            from protenix.model.triangular.layers import Attention
+            from fireprot.backends.amd.qkv_projection import prepare
+
+            original_prep_qkv = Attention._prep_qkv
+
+            @functools.wraps(original_prep_qkv)
+            def attention_prep_qkv(self: Any, q_x: Any, kv_x: Any, apply_scale: bool = True) -> Any:
+                return prepare(module=self, q_x=q_x, kv_x=kv_x, apply_scale=apply_scale,
+                               native=lambda: original_prep_qkv(self, q_x, kv_x, apply_scale))
+
+            Attention._prep_qkv = attention_prep_qkv
+            hook_names.append("Attention._prep_qkv")
+
         _hook_names = hook_names
         _installed = True
         _enabled = bool(hook_names)
@@ -126,10 +141,13 @@ def install() -> dict[str, Any]:
 
 
 def manifest() -> dict[str, Any]:
+    from fireprot.backends.amd.qkv_projection import manifest as qkv_manifest
+
     result = {
         "installed": _installed,
         "enabled": _enabled,
         "hooks": list(_hook_names),
+        "qkv_projection": qkv_manifest(),
     }
     if _enabled:
         selection_counts = []

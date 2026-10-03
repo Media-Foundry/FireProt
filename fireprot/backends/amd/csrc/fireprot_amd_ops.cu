@@ -1003,8 +1003,66 @@ __global__ void transpose_norm(const float* x,const float* weight,const float* b
 }
 }
 
+namespace transposed_norm_subgroup_detail {
+struct Moment { float mean, m2, count; };
+__device__ Moment merge(Moment a, Moment b) {
+    float total=a.count+b.count;
+    if(total==0) return {0,0,0};
+    float reciprocal=1.0f/total;
+    float wa=a.count*reciprocal, wb=b.count*reciprocal;
+    float delta=b.mean-a.mean;
+    return {wa*a.mean+wb*b.mean,
+            a.m2+b.m2+delta*delta*a.count*wb,total};
+}
+template<int Waves,int Tile>
+__global__ void transpose_norm(const float* x,const float* weight,const float* bias,
+                               float* out,int n,float eps) {
+    int lane=threadIdx.x%32, wave=threadIdx.x/32;
+    #pragma unroll 1
+    for(int item=wave;item<(Tile==0 ? Waves*2 : Tile*Tile);item+=Waves*2){
+    int i,j;
+    if constexpr(Tile==0){
+        int linear=blockIdx.x*Waves*2+wave;i=linear/n;j=linear%n;
+    } else {
+        i=blockIdx.y*Tile+item%Tile;j=blockIdx.x*Tile+item/Tile;
+    }
+    if(i>=n||j>=n)continue;
+    int row=i*n+j;
+    int source=(row%n*n+row/n)*128;
+    float4 v=make_float4(0,0,0,0);
+    Moment m{0,0,0};
+    if(lane<32){
+        v=*reinterpret_cast<const float4*>(x+source+lane*4);
+        float values[4]={v.x,v.y,v.z,v.w};
+        #pragma unroll
+        for(int i=0;i<4;i++){
+            float delta=values[i]-m.mean;
+            m.count+=1;
+            m.mean+=delta*(1.0f/m.count);
+            m.m2+=delta*(values[i]-m.mean);
+        }
+    }
+    #pragma unroll
+    for(int offset=16;offset>0;offset/=2){
+        Moment other{__shfl_down(m.mean,offset,32),__shfl_down(m.m2,offset,32),
+                     __shfl_down(m.count,offset,32)};
+        m=merge(other,m);
+    }
+    float mean=__shfl(m.mean,0,32), var=__shfl(m.m2,0,32)*(1.0f/128);
+    float inv=rsqrtf(var+eps);
+    if(lane<32){
+        float4 w=*reinterpret_cast<const float4*>(weight+lane*4);
+        float4 b=*reinterpret_cast<const float4*>(bias+lane*4);
+        float4 y=make_float4(w.x*(inv*(v.x-mean))+b.x,w.y*(inv*(v.y-mean))+b.y,
+                            w.z*(inv*(v.z-mean))+b.z,w.w*(inv*(v.w-mean))+b.w);
+        *reinterpret_cast<float4*>(out+row*128+lane*4)=y;
+    }
+    }
+}
+}
+
 torch::Tensor fireprot_transposed_layer_norm(torch::Tensor input,torch::Tensor weight,
-                                            torch::Tensor bias,double epsilon) {
+                                            torch::Tensor bias,double epsilon,bool subgroup) {
   TORCH_CHECK(!at::GradMode::is_enabled(),"transposed LayerNorm is inference only");
   TORCH_CHECK(input.is_cuda() && input.scalar_type()==torch::kFloat32 && !input.requires_grad(),
       "requires a CUDA FP32 inference input");
@@ -1028,9 +1086,19 @@ torch::Tensor fireprot_transposed_layer_norm(torch::Tensor input,torch::Tensor w
   TORCH_CHECK(std::string(properties.gcnArchName).substr(0,6)=="gfx90a","requires gfx90a");
   auto output=torch::empty({n,n,128},input.options());
   const auto stream=c10::hip::getCurrentHIPStream(input.get_device());
+  if(subgroup && n==1536) {
+    hipLaunchKernelGGL((transposed_norm_subgroup_detail::transpose_norm<8,32>),dim3(48,48),dim3(512),0,
+        stream.stream(),input.data_ptr<float>(),weight.data_ptr<float>(),bias.data_ptr<float>(),
+        output.data_ptr<float>(),n,static_cast<float>(epsilon));
+  } else if(subgroup) {
+    hipLaunchKernelGGL((transposed_norm_subgroup_detail::transpose_norm<4,0>),dim3((n*n+7)/8),dim3(256),0,
+        stream.stream(),input.data_ptr<float>(),weight.data_ptr<float>(),bias.data_ptr<float>(),
+        output.data_ptr<float>(),n,static_cast<float>(epsilon));
+  } else {
   hipLaunchKernelGGL(transposed_norm_detail::transpose_norm<8>,dim3((n*n+7)/8),dim3(512),0,
       stream.stream(),input.data_ptr<float>(),weight.data_ptr<float>(),bias.data_ptr<float>(),
       output.data_ptr<float>(),n,static_cast<float>(epsilon));
+  }
   C10_CUDA_KERNEL_LAUNCH_CHECK();
   return output;
 }

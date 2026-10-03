@@ -19,12 +19,14 @@ def test_cpu_falls_back(monkeypatch):
 
 @HIP
 @pytest.mark.parametrize('n',[1000,1536])
-def test_stream_numerics_and_dispatch(n,monkeypatch):
+@pytest.mark.parametrize('subgroup',[False,True])
+def test_stream_numerics_and_dispatch(n,subgroup,monkeypatch):
     monkeypatch.setenv('FIREPROT_ENABLE_TRANSPOSED_LAYERNORM','1')
+    monkeypatch.setenv('FIREPROT_ENABLE_TRANSPOSED_NORM_SUBGROUP','1' if subgroup else '0')
     monkeypatch.setattr(recycle,'_long1536_epilogues_enabled',True)
     ext=load_amd_extension();assert ext is not None
     torch.manual_seed(1047)
-    key=('layer_norm','amd-gfx90a-transposed-layernorm')
+    key=('layer_norm','amd-gfx90a-transposed-layernorm'+('-subgroup' if subgroup else ''))
     with torch.inference_mode(),torch.cuda.stream(torch.cuda.Stream()):
         module=torch.nn.LayerNorm(128).cuda().eval()
         module.weight.normal_();module.bias.normal_()

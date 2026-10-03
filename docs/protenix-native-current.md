@@ -76,7 +76,10 @@ and checkpoint loading. The constructor initializes weights before the
 checkpoint overwrites them, including SciPy truncated-normal sampling. This is
 an optimization lead, not an attribution of all 18.6 s to sampling. Constructor
 profiling, checkpoint coverage checks, and random-state validation are required
-before changing initialization.
+before changing initialization. A subsequent [construction profile](protenix-construction.md)
+attributes most of that time to truncated-normal initialization and tests a
+checkpoint-covered candidate that preserves random-state advancement. It is
+not yet integrated into the inference runtime.
 
 [Evidence](../provenance/protenix_native_current_b74161c.json) preserves
 configuration, source/input identities, individual model samples, stage totals

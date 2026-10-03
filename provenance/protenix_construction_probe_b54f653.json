@@ -1,0 +1,2567 @@
+{
+  "base_commit": "b54f653d24f1a84d842b6736a7f2a409dbf6b9da",
+  "scope": "Instrumented Mini-default construction pair only. Not integrated into runtime; no prediction or end-to-end gain established.",
+  "comparison": "native_repeat versus preserve_rng use identical probe source; native is the initial diagnostic",
+  "exact_match_checks": {
+    "source_sha256": true,
+    "loaded_state_sha256": true,
+    "all_buffers_sha256": true,
+    "checkpoint_sha256": true,
+    "rng_before_construction": true,
+    "rng_after_construction": true,
+    "initializer_calls": true,
+    "initializer_elements": true,
+    "parameter_elements": true,
+    "state_entries": true
+  },
+  "registered_buffers_note": "The model has no registered buffers; all_buffers_sha256 is the empty-stream digest. State-dict coverage includes 1612 entries and the Fourier embedding parameters.",
+  "cpu_construction_speedup": 12.708128866929354,
+  "runner_creation_speedup": 9.782721695003481,
+  "runner_creation_saved_ms": 17228.10509201372,
+  "reports": {
+    "native": {
+      "status": "ok",
+      "skip_truncated": false,
+      "model": "protenix_mini_default_v0.5.0",
+      "dtype": "FP32",
+      "cycles": 4,
+      "steps": 1,
+      "samples": 1,
+      "request_seed": 101,
+      "construction_seed": 1031,
+      "scope": "Construction and checkpoint load only; no prediction or model speedup claim",
+      "cache_state": "Fresh process; warm filesystem caches from preceding inference runs",
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "901412812",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "562501035",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1121135801",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "794223625",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "691005455",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1243678456",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451404139",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533769787",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "7",
+        "selected_physical_index": 7,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "sibling_preflight": {
+        "6": {
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "passed": true
+        }
+      },
+      "initializer_calls": 621,
+      "initializer_elements": 97331488,
+      "initializer_wall_ms": 18012.757946096826,
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "torch_threads": 1,
+      "source_sha256": {
+        "benchmarks/protenix/profile_construction.py": "8bf4fdf67760b38646e354c0a155573eefb504d2937b3f4071c23861712c93a3",
+        "Protenix/runner/inference.py": "f2c981b38936ff863e280602fc0ce4a32bc83e3103589b0111df73c00ac297f6",
+        "Protenix/protenix/model/triangular/layers.py": "c2a709d65ee40ab2fa7bdb100bccdd1f04f6b9036e7341a654510429f8f114ee",
+        "Protenix/protenix/model/modules/primitives.py": "48474abdd5b37a70f5d2579c0c2f1b2d2e6876961db7100f0eb9ebfad0198363"
+      },
+      "rng_before_construction": {
+        "python": "f86bcc97c7899c878b49ca7bd7292cf5446e0d1f8536b7ae3e9c4f67d049ce79",
+        "numpy": "0b80051f4259bd43818741edf82631ad2e6a0d5fc6ff029bf29ba150f6348f85",
+        "torch_cpu": "bc9fa097f798877999163378944acda3e43d845bf3d66d10cbe24fff5cb78a75"
+      },
+      "cpu_construction_ms": 18712.853878969327,
+      "rng_after_construction": {
+        "python": "f86bcc97c7899c878b49ca7bd7292cf5446e0d1f8536b7ae3e9c4f67d049ce79",
+        "numpy": "0f5a0a347dedd34092bceaed1606cf929c22dd4da3524baa54b64b2c1626a31b",
+        "torch_cpu": "b56dc5b0e409d9adeec8ca29a354c6d357681f1987f32ff8e6a7ec8d59c20665"
+      },
+      "construction_and_transfer_ms": 18910.750110982917,
+      "checkpoint_coverage": {
+        "missing_keys": [],
+        "unexpected_keys": []
+      },
+      "checkpoint_load_ms": 306.701215042267,
+      "runner_creation_ms": 19307.48004600173,
+      "checkpoint_sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81",
+      "parameter_elements": 134067007,
+      "state_entries": 1612,
+      "loaded_state_sha256": "5888e1046a229b8cc0c06d352c4ff710a5995e24d1a3f8088583435c7323c86b",
+      "all_buffers_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "top_cumulative": [
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/primitives.py",
+          "line": 46,
+          "function": "__init__",
+          "primitive_calls": 513,
+          "calls": 514,
+          "own_seconds": 0.040054836,
+          "cumulative_seconds": 23.064196439
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/utils/_contextlib.py",
+          "line": 120,
+          "function": "decorate_context",
+          "primitive_calls": 513,
+          "calls": 514,
+          "own_seconds": 0.022896609000000002,
+          "cumulative_seconds": 21.695429280000003
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/primitives.py",
+          "line": 69,
+          "function": "_init_params",
+          "primitive_calls": 513,
+          "calls": 514,
+          "own_seconds": 0.02493369,
+          "cumulative_seconds": 20.900271427
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/benchmarks/protenix/profile_construction.py",
+          "line": 75,
+          "function": "measured_initializer",
+          "primitive_calls": 621,
+          "calls": 622,
+          "own_seconds": 0.00874746,
+          "cumulative_seconds": 20.063623957
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/layers.py",
+          "line": 62,
+          "function": "trunc_normal_init_",
+          "primitive_calls": 621,
+          "calls": 622,
+          "own_seconds": 0.015882966000000002,
+          "cumulative_seconds": 19.489068507000002
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_distn_infrastructure.py",
+          "line": 1080,
+          "function": "rvs",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.08447383400000001,
+          "cumulative_seconds": 17.220917654
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_distn_infrastructure.py",
+          "line": 1050,
+          "function": "_rvs",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.480840443,
+          "cumulative_seconds": 16.07748895
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 10378,
+          "function": "_ppf",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.643256913,
+          "cumulative_seconds": 15.425119456000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 10384,
+          "function": "ppf_left",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 2.591390176,
+          "cumulative_seconds": 14.874430171
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/transformer.py",
+          "line": 271,
+          "function": "__init__",
+          "primitive_calls": 13,
+          "calls": 13,
+          "own_seconds": 0.000257805,
+          "cumulative_seconds": 10.870560575
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/diffusion.py",
+          "line": 254,
+          "function": "__init__",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 6.6167e-05,
+          "cumulative_seconds": 10.392817515
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/transformer.py",
+          "line": 371,
+          "function": "__init__",
+          "primitive_calls": 4,
+          "calls": 4,
+          "own_seconds": 0.000138267,
+          "cumulative_seconds": 10.004356647
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/pairformer.py",
+          "line": 62,
+          "function": "__init__",
+          "primitive_calls": 21,
+          "calls": 21,
+          "own_seconds": 0.0007650830000000001,
+          "cumulative_seconds": 9.233316522
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/transformer.py",
+          "line": 56,
+          "function": "__init__",
+          "primitive_calls": 33,
+          "calls": 33,
+          "own_seconds": 0.000929481,
+          "cumulative_seconds": 8.579290736
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/pairformer.py",
+          "line": 242,
+          "function": "__init__",
+          "primitive_calls": 3,
+          "calls": 3,
+          "own_seconds": 0.00021005400000000002,
+          "cumulative_seconds": 8.163329876
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/primitives.py",
+          "line": 175,
+          "function": "__init__",
+          "primitive_calls": 45,
+          "calls": 45,
+          "own_seconds": 0.001056221,
+          "cumulative_seconds": 6.954039629
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 10210,
+          "function": "_log_sum",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.1873244,
+          "cumulative_seconds": 6.6440497
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/special/_logsumexp.py",
+          "line": 15,
+          "function": "logsumexp",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 1.4706304080000001,
+          "cumulative_seconds": 6.381816072
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/primitives.py",
+          "line": 670,
+          "function": "__init__",
+          "primitive_calls": 33,
+          "calls": 33,
+          "own_seconds": 0.001329307,
+          "cumulative_seconds": 6.3608385940000005
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 10219,
+          "function": "_log_gauss_mass",
+          "primitive_calls": 1242,
+          "calls": 1242,
+          "own_seconds": 0.746961787,
+          "cumulative_seconds": 4.851520229
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/transformer.py",
+          "line": 561,
+          "function": "__init__",
+          "primitive_calls": 13,
+          "calls": 13,
+          "own_seconds": 0.000388256,
+          "cumulative_seconds": 4.806134771
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/special/_logsumexp.py",
+          "line": 201,
+          "function": "_logsumexp",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 3.328764048,
+          "cumulative_seconds": 4.615509894000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 10235,
+          "function": "mass_case_central",
+          "primitive_calls": 1242,
+          "calls": 1242,
+          "own_seconds": 0.7649577670000001,
+          "cumulative_seconds": 3.9413436570000004
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 370,
+          "function": "_norm_cdf",
+          "primitive_calls": 2484,
+          "calls": 2484,
+          "own_seconds": 3.2089835900000003,
+          "cumulative_seconds": 3.2089835900000003
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/primitives.py",
+          "line": 150,
+          "function": "__init__",
+          "primitive_calls": 26,
+          "calls": 26,
+          "own_seconds": 0.00044359200000000003,
+          "cumulative_seconds": 1.8852580220000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/confidence.py",
+          "line": 49,
+          "function": "__init__",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.00020424600000000002,
+          "cumulative_seconds": 1.5740921890000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/layers.py",
+          "line": 137,
+          "function": "__init__",
+          "primitive_calls": 507,
+          "calls": 507,
+          "own_seconds": 0.002682037,
+          "cumulative_seconds": 1.568251169
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 374,
+          "function": "_norm_logcdf",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 1.3589427710000002,
+          "cumulative_seconds": 1.3589427710000002
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/layers.py",
+          "line": 78,
+          "function": "lecun_normal_init_",
+          "primitive_calls": 254,
+          "calls": 254,
+          "own_seconds": 0.000317427,
+          "cumulative_seconds": 1.145792602
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/triangular.py",
+          "line": 185,
+          "function": "__init__",
+          "primitive_calls": 42,
+          "calls": 42,
+          "own_seconds": 0.000455156,
+          "cumulative_seconds": 1.037059645
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/nn/modules/linear.py",
+          "line": 96,
+          "function": "__init__",
+          "primitive_calls": 1020,
+          "calls": 1020,
+          "own_seconds": 0.006821881,
+          "cumulative_seconds": 0.937942559
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/numpy/_core/fromnumeric.py",
+          "line": 66,
+          "function": "_wrapreduction",
+          "primitive_calls": 7452,
+          "calls": 7452,
+          "own_seconds": 0.015893189000000002,
+          "cumulative_seconds": 0.6135499240000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'reduce' of 'numpy.ufunc' objects>",
+          "primitive_calls": 11178,
+          "calls": 11178,
+          "own_seconds": 0.601769101,
+          "cumulative_seconds": 0.601769101
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/transformer.py",
+          "line": 615,
+          "function": "__init__",
+          "primitive_calls": 2,
+          "calls": 3,
+          "own_seconds": 0.000370025,
+          "cumulative_seconds": 0.5626452820000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/nn/modules/linear.py",
+          "line": 117,
+          "function": "reset_parameters",
+          "primitive_calls": 1020,
+          "calls": 1020,
+          "own_seconds": 0.002754831,
+          "cumulative_seconds": 0.54038681
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/triangular.py",
+          "line": 649,
+          "function": "__init__",
+          "primitive_calls": 42,
+          "calls": 42,
+          "own_seconds": 0.00041072000000000005,
+          "cumulative_seconds": 0.5386574590000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/nn/init.py",
+          "line": 554,
+          "function": "kaiming_uniform_",
+          "primitive_calls": 1020,
+          "calls": 1020,
+          "own_seconds": 0.0068986410000000005,
+          "cumulative_seconds": 0.534629419
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_distn_infrastructure.py",
+          "line": 1452,
+          "function": "std",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.003046411,
+          "cumulative_seconds": 0.5260837460000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_distn_infrastructure.py",
+          "line": 1149,
+          "function": "stats",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.018944919,
+          "cumulative_seconds": 0.523037335
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'uniform_' of 'torch._C.TensorBase' objects>",
+          "primitive_calls": 1112,
+          "calls": 1112,
+          "own_seconds": 0.511556855,
+          "cumulative_seconds": 0.511556855
+        }
+      ],
+      "top_own_time": [
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/special/_logsumexp.py",
+          "line": 201,
+          "function": "_logsumexp",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 3.328764048,
+          "cumulative_seconds": 4.615509894000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 370,
+          "function": "_norm_cdf",
+          "primitive_calls": 2484,
+          "calls": 2484,
+          "own_seconds": 3.2089835900000003,
+          "cumulative_seconds": 3.2089835900000003
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 10384,
+          "function": "ppf_left",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 2.591390176,
+          "cumulative_seconds": 14.874430171
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/special/_logsumexp.py",
+          "line": 15,
+          "function": "logsumexp",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 1.4706304080000001,
+          "cumulative_seconds": 6.381816072
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 374,
+          "function": "_norm_logcdf",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 1.3589427710000002,
+          "cumulative_seconds": 1.3589427710000002
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 10235,
+          "function": "mass_case_central",
+          "primitive_calls": 1242,
+          "calls": 1242,
+          "own_seconds": 0.7649577670000001,
+          "cumulative_seconds": 3.9413436570000004
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 10219,
+          "function": "_log_gauss_mass",
+          "primitive_calls": 1242,
+          "calls": 1242,
+          "own_seconds": 0.746961787,
+          "cumulative_seconds": 4.851520229
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 10378,
+          "function": "_ppf",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.643256913,
+          "cumulative_seconds": 15.425119456000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'reduce' of 'numpy.ufunc' objects>",
+          "primitive_calls": 11178,
+          "calls": 11178,
+          "own_seconds": 0.601769101,
+          "cumulative_seconds": 0.601769101
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'uniform_' of 'torch._C.TensorBase' objects>",
+          "primitive_calls": 1112,
+          "calls": 1112,
+          "own_seconds": 0.511556855,
+          "cumulative_seconds": 0.511556855
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_distn_infrastructure.py",
+          "line": 1050,
+          "function": "_rvs",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.480840443,
+          "cumulative_seconds": 16.07748895
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method numpy.array>",
+          "primitive_calls": 32913,
+          "calls": 32913,
+          "own_seconds": 0.233515574,
+          "cumulative_seconds": 0.233515574
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'astype' of 'numpy.ndarray' objects>",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.220888882,
+          "cumulative_seconds": 0.220888882
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/numpy/_core/numeric.py",
+          "line": 400,
+          "function": "full_like",
+          "primitive_calls": 6210,
+          "calls": 6210,
+          "own_seconds": 0.208374356,
+          "cumulative_seconds": 0.209981149
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 10210,
+          "function": "_log_sum",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.1873244,
+          "cumulative_seconds": 6.6440497
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/_external/array_api_extra/_lib/_at.py",
+          "line": 224,
+          "function": "_op",
+          "primitive_calls": 6210,
+          "calls": 6210,
+          "own_seconds": 0.173965427,
+          "cumulative_seconds": 0.440509368
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'poll' of 'select.poll' objects>",
+          "primitive_calls": 15,
+          "calls": 56,
+          "own_seconds": 0.143231918,
+          "cumulative_seconds": 0.053267902000000006
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method numpy.asanyarray>",
+          "primitive_calls": 13041,
+          "calls": 13041,
+          "own_seconds": 0.134878681,
+          "cumulative_seconds": 0.134878681
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/_external/array_api_compat/common/_aliases.py",
+          "line": 631,
+          "function": "sign",
+          "primitive_calls": 1242,
+          "calls": 1242,
+          "own_seconds": 0.131030784,
+          "cumulative_seconds": 0.139860601
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/special/_logsumexp.py",
+          "line": 169,
+          "function": "_elements_and_indices_with_max_real",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.11637628800000001,
+          "cumulative_seconds": 0.26988007
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'acquire' of '_thread.lock' objects>",
+          "primitive_calls": 58,
+          "calls": 114,
+          "own_seconds": 0.11441166400000001,
+          "cumulative_seconds": 0.041030335
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_distn_infrastructure.py",
+          "line": 1080,
+          "function": "rvs",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.08447383400000001,
+          "cumulative_seconds": 17.220917654
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/threading.py",
+          "line": 323,
+          "function": "wait",
+          "primitive_calls": 14,
+          "calls": 28,
+          "own_seconds": 0.061496366000000004,
+          "cumulative_seconds": 0.05506056
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/selectors.py",
+          "line": 402,
+          "function": "select",
+          "primitive_calls": 15,
+          "calls": 56,
+          "own_seconds": 0.059339818,
+          "cumulative_seconds": 0.08605002
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method torch.tensor>",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.054526595000000004,
+          "cumulative_seconds": 0.054526595000000004
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/_external/array_api_extra/_lib/_funcs.py",
+          "line": 165,
+          "function": "_apply_where",
+          "primitive_calls": 4968,
+          "calls": 4968,
+          "own_seconds": 0.045720479,
+          "cumulative_seconds": 0.185218238
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/primitives.py",
+          "line": 46,
+          "function": "__init__",
+          "primitive_calls": 513,
+          "calls": 514,
+          "own_seconds": 0.040054836,
+          "cumulative_seconds": 23.064196439
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/threading.py",
+          "line": 637,
+          "function": "wait",
+          "primitive_calls": 14,
+          "calls": 28,
+          "own_seconds": 0.033876738,
+          "cumulative_seconds": 0.056212512000000006
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/_external/array_api_extra/_lib/_funcs.py",
+          "line": 67,
+          "function": "apply_where",
+          "primitive_calls": 4968,
+          "calls": 4968,
+          "own_seconds": 0.032823195,
+          "cumulative_seconds": 0.246621146
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/numpy/lib/_stride_tricks_impl.py",
+          "line": 447,
+          "function": "_broadcast_to",
+          "primitive_calls": 3726,
+          "calls": 3726,
+          "own_seconds": 0.030086721,
+          "cumulative_seconds": 0.039257682
+        }
+      ],
+      "profile_file": "outputs/benchmarks/construction-native-b54f653.pstats",
+      "monitors": [
+        {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 6,
+          "interval_seconds": 1.0,
+          "samples": 18,
+          "allowed_pid": 930245,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        },
+        {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 7,
+          "interval_seconds": 1.0,
+          "samples": 18,
+          "allowed_pid": 930245,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
+      ]
+    },
+    "native_repeat": {
+      "status": "ok",
+      "skip_truncated": false,
+      "model": "protenix_mini_default_v0.5.0",
+      "dtype": "FP32",
+      "cycles": 4,
+      "steps": 1,
+      "samples": 1,
+      "request_seed": 101,
+      "construction_seed": 1031,
+      "scope": "Construction and checkpoint load only; no prediction or model speedup claim",
+      "cache_state": "Fresh process; warm filesystem caches from preceding inference runs",
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "901412898",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "562501121",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1121135888",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "794223710",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "691005542",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1243698424",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451404226",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533769876",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "7",
+        "selected_physical_index": 7,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "sibling_preflight": {
+        "6": {
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "passed": true
+        }
+      },
+      "initializer_calls": 621,
+      "initializer_elements": 97331488,
+      "initializer_wall_ms": 17998.617379460484,
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "torch_threads": 1,
+      "scipy_sampling": {
+        "version": "1.18.1",
+        "source": "    def _rvs(self, *args, size=None, random_state=None):\n        # This method must handle size being a tuple, and it must\n        # properly broadcast *args and size.  size might be\n        # an empty tuple, which means a scalar random variate is to be\n        # generated.\n\n        # Use basic inverse cdf algorithm for RV generation as default.\n        U = random_state.uniform(size=size)\n        Y = self._ppf(U, *args)\n        return Y\n",
+        "source_sha256": "bd951a20257379d57e1b9fd97844c7fae6eb6d1f0207f39572f5687fbbcd919a",
+        "rng_advancement": "one uniform float64 draw per initialized element"
+      },
+      "source_sha256": {
+        "benchmarks/protenix/profile_construction.py": "60f08f8ffcd4641413d9226e7ce800e402aab3a2b2a062fe2c07b5e6301dab6d",
+        "Protenix/runner/inference.py": "f2c981b38936ff863e280602fc0ce4a32bc83e3103589b0111df73c00ac297f6",
+        "Protenix/protenix/model/triangular/layers.py": "c2a709d65ee40ab2fa7bdb100bccdd1f04f6b9036e7341a654510429f8f114ee",
+        "Protenix/protenix/model/modules/primitives.py": "48474abdd5b37a70f5d2579c0c2f1b2d2e6876961db7100f0eb9ebfad0198363"
+      },
+      "rng_before_construction": {
+        "python": "f86bcc97c7899c878b49ca7bd7292cf5446e0d1f8536b7ae3e9c4f67d049ce79",
+        "numpy": "0b80051f4259bd43818741edf82631ad2e6a0d5fc6ff029bf29ba150f6348f85",
+        "torch_cpu": "bc9fa097f798877999163378944acda3e43d845bf3d66d10cbe24fff5cb78a75"
+      },
+      "cpu_construction_ms": 18692.894186009653,
+      "rng_after_construction": {
+        "python": "f86bcc97c7899c878b49ca7bd7292cf5446e0d1f8536b7ae3e9c4f67d049ce79",
+        "numpy": "0f5a0a347dedd34092bceaed1606cf929c22dd4da3524baa54b64b2c1626a31b",
+        "torch_cpu": "b56dc5b0e409d9adeec8ca29a354c6d357681f1987f32ff8e6a7ec8d59c20665"
+      },
+      "construction_and_transfer_ms": 18874.775563017465,
+      "checkpoint_coverage": {
+        "missing_keys": [],
+        "unexpected_keys": []
+      },
+      "checkpoint_load_ms": 304.3646730366163,
+      "runner_creation_ms": 19189.69577999087,
+      "checkpoint_sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81",
+      "parameter_elements": 134067007,
+      "state_entries": 1612,
+      "loaded_state_sha256": "5888e1046a229b8cc0c06d352c4ff710a5995e24d1a3f8088583435c7323c86b",
+      "all_buffers_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "top_cumulative": [
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/primitives.py",
+          "line": 46,
+          "function": "__init__",
+          "primitive_calls": 513,
+          "calls": 513,
+          "own_seconds": 0.032004836,
+          "cumulative_seconds": 23.400768251000002
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/utils/_contextlib.py",
+          "line": 120,
+          "function": "decorate_context",
+          "primitive_calls": 513,
+          "calls": 513,
+          "own_seconds": 0.024932727000000002,
+          "cumulative_seconds": 22.130860318
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/primitives.py",
+          "line": 69,
+          "function": "_init_params",
+          "primitive_calls": 513,
+          "calls": 513,
+          "own_seconds": 0.039062531000000004,
+          "cumulative_seconds": 21.842514669
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/benchmarks/protenix/profile_construction.py",
+          "line": 84,
+          "function": "measured_initializer",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.01697432,
+          "cumulative_seconds": 19.797914947000002
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/layers.py",
+          "line": 62,
+          "function": "trunc_normal_init_",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.021357101,
+          "cumulative_seconds": 18.724479851
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/protenix.py",
+          "line": 96,
+          "function": "__init__",
+          "primitive_calls": 1,
+          "calls": 2,
+          "own_seconds": 0.000220423,
+          "cumulative_seconds": 18.515200797000002
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_distn_infrastructure.py",
+          "line": 1080,
+          "function": "rvs",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.08649382400000001,
+          "cumulative_seconds": 16.437547753
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_distn_infrastructure.py",
+          "line": 1050,
+          "function": "_rvs",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.44420233400000003,
+          "cumulative_seconds": 15.560883884
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 10378,
+          "function": "_ppf",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.6170391150000001,
+          "cumulative_seconds": 14.836433451000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 10384,
+          "function": "ppf_left",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 2.52411557,
+          "cumulative_seconds": 14.40549146
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/transformer.py",
+          "line": 271,
+          "function": "__init__",
+          "primitive_calls": 13,
+          "calls": 13,
+          "own_seconds": 0.00038696000000000005,
+          "cumulative_seconds": 10.913722869
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/diffusion.py",
+          "line": 254,
+          "function": "__init__",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.00010631800000000001,
+          "cumulative_seconds": 10.326710817
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/transformer.py",
+          "line": 371,
+          "function": "__init__",
+          "primitive_calls": 4,
+          "calls": 4,
+          "own_seconds": 0.000145627,
+          "cumulative_seconds": 10.289636167000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/pairformer.py",
+          "line": 62,
+          "function": "__init__",
+          "primitive_calls": 21,
+          "calls": 21,
+          "own_seconds": 0.0007356880000000001,
+          "cumulative_seconds": 9.037306997
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/transformer.py",
+          "line": 56,
+          "function": "__init__",
+          "primitive_calls": 33,
+          "calls": 33,
+          "own_seconds": 0.000905126,
+          "cumulative_seconds": 8.508422551
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/pairformer.py",
+          "line": 242,
+          "function": "__init__",
+          "primitive_calls": 3,
+          "calls": 3,
+          "own_seconds": 0.00019611500000000002,
+          "cumulative_seconds": 8.084239908
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/primitives.py",
+          "line": 175,
+          "function": "__init__",
+          "primitive_calls": 45,
+          "calls": 45,
+          "own_seconds": 0.001017825,
+          "cumulative_seconds": 6.879146564
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 10210,
+          "function": "_log_sum",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.183496125,
+          "cumulative_seconds": 6.4824920100000005
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/special/_logsumexp.py",
+          "line": 15,
+          "function": "logsumexp",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 1.43189992,
+          "cumulative_seconds": 6.163736487
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/primitives.py",
+          "line": 670,
+          "function": "__init__",
+          "primitive_calls": 33,
+          "calls": 33,
+          "own_seconds": 0.001306847,
+          "cumulative_seconds": 6.129983026000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/transformer.py",
+          "line": 561,
+          "function": "__init__",
+          "primitive_calls": 13,
+          "calls": 13,
+          "own_seconds": 0.000420237,
+          "cumulative_seconds": 4.866284927000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 10219,
+          "function": "_log_gauss_mass",
+          "primitive_calls": 1242,
+          "calls": 1242,
+          "own_seconds": 0.741729599,
+          "cumulative_seconds": 4.835135499000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/special/_logsumexp.py",
+          "line": 201,
+          "function": "_logsumexp",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 3.203249177,
+          "cumulative_seconds": 4.400778614
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 10235,
+          "function": "mass_case_central",
+          "primitive_calls": 1242,
+          "calls": 1242,
+          "own_seconds": 0.766586395,
+          "cumulative_seconds": 3.915216242
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 370,
+          "function": "_norm_cdf",
+          "primitive_calls": 2484,
+          "calls": 2484,
+          "own_seconds": 3.193298608,
+          "cumulative_seconds": 3.193298608
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/confidence.py",
+          "line": 49,
+          "function": "__init__",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.00016259800000000002,
+          "cumulative_seconds": 1.563106171
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/layers.py",
+          "line": 137,
+          "function": "__init__",
+          "primitive_calls": 507,
+          "calls": 507,
+          "own_seconds": 0.0026555040000000004,
+          "cumulative_seconds": 1.352159189
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 374,
+          "function": "_norm_logcdf",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 1.3444534430000001,
+          "cumulative_seconds": 1.3444534430000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/layers.py",
+          "line": 78,
+          "function": "lecun_normal_init_",
+          "primitive_calls": 254,
+          "calls": 254,
+          "own_seconds": 0.00034296,
+          "cumulative_seconds": 1.2415727250000002
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/nn/modules/linear.py",
+          "line": 96,
+          "function": "__init__",
+          "primitive_calls": 1020,
+          "calls": 1020,
+          "own_seconds": 0.0071219180000000005,
+          "cumulative_seconds": 1.031339088
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/primitives.py",
+          "line": 150,
+          "function": "__init__",
+          "primitive_calls": 26,
+          "calls": 26,
+          "own_seconds": 0.000320002,
+          "cumulative_seconds": 1.001471397
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/triangular.py",
+          "line": 649,
+          "function": "__init__",
+          "primitive_calls": 42,
+          "calls": 42,
+          "own_seconds": 0.000422644,
+          "cumulative_seconds": 0.9985950920000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/layers.py",
+          "line": 319,
+          "function": "__init__",
+          "primitive_calls": 42,
+          "calls": 42,
+          "own_seconds": 0.000757755,
+          "cumulative_seconds": 0.9363009080000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/benchmarks/protenix/profile_inference.py",
+          "line": 71,
+          "function": "_run_json_command",
+          "primitive_calls": 14,
+          "calls": 28,
+          "own_seconds": 0.022352530000000002,
+          "cumulative_seconds": 0.8737084060000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/transformer.py",
+          "line": 615,
+          "function": "__init__",
+          "primitive_calls": 2,
+          "calls": 2,
+          "own_seconds": 0.000124766,
+          "cumulative_seconds": 0.6447755190000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_distn_infrastructure.py",
+          "line": 1452,
+          "function": "std",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.0030600030000000004,
+          "cumulative_seconds": 0.6279449020000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_distn_infrastructure.py",
+          "line": 1149,
+          "function": "stats",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.019315332,
+          "cumulative_seconds": 0.624884899
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/numpy/_core/fromnumeric.py",
+          "line": 66,
+          "function": "_wrapreduction",
+          "primitive_calls": 7452,
+          "calls": 7452,
+          "own_seconds": 0.016269298,
+          "cumulative_seconds": 0.60683032
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/selectors.py",
+          "line": 402,
+          "function": "select",
+          "primitive_calls": 25,
+          "calls": 56,
+          "own_seconds": 0.086632161,
+          "cumulative_seconds": 0.5947218360000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'reduce' of 'numpy.ufunc' objects>",
+          "primitive_calls": 11178,
+          "calls": 11178,
+          "own_seconds": 0.594475194,
+          "cumulative_seconds": 0.594475194
+        }
+      ],
+      "top_own_time": [
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/special/_logsumexp.py",
+          "line": 201,
+          "function": "_logsumexp",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 3.203249177,
+          "cumulative_seconds": 4.400778614
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 370,
+          "function": "_norm_cdf",
+          "primitive_calls": 2484,
+          "calls": 2484,
+          "own_seconds": 3.193298608,
+          "cumulative_seconds": 3.193298608
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 10384,
+          "function": "ppf_left",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 2.52411557,
+          "cumulative_seconds": 14.40549146
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/special/_logsumexp.py",
+          "line": 15,
+          "function": "logsumexp",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 1.43189992,
+          "cumulative_seconds": 6.163736487
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 374,
+          "function": "_norm_logcdf",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 1.3444534430000001,
+          "cumulative_seconds": 1.3444534430000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 10235,
+          "function": "mass_case_central",
+          "primitive_calls": 1242,
+          "calls": 1242,
+          "own_seconds": 0.766586395,
+          "cumulative_seconds": 3.915216242
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 10219,
+          "function": "_log_gauss_mass",
+          "primitive_calls": 1242,
+          "calls": 1242,
+          "own_seconds": 0.741729599,
+          "cumulative_seconds": 4.835135499000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 10378,
+          "function": "_ppf",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.6170391150000001,
+          "cumulative_seconds": 14.836433451000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'reduce' of 'numpy.ufunc' objects>",
+          "primitive_calls": 11178,
+          "calls": 11178,
+          "own_seconds": 0.594475194,
+          "cumulative_seconds": 0.594475194
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'uniform_' of 'torch._C.TensorBase' objects>",
+          "primitive_calls": 1112,
+          "calls": 1112,
+          "own_seconds": 0.503237095,
+          "cumulative_seconds": 0.503237095
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_distn_infrastructure.py",
+          "line": 1050,
+          "function": "_rvs",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.44420233400000003,
+          "cumulative_seconds": 15.560883884
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method numpy.array>",
+          "primitive_calls": 32913,
+          "calls": 32913,
+          "own_seconds": 0.22873047000000002,
+          "cumulative_seconds": 0.22873047000000002
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'astype' of 'numpy.ndarray' objects>",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.20825010700000002,
+          "cumulative_seconds": 0.20825010700000002
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/numpy/_core/numeric.py",
+          "line": 400,
+          "function": "full_like",
+          "primitive_calls": 6210,
+          "calls": 6210,
+          "own_seconds": 0.20581982000000001,
+          "cumulative_seconds": 0.207447987
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'poll' of 'select.poll' objects>",
+          "primitive_calls": 25,
+          "calls": 56,
+          "own_seconds": 0.190181178,
+          "cumulative_seconds": 0.38702036
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_continuous_distns.py",
+          "line": 10210,
+          "function": "_log_sum",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.183496125,
+          "cumulative_seconds": 6.4824920100000005
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'acquire' of '_thread.lock' objects>",
+          "primitive_calls": 56,
+          "calls": 110,
+          "own_seconds": 0.183073817,
+          "cumulative_seconds": 0.11700469000000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/_external/array_api_extra/_lib/_at.py",
+          "line": 224,
+          "function": "_op",
+          "primitive_calls": 6210,
+          "calls": 6210,
+          "own_seconds": 0.17401554200000002,
+          "cumulative_seconds": 0.43649035100000005
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/_external/array_api_extra/_lib/_funcs.py",
+          "line": 165,
+          "function": "_apply_where",
+          "primitive_calls": 4968,
+          "calls": 4968,
+          "own_seconds": 0.14021950900000002,
+          "cumulative_seconds": 0.282576592
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method numpy.asanyarray>",
+          "primitive_calls": 13041,
+          "calls": 13041,
+          "own_seconds": 0.138737399,
+          "cumulative_seconds": 0.138737399
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/_external/array_api_compat/common/_aliases.py",
+          "line": 631,
+          "function": "sign",
+          "primitive_calls": 1242,
+          "calls": 1242,
+          "own_seconds": 0.12680105900000002,
+          "cumulative_seconds": 0.135631146
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/special/_logsumexp.py",
+          "line": 169,
+          "function": "_elements_and_indices_with_max_real",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.11382320600000001,
+          "cumulative_seconds": 0.26678491200000004
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/threading.py",
+          "line": 323,
+          "function": "wait",
+          "primitive_calls": 13,
+          "calls": 26,
+          "own_seconds": 0.089265829,
+          "cumulative_seconds": 0.14003642200000002
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/selectors.py",
+          "line": 402,
+          "function": "select",
+          "primitive_calls": 25,
+          "calls": 56,
+          "own_seconds": 0.086632161,
+          "cumulative_seconds": 0.5947218360000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/stats/_distn_infrastructure.py",
+          "line": 1080,
+          "function": "rvs",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.08649382400000001,
+          "cumulative_seconds": 16.437547753
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method torch.tensor>",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.053667484,
+          "cumulative_seconds": 0.053667484
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/subprocess.py",
+          "line": 1165,
+          "function": "communicate",
+          "primitive_calls": 14,
+          "calls": 28,
+          "own_seconds": 0.050149341,
+          "cumulative_seconds": 0.395274463
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/subprocess.py",
+          "line": 2062,
+          "function": "_communicate",
+          "primitive_calls": 14,
+          "calls": 28,
+          "own_seconds": 0.044494198000000006,
+          "cumulative_seconds": 0.31702059800000004
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/primitives.py",
+          "line": 69,
+          "function": "_init_params",
+          "primitive_calls": 513,
+          "calls": 513,
+          "own_seconds": 0.039062531000000004,
+          "cumulative_seconds": 21.842514669
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/_external/array_api_extra/_lib/_funcs.py",
+          "line": 67,
+          "function": "apply_where",
+          "primitive_calls": 4968,
+          "calls": 4968,
+          "own_seconds": 0.03283386,
+          "cumulative_seconds": 0.34400320900000003
+        }
+      ],
+      "profile_file": "outputs/benchmarks/construction-native_repeat-b54f653.pstats",
+      "monitors": [
+        {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 6,
+          "interval_seconds": 1.0,
+          "samples": 17,
+          "allowed_pid": 931134,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        },
+        {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 7,
+          "interval_seconds": 1.0,
+          "samples": 17,
+          "allowed_pid": 931134,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
+      ]
+    },
+    "preserve_rng": {
+      "status": "ok",
+      "skip_truncated": true,
+      "model": "protenix_mini_default_v0.5.0",
+      "dtype": "FP32",
+      "cycles": 4,
+      "steps": 1,
+      "samples": 1,
+      "request_seed": 101,
+      "construction_seed": 1031,
+      "scope": "Construction and checkpoint load only; no prediction or model speedup claim",
+      "cache_state": "Fresh process; warm filesystem caches from preceding inference runs",
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "901412853",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "562501076",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1121135843",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "794223666",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "691005496",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1243688469",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451404180",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533769829",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "7",
+        "selected_physical_index": 7,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "sibling_preflight": {
+        "6": {
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "passed": true
+        }
+      },
+      "initializer_calls": 621,
+      "initializer_elements": 97331488,
+      "initializer_wall_ms": 678.0736042419448,
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "torch_threads": 1,
+      "scipy_sampling": {
+        "version": "1.18.1",
+        "source": "    def _rvs(self, *args, size=None, random_state=None):\n        # This method must handle size being a tuple, and it must\n        # properly broadcast *args and size.  size might be\n        # an empty tuple, which means a scalar random variate is to be\n        # generated.\n\n        # Use basic inverse cdf algorithm for RV generation as default.\n        U = random_state.uniform(size=size)\n        Y = self._ppf(U, *args)\n        return Y\n",
+        "source_sha256": "bd951a20257379d57e1b9fd97844c7fae6eb6d1f0207f39572f5687fbbcd919a",
+        "rng_advancement": "one uniform float64 draw per initialized element"
+      },
+      "source_sha256": {
+        "benchmarks/protenix/profile_construction.py": "60f08f8ffcd4641413d9226e7ce800e402aab3a2b2a062fe2c07b5e6301dab6d",
+        "Protenix/runner/inference.py": "f2c981b38936ff863e280602fc0ce4a32bc83e3103589b0111df73c00ac297f6",
+        "Protenix/protenix/model/triangular/layers.py": "c2a709d65ee40ab2fa7bdb100bccdd1f04f6b9036e7341a654510429f8f114ee",
+        "Protenix/protenix/model/modules/primitives.py": "48474abdd5b37a70f5d2579c0c2f1b2d2e6876961db7100f0eb9ebfad0198363"
+      },
+      "rng_before_construction": {
+        "python": "f86bcc97c7899c878b49ca7bd7292cf5446e0d1f8536b7ae3e9c4f67d049ce79",
+        "numpy": "0b80051f4259bd43818741edf82631ad2e6a0d5fc6ff029bf29ba150f6348f85",
+        "torch_cpu": "bc9fa097f798877999163378944acda3e43d845bf3d66d10cbe24fff5cb78a75"
+      },
+      "cpu_construction_ms": 1470.9399300045334,
+      "rng_after_construction": {
+        "python": "f86bcc97c7899c878b49ca7bd7292cf5446e0d1f8536b7ae3e9c4f67d049ce79",
+        "numpy": "0f5a0a347dedd34092bceaed1606cf929c22dd4da3524baa54b64b2c1626a31b",
+        "torch_cpu": "b56dc5b0e409d9adeec8ca29a354c6d357681f1987f32ff8e6a7ec8d59c20665"
+      },
+      "construction_and_transfer_ms": 1650.4523910116404,
+      "checkpoint_coverage": {
+        "missing_keys": [],
+        "unexpected_keys": []
+      },
+      "checkpoint_load_ms": 300.83442700561136,
+      "runner_creation_ms": 1961.59068797715,
+      "checkpoint_sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81",
+      "parameter_elements": 134067007,
+      "state_entries": 1612,
+      "loaded_state_sha256": "5888e1046a229b8cc0c06d352c4ff710a5995e24d1a3f8088583435c7323c86b",
+      "all_buffers_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "top_cumulative": [
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/primitives.py",
+          "line": 46,
+          "function": "__init__",
+          "primitive_calls": 513,
+          "calls": 513,
+          "own_seconds": 0.0015506180000000001,
+          "cumulative_seconds": 1.566112833
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/protenix.py",
+          "line": 96,
+          "function": "__init__",
+          "primitive_calls": 1,
+          "calls": 2,
+          "own_seconds": 0.00018567600000000002,
+          "cumulative_seconds": 1.364454257
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/pairformer.py",
+          "line": 62,
+          "function": "__init__",
+          "primitive_calls": 21,
+          "calls": 21,
+          "own_seconds": 0.000491581,
+          "cumulative_seconds": 1.0765745850000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/transformer.py",
+          "line": 56,
+          "function": "__init__",
+          "primitive_calls": 33,
+          "calls": 33,
+          "own_seconds": 0.094552589,
+          "cumulative_seconds": 0.8888032250000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/primitives.py",
+          "line": 670,
+          "function": "__init__",
+          "primitive_calls": 33,
+          "calls": 33,
+          "own_seconds": 0.00077275,
+          "cumulative_seconds": 0.728465201
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/pairformer.py",
+          "line": 242,
+          "function": "__init__",
+          "primitive_calls": 3,
+          "calls": 4,
+          "own_seconds": 9.196600000000001e-05,
+          "cumulative_seconds": 0.6796818
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/benchmarks/protenix/profile_construction.py",
+          "line": 84,
+          "function": "measured_initializer",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.675837801,
+          "cumulative_seconds": 0.6766202840000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/diffusion.py",
+          "line": 254,
+          "function": "__init__",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 5.5542000000000005e-05,
+          "cumulative_seconds": 0.671813843
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/utils/_contextlib.py",
+          "line": 120,
+          "function": "decorate_context",
+          "primitive_calls": 513,
+          "calls": 513,
+          "own_seconds": 0.001028022,
+          "cumulative_seconds": 0.6624656400000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/primitives.py",
+          "line": 69,
+          "function": "_init_params",
+          "primitive_calls": 513,
+          "calls": 513,
+          "own_seconds": 0.0008966590000000001,
+          "cumulative_seconds": 0.658125576
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/transformer.py",
+          "line": 371,
+          "function": "__init__",
+          "primitive_calls": 4,
+          "calls": 4,
+          "own_seconds": 0.000145463,
+          "cumulative_seconds": 0.656220177
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/transformer.py",
+          "line": 271,
+          "function": "__init__",
+          "primitive_calls": 13,
+          "calls": 13,
+          "own_seconds": 0.00015783,
+          "cumulative_seconds": 0.6551710310000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/nn/modules/linear.py",
+          "line": 96,
+          "function": "__init__",
+          "primitive_calls": 1020,
+          "calls": 1020,
+          "own_seconds": 0.005130353000000001,
+          "cumulative_seconds": 0.6142748680000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/nn/modules/linear.py",
+          "line": 117,
+          "function": "reset_parameters",
+          "primitive_calls": 1020,
+          "calls": 1020,
+          "own_seconds": 0.0019476040000000001,
+          "cumulative_seconds": 0.5667543190000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/nn/init.py",
+          "line": 554,
+          "function": "kaiming_uniform_",
+          "primitive_calls": 1020,
+          "calls": 1020,
+          "own_seconds": 0.005366458,
+          "cumulative_seconds": 0.5617282140000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'uniform_' of 'torch._C.TensorBase' objects>",
+          "primitive_calls": 1112,
+          "calls": 1112,
+          "own_seconds": 0.543205881,
+          "cumulative_seconds": 0.543205881
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/primitives.py",
+          "line": 175,
+          "function": "__init__",
+          "primitive_calls": 45,
+          "calls": 45,
+          "own_seconds": 0.0005864020000000001,
+          "cumulative_seconds": 0.391348189
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/transformer.py",
+          "line": 561,
+          "function": "__init__",
+          "primitive_calls": 13,
+          "calls": 13,
+          "own_seconds": 0.00021420300000000002,
+          "cumulative_seconds": 0.361900883
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/benchmarks/protenix/profile_inference.py",
+          "line": 71,
+          "function": "_run_json_command",
+          "primitive_calls": 1,
+          "calls": 2,
+          "own_seconds": 0.00020622900000000002,
+          "cumulative_seconds": 0.336577481
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/subprocess.py",
+          "line": 506,
+          "function": "run",
+          "primitive_calls": 1,
+          "calls": 2,
+          "own_seconds": 0.000155446,
+          "cumulative_seconds": 0.335580569
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/confidence.py",
+          "line": 49,
+          "function": "__init__",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.000124375,
+          "cumulative_seconds": 0.134770035
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/layers.py",
+          "line": 137,
+          "function": "__init__",
+          "primitive_calls": 507,
+          "calls": 507,
+          "own_seconds": 0.002254643,
+          "cumulative_seconds": 0.099775889
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/triangular.py",
+          "line": 649,
+          "function": "__init__",
+          "primitive_calls": 42,
+          "calls": 42,
+          "own_seconds": 0.00047496400000000003,
+          "cumulative_seconds": 0.061193122
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/triangular.py",
+          "line": 185,
+          "function": "__init__",
+          "primitive_calls": 42,
+          "calls": 42,
+          "own_seconds": 0.000331818,
+          "cumulative_seconds": 0.056047995
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/nn/modules/module.py",
+          "line": 1971,
+          "function": "__setattr__",
+          "primitive_calls": 10346,
+          "calls": 10346,
+          "own_seconds": 0.020319182,
+          "cumulative_seconds": 0.055281176
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/primitives.py",
+          "line": 150,
+          "function": "__init__",
+          "primitive_calls": 26,
+          "calls": 26,
+          "own_seconds": 0.000116711,
+          "cumulative_seconds": 0.054070892
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/layers.py",
+          "line": 319,
+          "function": "__init__",
+          "primitive_calls": 42,
+          "calls": 42,
+          "own_seconds": 0.0006066380000000001,
+          "cumulative_seconds": 0.051293657000000006
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/primitives.py",
+          "line": 113,
+          "function": "__init__",
+          "primitive_calls": 31,
+          "calls": 31,
+          "own_seconds": 0.000245835,
+          "cumulative_seconds": 0.05008743500000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/transformer.py",
+          "line": 615,
+          "function": "__init__",
+          "primitive_calls": 2,
+          "calls": 2,
+          "own_seconds": 0.000129099,
+          "cumulative_seconds": 0.036004693000000004
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/transformer.py",
+          "line": 487,
+          "function": "__init__",
+          "primitive_calls": 3,
+          "calls": 3,
+          "own_seconds": 2.2440000000000002e-05,
+          "cumulative_seconds": 0.028625381000000002
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/embedders.py",
+          "line": 39,
+          "function": "__init__",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 1.0013e-05,
+          "cumulative_seconds": 0.025885241000000003
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/diffusion.py",
+          "line": 43,
+          "function": "__init__",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 4.8101000000000006e-05,
+          "cumulative_seconds": 0.025618395000000002
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/layers.py",
+          "line": 78,
+          "function": "lecun_normal_init_",
+          "primitive_calls": 254,
+          "calls": 254,
+          "own_seconds": 0.000236013,
+          "cumulative_seconds": 0.024651983000000002
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.isinstance>",
+          "primitive_calls": 33796,
+          "calls": 49455,
+          "own_seconds": 0.010833098000000001,
+          "cumulative_seconds": 0.022748486000000002
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/nn/modules/module.py",
+          "line": 482,
+          "function": "__init__",
+          "primitive_calls": 1856,
+          "calls": 1856,
+          "own_seconds": 0.021586777,
+          "cumulative_seconds": 0.021987237
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/triangular.py",
+          "line": 106,
+          "function": "__init__",
+          "primitive_calls": 42,
+          "calls": 42,
+          "own_seconds": 0.000370356,
+          "cumulative_seconds": 0.021017439000000002
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/layers.py",
+          "line": 246,
+          "function": "LayerNorm",
+          "primitive_calls": 305,
+          "calls": 305,
+          "own_seconds": 0.00036922400000000003,
+          "cumulative_seconds": 0.018542334
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/layers.py",
+          "line": 201,
+          "function": "__init__",
+          "primitive_calls": 305,
+          "calls": 305,
+          "own_seconds": 0.001716742,
+          "cumulative_seconds": 0.01811636
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/pairformer.py",
+          "line": 701,
+          "function": "__init__",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 2.5067000000000002e-05,
+          "cumulative_seconds": 0.010785719000000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/pairformer.py",
+          "line": 591,
+          "function": "__init__",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 9.977000000000001e-06,
+          "cumulative_seconds": 0.0098627
+        }
+      ],
+      "top_own_time": [
+        {
+          "file": "/media/IntelSSD/fireprot/benchmarks/protenix/profile_construction.py",
+          "line": 84,
+          "function": "measured_initializer",
+          "primitive_calls": 621,
+          "calls": 621,
+          "own_seconds": 0.675837801,
+          "cumulative_seconds": 0.6766202840000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'uniform_' of 'torch._C.TensorBase' objects>",
+          "primitive_calls": 1112,
+          "calls": 1112,
+          "own_seconds": 0.543205881,
+          "cumulative_seconds": 0.543205881
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/transformer.py",
+          "line": 56,
+          "function": "__init__",
+          "primitive_calls": 33,
+          "calls": 33,
+          "own_seconds": 0.094552589,
+          "cumulative_seconds": 0.8888032250000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/nn/modules/module.py",
+          "line": 482,
+          "function": "__init__",
+          "primitive_calls": 1856,
+          "calls": 1856,
+          "own_seconds": 0.021586777,
+          "cumulative_seconds": 0.021987237
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/nn/modules/module.py",
+          "line": 1971,
+          "function": "__setattr__",
+          "primitive_calls": 10346,
+          "calls": 10346,
+          "own_seconds": 0.020319182,
+          "cumulative_seconds": 0.055281176
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.isinstance>",
+          "primitive_calls": 33796,
+          "calls": 49455,
+          "own_seconds": 0.010833098000000001,
+          "cumulative_seconds": 0.022748486000000002
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method torch.empty>",
+          "primitive_calls": 1114,
+          "calls": 1114,
+          "own_seconds": 0.006741916000000001,
+          "cumulative_seconds": 0.006741916000000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/nn/parameter.py",
+          "line": 21,
+          "function": "__instancecheck__",
+          "primitive_calls": 8734,
+          "calls": 8734,
+          "own_seconds": 0.006110532,
+          "cumulative_seconds": 0.009076659
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/nn/init.py",
+          "line": 554,
+          "function": "kaiming_uniform_",
+          "primitive_calls": 1020,
+          "calls": 1020,
+          "own_seconds": 0.005366458,
+          "cumulative_seconds": 0.5617282140000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/nn/modules/linear.py",
+          "line": 96,
+          "function": "__init__",
+          "primitive_calls": 1020,
+          "calls": 1020,
+          "own_seconds": 0.005130353000000001,
+          "cumulative_seconds": 0.6142748680000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/nn/modules/module.py",
+          "line": 1954,
+          "function": "__getattr__",
+          "primitive_calls": 6174,
+          "calls": 6174,
+          "own_seconds": 0.004470254,
+          "cumulative_seconds": 0.004470254
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'get' of 'dict' objects>",
+          "primitive_calls": 26084,
+          "calls": 26084,
+          "own_seconds": 0.004385809,
+          "cumulative_seconds": 0.004385809
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method _make_subclass>",
+          "primitive_calls": 1612,
+          "calls": 1612,
+          "own_seconds": 0.004096789,
+          "cumulative_seconds": 0.004096789
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'zero_' of 'torch._C.TensorBase' objects>",
+          "primitive_calls": 289,
+          "calls": 289,
+          "own_seconds": 0.004001695,
+          "cumulative_seconds": 0.004001695
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/nn/parameter.py",
+          "line": 240,
+          "function": "__instancecheck__",
+          "primitive_calls": 6925,
+          "calls": 6925,
+          "own_seconds": 0.003919653,
+          "cumulative_seconds": 0.005694402
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/nn/modules/module.py",
+          "line": 592,
+          "function": "register_parameter",
+          "primitive_calls": 2656,
+          "calls": 2656,
+          "own_seconds": 0.00369995,
+          "cumulative_seconds": 0.009452975
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/autograd/grad_mode.py",
+          "line": 184,
+          "function": "__init__",
+          "primitive_calls": 5404,
+          "calls": 5404,
+          "own_seconds": 0.002844919,
+          "cumulative_seconds": 0.00518828
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/autograd/grad_mode.py",
+          "line": 75,
+          "function": "__init__",
+          "primitive_calls": 2702,
+          "calls": 2702,
+          "own_seconds": 0.002581833,
+          "cumulative_seconds": 0.002848087
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/layers.py",
+          "line": 137,
+          "function": "__init__",
+          "primitive_calls": 507,
+          "calls": 507,
+          "own_seconds": 0.002254643,
+          "cumulative_seconds": 0.099775889
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/autograd/grad_mode.py",
+          "line": 80,
+          "function": "__enter__",
+          "primitive_calls": 2702,
+          "calls": 2702,
+          "own_seconds": 0.0021906960000000002,
+          "cumulative_seconds": 0.005114447
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/autograd/grad_mode.py",
+          "line": 84,
+          "function": "__exit__",
+          "primitive_calls": 2702,
+          "calls": 2702,
+          "own_seconds": 0.001966956,
+          "cumulative_seconds": 0.0047244140000000006
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/nn/modules/linear.py",
+          "line": 117,
+          "function": "reset_parameters",
+          "primitive_calls": 1020,
+          "calls": 1020,
+          "own_seconds": 0.0019476040000000001,
+          "cumulative_seconds": 0.5667543190000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<function _ParameterMeta.__instancecheck__ at 0x7aa30d3185e0>",
+          "primitive_calls": 15659,
+          "calls": 15659,
+          "own_seconds": 0.0018436540000000001,
+          "cumulative_seconds": 0.0018436540000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.hasattr>",
+          "primitive_calls": 2702,
+          "calls": 2702,
+          "own_seconds": 0.0017832750000000002,
+          "cumulative_seconds": 0.005076378
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/layers.py",
+          "line": 201,
+          "function": "__init__",
+          "primitive_calls": 305,
+          "calls": 305,
+          "own_seconds": 0.001716742,
+          "cumulative_seconds": 0.01811636
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/utils/_contextlib.py",
+          "line": 167,
+          "function": "__new__",
+          "primitive_calls": 2702,
+          "calls": 2702,
+          "own_seconds": 0.0016355130000000001,
+          "cumulative_seconds": 0.0022547220000000002
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method torch.ones>",
+          "primitive_calls": 273,
+          "calls": 273,
+          "own_seconds": 0.001613793,
+          "cumulative_seconds": 0.001613793
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/torch/nn/init.py",
+          "line": 173,
+          "function": "calculate_gain",
+          "primitive_calls": 1020,
+          "calls": 1020,
+          "own_seconds": 0.0015760190000000001,
+          "cumulative_seconds": 0.002110753
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/model/modules/primitives.py",
+          "line": 46,
+          "function": "__init__",
+          "primitive_calls": 513,
+          "calls": 513,
+          "own_seconds": 0.0015506180000000001,
+          "cumulative_seconds": 1.566112833
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method torch._C._set_grad_enabled>",
+          "primitive_calls": 5404,
+          "calls": 5404,
+          "own_seconds": 0.001499698,
+          "cumulative_seconds": 0.001499698
+        }
+      ],
+      "profile_file": "outputs/benchmarks/construction-preserve_rng-b54f653.pstats",
+      "monitors": [
+        {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 6,
+          "interval_seconds": 1.0,
+          "samples": 4,
+          "allowed_pid": 931102,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        },
+        {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 7,
+          "interval_seconds": 1.0,
+          "samples": 4,
+          "allowed_pid": 931102,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
+      ]
+    }
+  }
+}

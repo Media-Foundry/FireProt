@@ -190,6 +190,7 @@ Raw predictions, profiler traces, weights, and hardware-local tuning data remain
 - [Measured Protenix AMD performance](docs/protenix-amd-performance.md)
 - [Long attention: SDPA, CK tuning, and incremental model results](docs/protenix-attention-tuning.md)
 - [Promoted CK Tile attention and model results](docs/protenix-ck-tile.md)
+- [Experimental CK projection fusion](docs/protenix-ck-projection-gate.md)
 - [Implementation plan](docs/plans/2026-10-02-gitnexus-plan-protenix-amd-acceleration.md)
 - [Historical Protenix baseline notes](.agents/protenix_baseline.md) (Chinese, retained as recorded)
 - [Project context](.agents/project_context.md)

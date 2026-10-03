@@ -109,4 +109,4 @@ candidate should fuse the gate and channel-first output with that GEMM. The inst
 only row-major D and E layouts in its capability checks. Expressing the
 projection as weights times transposed features could produce the desired
 channel-first output in logical row-major form, but both its projection
-layout and complete model benefit remain unmeasured.
+layout has now been measured in a separate [projection fusion investigation](protenix-ck-projection-gate.md). Complete-triangle gains are small; its model benefit remains unmeasured.

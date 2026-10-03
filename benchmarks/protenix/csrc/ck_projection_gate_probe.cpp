@@ -29,14 +29,29 @@ using Op=ck::tensor_operation::device::DeviceGemmMultipleD_Xdl_CShuffle<
     S<8,16,2>,S<1,0,2>,S<1,0,2>,2,2,2,true,
     1,1,S<1,16,1,16>,4>;
 extern "C" int ck_projection_gate(float* weight,float* features,float* value,float* output,
-                                   int n,void* stream) {
-    if(n!=1000 && n!=1536)return 2;
+                                   int n,int padding,void* stream) {
+    if((n!=1000 && n!=1536) || (padding!=0 && padding!=16 && padding!=64))return 2;
     if(!weight||!features||!value||!output)return 3;
     try {
         const int rows=n*n;
         // W[128,128] @ X.T[128,rows], D/E row-major [128,rows].
         auto arg=Op::MakeArgument(weight,features,{value},output,128,rows,128,
-                                  128,128,{rows},rows,Pass{},Pass{},SigmoidMultiply{});
+                                  128,128,{rows+padding},rows+padding,Pass{},Pass{},SigmoidMultiply{});
+        if(!Op::IsSupportedArgument(arg))return 4;
+        Op::MakeInvoker().Run(arg,StreamConfig{static_cast<hipStream_t>(stream),false});
+        return static_cast<int>(hipGetLastError());
+    } catch(const std::exception&) {return 5;}
+}
+
+// Private row-chunk entry: output can be a slice of a larger channel-first tensor.
+extern "C" int ck_projection_gate_rows(float* weight,float* features,float* value,float* output,
+                                        int rows,int value_stride,int output_stride,void* stream) {
+    if(rows<=0 || rows>1536*1536 || rows%4 || value_stride<rows ||
+       output_stride<rows || value_stride%4 || output_stride%4)return 2;
+    if(!weight||!features||!value||!output)return 3;
+    try {
+        auto arg=Op::MakeArgument(weight,features,{value},output,128,rows,128,
+                                  128,128,{value_stride},output_stride,Pass{},Pass{},SigmoidMultiply{});
         if(!Op::IsSupportedArgument(arg))return 4;
         Op::MakeInvoker().Run(arg,StreamConfig{static_cast<hipStream_t>(stream),false});
         return static_cast<int>(hipGetLastError());

@@ -32,7 +32,7 @@ def install() -> dict[str, Any]:
         recycle_disabled = os.environ.get("FIREPROT_DISABLE_RECYCLE_OPS") == "1"
         ck_disabled = not _ck_ops_enabled()
         attention_gate_enabled = os.environ.get("FIREPROT_ENABLE_ATTENTION_GATE_1536") == "1"
-        qkv_enabled = os.environ.get("FIREPROT_ENABLE_QKV_PROJECTION") == "1"
+        qkv_enabled = os.environ.get("FIREPROT_ENABLE_QKV_PROJECTION", "1") == "1"
         if recycle_disabled and ck_disabled and not attention_gate_enabled and not qkv_enabled:
             _installed = True
             _enabled = False

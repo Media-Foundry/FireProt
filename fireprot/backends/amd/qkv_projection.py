@@ -1,4 +1,4 @@
-"""Opt-in FP32 self-attention QKV preparation for exact long gfx90a buckets."""
+"""Validated FP32 self-attention QKV preparation for exact long gfx90a buckets."""
 from __future__ import annotations
 
 import os
@@ -14,7 +14,7 @@ _counts = {"n1000": 0, "n1536": 0, "fallback": 0}
 def supported(module: Any, q_x: Any, kv_x: Any, apply_scale: bool) -> bool:
     import torch
 
-    if os.environ.get("FIREPROT_ENABLE_QKV_PROJECTION") != "1":
+    if os.environ.get("FIREPROT_ENABLE_QKV_PROJECTION", "1") != "1":
         return False
     if module.training or torch.is_grad_enabled() or not apply_scale:
         return False
@@ -67,4 +67,4 @@ def prepare(*, module: Any, q_x: Any, kv_x: Any, apply_scale: bool, native: Any)
 
 def manifest() -> dict[str, Any]:
     with _lock:
-        return {"enabled": os.environ.get("FIREPROT_ENABLE_QKV_PROJECTION") == "1", "counts": dict(_counts)}
+        return {"enabled": os.environ.get("FIREPROT_ENABLE_QKV_PROJECTION", "1") == "1", "counts": dict(_counts)}

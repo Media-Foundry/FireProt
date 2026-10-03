@@ -143,3 +143,13 @@ with unchanged peak allocation and passing prediction comparisons.
 `FIREPROT_ENABLE_TILED_DUAL_PROJECTION=0` restores C64/R64, while
 `FIREPROT_ENABLE_DUAL_PROJECTION=0` disables both implementations. See
 [tiled projection evidence](protenix-dual-tiles.md#same-source-model-comparison).
+
+The validated long self-attention preparation hook fuses three FP32 QKV
+projections and Q scaling with handwritten MFMA HIP, emitting the exact
+head-last strides consumed by CK. It accepts identical tensor regions produced
+by chunking and the model's FP32 autocast context; low-precision autocast and
+unsupported calls use native preparation. Same-source warm-model comparisons
+measure 9.919 to 9.745 s (N1000, 1.018x) and 28.519 to 28.127 s (N1536, 1.014x),
+with unchanged allocated memory and passing prediction comparisons.
+`FIREPROT_ENABLE_QKV_PROJECTION=0` disables this increment. N1536 retains its
+length opt-in. See [QKV model evidence](protenix-qkv-projection.md#same-source-model-comparison).

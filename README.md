@@ -22,6 +22,8 @@ AtlasFold, OpenFold, ESMFold, Base-model coverage, BF16 promotion, additional lo
 
 ## Experimental 1,536-residue workload
 
+Fused HIP QKV preparation improves warm model median from **28.519 to 28.127 s (1.014x)** over five same-source repetitions. Attention improves from 13.628 to 13.280 s, allocated memory is unchanged, and all prediction comparisons pass. It is now enabled within the existing length opt-in; `FIREPROT_ENABLE_QKV_PROJECTION=0` restores native preparation. See [model validation](docs/protenix-qkv-projection.md#same-source-model-comparison).
+
 The latest tiled dual projection improves warm model median from **28.835 to 28.413 s (1.015x)** over five same-source repetitions. It follows the existing length opt-in; `FIREPROT_ENABLE_TILED_DUAL_PROJECTION=0` restores C64/R64 dual projection. Peak allocated memory is unchanged and all output comparisons pass. See [model validation](docs/protenix-dual-tiles.md#same-source-model-comparison).
 
 Fused dual projection improves the warm model from **29.930 to 28.916 s (1.035x)** in a five-repetition same-source comparison. It is now enabled inside the existing length opt-in; `FIREPROT_ENABLE_DUAL_PROJECTION=0` restores the preceding projections. Peak allocated memory is unchanged and all prediction comparisons pass. See [model validation](docs/protenix-dual-projection.md#same-source-model-comparison).
@@ -65,6 +67,8 @@ the model. It remains disabled; see the
 [two-GCD model comparison](docs/protenix-long1536.md#synchronized-two-gcd-model-validation).
 
 ## Verified 1,000-token MI250 result
+
+Fused HIP QKV preparation improves warm model median from **9.919 to 9.745 s (1.018x)** over five same-source repetitions. Attention improves from 4.374 to 4.194 s, allocated memory is unchanged, and all prediction comparisons pass. It is now enabled for this exact bucket; `FIREPROT_ENABLE_QKV_PROJECTION=0` restores native preparation. See [model validation](docs/protenix-qkv-projection.md#same-source-model-comparison).
 
 The latest tiled dual projection improves warm model median from **9.936 to 9.884 s (1.005x)** over five same-source repetitions, with unchanged peak allocated memory and passing output comparisons. Use `FIREPROT_ENABLE_TILED_DUAL_PROJECTION=0` to restore the preceding dual projection. See [model validation](docs/protenix-dual-tiles.md#same-source-model-comparison).
 

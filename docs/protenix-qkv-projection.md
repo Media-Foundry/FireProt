@@ -2,11 +2,13 @@
 
 ## Scope and implementation
 
-This experiment targets QKV preparation in long Protenix triangle attention.
+This work targets QKV preparation in long Protenix triangle attention.
 The baseline performs three FP32 hipBLAS projections and a separate Q scaling
 operation. The handwritten gfx90a HIP candidate shares input tiles across three
 MFMA accumulations, applies Q scaling, and writes the existing CK-compatible
-head-last storage directly. It is a benchmark candidate, not a production path.
+head-last storage directly. The integrated path is now enabled by default for
+the validated shapes after the model comparison below. The original standalone
+C ABI remains a benchmark probe.
 
 The selected tile is R128/C64/K16 with 16 waves. Logical Q/K/V shapes are
 `[B,4,N,32]`, each with strides `[N*128,32,128,1]`. N1000 uses B1000;
@@ -15,8 +17,8 @@ N1536 uses B512, matching one actual outer chunk. This is not the entire
 
 The C ABI is intentionally a private probe: it accepts only the two measured
 row counts and non-null pointers. Production tensor, device, architecture,
-autograd, aliasing, and parameter guards still need to be implemented before
-integration. The kernel computes FP32 MFMA and preserves the requested model
+autograd, aliasing, and parameter guards belong to the integrated binding and
+dispatch layer described below. The kernel computes FP32 MFMA and preserves the requested model
 cycle count by making no model execution changes.
 
 ## Measurements
@@ -83,18 +85,20 @@ and device monitoring records for all four experiments.
 
 ## Integration gate
 
-Next, add an inference-only self-attention preparation hook with exact shape,
-layout, weight, dtype, device, architecture, and scaling checks and native
-fallback. Validate a non-default stream and unsupported inputs, then run
-same-source Mini-default C4/S1 model A/B comparisons at both lengths with
-dispatch counts and the locked coordinate/confidence gates. No new end-to-end
-speedup is established by this experiment, and runtime defaults are unchanged.
+The original probe required an inference-only self-attention preparation hook
+with exact shape, layout, weight, dtype, device, architecture, and scaling checks
+and native fallback. Non-default streams and unsupported inputs must be checked
+before same-source Mini-default C4/S1 model A/B comparisons at both lengths,
+including dispatch counts and the locked coordinate/confidence gates. The
+standalone experiment established no end-to-end speedup; the integration and
+model evidence below complete these gates for the two measured shapes.
 
 ## Opt-in integration candidate
 
 Candidate `6ffcc776d282a1370ef60b40db13b2fc61c29ad5` adds
 `FIREPROT_ENABLE_QKV_PROJECTION=1`. Set it before installing the Protenix
-runtime hooks. It remains disabled by default pending model validation.
+runtime hooks. It was disabled by default while awaiting model validation;
+the subsequent promotion defaults to enabled. Set the flag to `0` to disable it.
 The N1536 shape also requires `FIREPROT_ENABLE_LONG1536=1`.
 
 The hook requires identical data pointers, shapes, strides, devices and dtypes
@@ -133,3 +137,38 @@ corrected capability check permits FP32 autocast while retaining BF16/FP16
 fallback. The regression now runs within the model's FP32 autocast context;
 it fails before this correction. These incomplete-selection attempts are not
 used to claim a fused-QKV model speedup.
+
+## Same-source model comparison
+
+Candidate `c4afab80c2f6434b5886dcb0b1ff74b0591bd84c`, Mini-default v0.5.0,
+FP32 with TF32 disabled, four cycles, one diffusion step, one sample, seed 101,
+no MSA/template search, hipBLAS, expandable allocator segments, one warmup and
+five measured predictions per side. GPU 7 executes inference and GPU 6 remains
+idle; continuous monitors pass for both. N1536 runs enabled then disabled;
+N1000 runs disabled then enabled. Only the QKV flag changes between each pair.
+
+| Length | Warm model disabled / enabled (s) | Speedup | Model p95 disabled / enabled (s) | Attention disabled / enabled (s) |
+| --- | ---: | ---: | ---: | ---: |
+| 1000 | 9.919 / 9.745 | 1.018x | 9.944 / 9.810 | 4.374 / 4.194 |
+| 1536 | 28.519 / 28.127 | 1.014x | 28.600 / 28.406 | 13.628 / 13.280 |
+
+Peak allocated memory is unchanged: 10,011,042,304 bytes at N1000 and
+22,721,185,792 bytes at N1536. The enabled runs select 864 and 2,592 QKV calls
+respectively across warmup plus measurements, with zero fallbacks. All ten
+prediction pairs pass the locked `1e-3` aligned-coordinate-RMSD and confidence
+gates. Maximum aligned RMSD is 0.00010215 A (N1000) and 0.00010146 A (N1536);
+maximum confidence delta is 2.67029e-5 and 1.52588e-5 respectively.
+
+Warm model timing excludes loading, preprocessing, serialization and compilation.
+Complete worker time is 112.684 to 111.176 s (N1000) and 245.183 to 243.772 s
+(N1536); each worker includes one warmup and five predictions, not one cold
+request. These are incremental comparisons against the existing FireProt
+baseline, not new original-Torch comparisons. N1536 model sample ranges overlap;
+the reported ratio is the five-run median, while all enabled attention-stage
+samples are below all disabled attention-stage samples.
+
+`FIREPROT_ENABLE_QKV_PROJECTION=0` restores native QKV preparation. N1536
+continues to require its existing length opt-in. The promotion changes Python
+defaults only; the HIP source and compiled binary remain those measured here.
+See [model evidence](../provenance/protenix_qkv_model_c4afab8.json) and
+[integration regressions](../provenance/protenix_qkv_integration_validation.json).

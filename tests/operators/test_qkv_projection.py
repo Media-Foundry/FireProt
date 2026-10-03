@@ -13,7 +13,7 @@ HIP = pytest.mark.skipif(os.environ.get("FIREPROT_RUN_HIP_TESTS") != "1" or not 
 
 
 def test_disabled_and_unavailable_fallback(monkeypatch):
-    monkeypatch.delenv("FIREPROT_ENABLE_QKV_PROJECTION", raising=False)
+    monkeypatch.setenv("FIREPROT_ENABLE_QKV_PROJECTION", "0")
     sentinel = object()
     args = dict(module=SimpleNamespace(), q_x=None, kv_x=None, apply_scale=True, native=lambda: sentinel)
     assert qkv.prepare(**args) is sentinel
@@ -27,8 +27,13 @@ def test_disabled_and_unavailable_fallback(monkeypatch):
 def test_qkv_stream_numerics_and_guards(batch, n, monkeypatch):
     os.environ["LAYERNORM_TYPE"] = "torch"
     from protenix.model.triangular.layers import Attention
-    monkeypatch.setenv("FIREPROT_ENABLE_QKV_PROJECTION", "1")
+    from fireprot.adapters.protenix import hooks
+    monkeypatch.delenv("FIREPROT_ENABLE_QKV_PROJECTION", raising=False)
     monkeypatch.setenv("FIREPROT_ENABLE_LONG1536", "1")
+    hooks.install()
+    assert "Attention._prep_qkv" in hooks.manifest()["hooks"]
+    assert qkv.manifest()["enabled"]
+    native_prep = Attention._prep_qkv.__wrapped__
     ext = load_amd_extension()
     assert ext is not None
     torch.manual_seed(1021)
@@ -43,11 +48,10 @@ def test_qkv_stream_numerics_and_guards(batch, n, monkeypatch):
         x[0, 2] = -100
         weights = [layer.weight for layer in (module.linear_q, module.linear_k, module.linear_v)]
         saved = [t.clone() for t in (x, *weights)]
-        reference = module._prep_qkv(x, x)
+        reference = native_prep(module, x, x)
         before = qkv.manifest()["counts"][f"n{n}"]
         for _ in range(3):
-            actual = qkv.prepare(module=module, q_x=x, kv_x=x.view_as(x), apply_scale=True,
-                                 native=lambda: pytest.fail("unexpected fallback"))
+            actual = module._prep_qkv(x, x.view_as(x), apply_scale=True)
             for a, b in zip(actual, reference):
                 assert a.shape == (batch, 4, n, 32)
                 assert a.stride() == (n * 128, 32, 128, 1)

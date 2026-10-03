@@ -822,7 +822,7 @@ LayerNorm compilation. See
 `Attention._wrap_up`. It selects the out-of-place HIP sigmoid/multiply
 kernel only for the measured contiguous `[512,1536,4,32]` attention output
 and `[512,1536,128]` input, FP32 gfx90a, evaluation mode, no gradients and
-no autocast. Other shapes or unavailable builds retain the original method.
+either disabled autocast or an FP32 autocast target. Other shapes or unavailable builds retain the original method.
 The gate and output linear layers remain the original model modules.
 The runtime manifest records selected and fallback counts separately.
 
@@ -832,3 +832,18 @@ implementation sources. Focused tests cover extreme sigmoid inputs,
 input preservation, alignment/layout rejection, non-default streams and
 full-size output agreement. Model promotion requires same-source timing
 and coordinate/confidence agreement; the switch defaults to disabled.
+
+
+The first model A/B at `c75e960` exposed a capability-gate error: only 24
+of 432 attention calls per prediction selected the fusion. A metadata-only
+diagnostic found that all 408 trunk fallbacks had the expected FP32 shape,
+strides and evaluation state, but ran inside **FP32 autocast**. The initial
+gate rejected every autocast context. Confidence-head calls disable that
+context and were the only selected calls. The initial 36.611/36.811-second
+model medians therefore do not evaluate trunk gate fusion. Output agreement
+passed, but no speedup is claimed from this incomplete-coverage comparison.
+
+The corrected condition permits an FP32 autocast target and continues to
+reject BF16/FP16 autocast. Tests explicitly exercise both contexts; fallback
+metadata is bounded to 16 unique signatures. See
+[coverage diagnosis](../provenance/protenix_attention_gate_coverage_c75e960.json).

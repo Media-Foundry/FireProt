@@ -54,6 +54,10 @@ def test_full_wrap_and_exact_gate(monkeypatch):
         assert not attention_gate.supported(module,o[:1],x[:1])
         module.train();assert not attention_gate.supported(module,o,x);module.eval()
         saved=o.clone();expected=module._wrap_up(o,x)
-        result=attention_gate.wrap_up(module=module,o=o,x=x,native=lambda:pytest.fail('unexpected fallback'))
+        with torch.autocast('cuda',dtype=torch.bfloat16):
+            assert not attention_gate.supported(module,o,x)
+        with torch.autocast('cuda',dtype=torch.float32):
+            assert attention_gate.supported(module,o,x)
+            result=attention_gate.wrap_up(module=module,o=o,x=x,native=lambda:pytest.fail('unexpected fallback'))
         torch.testing.assert_close(result,expected,atol=2e-5,rtol=2e-5)
         assert torch.equal(o,saved)

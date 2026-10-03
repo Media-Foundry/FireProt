@@ -36,12 +36,15 @@ _vector_norm_enabled = os.environ.get("FIREPROT_ENABLE_VECTOR_PACKED_NORM", "1")
 _norm_counts = {"n1000": 0, "n1536": 0}
 _dual_projection_enabled = os.environ.get("FIREPROT_ENABLE_DUAL_PROJECTION", "1") == "1"
 _dual_counts = {"n1000": 0, "n1536": 0, "fallback": 0}
+_dual_tiled_enabled = os.environ.get("FIREPROT_ENABLE_TILED_DUAL_PROJECTION", "0") == "1"
+_dual_tiled_counts = {"n1000": 0, "n1536": 0}
 
 
 def vector_manifest() -> dict[str, Any]:
     return {"enabled": _vector_packed_enabled, "counts": dict(_vector_counts),
             "packed_norm_enabled": _vector_norm_enabled, "packed_norm_counts": dict(_norm_counts),
-            "dual_projection_enabled": _dual_projection_enabled, "dual_projection_counts": dict(_dual_counts)}
+            "dual_projection_enabled": _dual_projection_enabled, "dual_projection_counts": dict(_dual_counts),
+            "tiled_dual_projection_enabled": _dual_tiled_enabled, "tiled_dual_projection_counts": dict(_dual_tiled_counts)}
 
 
 
@@ -305,8 +308,11 @@ def _long_sequence_packed(
     pack = extension.triangle_vector_pack if vector else extension.sigmoid_pack_f32_128
     normalized = module.layer_norm_in(z)
     if _supports_dual_projection(module, normalized):
-        a = extension.dual_projection(normalized, module.linear_a_g.weight, module.linear_a_p.weight)
-        b = extension.dual_projection(normalized, module.linear_b_g.weight, module.linear_b_p.weight)
+        project = extension.dual_projection_tiled if _dual_tiled_enabled else extension.dual_projection
+        a = project(normalized, module.linear_a_g.weight, module.linear_a_p.weight)
+        b = project(normalized, module.linear_b_g.weight, module.linear_b_p.weight)
+        if _dual_tiled_enabled:
+            _dual_tiled_counts[f"n{z.shape[0]}"] += 1
         _dual_counts[f"n{z.shape[0]}"] += 1
     else:
         if _dual_projection_enabled:

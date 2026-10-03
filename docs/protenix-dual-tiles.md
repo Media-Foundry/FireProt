@@ -115,3 +115,22 @@ FIREPROT_ENABLE_LT_BMM_1536=0 python \
   benchmarks/protenix/benchmark_dual_tiles.py --full-triangle --padding 128 \
   --output outputs/benchmarks/dual-tiles-triangle.json
 ```
+
+## Experimental model integration
+
+`FIREPROT_ENABLE_TILED_DUAL_PROJECTION=1` selects the C128/R128/K16/W8
+candidate with 128 floats of channel padding. It defaults to off and only
+applies when the existing dual-projection capability predicate succeeds.
+`FIREPROT_ENABLE_DUAL_PROJECTION=0` disables both dual implementations.
+N1536 still requires its existing length opt-in. The runtime manifest
+records the tiled flag and per-length counts separately from total dual
+projection calls.
+
+The extension returns logical `[128,N,N]` with stride `[N*N+128,N,1]` and
+owns the complete padded storage. Both entry points reject unsupported
+shape/dtype/layout/alignment/device/autograd combinations. Tests cover
+three queued projections, nondefault streams, preserved inputs, repeated
+complete-triangle calls in both directions and residual modes, and total
+switch precedence. CPU suite: 132 passed / 43 HIP skips. GPU regression
+subset: 28 passed, both GPU process monitors passed. Model A/B is pending;
+the tiled route remains opt-in.

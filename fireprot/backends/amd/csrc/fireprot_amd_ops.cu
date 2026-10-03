@@ -781,3 +781,83 @@ torch::Tensor fireprot_dual_projection(torch::Tensor input,torch::Tensor gate_we
   C10_CUDA_KERNEL_LAUNCH_CHECK();
   return output;
 }
+
+namespace {
+// C128/R128/K16/W8; padded channel stride preserves the logical [128,N,N] shape.
+__global__ void dual_projection_tiled_kernel(const float* __restrict__ x,
+ const float* __restrict__ wg,const float* __restrict__ wp,float* __restrict__ out,int rows,int stride) {
+#if defined(__gfx90a__)
+    __shared__ float input[128][16+4];
+    __shared__ float gate_weight[128][16+4],value_weight[128][16+4];
+    const int tid=threadIdx.x,lane=tid%64,wave=tid/64;
+    const int first=blockIdx.x*128,channel=blockIdx.y*128;
+    DualV4 gate[128/(16*8)][128/16]={},value[128/(16*8)][128/16]={};
+    for(int base=0;base<128;base+=16){
+        for(int i=tid;i<128*(16/4);i+=64*8){
+            const int r=i/(16/4),k=(i%(16/4))*4;
+            float4 v=make_float4(0,0,0,0);
+            if(first+r<rows)v=*reinterpret_cast<const float4*>(x+(first+r)*128+base+k);
+            *reinterpret_cast<float4*>(&input[r][k])=v;
+        }
+        for(int i=tid;i<128*(16/4);i+=64*8){
+            const int r=i/(16/4),k=(i%(16/4))*4,wi=(channel+r)*128+base+k;
+            *reinterpret_cast<float4*>(&gate_weight[r][k])=*reinterpret_cast<const float4*>(wg+wi);
+            *reinterpret_cast<float4*>(&value_weight[r][k])=*reinterpret_cast<const float4*>(wp+wi);
+        }
+        __syncthreads();
+        #pragma unroll
+        for(int k=0;k<16;k+=4){
+            #pragma unroll
+            for(int p=0;p<128/(16*8);p++) {
+                const float b=input[p*(16*8)+wave*16+lane%16][k+lane/16];
+                #pragma unroll
+                for(int g=0;g<128/16;g++){
+                    const int r=g*16+lane%16;
+                    gate[p][g]=__builtin_amdgcn_mfma_f32_16x16x4f32(gate_weight[r][k+lane/16],b,gate[p][g],0,0,0);
+                    value[p][g]=__builtin_amdgcn_mfma_f32_16x16x4f32(value_weight[r][k+lane/16],b,value[p][g],0,0,0);
+                }
+            }
+        }
+        __syncthreads();
+    }
+    #pragma unroll
+    for(int p=0;p<128/(16*8);p++) {
+        #pragma unroll
+        for(int g=0;g<128/16;g++){
+            #pragma unroll
+            for(int j=0;j<4;j++){
+                const int r=first+p*(16*8)+wave*16+lane%16;
+                if(r<rows)out[(channel+g*16+lane/16*4+j)*stride+r]=(1.f/(1.f+expf(-gate[p][g][j])))*value[p][g][j];
+            }
+        }
+    }
+#endif
+}
+} // namespace
+
+torch::Tensor fireprot_dual_projection_tiled(torch::Tensor input,torch::Tensor gate_weight,
+                                       torch::Tensor value_weight) {
+  check_triangle_vector_tensor(input);
+  check_common(gate_weight,"gate_weight");check_common(value_weight,"value_weight");
+  TORCH_CHECK(!at::GradMode::is_enabled(),"dual projection is inference only");
+  for(const auto& weight : {gate_weight,value_weight}) {
+    TORCH_CHECK(weight.dim()==2 && weight.size(0)==128 && weight.size(1)==128,
+        "requires [128,128] weights");
+    TORCH_CHECK(weight.device()==input.device(),"devices must match");
+    TORCH_CHECK(reinterpret_cast<std::uintptr_t>(weight.data_ptr())%16==0,
+        "requires 16-byte alignment");
+  }
+  const c10::DeviceGuard guard(input.device());
+  hipDeviceProp_t properties{};
+  TORCH_CHECK(hipGetDeviceProperties(&properties,input.get_device())==hipSuccess,
+      "cannot query device properties");
+  TORCH_CHECK(std::string(properties.gcnArchName).substr(0,6)=="gfx90a","requires gfx90a");
+  const int n=input.size(0),rows=n*n;
+  auto output=torch::empty({128,rows+128},input.options());
+  const auto stream=c10::hip::getCurrentHIPStream(input.get_device());
+  hipLaunchKernelGGL(dual_projection_tiled_kernel,dim3((rows+127)/128,1),dim3(512),0,stream.stream(),
+      input.data_ptr<float>(),gate_weight.data_ptr<float>(),value_weight.data_ptr<float>(),
+      output.data_ptr<float>(),rows,rows+128);
+  C10_CUDA_KERNEL_LAUNCH_CHECK();
+  return output.as_strided({128,n,n},{rows+128,n,1});
+}

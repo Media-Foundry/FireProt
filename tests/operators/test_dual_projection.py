@@ -19,8 +19,10 @@ def test_dual_projection_environment(flag,expected):
 
 @HIP
 @pytest.mark.parametrize('n',[1000,1536])
-def test_dual_projection_queue_stream_and_guards(n):
+@pytest.mark.parametrize('implementation',['dual_projection','dual_projection_tiled'])
+def test_dual_projection_queue_stream_and_guards(n,implementation):
     ext=load_amd_extension();assert ext is not None
+    project=getattr(ext,implementation)
     torch.manual_seed(991);torch.backends.cuda.matmul.allow_tf32=False
     with torch.inference_mode(),torch.cuda.stream(torch.cuda.Stream()):
         x=torch.randn(n,n,128,device='cuda')
@@ -28,19 +30,20 @@ def test_dual_projection_queue_stream_and_guards(n):
         wg=torch.randn(128,128,device='cuda')*.1;wp=torch.randn_like(wg)*.1
         saved=[t.clone() for t in (x,wg,wp)]
         reference=ext.triangle_vector_pack(torch.nn.functional.linear(x,wg),torch.nn.functional.linear(x,wp))
-        outputs=[ext.dual_projection(x,wg,wp) for _ in range(3)]
+        outputs=[project(x,wg,wp) for _ in range(3)]
         for actual in outputs:
-            assert actual.is_contiguous() and actual.shape==(128,n,n)
+            assert actual.shape==(128,n,n)
+            assert actual.stride()==(n*n+(128 if implementation.endswith("tiled") else 0),n,1)
             torch.testing.assert_close(actual,reference,atol=2e-5,rtol=2e-5)
         for t,before in zip((x,wg,wp),saved):torch.testing.assert_close(t,before,atol=0,rtol=0)
-        with pytest.raises(RuntimeError,match='exact'):ext.dual_projection(x[:2],wg,wp)
-        with pytest.raises(RuntimeError,match='weights'):ext.dual_projection(x,wg[:2],wp)
-        with pytest.raises(RuntimeError,match='contiguous'):ext.dual_projection(x,wg.T,wp)
+        with pytest.raises(RuntimeError,match='exact'):project(x[:2],wg,wp)
+        with pytest.raises(RuntimeError,match='weights'):project(x,wg[:2],wp)
+        with pytest.raises(RuntimeError,match='contiguous'):project(x,wg.T,wp)
         bad=torch.empty(128*128+1,device='cuda')[1:].view(128,128)
-        with pytest.raises(RuntimeError,match='alignment'):ext.dual_projection(x,bad,wp)
-        with pytest.raises(RuntimeError,match='FP32'):ext.dual_projection(x,wg.half(),wp)
+        with pytest.raises(RuntimeError,match='alignment'):project(x,bad,wp)
+        with pytest.raises(RuntimeError,match='FP32'):project(x,wg.half(),wp)
     torch.cuda.synchronize()
-    with pytest.raises(RuntimeError,match='inference'):ext.dual_projection(x,wg,wp)
+    with pytest.raises(RuntimeError,match='inference'):project(x,wg,wp)
 
 @HIP
 @pytest.mark.parametrize('n',[1000,1536])

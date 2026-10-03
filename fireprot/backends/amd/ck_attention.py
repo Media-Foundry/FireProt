@@ -24,7 +24,7 @@ _exact1536_enabled = os.environ.get(
     "FIREPROT_ENABLE_CK_EXACT1536", "1" if ta._long1536_enabled else "0"
 ) == "1"
 _long1536_enabled = _exact1536_enabled or os.environ.get("FIREPROT_ENABLE_CK_ATTENTION_1536") == "1"
-_vector1000_enabled = os.environ.get("FIREPROT_ENABLE_CK_VECTOR_BIAS1000") == "1"
+_vector1000_enabled = os.environ.get("FIREPROT_ENABLE_CK_VECTOR_BIAS1000", "1") == "1"
 _lock = threading.RLock()
 _library: Any = None
 _entry: Any = None

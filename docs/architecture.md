@@ -49,6 +49,8 @@ flowchart TD
 
 Framework entry points call adapters; adapters call upstream implementations. Operator implementations must not depend on model names. Shared data structures describe tasks, artifacts, capabilities, and timing, without forcing model-internal feature tensors into a cross-model ABI.
 
+The latest N1000 specialization retains sequence-tail masking while overriding bias access alignment to four FP32 elements, with M128/N32/W4 tiles. Same-source warm Mini-default C4/S1 model median improves 12.615 to 10.745 seconds (1.174x), with unchanged peak allocation and passing output comparisons. It is the default in the validated exact bucket; `FIREPROT_ENABLE_CK_VECTOR_BIAS1000=0` restores the preceding CK implementation. See [validation](protenix-ck-vector1000.md).
+
 ## 3. Proposed repository boundaries
 
 ```text

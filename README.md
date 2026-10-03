@@ -29,7 +29,7 @@ C4/S1 comparison improves warm model median from **36.975 to 31.441 s
 (1.176x)** and triangle attention from **18.856 to 13.623 s (1.384x)**,
 with unchanged peak allocated memory. Three output comparisons pass the
 locked coordinate/confidence gates. Use `FIREPROT_ENABLE_CK_EXACT1536=0`
-to return to SDPA. N1000 retains its existing padded CK kernel.
+to return to SDPA. N1000 uses a separately validated padded CK kernel with vectorized bias access.
 
 The key change removes unnecessary K-sequence padding handling for the
 exact divisible length; the installed CK generic path also restricts bias
@@ -57,6 +57,10 @@ the model. It remains disabled; see the
 [two-GCD model comparison](docs/protenix-long1536.md#synchronized-two-gcd-model-validation).
 
 ## Verified 1,000-token MI250 result
+
+The latest bias-vectorized CK specialization improves warm model median from **12.615 to 10.745 s (1.174x)** versus the previous CK kernel, with unchanged peak allocated memory and three passing coordinate/confidence comparisons. It retains FP32 and C4/S1. This is now the exact N1000 default; `FIREPROT_ENABLE_CK_VECTOR_BIAS1000=0` restores the previous CK kernel. See [vectorization and model evidence](docs/protenix-ck-vector1000.md).
+
+### Previous CK promotion
 
 The latest CK Tile attention path improves the model median from **13.120 to 12.580 s (1.043x)** in a same-source, five-repetition comparison, with unchanged peak allocated memory. The complete attention operator measures **32.711 ms** versus SDPA's **36.35–36.36 ms**. CK Tile is now the default for this exact validated bucket. See [CK Tile implementation and model validation](docs/protenix-ck-tile.md). The preceding [generic CK/SDPA investigation](docs/protenix-attention-tuning.md) remains historical evidence; its generic CK candidate was not promoted.
 

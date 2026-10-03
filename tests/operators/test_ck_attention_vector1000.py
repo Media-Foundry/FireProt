@@ -46,3 +46,15 @@ def test_vector1000_alignment_tail_stream_and_queue(monkeypatch):
         assert bool((storage[:4096] == 123.5).all())
         assert bool((storage[-4096:] == 123.5).all())
     torch.cuda.synchronize()
+
+
+@pytest.mark.parametrize("flag,expected", [(None, True), ("0", False), ("1", True)])
+def test_vector1000_environment_default(flag, expected):
+    import subprocess
+    import sys
+    environment = os.environ.copy()
+    environment.pop("FIREPROT_ENABLE_CK_VECTOR_BIAS1000", None)
+    if flag is not None:
+        environment["FIREPROT_ENABLE_CK_VECTOR_BIAS1000"] = flag
+    code = "from fireprot.backends.amd.ck_attention import _vector1000_enabled; print(_vector1000_enabled)"
+    assert subprocess.check_output([sys.executable, "-c", code], env=environment, text=True).strip() == str(expected)

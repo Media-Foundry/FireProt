@@ -27,6 +27,8 @@ def main():
         builds.append(dict(n=n,library=str(library),library_sha256=_sha256(library),command=command))
     import torch
     from fireprot.backends.amd import ck_attention as ck
+    # Preserve the original padded control after production promotion.
+    ck._vector1000_enabled = False
     if ck.load_extension() is None:raise RuntimeError(str(ck.extension_status()))
     policy=dict(device_policy='exclusive')
     preflight=_rocm_preflight(policy)

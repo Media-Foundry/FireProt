@@ -54,6 +54,7 @@ def install(blas_backend: str | None = None) -> dict[str, Any]:
 
 
 def manifest() -> dict[str, Any]:
+    from fireprot.adapters.protenix.features import manifest as features_manifest
     from fireprot.adapters.protenix.construction import manifest as construction_manifest
     from fireprot.backends.amd.ck_attention import extension_status
     from fireprot.backends.amd.lt_bmm import extension_status as lt_status
@@ -71,6 +72,7 @@ def manifest() -> dict[str, Any]:
         "two_gcd_attention": two_gcd_manifest(),
         "triangle_vector": vector_manifest(),
         "construction": construction_manifest(),
+        "feature_preparation": features_manifest(),
     }
     if _installed is not None:
         from fireprot.adapters.protenix import hooks

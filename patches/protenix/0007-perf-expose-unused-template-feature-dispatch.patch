@@ -1,0 +1,47 @@
+From 932de05cd71e744aafeaa3037bcfafc6f523f53f Mon Sep 17 00:00:00 2001
+From: HUSRCF <shuang886@connect.hkust-gz.edu.cn>
+Date: Sat, 3 Oct 2026 20:36:52 +0800
+Subject: [PATCH] perf: expose unused template feature dispatch for inference
+
+---
+ protenix/data/inference/infer_dataloader.py | 24 +++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
+
+diff --git a/protenix/data/inference/infer_dataloader.py b/protenix/data/inference/infer_dataloader.py
+index 4a2fe33..31ade34 100644
+--- a/protenix/data/inference/infer_dataloader.py
++++ b/protenix/data/inference/infer_dataloader.py
+@@ -176,12 +176,24 @@ class InferenceDataset(Dataset):
+             if self.use_msa
+             else {}
+         )
+-        template_features = InferenceTemplateFeaturizer.make_template_feature(
+-            bioassembly=single_sample_dict["sequences"],
+-            atom_array=atom_array,
+-            use_template=self.use_template,
+-            online_template_featurizer=self.online_template_featurizer,
+-        )
++        def native_template_features():
++            return InferenceTemplateFeaturizer.make_template_feature(
++                bioassembly=single_sample_dict["sequences"],
++                atom_array=atom_array,
++                use_template=self.use_template,
++                online_template_featurizer=self.online_template_featurizer,
++            )
++
++        if self.configs.get("triangle_attention", "torch") == "fireprot":
++            from fireprot.adapters.protenix.features import build_template_features
++
++            template_features = build_template_features(
++                configs=self.configs,
++                use_template=self.use_template,
++                native=native_template_features,
++            )
++        else:
++            template_features = native_template_features()
+         # Esm features
+         if self.esm_enable:
+             x_esm = self.esm_featurizer(
+-- 
+2.43.0
+

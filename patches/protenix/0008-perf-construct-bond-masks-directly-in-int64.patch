@@ -1,0 +1,32 @@
+From bb3be993b52713795796c72cf0a46ef8a7323442 Mon Sep 17 00:00:00 2001
+From: HUSRCF <shuang886@connect.hkust-gz.edu.cn>
+Date: Sat, 3 Oct 2026 21:06:57 +0800
+Subject: [PATCH] perf: construct bond masks directly in int64
+
+---
+ protenix/data/core/featurizer.py | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/protenix/data/core/featurizer.py b/protenix/data/core/featurizer.py
+index fdfaddc..a402611 100644
+--- a/protenix/data/core/featurizer.py
++++ b/protenix/data/core/featurizer.py
+@@ -676,13 +676,11 @@ class Featurizer(object):
+ 
+         lig_polymer_bonds = get_ligand_polymer_bond_mask(self.cropped_atom_array)
+         num_atoms = len(self.cropped_atom_array)
+-        bond_mask_mat = np.zeros((num_atoms, num_atoms))
++        bond_mask_mat = np.zeros((num_atoms, num_atoms), dtype=np.int64)
+         for i, j, _ in lig_polymer_bonds:
+             bond_mask_mat[i, j] = 1
+             bond_mask_mat[j, i] = 1
+-        mask_features["bond_mask"] = torch.Tensor(
+-            bond_mask_mat
+-        ).long()  # [N_atom, N_atom]
++        mask_features["bond_mask"] = torch.from_numpy(bond_mask_mat)  # [N_atom, N_atom]
+         return mask_features
+ 
+     def get_all_input_features(self):
+-- 
+2.43.0
+

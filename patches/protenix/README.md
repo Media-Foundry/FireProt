@@ -11,7 +11,8 @@ git am ../patches/protenix/0001-*.patch \
   ../patches/protenix/0004-*.patch \
   ../patches/protenix/0005-*.patch \
   ../patches/protenix/0006-*.patch \
-  ../patches/protenix/0007-*.patch
+  ../patches/protenix/0007-*.patch \
+  ../patches/protenix/0008-*.patch
 ```
 
 | Patch | SHA-256 | Purpose |
@@ -27,3 +28,5 @@ The dispatch patches do not change upstream kernel defaults. Native Protenix con
 Patch `0006-perf-expose-pair-transpose-layout-dispatch.patch` (SHA-256 `5018a23899ae8ce21ce849a8a72bbea80e14c88909da11dd40aededd14d2488c`) exposes opt-in transpose views for the exact long inference layout. Independent integration commit: `fb1f39a`. Both layout and transposed LayerNorm flags are required; native and training paths retain their copies.
 
 Patch `0007-perf-expose-unused-template-feature-dispatch.patch` (SHA-256 `4f4fbd5b21c54a9fff8fa6a3a4563924c8cb0d118201107b12e2edc216ef2d94`) exposes opt-in omission of unused template features for the verified Mini inference configuration. Integration commit: `932de05cd71e744aafeaa3037bcfafc6f523f53f`. Template-enabled or unsupported configurations preserve native preparation.
+
+Patch `0008-perf-construct-bond-masks-directly-in-int64.patch` (SHA-256 `dfb5e68cf5193660201f810ea760e30f7897888ed8fa3dc10acd901a7f0d4811`) constructs the binary bond mask directly as int64 and wraps its private NumPy storage, avoiding two full matrix conversions. Integration commit: `bb3be993b52713795796c72cf0a46ef8a7323442`. Mask shape, values, dtype and field presence are retained in both training and inference. See [validation](../../docs/protenix-bond-mask.md).

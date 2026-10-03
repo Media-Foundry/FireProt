@@ -315,7 +315,7 @@ def dispatch_layer_norm(
     if transposed_pair:
         extension = load_amd_extension()
         if extension is not None:
-            subgroup = os.environ.get("FIREPROT_ENABLE_TRANSPOSED_NORM_SUBGROUP") == "1"
+            subgroup = os.environ.get("FIREPROT_ENABLE_TRANSPOSED_NORM_SUBGROUP", "1") == "1"
             implementation = "amd-gfx90a-transposed-layernorm" + ("-subgroup" if subgroup else "")
             _fast_path_counts[(LAYER_NORM_OPERATION, implementation)] += 1
             return extension.transposed_layer_norm(x, module.weight, module.bias, module.eps, subgroup)

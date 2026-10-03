@@ -1,0 +1,2736 @@
+{
+  "schema_version": 1,
+  "status": "ok",
+  "scope": "CPU feature preparation only; no model or GPU inference",
+  "input": "benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+  "input_sha256": "3f3c19af52b40972ce1961eba6800afeba548d28c643fc23da0a9321485989a1",
+  "seed": 101,
+  "dtype": "native feature dtypes",
+  "cycles_steps_samples": "Not applicable",
+  "cache_state": "First call may initialize CCD caches; later calls reuse process caches",
+  "threads": 1,
+  "msa": false,
+  "templates": false,
+  "esm": false,
+  "torch": "2.12.0a0+git78258b9",
+  "numpy": "2.5.2",
+  "source_sha256": {
+    "benchmarks/protenix/profile_features.py": "43d5b28e527dd6a224abc39ee68a7b715ce672f25a4bf58e3bfe0ff9aff1b914",
+    "Protenix/protenix/data/inference/infer_dataloader.py": "ef87dd0c928720d54e0243a30b4be57d7f5325dad7e27dcf27f85b1db4051112",
+    "Protenix/protenix/data/inference/json_to_feature.py": "e09bffa380acf3f3a1aa215ba8f2e3e87e6b23dbfe078120b4a498994f246afc",
+    "Protenix/protenix/data/core/featurizer.py": "298d1dcf21b1247e73d2cdbae413f9de8e314706d58376ef0de79648d90f05cd"
+  },
+  "records": [
+    {
+      "iteration": 0,
+      "wall_seconds": 21.878807239991147,
+      "stages_seconds": {
+        "crop": 18.25862431526184,
+        "featurizer": 3.6169540882110596,
+        "added_feature": 0.001055002212524414
+      },
+      "profile": "outputs/benchmarks/features-1536-5859ca2.0.pstats",
+      "atom_count": 12139,
+      "token_count": 1536,
+      "feature_tensors": [
+        {
+          "name": "input_feature_dict.token_index",
+          "shape": [
+            1536
+          ],
+          "dtype": "torch.int64",
+          "bytes": 12288
+        },
+        {
+          "name": "input_feature_dict.residue_index",
+          "shape": [
+            1536
+          ],
+          "dtype": "torch.int64",
+          "bytes": 12288
+        },
+        {
+          "name": "input_feature_dict.asym_id",
+          "shape": [
+            1536
+          ],
+          "dtype": "torch.int64",
+          "bytes": 12288
+        },
+        {
+          "name": "input_feature_dict.entity_id",
+          "shape": [
+            1536
+          ],
+          "dtype": "torch.int64",
+          "bytes": 12288
+        },
+        {
+          "name": "input_feature_dict.sym_id",
+          "shape": [
+            1536
+          ],
+          "dtype": "torch.int64",
+          "bytes": 12288
+        },
+        {
+          "name": "input_feature_dict.restype",
+          "shape": [
+            1536,
+            32
+          ],
+          "dtype": "torch.float32",
+          "bytes": 196608
+        },
+        {
+          "name": "input_feature_dict.token_bonds",
+          "shape": [
+            1536,
+            1536
+          ],
+          "dtype": "torch.float32",
+          "bytes": 9437184
+        },
+        {
+          "name": "input_feature_dict.ref_pos",
+          "shape": [
+            12139,
+            3
+          ],
+          "dtype": "torch.float32",
+          "bytes": 145668
+        },
+        {
+          "name": "input_feature_dict.ref_mask",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.ref_element",
+          "shape": [
+            12139,
+            128
+          ],
+          "dtype": "torch.int64",
+          "bytes": 12430336
+        },
+        {
+          "name": "input_feature_dict.ref_charge",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.ref_atom_name_chars",
+          "shape": [
+            12139,
+            4,
+            64
+          ],
+          "dtype": "torch.int64",
+          "bytes": 24860672
+        },
+        {
+          "name": "input_feature_dict.ref_space_uid",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.has_frame",
+          "shape": [
+            1536
+          ],
+          "dtype": "torch.int64",
+          "bytes": 12288
+        },
+        {
+          "name": "input_feature_dict.frame_atom_index",
+          "shape": [
+            1536,
+            3
+          ],
+          "dtype": "torch.int64",
+          "bytes": 36864
+        },
+        {
+          "name": "input_feature_dict.atom_to_token_idx",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.atom_to_tokatom_idx",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.is_protein",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.is_ligand",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.is_dna",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.is_rna",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.resolution",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.float32",
+          "bytes": 4
+        },
+        {
+          "name": "input_feature_dict.mol_id",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.mol_atom_index",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.entity_mol_id",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.pae_rep_atom_mask",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.plddt_m_rep_atom_mask",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.distogram_rep_atom_mask",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.modified_res_mask",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.bond_mask",
+          "shape": [
+            12139,
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 1178842568
+        },
+        {
+          "name": "input_feature_dict.constraint_feature.contact_atom",
+          "shape": [
+            1536,
+            1536,
+            2
+          ],
+          "dtype": "torch.float32",
+          "bytes": 18874368
+        },
+        {
+          "name": "input_feature_dict.constraint_feature.contact",
+          "shape": [
+            1536,
+            1536,
+            2
+          ],
+          "dtype": "torch.float32",
+          "bytes": 18874368
+        },
+        {
+          "name": "input_feature_dict.constraint_feature.pocket",
+          "shape": [
+            1536,
+            1536,
+            1
+          ],
+          "dtype": "torch.float32",
+          "bytes": 9437184
+        },
+        {
+          "name": "input_feature_dict.constraint_feature.substructure",
+          "shape": [
+            1536,
+            1536,
+            4
+          ],
+          "dtype": "torch.float32",
+          "bytes": 37748736
+        },
+        {
+          "name": "input_feature_dict.template_aatype",
+          "shape": [
+            4,
+            1536
+          ],
+          "dtype": "torch.int64",
+          "bytes": 49152
+        },
+        {
+          "name": "input_feature_dict.template_atom_positions",
+          "shape": [
+            4,
+            1536,
+            24,
+            3
+          ],
+          "dtype": "torch.float32",
+          "bytes": 1769472
+        },
+        {
+          "name": "input_feature_dict.template_atom_mask",
+          "shape": [
+            4,
+            1536,
+            24
+          ],
+          "dtype": "torch.bool",
+          "bytes": 147456
+        },
+        {
+          "name": "input_feature_dict.template_pseudo_beta_mask",
+          "shape": [
+            4,
+            1536,
+            1536
+          ],
+          "dtype": "torch.float32",
+          "bytes": 37748736
+        },
+        {
+          "name": "input_feature_dict.template_distogram",
+          "shape": [
+            4,
+            1536,
+            1536,
+            39
+          ],
+          "dtype": "torch.float32",
+          "bytes": 1472200704
+        },
+        {
+          "name": "input_feature_dict.template_unit_vector",
+          "shape": [
+            4,
+            1536,
+            1536,
+            3
+          ],
+          "dtype": "torch.float32",
+          "bytes": 113246208
+        },
+        {
+          "name": "input_feature_dict.template_backbone_frame_mask",
+          "shape": [
+            4,
+            1536,
+            1536
+          ],
+          "dtype": "torch.float32",
+          "bytes": 37748736
+        },
+        {
+          "name": "input_feature_dict.msa",
+          "shape": [
+            1,
+            1536
+          ],
+          "dtype": "torch.int64",
+          "bytes": 12288
+        },
+        {
+          "name": "input_feature_dict.has_deletion",
+          "shape": [
+            1,
+            1536
+          ],
+          "dtype": "torch.float32",
+          "bytes": 6144
+        },
+        {
+          "name": "input_feature_dict.deletion_value",
+          "shape": [
+            1,
+            1536
+          ],
+          "dtype": "torch.float32",
+          "bytes": 6144
+        },
+        {
+          "name": "input_feature_dict.profile",
+          "shape": [
+            1536,
+            32
+          ],
+          "dtype": "torch.float32",
+          "bytes": 196608
+        },
+        {
+          "name": "input_feature_dict.deletion_mean",
+          "shape": [
+            1536
+          ],
+          "dtype": "torch.float32",
+          "bytes": 6144
+        },
+        {
+          "name": "input_feature_dict.prot_pair_num_alignments",
+          "shape": [],
+          "dtype": "torch.int32",
+          "bytes": 4
+        },
+        {
+          "name": "input_feature_dict.prot_unpair_num_alignments",
+          "shape": [],
+          "dtype": "torch.int32",
+          "bytes": 4
+        },
+        {
+          "name": "input_feature_dict.rna_pair_num_alignments",
+          "shape": [],
+          "dtype": "torch.int32",
+          "bytes": 4
+        },
+        {
+          "name": "input_feature_dict.rna_unpair_num_alignments",
+          "shape": [],
+          "dtype": "torch.int32",
+          "bytes": 4
+        },
+        {
+          "name": "N_asym",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_token",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_atom",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_msa",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_prot_atom",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_lig_atom",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_dna_atom",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_rna_atom",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_prot_token",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_lig_token",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_dna_token",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_rna_token",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        }
+      ],
+      "total_tensor_bytes": 2975649984,
+      "rng_after_sha256": "8f831d4c6403a458941bc327b70cf9f5edda0462de1e63e975902d240f0a1992",
+      "top_own": [
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method _pickle.load>",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 2.9042088980000003,
+          "cumulative_seconds": 2.9047858360000003
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/io/pdbx/cif.py",
+          "line": 817,
+          "function": "deserialize",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 2.790486286,
+          "cumulative_seconds": 11.280665866000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/io/pdbx/cif.py",
+          "line": 936,
+          "function": "_is_empty",
+          "primitive_calls": 9224064,
+          "calls": 9224064,
+          "own_seconds": 2.6019288560000002,
+          "cumulative_seconds": 4.37473558
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/io/pdbx/cif.py",
+          "line": 956,
+          "function": "_parse_data_block_name",
+          "primitive_calls": 8847827,
+          "calls": 8847827,
+          "own_seconds": 1.385408221,
+          "cumulative_seconds": 2.5482379560000004
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'strip' of 'str' objects>",
+          "primitive_calls": 9225919,
+          "calls": 9225919,
+          "own_seconds": 1.184169162,
+          "cumulative_seconds": 1.184169162
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'startswith' of 'str' objects>",
+          "primitive_calls": 8850640,
+          "calls": 8850640,
+          "own_seconds": 1.163262357,
+          "cumulative_seconds": 1.163262357
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'reduce' of 'numpy.ufunc' objects>",
+          "primitive_calls": 9355,
+          "calls": 9355,
+          "own_seconds": 0.878413392,
+          "cumulative_seconds": 0.878413392
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/template/template_utils.py",
+          "line": 228,
+          "function": "dgram_from_positions",
+          "primitive_calls": 4,
+          "calls": 4,
+          "own_seconds": 0.8732056810000001,
+          "cumulative_seconds": 1.262651184
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'splitlines' of 'str' objects>",
+          "primitive_calls": 81,
+          "calls": 81,
+          "own_seconds": 0.8633937190000001,
+          "cumulative_seconds": 0.8633937190000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method torch.tensor>",
+          "primitive_calls": 36,
+          "calls": 36,
+          "own_seconds": 0.84839547,
+          "cumulative_seconds": 0.84839547
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'long' of 'torch._C.TensorBase' objects>",
+          "primitive_calls": 6,
+          "calls": 6,
+          "own_seconds": 0.63768745,
+          "cumulative_seconds": 0.63768745
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.len>",
+          "primitive_calls": 9280396,
+          "calls": 9281577,
+          "own_seconds": 0.5987369260000001,
+          "cumulative_seconds": 0.6067964640000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/io/pdbx/cif.py",
+          "line": 940,
+          "function": "_create_element_dict",
+          "primitive_calls": 21,
+          "calls": 21,
+          "own_seconds": 0.475679858,
+          "cumulative_seconds": 0.6955554190000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/template/template_utils.py",
+          "line": 251,
+          "function": "compute_template_unit_vector",
+          "primitive_calls": 4,
+          "calls": 4,
+          "own_seconds": 0.374358415,
+          "cumulative_seconds": 1.1044910510000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/featurizer.py",
+          "line": 652,
+          "function": "get_mask_features",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.32793214400000004,
+          "cumulative_seconds": 0.9543684870000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'read' of '_io.TextIOWrapper' objects>",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.29840599700000003,
+          "cumulative_seconds": 0.558635361
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method _codecs.utf_8_decode>",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.26020203000000003,
+          "cumulative_seconds": 0.26020203000000003
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_parser.py",
+          "line": 165,
+          "function": "find_range_by_index",
+          "primitive_calls": 1535,
+          "calls": 1535,
+          "own_seconds": 0.238805439,
+          "cumulative_seconds": 0.238805439
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/template/template_featurizer.py",
+          "line": 580,
+          "function": "as_protenix_dict",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.23862736,
+          "cumulative_seconds": 2.749093637
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 1289,
+          "function": "concatenate",
+          "primitive_calls": 1536,
+          "calls": 1536,
+          "own_seconds": 0.22674903500000002,
+          "cumulative_seconds": 0.31694444800000005
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'astype' of 'numpy.ndarray' objects>",
+          "primitive_calls": 13791,
+          "calls": 13791,
+          "own_seconds": 0.225109776,
+          "cumulative_seconds": 0.225109776
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'join' of 'str' objects>",
+          "primitive_calls": 49155,
+          "calls": 49155,
+          "own_seconds": 0.219893215,
+          "cumulative_seconds": 0.21992529200000002
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/io/pdbx/cif.py",
+          "line": 848,
+          "function": "read",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.208311758,
+          "cumulative_seconds": 12.047666522
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/featurizer.py",
+          "line": 122,
+          "function": "ref_atom_name_chars_encoded",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.190381247,
+          "cumulative_seconds": 0.200138059
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 712,
+          "function": "get_atom",
+          "primitive_calls": 28886,
+          "calls": 28886,
+          "own_seconds": 0.16451668900000002,
+          "cumulative_seconds": 0.298391921
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/numpy/_core/shape_base.py",
+          "line": 378,
+          "function": "stack",
+          "primitive_calls": 8,
+          "calls": 8,
+          "own_seconds": 0.15628472100000002,
+          "cumulative_seconds": 0.156305833
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 201,
+          "function": "_subarray",
+          "primitive_calls": 1566,
+          "calls": 1566,
+          "own_seconds": 0.15419535,
+          "cumulative_seconds": 0.32518192
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/numpy/_core/fromnumeric.py",
+          "line": 66,
+          "function": "_wrapreduction",
+          "primitive_calls": 1985,
+          "calls": 1985,
+          "own_seconds": 0.09280940800000001,
+          "cumulative_seconds": 0.791332879
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/featurizer.py",
+          "line": 55,
+          "function": "encoder",
+          "primitive_calls": 2,
+          "calls": 2,
+          "own_seconds": 0.09048605600000001,
+          "cumulative_seconds": 0.090506738
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 480,
+          "function": "__init__",
+          "primitive_calls": 28886,
+          "calls": 28886,
+          "own_seconds": 0.080510465,
+          "cumulative_seconds": 0.129869815
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/featurizer.py",
+          "line": 400,
+          "function": "get_reference_features",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.063407431,
+          "cumulative_seconds": 0.524057537
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method torch._C._nn.one_hot>",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.052225060000000004,
+          "cumulative_seconds": 0.052225060000000004
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/ccd.py",
+          "line": 39,
+          "function": "biotite_load_ccd_cif",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.040962197000000006,
+          "cumulative_seconds": 12.088628719
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 515,
+          "function": "__getattr__",
+          "primitive_calls": 79276,
+          "calls": 79276,
+          "own_seconds": 0.031920031,
+          "cumulative_seconds": 0.031920031
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method torch.full>",
+          "primitive_calls": 4,
+          "calls": 4,
+          "own_seconds": 0.029432382000000003,
+          "cumulative_seconds": 0.029432382000000003
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 523,
+          "function": "__setattr__",
+          "primitive_calls": 57772,
+          "calls": 57772,
+          "own_seconds": 0.028473048,
+          "cumulative_seconds": 0.028473048
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method numpy.zeros>",
+          "primitive_calls": 22132,
+          "calls": 22132,
+          "own_seconds": 0.027010290000000003,
+          "cumulative_seconds": 0.027010290000000003
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 297,
+          "function": "__getattr__",
+          "primitive_calls": 67873,
+          "calls": 67873,
+          "own_seconds": 0.027000287,
+          "cumulative_seconds": 0.027000287
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'float' of 'torch._C.TensorBase' objects>",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.024181814000000003,
+          "cumulative_seconds": 0.024181814000000003
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/tokenizer.py",
+          "line": 112,
+          "function": "tokenize",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.023847309,
+          "cumulative_seconds": 0.532208043
+        }
+      ],
+      "top_cumulative": [
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/infer_dataloader.py",
+          "line": 140,
+          "function": "process_one",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.0008422480000000001,
+          "cumulative_seconds": 21.876640536
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_to_feature.py",
+          "line": 37,
+          "function": "__init__",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 2.8884000000000003e-05,
+          "cumulative_seconds": 15.780133512
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_parser.py",
+          "line": 606,
+          "function": "add_entity_atom_array",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 1.4817e-05,
+          "cumulative_seconds": 15.780087069
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_parser.py",
+          "line": 317,
+          "function": "build_polymer",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 8.6823e-05,
+          "cumulative_seconds": 15.780024428
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_parser.py",
+          "line": 276,
+          "function": "_build_polymer_atom_array",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.009326577,
+          "cumulative_seconds": 12.80323714
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/ccd.py",
+          "line": 74,
+          "function": "get_component_atom_array",
+          "primitive_calls": 20,
+          "calls": 20,
+          "own_seconds": 0.000436578,
+          "cumulative_seconds": 12.144135700000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/ccd.py",
+          "line": 39,
+          "function": "biotite_load_ccd_cif",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.040962197000000006,
+          "cumulative_seconds": 12.088628719
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/io/pdbx/cif.py",
+          "line": 848,
+          "function": "read",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.208311758,
+          "cumulative_seconds": 12.047666522
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/io/pdbx/cif.py",
+          "line": 817,
+          "function": "deserialize",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 2.790486286,
+          "cumulative_seconds": 11.280665866000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/io/pdbx/cif.py",
+          "line": 936,
+          "function": "_is_empty",
+          "primitive_calls": 9224064,
+          "calls": 9224064,
+          "own_seconds": 2.6019288560000002,
+          "cumulative_seconds": 4.37473558
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_parser.py",
+          "line": 79,
+          "function": "add_reference_features",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.015886472000000002,
+          "cumulative_seconds": 2.976699855
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/ccd.py",
+          "line": 219,
+          "function": "get_ccd_ref_info",
+          "primitive_calls": 20,
+          "calls": 20,
+          "own_seconds": 0.006543518000000001,
+          "cumulative_seconds": 2.9590961310000004
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/ccd.py",
+          "line": 190,
+          "function": "get_component_rdkit_mol",
+          "primitive_calls": 20,
+          "calls": 20,
+          "own_seconds": 0.019782874000000002,
+          "cumulative_seconds": 2.92478365
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method _pickle.load>",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 2.9042088980000003,
+          "cumulative_seconds": 2.9047858360000003
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/template/template_featurizer.py",
+          "line": 649,
+          "function": "make_template_feature",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.010560910000000001,
+          "cumulative_seconds": 2.7650966610000003
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/template/template_featurizer.py",
+          "line": 580,
+          "function": "as_protenix_dict",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.23862736,
+          "cumulative_seconds": 2.749093637
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/io/pdbx/cif.py",
+          "line": 956,
+          "function": "_parse_data_block_name",
+          "primitive_calls": 8847827,
+          "calls": 8847827,
+          "own_seconds": 1.385408221,
+          "cumulative_seconds": 2.5482379560000004
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_to_feature.py",
+          "line": 344,
+          "function": "get_feature_dict",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.000752788,
+          "cumulative_seconds": 2.478401341
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/featurizer.py",
+          "line": 688,
+          "function": "get_all_input_features",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.000353575,
+          "cumulative_seconds": 1.497221975
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/template/template_utils.py",
+          "line": 228,
+          "function": "dgram_from_positions",
+          "primitive_calls": 4,
+          "calls": 4,
+          "own_seconds": 0.8732056810000001,
+          "cumulative_seconds": 1.262651184
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'strip' of 'str' objects>",
+          "primitive_calls": 9225919,
+          "calls": 9225919,
+          "own_seconds": 1.184169162,
+          "cumulative_seconds": 1.184169162
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'startswith' of 'str' objects>",
+          "primitive_calls": 8850640,
+          "calls": 8850640,
+          "own_seconds": 1.163262357,
+          "cumulative_seconds": 1.163262357
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/template/template_utils.py",
+          "line": 251,
+          "function": "compute_template_unit_vector",
+          "primitive_calls": 4,
+          "calls": 4,
+          "own_seconds": 0.374358415,
+          "cumulative_seconds": 1.1044910510000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/featurizer.py",
+          "line": 652,
+          "function": "get_mask_features",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.32793214400000004,
+          "cumulative_seconds": 0.9543684870000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'reduce' of 'numpy.ufunc' objects>",
+          "primitive_calls": 9355,
+          "calls": 9355,
+          "own_seconds": 0.878413392,
+          "cumulative_seconds": 0.878413392
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'splitlines' of 'str' objects>",
+          "primitive_calls": 81,
+          "calls": 81,
+          "own_seconds": 0.8633937190000001,
+          "cumulative_seconds": 0.8633937190000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/utils/torch_utils.py",
+          "line": 229,
+          "function": "dict_to_tensor",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.008006724,
+          "cumulative_seconds": 0.850728031
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method torch.tensor>",
+          "primitive_calls": 36,
+          "calls": 36,
+          "own_seconds": 0.84839547,
+          "cumulative_seconds": 0.84839547
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/numpy/_core/fromnumeric.py",
+          "line": 66,
+          "function": "_wrapreduction",
+          "primitive_calls": 1985,
+          "calls": 1985,
+          "own_seconds": 0.09280940800000001,
+          "cumulative_seconds": 0.791332879
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/io/pdbx/cif.py",
+          "line": 940,
+          "function": "_create_element_dict",
+          "primitive_calls": 21,
+          "calls": 21,
+          "own_seconds": 0.475679858,
+          "cumulative_seconds": 0.6955554190000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/numpy/_core/fromnumeric.py",
+          "line": 2342,
+          "function": "sum",
+          "primitive_calls": 22,
+          "calls": 22,
+          "own_seconds": 0.000126956,
+          "cumulative_seconds": 0.684543165
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'long' of 'torch._C.TensorBase' objects>",
+          "primitive_calls": 6,
+          "calls": 6,
+          "own_seconds": 0.63768745,
+          "cumulative_seconds": 0.63768745
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.len>",
+          "primitive_calls": 9280396,
+          "calls": 9281577,
+          "own_seconds": 0.5987369260000001,
+          "cumulative_seconds": 0.6067964640000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'read' of '_io.TextIOWrapper' objects>",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.29840599700000003,
+          "cumulative_seconds": 0.558635361
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 746,
+          "function": "__getitem__",
+          "primitive_calls": 18313,
+          "calls": 19849,
+          "own_seconds": 0.014702431,
+          "cumulative_seconds": 0.5567486190000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/tokenizer.py",
+          "line": 175,
+          "function": "get_token_array",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 2.0580000000000003e-05,
+          "cumulative_seconds": 0.532473586
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/tokenizer.py",
+          "line": 112,
+          "function": "tokenize",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.023847309,
+          "cumulative_seconds": 0.532208043
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/featurizer.py",
+          "line": 400,
+          "function": "get_reference_features",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.063407431,
+          "cumulative_seconds": 0.524057537
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 201,
+          "function": "_subarray",
+          "primitive_calls": 1566,
+          "calls": 1566,
+          "own_seconds": 0.15419535,
+          "cumulative_seconds": 0.32518192
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 427,
+          "function": "__add__",
+          "primitive_calls": 1536,
+          "calls": 1536,
+          "own_seconds": 0.001078064,
+          "cumulative_seconds": 0.31802251200000003
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 1289,
+          "function": "concatenate",
+          "primitive_calls": 1536,
+          "calls": 1536,
+          "own_seconds": 0.22674903500000002,
+          "cumulative_seconds": 0.31694444800000005
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/residues.py",
+          "line": 463,
+          "function": "residue_iter",
+          "primitive_calls": 1537,
+          "calls": 1537,
+          "own_seconds": 0.0005596290000000001,
+          "cumulative_seconds": 0.31185513600000003
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/segments.py",
+          "line": 272,
+          "function": "segment_iter",
+          "primitive_calls": 1537,
+          "calls": 1537,
+          "own_seconds": 0.001486164,
+          "cumulative_seconds": 0.311038028
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 712,
+          "function": "get_atom",
+          "primitive_calls": 28886,
+          "calls": 28886,
+          "own_seconds": 0.16451668900000002,
+          "cumulative_seconds": 0.298391921
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_parser.py",
+          "line": 182,
+          "function": "remove_leaving_atoms",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.011434214000000002,
+          "cumulative_seconds": 0.26073719700000003
+        },
+        {
+          "file": "<frozen codecs>",
+          "line": 319,
+          "function": "decode",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 2.7334000000000003e-05,
+          "cumulative_seconds": 0.260229364
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method _codecs.utf_8_decode>",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.26020203000000003,
+          "cumulative_seconds": 0.26020203000000003
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_parser.py",
+          "line": 165,
+          "function": "find_range_by_index",
+          "primitive_calls": 1535,
+          "calls": 1535,
+          "own_seconds": 0.238805439,
+          "cumulative_seconds": 0.238805439
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'astype' of 'numpy.ndarray' objects>",
+          "primitive_calls": 13791,
+          "calls": 13791,
+          "own_seconds": 0.225109776,
+          "cumulative_seconds": 0.225109776
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_to_feature.py",
+          "line": 331,
+          "function": "get_atom_array",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 5.5186e-05,
+          "cumulative_seconds": 0.22187411
+        }
+      ]
+    },
+    {
+      "iteration": 1,
+      "wall_seconds": 6.666779974999372,
+      "stages_seconds": {
+        "crop": 3.0555238723754883,
+        "featurizer": 3.6080942153930664,
+        "added_feature": 0.0008075237274169922
+      },
+      "profile": "outputs/benchmarks/features-1536-5859ca2.1.pstats",
+      "atom_count": 12139,
+      "token_count": 1536,
+      "feature_tensors": [
+        {
+          "name": "input_feature_dict.token_index",
+          "shape": [
+            1536
+          ],
+          "dtype": "torch.int64",
+          "bytes": 12288
+        },
+        {
+          "name": "input_feature_dict.residue_index",
+          "shape": [
+            1536
+          ],
+          "dtype": "torch.int64",
+          "bytes": 12288
+        },
+        {
+          "name": "input_feature_dict.asym_id",
+          "shape": [
+            1536
+          ],
+          "dtype": "torch.int64",
+          "bytes": 12288
+        },
+        {
+          "name": "input_feature_dict.entity_id",
+          "shape": [
+            1536
+          ],
+          "dtype": "torch.int64",
+          "bytes": 12288
+        },
+        {
+          "name": "input_feature_dict.sym_id",
+          "shape": [
+            1536
+          ],
+          "dtype": "torch.int64",
+          "bytes": 12288
+        },
+        {
+          "name": "input_feature_dict.restype",
+          "shape": [
+            1536,
+            32
+          ],
+          "dtype": "torch.float32",
+          "bytes": 196608
+        },
+        {
+          "name": "input_feature_dict.token_bonds",
+          "shape": [
+            1536,
+            1536
+          ],
+          "dtype": "torch.float32",
+          "bytes": 9437184
+        },
+        {
+          "name": "input_feature_dict.ref_pos",
+          "shape": [
+            12139,
+            3
+          ],
+          "dtype": "torch.float32",
+          "bytes": 145668
+        },
+        {
+          "name": "input_feature_dict.ref_mask",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.ref_element",
+          "shape": [
+            12139,
+            128
+          ],
+          "dtype": "torch.int64",
+          "bytes": 12430336
+        },
+        {
+          "name": "input_feature_dict.ref_charge",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.ref_atom_name_chars",
+          "shape": [
+            12139,
+            4,
+            64
+          ],
+          "dtype": "torch.int64",
+          "bytes": 24860672
+        },
+        {
+          "name": "input_feature_dict.ref_space_uid",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.has_frame",
+          "shape": [
+            1536
+          ],
+          "dtype": "torch.int64",
+          "bytes": 12288
+        },
+        {
+          "name": "input_feature_dict.frame_atom_index",
+          "shape": [
+            1536,
+            3
+          ],
+          "dtype": "torch.int64",
+          "bytes": 36864
+        },
+        {
+          "name": "input_feature_dict.atom_to_token_idx",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.atom_to_tokatom_idx",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.is_protein",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.is_ligand",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.is_dna",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.is_rna",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.resolution",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.float32",
+          "bytes": 4
+        },
+        {
+          "name": "input_feature_dict.mol_id",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.mol_atom_index",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.entity_mol_id",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.pae_rep_atom_mask",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.plddt_m_rep_atom_mask",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.distogram_rep_atom_mask",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.modified_res_mask",
+          "shape": [
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 97112
+        },
+        {
+          "name": "input_feature_dict.bond_mask",
+          "shape": [
+            12139,
+            12139
+          ],
+          "dtype": "torch.int64",
+          "bytes": 1178842568
+        },
+        {
+          "name": "input_feature_dict.constraint_feature.contact_atom",
+          "shape": [
+            1536,
+            1536,
+            2
+          ],
+          "dtype": "torch.float32",
+          "bytes": 18874368
+        },
+        {
+          "name": "input_feature_dict.constraint_feature.contact",
+          "shape": [
+            1536,
+            1536,
+            2
+          ],
+          "dtype": "torch.float32",
+          "bytes": 18874368
+        },
+        {
+          "name": "input_feature_dict.constraint_feature.pocket",
+          "shape": [
+            1536,
+            1536,
+            1
+          ],
+          "dtype": "torch.float32",
+          "bytes": 9437184
+        },
+        {
+          "name": "input_feature_dict.constraint_feature.substructure",
+          "shape": [
+            1536,
+            1536,
+            4
+          ],
+          "dtype": "torch.float32",
+          "bytes": 37748736
+        },
+        {
+          "name": "input_feature_dict.template_aatype",
+          "shape": [
+            4,
+            1536
+          ],
+          "dtype": "torch.int64",
+          "bytes": 49152
+        },
+        {
+          "name": "input_feature_dict.template_atom_positions",
+          "shape": [
+            4,
+            1536,
+            24,
+            3
+          ],
+          "dtype": "torch.float32",
+          "bytes": 1769472
+        },
+        {
+          "name": "input_feature_dict.template_atom_mask",
+          "shape": [
+            4,
+            1536,
+            24
+          ],
+          "dtype": "torch.bool",
+          "bytes": 147456
+        },
+        {
+          "name": "input_feature_dict.template_pseudo_beta_mask",
+          "shape": [
+            4,
+            1536,
+            1536
+          ],
+          "dtype": "torch.float32",
+          "bytes": 37748736
+        },
+        {
+          "name": "input_feature_dict.template_distogram",
+          "shape": [
+            4,
+            1536,
+            1536,
+            39
+          ],
+          "dtype": "torch.float32",
+          "bytes": 1472200704
+        },
+        {
+          "name": "input_feature_dict.template_unit_vector",
+          "shape": [
+            4,
+            1536,
+            1536,
+            3
+          ],
+          "dtype": "torch.float32",
+          "bytes": 113246208
+        },
+        {
+          "name": "input_feature_dict.template_backbone_frame_mask",
+          "shape": [
+            4,
+            1536,
+            1536
+          ],
+          "dtype": "torch.float32",
+          "bytes": 37748736
+        },
+        {
+          "name": "input_feature_dict.msa",
+          "shape": [
+            1,
+            1536
+          ],
+          "dtype": "torch.int64",
+          "bytes": 12288
+        },
+        {
+          "name": "input_feature_dict.has_deletion",
+          "shape": [
+            1,
+            1536
+          ],
+          "dtype": "torch.float32",
+          "bytes": 6144
+        },
+        {
+          "name": "input_feature_dict.deletion_value",
+          "shape": [
+            1,
+            1536
+          ],
+          "dtype": "torch.float32",
+          "bytes": 6144
+        },
+        {
+          "name": "input_feature_dict.profile",
+          "shape": [
+            1536,
+            32
+          ],
+          "dtype": "torch.float32",
+          "bytes": 196608
+        },
+        {
+          "name": "input_feature_dict.deletion_mean",
+          "shape": [
+            1536
+          ],
+          "dtype": "torch.float32",
+          "bytes": 6144
+        },
+        {
+          "name": "input_feature_dict.prot_pair_num_alignments",
+          "shape": [],
+          "dtype": "torch.int32",
+          "bytes": 4
+        },
+        {
+          "name": "input_feature_dict.prot_unpair_num_alignments",
+          "shape": [],
+          "dtype": "torch.int32",
+          "bytes": 4
+        },
+        {
+          "name": "input_feature_dict.rna_pair_num_alignments",
+          "shape": [],
+          "dtype": "torch.int32",
+          "bytes": 4
+        },
+        {
+          "name": "input_feature_dict.rna_unpair_num_alignments",
+          "shape": [],
+          "dtype": "torch.int32",
+          "bytes": 4
+        },
+        {
+          "name": "N_asym",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_token",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_atom",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_msa",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_prot_atom",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_lig_atom",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_dna_atom",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_rna_atom",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_prot_token",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_lig_token",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_dna_token",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        },
+        {
+          "name": "N_rna_token",
+          "shape": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "bytes": 8
+        }
+      ],
+      "total_tensor_bytes": 2975649984,
+      "rng_after_sha256": "8f831d4c6403a458941bc327b70cf9f5edda0462de1e63e975902d240f0a1992",
+      "top_own": [
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/template/template_utils.py",
+          "line": 228,
+          "function": "dgram_from_positions",
+          "primitive_calls": 4,
+          "calls": 4,
+          "own_seconds": 0.882350472,
+          "cumulative_seconds": 1.269614225
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'reduce' of 'numpy.ufunc' objects>",
+          "primitive_calls": 7747,
+          "calls": 7747,
+          "own_seconds": 0.868190686,
+          "cumulative_seconds": 0.868190686
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method torch.tensor>",
+          "primitive_calls": 36,
+          "calls": 36,
+          "own_seconds": 0.8348885960000001,
+          "cumulative_seconds": 0.8348885960000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'long' of 'torch._C.TensorBase' objects>",
+          "primitive_calls": 6,
+          "calls": 6,
+          "own_seconds": 0.65036848,
+          "cumulative_seconds": 0.65036848
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/template/template_utils.py",
+          "line": 251,
+          "function": "compute_template_unit_vector",
+          "primitive_calls": 4,
+          "calls": 4,
+          "own_seconds": 0.37452619000000004,
+          "cumulative_seconds": 1.100655313
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/featurizer.py",
+          "line": 652,
+          "function": "get_mask_features",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.32991121500000004,
+          "cumulative_seconds": 0.9688840660000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/template/template_featurizer.py",
+          "line": 580,
+          "function": "as_protenix_dict",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.238824578,
+          "cumulative_seconds": 2.749824653
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_parser.py",
+          "line": 165,
+          "function": "find_range_by_index",
+          "primitive_calls": 1535,
+          "calls": 1535,
+          "own_seconds": 0.22874661200000002,
+          "cumulative_seconds": 0.22874661200000002
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 1289,
+          "function": "concatenate",
+          "primitive_calls": 1536,
+          "calls": 1536,
+          "own_seconds": 0.225620182,
+          "cumulative_seconds": 0.320723411
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'astype' of 'numpy.ndarray' objects>",
+          "primitive_calls": 12356,
+          "calls": 12356,
+          "own_seconds": 0.221019983,
+          "cumulative_seconds": 0.221019983
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/featurizer.py",
+          "line": 122,
+          "function": "ref_atom_name_chars_encoded",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.19282415700000002,
+          "cumulative_seconds": 0.2024998
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 712,
+          "function": "get_atom",
+          "primitive_calls": 28886,
+          "calls": 28886,
+          "own_seconds": 0.165896322,
+          "cumulative_seconds": 0.300421251
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/numpy/_core/shape_base.py",
+          "line": 378,
+          "function": "stack",
+          "primitive_calls": 8,
+          "calls": 8,
+          "own_seconds": 0.153587406,
+          "cumulative_seconds": 0.153613269
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 201,
+          "function": "_subarray",
+          "primitive_calls": 1546,
+          "calls": 1546,
+          "own_seconds": 0.153171204,
+          "cumulative_seconds": 0.23508698500000003
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/featurizer.py",
+          "line": 55,
+          "function": "encoder",
+          "primitive_calls": 2,
+          "calls": 2,
+          "own_seconds": 0.091275993,
+          "cumulative_seconds": 0.091295231
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 480,
+          "function": "__init__",
+          "primitive_calls": 28886,
+          "calls": 28886,
+          "own_seconds": 0.08150978,
+          "cumulative_seconds": 0.130454426
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/featurizer.py",
+          "line": 400,
+          "function": "get_reference_features",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.062854325,
+          "cumulative_seconds": 0.5246079220000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method torch._C._nn.one_hot>",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.052662589,
+          "cumulative_seconds": 0.052662589
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 515,
+          "function": "__getattr__",
+          "primitive_calls": 79276,
+          "calls": 79276,
+          "own_seconds": 0.032141587,
+          "cumulative_seconds": 0.032141587
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method torch.full>",
+          "primitive_calls": 4,
+          "calls": 4,
+          "own_seconds": 0.029421805000000002,
+          "cumulative_seconds": 0.029421805000000002
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 523,
+          "function": "__setattr__",
+          "primitive_calls": 57772,
+          "calls": 57772,
+          "own_seconds": 0.028015519000000003,
+          "cumulative_seconds": 0.028015519000000003
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method numpy.zeros>",
+          "primitive_calls": 21632,
+          "calls": 21632,
+          "own_seconds": 0.027420852000000003,
+          "cumulative_seconds": 0.027420852000000003
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 297,
+          "function": "__getattr__",
+          "primitive_calls": 66474,
+          "calls": 66474,
+          "own_seconds": 0.025834430000000002,
+          "cumulative_seconds": 0.025834430000000002
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/numpy/linalg/_linalg.py",
+          "line": 2598,
+          "function": "norm",
+          "primitive_calls": 12,
+          "calls": 12,
+          "own_seconds": 0.025173306000000003,
+          "cumulative_seconds": 0.19858006900000003
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'float' of 'torch._C.TensorBase' objects>",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.024093811000000003,
+          "cumulative_seconds": 0.024093811000000003
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/tokenizer.py",
+          "line": 112,
+          "function": "tokenize",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.024056835000000002,
+          "cumulative_seconds": 0.44626422800000004
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_parser.py",
+          "line": 124,
+          "function": "_remove_non_std_ccd_leaving_atoms",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.023087930000000003,
+          "cumulative_seconds": 0.037650010000000005
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/constraint/constraint_featurizer.py",
+          "line": 1368,
+          "function": "one_hot_encoder",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.022541823000000002,
+          "cumulative_seconds": 0.11884093800000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 318,
+          "function": "__setattr__",
+          "primitive_calls": 26199,
+          "calls": 26199,
+          "own_seconds": 0.020914231000000002,
+          "cumulative_seconds": 0.026976507
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/utils/geometry.py",
+          "line": 50,
+          "function": "random_transform",
+          "primitive_calls": 1536,
+          "calls": 1536,
+          "own_seconds": 0.020864615000000003,
+          "cumulative_seconds": 0.10139226600000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method numpy.array>",
+          "primitive_calls": 28911,
+          "calls": 28911,
+          "own_seconds": 0.019533341000000003,
+          "cumulative_seconds": 0.019533341000000003
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/parser.py",
+          "line": 3004,
+          "function": "add_tokatom_idx",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.019302153000000002,
+          "cumulative_seconds": 0.159975521
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/tokenizer.py",
+          "line": 39,
+          "function": "__getattr__",
+          "primitive_calls": 41472,
+          "calls": 41472,
+          "own_seconds": 0.018759472000000003,
+          "cumulative_seconds": 0.018759472000000003
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/featurizer.py",
+          "line": 151,
+          "function": "get_prot_nuc_frame",
+          "primitive_calls": 3072,
+          "calls": 3072,
+          "own_seconds": 0.016238713000000002,
+          "cumulative_seconds": 0.038137266
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.isinstance>",
+          "primitive_calls": 43033,
+          "calls": 43033,
+          "own_seconds": 0.015669125000000002,
+          "cumulative_seconds": 0.036992134
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/numpy/_core/numeric.py",
+          "line": 323,
+          "function": "full",
+          "primitive_calls": 4626,
+          "calls": 4626,
+          "own_seconds": 0.015466431000000001,
+          "cumulative_seconds": 0.019432149000000003
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/ccd.py",
+          "line": 288,
+          "function": "_connect_inter_residue",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.014837549,
+          "cumulative_seconds": 0.016563865
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_parser.py",
+          "line": 79,
+          "function": "add_reference_features",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.014473226,
+          "cumulative_seconds": 0.01605592
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 746,
+          "function": "__getitem__",
+          "primitive_calls": 18293,
+          "calls": 19829,
+          "own_seconds": 0.014398317,
+          "cumulative_seconds": 0.467869637
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/copyable.py",
+          "line": 27,
+          "function": "copy",
+          "primitive_calls": 1547,
+          "calls": 1547,
+          "own_seconds": 0.013789018,
+          "cumulative_seconds": 0.013789018
+        }
+      ],
+      "top_cumulative": [
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/infer_dataloader.py",
+          "line": 140,
+          "function": "process_one",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.000567806,
+          "cumulative_seconds": 6.664432151000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/template/template_featurizer.py",
+          "line": 649,
+          "function": "make_template_feature",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.010365985000000001,
+          "cumulative_seconds": 2.7651434950000002
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/template/template_featurizer.py",
+          "line": 580,
+          "function": "as_protenix_dict",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.238824578,
+          "cumulative_seconds": 2.749824653
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_to_feature.py",
+          "line": 344,
+          "function": "get_feature_dict",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.000789084,
+          "cumulative_seconds": 2.401697017
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/featurizer.py",
+          "line": 688,
+          "function": "get_all_input_features",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.00033230900000000003,
+          "cumulative_seconds": 1.511774903
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/template/template_utils.py",
+          "line": 228,
+          "function": "dgram_from_positions",
+          "primitive_calls": 4,
+          "calls": 4,
+          "own_seconds": 0.882350472,
+          "cumulative_seconds": 1.269614225
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/template/template_utils.py",
+          "line": 251,
+          "function": "compute_template_unit_vector",
+          "primitive_calls": 4,
+          "calls": 4,
+          "own_seconds": 0.37452619000000004,
+          "cumulative_seconds": 1.100655313
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/featurizer.py",
+          "line": 652,
+          "function": "get_mask_features",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.32991121500000004,
+          "cumulative_seconds": 0.9688840660000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'reduce' of 'numpy.ufunc' objects>",
+          "primitive_calls": 7747,
+          "calls": 7747,
+          "own_seconds": 0.868190686,
+          "cumulative_seconds": 0.868190686
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/utils/torch_utils.py",
+          "line": 229,
+          "function": "dict_to_tensor",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.007654603,
+          "cumulative_seconds": 0.842197835
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method torch.tensor>",
+          "primitive_calls": 36,
+          "calls": 36,
+          "own_seconds": 0.8348885960000001,
+          "cumulative_seconds": 0.8348885960000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/numpy/_core/fromnumeric.py",
+          "line": 66,
+          "function": "_wrapreduction",
+          "primitive_calls": 1572,
+          "calls": 1572,
+          "own_seconds": 0.004959918000000001,
+          "cumulative_seconds": 0.6941289730000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/numpy/_core/fromnumeric.py",
+          "line": 2342,
+          "function": "sum",
+          "primitive_calls": 22,
+          "calls": 22,
+          "own_seconds": 0.00016688300000000002,
+          "cumulative_seconds": 0.6824072480000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_to_feature.py",
+          "line": 37,
+          "function": "__init__",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 2.1152e-05,
+          "cumulative_seconds": 0.6537449900000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_parser.py",
+          "line": 606,
+          "function": "add_entity_atom_array",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 8.235e-06,
+          "cumulative_seconds": 0.6537040190000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_parser.py",
+          "line": 317,
+          "function": "build_polymer",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.00020346100000000002,
+          "cumulative_seconds": 0.6536533640000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'long' of 'torch._C.TensorBase' objects>",
+          "primitive_calls": 6,
+          "calls": 6,
+          "own_seconds": 0.65036848,
+          "cumulative_seconds": 0.65036848
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_parser.py",
+          "line": 276,
+          "function": "_build_polymer_atom_array",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.008457602,
+          "cumulative_seconds": 0.637393482
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/featurizer.py",
+          "line": 400,
+          "function": "get_reference_features",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.062854325,
+          "cumulative_seconds": 0.5246079220000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 746,
+          "function": "__getitem__",
+          "primitive_calls": 18293,
+          "calls": 19829,
+          "own_seconds": 0.014398317,
+          "cumulative_seconds": 0.467869637
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/tokenizer.py",
+          "line": 175,
+          "function": "get_token_array",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 1.5939e-05,
+          "cumulative_seconds": 0.44648219800000005
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/tokenizer.py",
+          "line": 112,
+          "function": "tokenize",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.024056835000000002,
+          "cumulative_seconds": 0.44626422800000004
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 427,
+          "function": "__add__",
+          "primitive_calls": 1536,
+          "calls": 1536,
+          "own_seconds": 0.00108499,
+          "cumulative_seconds": 0.321808401
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 1289,
+          "function": "concatenate",
+          "primitive_calls": 1536,
+          "calls": 1536,
+          "own_seconds": 0.225620182,
+          "cumulative_seconds": 0.320723411
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 712,
+          "function": "get_atom",
+          "primitive_calls": 28886,
+          "calls": 28886,
+          "own_seconds": 0.165896322,
+          "cumulative_seconds": 0.300421251
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_parser.py",
+          "line": 182,
+          "function": "remove_leaving_atoms",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.011585264000000001,
+          "cumulative_seconds": 0.250843119
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 201,
+          "function": "_subarray",
+          "primitive_calls": 1546,
+          "calls": 1546,
+          "own_seconds": 0.153171204,
+          "cumulative_seconds": 0.23508698500000003
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_parser.py",
+          "line": 165,
+          "function": "find_range_by_index",
+          "primitive_calls": 1535,
+          "calls": 1535,
+          "own_seconds": 0.22874661200000002,
+          "cumulative_seconds": 0.22874661200000002
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/residues.py",
+          "line": 463,
+          "function": "residue_iter",
+          "primitive_calls": 1537,
+          "calls": 1537,
+          "own_seconds": 0.000585859,
+          "cumulative_seconds": 0.22475814400000002
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/segments.py",
+          "line": 272,
+          "function": "segment_iter",
+          "primitive_calls": 1537,
+          "calls": 1537,
+          "own_seconds": 0.0015157430000000002,
+          "cumulative_seconds": 0.223916007
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'astype' of 'numpy.ndarray' objects>",
+          "primitive_calls": 12356,
+          "calls": 12356,
+          "own_seconds": 0.221019983,
+          "cumulative_seconds": 0.221019983
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_to_feature.py",
+          "line": 331,
+          "function": "get_atom_array",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 2.3512e-05,
+          "cumulative_seconds": 0.21687356900000002
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/inference/json_to_feature.py",
+          "line": 282,
+          "function": "add_atom_array_attributes",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.000145834,
+          "cumulative_seconds": 0.212331397
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/featurizer.py",
+          "line": 122,
+          "function": "ref_atom_name_chars_encoded",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.19282415700000002,
+          "cumulative_seconds": 0.2024998
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/numpy/linalg/_linalg.py",
+          "line": 2598,
+          "function": "norm",
+          "primitive_calls": 12,
+          "calls": 12,
+          "own_seconds": 0.025173306000000003,
+          "cumulative_seconds": 0.19858006900000003
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/constraint/constraint_featurizer.py",
+          "line": 199,
+          "function": "generate_from_json",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.002091308,
+          "cumulative_seconds": 0.170375664
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/parser.py",
+          "line": 3004,
+          "function": "add_tokatom_idx",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.019302153000000002,
+          "cumulative_seconds": 0.159975521
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/numpy/_core/shape_base.py",
+          "line": 378,
+          "function": "stack",
+          "primitive_calls": 8,
+          "calls": 8,
+          "own_seconds": 0.153587406,
+          "cumulative_seconds": 0.153613269
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/constraint/constraint_featurizer.py",
+          "line": 2415,
+          "function": "generate_spec_constraint",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.004598411,
+          "cumulative_seconds": 0.132312246
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 480,
+          "function": "__init__",
+          "primitive_calls": 28886,
+          "calls": 28886,
+          "own_seconds": 0.08150978,
+          "cumulative_seconds": 0.130454426
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 733,
+          "function": "__iter__",
+          "primitive_calls": 12140,
+          "calls": 12140,
+          "own_seconds": 0.0065612330000000005,
+          "cumulative_seconds": 0.122547047
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/constraint/constraint_featurizer.py",
+          "line": 1384,
+          "function": "encode",
+          "primitive_calls": 4,
+          "calls": 4,
+          "own_seconds": 1.1486000000000001e-05,
+          "cumulative_seconds": 0.11885271400000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/constraint/constraint_featurizer.py",
+          "line": 1368,
+          "function": "one_hot_encoder",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 0.022541823000000002,
+          "cumulative_seconds": 0.11884093800000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/featurizer.py",
+          "line": 242,
+          "function": "get_token_frame",
+          "primitive_calls": 2,
+          "calls": 2,
+          "own_seconds": 0.009026613000000001,
+          "cumulative_seconds": 0.105870512
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/utils/geometry.py",
+          "line": 50,
+          "function": "random_transform",
+          "primitive_calls": 1536,
+          "calls": 1536,
+          "own_seconds": 0.020864615000000003,
+          "cumulative_seconds": 0.10139226600000001
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/featurizer.py",
+          "line": 55,
+          "function": "encoder",
+          "primitive_calls": 2,
+          "calls": 2,
+          "own_seconds": 0.091275993,
+          "cumulative_seconds": 0.091295231
+        },
+        {
+          "file": "/media/IntelSSD/fireprot/Protenix/protenix/data/core/featurizer.py",
+          "line": 107,
+          "function": "elem_onehot_encoded",
+          "primitive_calls": 1,
+          "calls": 1,
+          "own_seconds": 4.9644e-05,
+          "cumulative_seconds": 0.088425796
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 678,
+          "function": "__init__",
+          "primitive_calls": 3083,
+          "calls": 3083,
+          "own_seconds": 0.0052197070000000005,
+          "cumulative_seconds": 0.07672182500000001
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/scipy/_lib/_util.py",
+          "line": 232,
+          "function": "wrapper",
+          "primitive_calls": 1536,
+          "calls": 3072,
+          "own_seconds": 0.009122219,
+          "cumulative_seconds": 0.057316149000000004
+        },
+        {
+          "file": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/biotite/structure/atoms.py",
+          "line": 45,
+          "function": "__init__",
+          "primitive_calls": 3083,
+          "calls": 3083,
+          "own_seconds": 0.009123386,
+          "cumulative_seconds": 0.055728389
+        }
+      ]
+    }
+  ],
+  "gpu_initialized": false,
+  "base_commit": "5859ca21faba32f78360efcbf4c77a47bd8af53f",
+  "protenix_commit": "fb1f39adb2b5bdd36c456cf5feaeeee76b6d63bc"
+}

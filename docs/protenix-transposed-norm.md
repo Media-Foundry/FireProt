@@ -1,5 +1,9 @@
 # Transposed pair LayerNorm
 
+The original kernel and layout integration are recorded below. The
+[subgroup follow-up](protenix-transposed-norm-tiles.md#same-source-model-validation)
+is now the default kernel within the same pair-layout opt-in.
+
 ## Previously uncovered layout
 
 Transposing the two sequence axes of a contiguous `[N,N,128]` pair tensor gives

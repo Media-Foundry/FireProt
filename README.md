@@ -20,6 +20,12 @@ Protenix v1.1.0 is the first working adapter target. The repository now contains
 
 AtlasFold, OpenFold, ESMFold, Base-model coverage, BF16 promotion, additional long-sequence buckets, and general multi-GPU execution remain future work.
 
+AtlasFold monomer plus AtlasLM-3B now has an initial native benchmark entry point
+with explicit dual-checkpoint provenance, complete LM/recycle timing, PCI-based
+GPU monitoring, and repeated-output validation. Its optimized adapter remains
+in development. See [AtlasFold performance work](docs/atlasfold-performance.md)
+and [DiamondHill checkpoint locations](docs/diamondhill-checkpoints.md).
+
 ## Latest single-request E2E comparison
 
 Fresh-process Mini-default FP32 C4/S1, seed 101, zero warmups, one prediction per worker, three pairs per length:

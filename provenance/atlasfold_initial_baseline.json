@@ -1,0 +1,730 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-04",
+  "fireprot_base_commit": "bde84396d2e44c63ee348066ea71444b14abf00a",
+  "source_commit": "8ab3aca0e18c8b814d5ca6756b2617a07d72c68d",
+  "status": "native baseline and operator screening; no optimized model claim",
+  "native1000": {
+    "status": "complete",
+    "args": {
+      "input": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+      "out": "/media/IntelSSD/fireprot/outputs/atlasfold/native-n1000-pci-verified",
+      "model_path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlasfold/snapshot/weights/atlasfold-260703.pth",
+      "lm_path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlaslm3b/snapshot/weights/atlaslm_3b_base.pth",
+      "kernel": "torch",
+      "seed": 101,
+      "recycles": 4,
+      "samples": 1,
+      "repeats": 2
+    },
+    "sequence_sha256": "462bb697ecdcce2f979b00075e60d96fbfcd1b18ba3d92f5427cb03befbcc570",
+    "length": 1000,
+    "cache": "Weights hashed before timer; filesystem warm; model fresh; no LM feature cache",
+    "dtype": "Native mixed BF16/FP32; BF16 autocast; FP32 diffusion",
+    "mlm_prob": 0.15,
+    "trunk_passes": 5,
+    "records": [
+      {
+        "repeat": 0,
+        "phase": "first",
+        "prediction_wall_seconds": 179.70977985596983,
+        "stages": {
+          "atlaslm_block": {
+            "calls": 240,
+            "gpu_ms": 855.2929263114929
+          },
+          "TriangleMultiplicationOutgoing": {
+            "calls": 264,
+            "gpu_ms": 17019.393646240234
+          },
+          "TriangleMultiplicationIncoming": {
+            "calls": 264,
+            "gpu_ms": 17019.68938446045
+          },
+          "TriangleAttentionStartingNode": {
+            "calls": 264,
+            "gpu_ms": 47025.14790344238
+          },
+          "TriangleAttentionEndingNode": {
+            "calls": 264,
+            "gpu_ms": 85341.9182434082
+          },
+          "lm_stack": {
+            "calls": 5,
+            "gpu_ms": 13440.054931640625
+          },
+          "run_lm_embedder": {
+            "calls": 5,
+            "gpu_ms": 16122.603759765625
+          },
+          "main_stack": {
+            "calls": 5,
+            "gpu_ms": 158333.701171875
+          },
+          "run_trunk": {
+            "calls": 1,
+            "gpu_ms": 175005.75
+          },
+          "diffusion": {
+            "calls": 1,
+            "gpu_ms": 1321.728271484375
+          },
+          "confidence_head": {
+            "calls": 1,
+            "gpu_ms": 2690.63916015625
+          },
+          "inference": {
+            "calls": 1,
+            "gpu_ms": 179690.546875
+          }
+        },
+        "peak_allocated_bytes": 54083513856,
+        "peak_reserved_bytes": 55771660288,
+        "outputs": [
+          "repeat0-seed101-sample0"
+        ]
+      },
+      {
+        "repeat": 1,
+        "phase": "warm",
+        "prediction_wall_seconds": 177.5771548920311,
+        "stages": {
+          "atlaslm_block": {
+            "calls": 240,
+            "gpu_ms": 769.7966759204865
+          },
+          "TriangleMultiplicationOutgoing": {
+            "calls": 264,
+            "gpu_ms": 17027.174560546875
+          },
+          "TriangleMultiplicationIncoming": {
+            "calls": 264,
+            "gpu_ms": 17027.125022888184
+          },
+          "TriangleAttentionStartingNode": {
+            "calls": 264,
+            "gpu_ms": 47035.46733093262
+          },
+          "TriangleAttentionEndingNode": {
+            "calls": 264,
+            "gpu_ms": 85346.43682861328
+          },
+          "lm_stack": {
+            "calls": 5,
+            "gpu_ms": 13445.729248046875
+          },
+          "run_lm_embedder": {
+            "calls": 5,
+            "gpu_ms": 15147.65234375
+          },
+          "main_stack": {
+            "calls": 5,
+            "gpu_ms": 158359.943359375
+          },
+          "run_trunk": {
+            "calls": 1,
+            "gpu_ms": 173603.625
+          },
+          "diffusion": {
+            "calls": 1,
+            "gpu_ms": 1296.240966796875
+          },
+          "confidence_head": {
+            "calls": 1,
+            "gpu_ms": 2660.6435546875
+          },
+          "inference": {
+            "calls": 1,
+            "gpu_ms": 177572.703125
+          }
+        },
+        "peak_allocated_bytes": 54083513856,
+        "peak_reserved_bytes": 55771660288,
+        "outputs": [
+          "repeat1-seed101-sample0"
+        ]
+      }
+    ],
+    "source_commit": "8ab3aca0e18c8b814d5ca6756b2617a07d72c68d",
+    "weights": {
+      "atlasfold": {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlasfold/snapshot/weights/atlasfold-260703.pth",
+        "bytes": 859549307,
+        "sha256": "cbadb227d40e801a3d268d6e884e6ed3c6b9fb89d558739fcf5970492732e5ea"
+      },
+      "atlaslm": {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlaslm3b/snapshot/weights/atlaslm_3b_base.pth",
+        "bytes": 6128042331,
+        "sha256": "8097cc4a234853f19ca97435844829d84fe7f13215c900e74659fa9682cc0ddb"
+      }
+    },
+    "device": {
+      "gpu": 5,
+      "bdf": "0000:93:00.0",
+      "uuid": "9000740c-0000-1000-8007-d3c11591c16f",
+      "kfd_id": 8466,
+      "node_id": 9,
+      "partition_id": 0
+    },
+    "environment": {
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "gpu": "AMD Instinct MI250X / MI250",
+      "HIP_VISIBLE_DEVICES": "7"
+    },
+    "load_seconds": 4.708203709044028,
+    "config": {
+      "name": "atlasfold-260703",
+      "lm_name": "atlaslm-3b",
+      "lm_path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlaslm3b/snapshot/weights/atlaslm_3b_base.pth",
+      "channel_s": 384,
+      "channel_s_lm": 768,
+      "channel_z": 128,
+      "trunk": {
+        "num_heads": 16,
+        "num_tri_heads": 4,
+        "dropout_z": 0.25,
+        "num_lm_blocks": 4,
+        "num_blocks": 48,
+        "num_pair_to_single_blocks": 12,
+        "blocks_per_ckpt": null
+      },
+      "distogram_head": {
+        "num_bins": 64,
+        "min_dist": 2.0,
+        "max_dist": 22.0
+      },
+      "diffusion_head": {
+        "channel_a": 768,
+        "channel_atom": 96,
+        "channel_cond": 384,
+        "num_heads": 16,
+        "num_blocks": 12,
+        "num_atom_heads": 2,
+        "num_atom_blocks": 3,
+        "blocks_per_ckpt": null
+      },
+      "confidence_head": {
+        "num_heads": 16,
+        "num_tri_heads": 4,
+        "dropout_z": 0.25,
+        "num_blocks": 2,
+        "num_bins": 39,
+        "min_dist": 3.25,
+        "max_dist": 50.75,
+        "num_plddt_bins": 50,
+        "max_pae_error": 32.0,
+        "num_pae_bins": 64,
+        "blocks_per_ckpt": null
+      }
+    },
+    "sampling": {
+      "num_steps": 30,
+      "sigma_min": 0.0004,
+      "sigma_max": 160.0,
+      "rho": 7,
+      "gamma_0": 0.8,
+      "gamma_min": 1.0,
+      "noise_scale": 1.003,
+      "step_scale": 1.5,
+      "chunk_size": 5
+    },
+    "first_request_seconds": 184.47601865703473,
+    "isolation": {
+      "available": true,
+      "command": [
+        "/usr/bin/amd-smi",
+        "process",
+        "--json"
+      ],
+      "physical_device_index": 5,
+      "interval_seconds": 1.0,
+      "samples": 278,
+      "allowed_pid": 984673,
+      "external_pids": [],
+      "errors": [],
+      "passed": true
+    }
+  },
+  "native_repeat_comparison": {
+    "coordinates": {
+      "equal": true,
+      "max_abs_delta": 0.0
+    },
+    "plddt": {
+      "equal": true,
+      "max_abs_delta": 0.0
+    },
+    "pae": {
+      "equal": true,
+      "max_abs_delta": 0.0
+    },
+    "ptm": {
+      "equal": true,
+      "max_abs_delta": 0.0
+    }
+  },
+  "native1536": {
+    "status": "failed",
+    "args": {
+      "input": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+      "out": "/media/IntelSSD/fireprot/outputs/atlasfold/native-n1536-pci-verified",
+      "model_path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlasfold/snapshot/weights/atlasfold-260703.pth",
+      "lm_path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlaslm3b/snapshot/weights/atlaslm_3b_base.pth",
+      "kernel": "torch",
+      "seed": 101,
+      "recycles": 4,
+      "samples": 1,
+      "repeats": 1
+    },
+    "sequence_sha256": "6b140cc19f02d9b9c7055b0317c205868d808a58c278d41e01847355da6565a8",
+    "length": 1536,
+    "cache": "Weights hashed before timer; filesystem warm; model fresh; no LM feature cache",
+    "dtype": "Native mixed BF16/FP32; BF16 autocast; FP32 diffusion",
+    "mlm_prob": 0.15,
+    "trunk_passes": 5,
+    "records": [],
+    "source_commit": "8ab3aca0e18c8b814d5ca6756b2617a07d72c68d",
+    "weights": {
+      "atlasfold": {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlasfold/snapshot/weights/atlasfold-260703.pth",
+        "bytes": 859549307,
+        "sha256": "cbadb227d40e801a3d268d6e884e6ed3c6b9fb89d558739fcf5970492732e5ea"
+      },
+      "atlaslm": {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlaslm3b/snapshot/weights/atlaslm_3b_base.pth",
+        "bytes": 6128042331,
+        "sha256": "8097cc4a234853f19ca97435844829d84fe7f13215c900e74659fa9682cc0ddb"
+      }
+    },
+    "device": {
+      "gpu": 5,
+      "bdf": "0000:93:00.0",
+      "uuid": "9000740c-0000-1000-8007-d3c11591c16f",
+      "kfd_id": 8466,
+      "node_id": 9,
+      "partition_id": 0
+    },
+    "environment": {
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "gpu": "AMD Instinct MI250X / MI250",
+      "HIP_VISIBLE_DEVICES": "7"
+    },
+    "load_seconds": 4.80565121298423,
+    "config": {
+      "name": "atlasfold-260703",
+      "lm_name": "atlaslm-3b",
+      "lm_path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlaslm3b/snapshot/weights/atlaslm_3b_base.pth",
+      "channel_s": 384,
+      "channel_s_lm": 768,
+      "channel_z": 128,
+      "trunk": {
+        "num_heads": 16,
+        "num_tri_heads": 4,
+        "dropout_z": 0.25,
+        "num_lm_blocks": 4,
+        "num_blocks": 48,
+        "num_pair_to_single_blocks": 12,
+        "blocks_per_ckpt": null
+      },
+      "distogram_head": {
+        "num_bins": 64,
+        "min_dist": 2.0,
+        "max_dist": 22.0
+      },
+      "diffusion_head": {
+        "channel_a": 768,
+        "channel_atom": 96,
+        "channel_cond": 384,
+        "num_heads": 16,
+        "num_blocks": 12,
+        "num_atom_heads": 2,
+        "num_atom_blocks": 3,
+        "blocks_per_ckpt": null
+      },
+      "confidence_head": {
+        "num_heads": 16,
+        "num_tri_heads": 4,
+        "dropout_z": 0.25,
+        "num_blocks": 2,
+        "num_bins": 39,
+        "min_dist": 3.25,
+        "max_dist": 50.75,
+        "num_plddt_bins": 50,
+        "max_pae_error": 32.0,
+        "num_pae_bins": 64,
+        "blocks_per_ckpt": null
+      }
+    },
+    "sampling": {
+      "num_steps": 100,
+      "sigma_min": 0.0004,
+      "sigma_max": 160.0,
+      "rho": 7,
+      "gamma_0": 0.8,
+      "gamma_min": 1.0,
+      "noise_scale": 1.003,
+      "step_scale": 1.5,
+      "chunk_size": 5
+    },
+    "error": "Traceback (most recent call last):\n  File \"/media/IntelSSD/fireprot/benchmarks/atlasfold/profile_inference.py\", line 194, in main\n    result = runner.fold(name, sequence, num_samples=args.samples, seeds=args.seed,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold/src/atlasfold/runner.py\", line 170, in fold\n    return next(\n           ^^^^^\n  File \"/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold/src/atlasfold/runner.py\", line 197, in fold_iter\n    for batch in self.fold_iter_batch(\n                 ^^^^^^^^^^^^^^^^^^^^^\n  File \"/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold/src/atlasfold/runner.py\", line 255, in fold_iter_batch\n    out = self.model_run(\n          ^^^^^^^^^^^^^^^\n  File \"/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold/src/atlasfold/runner.py\", line 318, in model_run\n    out = self.model.inference(\n          ^^^^^^^^^^^^^^^^^^^^^\n  File \"/media/IntelSSD/fireprot/benchmarks/atlasfold/profile_inference.py\", line 95, in call\n    result = original(*args, **kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/pc/anaconda3/envs/BIO/lib/python3.12/site-packages/torch/utils/_contextlib.py\", line 124, in decorate_context\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold/src/atlasfold/model/model.py\", line 303, in inference\n    s, z = self.run_trunk(batch, num_recycles, mlm_prob)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/media/IntelSSD/fireprot/benchmarks/atlasfold/profile_inference.py\", line 95, in call\n    result = original(*args, **kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold/src/atlasfold/model/model.py\", line 392, in run_trunk\n    s_lm, z_lm = self.run_lm_embedder(batch, mlm_mask)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/media/IntelSSD/fireprot/benchmarks/atlasfold/profile_inference.py\", line 95, in call\n    result = original(*args, **kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold/src/atlasfold/model/model.py\", line 483, in run_lm_embedder\n    s_lm, z_lm = self.lm_stack(s_lm, z_lm, mask, self.kernel_backend)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/pc/anaconda3/envs/BIO/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1778, in _wrapped_call_impl\n    return self._call_impl(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/pc/anaconda3/envs/BIO/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1789, in _call_impl\n    return forward_call(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/media/IntelSSD/fireprot/benchmarks/atlasfold/profile_inference.py\", line 95, in call\n    result = original(*args, **kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold/src/atlasfold/model/network/trunk.py\", line 161, in forward\n    s, z = b(s, z)\n           ^^^^^^^\n  File \"/home/pc/anaconda3/envs/BIO/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1778, in _wrapped_call_impl\n    return self._call_impl(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/pc/anaconda3/envs/BIO/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1789, in _call_impl\n    return forward_call(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold/src/atlasfold/model/network/block.py\", line 272, in forward\n    self.tri_attn_start(z, pair_mask, kernel_backend=kernel_backend)\n  File \"/home/pc/anaconda3/envs/BIO/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1778, in _wrapped_call_impl\n    return self._call_impl(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/pc/anaconda3/envs/BIO/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1789, in _call_impl\n    return forward_call(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/media/IntelSSD/fireprot/benchmarks/atlasfold/profile_inference.py\", line 95, in call\n    result = original(*args, **kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold/src/atlasfold/model/network/primitives/triangle_update.py\", line 396, in forward\n    a = a.softmax(dim=-1)\n        ^^^^^^^^^^^^^^^^^\ntorch.OutOfMemoryError: CUDA out of memory. Tried to allocate 54.00 GiB. GPU 0 has a total capacity of 63.98 GiB of which 22.89 GiB is free. Of the allocated memory 39.04 GiB is allocated by PyTorch, and 1.56 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)\n",
+    "isolation": {
+      "available": true,
+      "command": [
+        "/usr/bin/amd-smi",
+        "process",
+        "--json"
+      ],
+      "physical_device_index": 5,
+      "interval_seconds": 1.0,
+      "samples": 7,
+      "allowed_pid": 987740,
+      "external_pids": [],
+      "errors": [],
+      "passed": true
+    }
+  },
+  "operator_screening": {
+    "initial": {
+      "device": {
+        "gpu": 2,
+        "bdf": "0000:32:00.0",
+        "uuid": "0e00740c-0000-1000-80cf-54daf70a58aa",
+        "kfd_id": 51627,
+        "node_id": 2,
+        "partition_id": 0
+      },
+      "records": [
+        {
+          "module": "tri_attn_start",
+          "candidate": "chunk64",
+          "native_ms": 189.40911865234375,
+          "input": "random BF16, real first main-stack weights, N1000, all-valid mask",
+          "seed": 1029,
+          "candidate_ms": 187.3037567138672,
+          "max_abs_delta": 0.0,
+          "rms_delta": 0.0,
+          "bitwise_equal": true,
+          "finite": true
+        },
+        {
+          "module": "tri_attn_start",
+          "candidate": "chunk128",
+          "native_ms": 189.40911865234375,
+          "input": "random BF16, real first main-stack weights, N1000, all-valid mask",
+          "seed": 1029,
+          "candidate_ms": 186.33213806152344,
+          "max_abs_delta": 0.0,
+          "rms_delta": 0.0,
+          "bitwise_equal": true,
+          "finite": true
+        },
+        {
+          "module": "tri_attn_start",
+          "candidate": "chunk256",
+          "native_ms": 189.40911865234375,
+          "input": "random BF16, real first main-stack weights, N1000, all-valid mask",
+          "seed": 1029,
+          "candidate_ms": 186.1359405517578,
+          "max_abs_delta": 0.0,
+          "rms_delta": 0.0,
+          "bitwise_equal": true,
+          "finite": true
+        },
+        {
+          "module": "tri_attn_start",
+          "candidate": "upstream_triton",
+          "native_ms": 189.40911865234375,
+          "input": "random BF16, real first main-stack weights, N1000, all-valid mask",
+          "seed": 1029,
+          "error": "Traceback (most recent call last):\n  File \"/tmp/fireprot_atlas_triangle_probe.py\", line 55, in <module>\n    y,t=bench(fn);delta=(y.float()-ref.float())\n        ^^^^^^^^^\n  File \"/tmp/fireprot_atlas_triangle_probe.py\", line 39, in bench\n    s.record();y=fn();e.record();e.synchronize()\n                 ^^^^\n  File \"/tmp/fireprot_atlas_triangle_probe.py\", line 52, in <lambda>\n    for name,fn in [(f'chunk{c}',lambda c=c:chunked(m,x,mask,c)) for c in [64,128,256]]+[('upstream_triton',lambda:m(x,mask,'triton'))]:\n                                                                                                                   ^^^^^^^^^^^^^^^^^^\n  File \"/home/pc/anaconda3/envs/BIO/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1778, in _wrapped_call_impl\n    return self._call_impl(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/pc/anaconda3/envs/BIO/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1789, in _call_impl\n    return forward_call(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold/src/atlasfold/model/network/primitives/triangle_update.py\", line 346, in forward\n    return triton_triangle(self, z, mask)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/pc/anaconda3/envs/BIO/lib/python3.12/site-packages/torch/_dynamo/eval_frame.py\", line 1298, in _fn\n    return fn(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^\n  File \"/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold/src/atlasfold/model/network/primitives/triton_triangle.py\", line 38, in triton_triangle\n    from atlasfold.model.kernels.triton.triangle_attention import precompute\n  File \"/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold/src/atlasfold/model/kernels/triton/triangle_attention/__init__.py\", line 15, in <module>\n    from .kernels import triangle_attn_forward\n  File \"/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold/src/atlasfold/model/kernels/triton/triangle_attention/kernels.py\", line 23, in <module>\n    import triton\nModuleNotFoundError: No module named 'triton'\n"
+        },
+        {
+          "module": "tri_attn_end",
+          "candidate": "chunk64",
+          "native_ms": 263.9715270996094,
+          "input": "random BF16, real first main-stack weights, N1000, all-valid mask",
+          "seed": 1029,
+          "candidate_ms": 266.7694091796875,
+          "max_abs_delta": 0.0,
+          "rms_delta": 0.0,
+          "bitwise_equal": true,
+          "finite": true
+        },
+        {
+          "module": "tri_attn_end",
+          "candidate": "chunk128",
+          "native_ms": 263.9715270996094,
+          "input": "random BF16, real first main-stack weights, N1000, all-valid mask",
+          "seed": 1029,
+          "candidate_ms": 310.3171691894531,
+          "max_abs_delta": 0.0,
+          "rms_delta": 0.0,
+          "bitwise_equal": true,
+          "finite": true
+        },
+        {
+          "module": "tri_attn_end",
+          "candidate": "chunk256",
+          "native_ms": 263.9715270996094,
+          "input": "random BF16, real first main-stack weights, N1000, all-valid mask",
+          "seed": 1029,
+          "candidate_ms": 302.9830627441406,
+          "max_abs_delta": 0.0,
+          "rms_delta": 0.0,
+          "bitwise_equal": true,
+          "finite": true
+        },
+        {
+          "module": "tri_attn_end",
+          "candidate": "upstream_triton",
+          "native_ms": 263.9715270996094,
+          "input": "random BF16, real first main-stack weights, N1000, all-valid mask",
+          "seed": 1029,
+          "error": "Traceback (most recent call last):\n  File \"/tmp/fireprot_atlas_triangle_probe.py\", line 55, in <module>\n    y,t=bench(fn);delta=(y.float()-ref.float())\n        ^^^^^^^^^\n  File \"/tmp/fireprot_atlas_triangle_probe.py\", line 39, in bench\n    s.record();y=fn();e.record();e.synchronize()\n                 ^^^^\n  File \"/tmp/fireprot_atlas_triangle_probe.py\", line 52, in <lambda>\n    for name,fn in [(f'chunk{c}',lambda c=c:chunked(m,x,mask,c)) for c in [64,128,256]]+[('upstream_triton',lambda:m(x,mask,'triton'))]:\n                                                                                                                   ^^^^^^^^^^^^^^^^^^\n  File \"/home/pc/anaconda3/envs/BIO/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1778, in _wrapped_call_impl\n    return self._call_impl(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/pc/anaconda3/envs/BIO/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1789, in _call_impl\n    return forward_call(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold/src/atlasfold/model/network/primitives/triangle_update.py\", line 463, in forward\n    return triton_triangle(self, z, mask).transpose(-2, -3)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/pc/anaconda3/envs/BIO/lib/python3.12/site-packages/torch/_dynamo/eval_frame.py\", line 1298, in _fn\n    return fn(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^\n  File \"/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold/src/atlasfold/model/network/primitives/triton_triangle.py\", line 38, in triton_triangle\n    from atlasfold.model.kernels.triton.triangle_attention import precompute\n  File \"/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold/src/atlasfold/model/kernels/triton/triangle_attention/__init__.py\", line 15, in <module>\n    from .kernels import triangle_attn_forward\n  File \"/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold/src/atlasfold/model/kernels/triton/triangle_attention/kernels.py\", line 23, in <module>\n    import triton\nModuleNotFoundError: No module named 'triton'\n"
+        }
+      ],
+      "isolation": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 2,
+        "interval_seconds": 1.0,
+        "samples": 7,
+        "allowed_pid": 985655,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "sdpa": {
+      "device": {
+        "gpu": 2,
+        "bdf": "0000:32:00.0",
+        "uuid": "0e00740c-0000-1000-80cf-54daf70a58aa",
+        "kfd_id": 51627,
+        "node_id": 2,
+        "partition_id": 0
+      },
+      "records": [
+        {
+          "module": "tri_attn_start",
+          "candidate": "contiguous_chunk128",
+          "native_ms": 185.49436950683594,
+          "input": "random BF16, real first main-stack weights, N1000, all-valid mask",
+          "seed": 1029,
+          "candidate_ms": 186.7675018310547,
+          "max_abs_delta": 0.0,
+          "rms_delta": 0.0,
+          "bitwise_equal": true,
+          "finite": true
+        },
+        {
+          "module": "tri_attn_start",
+          "candidate": "contiguous_chunk1000",
+          "native_ms": 185.49436950683594,
+          "input": "random BF16, real first main-stack weights, N1000, all-valid mask",
+          "seed": 1029,
+          "candidate_ms": 187.83016967773438,
+          "max_abs_delta": 0.0,
+          "rms_delta": 0.0,
+          "bitwise_equal": true,
+          "finite": true
+        },
+        {
+          "module": "tri_attn_start",
+          "candidate": "sdpa32",
+          "native_ms": 185.49436950683594,
+          "input": "random BF16, real first main-stack weights, N1000, all-valid mask",
+          "seed": 1029,
+          "candidate_ms": 238.68614196777344,
+          "max_abs_delta": 2.25,
+          "rms_delta": 0.05113733187317848,
+          "bitwise_equal": false,
+          "finite": true
+        },
+        {
+          "module": "tri_attn_start",
+          "candidate": "sdpa128",
+          "native_ms": 185.49436950683594,
+          "input": "random BF16, real first main-stack weights, N1000, all-valid mask",
+          "seed": 1029,
+          "candidate_ms": 232.68885803222656,
+          "max_abs_delta": 2.25,
+          "rms_delta": 0.05113733187317848,
+          "bitwise_equal": false,
+          "finite": true
+        },
+        {
+          "module": "tri_attn_end",
+          "candidate": "contiguous_chunk128",
+          "native_ms": 262.61749267578125,
+          "input": "random BF16, real first main-stack weights, N1000, all-valid mask",
+          "seed": 1029,
+          "candidate_ms": 310.71270751953125,
+          "max_abs_delta": 0.0,
+          "rms_delta": 0.0,
+          "bitwise_equal": true,
+          "finite": true
+        },
+        {
+          "module": "tri_attn_end",
+          "candidate": "contiguous_chunk1000",
+          "native_ms": 262.61749267578125,
+          "input": "random BF16, real first main-stack weights, N1000, all-valid mask",
+          "seed": 1029,
+          "candidate_ms": 263.4407653808594,
+          "max_abs_delta": 0.0,
+          "rms_delta": 0.0,
+          "bitwise_equal": true,
+          "finite": true
+        },
+        {
+          "module": "tri_attn_end",
+          "candidate": "sdpa32",
+          "native_ms": 262.61749267578125,
+          "input": "random BF16, real first main-stack weights, N1000, all-valid mask",
+          "seed": 1029,
+          "candidate_ms": 641.740478515625,
+          "max_abs_delta": 1.875,
+          "rms_delta": 0.055137597024440765,
+          "bitwise_equal": false,
+          "finite": true
+        },
+        {
+          "module": "tri_attn_end",
+          "candidate": "sdpa128",
+          "native_ms": 262.61749267578125,
+          "input": "random BF16, real first main-stack weights, N1000, all-valid mask",
+          "seed": 1029,
+          "candidate_ms": 650.2330322265625,
+          "max_abs_delta": 1.875,
+          "rms_delta": 0.055137597024440765,
+          "bitwise_equal": false,
+          "finite": true
+        }
+      ],
+      "isolation": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 2,
+        "interval_seconds": 1.0,
+        "samples": 11,
+        "allowed_pid": 986146,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "skipmask": {
+      "device": {
+        "gpu": 2,
+        "bdf": "0000:32:00.0",
+        "uuid": "0e00740c-0000-1000-80cf-54daf70a58aa",
+        "kfd_id": 51627,
+        "node_id": 2,
+        "partition_id": 0
+      },
+      "records": [
+        {
+          "module": "tri_attn_start",
+          "candidate": "skip_valid_mask_chunk128",
+          "native_ms": 185.6784210205078,
+          "input": "random BF16, real first main-stack weights, N1000, all-valid mask",
+          "seed": 1029,
+          "candidate_ms": 164.73121643066406,
+          "max_abs_delta": 0.0,
+          "rms_delta": 0.0,
+          "bitwise_equal": true,
+          "finite": true
+        },
+        {
+          "module": "tri_attn_start",
+          "candidate": "skip_valid_mask_chunk1000",
+          "native_ms": 185.6784210205078,
+          "input": "random BF16, real first main-stack weights, N1000, all-valid mask",
+          "seed": 1029,
+          "candidate_ms": 165.49317932128906,
+          "max_abs_delta": 0.0,
+          "rms_delta": 0.0,
+          "bitwise_equal": true,
+          "finite": true
+        },
+        {
+          "module": "tri_attn_end",
+          "candidate": "skip_valid_mask_chunk128",
+          "native_ms": 263.1860656738281,
+          "input": "random BF16, real first main-stack weights, N1000, all-valid mask",
+          "seed": 1029,
+          "candidate_ms": 164.24485778808594,
+          "max_abs_delta": 0.0,
+          "rms_delta": 0.0,
+          "bitwise_equal": true,
+          "finite": true
+        },
+        {
+          "module": "tri_attn_end",
+          "candidate": "skip_valid_mask_chunk1000",
+          "native_ms": 263.1860656738281,
+          "input": "random BF16, real first main-stack weights, N1000, all-valid mask",
+          "seed": 1029,
+          "candidate_ms": 164.963623046875,
+          "max_abs_delta": 0.0,
+          "rms_delta": 0.0,
+          "bitwise_equal": true,
+          "finite": true
+        }
+      ],
+      "isolation": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 2,
+        "interval_seconds": 1.0,
+        "samples": 5,
+        "allowed_pid": 987428,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    }
+  },
+  "operator_profile": "-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------------------------------------------------------  \n                                                   Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg     Self CUDA   Self CUDA %    CUDA total  CUDA time avg    # of Calls                                                  Input Shapes  \n-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------------------------------------------------------  \nvoid at::native::elementwise_kernel_manual_unroll<12...         0.00%       0.000us         0.00%       0.000us       0.000us     135.580ms        51.48%     135.580ms      16.948ms             8                                                            []  \n                                             aten::add_         0.01%      33.460us         0.02%      62.067us      62.067us      98.156ms        37.27%      98.156ms      98.156ms             1         [[1, 1000, 4, 1000, 1000], [1, 1000, 1, 1, 1000], []]  \n                                             aten::add_         0.01%      22.997us         0.03%      77.001us      77.001us      37.425ms        14.21%      37.425ms      37.425ms             1         [[1, 1000, 4, 1000, 1000], [1, 1, 4, 1000, 1000], []]  \n                                            aten::copy_         0.03%      85.373us         0.07%     182.970us      91.485us      37.352ms        14.18%      37.352ms      18.676ms             2      [[1, 1000, 4, 1000, 1000], [1, 1000, 4, 1000, 1000], []]  \n                                              aten::bmm         0.03%      75.772us         0.04%      94.466us      94.466us      34.049ms        12.93%      34.049ms      34.049ms             1                          [[4000, 1000, 32], [4000, 32, 1000]]  \nCijk_Ailk_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT256x1...         0.00%       0.000us         0.00%       0.000us       0.000us      34.049ms        12.93%      34.049ms      34.049ms             1                                                            []  \n                                         aten::_softmax         0.01%      25.176us         0.02%      49.693us      49.693us      27.279ms        10.36%      27.279ms      27.279ms             1                            [[1, 1000, 4, 1000, 1000], [], []]  \nvoid (anonymous namespace)::softmax_warp_forward<flo...         0.00%       0.000us         0.00%       0.000us       0.000us      27.279ms        10.36%      27.279ms       6.820ms             4                                                            []  \nvoid at::native::vectorized_elementwise_kernel<4, at...         0.00%       0.000us         0.00%       0.000us       0.000us      19.436ms         7.38%      19.436ms       1.767ms            11                                                            []  \nvoid at::native::vectorized_elementwise_kernel<4, at...         0.00%       0.000us         0.00%       0.000us       0.000us      19.111ms         7.26%      19.111ms       2.123ms             9                                                            []  \n                                              aten::bmm         0.03%      74.659us         0.04%      92.426us      92.426us      11.229ms         4.26%      11.229ms      11.229ms             1                        [[4000, 1000, 1000], [4000, 1000, 32]]  \nCijk_Ailk_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT32x16...         0.00%       0.000us         0.00%       0.000us       0.000us      11.229ms         4.26%      11.229ms      11.229ms             1                                                            []  \n                                aten::native_layer_norm         0.01%      28.596us         0.23%     611.210us     611.210us       4.968ms         1.89%       5.783ms       5.783ms             1                  [[1, 1000, 1000, 128], [], [128], [128], []]  \nvoid at::native::(anonymous namespace)::vectorized_l...         0.00%       0.000us         0.00%       0.000us       0.000us       4.968ms         1.89%       4.968ms       4.968ms             1                                                            []  \nvoid at::native::elementwise_kernel_manual_unroll<12...         0.00%       0.000us         0.00%       0.000us       0.000us       4.343ms         1.65%       4.343ms       1.448ms             3                                                            []  \n                                            aten::copy_         0.00%      10.732us         0.01%      20.685us      20.685us       3.259ms         1.24%       3.259ms       3.259ms             1          [[1, 1000, 4, 32, 1000], [1, 1000, 4, 32, 1000], []]  \n                                               aten::mm         0.04%     103.007us         0.05%     123.704us     123.704us       2.329ms         0.88%       2.329ms       2.329ms             1                                  [[1000000, 128], [128, 384]]  \nCijk_Alik_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT192x6...         0.00%       0.000us         0.00%       0.000us       0.000us       2.329ms         0.88%       2.329ms       2.329ms             1                                                            []  \n                                               aten::mm         0.05%     120.315us         0.06%     153.364us      76.682us       2.105ms         0.80%       2.105ms       1.053ms             2                                  [[1000000, 128], [128, 128]]  \nCijk_Alik_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT32x25...         0.00%       0.000us         0.00%       0.000us       0.000us       2.105ms         0.80%       2.105ms       1.053ms             2                                                            []  \n                                            aten::copy_         0.05%     128.845us         0.19%     514.323us     171.441us       2.001ms         0.76%       2.001ms     667.057us             3              [[1, 1000, 1000, 128], [1, 1000, 1000, 128], []]  \n                                            aten::copy_         0.01%      35.220us         0.02%      59.906us      29.953us       1.084ms         0.41%       1.084ms     542.064us             2          [[1, 1000, 4, 1000, 32], [1, 1000, 4, 1000, 32], []]  \nvoid at::native::elementwise_kernel_manual_unroll<12...         0.00%       0.000us         0.00%       0.000us       0.000us     814.616us         0.31%     814.616us     814.616us             1                                                            []  \n                                              aten::mul         0.01%      26.747us         0.02%      40.031us      40.031us     752.680us         0.29%     752.680us     752.680us             1              [[1, 1000, 1000, 4, 32], [1, 1000, 1000, 4, 32]]  \nvoid at::native::elementwise_kernel_manual_unroll<12...         0.00%       0.000us         0.00%       0.000us       0.000us     752.680us         0.29%     752.680us     752.680us             1                                                            []  \n                                          aten::sigmoid         0.01%      19.635us         0.01%      33.849us      33.849us     515.496us         0.20%     515.496us     515.496us             1                                        [[1, 1000, 1000, 128]]  \nvoid at::native::vectorized_elementwise_kernel<8, at...         0.00%       0.000us         0.00%       0.000us       0.000us     515.496us         0.20%     515.496us     515.496us             1                                                            []  \n                                             aten::mul_         0.01%      25.728us         0.02%      46.263us      46.263us     480.287us         0.18%     480.287us     480.287us             1                                  [[1, 1000, 4, 1000, 32], []]  \nvoid at::native::elementwise_kernel_manual_unroll<12...         0.00%       0.000us         0.00%       0.000us       0.000us     480.287us         0.18%     480.287us     480.287us             1                                                            []  \n                                               aten::mm         0.02%      65.271us         0.03%      85.874us      85.874us     346.171us         0.13%     346.171us     346.171us             1                                    [[1000000, 128], [128, 4]]  \n-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------------------------------------------------------  \nSelf CPU time total: 263.795ms\nSelf CUDA time total: 263.381ms\n",
+  "scripts": {
+    "fireprot_atlas_triangle_probe.py": {
+      "sha256": "eeb0e889f70343a3bbbb17f542c8041562c1fc241e739a4635338ea46193e755",
+      "source": "import os,time,json,pathlib,statistics,traceback,sys\nsys.path.insert(0,\"/media/IntelSSD/fireprot\")\nfrom benchmarks.atlasfold.profile_inference import resolve_physical_device, _GpuProcessMonitor\nimport torch\nfrom atlasfold.model.network.primitives.triangle_update import TriangleAttentionStartingNode,TriangleAttentionEndingNode\nimport torch.nn.functional as F\nout=pathlib.Path('/media/IntelSSD/fireprot/outputs/atlasfold/triangle-candidates-initial.json')\ntorch.set_num_threads(8);torch.manual_seed(1029);torch.backends.cuda.matmul.allow_tf32=False\ntorch.cuda.init();device=resolve_physical_device();monitor=_GpuProcessMonitor(device['gpu'],os.getpid(),1);monitor.start()\nstate=torch.load('/media/PM982/engramfold/folding_e2e_20260921/weights/atlasfold/snapshot/weights/atlasfold-260703.pth',map_location='cpu',weights_only=True,mmap=True)\n\ndef chunked(m,z,mask,chunk):\n ending=isinstance(m,TriangleAttentionEndingNode)\n if ending:z=z.transpose(-2,-3);mask=mask.transpose(-1,-2)\n z=m.layernorm(z)\n B,N,_,C=z.shape;H=m.num_heads;D=m.channel_hidden\n q,k,v=m.linear_qkv(z).chunk(3,dim=-1)\n q,k,v=[t.reshape(B,N,N,H,D).transpose(-2,-3) for t in (q,k,v)]\n bias=m.linear_bias(z).permute(0,3,1,2).unsqueeze(1)\n mask=mask[:,:,None,None,:]\n g=m.linear_g(z).sigmoid().reshape(B,N,N,H,D)\n q*=m.scale\n result=[]\n for offset in range(0,N,chunk):\n  stop=min(offset+chunk,N)\n  a=q[:,offset:stop]@k[:,offset:stop].transpose(-1,-2)\n  a+=(-m.inf)*(~mask[:,offset:stop].bool()).to(q.dtype)\n  a+=bias\n  a=a.softmax(-1)\n  result.append((a@v[:,offset:stop]).transpose(-2,-3))\n y=torch.cat(result,dim=1)*g\n y=m.linear_out(y.flatten(-2))\n return y.transpose(-2,-3) if ending else y\n\ndef bench(fn):\n values=[]\n for i in range(4):\n  s=torch.cuda.Event(enable_timing=True);e=torch.cuda.Event(enable_timing=True)\n  s.record();y=fn();e.record();e.synchronize()\n  if i:values.append(s.elapsed_time(e))\n return y,statistics.median(values)\n\nrecords=[]\nwith torch.inference_mode(),torch.autocast('cuda',dtype=torch.bfloat16):\n for cls,label in [(TriangleAttentionStartingNode,'tri_attn_start'),(TriangleAttentionEndingNode,'tri_attn_end')]:\n  m=cls(128,4).eval().cuda().bfloat16()\n  prefix='main_stack.blocks.0.'+label+'.'\n  m.load_state_dict({k[len(prefix):]:v for k,v in state.items() if k.startswith(prefix)},strict=True)\n  x=torch.randn(1,1000,1000,128,device='cuda',dtype=torch.bfloat16)\n  mask=torch.ones(1,1000,1000,device='cuda',dtype=torch.bool)\n  ref,ms=bench(lambda:m(x,mask,'torch'))\n  for name,fn in [(f'chunk{c}',lambda c=c:chunked(m,x,mask,c)) for c in [64,128,256]]+[('upstream_triton',lambda:m(x,mask,'triton'))]:\n   r={'module':label,'candidate':name,'native_ms':ms,'input':'random BF16, real first main-stack weights, N1000, all-valid mask','seed':1029}\n   try:\n    y,t=bench(fn);delta=(y.float()-ref.float())\n    r.update(candidate_ms=t,max_abs_delta=delta.abs().max().item(),rms_delta=delta.square().mean().sqrt().item(),bitwise_equal=torch.equal(y,ref),finite=bool(torch.isfinite(y).all()))\n   except Exception:r['error']=traceback.format_exc()\n   records.append(r);out.write_text(json.dumps(records,indent=2));print(json.dumps(r),flush=True)\n\nreport={'device':device,'records':records,'isolation':monitor.stop()};out.write_text(json.dumps(report,indent=2))\n"
+    },
+    "fireprot_atlas_triangle_probe2.py": {
+      "sha256": "83873088234a13ad1d8c0086761d79ad2474a259199c976dff74fbe62889f4b6",
+      "source": "import os,time,json,pathlib,statistics,traceback,sys\nsys.path.insert(0,\"/media/IntelSSD/fireprot\")\nfrom benchmarks.atlasfold.profile_inference import resolve_physical_device, _GpuProcessMonitor\nimport torch\nfrom atlasfold.model.network.primitives.triangle_update import TriangleAttentionStartingNode,TriangleAttentionEndingNode\nimport torch.nn.functional as F\nout=pathlib.Path('/media/IntelSSD/fireprot/outputs/atlasfold/triangle-candidates-layout-sdpa.json')\ntorch.set_num_threads(8);torch.manual_seed(1029);torch.backends.cuda.matmul.allow_tf32=False\ntorch.cuda.init();device=resolve_physical_device();monitor=_GpuProcessMonitor(device['gpu'],os.getpid(),1);monitor.start()\nstate=torch.load('/media/PM982/engramfold/folding_e2e_20260921/weights/atlasfold/snapshot/weights/atlasfold-260703.pth',map_location='cpu',weights_only=True,mmap=True)\n\ndef chunked(m,z,mask,chunk,mode=\"math\"):\n ending=isinstance(m,TriangleAttentionEndingNode)\n if ending:z=z.transpose(-2,-3);mask=mask.transpose(-1,-2)\n z=m.layernorm(z.contiguous())\n B,N,_,C=z.shape;H=m.num_heads;D=m.channel_hidden\n q,k,v=m.linear_qkv(z).chunk(3,dim=-1)\n q,k,v=[t.reshape(B,N,N,H,D).transpose(-2,-3) for t in (q,k,v)]\n bias=m.linear_bias(z).permute(0,3,1,2).unsqueeze(1)\n mask=mask[:,:,None,None,:]\n g=m.linear_g(z).sigmoid().reshape(B,N,N,H,D)\n q*=m.scale\n result=[]\n for offset in range(0,N,chunk):\n  stop=min(offset+chunk,N)\n  if mode==\"math\":\n   a=q[:,offset:stop]@k[:,offset:stop].transpose(-1,-2)\n   a+=(-m.inf)*(~mask[:,offset:stop].bool()).to(q.dtype)\n   a+=bias\n   a=a.softmax(-1)\n   result.append((a@v[:,offset:stop]).transpose(-2,-3))\n  else:\n   additive=bias+(-m.inf)*(~mask[:,offset:stop].bool()).to(q.dtype)\n   result.append(F.scaled_dot_product_attention(q[:,offset:stop],k[:,offset:stop],v[:,offset:stop],attn_mask=additive,scale=1.0).transpose(-2,-3))\n y=torch.cat(result,dim=1)*g\n y=m.linear_out(y.flatten(-2))\n return y.transpose(-2,-3) if ending else y\n\ndef bench(fn):\n values=[]\n for i in range(4):\n  s=torch.cuda.Event(enable_timing=True);e=torch.cuda.Event(enable_timing=True)\n  s.record();y=fn();e.record();e.synchronize()\n  if i:values.append(s.elapsed_time(e))\n return y,statistics.median(values)\n\nrecords=[]\nwith torch.inference_mode(),torch.autocast('cuda',dtype=torch.bfloat16):\n for cls,label in [(TriangleAttentionStartingNode,'tri_attn_start'),(TriangleAttentionEndingNode,'tri_attn_end')]:\n  m=cls(128,4).eval().cuda().bfloat16()\n  prefix='main_stack.blocks.0.'+label+'.'\n  m.load_state_dict({k[len(prefix):]:v for k,v in state.items() if k.startswith(prefix)},strict=True)\n  x=torch.randn(1,1000,1000,128,device='cuda',dtype=torch.bfloat16)\n  mask=torch.ones(1,1000,1000,device='cuda',dtype=torch.bool)\n  ref,ms=bench(lambda:m(x,mask,'torch'))\n  for name,fn in [(f'contiguous_chunk{c}',lambda c=c:chunked(m,x,mask,c)) for c in [128,1000]]+[(f'sdpa{c}',lambda c=c:chunked(m,x,mask,c,'sdpa')) for c in [32,128]]:\n   r={'module':label,'candidate':name,'native_ms':ms,'input':'random BF16, real first main-stack weights, N1000, all-valid mask','seed':1029}\n   try:\n    y,t=bench(fn);delta=(y.float()-ref.float())\n    r.update(candidate_ms=t,max_abs_delta=delta.abs().max().item(),rms_delta=delta.square().mean().sqrt().item(),bitwise_equal=torch.equal(y,ref),finite=bool(torch.isfinite(y).all()))\n   except Exception:r['error']=traceback.format_exc()\n   records.append(r);out.write_text(json.dumps(records,indent=2));print(json.dumps(r),flush=True)\n\nreport={'device':device,'records':records,'isolation':monitor.stop()};out.write_text(json.dumps(report,indent=2))\n"
+    },
+    "fireprot_atlas_triangle_probe3.py": {
+      "sha256": "7fae2cbc1c027760ecbf4869c5ebfd4bd1e061415ac4ff8e80935d3b88e791f2",
+      "source": "import os,time,json,pathlib,statistics,traceback,sys\nsys.path.insert(0,\"/media/IntelSSD/fireprot\")\nfrom benchmarks.atlasfold.profile_inference import resolve_physical_device, _GpuProcessMonitor\nimport torch\nfrom atlasfold.model.network.primitives.triangle_update import TriangleAttentionStartingNode,TriangleAttentionEndingNode\nimport torch.nn.functional as F\nout=pathlib.Path('/media/IntelSSD/fireprot/outputs/atlasfold/triangle-candidates-skip-valid-mask.json')\ntorch.set_num_threads(8);torch.manual_seed(1029);torch.backends.cuda.matmul.allow_tf32=False\ntorch.cuda.init();device=resolve_physical_device();monitor=_GpuProcessMonitor(device['gpu'],os.getpid(),1);monitor.start()\nstate=torch.load('/media/PM982/engramfold/folding_e2e_20260921/weights/atlasfold/snapshot/weights/atlasfold-260703.pth',map_location='cpu',weights_only=True,mmap=True)\n\ndef chunked(m,z,mask,chunk):\n ending=isinstance(m,TriangleAttentionEndingNode)\n if ending:z=z.transpose(-2,-3);mask=mask.transpose(-1,-2)\n z=m.layernorm(z)\n B,N,_,C=z.shape;H=m.num_heads;D=m.channel_hidden\n q,k,v=m.linear_qkv(z).chunk(3,dim=-1)\n q,k,v=[t.reshape(B,N,N,H,D).transpose(-2,-3) for t in (q,k,v)]\n bias=m.linear_bias(z).permute(0,3,1,2).unsqueeze(1)\n mask=mask[:,:,None,None,:]\n g=m.linear_g(z).sigmoid().reshape(B,N,N,H,D)\n q*=m.scale\n result=[]\n for offset in range(0,N,chunk):\n  stop=min(offset+chunk,N)\n  a=q[:,offset:stop]@k[:,offset:stop].transpose(-1,-2)\n  # Probe input has a verified all-valid mask; adding signed zero is unnecessary.\n  a+=bias\n  a=a.softmax(-1)\n  result.append((a@v[:,offset:stop]).transpose(-2,-3))\n y=torch.cat(result,dim=1)*g\n y=m.linear_out(y.flatten(-2))\n return y.transpose(-2,-3) if ending else y\n\ndef bench(fn):\n values=[]\n for i in range(4):\n  s=torch.cuda.Event(enable_timing=True);e=torch.cuda.Event(enable_timing=True)\n  s.record();y=fn();e.record();e.synchronize()\n  if i:values.append(s.elapsed_time(e))\n return y,statistics.median(values)\n\nrecords=[]\nwith torch.inference_mode(),torch.autocast('cuda',dtype=torch.bfloat16):\n for cls,label in [(TriangleAttentionStartingNode,'tri_attn_start'),(TriangleAttentionEndingNode,'tri_attn_end')]:\n  m=cls(128,4).eval().cuda().bfloat16()\n  prefix='main_stack.blocks.0.'+label+'.'\n  m.load_state_dict({k[len(prefix):]:v for k,v in state.items() if k.startswith(prefix)},strict=True)\n  x=torch.randn(1,1000,1000,128,device='cuda',dtype=torch.bfloat16)\n  mask=torch.ones(1,1000,1000,device='cuda',dtype=torch.bool)\n  ref,ms=bench(lambda:m(x,mask,'torch'))\n  for name,fn in [(f'skip_valid_mask_chunk{c}',lambda c=c:chunked(m,x,mask,c)) for c in [128,1000]]:\n   r={'module':label,'candidate':name,'native_ms':ms,'input':'random BF16, real first main-stack weights, N1000, all-valid mask','seed':1029}\n   try:\n    y,t=bench(fn);delta=(y.float()-ref.float())\n    r.update(candidate_ms=t,max_abs_delta=delta.abs().max().item(),rms_delta=delta.square().mean().sqrt().item(),bitwise_equal=torch.equal(y,ref),finite=bool(torch.isfinite(y).all()))\n   except Exception:r['error']=traceback.format_exc()\n   records.append(r);out.write_text(json.dumps(records,indent=2));print(json.dumps(r),flush=True)\n\nreport={'device':device,'records':records,'isolation':monitor.stop()};out.write_text(json.dumps(report,indent=2))\n"
+    },
+    "fireprot_atlas_triangle_profile.py": {
+      "sha256": "73d3e32cff00099145dbd748a2036b5a0b2202440ace52128744b69a8ea0185b",
+      "source": "import os,time,json,pathlib,statistics,traceback,sys\nsys.path.insert(0,\"/media/IntelSSD/fireprot\")\nfrom benchmarks.atlasfold.profile_inference import resolve_physical_device, _GpuProcessMonitor\nimport torch\nfrom atlasfold.model.network.primitives.triangle_update import TriangleAttentionStartingNode,TriangleAttentionEndingNode\nimport torch.nn.functional as F\nout=pathlib.Path('/media/IntelSSD/fireprot/outputs/atlasfold/triangle-candidates-initial.json')\ntorch.set_num_threads(8);torch.manual_seed(1029);torch.backends.cuda.matmul.allow_tf32=False\ntorch.cuda.init();device=resolve_physical_device();monitor=_GpuProcessMonitor(device['gpu'],os.getpid(),1);monitor.start()\nstate=torch.load('/media/PM982/engramfold/folding_e2e_20260921/weights/atlasfold/snapshot/weights/atlasfold-260703.pth',map_location='cpu',weights_only=True,mmap=True)\n\ndef chunked(m,z,mask,chunk):\n ending=isinstance(m,TriangleAttentionEndingNode)\n if ending:z=z.transpose(-2,-3);mask=mask.transpose(-1,-2)\n z=m.layernorm(z)\n B,N,_,C=z.shape;H=m.num_heads;D=m.channel_hidden\n q,k,v=m.linear_qkv(z).chunk(3,dim=-1)\n q,k,v=[t.reshape(B,N,N,H,D).transpose(-2,-3) for t in (q,k,v)]\n bias=m.linear_bias(z).permute(0,3,1,2).unsqueeze(1)\n mask=mask[:,:,None,None,:]\n g=m.linear_g(z).sigmoid().reshape(B,N,N,H,D)\n q*=m.scale\n result=[]\n for offset in range(0,N,chunk):\n  stop=min(offset+chunk,N)\n  a=q[:,offset:stop]@k[:,offset:stop].transpose(-1,-2)\n  a+=(-m.inf)*(~mask[:,offset:stop].bool()).to(q.dtype)\n  a+=bias\n  a=a.softmax(-1)\n  result.append((a@v[:,offset:stop]).transpose(-2,-3))\n y=torch.cat(result,dim=1)*g\n y=m.linear_out(y.flatten(-2))\n return y.transpose(-2,-3) if ending else y\n\ndef bench(fn):\n values=[]\n for i in range(4):\n  s=torch.cuda.Event(enable_timing=True);e=torch.cuda.Event(enable_timing=True)\n  s.record();y=fn();e.record();e.synchronize()\n  if i:values.append(s.elapsed_time(e))\n return y,statistics.median(values)\n\n\nfrom torch.profiler import profile, ProfilerActivity\nwith torch.inference_mode(),torch.autocast('cuda',dtype=torch.bfloat16):\n m=TriangleAttentionEndingNode(128,4).eval().cuda().bfloat16()\n prefix='main_stack.blocks.0.tri_attn_end.'\n m.load_state_dict({k[len(prefix):]:v for k,v in state.items() if k.startswith(prefix)},strict=True)\n x=torch.randn(1,1000,1000,128,device='cuda',dtype=torch.bfloat16)\n mask=torch.ones(1,1000,1000,device='cuda',dtype=torch.bool)\n y=m(x,mask,'torch');torch.cuda.synchronize()\n with profile(activities=[ProfilerActivity.CPU,ProfilerActivity.CUDA],record_shapes=True) as prof:\n  y=m(x,mask,'torch');torch.cuda.synchronize()\n table=prof.key_averages(group_by_input_shape=True).table(sort_by='self_device_time_total',row_limit=30)\n print(table,flush=True)\n pathlib.Path('/media/IntelSSD/fireprot/outputs/atlasfold/triangle-ending-torch-profile.txt').write_text(table)\n print(json.dumps(monitor.stop()))\n"
+    }
+  },
+  "limitations": [
+    "One N1000 development case, first plus one warm prediction; not a repeated benchmark median.",
+    "Operator screening uses random BF16 activations and real first-main-block weights; model gates are still required.",
+    "All-valid masks only in these operator probes.",
+    "Full baseline ran on SMI5; brief independent screening on SMI2 overlapped; selected-device process isolation passed, host shared.",
+    "Initial exploratory run monitored wrong SMI ordinal and is excluded here.",
+    "Native N1536 fails OOM; no native full output exists for this exact unchunked path."
+  ]
+}

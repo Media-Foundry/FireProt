@@ -847,3 +847,31 @@ The corrected condition permits an FP32 autocast target and continues to
 reject BF16/FP16 autocast. Tests explicitly exercise both contexts; fallback
 metadata is bounded to 16 unique signatures. See
 [coverage diagnosis](../provenance/protenix_attention_gate_coverage_c75e960.json).
+
+At corrected source `bba36829266acd6ab8cc95e75d883154dd4c0dbd`, a fresh
+same-source A/B ran enabled then disabled on GPU 7 with GPU 6 idle.
+Mini-default N1536 FP32 C4/S1, sample 1, seed 101, expandable segments,
+one warmup and three measured predictions were retained. All **1,728**
+attention calls across warmup and measured calls selected fusion, with
+zero fallbacks. Continuous isolation checks passed.
+
+| Metric | Gate disabled | Gate enabled |
+| --- | ---: | ---: |
+| Model median | 36.562 s | 36.625 s |
+| Model p95 | 36.802 s | 36.920 s |
+| Triangle attention median | 18.800 s | 18.684 s |
+| Peak allocated memory | 22,721,185,792 B | 22,721,185,792 B |
+
+All three output comparisons passed over 12,139 atoms each. Maximum aligned
+RMSD was `9.9394e-5 A`; maximum confidence delta was `7.6294e-6`. Shared
+extension regression passed on GPU 6 (132 passed, 1 skipped) and locally
+(110 passed, 23 skipped). The FP32-autocast correction additionally passed
+all four focused GPU tests, including BF16-autocast rejection.
+
+The attention-stage improvement does not produce a model-median win.
+The distributions overlap, and this fixed-order, three-repetition result
+establishes neither stable speedup nor a small systematic regression.
+Gate fusion remains **disabled by default**. The failed coverage attempt
+and the corrected full-coverage comparison are separate evidence records;
+only the latter evaluates trunk fusion. See
+[full-coverage model evidence](../provenance/protenix_attention_gate_model_bba3682.json).

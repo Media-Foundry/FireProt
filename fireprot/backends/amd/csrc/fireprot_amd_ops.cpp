@@ -53,7 +53,10 @@ torch::Tensor fireprot_dual_projection_tiled(torch::Tensor input,torch::Tensor g
 
 torch::Tensor fireprot_qkv_projection(torch::Tensor input,torch::Tensor wq,torch::Tensor wk,torch::Tensor wv);
 
+torch::Tensor fireprot_transposed_layer_norm(torch::Tensor input,torch::Tensor weight,torch::Tensor bias,double epsilon);
+
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, module) {
+  module.def("transposed_layer_norm", &fireprot_transposed_layer_norm);
   module.def("qkv_projection", &fireprot_qkv_projection);
   module.def("dual_projection_tiled", &fireprot_dual_projection_tiled);
   module.def("dual_projection", &fireprot_dual_projection);

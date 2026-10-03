@@ -301,6 +301,22 @@ def dispatch_layer_norm(
         and not (module.weight is None and module.bias is not None)
         and module.eps == 1e-5
     )
+    transposed_pair = (
+        os.environ.get("FIREPROT_ENABLE_TRANSPOSED_LAYERNORM") == "1"
+        and common and x.ndim == 3 and x.shape[0] in (1000, 1536)
+        and x.shape[1] == x.shape[0]
+        and tuple(x.stride()) == (128, x.shape[0] * 128, 1)
+        and not x.requires_grad and x.data_ptr() % 16 == 0
+        and all(t is not None and tuple(t.shape) == (128,)
+                and t.dtype == torch.float32 and t.device == x.device
+                and t.is_contiguous() and t.data_ptr() % 16 == 0
+                for t in (module.weight, module.bias))
+    )
+    if transposed_pair:
+        extension = load_amd_extension()
+        if extension is not None:
+            _fast_path_counts[(LAYER_NORM_OPERATION, "amd-gfx90a-transposed-layernorm")] += 1
+            return extension.transposed_layer_norm(x, module.weight, module.bias, module.eps)
     channel_first = (
         _channel_first_layer_norm_enabled
         and common

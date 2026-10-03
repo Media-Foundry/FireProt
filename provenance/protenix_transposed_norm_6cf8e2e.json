@@ -1,0 +1,568 @@
+{
+  "schema_version": 1,
+  "base_commit": "6cf8e2e59ba68ec64032a7ea5dd916f6ad6a963c",
+  "operator": {
+    "status": "ok",
+    "seed": 1043,
+    "dtype": "float32",
+    "tf32": false,
+    "warmups": 5,
+    "repetitions": 20,
+    "scope": "Standalone strided pair LayerNorm; no model predictions",
+    "cycle_step_samples": "Not applicable",
+    "cache_state": "warm; allocation included, compile excluded",
+    "preflight": {
+      "available": true,
+      "command": [
+        "/usr/bin/rocm-smi",
+        "--showpids",
+        "--showuse",
+        "--showmeminfo",
+        "vram",
+        "--showclocks",
+        "--json"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "data": {
+        "card0": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "901413689",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card1": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "562501911",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card2": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "1121136679",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "10981376"
+        },
+        "card3": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "794224499",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card4": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "691006331",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card5": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "1253565956",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "10981376"
+        },
+        "card6": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "451405010",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        },
+        "card7": {
+          "mclk clock speed:": "(1600Mhz)",
+          "mclk clock level:": "3",
+          "sclk clock speed:": "(800Mhz)",
+          "sclk clock level:": "1",
+          "socclk clock speed:": "(1090Mhz)",
+          "socclk clock level:": "3",
+          "GPU use (%)": "0",
+          "GFX Activity": "533770660",
+          "VRAM Total Memory (B)": "68702699520",
+          "VRAM Total Used Memory (B)": "11014144"
+        }
+      },
+      "visible_devices": "7",
+      "selected_physical_index": 7,
+      "exclusive_check": {
+        "required": true,
+        "passed": true,
+        "gpu_use_percent": 0,
+        "vram_used_bytes": 11014144,
+        "max_gpu_use_percent": 5,
+        "max_vram_used_bytes": 268435456
+      }
+    },
+    "sibling_preflight": {
+      "6": {
+        "gpu_use_percent": 0,
+        "vram_used_bytes": 11014144,
+        "passed": true
+      }
+    },
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850",
+    "source_sha256": {
+      "benchmarks/protenix/csrc/transposed_norm_probe.cpp": "667a6b05444f5b5a7b8b028143ee74ee20a344e4b4febc8bcabedb7ca7df3be2",
+      "benchmarks/protenix/benchmark_transposed_norm.py": "5c4e43e7252ad0f8d507b38312afe29c57dcc7807e63aee93964d757986fc993"
+    },
+    "records": [
+      {
+        "n": 1000,
+        "input_stride": [
+          128,
+          128000,
+          1
+        ],
+        "implementation": "native_before",
+        "median_ms": 5.802138090133667,
+        "p95_ms": 5.805335998535156,
+        "values_ms": [
+          5.799260139465332,
+          5.798140048980713,
+          5.799260139465332,
+          5.802298069000244,
+          5.79941987991333,
+          5.803737163543701,
+          5.800698757171631,
+          5.800378799438477,
+          5.8027777671813965,
+          5.801659107208252,
+          5.804697036743164,
+          5.80197811126709,
+          5.805335998535156,
+          5.80517578125,
+          5.805655002593994,
+          5.805016040802002,
+          5.804534912109375,
+          5.801977157592773,
+          5.802456855773926,
+          5.8016581535339355
+        ],
+        "peak_allocated_bytes": 1544001536
+      },
+      {
+        "n": 1000,
+        "input_stride": [
+          128,
+          128000,
+          1
+        ],
+        "implementation": "w4",
+        "median_ms": 1.8860700130462646,
+        "p95_ms": 1.887030005455017,
+        "values_ms": [
+          1.8822319507598877,
+          1.886391043663025,
+          1.8879899978637695,
+          1.8862299919128418,
+          1.8859100341796875,
+          1.8859100341796875,
+          1.8857499361038208,
+          1.887030005455017,
+          1.8833520412445068,
+          1.8849509954452515,
+          1.8807929754257202,
+          1.8854310512542725,
+          1.8859100341796875,
+          1.886391043663025,
+          1.8867100477218628,
+          1.886391043663025,
+          1.886549949645996,
+          1.886389970779419,
+          1.8855910301208496,
+          1.8862299919128418
+        ],
+        "peak_allocated_bytes": 1024001024
+      },
+      {
+        "n": 1000,
+        "input_stride": [
+          128,
+          128000,
+          1
+        ],
+        "implementation": "w8",
+        "median_ms": 1.8871104717254639,
+        "p95_ms": 1.8895889520645142,
+        "values_ms": [
+          1.88687002658844,
+          1.886389970779419,
+          1.8857510089874268,
+          1.8870309591293335,
+          1.8855910301208496,
+          1.8875099420547485,
+          1.886070966720581,
+          1.8895889520645142,
+          1.886549949645996,
+          1.892467975616455,
+          1.8881499767303467,
+          1.8873499631881714,
+          1.8841509819030762,
+          1.8884689807891846,
+          1.887349009513855,
+          1.8875099420547485,
+          1.886391043663025,
+          1.8881499767303467,
+          1.8871899843215942,
+          1.886551022529602
+        ],
+        "peak_allocated_bytes": 1024001024
+      },
+      {
+        "n": 1000,
+        "input_stride": [
+          128,
+          128000,
+          1
+        ],
+        "implementation": "native_after",
+        "median_ms": 5.805335998535156,
+        "p95_ms": 5.809493064880371,
+        "values_ms": [
+          5.806295871734619,
+          5.80677604675293,
+          5.8054962158203125,
+          5.805177211761475,
+          5.8096537590026855,
+          5.809493064880371,
+          5.807415008544922,
+          5.806135177612305,
+          5.801977157592773,
+          5.809333801269531,
+          5.805494785308838,
+          5.80821418762207,
+          5.800858020782471,
+          5.797658920288086,
+          5.8006978034973145,
+          5.801817893981934,
+          5.8040571212768555,
+          5.803576946258545,
+          5.801817893981934,
+          5.802457809448242
+        ],
+        "peak_allocated_bytes": 1544001536
+      },
+      {
+        "n": 1536,
+        "input_stride": [
+          128,
+          196608,
+          1
+        ],
+        "implementation": "native_before",
+        "median_ms": 20.15379810333252,
+        "p95_ms": 20.21808433532715,
+        "values_ms": [
+          20.174745559692383,
+          20.12453269958496,
+          20.20081329345703,
+          20.1352481842041,
+          20.20705223083496,
+          20.104223251342773,
+          20.145641326904297,
+          20.21808433532715,
+          20.170907974243164,
+          20.10246467590332,
+          20.113819122314453,
+          20.07383918762207,
+          20.225120544433594,
+          20.199371337890625,
+          20.168827056884766,
+          20.113338470458984,
+          20.12229347229004,
+          20.162912368774414,
+          20.13252830505371,
+          20.161954879760742
+        ],
+        "peak_allocated_bytes": 3642754048
+      },
+      {
+        "n": 1536,
+        "input_stride": [
+          128,
+          196608,
+          1
+        ],
+        "implementation": "w4",
+        "median_ms": 8.542167663574219,
+        "p95_ms": 8.54808521270752,
+        "values_ms": [
+          8.539609909057617,
+          8.541688919067383,
+          8.543606758117676,
+          8.535930633544922,
+          8.544726371765137,
+          8.538649559020996,
+          8.538490295410156,
+          8.542167663574219,
+          8.54344654083252,
+          8.543766975402832,
+          8.542167663574219,
+          8.54808521270752,
+          8.542488098144531,
+          8.54024887084961,
+          8.541208267211914,
+          8.531932830810547,
+          8.536251068115234,
+          8.547125816345215,
+          8.549043655395508,
+          8.54616641998291
+        ],
+        "peak_allocated_bytes": 2415920128
+      },
+      {
+        "n": 1536,
+        "input_stride": [
+          128,
+          196608,
+          1
+        ],
+        "implementation": "w8",
+        "median_ms": 8.535691261291504,
+        "p95_ms": 8.542488098144531,
+        "values_ms": [
+          8.55272388458252,
+          8.539130210876465,
+          8.541367530822754,
+          8.529535293579102,
+          8.53049373626709,
+          8.528254508972168,
+          8.535451889038086,
+          8.538809776306152,
+          8.534172058105469,
+          8.529374122619629,
+          8.54024887084961,
+          8.535930633544922,
+          8.534811973571777,
+          8.532892227172852,
+          8.535931587219238,
+          8.542488098144531,
+          8.535930633544922,
+          8.534171104431152,
+          8.540569305419922,
+          8.53225326538086
+        ],
+        "peak_allocated_bytes": 2415920128
+      },
+      {
+        "n": 1536,
+        "input_stride": [
+          128,
+          196608,
+          1
+        ],
+        "implementation": "native_after",
+        "median_ms": 20.161312103271484,
+        "p95_ms": 20.217763900756836,
+        "values_ms": [
+          20.186260223388672,
+          20.15811538696289,
+          20.10598373413086,
+          20.159076690673828,
+          20.167709350585938,
+          20.136526107788086,
+          20.16307258605957,
+          20.160991668701172,
+          20.153797149658203,
+          20.172027587890625,
+          20.166112899780273,
+          20.128692626953125,
+          20.165632247924805,
+          20.15379524230957,
+          20.217763900756836,
+          20.161632537841797,
+          20.15427589416504,
+          20.200334548950195,
+          20.221923828125,
+          20.1352481842041
+        ],
+        "peak_allocated_bytes": 3642754048
+      }
+    ],
+    "validation": [
+      {
+        "n": 1000,
+        "case": "normal",
+        "waves": 4,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      {
+        "n": 1000,
+        "case": "normal",
+        "waves": 8,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      {
+        "n": 1000,
+        "case": "edge",
+        "waves": 4,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      {
+        "n": 1000,
+        "case": "edge",
+        "waves": 8,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      {
+        "n": 1536,
+        "case": "normal",
+        "waves": 4,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      {
+        "n": 1536,
+        "case": "normal",
+        "waves": 8,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      {
+        "n": 1536,
+        "case": "edge",
+        "waves": 4,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      {
+        "n": 1536,
+        "case": "edge",
+        "waves": 8,
+        "max_abs_delta": 0.0,
+        "passed": true
+      }
+    ],
+    "compiler": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+    "command": [
+      "/opt/rocm/bin/hipcc",
+      "-O3",
+      "-std=c++17",
+      "-shared",
+      "-fPIC",
+      "--offload-arch=gfx90a",
+      "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/transposed_norm_probe.cpp",
+      "-o",
+      "/media/IntelSSD/fireprot/runtime/transposed_norm/f886399ff7b68ec0/probe.so"
+    ],
+    "library_sha256": "198185017f4846c83de650fd46ee1ff7ae8d0fdb06d07474430c701a210a3aa2",
+    "monitors": [
+      {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 4,
+        "allowed_pid": 937270,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      },
+      {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 7,
+        "interval_seconds": 1.0,
+        "samples": 4,
+        "allowed_pid": 937270,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    ]
+  },
+  "cpu_tests": {
+    "passed": 144,
+    "skipped": 47
+  },
+  "hip_tests": {
+    "returncode": 0,
+    "stdout": "......                                                                   [100%]\n6 passed in 42.84s\n",
+    "stderr": "",
+    "monitors": [
+      {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 6,
+        "interval_seconds": 1.0,
+        "samples": 34,
+        "allowed_pid": 938344,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      },
+      {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 7,
+        "interval_seconds": 1.0,
+        "samples": 34,
+        "allowed_pid": 938344,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    ]
+  }
+}

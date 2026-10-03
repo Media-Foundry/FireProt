@@ -953,3 +953,84 @@ torch::Tensor fireprot_qkv_projection(torch::Tensor input,torch::Tensor wq,
   C10_CUDA_KERNEL_LAUNCH_CHECK();
   return output;
 }
+
+namespace transposed_norm_detail {
+struct Moment { float mean, m2, count; };
+__device__ Moment merge(Moment a, Moment b) {
+    float total=a.count+b.count;
+    if(total==0) return {0,0,0};
+    float reciprocal=1.0f/total;
+    float wa=a.count*reciprocal, wb=b.count*reciprocal;
+    float delta=b.mean-a.mean;
+    return {wa*a.mean+wb*b.mean,
+            a.m2+b.m2+delta*delta*a.count*wb,total};
+}
+template<int Waves>
+__global__ void transpose_norm(const float* x,const float* weight,const float* bias,
+                               float* out,int n,float eps) {
+    int lane=threadIdx.x%64, wave=threadIdx.x/64;
+    int row=blockIdx.x*Waves+wave;
+    if(row>=n*n)return;
+    int source=(row%n*n+row/n)*128;
+    float4 v=make_float4(0,0,0,0);
+    Moment m{0,0,0};
+    if(lane<32){
+        v=*reinterpret_cast<const float4*>(x+source+lane*4);
+        float values[4]={v.x,v.y,v.z,v.w};
+        #pragma unroll
+        for(int i=0;i<4;i++){
+            float delta=values[i]-m.mean;
+            m.count+=1;
+            m.mean+=delta*(1.0f/m.count);
+            m.m2+=delta*(values[i]-m.mean);
+        }
+    }
+    #pragma unroll
+    for(int offset=32;offset>0;offset/=2){
+        Moment other{__shfl_down(m.mean,offset,64),__shfl_down(m.m2,offset,64),
+                     __shfl_down(m.count,offset,64)};
+        m=merge(other,m);
+    }
+    float mean=__shfl(m.mean,0,64), var=__shfl(m.m2,0,64)*(1.0f/128);
+    float inv=rsqrtf(var+eps);
+    if(lane<32){
+        float4 w=*reinterpret_cast<const float4*>(weight+lane*4);
+        float4 b=*reinterpret_cast<const float4*>(bias+lane*4);
+        float4 y=make_float4(w.x*(inv*(v.x-mean))+b.x,w.y*(inv*(v.y-mean))+b.y,
+                            w.z*(inv*(v.z-mean))+b.z,w.w*(inv*(v.w-mean))+b.w);
+        *reinterpret_cast<float4*>(out+row*128+lane*4)=y;
+    }
+}
+}
+
+torch::Tensor fireprot_transposed_layer_norm(torch::Tensor input,torch::Tensor weight,
+                                            torch::Tensor bias,double epsilon) {
+  TORCH_CHECK(!at::GradMode::is_enabled(),"transposed LayerNorm is inference only");
+  TORCH_CHECK(input.is_cuda() && input.scalar_type()==torch::kFloat32 && !input.requires_grad(),
+      "requires a CUDA FP32 inference input");
+  TORCH_CHECK(input.dim()==3 && (input.size(0)==1000 || input.size(0)==1536) &&
+      input.size(1)==input.size(0) && input.size(2)==128,"unsupported shape");
+  const int n=input.size(0);
+  TORCH_CHECK(input.stride(0)==128 && input.stride(1)==n*128 && input.stride(2)==1,
+      "requires transposed pair strides");
+  TORCH_CHECK(epsilon==1e-5,"unsupported epsilon");
+  TORCH_CHECK(reinterpret_cast<std::uintptr_t>(input.data_ptr())%16==0,"unaligned input");
+  for(const auto& tensor : {weight,bias}) {
+    check_common(tensor,"affine tensor");
+    TORCH_CHECK(tensor.device()==input.device() && tensor.dim()==1 && tensor.size(0)==128,
+        "requires same-device [128] affine tensors");
+    TORCH_CHECK(reinterpret_cast<std::uintptr_t>(tensor.data_ptr())%16==0,"unaligned affine tensor");
+  }
+  const c10::DeviceGuard guard(input.device());
+  hipDeviceProp_t properties{};
+  TORCH_CHECK(hipGetDeviceProperties(&properties,input.get_device())==hipSuccess,
+      "cannot query device properties");
+  TORCH_CHECK(std::string(properties.gcnArchName).substr(0,6)=="gfx90a","requires gfx90a");
+  auto output=torch::empty({n,n,128},input.options());
+  const auto stream=c10::hip::getCurrentHIPStream(input.get_device());
+  hipLaunchKernelGGL(transposed_norm_detail::transpose_norm<8>,dim3((n*n+7)/8),dim3(512),0,
+      stream.stream(),input.data_ptr<float>(),weight.data_ptr<float>(),bias.data_ptr<float>(),
+      output.data_ptr<float>(),n,static_cast<float>(epsilon));
+  C10_CUDA_KERNEL_LAUNCH_CHECK();
+  return output;
+}

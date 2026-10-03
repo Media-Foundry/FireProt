@@ -1,0 +1,3127 @@
+{
+  "schema_version": 1,
+  "base_commit": "f21e6f7b301a1c4806ac1a21b5c27fbc726a088b",
+  "decision": "Not integrated: complete attention slower, with additional live gate storage",
+  "experiments": {
+    "qkv-sigmoid": {
+      "scope": "both",
+      "status": "ok",
+      "seed": 1027,
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "model": "Protenix Attention shape replay; random weights",
+      "cycle_step_sample_count": "Not applicable to operator replay",
+      "cache_state": "warm; allocations included; compilation excluded",
+      "parameters": "Normal inputs and normal(0,0.1) weights; first rows set to 0,+100,-100",
+      "memory_scope": "Whole probe process including references; not model memory",
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "901413453",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "562501677",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1121136442",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "794224262",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "691006101",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1251242082",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451404780",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533770429",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "7",
+        "selected_physical_index": 7,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "sibling_preflight": {
+        "6": {
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "passed": true
+        }
+      },
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "source_sha256": {
+        "benchmarks/protenix/csrc/qkv_sigmoid_probe.cpp": "455ba7434606ff27d238ccbe5ef47f633c9b3c91474c68d6d1bfd83a9a818e26",
+        "benchmarks/protenix/benchmark_qkv_sigmoid.py": "ac3a3e3830b9958c5eb17e0ff56c4b3865623d544ee56264905459e3440e485e",
+        "fireprot/backends/amd/qkv_projection.py": "6f6ad521b169df46c2e0ec3030195267decda3a7a1bbddac40a9f25b23b6fc02",
+        "fireprot/backends/amd/csrc/fireprot_amd_ops.cpp": "5bfcd03c3e5a70a9c294b51fd720cf05bc428c6ba030b47354c2bc6063b57b84",
+        "fireprot/backends/amd/csrc/fireprot_amd_ops.cu": "66bf04eecc03f827725dd361465cda07237830950e64376e5701578a61884d2a",
+        "Protenix/protenix/model/triangular/layers.py": "c2a709d65ee40ab2fa7bdb100bccdd1f04f6b9036e7341a654510429f8f114ee"
+      },
+      "builds": [
+        {
+          "name": "r128c64k16w16",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-shared",
+            "-fPIC",
+            "--offload-arch=gfx90a",
+            "-DROW_TILE=128",
+            "-DCHANNEL_TILE=64",
+            "-DK_TILE=16",
+            "-DWAVES=16",
+            "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/qkv_sigmoid_probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/qkv_sigmoid/01285ea7249dfb2b/r128c64k16w16.pending.so"
+          ],
+          "library_sha256": "a2f6175aad1dac71a4116157b38f8acf31f37d24a5fefa61a15bdff96ba39948"
+        },
+        {
+          "name": "r64c64k16w8",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-shared",
+            "-fPIC",
+            "--offload-arch=gfx90a",
+            "-DROW_TILE=64",
+            "-DCHANNEL_TILE=64",
+            "-DK_TILE=16",
+            "-DWAVES=8",
+            "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/qkv_sigmoid_probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/qkv_sigmoid/01285ea7249dfb2b/r64c64k16w8.pending.so"
+          ],
+          "library_sha256": "d97d271290801fc0f050e427efddd658b660c69c1d936f8dcb1a7cbd13486d90"
+        }
+      ],
+      "records": [
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_before",
+          "median_ms": 5.660049915313721,
+          "p95_ms": 5.937108039855957,
+          "values_ms": [
+            5.771432876586914,
+            5.557623863220215,
+            5.6139140129089355,
+            5.723298072814941,
+            5.600000858306885,
+            5.675161838531494,
+            5.670845031738281,
+            5.629426002502441,
+            5.937108039855957,
+            5.767755031585693,
+            5.947662830352783,
+            5.577453136444092,
+            5.564499855041504,
+            5.554265022277832,
+            5.678201198577881,
+            5.570576190948486,
+            5.609595775604248,
+            5.716900825500488,
+            5.850593090057373,
+            5.64925479888916
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 7219576832
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r128c64k16w16",
+          "median_ms": 6.0418548583984375,
+          "p95_ms": 6.086791038513184,
+          "values_ms": [
+            6.05608606338501,
+            6.033218860626221,
+            6.014028072357178,
+            6.0418548583984375,
+            6.027462005615234,
+            6.055448055267334,
+            6.053208827972412,
+            6.026182174682617,
+            6.086791038513184,
+            6.0418548583984375,
+            6.079275131225586,
+            6.032738208770752,
+            6.034817218780518,
+            6.092388153076172,
+            6.041533946990967,
+            6.039935111999512,
+            6.077516078948975,
+            6.043453216552734,
+            6.041053771972656,
+            6.072237968444824
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 7220494336
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r64c64k16w8",
+          "median_ms": 6.3531341552734375,
+          "p95_ms": 6.367607116699219,
+          "values_ms": [
+            6.366806983947754,
+            6.345218181610107,
+            6.343938827514648,
+            6.365528106689453,
+            6.366326808929443,
+            6.353693962097168,
+            6.346497058868408,
+            6.3712849617004395,
+            6.359130859375,
+            6.367607116699219,
+            6.35353422164917,
+            6.352734088897705,
+            6.3596110343933105,
+            6.335943222045898,
+            6.343618869781494,
+            6.35593318939209,
+            6.344418048858643,
+            6.347456932067871,
+            6.345696926116943,
+            6.3468170166015625
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 7220494336
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_after",
+          "median_ms": 5.676761865615845,
+          "p95_ms": 5.930391788482666,
+          "values_ms": [
+            5.695792198181152,
+            5.552505970001221,
+            5.719299793243408,
+            5.560821056365967,
+            5.544829845428467,
+            5.714022159576416,
+            5.952139854431152,
+            5.677241802215576,
+            5.676281929016113,
+            5.930391788482666,
+            5.69467306137085,
+            5.88561487197876,
+            5.673402786254883,
+            5.657890796661377,
+            5.6177520751953125,
+            5.611354827880859,
+            5.769195079803467,
+            5.66188907623291,
+            5.9179182052612305,
+            5.577773094177246
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 7219576832
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_before",
+          "median_ms": 27.734060287475586,
+          "p95_ms": 28.05469512939453,
+          "values_ms": [
+            27.531768798828125,
+            27.901016235351562,
+            27.684329986572266,
+            27.622760772705078,
+            28.05469512939453,
+            27.641468048095703,
+            28.244840621948242,
+            27.75501251220703,
+            27.9541072845459,
+            27.62179946899414,
+            27.782197952270508,
+            27.81562042236328,
+            27.673131942749023,
+            27.71678924560547,
+            27.86855125427246,
+            27.7874755859375,
+            27.587738037109375,
+            27.751331329345703,
+            27.7121524810791,
+            27.466039657592773
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5170659328
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r128c64k16w16",
+          "median_ms": 28.238203048706055,
+          "p95_ms": 28.51926040649414,
+          "values_ms": [
+            28.41659164428711,
+            28.095796585083008,
+            28.51926040649414,
+            28.8566837310791,
+            28.300491333007812,
+            28.1448917388916,
+            28.23876190185547,
+            28.310565948486328,
+            28.164400100708008,
+            28.2083797454834,
+            28.152568817138672,
+            28.279062271118164,
+            28.259231567382812,
+            28.1511287689209,
+            28.17319679260254,
+            28.23764419555664,
+            28.228687286376953,
+            28.286258697509766,
+            28.26211166381836,
+            28.13161849975586
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6707576832
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r64c64k16w8",
+          "median_ms": 28.49878978729248,
+          "p95_ms": 28.689252853393555,
+          "values_ms": [
+            28.394363403320312,
+            28.75242042541504,
+            28.504547119140625,
+            28.689252853393555,
+            28.596817016601562,
+            28.612651824951172,
+            28.408275604248047,
+            28.511104583740234,
+            28.467926025390625,
+            28.470643997192383,
+            28.546283721923828,
+            28.507904052734375,
+            28.37645149230957,
+            28.428104400634766,
+            28.50470542907715,
+            28.493032455444336,
+            28.663183212280273,
+            28.282899856567383,
+            28.486635208129883,
+            28.462648391723633
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6707576832
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_after",
+          "median_ms": 27.84536647796631,
+          "p95_ms": 28.04462432861328,
+          "values_ms": [
+            27.875272750854492,
+            27.483152389526367,
+            27.782838821411133,
+            27.961944580078125,
+            27.68177032470703,
+            27.622440338134766,
+            28.04462432861328,
+            27.632675170898438,
+            28.095476150512695,
+            27.842008590698242,
+            27.557353973388672,
+            27.777080535888672,
+            27.944353103637695,
+            27.848724365234375,
+            27.871591567993164,
+            28.005441665649414,
+            27.67249298095703,
+            27.467639923095703,
+            27.876388549804688,
+            27.952350616455078
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5170659328
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "baseline_before",
+          "median_ms": 4.4222869873046875,
+          "p95_ms": 4.442676067352295,
+          "values_ms": [
+            4.418368816375732,
+            4.420607089996338,
+            4.417250156402588,
+            4.442676067352295,
+            4.405894756317139,
+            4.451791763305664,
+            4.422526836395264,
+            4.411652088165283,
+            4.41549015045166,
+            4.431002140045166,
+            4.438357830047607,
+            4.420607089996338,
+            4.437717914581299,
+            4.409573078155518,
+            4.427164077758789,
+            4.422047138214111,
+            4.404615879058838,
+            4.4252448081970215,
+            4.432121753692627,
+            4.423165798187256
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5708775424
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r128c64k16w16",
+          "median_ms": 4.8731749057769775,
+          "p95_ms": 4.926427841186523,
+          "values_ms": [
+            4.860701084136963,
+            4.878131866455078,
+            4.926427841186523,
+            4.910116195678711,
+            4.844389915466309,
+            4.942419052124023,
+            4.8730149269104,
+            4.842151165008545,
+            4.861660957336426,
+            4.902440071105957,
+            4.854304790496826,
+            4.834794044494629,
+            4.871416091918945,
+            4.869976997375488,
+            4.88037109375,
+            4.8798909187316895,
+            4.861979961395264,
+            4.897801876068115,
+            4.899721145629883,
+            4.873334884643555
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5708775424
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r64c64k16w8",
+          "median_ms": 5.033891916275024,
+          "p95_ms": 5.043007850646973,
+          "values_ms": [
+            5.033731937408447,
+            5.027495861053467,
+            5.042848110198975,
+            5.034051895141602,
+            5.0324530601501465,
+            5.043968200683594,
+            5.034212112426758,
+            5.023656845092773,
+            5.031174182891846,
+            5.040289878845215,
+            5.033411979675293,
+            5.03964900970459,
+            5.035811901092529,
+            5.01806116104126,
+            5.02141809463501,
+            5.0364508628845215,
+            5.043007850646973,
+            5.03709077835083,
+            5.02669620513916,
+            5.027336120605469
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5708775424
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "baseline_after",
+          "median_ms": 4.392941474914551,
+          "p95_ms": 4.455470085144043,
+          "values_ms": [
+            4.408453941345215,
+            4.455470085144043,
+            4.416450023651123,
+            4.419968128204346,
+            4.369113922119141,
+            4.410693168640137,
+            4.38942289352417,
+            4.3751912117004395,
+            4.389584064483643,
+            4.3881449699401855,
+            4.3807878494262695,
+            4.381426811218262,
+            4.3846259117126465,
+            4.378389835357666,
+            4.39901876449585,
+            4.462666034698486,
+            4.435160160064697,
+            4.392141819000244,
+            4.393741130828857,
+            4.4289231300354
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5708775424
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "baseline_before",
+          "median_ms": 28.951756477355957,
+          "p95_ms": 29.131103515625,
+          "values_ms": [
+            28.940004348754883,
+            28.93328857421875,
+            28.97662353515625,
+            28.881311416625977,
+            28.89570426940918,
+            28.976943969726562,
+            29.07929229736328,
+            28.898103713989258,
+            28.964630126953125,
+            28.878273010253906,
+            29.048908233642578,
+            29.131103515625,
+            29.219379425048828,
+            28.96750831604004,
+            28.948957443237305,
+            28.828859329223633,
+            28.923532485961914,
+            28.95455551147461,
+            29.02475929260254,
+            28.866600036621094
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 4136304640
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r128c64k16w16",
+          "median_ms": 29.426633834838867,
+          "p95_ms": 29.745668411254883,
+          "values_ms": [
+            29.451099395751953,
+            29.51283073425293,
+            29.390811920166016,
+            29.389371871948242,
+            29.50307273864746,
+            30.06550407409668,
+            29.35850715637207,
+            29.429672241210938,
+            29.395130157470703,
+            29.528499603271484,
+            29.35466957092285,
+            29.19379234313965,
+            29.53505516052246,
+            29.745668411254883,
+            29.20402717590332,
+            29.423595428466797,
+            29.485483169555664,
+            29.53074073791504,
+            29.173484802246094,
+            29.39208984375
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5306122240
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r64c64k16w8",
+          "median_ms": 29.60038471221924,
+          "p95_ms": 29.887676239013672,
+          "values_ms": [
+            29.506271362304688,
+            29.615175247192383,
+            29.767578125,
+            29.457338333129883,
+            29.480045318603516,
+            29.604942321777344,
+            29.91629981994629,
+            29.40056610107422,
+            29.439746856689453,
+            29.598865509033203,
+            29.801639556884766,
+            29.685060501098633,
+            29.657873153686523,
+            29.63052749633789,
+            29.584152221679688,
+            29.378978729248047,
+            29.467092514038086,
+            29.601903915405273,
+            29.887676239013672,
+            29.474287033081055
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5306122240
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "baseline_after",
+          "median_ms": 28.903943061828613,
+          "p95_ms": 29.002052307128906,
+          "values_ms": [
+            28.996135711669922,
+            29.02971839904785,
+            28.876195907592773,
+            28.871240615844727,
+            28.917295455932617,
+            28.98430061340332,
+            28.81686782836914,
+            28.885791778564453,
+            28.90498161315918,
+            28.95535659790039,
+            28.81766700744629,
+            28.877796173095703,
+            28.98542022705078,
+            28.919376373291016,
+            28.910419464111328,
+            28.83061981201172,
+            28.902904510498047,
+            29.002052307128906,
+            28.80119514465332,
+            28.89666748046875
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 4136304640
+        }
+      ],
+      "rejections": [],
+      "blas": {
+        "requested": "hipblas",
+        "before": "_BlasBackend.Cublaslt",
+        "effective": "_BlasBackend.Cublas",
+        "changed": true
+      },
+      "ck_attention": {
+        "enabled": true,
+        "long1536_enabled": true,
+        "exact1536_enabled": true,
+        "vector1000_enabled": true,
+        "loaded": true,
+        "error": null,
+        "build": {
+          "source_sha256": "d50865b27a66956b391a331cc0daf9e33962c1fd1c0d93b3243fab9d25af016c",
+          "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+          "header_count": 581,
+          "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a",
+            "-I/opt/rocm/include",
+            "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.pending.so"
+          ],
+          "library_sha256": "e0db29648fbc9e4895663604a93c3729503039310761abdf19ed8e637d49ca63",
+          "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.so",
+          "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+        }
+      },
+      "compiler": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+      "qkv_dispatch": {
+        "enabled": true,
+        "counts": {
+          "n1000": 107,
+          "n1536": 107,
+          "fallback": 0
+        }
+      },
+      "monitors": [
+        {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 6,
+          "interval_seconds": 1.0,
+          "samples": 13,
+          "allowed_pid": 934274,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        },
+        {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 7,
+          "interval_seconds": 1.0,
+          "samples": 13,
+          "allowed_pid": 934274,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
+      ]
+    },
+    "qkv-sigmoid-vector": {
+      "scope": "both",
+      "status": "ok",
+      "seed": 1027,
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "model": "Protenix Attention shape replay; random weights",
+      "cycle_step_sample_count": "Not applicable to operator replay",
+      "cache_state": "warm; allocations included; compilation excluded",
+      "parameters": "Normal inputs and normal(0,0.1) weights; first rows set to 0,+100,-100",
+      "memory_scope": "Whole probe process including references; not model memory",
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "901413530",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "562501754",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1121136519",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "794224339",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "691006176",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1252023209",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451404856",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533770505",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "7",
+        "selected_physical_index": 7,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "sibling_preflight": {
+        "6": {
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "passed": true
+        }
+      },
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "source_sha256": {
+        "benchmarks/protenix/csrc/qkv_sigmoid_vector_probe.cpp": "be3eca05411a37b17174b0d3384b50a3f3614fdfef6a42fa537f6751edfcb5ed",
+        "benchmarks/protenix/benchmark_qkv_sigmoid_vector.py": "3f45dc218a711d4c67cf7f08b710db5d0a31c4f12829b1c95439fa89251e1bd3",
+        "fireprot/backends/amd/qkv_projection.py": "6f6ad521b169df46c2e0ec3030195267decda3a7a1bbddac40a9f25b23b6fc02",
+        "fireprot/backends/amd/csrc/fireprot_amd_ops.cpp": "5bfcd03c3e5a70a9c294b51fd720cf05bc428c6ba030b47354c2bc6063b57b84",
+        "fireprot/backends/amd/csrc/fireprot_amd_ops.cu": "66bf04eecc03f827725dd361465cda07237830950e64376e5701578a61884d2a",
+        "Protenix/protenix/model/triangular/layers.py": "c2a709d65ee40ab2fa7bdb100bccdd1f04f6b9036e7341a654510429f8f114ee"
+      },
+      "builds": [
+        {
+          "name": "r128c64k16w16",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-shared",
+            "-fPIC",
+            "--offload-arch=gfx90a",
+            "-DROW_TILE=128",
+            "-DCHANNEL_TILE=64",
+            "-DK_TILE=16",
+            "-DWAVES=16",
+            "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/qkv_sigmoid_vector_probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/qkv_sigmoid_vector/74c1a0a1fe3be387/r128c64k16w16.pending.so"
+          ],
+          "library_sha256": "9bdb45651b0b429a44ef08d48529d548eee6332326cc790d72274ed45809e780"
+        },
+        {
+          "name": "r64c64k16w8",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-shared",
+            "-fPIC",
+            "--offload-arch=gfx90a",
+            "-DROW_TILE=64",
+            "-DCHANNEL_TILE=64",
+            "-DK_TILE=16",
+            "-DWAVES=8",
+            "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/qkv_sigmoid_vector_probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/qkv_sigmoid_vector/74c1a0a1fe3be387/r64c64k16w8.pending.so"
+          ],
+          "library_sha256": "9b0514fff5e6160e2a4067b8ab5d57f35dce48fafae99193ba731b1e0964b73e"
+        }
+      ],
+      "records": [
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_before",
+          "median_ms": 5.631665468215942,
+          "p95_ms": 5.786625862121582,
+          "values_ms": [
+            5.568818092346191,
+            5.726975917816162,
+            5.506609916687012,
+            5.7362518310546875,
+            5.576972961425781,
+            5.564819812774658,
+            5.587048053741455,
+            5.683319091796875,
+            5.551547050476074,
+            5.743127822875977,
+            5.710824966430664,
+            5.8515520095825195,
+            5.7429680824279785,
+            5.747446060180664,
+            5.563860893249512,
+            5.588007926940918,
+            5.786625862121582,
+            5.521801948547363,
+            5.675323009490967,
+            5.554584980010986
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 7218659328
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r128c64k16w16",
+          "median_ms": 5.745927095413208,
+          "p95_ms": 5.770954132080078,
+          "values_ms": [
+            5.743927955627441,
+            5.727776050567627,
+            5.770954132080078,
+            5.754961967468262,
+            5.768394947052002,
+            5.695793151855469,
+            5.7234578132629395,
+            5.742008209228516,
+            5.76135778427124,
+            5.723298072814941,
+            5.744088172912598,
+            5.771914005279541,
+            5.747766017913818,
+            5.749044895172119,
+            5.730014801025391,
+            5.751123905181885,
+            5.741368770599365,
+            5.735452175140381,
+            5.757199764251709,
+            5.761038780212402
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6706659328
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r64c64k16w8",
+          "median_ms": 6.036017894744873,
+          "p95_ms": 6.064083099365234,
+          "values_ms": [
+            6.033218860626221,
+            5.984283924102783,
+            6.040736198425293,
+            6.0172271728515625,
+            6.038977146148682,
+            5.992119789123535,
+            6.051928997039795,
+            6.064083099365234,
+            6.027462005615234,
+            5.957898139953613,
+            6.062644004821777,
+            6.040414810180664,
+            6.065201759338379,
+            5.9884419441223145,
+            6.054967880249023,
+            6.04537296295166,
+            6.031300067901611,
+            5.96109676361084,
+            6.036098003387451,
+            6.035937786102295
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6706659328
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_after",
+          "median_ms": 5.635423421859741,
+          "p95_ms": 5.793501853942871,
+          "values_ms": [
+            5.670044898986816,
+            5.6462178230285645,
+            5.706986904144287,
+            5.585608959197998,
+            5.52515983581543,
+            5.919517993927002,
+            5.7583208084106445,
+            5.612955093383789,
+            5.5987229347229,
+            5.552666187286377,
+            5.687636852264404,
+            5.689075946807861,
+            5.550907135009766,
+            5.623828887939453,
+            5.549307823181152,
+            5.588326930999756,
+            5.739930152893066,
+            5.73257303237915,
+            5.624629020690918,
+            5.793501853942871
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 7218659328
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_before",
+          "median_ms": 27.757652282714844,
+          "p95_ms": 28.048303604125977,
+          "values_ms": [
+            27.8560848236084,
+            27.7482967376709,
+            27.649307250976562,
+            27.74941635131836,
+            27.73902130126953,
+            27.523771286010742,
+            27.80426788330078,
+            27.891584396362305,
+            27.9344425201416,
+            27.668657302856445,
+            27.765888214111328,
+            28.048303604125977,
+            28.287220001220703,
+            27.817062377929688,
+            27.783479690551758,
+            27.56391143798828,
+            27.916851043701172,
+            27.56711196899414,
+            27.722551345825195,
+            27.735504150390625
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5170659328
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r128c64k16w16",
+          "median_ms": 27.826257705688477,
+          "p95_ms": 28.089881896972656,
+          "values_ms": [
+            27.862319946289062,
+            27.922607421875,
+            27.646751403808594,
+            27.94355583190918,
+            27.91413116455078,
+            27.673616409301758,
+            27.636676788330078,
+            28.01232147216797,
+            27.815303802490234,
+            27.793712615966797,
+            27.853681564331055,
+            28.181833267211914,
+            27.83721160888672,
+            27.676494598388672,
+            27.74254035949707,
+            27.910614013671875,
+            28.089881896972656,
+            27.77196502685547,
+            27.678892135620117,
+            27.79787254333496
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6706659328
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r64c64k16w8",
+          "median_ms": 28.079246520996094,
+          "p95_ms": 28.245962142944336,
+          "values_ms": [
+            28.180715560913086,
+            28.43770408630371,
+            28.092119216918945,
+            28.04814338684082,
+            28.10651397705078,
+            28.19734764099121,
+            28.140735626220703,
+            28.245962142944336,
+            28.123943328857422,
+            28.02031707763672,
+            27.91077423095703,
+            27.865676879882812,
+            28.026714324951172,
+            28.066373825073242,
+            28.20342445373535,
+            27.920207977294922,
+            28.148252487182617,
+            28.05150032043457,
+            28.013439178466797,
+            27.92420768737793
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6706659328
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_after",
+          "median_ms": 27.7359037399292,
+          "p95_ms": 28.23428726196289,
+          "values_ms": [
+            27.774524688720703,
+            28.351987838745117,
+            27.801231384277344,
+            27.674415588378906,
+            27.503143310546875,
+            27.606769561767578,
+            27.430540084838867,
+            27.66082191467285,
+            27.826656341552734,
+            27.925006866455078,
+            27.65298843383789,
+            27.95475196838379,
+            27.662580490112305,
+            28.0459041595459,
+            27.63411521911621,
+            28.084123611450195,
+            28.23428726196289,
+            27.677772521972656,
+            27.705759048461914,
+            27.766048431396484
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5170659328
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "baseline_before",
+          "median_ms": 4.401098012924194,
+          "p95_ms": 4.414371013641357,
+          "values_ms": [
+            4.404935836791992,
+            4.414371013641357,
+            4.3806281089782715,
+            4.39086389541626,
+            4.411172866821289,
+            4.408934116363525,
+            4.4212470054626465,
+            4.394540786743164,
+            4.404615879058838,
+            4.394861221313477,
+            4.413570880889893,
+            4.409093856811523,
+            4.402217864990234,
+            4.399978160858154,
+            4.397900104522705,
+            4.384786128997803,
+            4.3441667556762695,
+            4.41005277633667,
+            4.379828929901123,
+            4.367035865783691
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5708775424
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r128c64k16w16",
+          "median_ms": 4.525034427642822,
+          "p95_ms": 4.573489189147949,
+          "values_ms": [
+            4.537827014923096,
+            4.497848987579346,
+            4.479137897491455,
+            4.563414096832275,
+            4.517037868499756,
+            4.573489189147949,
+            4.515919208526611,
+            4.516718864440918,
+            4.523274898529053,
+            4.503125190734863,
+            4.526793956756592,
+            4.604353904724121,
+            4.568692207336426,
+            4.548861980438232,
+            4.513040065765381,
+            4.48809289932251,
+            4.545823097229004,
+            4.5303120613098145,
+            4.5020060539245605,
+            4.536068916320801
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5306122240
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r64c64k16w8",
+          "median_ms": 4.540385961532593,
+          "p95_ms": 4.549500942230225,
+          "values_ms": [
+            4.527113914489746,
+            4.528872013092041,
+            4.542785167694092,
+            4.54294490814209,
+            4.540225982666016,
+            4.539906024932861,
+            4.5410261154174805,
+            4.54054594039917,
+            4.5434250831604,
+            4.536868095397949,
+            4.524875164031982,
+            4.542144775390625,
+            4.545184135437012,
+            4.535589218139648,
+            4.549500942230225,
+            4.535428047180176,
+            4.549342155456543,
+            4.6521687507629395,
+            4.535109043121338,
+            4.528872013092041
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5306122240
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "baseline_after",
+          "median_ms": 4.3779895305633545,
+          "p95_ms": 4.413412094116211,
+          "values_ms": [
+            4.364956855773926,
+            4.377429962158203,
+            4.364477157592773,
+            4.381907939910889,
+            4.389743804931641,
+            4.383986949920654,
+            4.374551773071289,
+            4.372791767120361,
+            4.367354869842529,
+            4.387024879455566,
+            4.375831127166748,
+            4.367196083068848,
+            4.424126148223877,
+            4.37838888168335,
+            4.377590179443359,
+            4.400137901306152,
+            4.3739118576049805,
+            4.413412094116211,
+            4.389423847198486,
+            4.4100542068481445
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5708775424
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "baseline_before",
+          "median_ms": 28.932649612426758,
+          "p95_ms": 29.032756805419922,
+          "values_ms": [
+            28.977266311645508,
+            28.8546085357666,
+            28.973108291625977,
+            28.87859535217285,
+            28.880516052246094,
+            28.856687545776367,
+            28.894428253173828,
+            29.032756805419922,
+            28.920015335083008,
+            28.982704162597656,
+            29.028120040893555,
+            29.048267364501953,
+            28.900184631347656,
+            28.990217208862305,
+            28.823104858398438,
+            28.991500854492188,
+            28.9707088470459,
+            28.945283889770508,
+            28.896827697753906,
+            28.91761589050293
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 4136304640
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r128c64k16w16",
+          "median_ms": 29.05210781097412,
+          "p95_ms": 29.192676544189453,
+          "values_ms": [
+            29.100563049316406,
+            28.916337966918945,
+            29.03867530822754,
+            29.192676544189453,
+            28.928491592407227,
+            29.527223587036133,
+            29.02108383178711,
+            28.98366355895996,
+            28.927692413330078,
+            29.043472290039062,
+            29.094646453857422,
+            29.078014373779297,
+            29.012128829956055,
+            29.03595542907715,
+            29.069059371948242,
+            29.02907943725586,
+            29.09928321838379,
+            29.136703491210938,
+            29.081052780151367,
+            29.06074333190918
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5306122240
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r64c64k16w8",
+          "median_ms": 29.13326644897461,
+          "p95_ms": 29.248008728027344,
+          "values_ms": [
+            29.121511459350586,
+            29.08009147644043,
+            29.118154525756836,
+            29.122472763061523,
+            29.224340438842773,
+            29.17876434326172,
+            29.029560089111328,
+            29.16756820678711,
+            29.144060134887695,
+            29.06314468383789,
+            29.1197509765625,
+            29.091768264770508,
+            29.248008728027344,
+            29.112396240234375,
+            29.18084144592285,
+            29.163572311401367,
+            29.208667755126953,
+            29.26255989074707,
+            29.035634994506836,
+            29.241291046142578
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5306122240
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "baseline_after",
+          "median_ms": 28.932169914245605,
+          "p95_ms": 29.047151565551758,
+          "values_ms": [
+            29.011648178100586,
+            29.028759002685547,
+            28.917938232421875,
+            29.023164749145508,
+            28.797039031982422,
+            28.92913246154785,
+            29.051307678222656,
+            28.84853172302246,
+            29.047151565551758,
+            28.866443634033203,
+            28.811752319335938,
+            28.955677032470703,
+            28.85093116760254,
+            28.88451385498047,
+            28.93520736694336,
+            28.989580154418945,
+            28.984783172607422,
+            28.946081161499023,
+            28.924333572387695,
+            28.92497444152832
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 4136304640
+        }
+      ],
+      "rejections": [],
+      "blas": {
+        "requested": "hipblas",
+        "before": "_BlasBackend.Cublaslt",
+        "effective": "_BlasBackend.Cublas",
+        "changed": true
+      },
+      "ck_attention": {
+        "enabled": true,
+        "long1536_enabled": true,
+        "exact1536_enabled": true,
+        "vector1000_enabled": true,
+        "loaded": true,
+        "error": null,
+        "build": {
+          "source_sha256": "d50865b27a66956b391a331cc0daf9e33962c1fd1c0d93b3243fab9d25af016c",
+          "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+          "header_count": 581,
+          "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a",
+            "-I/opt/rocm/include",
+            "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.pending.so"
+          ],
+          "library_sha256": "e0db29648fbc9e4895663604a93c3729503039310761abdf19ed8e637d49ca63",
+          "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.so",
+          "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+        }
+      },
+      "compiler": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+      "qkv_dispatch": {
+        "enabled": true,
+        "counts": {
+          "n1000": 107,
+          "n1536": 107,
+          "fallback": 0
+        }
+      },
+      "monitors": [
+        {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 6,
+          "interval_seconds": 1.0,
+          "samples": 13,
+          "allowed_pid": 935195,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        },
+        {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 7,
+          "interval_seconds": 1.0,
+          "samples": 13,
+          "allowed_pid": 935195,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
+      ]
+    },
+    "qkv-sigmoid-vector-final": {
+      "scope": "both",
+      "status": "ok",
+      "seed": 1027,
+      "dtype": "float32",
+      "tf32": false,
+      "warmups": 5,
+      "repetitions": 20,
+      "model": "Protenix Attention shape replay; random weights",
+      "cycle_step_sample_count": "Not applicable to operator replay",
+      "cache_state": "warm; allocations included; compilation excluded",
+      "parameters": "Normal inputs and normal(0,0.1) weights; first rows set to 0,+100,-100",
+      "memory_scope": "Whole probe process including references; not model memory",
+      "preflight": {
+        "available": true,
+        "command": [
+          "/usr/bin/rocm-smi",
+          "--showpids",
+          "--showuse",
+          "--showmeminfo",
+          "vram",
+          "--showclocks",
+          "--json"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "data": {
+          "card0": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "901413610",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card1": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "562501833",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card2": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1121136598",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card3": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "794224418",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card4": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "691006255",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card5": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "1252792708",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "10981376"
+          },
+          "card6": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "451404935",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          },
+          "card7": {
+            "mclk clock speed:": "(1600Mhz)",
+            "mclk clock level:": "3",
+            "sclk clock speed:": "(800Mhz)",
+            "sclk clock level:": "1",
+            "socclk clock speed:": "(1090Mhz)",
+            "socclk clock level:": "3",
+            "GPU use (%)": "0",
+            "GFX Activity": "533770584",
+            "VRAM Total Memory (B)": "68702699520",
+            "VRAM Total Used Memory (B)": "11014144"
+          }
+        },
+        "visible_devices": "7",
+        "selected_physical_index": 7,
+        "exclusive_check": {
+          "required": true,
+          "passed": true,
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "max_gpu_use_percent": 5,
+          "max_vram_used_bytes": 268435456
+        }
+      },
+      "sibling_preflight": {
+        "6": {
+          "gpu_use_percent": 0,
+          "vram_used_bytes": 11014144,
+          "passed": true
+        }
+      },
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "source_sha256": {
+        "benchmarks/protenix/csrc/qkv_sigmoid_vector_probe.cpp": "be3eca05411a37b17174b0d3384b50a3f3614fdfef6a42fa537f6751edfcb5ed",
+        "benchmarks/protenix/benchmark_qkv_sigmoid_vector.py": "5911b4d5577ae0de2456e01e3713930dc52f33cabd58fbbb5634daeb6d62fee5",
+        "fireprot/backends/amd/qkv_projection.py": "6f6ad521b169df46c2e0ec3030195267decda3a7a1bbddac40a9f25b23b6fc02",
+        "fireprot/backends/amd/csrc/fireprot_amd_ops.cpp": "5bfcd03c3e5a70a9c294b51fd720cf05bc428c6ba030b47354c2bc6063b57b84",
+        "fireprot/backends/amd/csrc/fireprot_amd_ops.cu": "66bf04eecc03f827725dd361465cda07237830950e64376e5701578a61884d2a",
+        "Protenix/protenix/model/triangular/layers.py": "c2a709d65ee40ab2fa7bdb100bccdd1f04f6b9036e7341a654510429f8f114ee"
+      },
+      "builds": [
+        {
+          "name": "r128c64k16w16",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-shared",
+            "-fPIC",
+            "--offload-arch=gfx90a",
+            "-DROW_TILE=128",
+            "-DCHANNEL_TILE=64",
+            "-DK_TILE=16",
+            "-DWAVES=16",
+            "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/qkv_sigmoid_vector_probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/qkv_sigmoid_vector/74c1a0a1fe3be387/r128c64k16w16.pending.so"
+          ],
+          "library_sha256": "9bdb45651b0b429a44ef08d48529d548eee6332326cc790d72274ed45809e780"
+        },
+        {
+          "name": "r64c64k16w8",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-shared",
+            "-fPIC",
+            "--offload-arch=gfx90a",
+            "-DROW_TILE=64",
+            "-DCHANNEL_TILE=64",
+            "-DK_TILE=16",
+            "-DWAVES=8",
+            "/media/IntelSSD/fireprot/benchmarks/protenix/csrc/qkv_sigmoid_vector_probe.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/qkv_sigmoid_vector/74c1a0a1fe3be387/r64c64k16w8.pending.so"
+          ],
+          "library_sha256": "9b0514fff5e6160e2a4067b8ab5d57f35dce48fafae99193ba731b1e0964b73e"
+        }
+      ],
+      "records": [
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_before",
+          "median_ms": 5.616953372955322,
+          "p95_ms": 5.72633695602417,
+          "values_ms": [
+            5.628626823425293,
+            5.633745193481445,
+            5.548509120941162,
+            5.8467559814453125,
+            5.5856099128723145,
+            5.690035820007324,
+            5.672124862670898,
+            5.559062957763672,
+            5.546588897705078,
+            5.715463161468506,
+            5.567378997802734,
+            5.605279922485352,
+            5.72633695602417,
+            5.654533863067627,
+            5.588169097900391,
+            5.602880001068115,
+            5.5557050704956055,
+            5.679800987243652,
+            5.713223934173584,
+            5.603519916534424
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 7218659328
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r128c64k16w16",
+          "median_ms": 5.752003908157349,
+          "p95_ms": 5.779109954833984,
+          "values_ms": [
+            5.753842830657959,
+            5.711464881896973,
+            5.7675957679748535,
+            5.749364852905273,
+            5.783107757568359,
+            5.7085862159729,
+            5.734333038330078,
+            5.72393798828125,
+            5.764078140258789,
+            5.735931873321533,
+            5.766796112060547,
+            5.779109954833984,
+            5.76823616027832,
+            5.731773853302002,
+            5.729055881500244,
+            5.760079860687256,
+            5.735612869262695,
+            5.750164985656738,
+            5.766955852508545,
+            5.761679172515869
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6706659328
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r64c64k16w8",
+          "median_ms": 6.024664640426636,
+          "p95_ms": 6.049691200256348,
+          "values_ms": [
+            6.021864891052246,
+            5.977888107299805,
+            6.03193998336792,
+            6.038336753845215,
+            6.049691200256348,
+            5.988761901855469,
+            6.03673791885376,
+            6.025864124298096,
+            6.054328918457031,
+            5.992920875549316,
+            6.01610803604126,
+            6.044573783874512,
+            6.0233049392700195,
+            5.969253063201904,
+            6.029861927032471,
+            6.036898136138916,
+            6.043774127960205,
+            5.957417964935303,
+            6.023465156555176,
+            6.016908168792725
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 6706659328
+        },
+        {
+          "scope": "preparation",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_after",
+          "median_ms": 5.650377035140991,
+          "p95_ms": 5.810774803161621,
+          "values_ms": [
+            5.589287757873535,
+            5.679161071777344,
+            5.628948211669922,
+            5.701550006866455,
+            5.709866046905518,
+            5.5478692054748535,
+            5.810774803161621,
+            5.609278202056885,
+            5.632946014404297,
+            5.735292911529541,
+            5.6036810874938965,
+            5.702508926391602,
+            5.6678080558776855,
+            5.724738121032715,
+            5.549468040466309,
+            5.540352821350098,
+            5.678041934967041,
+            5.606238842010498,
+            5.605759143829346,
+            5.856350898742676
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              32,
+              128,
+              1
+            ],
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 7218659328
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_before",
+          "median_ms": 28.069334030151367,
+          "p95_ms": 30.144508361816406,
+          "values_ms": [
+            28.001291275024414,
+            28.208223342895508,
+            28.320648193359375,
+            29.34716033935547,
+            27.83625602722168,
+            27.875595092773438,
+            28.05854034423828,
+            30.144508361816406,
+            27.972026824951172,
+            28.348791122436523,
+            27.72671127319336,
+            28.59234619140625,
+            28.080127716064453,
+            27.884708404541016,
+            27.9932918548584,
+            29.732080459594727,
+            28.027036666870117,
+            28.20054817199707,
+            30.779699325561523,
+            28.033111572265625
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5170659328
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r128c64k16w16",
+          "median_ms": 28.121068000793457,
+          "p95_ms": 28.51494598388672,
+          "values_ms": [
+            28.129064559936523,
+            28.539894104003906,
+            27.87239646911621,
+            27.890628814697266,
+            28.041748046875,
+            28.332799911499023,
+            28.048463821411133,
+            28.2222957611084,
+            28.11307144165039,
+            28.151771545410156,
+            27.997451782226562,
+            28.271392822265625,
+            28.251081466674805,
+            28.51494598388672,
+            28.10747528076172,
+            28.18839454650879,
+            27.882312774658203,
+            28.29058265686035,
+            27.959552764892578,
+            28.050703048706055
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5682659328
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "r64c64k16w8",
+          "median_ms": 28.38573169708252,
+          "p95_ms": 29.21954345703125,
+          "values_ms": [
+            28.68366050720215,
+            28.289621353149414,
+            28.303695678710938,
+            28.281463623046875,
+            28.231571197509766,
+            28.384132385253906,
+            28.488079071044922,
+            30.621864318847656,
+            28.154491424560547,
+            28.435468673706055,
+            28.521183013916016,
+            28.140579223632812,
+            28.387331008911133,
+            29.21954345703125,
+            28.484722137451172,
+            28.46105194091797,
+            28.294740676879883,
+            28.170324325561523,
+            28.34815216064453,
+            28.47096824645996
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5682659328
+        },
+        {
+          "scope": "attention",
+          "batch": 1000,
+          "length": 1000,
+          "implementation": "baseline_after",
+          "median_ms": 28.016002655029297,
+          "p95_ms": 28.225814819335938,
+          "values_ms": [
+            28.10779571533203,
+            27.792280197143555,
+            28.007047653198242,
+            28.222936630249023,
+            27.844091415405273,
+            28.02495765686035,
+            27.74846076965332,
+            27.969146728515625,
+            27.917491912841797,
+            28.195907592773438,
+            27.80219268798828,
+            28.056779861450195,
+            27.94420051574707,
+            27.848567962646484,
+            27.74526023864746,
+            28.06653594970703,
+            28.061100006103516,
+            28.407320022583008,
+            28.1103515625,
+            28.225814819335938
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              128000,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5170659328
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "baseline_before",
+          "median_ms": 4.413732051849365,
+          "p95_ms": 4.443477153778076,
+          "values_ms": [
+            4.414691925048828,
+            4.405096054077148,
+            4.435000896453857,
+            4.414212226867676,
+            4.405416011810303,
+            4.41788911819458,
+            4.443477153778076,
+            4.390063762664795,
+            4.418209075927734,
+            4.423646926879883,
+            4.413251876831055,
+            4.440757751464844,
+            4.420769214630127,
+            4.378069877624512,
+            4.408295154571533,
+            4.370393753051758,
+            4.480738162994385,
+            4.365437030792236,
+            4.373752117156982,
+            4.380629062652588
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5708775424
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r128c64k16w16",
+          "median_ms": 4.515040397644043,
+          "p95_ms": 4.543745040893555,
+          "values_ms": [
+            4.497529029846191,
+            4.51639986038208,
+            4.543745040893555,
+            4.520236968994141,
+            4.47514009475708,
+            4.5464630126953125,
+            4.513360977172852,
+            4.5044050216674805,
+            4.527273178100586,
+            4.507763862609863,
+            4.534629821777344,
+            4.521996021270752,
+            4.527753829956055,
+            4.532071113586426,
+            4.519117832183838,
+            4.479618072509766,
+            4.472742080688477,
+            4.489212989807129,
+            4.487453937530518,
+            4.513680934906006
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5306122240
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r64c64k16w8",
+          "median_ms": 4.5397467613220215,
+          "p95_ms": 4.547741889953613,
+          "values_ms": [
+            4.546783924102783,
+            4.547741889953613,
+            4.539107799530029,
+            4.536869049072266,
+            4.553500175476074,
+            4.546943187713623,
+            4.5397467613220215,
+            4.541505813598633,
+            4.543904781341553,
+            4.539426803588867,
+            4.539426803588867,
+            4.5264739990234375,
+            4.5431060791015625,
+            4.5397467613220215,
+            4.537988185882568,
+            4.535909175872803,
+            4.5357489585876465,
+            4.534150123596191,
+            4.5434250831604,
+            4.539906978607178
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5306122240
+        },
+        {
+          "scope": "preparation",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "baseline_after",
+          "median_ms": 4.3787901401519775,
+          "p95_ms": 4.41453218460083,
+          "values_ms": [
+            4.387344837188721,
+            4.36527681350708,
+            4.3446478843688965,
+            4.396780014038086,
+            4.394381999969482,
+            4.388463973999023,
+            4.384306907653809,
+            4.371673107147217,
+            4.423007011413574,
+            4.41453218460083,
+            4.373753070831299,
+            4.365596771240234,
+            4.383827209472656,
+            4.394542217254639,
+            4.355521202087402,
+            4.404616832733154,
+            4.355360984802246,
+            4.358240127563477,
+            4.367994785308838,
+            4.36047887802124
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              32,
+              128,
+              1
+            ],
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 5708775424
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "baseline_before",
+          "median_ms": 28.946964263916016,
+          "p95_ms": 29.037080764770508,
+          "values_ms": [
+            28.874603271484375,
+            28.931371688842773,
+            29.037080764770508,
+            28.928651809692383,
+            28.97119140625,
+            28.907384872436523,
+            29.01276969909668,
+            28.940807342529297,
+            28.949922561645508,
+            29.015968322753906,
+            28.998058319091797,
+            28.921775817871094,
+            28.906423568725586,
+            29.0469913482666,
+            28.904985427856445,
+            28.97806739807129,
+            28.927852630615234,
+            28.959518432617188,
+            28.984783172607422,
+            28.944005966186523
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 4136304640
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r128c64k16w16",
+          "median_ms": 29.049710273742676,
+          "p95_ms": 29.156856536865234,
+          "values_ms": [
+            29.069862365722656,
+            29.088891983032227,
+            29.041715621948242,
+            28.926416397094727,
+            28.98798370361328,
+            29.04587173461914,
+            29.156856536865234,
+            28.96767234802246,
+            29.071300506591797,
+            29.05354881286621,
+            29.02044677734375,
+            29.164051055908203,
+            29.065223693847656,
+            29.041555404663086,
+            29.072420120239258,
+            28.99837875366211,
+            29.045713424682617,
+            29.080415725708008,
+            29.039796829223633,
+            29.079456329345703
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 4538957824
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "r64c64k16w8",
+          "median_ms": 29.165813446044922,
+          "p95_ms": 29.250728607177734,
+          "values_ms": [
+            29.14134407043457,
+            29.22882080078125,
+            29.368427276611328,
+            29.10200309753418,
+            29.16901206970215,
+            29.11479949951172,
+            29.138626098632812,
+            29.1914005279541,
+            29.13254737854004,
+            29.199073791503906,
+            29.170289993286133,
+            29.250728607177734,
+            29.196035385131836,
+            29.15205955505371,
+            29.236175537109375,
+            29.196516036987305,
+            29.08409309387207,
+            29.158456802368164,
+            29.162614822387695,
+            29.145984649658203
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 4538957824
+        },
+        {
+          "scope": "attention",
+          "batch": 512,
+          "length": 1536,
+          "implementation": "baseline_after",
+          "median_ms": 28.92209815979004,
+          "p95_ms": 28.97199249267578,
+          "values_ms": [
+            28.959997177124023,
+            28.971351623535156,
+            28.94608497619629,
+            28.937450408935547,
+            28.842620849609375,
+            28.91266441345215,
+            29.070980072021484,
+            28.856372833251953,
+            28.952322006225586,
+            28.92305564880371,
+            28.852693557739258,
+            28.904987335205078,
+            28.836702346801758,
+            28.97199249267578,
+            28.921140670776367,
+            28.851253509521484,
+            28.956480026245117,
+            28.86052703857422,
+            28.9670352935791,
+            28.891551971435547
+          ],
+          "max_abs_delta": 0.0,
+          "strides": [
+            [
+              196608,
+              128,
+              1
+            ]
+          ],
+          "peak_allocated_bytes": 4136304640
+        }
+      ],
+      "rejections": [],
+      "blas": {
+        "requested": "hipblas",
+        "before": "_BlasBackend.Cublaslt",
+        "effective": "_BlasBackend.Cublas",
+        "changed": true
+      },
+      "ck_attention": {
+        "enabled": true,
+        "long1536_enabled": true,
+        "exact1536_enabled": true,
+        "vector1000_enabled": true,
+        "loaded": true,
+        "error": null,
+        "build": {
+          "source_sha256": "d50865b27a66956b391a331cc0daf9e33962c1fd1c0d93b3243fab9d25af016c",
+          "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+          "header_count": 581,
+          "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+          "command": [
+            "/opt/rocm/bin/hipcc",
+            "-O3",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a",
+            "-I/opt/rocm/include",
+            "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+            "-o",
+            "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.pending.so"
+          ],
+          "library_sha256": "e0db29648fbc9e4895663604a93c3729503039310761abdf19ed8e637d49ca63",
+          "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.so",
+          "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+        }
+      },
+      "compiler": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+      "qkv_dispatch": {
+        "enabled": true,
+        "counts": {
+          "n1000": 107,
+          "n1536": 107,
+          "fallback": 0
+        }
+      },
+      "monitors": [
+        {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 6,
+          "interval_seconds": 1.0,
+          "samples": 11,
+          "allowed_pid": 936193,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        },
+        {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 7,
+          "interval_seconds": 1.0,
+          "samples": 11,
+          "allowed_pid": 936193,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
+      ]
+    }
+  }
+}

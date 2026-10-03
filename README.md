@@ -18,12 +18,15 @@ Protenix v1.1.0 is the first working adapter target. The repository now contains
 - a validated exact-sequence CK FP32 attention specialization for the opt-in 1,536-token gfx90a bucket, with same-source model gains and SDPA fallback;
 - an independent Protenix patch branch that exposes FireProt dispatch without changing native defaults.
 
-AtlasFold, OpenFold, ESMFold, Base-model coverage, BF16 promotion, additional long-sequence buckets, and general multi-GPU execution remain future work.
+OpenFold, ESMFold, Protenix Base-model coverage, Protenix BF16 promotion,
+additional long-sequence buckets, and general multi-GPU execution remain future work.
 
-AtlasFold monomer plus AtlasLM-3B now has an initial native benchmark entry point
-with explicit dual-checkpoint provenance, complete LM/recycle timing, PCI-based
-GPU monitoring, and repeated-output validation. Its optimized adapter remains
-in development. See [AtlasFold performance work](docs/atlasfold-performance.md)
+AtlasFold monomer plus AtlasLM-3B now has an opt-in adapter and benchmark entry
+point with dual-checkpoint provenance, complete LM/recycle timing, PCI-based
+GPU monitoring, and repeated-output validation. A HIP mask/bias path is available
+for the exact 1000-residue input bucket and explicitly enabled N1536 experiments.
+A further softmax-fusion experiment has passed N1000 full-model byte comparisons
+but is not yet the packaged default. See [AtlasFold performance work](docs/atlasfold-performance.md)
 and [DiamondHill checkpoint locations](docs/diamondhill-checkpoints.md).
 
 ## Latest single-request E2E comparison

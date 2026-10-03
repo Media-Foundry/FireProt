@@ -115,6 +115,9 @@ def main():
     parser.add_argument('--model-path', type=Path, default=ASSET_ROOT/'weights/atlasfold/snapshot/weights/atlasfold-260703.pth')
     parser.add_argument('--lm-path', type=Path, default=ASSET_ROOT/'weights/atlaslm3b/snapshot/weights/atlaslm_3b_base.pth')
     parser.add_argument('--kernel', choices=('torch', 'triton'), default='torch')
+    parser.add_argument('--backend', choices=('native', 'chunked', 'hip'), default='native')
+    parser.add_argument('--allow-long1536', action='store_true')
+    parser.add_argument('--stage-events', choices=('all', 'stages', 'off'), default='all')
     parser.add_argument('--seed', type=int, default=101)
     parser.add_argument('--recycles', type=int, default=4)
     parser.add_argument('--samples', type=int, default=1)
@@ -122,6 +125,8 @@ def main():
     args = parser.parse_args()
     if args.recycles < 0 or args.samples < 1 or args.repeats < 1:
         parser.error('Invalid recycle, sample, or repetition count')
+    if args.backend != 'native' and args.kernel != 'torch':
+        parser.error('FireProt backends require the torch upstream kernel route')
     if not os.environ.get('HIP_VISIBLE_DEVICES') or os.environ.get('ROCR_VISIBLE_DEVICES'):
         parser.error('Set HIP_VISIBLE_DEVICES to one ordinal and unset ROCR_VISIBLE_DEVICES')
     if not os.environ['HIP_VISIBLE_DEVICES'].isdigit() or int(os.environ['HIP_VISIBLE_DEVICES']) not in range(8):
@@ -136,6 +141,7 @@ def main():
               'dtype': 'Native mixed BF16/FP32; BF16 autocast; FP32 diffusion',
               'mlm_prob': 0.15, 'trunk_passes': args.recycles + 1, 'records': []}
     monitor = None
+    runtime = None
     def save():
         (args.out/'manifest.json').write_text(json.dumps(report, indent=2))
     save()
@@ -170,6 +176,10 @@ def main():
                            model_path=args.model_path, lm_path=args.lm_path).eval()
         torch.cuda.synchronize()
         report['load_seconds'] = time.perf_counter() - request_start
+        if args.backend != 'native':
+            from fireprot.adapters.atlasfold.runtime import AtlasFoldRuntime
+            runtime = AtlasFoldRuntime(model, len(sequence), args.backend,
+                                       allow_long1536=args.allow_long1536)
         report['config'] = dataclasses.asdict(model.cfg)
         runner = get_runner(model)
         bucket = runner._get_length_bucket(len(sequence))
@@ -177,16 +187,18 @@ def main():
         report['padding_residues'] = bucket - len(sequence)
         report['sampling'] = dataclasses.asdict(get_sampling_config(bucket))
         stages = StageEvents(torch)
-        for method in ('inference', 'run_trunk', 'run_lm_embedder'):
-            stages.wrap(model, method, method)
-        for attr in ('lm_stack', 'main_stack', 'confidence_head'):
-            stages.wrap(getattr(model, attr), 'forward', attr)
-        stages.wrap(model.diffusion_head, 'sample', 'diffusion')
-        for block in model.lm.transformer.blocks:
-            stages.wrap(block, 'forward', 'atlaslm_block')
-        for module in model.modules():
-            if type(module).__name__.startswith('Triangle'):
-                stages.wrap(module, 'forward', type(module).__name__)
+        if args.stage_events != 'off':
+            for method in ('inference', 'run_trunk', 'run_lm_embedder'):
+                stages.wrap(model, method, method)
+            for attr in ('lm_stack', 'main_stack', 'confidence_head'):
+                stages.wrap(getattr(model, attr), 'forward', attr)
+            stages.wrap(model.diffusion_head, 'sample', 'diffusion')
+        if args.stage_events == 'all':
+            for block in model.lm.transformer.blocks:
+                stages.wrap(block, 'forward', 'atlaslm_block')
+            for module in model.modules():
+                if type(module).__name__.startswith('Triangle'):
+                    stages.wrap(module, 'forward', type(module).__name__)
         save()
         for repeat in range(args.repeats):
             stages.events.clear()
@@ -220,6 +232,7 @@ def main():
         report['error'] = traceback.format_exc()
         raise
     finally:
+        report['fireprot'] = runtime.manifest() if runtime else None
         report['isolation'] = monitor.stop() if monitor else {'passed': False}
         save()
     if not report['isolation']['passed']:

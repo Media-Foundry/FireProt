@@ -96,7 +96,16 @@ def predict(request, channel):
         OpenFold3.forward, OpenFold3AllAtom.predict_step = original_forward, original_predict
     if calls != 1 or len(predictions) != workload['samples']:
         raise RuntimeError('Expected exactly one query with the requested samples')
-    return dict(schema_version=1, run_id=request['run_id'], seed=request['seed'], workload=workload,
+    structures = list((output / 'native').rglob('*.cif'))
+    if len(structures) != workload['samples']:
+        raise RuntimeError('Unexpected OpenFold3 structure count')
+    for prediction in predictions:
+        suffix = f"_seed_{request['seed']}_sample_{prediction['sample'] + 1}_model.cif"
+        matches = [p for p in structures if p.name.endswith(suffix)]
+        if len(matches) != 1:
+            raise RuntimeError('Missing or ambiguous OpenFold3 sample structure')
+        prediction['structure'] = str(matches[0].relative_to(output))
+    return dict(schema_version=2, run_id=request['run_id'], seed=request['seed'], workload=workload,
                 predictions=predictions, model_seconds=model_seconds,
                 request_seconds=time.perf_counter() - started)
 

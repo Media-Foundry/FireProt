@@ -95,6 +95,7 @@ workloads without experimental coordinates establish native agreement, not
 structural accuracy.
 
 - [Rust migration acceptance and remaining work](docs/rust-migration.md)
+- [Prediction CIF validation and sample associations](docs/cif-validation.md)
 - [Current architecture and dependency boundaries](docs/architecture.md)
 - [Independent Linux installation](docs/installation.md)
 - [Repository layout and historical path compatibility](docs/repository-layout.md)

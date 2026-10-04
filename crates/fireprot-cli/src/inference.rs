@@ -152,7 +152,7 @@ pub fn run(request: &Path, profile: &Path) -> Result<RunReport> {
         &Limits::default(),
         &cancelled,
         |paths| {
-            bundle::validate(prepared.request(), paths)
+            bundle::validate_current(prepared.request(), paths)
                 .map(|_| ())
                 .map_err(|e| e.to_string())
         },

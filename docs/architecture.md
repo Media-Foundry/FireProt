@@ -252,3 +252,13 @@ Start and before final output acceptance. Python workers do not own inventory or
 acceptance policy. `capture-environment` exposes the Rust capture operation; profiles
 select its result explicitly. Inventory coverage must be audited against actual
 import roots and native dependencies. See [scope and cost](environment-inventories.md).
+
+## Prediction structures
+
+`fireprot-validation::structure` owns strict single-model prediction CIF parsing,
+atom identity and Protenix coordinate/confidence comparison. Current output
+bundles explicitly bind original sample indices to upstream-written structures.
+Rust acceptance checks those files after supervisor hash verification. The worker
+transport remains version 1; prediction content is schema 2. Historical schema 1
+archives remain readable with their original guarantees. See
+[CIF validation](cif-validation.md) for model-specific checks and limitations.

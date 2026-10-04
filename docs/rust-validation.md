@@ -59,8 +59,10 @@ cargo run --release --example compare_npz -- reference.npz candidate.npz
 ```
 
 The example checks every archive key with exact comparison and returns nonzero
-on failure. Broader model output schemas, CIF handling and repeated-timing statistics
-remain migration work. Saved-output replay is not a new inference benchmark.
+on failure. Rust also provides [prediction CIF parsing and comparison](cif-validation.md)
+and [timing statistics](timing-statistics.md). Broader model coverage and paired
+performance verdicts remain migration work. Saved-output replay is not a new
+inference benchmark.
 
 NPY parsing uses [npyz](https://docs.rs/npyz/0.9.1/npyz/), and coordinate
 alignment uses [nalgebra decompositions](https://www.nalgebra.rs/docs/user_guide/decompositions_and_lapack/).

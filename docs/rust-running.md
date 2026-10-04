@@ -82,8 +82,8 @@ preserves its `[residues,14,3]` coordinate layout.
 
 The CLI is not yet a replacement for every maintained workflow. Pending work
 includes additional model variants and accelerated routes,
-environment/build provenance, richer model schemas, CIF comparison,
-paired performance verdicts, deployment packaging, and full parity across the established length
+complete environment provenance, richer model schemas,
+paired performance verdicts, and full parity across the established length
 buckets. The historical E2E speedups do not establish this entry point's overhead.
 
 ## First N1000 execution evidence
@@ -171,17 +171,19 @@ features, prediction and serialization. Supervisor wall adds worker startup,
 monitoring and output verification, excluding the earlier provenance preflight.
 No historical timing boundary is silently substituted for these fields.
 
-For migration checks against an archived native CIF, export its model-1
-coordinates losslessly to NPZ, then run the Rust comparator:
+For migration checks against an archived native CIF, use the Rust comparator:
 
 ```bash
-cargo run --release -p fireprot-validation --example compare_protenix -- \
-  reference.npz reference-confidence.json sample-0.npz candidate-confidence.json
+target/release/fireprot compare-protenix-cif \
+  reference.cif reference-confidence.json candidate.cif candidate-confidence.json
 ```
 
-This example preserves the existing 1e-3 Angstrom aligned-RMSD and 1e-3 numeric
+This command preserves the existing 1e-3 Angstrom aligned-RMSD and 1e-3 numeric
 summary-confidence gates. It does not assert bitwise equality or compare raw
 confidence arrays that were absent from historical CIF/summary references.
+See [CIF validation](cif-validation.md) for supported structures and schema 2
+sample associations. The NPZ `compare_protenix` example remains available for
+saved array comparisons.
 
 ### Protenix migration evidence
 

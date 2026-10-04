@@ -115,6 +115,7 @@ def predict(request, channel):
             raise RuntimeError('Unexpected Protenix coordinate sample axis')
         if len(result['summary_confidence']) != workload['samples'] or len(result['full_data']) != workload['samples']:
             raise RuntimeError('Unexpected Protenix confidence sample count')
+        ranks = runner.dumper._get_ranker_indices(result)
         for sample in range(workload['samples']):
             arrays = {'coordinates': result['coordinate'][sample]}
             arrays.update({'confidence.' + key: value for key, value in result['full_data'][sample].items()
@@ -122,7 +123,8 @@ def predict(request, channel):
             archive = f'sample-{sample}.npz'
             descriptors = save_arrays(output / archive, arrays)
             summary = map_values_to_list(copy.deepcopy(result['summary_confidence'][sample]))
-            predictions.append(dict(sample=sample, archive=archive, arrays=descriptors, confidence=summary))
+            predictions.append(dict(sample=sample, archive=archive, arrays=descriptors, confidence=summary,
+                structure=f"native/{name}/seed_{request['seed']}/predictions/{name}_sample_{int(ranks[sample])}.cif"))
         return result
 
     inference.InferenceRunner.predict = capture
@@ -147,5 +149,5 @@ def predict(request, channel):
         raise RuntimeError('Incomplete Protenix inference; inspect native/ERR and worker logs')
     if runtime_manifest is not None:
         (output / 'operator-runtime.json').write_text(json.dumps(runtime_manifest(), indent=2, allow_nan=False) + '\n')
-    return dict(schema_version=1, run_id=request['run_id'], seed=request['seed'], workload=workload,
+    return dict(schema_version=2, run_id=request['run_id'], seed=request['seed'], workload=workload,
                 predictions=predictions, model_seconds=model_seconds, request_seconds=time.perf_counter()-started)

@@ -61,6 +61,11 @@ fn fixture(root: &Path) -> (Value, Value) {
     );
     let archive = root.join("fixture/sample-0.npz");
     fs::write(
+        root.join("fixture/sample.cif"),
+        include_bytes!("../../fireprot-validation/tests/fixtures/prediction-zero.cif"),
+    )
+    .unwrap();
+    fs::write(
         &archive,
         include_bytes!("../../fireprot-validation/tests/fixtures/openfold_sample.npz"),
     )
@@ -77,8 +82,8 @@ fn fixture(root: &Path) -> (Value, Value) {
         .collect();
     write(
         &root.join("fixture/predictions.json"),
-        &json!({"schema_version":1,"run_id":"filled-by-worker","seed":101,"workload":{},
-        "predictions":[{"sample":0,"archive":"sample-0.npz","arrays":descriptors,"confidence":null}],
+        &json!({"schema_version":2,"run_id":"filled-by-worker","seed":101,"workload":{},
+        "predictions":[{"sample":0,"archive":"sample-0.npz","structure":"sample.cif","arrays":descriptors,"confidence":null}],
         "model_seconds":0.001,"request_seconds":0.002,"environment":{"torch":"fixture","hip":"fixture","python":"fixture"}}),
     );
     let artifact = json!({"path":root.join("source/model.py"),"sha256":sha256(&root.join("source/model.py")).unwrap()});

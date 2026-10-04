@@ -30,6 +30,7 @@ if os.environ.get('FIREPROT_TEST_INVALID') == '1':
     bundle['seed'] += 1
 (root / 'predictions.json').write_text(json.dumps(bundle))
 shutil.copyfile(fixture / 'sample-0.npz', root / 'sample-0.npz')
+shutil.copyfile(fixture / 'sample.cif', root / 'sample.cif')
 artifacts = [dict(path=name, sha256=hashlib.sha256((root / name).read_bytes()).hexdigest())
-             for name in ['predictions.json', 'sample-0.npz']]
+             for name in ['predictions.json', 'sample-0.npz', 'sample.cif']]
 emit(1, dict(event='outputs', artifacts=artifacts))

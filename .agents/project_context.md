@@ -125,3 +125,14 @@ and acceptance, so default profiles remain unchanged. See
 `docs/environment-inventories.md`. Output validation now rechecks cancellation and
 timeout before accepting a run; the new cancellation regression failed before the
 fix and passes afterward. Final environment acceptance remains outstanding.
+
+## Prediction CIF acceptance (2026-10-05)
+
+Current inference requires prediction bundle schema 2 with explicit sample/CIF
+associations; archive replay preserves schema 1 compatibility. Rust parses native
+prediction CIFs and compares Protenix structures with the unchanged numerical
+gates. Four N1000 requests (AtlasFold, Protenix one/two samples, deterministic
+OpenFold3) pass acceptance and archive replay. AtlasFold/OF3 arrays retain exact
+native parity; Protenix single-sample passes established gates. AtlasFold CIF
+rounding and omitted atom14 slots prevent claiming a complete CIF-to-tensor
+mapping. See `docs/cif-validation.md` and `provenance/rust_cif_integration.json`.

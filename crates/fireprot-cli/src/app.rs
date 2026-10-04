@@ -29,6 +29,27 @@ fn execute(command: Command<'_>) -> Result<()> {
     match command {
         Command::Help(name) => print!("{}", args::help(name)),
         Command::Version => println!("fireprot {}", env!("CARGO_PKG_VERSION")),
+        Command::InspectCif(path) => {
+            let structure = fireprot_validation::structure::read(path)?;
+            print_json(&json!({"atom_count":structure.atoms.len(),"model_count":1,"finite":true}))?;
+        }
+        Command::CompareProtenixCif {
+            reference,
+            reference_confidence,
+            candidate,
+            candidate_confidence,
+        } => {
+            let report = fireprot_validation::structure::compare_protenix(
+                reference,
+                reference_confidence,
+                candidate,
+                candidate_confidence,
+            )?;
+            print_json(&report)?;
+            if !report.passed {
+                return Err("Protenix CIF comparison failed".into());
+            }
+        }
         Command::CaptureEnvironment(path) => {
             let specification: fireprot_runtime::environment_inventory::InventorySpec =
                 read_json(path)?;

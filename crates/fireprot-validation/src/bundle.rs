@@ -24,6 +24,8 @@ pub struct TensorDescriptor {
 pub struct Prediction {
     pub sample: u32,
     pub archive: PathBuf,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub structure: Option<PathBuf>,
     pub arrays: BTreeMap<String, TensorDescriptor>,
     pub confidence: Option<serde_json::Value>,
 }
@@ -54,7 +56,7 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
     }
     let bundle: Bundle =
         serde_json::from_slice(&fs::read(manifest)?).map_err(|e| Error::Schema(e.to_string()))?;
-    if bundle.schema_version != 1
+    if !matches!(bundle.schema_version, 1 | 2)
         || bundle.run_id != r.run_id
         || bundle.seed != r.seed
         || bundle.workload != r.workload
@@ -83,6 +85,7 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
     }
     let mut ids = BTreeSet::new();
     let mut archives = BTreeSet::new();
+    let mut structures = BTreeSet::new();
     for prediction in &bundle.predictions {
         if prediction.sample >= samples || !ids.insert(prediction.sample) {
             return Err(schema("duplicate or invalid sample ID"));
@@ -120,6 +123,67 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
             arrays.insert(name, array);
         }
         validate_model(&r.workload, &arrays, prediction.confidence.as_ref())?;
+        if bundle.schema_version == 2 {
+            let file = prediction
+                .structure
+                .as_ref()
+                .ok_or_else(|| schema("missing sample structure"))?;
+            if file.as_os_str().is_empty()
+                || !file.components().all(|c| matches!(c, Component::Normal(_)))
+            {
+                return Err(schema("invalid structure path"));
+            }
+            let file = root.join(file).canonicalize()?;
+            if !file.starts_with(&root)
+                || !verified.contains(&file)
+                || !structures.insert(file.clone())
+            {
+                return Err(schema("unverified or reused structure"));
+            }
+            let structure = crate::structure::read(&file)?;
+            if structure
+                .atoms
+                .iter()
+                .enumerate()
+                .any(|(i, a)| a.serial != i + 1)
+            {
+                return Err(schema(
+                    "prediction CIF atom IDs must be consecutive from one",
+                ));
+            }
+            let coords = &arrays["coordinates"];
+            match &r.workload {
+                Workload::Atlasfold { .. } => {
+                    if structure.atoms.len() > coords.shape()[0] * 14 {
+                        return Err(schema("AtlasFold CIF atom count exceeds atom14 storage"));
+                    }
+                }
+                _ => {
+                    if structure.coordinates != coords.coordinates()? {
+                        return Err(schema("CIF coordinates differ from the sample tensor"));
+                    }
+                }
+            }
+        }
+    }
+    if bundle.schema_version == 2
+        && verified
+            .iter()
+            .filter(|p| p.extension().is_some_and(|e| e == "cif"))
+            .count()
+            != structures.len()
+    {
+        return Err(schema("unassociated CIF artifact"));
+    }
+    Ok(bundle)
+}
+
+/// Current inference requires explicit sample/CIF associations. Schema 1 remains
+/// readable only for historical accepted-archive replay.
+pub fn validate_current(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bundle> {
+    let bundle = validate(request, verified)?;
+    if bundle.schema_version != 2 {
+        return Err(schema("current inference requires output bundle schema 2"));
     }
     Ok(bundle)
 }

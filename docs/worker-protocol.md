@@ -186,3 +186,12 @@ with a recorded explicit environment, and independently verifies `/proc/PID/exe`
 before authorizing Start. Final reports retain the worker's announced identity,
 `device_verified`, and AMD SMI's independent physical mapping. See
 [execution provenance](execution-provenance.md) for exact scope and limits.
+
+## Prediction content schema
+
+The transport protocol remains version 1. Current workers return prediction
+bundle schema 2: each original sample index binds an NPZ archive and a native
+CIF `structure` path. Rust validates these associations independently before
+accepting output. Historical accepted archives can still replay schema 1, but
+new inference requires schema 2. See [CIF validation](cif-validation.md) for the
+model-specific coordinate checks and AtlasFold atom14 limitation.

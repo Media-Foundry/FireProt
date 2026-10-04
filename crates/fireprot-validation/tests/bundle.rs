@@ -67,3 +67,55 @@ fn only_supervisor_verified_files_are_accepted() {
     assert!(validate(&r, &v[..1]).is_err());
     assert!(validate(&r, &v[1..]).is_err());
 }
+
+#[test]
+fn current_inference_requires_linked_valid_cif_but_legacy_archives_remain_readable() {
+    use fireprot_validation::bundle::validate_current;
+    let (_d, r, mut b, mut v) = setup();
+    fs::write(&v[0], serde_json::to_vec(&b).unwrap()).unwrap();
+    assert!(validate_current(&r, &v).is_err());
+    assert!(validate(&r, &v).is_ok());
+    b["schema_version"] = json!(2);
+    b["predictions"][0]["structure"] = json!("sample.cif");
+    let cif = r.as_request().output_dir.join("sample.cif");
+    fs::write(&cif, include_bytes!("fixtures/prediction-zero.cif")).unwrap();
+    v.push(cif.clone());
+    fs::write(&v[0], serde_json::to_vec(&b).unwrap()).unwrap();
+    assert!(validate_current(&r, &v).is_ok());
+    for mode in [
+        "missing",
+        "unverified",
+        "wrong_coordinates",
+        "malformed",
+        "extra",
+        "escape",
+    ] {
+        let mut candidate = b.clone();
+        let mut files = v.clone();
+        fs::write(&cif, include_bytes!("fixtures/prediction-zero.cif")).unwrap();
+        match mode {
+            "missing" => {
+                candidate["predictions"][0]
+                    .as_object_mut()
+                    .unwrap()
+                    .remove("structure");
+            }
+            "unverified" => {
+                files.pop();
+            }
+            "wrong_coordinates" => {
+                fs::write(&cif, include_bytes!("fixtures/prediction.cif")).unwrap()
+            }
+            "malformed" => fs::write(&cif, "not a CIF").unwrap(),
+            "extra" => {
+                let p = r.as_request().output_dir.join("extra.cif");
+                fs::write(&p, include_bytes!("fixtures/prediction-zero.cif")).unwrap();
+                files.push(p);
+            }
+            "escape" => candidate["predictions"][0]["structure"] = json!("../outside.cif"),
+            _ => unreachable!(),
+        }
+        fs::write(&v[0], serde_json::to_vec(&candidate).unwrap()).unwrap();
+        assert!(validate_current(&r, &files).is_err(), "{mode}");
+    }
+}

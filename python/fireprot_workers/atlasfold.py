@@ -104,11 +104,12 @@ def predict(request, channel):
         arrays = dict(coordinates=sample.coordinates, plddt=sample.plddt, pae=sample.pae, ptm=sample.ptm)
         descriptors = save_arrays(output / archive, arrays)
         (native / f'sample-{sample_index}.cif').write_text(sample.to_mmcif())
-        predictions.append(dict(sample=sample_index, archive=archive, arrays=descriptors, confidence=None))
+        predictions.append(dict(sample=sample_index, archive=archive, arrays=descriptors, confidence=None,
+                                structure=f'native/sample-{sample_index}.cif'))
     (output / 'atlasfold-model.json').write_text(json.dumps(dict(config=dataclasses.asdict(model.cfg),
         bucket=bucket, sampling=dataclasses.asdict(sampling), mlm_prob=0.15,
         trunk_passes=workload['recycles'] + 1, internal_tensor_dtypes=raw_dtypes), indent=2) + '\n')
     if runtime is not None:
         (output / 'operator-runtime.json').write_text(json.dumps(runtime.manifest(), indent=2, allow_nan=False) + '\n')
-    return dict(schema_version=1, run_id=request['run_id'], seed=request['seed'], workload=workload,
+    return dict(schema_version=2, run_id=request['run_id'], seed=request['seed'], workload=workload,
         predictions=predictions, model_seconds=model_seconds, request_seconds=time.perf_counter()-started)

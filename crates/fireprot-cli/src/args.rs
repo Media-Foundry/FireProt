@@ -4,6 +4,13 @@ use std::path::Path;
 pub enum Command<'a> {
     Help(Option<&'a str>),
     Version,
+    InspectCif(&'a Path),
+    CompareProtenixCif {
+        reference: &'a Path,
+        reference_confidence: &'a Path,
+        candidate: &'a Path,
+        candidate_confidence: &'a Path,
+    },
     CaptureEnvironment(&'a Path),
     Install {
         specification: &'a Path,
@@ -48,6 +55,16 @@ pub enum Command<'a> {
 }
 
 const COMMANDS: &[(&str, &str, &str)] = &[
+    (
+        "inspect-cif",
+        "STRUCTURE",
+        "Validate a single-model prediction CIF and report its atom count.",
+    ),
+    (
+        "compare-protenix-cif",
+        "REFERENCE_CIF REFERENCE_CONFIDENCE CANDIDATE_CIF CANDIDATE_CONFIDENCE",
+        "Apply established Protenix coordinate and confidence gates to CIF predictions.",
+    ),
     (
         "capture-environment",
         "SPECIFICATION",
@@ -146,6 +163,13 @@ pub fn parse(args: &[String]) -> Result<Command<'_>, String> {
     Ok(match words.as_slice() {
         ["--help" | "-h" | "help"] => Command::Help(None),
         ["--version" | "-V"] => Command::Version,
+        ["inspect-cif", path] => Command::InspectCif(Path::new(*path)),
+        ["compare-protenix-cif", r, rc, c, cc] => Command::CompareProtenixCif {
+            reference: Path::new(*r),
+            reference_confidence: Path::new(*rc),
+            candidate: Path::new(*c),
+            candidate_confidence: Path::new(*cc),
+        },
         ["capture-environment", path] => Command::CaptureEnvironment(Path::new(*path)),
         ["install", specification, destination] => Command::Install {
             specification: Path::new(*specification),

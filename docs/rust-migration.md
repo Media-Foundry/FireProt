@@ -62,7 +62,7 @@ is active and the completion gates above remain in force.
 | Operator policy | Rust ordering, cache identity/invalidation, rejection reasons and fallback via the CPython bridge | Python tensor predicates and calls remain an explicit boundary |
 | Process and device control | Rust preflight, explicit launch environments and input identities, worker supervision, timeouts/cancellation, process cleanup, persisted HIP-to-PCI-to-SMI mapping and continuous isolation | Complete model-environment and dynamic-library evidence |
 | Source and resource provenance | Rust streaming hashes, pinned Git/exported sources, checkpoints, inputs, Protenix CCD/data resources and optional environment file/tree inventories | Complete adapter environment/resource coverage |
-| Output validation | Rust sample/tensor acceptance, primitive NPY/NPZ, exact array comparison, alignment, confidence schemas/deltas and experimental coordinate masks | CIF workflow coverage |
+| Output validation | Rust sample/tensor acceptance, NPY/NPZ, strict prediction CIF parsing and sample association, array comparison, alignment, confidence deltas and experimental masks | Broader structure workflows; AtlasFold CIF-to-atom14 mapping remains incomplete |
 | Timing collection | Rust descriptive statistics and pinned accepted-run archive collection, with content/device/condition checks | Paired performance verdicts and complete invocation timing |
 | Protenix | Native and accelerated Mini-default FP32 N1000/N1536 under Rust supervision | Other variants before retiring the old entry point |
 | AtlasFold + AtlasLM-3B | Native/chunked/HIP/fused HIP with dual weights and model-specific semantics | Final acceptance after layout migration |

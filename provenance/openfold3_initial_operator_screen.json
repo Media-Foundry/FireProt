@@ -1,0 +1,158 @@
+{
+  "reports": {
+    "triton-environment-probe.json": {
+      "device": {
+        "gpu": 0,
+        "bdf": "0000:11:00.0",
+        "uuid": "0e00740c-0000-1000-8087-722801eb4921",
+        "kfd_id": 57586,
+        "node_id": 4,
+        "partition_id": 0
+      },
+      "torch": "2.12.0a0+git78258b9",
+      "torch_path": "/home/pc/anaconda3/envs/BIO/lib/python3.12/site-packages/torch/__init__.py",
+      "triton": "3.7.1",
+      "triton_path": "/home/pc/anaconda3/envs/DS/lib/python3.12/site-packages/triton/__init__.py",
+      "isolation": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 0,
+        "interval_seconds": 1.0,
+        "samples": 1,
+        "allowed_pid": 1158317,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "sdpa-probe.json": {
+      "device": {
+        "gpu": 0,
+        "bdf": "0000:11:00.0",
+        "uuid": "0e00740c-0000-1000-8087-722801eb4921",
+        "kfd_id": 57586,
+        "node_id": 4,
+        "partition_id": 0
+      },
+      "dtype": "float32",
+      "seed": 1231,
+      "chunk_size": 128,
+      "warmup": 1,
+      "repetitions": 3,
+      "cases": [],
+      "scope": "Trained first-block triangle operators on synthetic activations and all-valid masks; no full-model speedup claim.",
+      "status": "failed",
+      "error": "RuntimeError('No available kernel. Aborting execution.')",
+      "isolation": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 0,
+        "interval_seconds": 1.0,
+        "samples": 4,
+        "allowed_pid": 1159492,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "sdpa-contiguous-bias-probe.json": {
+      "device": {
+        "gpu": 0,
+        "bdf": "0000:11:00.0",
+        "uuid": "0e00740c-0000-1000-8087-722801eb4921",
+        "kfd_id": 57586,
+        "node_id": 4,
+        "partition_id": 0
+      },
+      "dtype": "float32",
+      "seed": 1231,
+      "chunk_size": 128,
+      "warmup": 1,
+      "repetitions": 3,
+      "cases": [
+        {
+          "length": 1000,
+          "kind": "start",
+          "native_ms": 199.01785278320312,
+          "sdpa_ms": 54.00455856323242,
+          "exact": false,
+          "max_abs": 0.000820159912109375,
+          "rms": 2.3256974600371905e-05,
+          "finite": true
+        },
+        {
+          "length": 1000,
+          "kind": "end",
+          "native_ms": 276.6046142578125,
+          "sdpa_ms": 54.69912338256836,
+          "exact": false,
+          "max_abs": 0.001262664794921875,
+          "rms": 2.7821130061056465e-05,
+          "finite": true
+        },
+        {
+          "length": 1536,
+          "kind": "start",
+          "native_ms": 651.2042236328125,
+          "sdpa_ms": 144.08419799804688,
+          "exact": false,
+          "max_abs": 0.00130462646484375,
+          "rms": 2.8944825317012146e-05,
+          "finite": true
+        },
+        {
+          "length": 1536,
+          "kind": "end",
+          "native_ms": 1004.3375244140625,
+          "sdpa_ms": 152.1893768310547,
+          "exact": false,
+          "max_abs": 0.0014171600341796875,
+          "rms": 3.436125552980229e-05,
+          "finite": true
+        }
+      ],
+      "scope": "Trained first-block triangle operators on synthetic activations and all-valid masks; no full-model speedup claim.",
+      "status": "complete",
+      "isolation": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 0,
+        "interval_seconds": 1.0,
+        "samples": 13,
+        "allowed_pid": 1160038,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    }
+  },
+  "sources": {
+    "fireprot_openfold3_triton_probe.py": {
+      "source": "import importlib.machinery,sys,json,os,pathlib\nclass TritonOnly:\n    def find_spec(self,fullname,path=None,target=None):\n        if fullname=='triton' and path is None:\n            return importlib.machinery.PathFinder.find_spec(fullname,['/home/pc/anaconda3/envs/DS/lib/python3.12/site-packages'])\nsys.meta_path.insert(0,TritonOnly())\nimport torch,triton,triton.language as tl\nfrom benchmarks.atlasfold.profile_inference import resolve_physical_device,_GpuProcessMonitor\n@triton.jit\ndef copy_kernel(x,y,N:tl.constexpr,B:tl.constexpr):\n    i=tl.program_id(0)*B+tl.arange(0,B)\n    tl.store(y+i,tl.load(x+i,i<N,other=0),i<N)\ntorch.cuda.init();device=resolve_physical_device();mon=_GpuProcessMonitor(device['gpu'],os.getpid(),1);mon.start()\nr={'device':device,'torch':str(torch.__version__),'torch_path':torch.__file__,'triton':triton.__version__,'triton_path':triton.__file__}\ntry:\n r['target']=str(triton.runtime.driver.active.get_current_target())\n x=torch.randn(8193,device='cuda');y=torch.empty_like(x);copy_kernel[(triton.cdiv(x.numel(),256),)](x,y,x.numel(),256);torch.cuda.synchronize();assert torch.equal(x,y)\n from openfold3.core.kernels.triton.evoformer import _TRITON_AVAILABLE\n assert _TRITON_AVAILABLE;r['status']='complete';r['copy_equal']=True\nfinally:\n r['isolation']=mon.stop();p=pathlib.Path('/media/IntelSSD/fireprot/outputs/openfold3/triton-environment-probe.json');p.write_text(json.dumps(r,indent=2));print(json.dumps(r))\n",
+      "sha256": "b8597f9804d25ca8d5796aa7d68f496b0b6466d3b1adb879e1ad5d981a13f561"
+    },
+    "fireprot_openfold3_sdpa_probe.py": {
+      "source": "import json,os,pathlib,statistics\nimport torch\nfrom torch.nn import functional as F\nfrom torch.nn.attention import sdpa_kernel,SDPBackend\nfrom benchmarks.atlasfold.profile_inference import resolve_physical_device,_GpuProcessMonitor\nfrom openfold3.core.model.layers.triangular_attention import TriangleAttention\nimport openfold3.core.model.primitives.attention as attention\nroot=pathlib.Path('/media/IntelSSD/fireprot');torch.cuda.init();device=resolve_physical_device();monitor=_GpuProcessMonitor(device['gpu'],os.getpid(),1);monitor.start()\nstate=torch.load('/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt',map_location='cpu',mmap=True,weights_only=True)\noriginal=attention._attention\nr={'device':device,'dtype':'float32','seed':1231,'chunk_size':128,'warmup':1,'repetitions':3,'cases':[],'scope':'Trained first-block triangle operators on synthetic activations and all-valid masks; no full-model speedup claim.'}\ndef candidate(q,k,v,biases,use_high_precision=False):\n assert not use_high_precision and q.dtype==torch.float32\n with sdpa_kernel(SDPBackend.EFFICIENT_ATTENTION):\n  return F.scaled_dot_product_attention(q,k,v,attn_mask=biases[1],dropout_p=0.0,scale=1.0)\ndef timing(fn):\n fn();vals=[]\n for _ in range(3):\n  a=torch.cuda.Event(enable_timing=True);b=torch.cuda.Event(enable_timing=True);a.record();fn();b.record();b.synchronize();vals.append(a.elapsed_time(b))\n return statistics.median(vals)\ntry:\n torch.backends.cuda.preferred_blas_library('cublas')\n with torch.inference_mode():\n  for n in (1000,1536):\n   torch.manual_seed(1231);z=torch.randn(1,n,n,128,device='cuda');mask=torch.ones(1,n,n,device='cuda')\n   for kind in ('start','end'):\n    mod=TriangleAttention(128,32,4,starting=kind=='start').cuda().eval();prefix=f'pairformer_stack.blocks.0.pair_stack.tri_att_{kind}.'\n    mod.load_state_dict({k[len(prefix):]:v for k,v in state.items() if k.startswith(prefix)},strict=True)\n    fn=lambda:mod(z,mask,chunk_size=128,inplace_safe=False)\n    attention._attention=original;ref=fn();base=timing(fn)\n    attention._attention=candidate;out=fn();fast=timing(fn)\n    delta=(out-ref).abs();r['cases'].append({'length':n,'kind':kind,'native_ms':base,'sdpa_ms':fast,'exact':torch.equal(out,ref),'max_abs':float(delta.max()),'rms':float(delta.square().mean().sqrt()),'finite':bool(torch.isfinite(out).all())})\n r['status']='complete'\nexcept BaseException as e:\n r['status']='failed';r['error']=repr(e);raise\nfinally:\n attention._attention=original;r['isolation']=monitor.stop();(root/'outputs/openfold3/sdpa-probe.json').write_text(json.dumps(r,indent=2));print(json.dumps(r),flush=True)\n",
+      "sha256": "74c2da5c4816f79b28387591858236e85a36e8c9393820f25ea6c990078f543c"
+    },
+    "fireprot_openfold3_sdpa_contiguous_probe.py": {
+      "source": "import json,os,pathlib,statistics\nimport torch\nfrom torch.nn import functional as F\nfrom torch.nn.attention import sdpa_kernel,SDPBackend\nfrom benchmarks.atlasfold.profile_inference import resolve_physical_device,_GpuProcessMonitor\nfrom openfold3.core.model.layers.triangular_attention import TriangleAttention\nimport openfold3.core.model.primitives.attention as attention\nroot=pathlib.Path('/media/IntelSSD/fireprot');torch.cuda.init();device=resolve_physical_device();monitor=_GpuProcessMonitor(device['gpu'],os.getpid(),1);monitor.start()\nstate=torch.load('/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt',map_location='cpu',mmap=True,weights_only=True)\noriginal=attention._attention\nr={'device':device,'dtype':'float32','seed':1231,'chunk_size':128,'warmup':1,'repetitions':3,'cases':[],'scope':'Trained first-block triangle operators on synthetic activations and all-valid masks; no full-model speedup claim.'}\ndef candidate(q,k,v,biases,use_high_precision=False):\n assert not use_high_precision and q.dtype==torch.float32\n with sdpa_kernel(SDPBackend.EFFICIENT_ATTENTION):\n  return F.scaled_dot_product_attention(q,k,v,attn_mask=biases[1].contiguous(),dropout_p=0.0,scale=1.0)\ndef timing(fn):\n fn();vals=[]\n for _ in range(3):\n  a=torch.cuda.Event(enable_timing=True);b=torch.cuda.Event(enable_timing=True);a.record();fn();b.record();b.synchronize();vals.append(a.elapsed_time(b))\n return statistics.median(vals)\ntry:\n torch.backends.cuda.preferred_blas_library('cublas')\n with torch.inference_mode():\n  for n in (1000,1536):\n   torch.manual_seed(1231);z=torch.randn(1,n,n,128,device='cuda');mask=torch.ones(1,n,n,device='cuda')\n   for kind in ('start','end'):\n    mod=TriangleAttention(128,32,4,starting=kind=='start').cuda().eval();prefix=f'pairformer_stack.blocks.0.pair_stack.tri_att_{kind}.'\n    mod.load_state_dict({k[len(prefix):]:v for k,v in state.items() if k.startswith(prefix)},strict=True)\n    fn=lambda:mod(z,mask,chunk_size=128,inplace_safe=False)\n    attention._attention=original;ref=fn();base=timing(fn)\n    attention._attention=candidate;out=fn();fast=timing(fn)\n    delta=(out-ref).abs();r['cases'].append({'length':n,'kind':kind,'native_ms':base,'sdpa_ms':fast,'exact':torch.equal(out,ref),'max_abs':float(delta.max()),'rms':float(delta.square().mean().sqrt()),'finite':bool(torch.isfinite(out).all())})\n r['status']='complete'\nexcept BaseException as e:\n r['status']='failed';r['error']=repr(e);raise\nfinally:\n attention._attention=original;r['isolation']=monitor.stop();(root/'outputs/openfold3/sdpa-contiguous-bias-probe.json').write_text(json.dumps(r,indent=2));print(json.dumps(r),flush=True)\n",
+      "sha256": "2a47d8bb030500d0e6c913d0942a6d5aa2e830e95d8d4a7a466548fbadb97b9c"
+    }
+  },
+  "triton_failure": "Imported Triton 3.7.1 from DS via a package-specific import finder while keeping original BIO Torch. Driver initialization failed with zero active drivers; no kernel ran.",
+  "decisions": "Contiguous-bias SDPA is faster for sampled trained triangle operators, but outputs are not bitwise equal (max absolute difference up to 0.001418). Not promoted. Full-model agreement and a predeclared numerical gate remain required after Rust migration.",
+  "scope": "No existing model source or shared environment was changed; only isolated probe processes were patched."
+}

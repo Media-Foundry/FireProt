@@ -449,8 +449,58 @@ performance pairs. Source hashes match the tested local implementation.
 All 60 GPU tests pass with selected-device isolation; local regression has
 167 passes and 110 GPU-dependent skips. Complete tests include random BF16
 bits, physical operand layouts, non-default streams, invalid input rejection,
-trained operators, and unavailable-extension fallback. Final packaged N1536
-repeated requests are being collected on the same SMI5 device as the earlier
-three native references; the new median remains pending.
+trained operators, and unavailable-extension fallback. The final packaged N1536 repetitions are complete, as recorded below.
 
 Evidence: [`atlasfold_packaged_qkv.json`](../provenance/atlasfold_packaged_qkv.json).
+
+
+### Final QKV request repetitions
+
+Commit `2cc12a8` completes three fresh-process N1536 requests on HIP7 / SMI5:
+204.153, 203.910, and 203.775 seconds; median **203.910 seconds**. The earlier
+three chunked-native requests on this same physical GCD have a median of
+**553.359 seconds**, giving **2.714x**. These are sequential sets, not three
+new interleaved pairs. Each packaged run passes raw-byte equality for
+coordinates, pLDDT, PAE, and pTM and passes selected-device isolation.
+
+The model remains AtlasFold260703 plus AtlasLM-3B, native BF16/FP32 boundaries,
+seed102, four recycles/five trunk passes, 100 diffusion steps, one sample,
+and warm filesystem/extension caches. Timing includes loading, adapter setup,
+features, prediction, and serialization, excluding imports, weight hashing,
+and preflight. All packaged implementation hashes match the committed code.
+Unchunked native N1536 still OOMs. N1000 has no new repeated native comparison.
+
+Evidence: [`atlasfold_final_qkv_repeats.json`](../provenance/atlasfold_final_qkv_repeats.json).
+
+
+## AtlasLM follow-up and practical plateau
+
+AtlasLM input lengths are 1026 and 1538, including the two special tokens.
+Its per-layer logits feed native projections into pair features; they cannot
+be dropped or cached across stochastic recycle passes. A HIP fusion of
+non-finite cleanup, clamping, division, and contiguous layout packing matches
+raw preparation bits, but changes the native physical projection layout.
+Actual first/last trained projection weights then produce 473–1226 differing
+BF16 values (maximum 0.03125). That candidate is rejected despite faster
+operator timing.
+
+Keeping the original layout and fusing only in-place cleanup preserves those
+sampled trained projection outputs. It improves the N1538 path by about
+0.29 ms per call. Multiplying by 240 calls gives an optimistic 0.070 s, about
+0.034% of the final request time; this is an extrapolation, not a full-model
+measurement. It is not promoted. The initial pack-only comparison explicitly
+materialized native contiguous input; it must not be used as the actual LM
+path's speedup. See the follow-up projection measurements instead.
+
+The measured exact candidates have reached a practical plateau for the current
+N1000/N1536 gfx90a workloads: the final useful QKV increment is integrated;
+further norm conversion, chunk-size and softmax-storage trials offer marginal
+or no benefit, add memory, or fail exactness, while the LM follow-up offers
+negligible projected request benefit. The present optimization cycle stops
+here. This is not a global optimum claim or validation of arbitrary lengths,
+architectures, model variants, or altered numerical tolerances. Reopen tuning
+when a new representative workload or profiler result identifies a material
+remaining opportunity.
+
+Evidence: [`atlasfold_lm_feature_followups.json`](../provenance/atlasfold_lm_feature_followups.json)
+and [`atlasfold_completion_audit.json`](../provenance/atlasfold_completion_audit.json).

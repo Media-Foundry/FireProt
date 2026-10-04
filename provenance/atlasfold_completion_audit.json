@@ -1,0 +1,139 @@
+{
+  "source_commit": "2cc12a892e426ee3dee67c16dff726a520fa6fac",
+  "scope": "AtlasFold260703 plus AtlasLM-3B monomer, gfx90a native arithmetic, validated N1000 and N1536 development buckets. Practical plateau for measured exact candidates, not a global optimum.",
+  "final_n1536_checks": [
+    {
+      "run": 1,
+      "matched_configuration": {
+        "sequence_sha256": true,
+        "length": true,
+        "cache": true,
+        "dtype": true,
+        "mlm_prob": true,
+        "trunk_passes": true,
+        "source_commit": true,
+        "weights": true,
+        "device": true,
+        "config": true,
+        "effective_bucket_length": true,
+        "padding_residues": true,
+        "sampling": true,
+        "args.kernel": true,
+        "args.stage_events": true,
+        "args.seed": true,
+        "args.recycles": true,
+        "args.samples": true,
+        "args.repeats": true
+      },
+      "raw_bytes_equal": {
+        "coordinates": true,
+        "plddt": true,
+        "pae": true,
+        "ptm": true
+      },
+      "isolation_passed": true,
+      "implementation_matches_worktree": true
+    },
+    {
+      "run": 2,
+      "matched_configuration": {
+        "sequence_sha256": true,
+        "length": true,
+        "cache": true,
+        "dtype": true,
+        "mlm_prob": true,
+        "trunk_passes": true,
+        "source_commit": true,
+        "weights": true,
+        "device": true,
+        "config": true,
+        "effective_bucket_length": true,
+        "padding_residues": true,
+        "sampling": true,
+        "args.kernel": true,
+        "args.stage_events": true,
+        "args.seed": true,
+        "args.recycles": true,
+        "args.samples": true,
+        "args.repeats": true
+      },
+      "raw_bytes_equal": {
+        "coordinates": true,
+        "plddt": true,
+        "pae": true,
+        "ptm": true
+      },
+      "isolation_passed": true,
+      "implementation_matches_worktree": true
+    },
+    {
+      "run": 3,
+      "matched_configuration": {
+        "sequence_sha256": true,
+        "length": true,
+        "cache": true,
+        "dtype": true,
+        "mlm_prob": true,
+        "trunk_passes": true,
+        "source_commit": true,
+        "weights": true,
+        "device": true,
+        "config": true,
+        "effective_bucket_length": true,
+        "padding_residues": true,
+        "sampling": true,
+        "args.kernel": true,
+        "args.stage_events": true,
+        "args.seed": true,
+        "args.recycles": true,
+        "args.samples": true,
+        "args.repeats": true
+      },
+      "raw_bytes_equal": {
+        "coordinates": true,
+        "plddt": true,
+        "pae": true,
+        "ptm": true
+      },
+      "isolation_passed": true,
+      "implementation_matches_worktree": true
+    }
+  ],
+  "model_preservation": "The pinned upstream LM embedder and sampling remain unchanged; native source hashes and five trunk passes are checked. No LM cache, recycle cut, diffusion-step cut, or approximation was introduced.",
+  "evidence": {
+    "n1000_packaging": "atlasfold_packaged_qkv.json",
+    "n1536_repeated_requests": "atlasfold_final_qkv_repeats.json",
+    "operator_and_gpu_tests": "atlasfold_packaged_qkv.json",
+    "small_gain_layout_trials": "atlasfold_attention_layout_followups.json",
+    "lm_followups": "atlasfold_lm_feature_followups.json",
+    "blas_correctness_rejections": "atlasfold_layout_blas_trials.json",
+    "softmax_scheduling_trials": "atlasfold_scheduling_trials.json"
+  },
+  "remaining_measured_candidates": [
+    {
+      "candidate": "FP32 conversion before native LayerNorm",
+      "decision": "Three paired requests gain only 0.392 percent; not promoted."
+    },
+    {
+      "candidate": "chunk256",
+      "decision": "0.899 percent single-pair gain costs 3.139 GB more allocated memory; not promoted."
+    },
+    {
+      "candidate": "inplace softmax storage",
+      "decision": "No operator speed benefit."
+    },
+    {
+      "candidate": "LM packed feature cleanup",
+      "decision": "Trained projection bytes differ; rejected."
+    },
+    {
+      "candidate": "LM inplace cleanup",
+      "decision": "Exact sampled operators save only about 0.070 seconds across 240 calls by extrapolation; no full-model claim or promotion."
+    }
+  ],
+  "limits": [
+    "N1536 native comparison uses bounded-memory native arithmetic because unchunked upstream OOMs.",
+    "Final three candidate timings follow the three native timings; they are not new interleaved pairs.",
+    "Unmeasured shapes, architectures, model variants, and alternative numerical tolerances are outside these validated claims."
+  ]
+}

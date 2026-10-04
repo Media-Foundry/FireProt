@@ -42,12 +42,45 @@ fn monitor() -> Monitor {
         wrong_device: false,
     }
 }
-fn request(output: PathBuf) -> ValidatedRequest {
-    let a = json!({"path":"/unused","sha256":"a".repeat(64)});
+fn request(output: PathBuf) -> fireprot_runtime::preflight::PreparedRequest {
+    let root = output.parent().unwrap().join("source");
+    std::fs::create_dir_all(&root).unwrap();
+    std::fs::write(root.join("model.py"), "model source").unwrap();
+    let git = |args: &[&str]| {
+        let o = std::process::Command::new("git")
+            .arg("-C")
+            .arg(&root)
+            .args(args)
+            .output()
+            .unwrap();
+        assert!(o.status.success(), "{:?}", o);
+        String::from_utf8(o.stdout).unwrap()
+    };
+    if !root.join(".git").exists() {
+        git(&["init", "-q"]);
+        git(&["add", "model.py"]);
+        git(&[
+            "-c",
+            "user.name=Test",
+            "-c",
+            "user.email=test@example.invalid",
+            "commit",
+            "-qm",
+            "fixture",
+        ]);
+    }
+    let commit = git(&["rev-parse", "HEAD"]);
+    let path = root.join("model.py");
+    let hash = fireprot_runtime::artifacts::sha256(&path).unwrap();
+    let a = json!({"path":path,"sha256":hash});
     let r: Request = serde_json::from_value(json!({"schema_version":1,"run_id":"test","backend":"native","seed":101,"hip_device":7,
         "workload":{"model":"openfold3","model_name":"openbind-0","recycles":3,"diffusion_steps":200,"samples":1,"precision":"float32"},
-        "source":{"root":"/unused","commit":"b".repeat(40)},"checkpoints":{"model":a},"input":a,"output_dir":output})).unwrap();
-    ValidatedRequest::try_from(r).unwrap()
+        "source":{"root":root,"commit":commit.trim()},"checkpoints":{"model":a},"input":a,"output_dir":output})).unwrap();
+    fireprot_runtime::preflight::prepare(
+        ValidatedRequest::try_from(r).unwrap(),
+        fireprot_runtime::preflight::SourceOrigin::GitCheckout,
+    )
+    .unwrap()
 }
 fn worker(mode: &str) -> WorkerCommand {
     WorkerCommand {

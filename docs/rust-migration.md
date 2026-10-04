@@ -73,9 +73,11 @@ process-group cleanup, isolated logs, fresh output directories, streaming SHA-25
 and output containment checks. Real subprocess tests exercise failure paths.
 The AMD device monitor now independently probes HIP identity, maps PCI to SMI,
 and rejects invalid process observations. Model content validation remains an
-injected Rust interface; its production implementation and preflight are pending.
+injected Rust interface; its production implementation is pending. Source/input/
+checkpoint preflight now gates the supervisor via `PreparedRequest`, with pinned
+Git or exported-manifest source verification and canonical artifact identities.
 
-Pending: provenance preflight, Rust operator-policy bridge, numerical
+Pending: adapter resource/environment provenance, Rust operator-policy bridge, numerical
 comparison/artifact tooling, CLI, model-worker extraction, kernel layout/build
 migration, GPU parity, and replacement of maintained Python entry points. The
 repository is in migration; the full framework is not yet rebuilt.

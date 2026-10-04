@@ -1,9 +1,7 @@
 use crate::artifacts::verify_outputs;
 use crate::command::ProcessGroup;
-use fireprot_core::{
-    ValidatedRequest,
-    protocol::{CompletionChecks, DeviceIdentity, Envelope, Phase, Session},
-};
+use crate::preflight::PreparedRequest;
+use fireprot_core::protocol::{CompletionChecks, DeviceIdentity, Envelope, Phase, Session};
 use serde::Serialize;
 use std::{
     ffi::OsString,
@@ -63,12 +61,12 @@ pub struct RunReport {
     pub failure: Option<String>,
 }
 
-/// Supervise one fresh output directory. The caller must complete source,
-/// checkpoint and input preflight before launch. `validate_content` must check
+/// Supervise one fresh output directory after mandatory provenance preflight.
+/// `validate_content` must check
 /// model-required arrays, shapes, original dtypes and finiteness; hashes alone
 /// are insufficient. Failures after spawn are retained in supervisor.json.
 pub fn run(
-    request: &ValidatedRequest,
+    prepared: &PreparedRequest,
     worker: &WorkerCommand,
     monitor: &mut dyn DeviceMonitor,
     limits: &Limits,
@@ -82,11 +80,16 @@ pub fn run(
     {
         return Err(io::Error::other("runtime limits must be positive"));
     }
+    let request = prepared.request();
     let r = request.as_request();
     fs::create_dir(&r.output_dir)?; // Never overwrite or reuse a prior run.
     let output = r.output_dir.canonicalize()?;
     let request_path = output.join("request.json");
     fs::write(&request_path, serde_json::to_vec_pretty(request)?)?;
+    fs::write(
+        output.join("provenance.json"),
+        serde_json::to_vec_pretty(prepared.provenance())?,
+    )?;
     let channel = tempfile::tempdir()?;
     let socket_path = channel.path().join("worker.sock");
     let listener = UnixListener::bind(&socket_path)?;

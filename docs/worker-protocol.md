@@ -105,8 +105,8 @@ return an I/O error and may leave the reserved directory for diagnosis. Existing
 output directories are never reused.
 
 This layer exposes an independent `DeviceMonitor` trait and an `AmdSmiMonitor`
-implementation. Input/source/checkpoint preflight, numerical validators and
-production workers remain integration work. CPU tests use a standard-library
+implementation. Source/input/checkpoint preflight is mandatory at the runtime entry point.
+Numerical validators and production workers remain integration work. CPU tests use a standard-library
 Python fixture as a real child process and an injected host monitor; they do not
 establish GPU isolation or full-model parity.
 
@@ -145,3 +145,36 @@ HIP 7, PCI `0000:93:00.0`, gfx90a; override `FIREPROT_TEST_HIP_DEVICE` and
 process, proves that process is detected as external, then proves it is excluded
 only when explicitly selected as the allowed worker. It cleans up the process.
 CPU-only `cargo test --workspace` intentionally skips this hardware test.
+
+## Provenance preflight
+
+The supervisor accepts only a `PreparedRequest`, constructed by Rust `prepare`.
+Preparation verifies the input and every checkpoint, records canonical paths,
+SHA-256 and byte sizes, and normalizes request paths before the worker changes
+its working directory. Each launched run retains `provenance.json`.
+
+Two explicit source modes are supported:
+
+- `GitCheckout`: the root must be the repository root at the requested commit
+  with a clean tracked index/worktree. Every regular tracked file is additionally
+  compared with its Git blob identity and executable mode, including files hidden
+  from ordinary status by `assume-unchanged` or `skip-worktree`.
+- `Exported`: a source manifest has its own explicitly supplied SHA-256. Its
+  schema and commit must match the request, and every listed file is checked by
+  SHA-256 and executable mode. Export the manifest from the verified local
+  checkout; deploy it alongside synchronized source without copying Git metadata.
+
+```bash
+cargo run --example source_manifest -- Protenix COMMIT > source-manifest.json
+cargo run --example preflight -- request.json
+cargo run --example preflight -- request.json source-manifest.json MANIFEST_SHA256
+```
+
+Source manifests cover regular tracked files. Symlinks and gitlinks are rejected;
+untracked/ignored resources and installed dependencies need explicit adapter
+resource/environment provenance. A pinned manifest authenticates the caller's
+selected file inventory; it does not infer whether that inventory is complete.
+These checks observe filesystem contents, not an immutable snapshot: inputs,
+weights and source must remain unchanged between preparation and execution.
+Reprepare after any change. The exported mode never substitutes the remote
+checkout's older Git HEAD for the verified synchronized source identity.

@@ -7,3 +7,5 @@ pub mod supervisor;
 pub mod command;
 #[cfg(unix)]
 pub mod device;
+#[cfg(unix)]
+pub mod preflight;

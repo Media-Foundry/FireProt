@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-04",
+  "base_commit": "9df6193dd81472291ecc0f4d90a7c5bc076e02a4",
+  "purpose": "CLI command/inference separation with preserved command outputs",
+  "source_sha256": {
+    "crates/fireprot-cli/src/app.rs": "7a4acf2d9f354b6a17052d21258ea9f5078fb7af065aec1e12a5bb8cd9fff708",
+    "crates/fireprot-cli/src/args.rs": "e78129890e11825d8271774a6fa9da981c7ec62a30457cf5a7961662cd3481de",
+    "crates/fireprot-cli/src/collection.rs": "dda2ac53149667fc9dc2cc2d48a1810a76a2a3cd11e0097ab08ec1f2f9374fc5",
+    "crates/fireprot-cli/src/inference.rs": "bfe442e50b2a9975bc6550cf056e0f3e1b63a23e91cf466ab2c44244392f58db",
+    "crates/fireprot-cli/src/main.rs": "d01002e1de607e6d33f06a147292740b268802647c39fb824f52d6be9ae83794",
+    "crates/fireprot-cli/src/support.rs": "c37d43576b2c5f726b51825faaeba65b7dcd7d62a2752523c5d68cdd7010a676"
+  },
+  "binary_sha256": "b7dff94c73dcc085defd89650531945370536722852cffdeb2e7646ea81fd6ce",
+  "tests": {
+    "local_rust_passed": 108,
+    "local_cli_msrv_1_85_passed": 9,
+    "diamondhill_cli_passed": 9,
+    "clippy": "passed",
+    "format": "passed"
+  },
+  "initial_remote_setup_failure": "CLI tests could not compile because the two native AtlasFold/OpenFold3 request example files were absent on the remote checkout. Their dry-run was reviewed and the tracked request files were synchronized before retrying.",
+  "replays": [
+    {
+      "model": "atlasfold",
+      "scope": "model",
+      "configuration": "/media/IntelSSD/fireprot/outputs/atlasfold-n1000-archive-v1/collection-model.json",
+      "configuration_sha256": "c2ddfc49a166548d0915551aa32020c6be1fdeb11b9343a1b0c663659fd628fc",
+      "reference": "/media/IntelSSD/fireprot/outputs/atlasfold-n1000-archive-v1/collected-model.json",
+      "reference_sha256": "2216ea34792fad33ad218dd1e5188cd6e688782fa1f9aa3e73cd440b43106119",
+      "byte_identical": true
+    },
+    {
+      "model": "atlasfold",
+      "scope": "worker_request",
+      "configuration": "/media/IntelSSD/fireprot/outputs/atlasfold-n1000-archive-v1/collection-worker_request.json",
+      "configuration_sha256": "b2a05f6f700207dfcf3ae023ad8d8e053a41b072b23f46fb8dece35f8037ac50",
+      "reference": "/media/IntelSSD/fireprot/outputs/atlasfold-n1000-archive-v1/collected-worker_request.json",
+      "reference_sha256": "2c27ea6667b041008ec3f4760cf21dae0f1458b5d63de3221686d647d44efaa5",
+      "byte_identical": true
+    },
+    {
+      "model": "atlasfold",
+      "scope": "supervisor",
+      "configuration": "/media/IntelSSD/fireprot/outputs/atlasfold-n1000-archive-v1/collection-supervisor.json",
+      "configuration_sha256": "fe6772e0b71d61571911eac0ab8421a56bdccef6dba86dddeaadb722103f4b43",
+      "reference": "/media/IntelSSD/fireprot/outputs/atlasfold-n1000-archive-v1/collected-supervisor.json",
+      "reference_sha256": "57f7b85410bf97a85ad4e411a3a76118f14ecacc8e9b4c8a023212b2575736c8",
+      "byte_identical": true
+    },
+    {
+      "model": "protenix",
+      "scope": "model",
+      "configuration": "/media/IntelSSD/fireprot/outputs/protenix-n1000-archive-v1/collection-model.json",
+      "configuration_sha256": "891e7a65abf524437191dfe7bc5c823f0a9c84339cd5bab108ce34d631e45a4c",
+      "reference": "/media/IntelSSD/fireprot/outputs/protenix-n1000-archive-v1/collected-model.json",
+      "reference_sha256": "1d20c5952a53b396c08b3f6c9c906d7ef368965b65c1bbd95ede8392e6e9fa3d",
+      "byte_identical": true
+    },
+    {
+      "model": "protenix",
+      "scope": "worker_request",
+      "configuration": "/media/IntelSSD/fireprot/outputs/protenix-n1000-archive-v1/collection-worker_request.json",
+      "configuration_sha256": "845bad6a89b3b34050707fc8b377d449c0801f3e5612a7b9b980d18d3c4f1bdb",
+      "reference": "/media/IntelSSD/fireprot/outputs/protenix-n1000-archive-v1/collected-worker_request.json",
+      "reference_sha256": "8dfd446bb6b40e4e693c53bb364aaca4cc7d119d21cdc85bebe4ae3d90270257",
+      "byte_identical": true
+    },
+    {
+      "model": "protenix",
+      "scope": "supervisor",
+      "configuration": "/media/IntelSSD/fireprot/outputs/protenix-n1000-archive-v1/collection-supervisor.json",
+      "configuration_sha256": "e36e7c78a9546ed054aa6ce2ca2a4b469b6071c6b7f7786675c8b0eb45668f21",
+      "reference": "/media/IntelSSD/fireprot/outputs/protenix-n1000-archive-v1/collected-supervisor.json",
+      "reference_sha256": "f45bd480b9aefc765d61153f6fde6bc070c88882b93c6714ea5117587510b77b",
+      "byte_identical": true
+    },
+    {
+      "model": "openfold3",
+      "scope": "model",
+      "configuration": "/media/IntelSSD/fireprot/outputs/openfold3-n1000-archive-v1/collection-model.json",
+      "configuration_sha256": "589e8711f05edd1875b48dc9b592ee8963649f1f675051ab6ae3035c16536695",
+      "reference": "/media/IntelSSD/fireprot/outputs/openfold3-n1000-archive-v1/collected-model.json",
+      "reference_sha256": "f7a79a64cd63d89daa519cd29bbe6cb9094cbec626b7091f9a3f62b122d7369e",
+      "byte_identical": true
+    },
+    {
+      "model": "openfold3",
+      "scope": "worker_request",
+      "configuration": "/media/IntelSSD/fireprot/outputs/openfold3-n1000-archive-v1/collection-worker_request.json",
+      "configuration_sha256": "568fcea02199d5a766769b6e79adb7011c8ee9ef840aa9d12222a7da9b53d7f4",
+      "reference": "/media/IntelSSD/fireprot/outputs/openfold3-n1000-archive-v1/collected-worker_request.json",
+      "reference_sha256": "21670f668e5b11a5cd5be6ecbafbaf17df217f12260332655a0193a2737c6d6a",
+      "byte_identical": true
+    },
+    {
+      "model": "openfold3",
+      "scope": "supervisor",
+      "configuration": "/media/IntelSSD/fireprot/outputs/openfold3-n1000-archive-v1/collection-supervisor.json",
+      "configuration_sha256": "eb0c30313139ad3d8d29fa9a948da7a388171f6fd34d15556e537af40cf9ab0d",
+      "reference": "/media/IntelSSD/fireprot/outputs/openfold3-n1000-archive-v1/collected-supervisor.json",
+      "reference_sha256": "f20cc65ccbec1ff2d6950a88bf7053424ae815cacfce1f6828639ba1badcc0bf",
+      "byte_identical": true
+    },
+    {
+      "model": "atlasfold-repeat",
+      "scope": "model",
+      "configuration": "/media/IntelSSD/fireprot/outputs/atlasfold-n1000-archive-repeat-v1/paired-collection-model.json",
+      "configuration_sha256": "462b17f89916b212760dc351dc2e56da9c32ce6c3a5dba94419bce152ecf3bbb",
+      "reference": "/media/IntelSSD/fireprot/outputs/atlasfold-n1000-archive-repeat-v1/paired-collected-model.json",
+      "reference_sha256": "ace79aa39c44a02595b589b461f5b0c23d228386ff279292b669ce3590b8147c",
+      "byte_identical": true
+    },
+    {
+      "model": "atlasfold-repeat",
+      "scope": "worker_request",
+      "configuration": "/media/IntelSSD/fireprot/outputs/atlasfold-n1000-archive-repeat-v1/paired-collection-worker_request.json",
+      "configuration_sha256": "3cc12108f74a6c97406448c55fedb2463dd84b8ae7a955ca6bf294683cc97f6f",
+      "reference": "/media/IntelSSD/fireprot/outputs/atlasfold-n1000-archive-repeat-v1/paired-collected-worker_request.json",
+      "reference_sha256": "2091a3a2b63d8b8a9ba7080bd370b5403b926de3f861e2a8ebff44fc718b4dc3",
+      "byte_identical": true
+    },
+    {
+      "model": "atlasfold-repeat",
+      "scope": "supervisor",
+      "configuration": "/media/IntelSSD/fireprot/outputs/atlasfold-n1000-archive-repeat-v1/paired-collection-supervisor.json",
+      "configuration_sha256": "c77d672837a2a5e861fad0312de876f22f9d6a98f762d2e06a6b07b04d930fd9",
+      "reference": "/media/IntelSSD/fireprot/outputs/atlasfold-n1000-archive-repeat-v1/paired-collected-supervisor.json",
+      "reference_sha256": "6a1e4d8e22548d98631100271f2f63c1b5ee405b184de7bb71be8feb4e28ba8c",
+      "byte_identical": true
+    }
+  ],
+  "limitations": [
+    "No new GPU model execution or performance measurement in this CLI refactor cycle.",
+    "Synthetic inference tests validate host orchestration using fake device probes and an existing output-array fixture.",
+    "OpenFold3 numerical parity remains unpassed in the referenced archive evidence."
+  ],
+  "version": "fireprot 0.1.0"
+}

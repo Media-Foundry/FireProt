@@ -11,6 +11,9 @@ the Rust operator bridge. AtlasFold chunked, HIP and fused HIP routes also use R
 
 ## Commands
 
+Use `fireprot --help`, `fireprot help COMMAND` or `fireprot COMMAND --help` to
+inspect command arguments. See [CLI structure and result conventions](cli-design.md).
+
 ```bash
 cargo build --release -p fireprot-cli
 target/release/fireprot inspect configs/requests/openfold3-n1000-native.json

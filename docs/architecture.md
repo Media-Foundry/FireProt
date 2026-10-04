@@ -112,6 +112,11 @@ file and its before/after hash; see [layout](repository-layout.md). Rust core mu
 the runtime owns process/device/build policy, and the CLI composes those services.
 The bridge receives metadata and invokes local callbacks without copying tensors.
 
+The CLI separates typed command parsing, result presentation, inference setup,
+archive collection and host I/O/signal wiring. It composes public crate interfaces;
+request, process, operator and validation policy stay in their owning crates.
+See [CLI design](cli-design.md).
+
 Deployment should build and validate native artifacts before inference. Rust now publishes verified cached Python extensions with `publish-kernel` and
 checks pinned artifacts with `verify-kernel`. The AtlasFold mask/bias loader can
 accept that artifact through the bridge using actual runtime compatibility.

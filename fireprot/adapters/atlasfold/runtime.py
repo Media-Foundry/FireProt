@@ -11,6 +11,8 @@ import math
 from pathlib import Path
 import types
 
+from fireprot.ops.registry import OperationRegistry, signature_from_tensor
+
 SOURCE_HASHES = {
     'model/network/primitives/triangle_update.py': '11e36afda7255016be645c647ad77b9911485fe801bd52c8d60f9a0c68f3bcc9',
     'model/network/primitives/linear.py': '3f5514681e542a38a2e3a7154190fefcc1d93fa5b819a2e84b9e8b4de05217fa',
@@ -117,8 +119,6 @@ class AtlasFoldRuntime:
             for path in (Path(__file__), *sources)}
         self.valid_length = sequence_length
         self.bucket = 1024 if sequence_length == 1000 else 1536
-        self.counts = {'hip_attention': 0, 'chunked_attention': 0, 'native_fallback': 0,
-                       'fused_attention': 0, 'hip_multiplication': 0, 'native_multiplication': 0}
         self.originals = []
         self.extension = None
         if backend == 'hip':
@@ -127,6 +127,7 @@ class AtlasFoldRuntime:
         if backend == 'hip-fused':
             from fireprot.backends.amd.pair_fusions import load
             self.extension = load()
+        self._setup_registry()
         self.expected_mask = None
         types_to_hook = (TriangleAttentionStartingNode, TriangleAttentionEndingNode)
         multiplication_types = (TriangleMultiplicationOutgoing, TriangleMultiplicationIncoming)
@@ -149,23 +150,69 @@ class AtlasFoldRuntime:
             outgoing = type(module) is TriangleMultiplicationOutgoing
             def forward(current, z, mask, kernel_backend='torch', _original=original,
                         _ending=ending, _multiplication=multiplication, _outgoing=outgoing):
-                if not self.supported(current, z, mask, kernel_backend, multiplication=_multiplication):
-                    self.counts['native_fallback'] += 1
-                    return _original(z, mask, kernel_backend)
-                if _multiplication:
-                    if self.extension is None:
-                        self.counts['native_multiplication'] += 1
-                        return _original(z, mask, kernel_backend)
-                    self.counts['hip_multiplication'] += 1
-                    return triangle_multiplication(current, z, mask, outgoing=_outgoing, extension=self.extension)
-                route = ('fused_attention' if self.backend == 'hip-fused' else 'hip_attention') if self.extension is not None else 'chunked_attention'
-                self.counts[route] += 1
-                return triangle_attention(current, z, mask, ending=_ending,
-                    extension=self.extension, valid_length=self.valid_length, fuse_softmax=self.backend == 'hip-fused')
+                return self._dispatch(current, z, mask, kernel_backend, original=_original,
+                    ending=_ending, multiplication=_multiplication, outgoing=_outgoing)
             module.forward = types.MethodType(forward, module)
             self.originals.append((module, original))
         model._fireprot_atlasfold_runtime = self
         self.model = model
+
+    def _setup_registry(self):
+        """Register callables once; Rust owns ordering, caching and counts."""
+        self.registry = OperationRegistry()
+
+        def supports(signature, extension=False):
+            attributes = dict(signature.attributes)
+            if attributes['eligible'] != 'True':
+                return False, 'tensor/module/mask contract mismatch'
+            if extension and attributes['extension_available'] != 'True':
+                return False, 'HIP extension unavailable'
+            return True
+
+        if self.backend != 'chunked':
+            self.registry.register(operation='triangle_attention',
+                name='fused_attention' if self.backend == 'hip-fused' else 'hip_attention',
+                function=self._attention, supports=lambda s: supports(s, extension=True), priority=10)
+        self.registry.register(operation='triangle_attention', name='chunked_attention',
+            function=self._attention, supports=supports)
+        if self.backend == 'hip-fused':
+            self.registry.register(operation='triangle_multiplication', name='hip_multiplication',
+                function=self._multiplication, supports=lambda s: supports(s, extension=True), priority=10)
+            self.registry.register(operation='triangle_multiplication', name='native_multiplication',
+                function=lambda *, native, **_: native(), supports=supports)
+
+    def _attention(self, *, module, z, mask, ending, **_):
+        return triangle_attention(module, z, mask, ending=ending, extension=self.extension,
+            valid_length=self.valid_length, fuse_softmax=self.backend == 'hip-fused')
+
+    def _multiplication(self, *, module, z, mask, outgoing, **_):
+        return triangle_multiplication(module, z, mask, outgoing=outgoing, extension=self.extension)
+
+    def _dispatch(self, module, z, mask, kernel_backend, *, original, ending, multiplication, outgoing):
+        # Tensor values and module mutation are not safe cache keys. Recheck the
+        # full boundary on every call, then cache only its metadata result.
+        eligible = self.supported(module, z, mask, kernel_backend, multiplication=multiplication)
+        signature = signature_from_tensor(
+            'triangle_multiplication' if multiplication else 'triangle_attention', z,
+            architecture='gfx90a' if eligible else 'unverified', mode='inference' if eligible else 'unsupported',
+            mask='validated-monomer' if eligible else 'unverified', inplace=False,
+            attributes=dict(eligible=eligible, extension_available=self.extension is not None,
+                            backend=self.backend, ending=ending, outgoing=outgoing))
+
+        def native(**_):
+            return original(z, mask, kernel_backend)
+
+        return self.registry.dispatch(signature, native, module=module, z=z, mask=mask,
+            ending=ending, outgoing=outgoing, native=native)
+
+    @property
+    def counts(self):
+        """Compatibility view of the counters owned by Rust."""
+        counts = dict(hip_attention=0, chunked_attention=0, native_fallback=0,
+                      fused_attention=0, hip_multiplication=0, native_multiplication=0)
+        for row in self.registry.manifest()['selection_counts']:
+            counts['native_fallback' if row['implementation'] == 'native' else row['implementation']] += row['count']
+        return counts
 
     def supported(self, module, z, mask, kernel_backend, *, multiplication=False):
         import torch
@@ -215,6 +262,7 @@ class AtlasFoldRuntime:
                 'valid_length': self.valid_length, 'bucket_length': self.bucket,
                 'implementation_sha256': dict(self.implementation_hashes),
                 'chunk_size': 128, 'counts': dict(self.counts),
+                'operations': self.registry.manifest(),
                 'extension': manifest() if self.backend in ('hip', 'hip-fused') else None}
 
     def uninstall(self):

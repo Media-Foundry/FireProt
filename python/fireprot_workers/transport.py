@@ -66,8 +66,9 @@ def announce_outputs(channel, bundle):
     paths = [output / 'predictions.json'] + [output / p['archive'] for p in bundle['predictions']]
     # Keep upstream structure files available and covered by the artifact hashes.
     paths += sorted((output / 'native').rglob('*.cif'))
-    if (output / 'operator-runtime.json').is_file():
-        paths.append(output / 'operator-runtime.json')
+    for diagnostic in ('operator-runtime.json', 'atlasfold-model.json'):
+        if (output / diagnostic).is_file():
+            paths.append(output / diagnostic)
     artifacts = []
     for path in paths:
         digest = hashlib.sha256()

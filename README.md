@@ -6,14 +6,14 @@ FireProt is an AMD GPU focused framework for protein structure inference. It is 
 
 The experimental Rust CLI now owns request validation, source/weight preflight,
 process supervision, GPU isolation and output acceptance for Protenix Mini-default,
-native AtlasFold plus AtlasLM-3B and OpenFold3. Protenix native and existing CK/HIP
+AtlasFold plus AtlasLM-3B (native/chunked/HIP/fused HIP) and native OpenFold3. Protenix native and existing CK/HIP
 routes pass the established coordinate/summary gates at N1000 and N1536;
-raw PAE/PDE differences are recorded separately. AtlasFold N1000 parity passes exactly.
+raw PAE/PDE differences are recorded separately. AtlasFold chunked/HIP/fused HIP routes pass exact parity at N1000 and N1536.
 OpenFold3 executes successfully, but numerical migration parity remains unpassed
 after native-repeat variation was observed. The shared operator registry now
 uses Rust policy through an in-process bridge; build it before importing the
 Python operator API (`cargo build --release -p fireprot-bridge --locked`).
-Additional model variants, accelerated AtlasFold and kernel build migration remain in progress. See
+Additional model variants and kernel build migration remain in progress. See
 [operator ownership and build](docs/rust-operators.md),
 [Rust commands and scope](docs/rust-running.md) and
 [migration gates](docs/rust-migration.md).

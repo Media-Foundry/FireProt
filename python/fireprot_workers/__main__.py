@@ -12,7 +12,8 @@ def main():
     channel = Channel(request)
     try:
         if request['backend'] != 'native' and not (
-                request['workload']['model'] == 'protenix' and request['backend'] == 'fireprot'):
+                (request['workload']['model'] == 'protenix' and request['backend'] == 'fireprot') or
+                (request['workload']['model'] == 'atlasfold' and request['backend'] in ('chunked', 'hip', 'hip_fused'))):
             raise ValueError('Accelerated worker backends are not integrated yet')
         import torch
         channel.ready(torch)

@@ -104,8 +104,10 @@ cargo clippy --workspace --all-targets -- -D warnings
 AtlasFold plus AtlasLM-3B now also runs through the Rust CLI. The N1000 seed102
 native request completed with 216 isolation samples and exact agreement for all
 four public output arrays against the stored native reference. Dual weights,
-recycles, sampling steps and native precision boundaries are retained. Accelerated
-AtlasFold routes and N1536 parity remain pending.
+recycles, sampling steps and native precision boundaries are retained. AtlasFold
+chunked/HIP/fused HIP routes now use Rust dispatch and supervision; N1000 and N1536
+pass exact comparisons for all four public arrays across all three routes.
+See `provenance/rust_atlasfold_accelerated.json`.
 
 Protenix Mini-default FP32 now runs natively and through the existing CK/HIP
 backend under Rust supervision, with four pinned CCD/data resources in preflight.

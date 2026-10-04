@@ -11,12 +11,13 @@ cross-model API and packaged kernel builds are not complete.
 | Typed requests, cycle semantics and operator selection | `fireprot-core` | Rust; shared Python dispatch uses the Rust registry |
 | Source/weight/resource preflight, worker lifecycle and GPU isolation | `fireprot-runtime` | Rust; Protenix, AtlasFold and OpenFold3 workers connected |
 | Output acceptance and numerical comparison | `fireprot-validation` | Rust; output bundles, NPY/NPZ, alignment and confidence checks |
-| User entry point | `fireprot-cli` | Rust; Protenix native/FireProt and native AtlasFold/OpenFold3 requests |
+| User entry point | `fireprot-cli` | Rust; Protenix native/FireProt, AtlasFold native/chunked/HIP/fused HIP, native OpenFold3 |
 | In-process operator policy boundary | `fireprot-bridge` | CPython stable C ABI; metadata and callbacks only |
 | Model execution | `python/fireprot_workers` and independent upstream checkouts | Explicit PyTorch boundary; additional model variants pending |
 | AMD kernels and tensor glue | `fireprot/backends/amd` | Existing HIP/CK paths; build and layout migration pending |
 
-AtlasFold N1000 native output migration passes exactly. OpenFold3 N1000 executes
+AtlasFold N1000 native output migration passes exactly. Its chunked/HIP/fused HIP
+routes also pass exact public-output parity at N1000 and N1536. OpenFold3 N1000 executes
 under Rust supervision, but numerical parity remains unpassed after variation
 was also observed between unchanged native runs. Protenix Mini-default native and
 FireProt workers now pass existing coordinate/summary gates at N1000 and N1536.

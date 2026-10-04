@@ -92,5 +92,21 @@ validation explicitly probes HIP 7's PCI identity, resolves SMI 5, and adds that
 SMI index to continuous monitoring, checking the mapping again after each run.
 The extra visibility ordinal required by the old harness does not enable the
 two-GCD path. The new Rust supervisor already performs PCI mapping internally;
-the pending Protenix worker will remove this legacy harness dependency. Earlier
+the implemented Protenix worker removes this legacy harness dependency. Earlier
 bridge trial timings without this correction are not accepted isolation evidence.
+
+
+## AtlasFold dispatch
+
+AtlasFold now uses a private instance of the shared Rust registry for chunked,
+HIP and fused HIP routes. The former six Python counters are a compatibility
+view of Rust selection counts. Eligible calls with unavailable extensions use
+bounded native attention or original multiplication; unsupported calls use the
+original upstream method.
+
+Mask contents, module state and tensor eligibility are checked before every
+resolution, including cache hits. Eligibility, extension availability, backend,
+direction and actual tensor strides are included in signature metadata. No
+mask value or tensor result is cached. CPU tests exercise same-shape mask
+changes and extension availability changes; GPU tests exercise trained modules,
+fallbacks, reinstall, stream behavior and precision boundaries.

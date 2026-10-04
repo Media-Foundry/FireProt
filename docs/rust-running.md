@@ -7,7 +7,7 @@ pass; a fresh native-repeat control also differs from the older native capture. 
 promoted as migration-parity validated. The workers
 implement native OpenFold3/OpenBind-0, AtlasFold plus AtlasLM-3B, and Protenix
 Mini-default monomer inference. Protenix also has a FireProt backend connected to
-the Rust operator bridge. Accelerated AtlasFold/OpenFold3 routes remain pending.
+the Rust operator bridge. AtlasFold chunked, HIP and fused HIP routes also use Rust dispatch and supervision; accelerated OpenFold3 remains pending.
 
 ## Commands
 
@@ -110,13 +110,14 @@ directly, with no benchmark-harness orchestration.
 One N1000 request completed through the Rust supervisor with 216 isolation
 samples. Its coordinates, pLDDT, PAE and pTM are byte-identical to the stored
 seed102 native output, including shape and dtype. This verifies that exact
-request only; native N1536 and accelerated AtlasFold routes are not migrated yet.
+request only. The accelerated-route checks below extend coverage to N1536.
 See [the request and complete comparison](../provenance/rust_atlasfold_integration.json).
 
 AtlasFold's public API already exports FP32 NumPy arrays and a Python float pTM.
 The worker preserves that native API. `atlasfold-model.json` separately records
 internal output tensor dtypes, effective bucket, sampling settings and model
-configuration; it is a worker diagnostic, not a supervisor-authenticated report.
+configuration. Its file hash is verified by the supervisor; the diagnostic content
+is not an independent scientific validation.
 
 ## Protenix Mini-default
 
@@ -200,3 +201,39 @@ coordinate/summary gate remains distinct: maximum paired aligned RMSD is
 1.074e-4 Angstrom and maximum paired summary delta is 3.815e-6.
 
 See [complete requests, build identities, outputs and comparisons](../provenance/rust_protenix_integration.json).
+
+
+### AtlasFold accelerated routes
+
+Build both CLI and bridge before using the supplied requests:
+
+```bash
+cargo build --release -p fireprot-cli -p fireprot-bridge --locked
+target/release/fireprot infer configs/requests/atlasfold-n1536-hip-fused.json \
+  configs/diamondhill/atlasfold-native.json
+```
+
+Requests cover `chunked`, `hip` and `hip_fused` at N1000 and N1536. The JSON
+backend uses an underscore; filenames and the adapter name use `hip-fused`.
+N1000 pads to 1024 and retains 30 diffusion steps; N1536 retains 100 steps.
+Both preserve four additional recycles, one sample, seed 102, original dual
+weights and native precision. The N1536 reference uses bounded native math
+because unchunked native attention exceeds available memory.
+
+Rust owns route selection, cache decisions and counters. Python rechecks actual
+mask values and module/tensor eligibility on every call. Existing attention and
+multiplication arithmetic is unchanged. `operator-runtime.json` records the
+Rust library hash, decisions, counts and extension identity and is included in
+hash-verified output artifacts. Tensor arguments stay in process.
+
+These checks use separate GCDs concurrently for correctness. Their timings are
+diagnostic and do not establish a new E2E speedup or migration overhead.
+
+
+All six route/length requests passed exact shape, dtype and value-byte comparison
+for coordinates, pLDDT, PAE and pTM. Every request selected 528 attention calls;
+fused HIP additionally selected 528 multiplication calls. No unsupported-call
+native fallback occurred. All six supervisors passed continuous PCI-mapped GPU
+isolation and output acceptance. Local validation passed 58 Rust tests and 201
+Python tests (110 GPU cases skipped); the remote targeted GPU suite passed 62.
+See [requests, identities and complete comparisons](../provenance/rust_atlasfold_accelerated.json).

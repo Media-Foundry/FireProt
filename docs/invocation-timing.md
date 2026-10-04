@@ -1,7 +1,8 @@
 # Complete invocation timing
 
 Status: Rust CLI measurement and accepted-archive collection are connected.
-Paired performance verdicts remain migration work.
+[`compare-runs`](paired-comparisons.md) adds explicit paired conditions and
+numerical gates; final cross-model benchmark acceptance remains migration work.
 
 ## Measure and collect
 

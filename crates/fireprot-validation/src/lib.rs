@@ -3,6 +3,7 @@ pub mod array;
 pub mod bundle;
 pub mod metrics;
 pub mod numpy;
+pub mod paired;
 pub mod structure;
 pub mod timing;
 #[derive(Debug, thiserror::Error)]

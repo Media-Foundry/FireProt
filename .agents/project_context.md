@@ -175,3 +175,18 @@ gates against the native reference. E2E times 42.219/41.491 seconds establish
 workflow integration, not a new speedup. See `docs/invocation-timing.md` and
 `provenance/rust_invocation_timing_integration.json`. Paired performance verdicts
 and complete cross-model E2E acceptance remain unfinished.
+
+## Paired numerical and performance comparison (2026-10-05)
+
+`compare-runs SPECIFICATION` authenticates both collections, rejects changes to
+scientific work/software/device/cache conditions, requires exact declarations
+of permitted backend/operator changes, and compares every requested sample.
+Failed numerical gates produce `performance: null` and a nonzero CLI status.
+Three sequential N1000 Mini-default FP32/C4/step1/sample1/seed101 pairs on HIP 6 /
+PCI 8e / SMI 4 pass the existing gates. Native/FireProt medians are 50.604/23.460 s
+for model time (2.157x) and 87.618/41.309 s for complete invocation time (2.121x).
+This uses existing published operators and fresh model processes, not new kernel
+optimizations or a warm resident-model measurement. See
+`docs/paired-comparisons.md` and `provenance/rust_paired_comparison_integration.json`.
+Paired execution orchestration, environment coverage/overhead, AtlasFold CIF
+mapping, final installation/model acceptance, CI and push remain outstanding.

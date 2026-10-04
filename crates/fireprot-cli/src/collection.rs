@@ -41,9 +41,9 @@ impl Collection {
 
 #[derive(Serialize)]
 pub struct Collected {
-    series: TimingSeries,
+    pub(crate) series: TimingSeries,
     summary: TimingSummary,
-    receipts: Vec<ArtifactRef>,
+    pub(crate) receipts: Vec<ArtifactRef>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
     invocations: Vec<ArtifactRef>,
 }

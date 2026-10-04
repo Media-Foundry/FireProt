@@ -52,7 +52,9 @@ reopen weights, or revalidate prediction artifacts. For collection with artifact
 and output-content verification, use [accepted run archives](run-archives.md).
 Complete inference invocations can be measured and bound to those archives with
 [`measure-inference`](invocation-timing.md).
-Paired performance verdicts remain migration work.
+For explicit paired treatment and model-correctness checks, use
+[`compare-runs`](paired-comparisons.md). Its descriptive trend is not an operator
+promotion or a statistical-significance claim.
 
 Historical Python benchmark reports are preserved for reproduction. Their
 statistical definition is covered by Rust fixtures, including odd/even medians,

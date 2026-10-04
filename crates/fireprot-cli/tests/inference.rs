@@ -503,3 +503,77 @@ fn failed_or_timed_out_invocations_never_publish_timing_records() {
         assert!(failed["elapsed_seconds"].as_f64().unwrap() > 0.0);
     }
 }
+
+#[test]
+fn paired_cli_withholds_performance_when_resealed_finite_outputs_disagree() {
+    let dir = tempfile::tempdir().unwrap();
+    let root = dir.path();
+    let (mut request, profile) = fixture(root);
+    let mut pins = Vec::new();
+    for arm in ["baseline", "candidate"] {
+        request["run_id"] = json!(arm);
+        request["output_dir"] = json!(root.join(arm));
+        let output = infer(root, &request, &profile);
+        assert!(
+            output.status.success(),
+            "{}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        let receipt = root.join(arm).join("accepted.json");
+        pins.push(json!({"path":receipt,"sha256":sha256(&receipt).unwrap()}));
+    }
+    let collection = |pin: &Value| json!({"schema_version":1,"scope":"model","cache_state":"synthetic paired fixture","runs":[pin]});
+    let mut specification = json!({"schema_version":1,"treatment_description":"same-code synthetic repeat",
+        "expected_changes":{},"baseline":collection(&pins[0]),"candidate":collection(&pins[1])});
+    let run = |spec: &Value| {
+        write(&root.join("comparison.json"), spec);
+        Command::new(env!("CARGO_BIN_EXE_fireprot"))
+            .current_dir(root)
+            .args(["compare-runs", "comparison.json"])
+            .output()
+            .unwrap()
+    };
+    let output = run(&specification);
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let report: Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(report["correctness_passed"], true);
+    assert_eq!(report["performance"]["median_speedup"], 1.0);
+    assert_eq!(
+        report["performance"]["observed_trend"],
+        "insufficient_repeats"
+    );
+    assert_eq!(report["pairs"][0]["cif_atom_identities_checked"], true);
+    // Keep the candidate finite, structurally valid and independently re-pinned.
+    // Only its model agreement is now wrong; archive/content checks still pass.
+    let archive = root.join("candidate/sample-0.npz");
+    let changed=Command::new("/usr/bin/python3").arg("-c").arg(
+        "import sys,zipfile,struct\np=sys.argv[1]\nwith zipfile.ZipFile(p) as z: d={k:z.read(k) for k in z.namelist()}\nk='confidence.ptm.npy'\nd[k]=d[k][:-4]+struct.pack('<f',0.75)\nwith zipfile.ZipFile(p,'w') as z:\n for k,v in d.items(): z.writestr(k,v)\n"
+    ).arg(&archive).output().unwrap();
+    assert!(
+        changed.status.success(),
+        "{}",
+        String::from_utf8_lossy(&changed.stderr)
+    );
+    let receipt = root.join("candidate/accepted.json");
+    let mut content: Value = serde_json::from_slice(&fs::read(&receipt).unwrap()).unwrap();
+    for artifact in content["outputs"].as_array_mut().unwrap() {
+        if artifact["path"] == "sample-0.npz" {
+            artifact["sha256"] = sha256(&archive).unwrap().into();
+        }
+    }
+    write(&receipt, &content);
+    specification["candidate"]["runs"][0]["sha256"] = sha256(&receipt).unwrap().into();
+    let output = run(&specification);
+    assert!(!output.status.success());
+    let report: Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(report["correctness_passed"], false);
+    assert!(report["performance"].is_null());
+    assert_eq!(
+        report["pairs"][0]["samples"][0]["exact_arrays"]["confidence.ptm"],
+        false
+    );
+}

@@ -4,6 +4,7 @@ use std::path::Path;
 pub enum Command<'a> {
     Help(Option<&'a str>),
     Version,
+    CompareRuns(&'a Path),
     MeasureInference {
         specification: &'a Path,
         destination: &'a Path,
@@ -60,6 +61,11 @@ pub enum Command<'a> {
 }
 
 const COMMANDS: &[(&str, &str, &str)] = &[
+    (
+        "compare-runs",
+        "SPECIFICATION",
+        "Verify paired archives, declared treatment changes, numerical gates and timing ratios.",
+    ),
     (
         "measure-inference",
         "SPECIFICATION DESTINATION",
@@ -179,6 +185,7 @@ pub fn parse(args: &[String]) -> Result<Command<'_>, String> {
         ["--help" | "-h" | "help"] => Command::Help(None),
         ["--version" | "-V"] => Command::Version,
         ["help", name] | [name, "--help" | "-h"] if known(name) => Command::Help(Some(*name)),
+        ["compare-runs", path] => Command::CompareRuns(Path::new(*path)),
         ["measure-inference", specification, destination] => Command::MeasureInference {
             specification: Path::new(*specification),
             destination: Path::new(*destination),

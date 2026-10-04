@@ -77,7 +77,9 @@ signatures or proof against a writer who can replace both the archive and the
 trusted receipt pin. Cache preparation is explicitly supplied by the caller and
 cannot be reconstructed from a successful run. Continuous isolation remains an
 observation made during inference, not something the collector can repeat later.
-Full environment locking and paired performance verdicts remain unfinished.
+[`compare-runs`](paired-comparisons.md) adds declared treatment changes,
+per-sample numerical gates and paired timing ratios. Full environment locking
+and paired execution orchestration remain unfinished.
 
 ## Verified integration (2026-10-04)
 

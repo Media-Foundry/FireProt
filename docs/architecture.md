@@ -12,6 +12,7 @@ cross-model API and packaged kernel builds are not complete.
 | Source/weight/resource preflight, worker lifecycle and GPU isolation | `fireprot-runtime` | Rust; Protenix, AtlasFold and OpenFold3 workers connected |
 | Output acceptance and numerical comparison | `fireprot-validation` | Rust; output bundles, NPY/NPZ, alignment and confidence checks |
 | User entry point | `fireprot-cli` | Rust; Protenix native/FireProt, AtlasFold native/chunked/HIP/fused HIP, native OpenFold3 |
+| Timing and paired comparison | Rust runtime/validation composed by `fireprot-cli` | Complete invocation measurement, archive collection, declared treatment checks and model-specific numerical gates; execution orchestration and final cross-model acceptance remain open |
 | In-process operator policy boundary | `fireprot-bridge` | CPython stable C ABI; metadata and callbacks only |
 | Model execution | `python/fireprot_workers` and independent upstream checkouts | Explicit PyTorch boundary; additional model variants pending |
 | Native build identity, dependency inventories and cache transactions | `fireprot-runtime` via `fireprot-bridge` | Maintained Torch and standalone HIP loaders use Rust |

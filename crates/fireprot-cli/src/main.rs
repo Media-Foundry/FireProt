@@ -1,6 +1,7 @@
 mod app;
 mod args;
 mod collection;
+mod comparison;
 mod inference;
 mod support;
 

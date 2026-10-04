@@ -9,3 +9,5 @@ pub mod command;
 pub mod device;
 #[cfg(unix)]
 pub mod preflight;
+
+pub mod build;

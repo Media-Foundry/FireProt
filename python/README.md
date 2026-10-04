@@ -24,4 +24,7 @@ PYTHONPATH=python:Protenix python -m pytest -q tests
 
 Run these commands from the repository root. Model execution uses its pinned
 Torch/ROCm environment and upstream checkout, not a shared generic Python install.
-An installable distribution and complete environment provenance remain pending.
+The Rust installer packages this boundary with the CLI, bridge and native kernel
+sources; see [installation](../docs/installation.md). Model environments and
+weights remain external, explicitly pinned deployment inputs. Environment
+inventories cover declared roots; they do not create a hermetic runtime.

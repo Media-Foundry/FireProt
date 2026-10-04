@@ -2,52 +2,35 @@
 
 FireProt is an AMD GPU protein structure inference framework. Its architecture separates model-specific adapters from semantic operation contracts and AMD implementations.
 
-## Active work: Rust migration (2026-10-04)
+## Current state: Rust framework validated (2026-10-05)
 
-Rebuild the maintained framework in Rust before resuming OpenFold3 optimization.
-`docs/rust-migration.md` and `docs/architecture.md` describe current ownership;
-the older measurements below are historical context, not current defaults.
-Native AtlasFold plus AtlasLM-3B and OpenFold3 execute under Rust supervision.
-AtlasFold N1000 exact parity passes. OpenFold3 N1000 with explicit strict deterministic
-execution and PYTHONHASHSEED=101 now passes exact native parity; legacy default-mode
-comparisons remain unpassed because native repeats vary. See
-`docs/openfold3-determinism.md`. Preserve all existing gates.
-The shared Python operator API now requires the Rust bridge build described in
-`docs/rust-operators.md`. Protenix Mini-default native/FireProt workers are also
-connected: N1000 and N1536 pass existing coordinate/summary gates under Rust PCI
-monitoring. Preserve the separately recorded nonzero full PAE/PDE differences;
-do not claim all confidence arrays are identical. AtlasFold chunked/HIP/fused HIP workers and Rust registry dispatch are connected;
-N1000 and N1536 pass exact parity for all three routes. Additional model variants and full framework acceptance remain outstanding.
+The maintained Rust migration has passed the model, operator, CPU and independent
+installation gates described in `docs/rust-acceptance.md`. Consult that audit and
+README for current scope; the dated entries below are chronological evidence and
+may describe gates that were open at the time.
 
-Rust now owns native build identities, directory inventories, cache locks, artifact
-hashes and atomic publication. Declared host ELF tools also have their load-time
-dynamic dependencies resolved and hashed in Rust. All four maintained Torch
-extension loaders now use Rust build services with recipe 6; `FIREPROT_RUST_BUILD`
-is no longer a selector. Model/operator correctness gates remain unchanged.
-Standalone C ABI CK attention and hipBLASLt loaders now use Rust direct HIP
-builds, sharing process management with Torch. Typed C ABI publication/loading
-now complements the existing Python bundle path. All six maintained loaders have
-pinned artifact selectors. Maintained Python is under `python/fireprot`, native
-sources under `kernels/amd`, with a root import shim and an explicit historical source path map.
-Rust now records explicit launch environments, interpreter/worker inputs and
-verified physical device mapping. Complete Python package/runtime provenance still needs work; see
-`docs/execution-provenance.md`. Independent installation is described below.
-Successful runs now retain pinned acceptance receipts. Rust `collect-timings`
-rechecks archived files and output content before collecting model, worker-request
-or supervisor intervals; it cannot infer complete invocation E2E or cache preparation.
-See `docs/run-archives.md`. Rust owns compiler staging,
-subprocess environment, cancellable lock waits, timeout and cache publication.
-A separate Rust guard stops compiler descendants when the caller exits, including
-forced worker termination; see `docs/torch-loaders.md` and `docs/torch-build-process.md`.
-Rust publication/acceptance commands and the pinned mask/bias bundle path are
-implemented; see `docs/kernel-artifacts.md`. Inference should ultimately accept published artifacts without repeating
-compiler discovery; the current worker-driven build path is transitional. See
-`docs/kernel-builds.md`; preserve its explicit acceptance limits.
+Rust owns requests, shared registry policy, process/device supervision, artifact
+and environment verification, native build/cache publication, output acceptance,
+archive replay, invocation timing and paired execution. Python owns explicit
+upstream/Torch invocation, tensor metadata/capability predicates, operator calls,
+Torch build descriptors and serialization. Historical Python benchmark and
+validation helpers remain reproduction tools. New framework policy belongs in Rust.
 
-DiamondHill: `pc@10.120.16.9`, workspace `/media/IntelSSD/fireprot`. All eight GCDs
-are authorized; verify isolation for each run. Checkpoint locations are recorded
-in `docs/diamondhill-checkpoints.md`. The independent Protenix integration HEAD is
-`bb3be993b52713795796c72cf0a46ef8a7323442`; retain its separate Git history.
+DiamondHill: `pc@10.120.16.9`, checkout `/media/IntelSSD/fireprot`, validated
+installation `/media/IntelSSD/fireprot-install-v2`. All eight GCDs are authorized;
+verify HIP-to-PCI-to-SMI mapping and isolation for each run. Checkpoints are listed
+in `docs/diamondhill-checkpoints.md`. Preserve the independent Protenix integration
+HEAD `bb3be993b52713795796c72cf0a46ef8a7323442` and its separate Git history.
+
+AtlasFold/AtlasLM-3B N1000/N1536 exact array gates pass. Protenix Mini-default
+N1000/N1536, Mini-ESM N1000 and Tiny L124 pass their declared gates; accelerated
+full confidence arrays are not claimed bitwise equal. OpenFold3 strict deterministic
+N1000 passes exact parity; legacy nondeterministic runs remain unpassed. Do not
+weaken gates, reduce work or label concurrent acceptance timings as E2E speedup.
+
+Next work is OpenFold3 optimization through the Rust framework, preserving
+baseline correctness after every trial. OpenFold2/ESMFold integration, distributed
+execution and approximation policies remain separate future work.
 
 ## Historical implemented state
 

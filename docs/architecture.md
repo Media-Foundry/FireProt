@@ -1,10 +1,11 @@
 # FireProt architecture
 
-Status: Rust migration in progress, 2026-10-04. The existing AMD inference
-paths and historical measurements below remain model-specific. The full
-cross-model API and packaged kernel builds are not complete.
+Status: Rust framework migration validated, 2026-10-05. See the
+[acceptance audit](rust-acceptance.md). Model adapters retain separate scientific
+contracts; this is not a universal API for every folding model. The historical
+measurements below remain model-specific.
 
-## Maintained ownership during migration
+## Maintained ownership
 
 | Layer | Current owner | Integration status |
 | --- | --- | --- |
@@ -12,9 +13,9 @@ cross-model API and packaged kernel builds are not complete.
 | Source/weight/resource preflight, worker lifecycle and GPU isolation | `fireprot-runtime` | Rust; Protenix, AtlasFold and OpenFold3 workers connected |
 | Output acceptance and numerical comparison | `fireprot-validation` | Rust; output bundles, NPY/NPZ, alignment and confidence checks |
 | User entry point | `fireprot-cli` | Rust; Protenix native/FireProt, AtlasFold native/chunked/HIP/fused HIP, native OpenFold3 |
-| Timing and paired comparison | Rust runtime/validation composed by `fireprot-cli` | Complete invocation measurement, archive collection, paired scheduling, declared treatment checks and model-specific numerical gates; final cross-model acceptance remains open |
+| Timing and paired comparison | Rust runtime/validation composed by `fireprot-cli` | Complete invocation measurement, archive collection, paired scheduling, declared treatment checks and model-specific numerical gates; validated installed workflows; timing scopes remain explicit |
 | In-process operator policy boundary | `fireprot-bridge` | CPython stable C ABI; metadata and callbacks only |
-| Model execution | `python/fireprot_workers` and independent upstream checkouts | Explicit PyTorch boundary; additional model variants pending |
+| Model execution | `python/fireprot_workers` and independent upstream checkouts | Explicit PyTorch boundary; supported variants listed in README |
 | Native build identity, dependency inventories and cache transactions | `fireprot-runtime` via `fireprot-bridge` | Maintained Torch and standalone HIP loaders use Rust |
 | AMD kernels and tensor glue | `kernels/amd`, `python/fireprot` | Rust build services and pinned artifact loaders; root Python imports use a small compatibility shim |
 

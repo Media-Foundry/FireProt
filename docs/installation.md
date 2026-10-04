@@ -127,3 +127,33 @@ The installed inventory remained unchanged after all runs/builds.
 The [evidence record](../provenance/rust_installation_integration.json) binds the
 installation manifest, binary input pins, launch/archive receipts, references,
 comparisons and cold-build artifacts. Concurrent timings are diagnostic only.
+
+### Updated installation acceptance
+
+`/media/IntelSSD/fireprot-install-v2` contains 58 files and uses the expanded
+system-environment inventories. Its independently retained manifest SHA-256 is
+`58b4cafbcfb5c7a01fe9a66614ba7d37f75c61a860143642a40e61a8b75ef34d`.
+The CLI was invoked from `/tmp`, using installed workers, bridge and profiles.
+Seven requests pass reference comparison and installed-CLI archive replay:
+
+| Model / route | Length | Reference gate |
+| --- | ---: | --- |
+| AtlasFold + AtlasLM-3B / fused HIP | 1000, 1536 | All public arrays bitwise equal |
+| Protenix Mini-default / FireProt | 1000, 1536 | Existing coordinate and summary-confidence gates |
+| Protenix Mini-ESM / FireProt | 1000 | Upstream CIF/summary gates; ESM input features byte-identical |
+| Protenix Tiny-default / native | 124 | Upstream CIF/summary gates |
+| OpenFold3 / strict deterministic native | 1000 | All eleven arrays bitwise equal |
+
+Tiny, Mini-default N1000 and AtlasFold N1000 also exercise installed sequential
+batch execution. The 58-file installation remains unchanged after all seven runs.
+The N1536 AtlasFold request retains 100 diffusion steps; the N1000 request retains
+30. Each request records the remaining workload, random-state and device settings.
+Concurrent acceptance timings are not controlled E2E speedup evidence.
+
+Observed regular library mappings from the long AtlasFold, Protenix/Mini-ESM and
+OpenFold3 workers are covered by the environment inventories, installed bridge
+or separately verified published kernel bundles. The map PIDs match completed
+supervisor reports. Point-in-time maps do not prove complete transient-load
+coverage; device mappings and mutable filesystem behavior retain their documented
+limits. See `provenance/rust_installation_v2_integration.json` for the installation,
+input pins, seven acceptance receipts, comparisons, replay hashes and library audit.

@@ -1,5 +1,14 @@
 # Rust migration priority and acceptance
 
+## Current acceptance
+
+The maintained Rust framework has passed the technical requirements in the
+original plan. The [requirement-by-requirement audit](rust-acceptance.md) records
+the supported scope, seven installed model requests, CPU/CI evidence, environment
+coverage and retained limits. Final publication is checked with the audit commit.
+The dated implementation tables below preserve migration history; their remaining
+work columns describe what was open at that point, not the current backlog.
+
 ## Required order
 
 The user requested this ordering on 2026-10-04:

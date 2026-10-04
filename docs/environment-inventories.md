@@ -187,9 +187,10 @@ matching references. Protenix's aligned coordinate RMSD is 9.539e-5 Angstrom and
 maximum summary-confidence delta is 7.451e-8, within the unchanged 1e-3 gates.
 See `provenance/rust_system_environment_integration.json` for requests, receipts,
 supervisor/device records and comparisons. Concurrent validation does not
-establish E2E speedup. Observed library coverage and final installation acceptance
-remain open; the SSH interruption prevented live map capture for these AtlasFold
-and OpenFold3 workers.
+establish E2E speedup. The later installed-workflow audit covers observed library
+mappings and seven accepted requests; see [installation](installation.md).
+The SSH interruption prevented live map capture for these original N1000 AtlasFold
+and OpenFold3 workers, so their own evidence retains that limit.
 The checks observe mutable filesystems; they do not provide an atomic snapshot,
 prove every transient library load, or lock GPU firmware identity.
 

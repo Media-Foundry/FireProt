@@ -13,7 +13,9 @@ Python implementation functions, constructs tensor signatures, and invokes the
 selected function or the caller's native fallback. Existing Python capability
 predicates still perform model/framework-specific checks. They receive an
 equivalent immutable signature reconstructed from metadata; object identity is
-not preserved. Porting these predicates and kernel build policy is separate work.
+not preserved. Tensor predicates remain at the Python boundary; maintained
+kernel build policy and cache services are Rust-owned, as described in
+[native builds](kernel-builds.md).
 
 There is no second Python implementation of sorting, caching, counting or
 fallback selection. Rust library loading is mandatory for this registry. Native

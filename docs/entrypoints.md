@@ -59,9 +59,10 @@ performance or accuracy claims to long inputs. Mini-default and Mini-ESM retain
 their separately documented long-input validation scope. AtlasFold and OpenFold3
 use the same Rust inference/batch interface with their own request contracts.
 
-Historical benchmark entry points remain reproducibility tools. Environment
-coverage, complete invocation E2E measurement, paired performance verdicts and
-final migration acceptance remain separate outstanding work.
+Historical benchmark entry points remain reproducibility tools. Rust implements
+[complete invocation timing](invocation-timing.md) and
+[paired execution with correctness gates](paired-execution.md). Final migration
+acceptance includes environment coverage and the updated installed workflows.
 
 ## Verified migration evidence
 

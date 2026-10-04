@@ -4,13 +4,14 @@ An AMD GPU protein structure inference framework with model adapters and
 capability-gated HIP/CK operators. The primary performance target is long proteins,
 including the measured 1,000- and 1,536-residue workloads.
 
-**Status: Rust framework migration in progress.** Rust owns request contracts,
-operator selection, process supervision, GPU isolation, provenance preflight and
-output validation. Native build/cache services now own maintained Torch and standalone HIP loaders.
-All six maintained loaders support pinned Python/C ABI artifacts. A Linux installer
-provides an independent deployment prefix. Complete environment provenance and
-remaining workflow/model coverage are still unfinished. Rust itself
-is not claimed to accelerate GPU kernels.
+**Status: Rust framework migration validated for the workflows below.** Rust owns
+request contracts, operator selection, process supervision, GPU isolation,
+provenance, native build/cache services, numerical acceptance and paired benchmarks.
+All six maintained loaders support pinned artifacts. Seven model requests pass
+validation from an independent Linux installation. Upstream model execution and
+tensor calls retain an explicit Python/Torch boundary. See the
+[acceptance audit](docs/rust-acceptance.md) for evidence and limits.
+Rust itself is not claimed to accelerate GPU kernels.
 
 ## Model coverage
 
@@ -120,6 +121,6 @@ structural accuracy.
 - [Historical README measurements](.agents/readme_history_2026-10-04.md)
 - [Original Protenix setup notes](.agents/protenix_baseline.md)
 
-Finish the maintained Rust framework and its parity gates before resuming
-OpenFold3 optimization. Existing validated GPU arithmetic remains available
-through capability checks and native fallback throughout this migration.
+OpenFold3 optimization proceeds through the Rust framework and the same correctness
+gates. Existing validated GPU arithmetic remains available through capability
+checks and native fallback.

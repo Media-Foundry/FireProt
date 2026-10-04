@@ -67,8 +67,10 @@ Source-path changes produce new Rust build identities. Published artifact
 acceptance remains independent of original build paths: pinned bundles continue
 to load without scanning old compiler inputs. Native source builds must still be
 validated from their new paths. The [Rust installer](installation.md) now creates an independent Linux prefix
-with pinned binaries, Python/kernel source and generated model profiles. Remaining
-maintained entry points and complete environment inventories still need work.
+with pinned binaries, Python/kernel source and generated model profiles.
+Single, batch and paired-benchmark entry points are Rust-owned. Explicit
+[environment inventories](environment-inventories.md) cover declared library
+roots; final deployment coverage must be checked against the actual model paths.
 
 ## Validation on DiamondHill (2026-10-04)
 

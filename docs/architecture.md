@@ -113,7 +113,8 @@ accept that artifact through the bridge using actual runtime compatibility.
 Compiler dependency scans belong to build acceptance; published-artifact loading
 checks the manifest, receipt and library without reopening build inputs. Rust now orchestrates the experimental Torch compiler process, including staging,
 timeout and diagnostics. Maintained Torch and standalone C ABI loaders now use the shared guarded compiler
-service. Pinned C ABI deployment bundles remain pending. See [Torch loader
+service. Typed C ABI deployment bundles now cover CK attention and hipBLASLt,
+with package-specific ABI revisions and preserved schema-1 Python compatibility. See [Torch loader
 ownership](torch-loaders.md) and [direct HIP builds](hip-builds.md). See [published kernel artifacts](kernel-artifacts.md).
 
 Keep `Protenix/` as an independent upstream checkout. Other upstream implementations should follow the same independent-source approach. Keep adapters and local patches in the top-level repository. When an upstream edit is unavoidable, record the baseline commit, patch, and license. Do not copy upstream source into the shared core.

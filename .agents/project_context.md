@@ -24,7 +24,8 @@ dynamic dependencies resolved and hashed in Rust. All four maintained Torch
 extension loaders now use Rust build services with recipe 6; `FIREPROT_RUST_BUILD`
 is no longer a selector. Model/operator correctness gates remain unchanged.
 Standalone C ABI CK attention and hipBLASLt loaders now use Rust direct HIP
-builds, sharing process management with Torch. Pinned C ABI publication/loading,
+builds, sharing process management with Torch. Typed C ABI publication/loading
+now complements the existing Python bundle path. Other Torch prebuilt selectors,
 model-environment provenance and repository layout still need work. Rust owns compiler staging,
 subprocess environment, cancellable lock waits, timeout and cache publication.
 A separate Rust guard stops compiler descendants when the caller exits, including

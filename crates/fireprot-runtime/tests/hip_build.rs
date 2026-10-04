@@ -146,6 +146,68 @@ fn c_abi_build_cannot_be_published_as_python_extension() {
     let destination = dir.path().join("published");
     let error =
         fireprot_runtime::kernel_bundle::publish(&build.directory, &destination).unwrap_err();
-    assert!(error.to_string().contains("soabi"));
+    assert!(error.to_string().contains("c_abi"));
     assert!(!destination.exists());
+}
+
+#[test]
+fn c_abi_bundle_is_typed_and_independent_of_build_inputs() {
+    use fireprot_runtime::{
+        artifacts::sha256,
+        kernel_bundle::{KernelCompatibility, accept, publish},
+    };
+    let dir = tempfile::tempdir().unwrap();
+    let mut spec = fixture(dir.path());
+    spec.build.versions.extend([
+        ("torch".into(), "fixture".into()),
+        ("hip".into(), "fixture".into()),
+        ("c_abi".into(), "answer-v1".into()),
+    ]);
+    let build = spec.run(&dir.path().join("cache")).unwrap();
+    let bundle = publish(&build.directory, &dir.path().join("bundle")).unwrap();
+    assert!(
+        matches!(&bundle.compatibility, KernelCompatibility::C { c_abi, .. } if c_abi == "answer-v1")
+    );
+    fs::remove_dir_all(dir.path().join("cache")).unwrap();
+    fs::remove_file(dir.path().join("source.c")).unwrap();
+    fs::remove_dir_all(dir.path().join("include")).unwrap();
+    let accepted = serde_json::to_value(
+        accept(
+            &bundle.directory,
+            &bundle.manifest_sha256,
+            &bundle.compatibility,
+        )
+        .unwrap(),
+    )
+    .unwrap();
+    assert!(accepted.get("module_name").is_none());
+    let library = accepted["library"].as_str().unwrap();
+    assert_eq!(&fs::read(library).unwrap()[..4], b"\x7fELF");
+    let mut incompatible = bundle.compatibility.clone();
+    if let KernelCompatibility::C { c_abi, .. } = &mut incompatible {
+        *c_abi = "answer-v2".into();
+    }
+    assert!(accept(&bundle.directory, &bundle.manifest_sha256, &incompatible).is_err());
+    let path = bundle.directory.join("kernel.json");
+    let original: serde_json::Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+    assert_eq!(original["schema_version"], 2);
+    for (field, value) in [
+        ("schema_version", serde_json::json!(1)),
+        ("module_name", serde_json::json!("pretend_python")),
+    ] {
+        let mut manifest = original.clone();
+        manifest[field] = value;
+        fs::write(&path, serde_json::to_vec(&manifest).unwrap()).unwrap();
+        assert!(
+            accept(
+                &bundle.directory,
+                &sha256(&path).unwrap(),
+                &bundle.compatibility
+            )
+            .is_err()
+        );
+    }
+    let mut ambiguous = serde_json::to_value(&bundle.compatibility).unwrap();
+    ambiguous["python_soabi"] = "cpython-test".into();
+    assert!(serde_json::from_value::<KernelCompatibility>(ambiguous).is_err());
 }

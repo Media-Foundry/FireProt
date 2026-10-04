@@ -1,0 +1,3966 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-04",
+  "base_commit": "5c7b4f9cb9cf9ec59a47476634015cca23edfe9e",
+  "purpose": "Typed C ABI publication and compiler-free accepted loading",
+  "source_sha256": {
+    "crates/fireprot-runtime/src/kernel_bundle.rs": "7246917dee94443dd8fb8d8844749228b01ca74dd526ab66c9904ba3bcd78375",
+    "fireprot/backends/amd/_published.py": "a0f76817d57dfab9b9d17cb20b6dc4f14e0f702012326d5786f187bbfb37707b",
+    "fireprot/backends/amd/ck_attention.py": "5fa941737310e5a39d413b3eb696d5373aa5a1594982a147b35f40f7da5210e3",
+    "fireprot/backends/amd/lt_bmm.py": "fa407796af7b988d8b56abbd4870991c9568af256440691ababcb2852eca4496",
+    "configs/diamondhill/protenix-published.json": "f6def5aec9c7822157d4d543fbe24481f2c73ee5ec47063d9d4019c50d478b54",
+    "target/release/fireprot": "d56569011ad83d166c524ff866e789bfd01e0f8335e61c0853dd021e5f5be3a0",
+    "target/release/lib_fireprot_bridge.so": "f036778cc4ef7da0f1dc2ffba87c397fdcb0c4900905ac29863cb04cb213c2b1"
+  },
+  "tests": {
+    "rust_passed": 91,
+    "python_passed": 232,
+    "python_skipped": 110,
+    "c_abi_gpu_passed": 5,
+    "legacy_python_gpu_passed": 11
+  },
+  "limitations": [
+    "Concurrent migration runs do not establish E2E speedup.",
+    "Protenix retains its aligned-coordinate/summary-confidence 1e-3 gates; raw arrays are diagnostic.",
+    "hipBLASLt inference is still disabled by default.",
+    "Bundles do not package dynamic HIP/BLAS libraries or establish cross-host portability."
+  ],
+  "published": {
+    "ck_attention": {
+      "directory": "/media/IntelSSD/fireprot/runtime/kernels/protenix-ck_attention-cabi-v1",
+      "manifest_sha256": "ea39ea45489c9b1f014adcb7b4297d433c65d59a9d3d4fcb4b0b432c5d6e2885",
+      "compatibility": {
+        "package": "fireprot_ck_attention",
+        "target": "gfx90a",
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "c_abi": "ck-attention-v1"
+      },
+      "manifest": {
+        "schema_version": 2,
+        "compatibility": {
+          "package": "fireprot_ck_attention",
+          "target": "gfx90a",
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850",
+          "c_abi": "ck-attention-v1"
+        },
+        "build_identity_sha256": "e86557e12cf36bea3bb6eb7d248d6c1697d019b8c824ca5cc661bcb8d8d20bc3",
+        "library": {
+          "path": "fireprot_ck_attention_e86557e12cf36bea3bb6eb7d248d6c1697d019b8c824ca5cc661bcb8d8d20bc3.so",
+          "sha256": "fa8a2ef8fae01c16efeb982ad9e966df04035246220f07658ce88ed29136538b"
+        },
+        "build_receipt": {
+          "path": "build-receipt.json",
+          "sha256": "948e55e509075e2ca5014247abf8d0deee6498416a887833cd55043414dc6c48"
+        }
+      },
+      "cli_accepted_without_path": {
+        "directory": "/media/IntelSSD/fireprot/runtime/kernels/protenix-ck_attention-cabi-v1",
+        "library": "/media/IntelSSD/fireprot/runtime/kernels/protenix-ck_attention-cabi-v1/fireprot_ck_attention_e86557e12cf36bea3bb6eb7d248d6c1697d019b8c824ca5cc661bcb8d8d20bc3.so",
+        "manifest_sha256": "ea39ea45489c9b1f014adcb7b4297d433c65d59a9d3d4fcb4b0b432c5d6e2885",
+        "build_identity_sha256": "e86557e12cf36bea3bb6eb7d248d6c1697d019b8c824ca5cc661bcb8d8d20bc3",
+        "compatibility": {
+          "package": "fireprot_ck_attention",
+          "target": "gfx90a",
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850",
+          "c_abi": "ck-attention-v1"
+        }
+      }
+    },
+    "lt_bmm": {
+      "directory": "/media/IntelSSD/fireprot/runtime/kernels/protenix-lt_bmm-cabi-v1",
+      "manifest_sha256": "edba84ba899f4c8ee071ab026f1bd7043a1f3b3aa14007030cbc9f73db1bab1c",
+      "compatibility": {
+        "package": "fireprot_lt_bmm",
+        "target": "gfx90a",
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "c_abi": "lt-packed-bmm-v1"
+      },
+      "manifest": {
+        "schema_version": 2,
+        "compatibility": {
+          "package": "fireprot_lt_bmm",
+          "target": "gfx90a",
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850",
+          "c_abi": "lt-packed-bmm-v1"
+        },
+        "build_identity_sha256": "66479c0e7059408e52b7d9b1d0848203bb2ee0692dbef26bd86885191aaf466c",
+        "library": {
+          "path": "fireprot_lt_bmm_66479c0e7059408e52b7d9b1d0848203bb2ee0692dbef26bd86885191aaf466c.so",
+          "sha256": "2579af6dcd6c415f41381ec8cc81b7df81bfcbbd53f408c807a3da67b805e8f7"
+        },
+        "build_receipt": {
+          "path": "build-receipt.json",
+          "sha256": "759a7a8c756a4ccbed6e810bb68c0e0761413db4e5bffb69ee20776f87bda4e3"
+        }
+      },
+      "cli_accepted_without_path": {
+        "directory": "/media/IntelSSD/fireprot/runtime/kernels/protenix-lt_bmm-cabi-v1",
+        "library": "/media/IntelSSD/fireprot/runtime/kernels/protenix-lt_bmm-cabi-v1/fireprot_lt_bmm_66479c0e7059408e52b7d9b1d0848203bb2ee0692dbef26bd86885191aaf466c.so",
+        "manifest_sha256": "edba84ba899f4c8ee071ab026f1bd7043a1f3b3aa14007030cbc9f73db1bab1c",
+        "build_identity_sha256": "66479c0e7059408e52b7d9b1d0848203bb2ee0692dbef26bd86885191aaf466c",
+        "compatibility": {
+          "package": "fireprot_lt_bmm",
+          "target": "gfx90a",
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850",
+          "c_abi": "lt-packed-bmm-v1"
+        }
+      }
+    }
+  },
+  "cold_builds": {
+    "ck_attention": {
+      "enabled": true,
+      "long1536_enabled": false,
+      "exact1536_enabled": false,
+      "vector1000_enabled": true,
+      "loaded": true,
+      "error": null,
+      "build": {
+        "directory": "/media/IntelSSD/fireprot/runtime/torch_extensions/rust-v1/fireprot_ck_attention_e86557e12cf36bea3bb6eb7d248d6c1697d019b8c824ca5cc661bcb8d8d20bc3",
+        "cache_hit": false,
+        "identity_sha256": "e86557e12cf36bea3bb6eb7d248d6c1697d019b8c824ca5cc661bcb8d8d20bc3",
+        "package": "fireprot_ck_attention",
+        "arguments": {
+          "compile": [
+            "-O3",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a"
+          ],
+          "fireprot_hip_process": [
+            "1",
+            "/opt/rocm/bin/hipcc",
+            "/media/IntelSSD/fireprot/target/release/fireprot-compiler-guard",
+            "[\"/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp\"]",
+            "600000",
+            "600000",
+            "/opt/rocm/bin/hipcc"
+          ],
+          "include": [
+            "/opt/rocm/include"
+          ],
+          "link": []
+        },
+        "versions": {
+          "abi": "c",
+          "c_abi": "ck-attention-v1",
+          "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n",
+          "hip": "7.14.60850",
+          "recipe": "hip-cabi-1",
+          "torch": "2.12.0a0+git78258b9"
+        },
+        "inventory_counts": {
+          "files": 10,
+          "tree_files": 9029,
+          "dynamic_files": 31
+        },
+        "artifacts": {
+          "fireprot_ck_attention_e86557e12cf36bea3bb6eb7d248d6c1697d019b8c824ca5cc661bcb8d8d20bc3.so": "fa8a2ef8fae01c16efeb982ad9e966df04035246220f07658ce88ed29136538b"
+        },
+        "receipt_sha256": "948e55e509075e2ca5014247abf8d0deee6498416a887833cd55043414dc6c48"
+      }
+    },
+    "lt_bmm": {
+      "enabled": false,
+      "loaded": true,
+      "error": null,
+      "build": {
+        "directory": "/media/IntelSSD/fireprot/runtime/torch_extensions/rust-v1/fireprot_lt_bmm_66479c0e7059408e52b7d9b1d0848203bb2ee0692dbef26bd86885191aaf466c",
+        "cache_hit": false,
+        "identity_sha256": "66479c0e7059408e52b7d9b1d0848203bb2ee0692dbef26bd86885191aaf466c",
+        "package": "fireprot_lt_bmm",
+        "arguments": {
+          "compile": [
+            "-O3",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a"
+          ],
+          "fireprot_hip_process": [
+            "1",
+            "/opt/rocm/bin/hipcc",
+            "/media/IntelSSD/fireprot/target/release/fireprot-compiler-guard",
+            "[\"/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_lt_bmm.cpp\"]",
+            "600000",
+            "600000",
+            "/opt/rocm/bin/hipcc"
+          ],
+          "include": [
+            "/opt/rocm/include"
+          ],
+          "link": [
+            "-L/opt/rocm/lib",
+            "-Wl,-rpath,/opt/rocm/lib",
+            "-lhipblaslt"
+          ]
+        },
+        "versions": {
+          "abi": "c",
+          "c_abi": "lt-packed-bmm-v1",
+          "hip": "7.14.60850",
+          "recipe": "hip-cabi-1",
+          "torch": "2.12.0a0+git78258b9"
+        },
+        "inventory_counts": {
+          "files": 11,
+          "tree_files": 9029,
+          "dynamic_files": 35
+        },
+        "artifacts": {
+          "fireprot_lt_bmm_66479c0e7059408e52b7d9b1d0848203bb2ee0692dbef26bd86885191aaf466c.so": "2579af6dcd6c415f41381ec8cc81b7df81bfcbbd53f408c807a3da67b805e8f7"
+        },
+        "receipt_sha256": "759a7a8c756a4ccbed6e810bb68c0e0761413db4e5bffb69ee20776f87bda4e3"
+      },
+      "counts": {
+        "outgoing": 0,
+        "incoming": 0,
+        "fallback": 0
+      },
+      "workspace_bytes_per_call": 33554432
+    }
+  },
+  "runs": [
+    {
+      "model": "protenix",
+      "length": 1000,
+      "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-published-cabi-v1",
+      "sample_sha256": "f2329b03810d62c74209ee9c6b851ea7f89cd8ced93515ca4614813543892bf8",
+      "request": {
+        "schema_version": 1,
+        "run_id": "protenix-n1000-published-cabi-v1",
+        "workload": {
+          "model": "protenix",
+          "model_name": "protenix_mini_default_v0.5.0",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "precision": "float32"
+        },
+        "backend": "fireprot",
+        "seed": 101,
+        "hip_device": 4,
+        "source": {
+          "root": "/media/IntelSSD/fireprot/Protenix",
+          "commit": "bb3be993b52713795796c72cf0a46ef8a7323442"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_default_v0.5.0.pt",
+            "sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81"
+          }
+        },
+        "resources": {
+          "ccd_components_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+            "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5"
+          },
+          "ccd_components_rdkit_mol_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+            "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35"
+          },
+          "obsolete_release_data_csv": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+            "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33"
+          },
+          "pdb_cluster_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+            "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c"
+          }
+        },
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/protenix-n1000-published-cabi-v1"
+      },
+      "provenance": {
+        "source_root": "/media/IntelSSD/fireprot/Protenix",
+        "source": {
+          "schema_version": 1,
+          "commit": "bb3be993b52713795796c72cf0a46ef8a7323442",
+          "files": {
+            ".flake8": {
+              "sha256": "9247551a20e29e83bafdef16404fdadc9e62dbd0116f08d9516dc489d3229fba",
+              "executable": false
+            },
+            ".github/workflows/ci.yml": {
+              "sha256": "226c2bb2145161b4b9fbbfb2bbf5305a91815e6117e9dbbd4001441d253ad604",
+              "executable": false
+            },
+            ".github/workflows/publish_to_pypi.yml": {
+              "sha256": "996a005bdcbdb769ac4adcea7897747d1c851ca54f67cac364a6fd7afc31bad7",
+              "executable": false
+            },
+            ".github/workflows/scorecard.yml": {
+              "sha256": "98e05d123f1025e89f5dbc8e390c2177ca82ebc9817a5b721373624189ba391d",
+              "executable": false
+            },
+            ".gitignore": {
+              "sha256": "dd4dea8e9f9787294f6fe7ac1805a70986ad936e26f201b567919624788eb63d",
+              "executable": false
+            },
+            ".pre-commit-config.yaml": {
+              "sha256": "0259472ccd5c72d9ca4c7877eb667fca818507a07f10736b1937e62d6880412e",
+              "executable": false
+            },
+            "CHANGELOG.md": {
+              "sha256": "b0023ebcfced5dbe718243807e46d61930ffa4a4a47a7eabe520548959233dc4",
+              "executable": false
+            },
+            "CODE_OF_CONDUCT.md": {
+              "sha256": "d702a2eb425fad2977a5dc086e3fd500bcbcf1e35a527e08bde364cdfc3e0b36",
+              "executable": false
+            },
+            "CONTRIBUTING.md": {
+              "sha256": "13fec2d9b2fe0787fe3ee29add2d79f97745a7362ad7e5d01bc21f5522806592",
+              "executable": false
+            },
+            "Dockerfile": {
+              "sha256": "657e90df4584c1b7697de88c709093d4970db96a3cb00305476ff8d90403c06c",
+              "executable": false
+            },
+            "LICENSE": {
+              "sha256": "add3b0d4449b29559d6f429d84a09a9b363d78fd516b3315a8ed946eb12ad8eb",
+              "executable": false
+            },
+            "README.md": {
+              "sha256": "64e5453ca37dbe12af86eeb4b297baaa03946f31eaa00193acffe55aa27f66c0",
+              "executable": false
+            },
+            "assets/inference_time_vs_ntoken.png": {
+              "sha256": "911e317f2338ebded2a42035bab3b7df78c34845e5b3c1e8925e74a8dd440d62",
+              "executable": false
+            },
+            "assets/license_header.txt": {
+              "sha256": "67c77925c6347a897d36a21dea133da79a3e2433300038fc7b4b8667d5bc5166",
+              "executable": false
+            },
+            "assets/mini_tiny_0.5.0_performance.png": {
+              "sha256": "383d078099b15bf69a1bd1bf89a25f898863761b7815f0720824bcfa67a20b4d",
+              "executable": false
+            },
+            "assets/protenix_base_constraint_v0.5.0_metrics.png": {
+              "sha256": "7d96e0825b99f159a9644be057fdb50a75f78d94b0040262c67b4a48983ee8ed",
+              "executable": false
+            },
+            "assets/protenix_base_default_v0.5.0_metrics.png": {
+              "sha256": "3ff727dac76ad6686a26535169c9d8196dab9176a13be8da4a3439f30927a8a9",
+              "executable": false
+            },
+            "assets/protenix_base_default_v1.0.0_metrics.png": {
+              "sha256": "7c705355b10a844a0439fd331132891eed06d95dea2c19a28251ac470435104b",
+              "executable": false
+            },
+            "assets/protenix_base_default_v1.0.0_metrics2.png": {
+              "sha256": "e73aa9398481dd0a30598d76d522781c98a3aa43943dab5496e14ac8d6bcff6c",
+              "executable": false
+            },
+            "assets/protenix_predictions.gif": {
+              "sha256": "400c4b72786c6ab2816a23cd03276502a32705dbdf663f7292659d892ed78a7b",
+              "executable": false
+            },
+            "configs/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "configs/configs_base.py": {
+              "sha256": "13c36fb5624bb804aee78cd95d04b08832dcabc7de8378886dd99a67251d66b9",
+              "executable": false
+            },
+            "configs/configs_data.py": {
+              "sha256": "4699fc39387203bb861437dfa2dec89cc73e375539d37b2140c2b82fa6796e69",
+              "executable": false
+            },
+            "configs/configs_inference.py": {
+              "sha256": "0a1b8f79f6b770af74d3e27f3b60b21f05848aa3477bc33ca9b16abcd7755bab",
+              "executable": false
+            },
+            "configs/configs_model_type.py": {
+              "sha256": "d7f59f1b2d83b3657555893be085502b04c38b21a069e8ebb4b05229a8f12552",
+              "executable": false
+            },
+            "docs/PTX_V1_Technical_Report_202602042356.pdf": {
+              "sha256": "3a9fdfe260cee1bd5351fa3392740ab80bb4782a1e57bd8082783cb6e4c6cb5e",
+              "executable": false
+            },
+            "docs/Protenix_Technical_Report_2024.pdf": {
+              "sha256": "b4150ea75c2772c27e8fb64153434b568850bd724ac22d47cc73158737e3ee44",
+              "executable": false
+            },
+            "docs/colabfold_compatible_msa.md": {
+              "sha256": "5546697778392f5da9b0752c63a4615325cd6ef07aab12347728478b0af9ddae",
+              "executable": false
+            },
+            "docs/docker_installation.md": {
+              "sha256": "41da6066cfa504575a28e7a66b863005c5f7fbbb454b32293539a593d80d32d1",
+              "executable": false
+            },
+            "docs/infer_json_format.md": {
+              "sha256": "fa7f48d076136df941d5120f50ff00d688be4510fa73d9a6e75f6e21ea95d556",
+              "executable": false
+            },
+            "docs/kernels.md": {
+              "sha256": "8cfe0e7df1d4d1dfc1266ba1df86bcdcb2d9905a16b353e89c5609fd6495347c",
+              "executable": false
+            },
+            "docs/model_0.5.0_benchmark.md": {
+              "sha256": "b09eb2389a7bfd6ff7d9832161c8b8e2e53c9cc0633d2b1321a58ae4b595a0e1",
+              "executable": false
+            },
+            "docs/model_1.0.0_benchmark.md": {
+              "sha256": "41021284f0c9d1bf9d69756629494addacec557a8884e0300ef8c74a2ccc0cff",
+              "executable": false
+            },
+            "docs/msa_template_pipeline.md": {
+              "sha256": "befce5e75dbc2dd8a4e199874120365cc14b7c587fd85831e7aa1da7757486e6",
+              "executable": false
+            },
+            "docs/prepare_training_data.md": {
+              "sha256": "8c26be979184878904a37c0a36dc808259fa59fafe3a802b07ef9fb8e75ae324",
+              "executable": false
+            },
+            "docs/supported_models.md": {
+              "sha256": "1285c600c3e809e2aff7415067ed6e43f9509c7eb951f09ac4958c9354f69816",
+              "executable": false
+            },
+            "docs/training_inference_instructions.md": {
+              "sha256": "d8312eb63ecf6d0ce03969ddef4f6d3aca2c5a2470e107b8e9bca1517f40c967",
+              "executable": false
+            },
+            "examples/2lwu.cif": {
+              "sha256": "81f96a56b4d6a1d8576dad57a29a7219c54debf70002eb5d8bb4dadccf3c3a67",
+              "executable": false
+            },
+            "examples/5sak/1/non_pairing.a3m": {
+              "sha256": "6c9a6237d84990287f4ddef29f327b9dfe0715f055b70c20ef777c84adf89165",
+              "executable": false
+            },
+            "examples/5sak/1/pairing.a3m": {
+              "sha256": "a6f20813da470de6121dc4e97659053463fb9bc2a61fc7d5095bf4d48aa65781",
+              "executable": false
+            },
+            "examples/7pzb/msa/1/non_pairing.a3m": {
+              "sha256": "98c033b02e728815681bdba74dfa93dde88b27a56adf4941dd91ca295f8b966a",
+              "executable": false
+            },
+            "examples/7pzb/msa/1/pairing.a3m": {
+              "sha256": "df92e850929ebc56d83b59d7173c0d92ff6cf4d22fdb03636a0750ef2d7a3cd9",
+              "executable": false
+            },
+            "examples/7pzb.pdb": {
+              "sha256": "69eac5c93d75b73bd740852b15654183685a533e9ae79caf19947caf1d652e1f",
+              "executable": false
+            },
+            "examples/7r6r/msa/1/non_pairing.a3m": {
+              "sha256": "15388d7ed4fa8dac77770d2887d7234847b5aee1252651917efc5c1dba149066",
+              "executable": false
+            },
+            "examples/7r6r/msa/1/pairing.a3m": {
+              "sha256": "105e7c949a533f488248476e0b13307a2c94fbf138b3859ea8b1ccbdb8e27223",
+              "executable": false
+            },
+            "examples/7st3/msa/1/non_pairing.a3m": {
+              "sha256": "e3014847fa1b42d914ba4c030d4ed91f19508bf3ccc7454ba48bbe927d73612b",
+              "executable": false
+            },
+            "examples/7st3/msa/1/pairing.a3m": {
+              "sha256": "8758f2a66fd3fec0804851640b407741be1e0d0c87cf72f4733d5680dfa9b7a6",
+              "executable": false
+            },
+            "examples/7st3/msa/2/non_pairing.a3m": {
+              "sha256": "f273af04f49978c4c64e01b202aaf23b9c72945d4243ad7ba8a563fb23d8ea7b",
+              "executable": false
+            },
+            "examples/7st3/msa/2/pairing.a3m": {
+              "sha256": "cf2ddb00ca019ec52d979f456408ea71a1cc8de7ab2bc8a4f3216675e04e9d25",
+              "executable": false
+            },
+            "examples/7wux/msa/1/non_pairing.a3m": {
+              "sha256": "0aff2182af3f28d02ac526cb391a1faa8f75b18f3e8df8fc9046b2918647017f",
+              "executable": false
+            },
+            "examples/7wux/msa/1/pairing.a3m": {
+              "sha256": "1fd47550efdadc57ac7483fedff2fe0a362ad0fbde7bae52a08afe08c1f58912",
+              "executable": false
+            },
+            "examples/7wux/msa/2/non_pairing.a3m": {
+              "sha256": "9baa25bbffd2cc4b0e36b0bbf1fab43d2fa79d8eefa751455fcb80053f095e6e",
+              "executable": false
+            },
+            "examples/7wux/msa/2/pairing.a3m": {
+              "sha256": "e30d005be6ef75972498148f056dbd637892891bedbc36489129855c6390604f",
+              "executable": false
+            },
+            "examples/dimer.fasta": {
+              "sha256": "9770d6ce96400fc1a284c186291cc3188b3f8276fec6a4d327aa266e38c77ca1",
+              "executable": false
+            },
+            "examples/example.json": {
+              "sha256": "34c701ed139083201a8faa46831d2a00c84ee44eb10a36a938e42f56b7fb193d",
+              "executable": false
+            },
+            "examples/example_constraint_msa.json": {
+              "sha256": "56776851ecfb14d08daddb9915985af9083797d78185a49f752c5e9b56c2bc8d",
+              "executable": false
+            },
+            "examples/example_without_msa.json": {
+              "sha256": "cc30e4fc1073854069611a138dcec5e0aeefacbad5889784d4e97cf6f0bc1d9e",
+              "executable": false
+            },
+            "examples/examples_with_rna_msa/9gmw/9gmw_2_all.a3m": {
+              "sha256": "beb1253df1856aad3c3226735cf1e201f443c58340e86692dcb5af7a1254191c",
+              "executable": false
+            },
+            "examples/examples_with_rna_msa/example_9gmw_2.json": {
+              "sha256": "c58449542a8eff60aefb18ae29fd9e3e63736123315b7666e6bd4ea4db10842e",
+              "executable": false
+            },
+            "examples/examples_with_template/9fm7/hmmsearch.a3m": {
+              "sha256": "210c76abc79e85b39c6530932214ecca134ed9a5d2d020d6e560717c804f52f3",
+              "executable": false
+            },
+            "examples/examples_with_template/9fm7/non_pairing.a3m": {
+              "sha256": "c463a900d0287463ac1fa9b93123227f59bd2a4024740c26ea2df39eaec31086",
+              "executable": false
+            },
+            "examples/examples_with_template/9fm7/pairing.a3m": {
+              "sha256": "d5f09ce2beed7925b0dea8785341a36f64c887594e8b6a046f9d2f758e4f1311",
+              "executable": false
+            },
+            "examples/examples_with_template/MGYP004658859411/concat.hhr": {
+              "sha256": "85f79dbbb26505324d45a1051049ad02ab98330bc696c9dcc57ccbd118348596",
+              "executable": false
+            },
+            "examples/examples_with_template/MGYP004658859411/non_pairing.a3m": {
+              "sha256": "c52fee7b588dde30f009cda70c8de563fad1e5256c023532f1de9cbb4f59381b",
+              "executable": false
+            },
+            "examples/examples_with_template/MGYP004658859411/pairing.a3m": {
+              "sha256": "201cb3c18ddecbf05a562bffe971b87520b65f9473cd6f62287454a335ce04db",
+              "executable": false
+            },
+            "examples/examples_with_template/example_9fm7.json": {
+              "sha256": "3ee53046d38b9a41c45dceb991b43edeefc54e75e5f4ef62a5ae3d2617102694",
+              "executable": false
+            },
+            "examples/examples_with_template/example_mgyp004658859411.json": {
+              "sha256": "ea0569ffb16c9285d0c2ebc825f133dc012ae349778811def1f457aa352170a2",
+              "executable": false
+            },
+            "examples/finetune_subset.txt": {
+              "sha256": "82b3ec04493bd2235136f4c162d5194c72aa126881df5e648e979e55fd569c2c",
+              "executable": false
+            },
+            "examples/input.json": {
+              "sha256": "3bfe91c73117f3f234891e61945bda0ff361ae41d0d4068ad96e40c40a9bc67d",
+              "executable": false
+            },
+            "examples/ligands/7wux_smiles.smi": {
+              "sha256": "6e84db6483f20d60b040f75c4ba15a72256e6e2941b0cc37c0b4d785733dae30",
+              "executable": false
+            },
+            "examples/ligands/compounds-3d-R.sdf": {
+              "sha256": "da0ad70027c82cf876d0d95a3034a38d23e47cb8e09b62020f8af9e2e07135d3",
+              "executable": false
+            },
+            "examples/ligands/compounds-3d-RS.sdf": {
+              "sha256": "d9ef95df8934f6f940e63bdc8152f198bc29f772ce3d5081c8b020d9a460a356",
+              "executable": false
+            },
+            "examples/prot.fasta": {
+              "sha256": "0a7069e74462c6ae548466bb98de11eca680293a45630d0eb841abbe3e62d4fb",
+              "executable": false
+            },
+            "finetune_demo.sh": {
+              "sha256": "b387d774a68c003643c88808827d856415210921ff1b893c56dab2ddea41db07",
+              "executable": false
+            },
+            "inference_demo.sh": {
+              "sha256": "a8a8b3530f40e331fe1178e2f11894ec33ee3291c790f40772e5a61e7cf1b0c9",
+              "executable": true
+            },
+            "protenix/__init__.py": {
+              "sha256": "2736ff45f82f5c2ae6fd243801f786562d4ddfa6326f19cce66a72c6b9e28602",
+              "executable": false
+            },
+            "protenix/config/__init__.py": {
+              "sha256": "50d0fc5cbb80a0ef4c68227b9a523b0042ce101f1954126d9b4dcc0ffb5f84a5",
+              "executable": false
+            },
+            "protenix/config/config.py": {
+              "sha256": "22c134a75bf00c98b1ec85d9fb753830bca97e8b782a3c90ec60109087854c7e",
+              "executable": false
+            },
+            "protenix/config/extend_types.py": {
+              "sha256": "279c6eff86e90ca22bbd91e904a1c748773a745b92ab0735d0ec7325f1baeba4",
+              "executable": false
+            },
+            "protenix/data/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/data/constants.py": {
+              "sha256": "10a526bd64e1206052c307239ff92109c245aec3d2c10e6ef0d4deae295092a4",
+              "executable": false
+            },
+            "protenix/data/constraint/__init__.py": {
+              "sha256": "9448792dbd9aa44112cb16e9cdb77cca263cd50193ab8c7761d6a51d6d0d4d29",
+              "executable": false
+            },
+            "protenix/data/constraint/constraint_featurizer.py": {
+              "sha256": "a413febd327df54065dd4cc1786870f7f617f29a4e46214f9edaf472f99eaab4",
+              "executable": false
+            },
+            "protenix/data/core/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/data/core/ccd.py": {
+              "sha256": "f8262a29130c453f6d0a84c1752f4e11062c77df2baba686964018cfd5f88714",
+              "executable": false
+            },
+            "protenix/data/core/featurizer.py": {
+              "sha256": "634a845d031c35e2e926a7aa4f10201fd88ab1725e5aae8e8396b8e001ae291d",
+              "executable": false
+            },
+            "protenix/data/core/filter.py": {
+              "sha256": "c2642455544cf8e96d95c8bb0e789b9e02acbe88c42251a456f1a0fd3c12625e",
+              "executable": false
+            },
+            "protenix/data/core/parser.py": {
+              "sha256": "f6f801195f9fdce3b17c43b141b6037491bf1f7e395fff4dc2a499ca8c739cf7",
+              "executable": false
+            },
+            "protenix/data/core/substructure_perms.py": {
+              "sha256": "da92fbb4fcaca716a9e7f32eff4119375e131b4684ca5a33f84c5cdcc98709a6",
+              "executable": false
+            },
+            "protenix/data/esm/__init__.py": {
+              "sha256": "42489adb08de889bb649185121b7d86b2aed3b4ea89b1ffdaa2d8d8bdf87f413",
+              "executable": false
+            },
+            "protenix/data/esm/compute_esm.py": {
+              "sha256": "ce3fc45709d088ecba45fb49c8dafd4882a74401a24f7df9a91f8115091a9363",
+              "executable": false
+            },
+            "protenix/data/esm/esm_featurizer.py": {
+              "sha256": "2ac3a6fa513e84a736f14e5d2d57ad156014b5cb7e785e2ca17e6f9d896ea657",
+              "executable": false
+            },
+            "protenix/data/inference/__init__.py": {
+              "sha256": "beeabcb42895075d0b6d5ab678307bbdfc87820273374dd5b685618272ecdbce",
+              "executable": false
+            },
+            "protenix/data/inference/infer_dataloader.py": {
+              "sha256": "d56800bceb33388d5fa0c275f6769aca2214e7f470757d521eedd262259dff0a",
+              "executable": false
+            },
+            "protenix/data/inference/json_maker.py": {
+              "sha256": "de9fdfc297886d924d1c207d8e1e79109087f32339c1c0ac25469bd32e8caf29",
+              "executable": false
+            },
+            "protenix/data/inference/json_parser.py": {
+              "sha256": "204a6ec0fdd5a00f0cf0725401efb7321ea1ece8c7f2326960c8068241f27c8e",
+              "executable": false
+            },
+            "protenix/data/inference/json_to_feature.py": {
+              "sha256": "e09bffa380acf3f3a1aa215ba8f2e3e87e6b23dbfe078120b4a498994f246afc",
+              "executable": false
+            },
+            "protenix/data/msa/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/data/msa/msa_featurizer.py": {
+              "sha256": "cac245cd3165fc3ca2318ffa8dba0b77ac961024f09e6b3dec48d768001e8fd6",
+              "executable": false
+            },
+            "protenix/data/msa/msa_utils.py": {
+              "sha256": "fbacbbdfa5afd0e17cacb9dba33f8e9e094531640ff665a285f507ecd4395918",
+              "executable": false
+            },
+            "protenix/data/pipeline/__init__.py": {
+              "sha256": "61b7184ce678a06c93ae88d2e1a27d00fa3621d3da15959f7b276c353e63bc2a",
+              "executable": false
+            },
+            "protenix/data/pipeline/data_pipeline.py": {
+              "sha256": "b071b38e741b090205a35da8eba0139d62e04cf4bed73c8b27ec3ccf53bffc99",
+              "executable": false
+            },
+            "protenix/data/pipeline/dataloader.py": {
+              "sha256": "2f6a68ba8a85c130001ecc18033722e86d99054ecc3954bb995578bb47e5cc29",
+              "executable": false
+            },
+            "protenix/data/pipeline/dataset.py": {
+              "sha256": "4d2706060aca6719dc43365e30384b2b471141e14fc84ae27b5a8b1997235c07",
+              "executable": false
+            },
+            "protenix/data/template/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/data/template/template_featurizer.py": {
+              "sha256": "728120aa433ef76dd064d200d1bb6f3304777c09844377ad1e634920d2aa28c0",
+              "executable": false
+            },
+            "protenix/data/template/template_parser.py": {
+              "sha256": "1d2e0a5c3ee7b44d1f5b1dcf0e4fadb0d4114f46f5c34e302b3fe4be058ecbe8",
+              "executable": false
+            },
+            "protenix/data/template/template_utils.py": {
+              "sha256": "6da8425ce2688994cd0882963116e6294c0ef77b86b461aa32c26cfd50b4b9df",
+              "executable": false
+            },
+            "protenix/data/tokenizer.py": {
+              "sha256": "ad70ef6e5a0c976132ee1e96af71b8ba0d27b92ab9d9284a1c68326ca8d1a265",
+              "executable": false
+            },
+            "protenix/data/tools/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/data/tools/common.py": {
+              "sha256": "833ceeb47c1460a1ac7bed498a536284f30e6af3e9bbf43a74cd03aefdd6c14b",
+              "executable": false
+            },
+            "protenix/data/tools/kalign.py": {
+              "sha256": "df068344839cda5d89df8bffe885b8b7a19918828aa3a21622b5530c76eaa48f",
+              "executable": false
+            },
+            "protenix/data/tools/search.py": {
+              "sha256": "2a33e74ddfb42d14026b2c2b219438babf9337f2e59c5754b36c9ccee7bb576c",
+              "executable": false
+            },
+            "protenix/data/utils.py": {
+              "sha256": "1c8ea6c8f9541ee081410d677bda7b2003ea91765b66cccb47e935e110b33a97",
+              "executable": false
+            },
+            "protenix/metrics/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/metrics/clash.py": {
+              "sha256": "4f8f47b8020cdf21c3332a87561ecbfb7e826ddcf23512fc10ad940d758f0adc",
+              "executable": false
+            },
+            "protenix/metrics/lddt_metrics.py": {
+              "sha256": "f78dde38592ee2bbdb8386b83e038255a6fae2fbc24d4f6b08885970d52b0501",
+              "executable": false
+            },
+            "protenix/metrics/rmsd.py": {
+              "sha256": "23ec3fc1993fafa6323fb6fc2a4662212e5f7ba667f12b3e9922bf8bbac6ff46",
+              "executable": false
+            },
+            "protenix/model/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/model/generator.py": {
+              "sha256": "84338db0cda852d859e498c9aee972747a319e4e701cfae271ac882215fe25ae",
+              "executable": false
+            },
+            "protenix/model/layer_norm/__init__.py": {
+              "sha256": "1c21a7a0bf9787f07c68caf16dfe80c7451bc28ff138bc8510cb9e0712a4333d",
+              "executable": false
+            },
+            "protenix/model/layer_norm/kernel/compat.h": {
+              "sha256": "24da65d5e0a58c6483abd60e7a6d6fca7e4abc9303f08c902975c77bdeacbc08",
+              "executable": false
+            },
+            "protenix/model/layer_norm/kernel/layer_norm_cuda.cpp": {
+              "sha256": "b03d995042fede126b1e36a8e9c9e73433a598f523ad914789d7aeaeb8ac842d",
+              "executable": false
+            },
+            "protenix/model/layer_norm/kernel/layer_norm_cuda_kernel.cu": {
+              "sha256": "ad75251f6fabbf59bbc83637a9600204c62a20c6ac563a742694bbfc8c0c180a",
+              "executable": false
+            },
+            "protenix/model/layer_norm/kernel/type_shim.h": {
+              "sha256": "824a0dfdb5bfb1316187b3a3f7c10c9b41496b97259ddf84c882152ccec66a7a",
+              "executable": false
+            },
+            "protenix/model/layer_norm/layer_norm.py": {
+              "sha256": "30b9a8803530a6fbdaa3c9302a7091eb04bca2d10dd2f79aa79a5efc1e4dfb8a",
+              "executable": false
+            },
+            "protenix/model/layer_norm/torch_ext_compile.py": {
+              "sha256": "1237b09c7a3f3494429d1dbb6547aad66a0682b199b3274e7d2e18b975ce2c1d",
+              "executable": false
+            },
+            "protenix/model/loss.py": {
+              "sha256": "c5a8c348d589829f3ed1eee36dbc04206773b50a4f22cac00f11fa4d7d978a88",
+              "executable": false
+            },
+            "protenix/model/modules/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/model/modules/confidence.py": {
+              "sha256": "064375730d100f1536cf1a2061fa08ad0a039f21c4bf2965275a74646d33cebd",
+              "executable": false
+            },
+            "protenix/model/modules/diffusion.py": {
+              "sha256": "c92001aeb046ea9a5dbbc8120a5487c76d0497c52ff7fe178143f443dd4cc988",
+              "executable": false
+            },
+            "protenix/model/modules/embedders.py": {
+              "sha256": "05e9e8d7bc8e9f917a6cadb3534b4b95764ea9968c19bc38d4743a29daf982f8",
+              "executable": false
+            },
+            "protenix/model/modules/frames.py": {
+              "sha256": "375bc7478c566338c5bce6e325f7dd912c1865df51bc373e1b9a21477a1f80b1",
+              "executable": false
+            },
+            "protenix/model/modules/fused_ops.py": {
+              "sha256": "89d80eae7d5fd688fac7c2c3f956de943022acd486427047eb1c584b0b58cd23",
+              "executable": false
+            },
+            "protenix/model/modules/head.py": {
+              "sha256": "5b79308417267c7072b9d220c78970d458ea44b94450e5e3f14140459331f1b4",
+              "executable": false
+            },
+            "protenix/model/modules/pairformer.py": {
+              "sha256": "90fc6b48207fcee017b2a71ac7c745a76c1dbcbc2e733916e827417cfc76b4f4",
+              "executable": false
+            },
+            "protenix/model/modules/primitives.py": {
+              "sha256": "48474abdd5b37a70f5d2579c0c2f1b2d2e6876961db7100f0eb9ebfad0198363",
+              "executable": false
+            },
+            "protenix/model/modules/transformer.py": {
+              "sha256": "4d4d56b0fdf0f0fd6eff2cbcafd4a2f35b24f217746e671cac4e1238ae649ed6",
+              "executable": false
+            },
+            "protenix/model/protenix.py": {
+              "sha256": "c4250bd93d592a11d9019285cfd84b71b26fa6a8aca6944a239fb31e0337e179",
+              "executable": false
+            },
+            "protenix/model/sample_confidence.py": {
+              "sha256": "66ca9d6001a429a8c613dfcdcbbe30fe515894cd851452073ef4aca1854e8de1",
+              "executable": false
+            },
+            "protenix/model/tri_attention/__init__.py": {
+              "sha256": "f738f69a1e4c6036957b5e852e139629bf3f3cf29a0a88220e8c1b00cb19c7eb",
+              "executable": false
+            },
+            "protenix/model/tri_attention/autotune.py": {
+              "sha256": "4da7f146f0c7e399b624ed818354c6e5044213ff873a3b995f66d3af988f0de8",
+              "executable": false
+            },
+            "protenix/model/tri_attention/autotune_helpers.py": {
+              "sha256": "e9f1a96c63a0218b2bd25198d9aa31a9165a0ec20534e5607a0692995d3743d7",
+              "executable": false
+            },
+            "protenix/model/tri_attention/backward.py": {
+              "sha256": "fac61c5601a2b0fe5d6f236f5de0e59a3382e094115f8654c0f9d675c14eea46",
+              "executable": false
+            },
+            "protenix/model/tri_attention/forward.py": {
+              "sha256": "42fc170c998d3170fbf5781837a71b7d7b9f7e569be7554f39287236a7d4ae93",
+              "executable": false
+            },
+            "protenix/model/tri_attention/op.py": {
+              "sha256": "e0942e6d6b06607ad399ee972465edbcb868fa1328cf39322730f3b3e4a4135b",
+              "executable": false
+            },
+            "protenix/model/triangular/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/model/triangular/layers.py": {
+              "sha256": "c2a709d65ee40ab2fa7bdb100bccdd1f04f6b9036e7341a654510429f8f114ee",
+              "executable": false
+            },
+            "protenix/model/triangular/triangular.py": {
+              "sha256": "675b8c2872caba78cc8a5ee66f5bada4013c1273203e89fa7053f27860da84a9",
+              "executable": false
+            },
+            "protenix/model/utils.py": {
+              "sha256": "81784461673c929002f59a43c4a8980e7c638a01e0d0a7d8ec14263b0c76f5ef",
+              "executable": false
+            },
+            "protenix/utils/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/utils/cropping.py": {
+              "sha256": "5a6045b2df53822313bd67a792972452b35cef8da5f72cfdf27640d0c8b9ab0b",
+              "executable": false
+            },
+            "protenix/utils/distributed.py": {
+              "sha256": "10e8a47fe679cfc8844534e45f032d9908bb16fb8ab714e90d74ebfc439fbbb2",
+              "executable": false
+            },
+            "protenix/utils/file_io.py": {
+              "sha256": "ff17fac71adf30131790328c008b38de549357d42259d40ef9fcfd38c7f6947b",
+              "executable": false
+            },
+            "protenix/utils/geometry.py": {
+              "sha256": "18bf79f41026e8211196ae8d789849252e5b93f54c19ca94179ed8e7e6ca9622",
+              "executable": false
+            },
+            "protenix/utils/logger.py": {
+              "sha256": "d4597c92f044ea5a3c9954e44824928aeb7f6f222e0050754eb495025280995a",
+              "executable": false
+            },
+            "protenix/utils/lr_scheduler.py": {
+              "sha256": "a4758ed1e3df0d623b5ca3c829edb88dd027624178ecc17aea6baf43b5487ba0",
+              "executable": false
+            },
+            "protenix/utils/metrics.py": {
+              "sha256": "e69dbd717875f876ab21e33c17fa7eaa6a7d11a4543dd6d54c1ce63b188dac71",
+              "executable": false
+            },
+            "protenix/utils/permutation/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/utils/permutation/atom_permutation.py": {
+              "sha256": "428dfb0e6e7362435c5132b064888e63751a58d1e63f460053258f48a7527fca",
+              "executable": false
+            },
+            "protenix/utils/permutation/chain_permutation/__init__.py": {
+              "sha256": "e9b9411bbb55acd7f59db7e767268d7b24d5d2ce46552fc7b447366ac8b1c182",
+              "executable": false
+            },
+            "protenix/utils/permutation/chain_permutation/heuristic.py": {
+              "sha256": "63164ba4f8c33b2877c30af36ae0e2fb0db296016b026cf43c9ce2557bcc90e9",
+              "executable": false
+            },
+            "protenix/utils/permutation/chain_permutation/pocket_based_permutation.py": {
+              "sha256": "854c650f45eec574e3dbd4fbb958d4b6330341bf5498cfa69765f8e1902249c9",
+              "executable": false
+            },
+            "protenix/utils/permutation/chain_permutation/utils.py": {
+              "sha256": "7a8d7d0882f6ff7e8db25ede61bb23c5439d46a3b6ae8e865a4e229dda69707d",
+              "executable": false
+            },
+            "protenix/utils/permutation/permutation.py": {
+              "sha256": "4684fcf24b0fa01e58703d907db6d4cca9e51cf9ed50781a7723244497c2682e",
+              "executable": false
+            },
+            "protenix/utils/permutation/utils.py": {
+              "sha256": "22549e0cc17fecde6e37804a0c651da9a1d62f20a6c4ce12378b30bbe31685b7",
+              "executable": false
+            },
+            "protenix/utils/scatter_utils.py": {
+              "sha256": "5a4683c560140529f2ffc9e948206d46d80586c2a06ca17a9d498fc2e8917dad",
+              "executable": false
+            },
+            "protenix/utils/seed.py": {
+              "sha256": "dfb5611fd421d1316eafde5ecc82879a736682b4613ad9465a3982059148e744",
+              "executable": false
+            },
+            "protenix/utils/torch_utils.py": {
+              "sha256": "f7e60efd6c069c71cf7d2accb9204441168763c7629e723b8c93a3dcad8aa5c8",
+              "executable": false
+            },
+            "protenix/utils/training.py": {
+              "sha256": "b97c8904f6a7517e592b1730fb9cf74299717ca057400529dc116cef3498742f",
+              "executable": false
+            },
+            "protenix/version.py": {
+              "sha256": "f9c360c6efbbb5aed27ea3405265b6bc26ebceee25bdc7df69c7ccd8cbf8f33a",
+              "executable": false
+            },
+            "protenix/web_service/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/web_service/colab_request_parser.py": {
+              "sha256": "0b781cb10a1cd92f19a4924fb7273f97895c9bbb737aa741d241e4805d273d9c",
+              "executable": false
+            },
+            "protenix/web_service/colab_request_utils.py": {
+              "sha256": "11cf40531d6af7b335c21846d4199033ec1964b7cb6a649e122c869238cba1e7",
+              "executable": false
+            },
+            "protenix/web_service/dependency_url.py": {
+              "sha256": "f65331d36221a8c3fd715ff8760b39dda9c880b88054216b04d5e39277478fd8",
+              "executable": false
+            },
+            "protenix/web_service/prediction_visualization.py": {
+              "sha256": "a0f149784b2efaafae217c11610cab7471f85a29be61b36df1907ada1abb107c",
+              "executable": false
+            },
+            "protenix/web_service/viewer.py": {
+              "sha256": "d72c11014161b34e5d1fd9f77ec4e76e19264858b9db56600616f61591a68ec3",
+              "executable": false
+            },
+            "requirements.txt": {
+              "sha256": "2ee61736c8f8021cd22a040e794f470728b52739256004d20acb70b54243c9bf",
+              "executable": false
+            },
+            "runner/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "runner/batch_inference.py": {
+              "sha256": "b7151ae1fca92d0607f38480d5a439e3287108e607995c753db39991069482be",
+              "executable": false
+            },
+            "runner/dumper.py": {
+              "sha256": "c7ba3d2d42c9a700fea5efc1c9636118513a90906fd270204a4c12b72ad656d6",
+              "executable": false
+            },
+            "runner/ema.py": {
+              "sha256": "9500d6e0357d1686f5650fc418c322b1f647fa98f27139ab1975ad784bb9481c",
+              "executable": false
+            },
+            "runner/inference.py": {
+              "sha256": "f2c981b38936ff863e280602fc0ce4a32bc83e3103589b0111df73c00ac297f6",
+              "executable": false
+            },
+            "runner/msa_search.py": {
+              "sha256": "f2e6da81a178244e25c04ca4666a73028b4d3078280d52d6c1b070869ebc0dfc",
+              "executable": false
+            },
+            "runner/rna_msa_search.py": {
+              "sha256": "8106ea53953e6b49a5744e5813055f82a9c6854e238e360eedf2788da89e2976",
+              "executable": false
+            },
+            "runner/template_search.py": {
+              "sha256": "b62d711de0f8af3429c000ea60eaa43c1538431e91e8951c4bc6b93e07decd2a",
+              "executable": false
+            },
+            "runner/train.py": {
+              "sha256": "831ad0abd5cc46cc75419287a179cc3d66b27edc7d0003c8f9f32b5d5f6709ab",
+              "executable": false
+            },
+            "scripts/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "scripts/colabfold_msa.py": {
+              "sha256": "1c51ac4214a96eaaa5f1569c2f80ee62ceff0cff6b51f3a5274f6d7123e4fc60",
+              "executable": false
+            },
+            "scripts/database/download_protenix_data.sh": {
+              "sha256": "27da2585d0ea1d820f4693099653aab1fdff7d4e18c21e6d90a0dc18f718dd89",
+              "executable": true
+            },
+            "scripts/database/generate_pdb_seqres.py": {
+              "sha256": "b332136ce3d32dced11c68b7a8bef51e13f667ae208803bf58eddde8185cb5a1",
+              "executable": false
+            },
+            "scripts/database/generate_rfam_cluster_file.sh": {
+              "sha256": "ec41337203fd8adc981118892d0ee2570e6b145e9a1d860d8789f54562c13c66",
+              "executable": false
+            },
+            "scripts/database/generate_rnacentral_cluster_file.sh": {
+              "sha256": "09dfac6a9eda9655ebe5a06b631b126ad660ff8eeb98624f5e91674badbf9d77",
+              "executable": false
+            },
+            "scripts/gen_ccd_cache.py": {
+              "sha256": "259094d42ad1db9e18888e2f4a6ddb487fc787a41f7d636c315467dad8fa9318",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif/102m.cif": {
+              "sha256": "4e52ffbab847f864799d3bc6f76c378810144b7deabdff6a353b40c65cea1c47",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif/1k1a.cif": {
+              "sha256": "9227cc7228ba832a57b8f7a3b75442a5175e5e9b07730c2c4a305c30acedeeee",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif/5zyh.cif": {
+              "sha256": "7b8113ee0a305a688429ec29524e6f5c3656e735a0e871fca7bad90c2d169b23",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif/7zzx.cif": {
+              "sha256": "0def3e31b2b0a3bc68ce30713f2043000905bcd990bd9d2bb937bada184195ba",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif/8f9h.cif": {
+              "sha256": "90f34aa0052c5a4f2ef3225f41d1a567aea1dbae26efb5c7d6d790df93c84529",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa/0/non_pairing.a3m": {
+              "sha256": "b830d22c2c5dc39c7963bedbcbf0f9a5366a4d052c66ec047179b96d2de08f16",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa/0/pairing.a3m": {
+              "sha256": "60c7b62c3adfbf39a2d211051016cf77a4957d24d23752e73c8fae1609ccdaf1",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa/1/non_pairing.a3m": {
+              "sha256": "bc82da304b2f5c45f87a617f31ed6795be430118cc8ce8599fe8f0222df7c809",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa/1/pairing.a3m": {
+              "sha256": "e053084742cbbe7012032f782950abfcdba9d59db71f0ad4acc97221234b2d44",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa/2/non_pairing.a3m": {
+              "sha256": "2dac422f785ae656243cb0eab3c34e49e2bf91ad62443b455c027adf1c9b11e8",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa/2/pairing.a3m": {
+              "sha256": "1e2dafba108310018bac81070556942386109b910738b8aa4072b332a0c90f5e",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa/3/non_pairing.a3m": {
+              "sha256": "e20ec88c7d1d9cdc966d35a151394b91d190636274ec7515fd6496ca8e327a69",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa/3/pairing.a3m": {
+              "sha256": "7188778b6a3ff089431a102f4c331a1703d7e82356754c37ea563aff49dd107e",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa_initial/0.a3m": {
+              "sha256": "3281cda9b281a42d7f29ca19938d7dca1e492553129401c0cf3923813c4f858d",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa_initial/1.a3m": {
+              "sha256": "7caaeac79d592fe6185e9612e6cccc8d69a1591f1e99d0e4e2e11f349436966d",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa_initial/2.a3m": {
+              "sha256": "33de7a1a5cdf672b44539227437f9be602238c528509d29a31afd54f15d26eee",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa_initial/3.a3m": {
+              "sha256": "789f32f02bc56115d57c61d89f2d5be5bfe51d425fec5252860b9a8679b8fade",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa_initial/pdb70_220313_db.m8": {
+              "sha256": "d0e01e03ceac54b7edfd3bd6df8b3e8e24dbecc8dc948cb19eb33bf4d86b17e3",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa_initial/uniref_tax.m8": {
+              "sha256": "c598e6de46d55c9e7cfb3ecca4fa422fb084592010cada5169c1e6c0fbf76724",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa_with_taxid/0.a3m": {
+              "sha256": "f589a7bea6b245e2465a9eafb17ecf508eb7136d2840dc18d1ca6f17be99d56e",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa_with_taxid/1.a3m": {
+              "sha256": "aefb364e83aaf7ace330bc8f44afba58f971c59e6005f776ffcd7d59b3d81001",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa_with_taxid/2.a3m": {
+              "sha256": "aef9272e23f9cd7a0d5206574346c6a5f178a69542e515bf86af397353c266e4",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa_with_taxid/3.a3m": {
+              "sha256": "f42ab3afe843b8b601bda06db1353a4817883bb0e4d9675c921826182258a39b",
+              "executable": false
+            },
+            "scripts/msa/data/pdb_seqs/pdb_index_to_seq.json": {
+              "sha256": "7fe199ba762b776ae3723d8a2b0464c97033207c7a2c6610d51a41c24c535ff4",
+              "executable": false
+            },
+            "scripts/msa/data/pdb_seqs/pdb_seq.csv": {
+              "sha256": "149aaa954a6564253bccf1f32ae71f086ce34c6b66d39a091979eeac185d1780",
+              "executable": false
+            },
+            "scripts/msa/data/pdb_seqs/pdb_seq.fasta": {
+              "sha256": "1953e667e15f1edc468b622b83f4bddc1d2c90cfc5dddc1235daada0b3223b9f",
+              "executable": false
+            },
+            "scripts/msa/data/pdb_seqs/seq_to_pdb_id_entity_id.json": {
+              "sha256": "961031384cb5f55206681a84f696f393e1d66d97d785b8158f6e6dacc196d6cf",
+              "executable": false
+            },
+            "scripts/msa/data/pdb_seqs/seq_to_pdb_index.json": {
+              "sha256": "9d369e6ae0f69527d6850dd5f11849559760944d4664b6abea70f9ca67b8b5a5",
+              "executable": false
+            },
+            "scripts/msa/step1-get_prot_seq.py": {
+              "sha256": "0a3eb4aeb1dff6a2dca5f152ff98d1de0ea9e92b81c164350c2a52af72739c0a",
+              "executable": false
+            },
+            "scripts/msa/step2-get_msa.ipynb": {
+              "sha256": "e45d8cd578714070dd3d73de04a93a9971ca734c5cdafbf9034070ccd5f1ce5d",
+              "executable": false
+            },
+            "scripts/msa/step3-uniref_add_taxid.py": {
+              "sha256": "c910073d002cd72c8b8cc15b2eb95e95fff790a037bbea2c4835b8530e560404",
+              "executable": false
+            },
+            "scripts/msa/step4-split_msa_to_uniref_and_others.py": {
+              "sha256": "24c16ccbd4b6abcd0539e8c24dba79b07c4b435d2a40b33b9a67e126dd147a59",
+              "executable": false
+            },
+            "scripts/msa/utils.py": {
+              "sha256": "02513b2aceed5b8fccd77bd8197c4b8b7f71d76cb394ea498be7f39abfabf4ee",
+              "executable": false
+            },
+            "scripts/prepare_training_data.py": {
+              "sha256": "13167bf58c1cda19cf48fd2c0b250243e1cb1f73d68ee3c31d36fc9a35d06e57",
+              "executable": false
+            },
+            "setup.py": {
+              "sha256": "108c7945b6ff57935285ec5ce8d2108b4be8706e09479cb04ceec67df16727de",
+              "executable": false
+            },
+            "tests/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "tests/test_attention_lddt_loss.py": {
+              "sha256": "532ab1b0ae02130ffceab6e3720ab90eddd7a96b559cdc9395c84c86b8672913",
+              "executable": false
+            },
+            "tests/test_attention_pair_bias.py": {
+              "sha256": "0702de2b5215af3bffb2c5ce09f2f999f78758c7d9ae9a58e0176ab676451de4",
+              "executable": false
+            },
+            "tests/test_condition_transition.py": {
+              "sha256": "e64c300e285833444a70c23e9b7c55276821fea08876e02ba448ce27b72b3f46",
+              "executable": false
+            },
+            "tests/test_dataset_vectorization.py": {
+              "sha256": "f38773f7795af17ceb301b943480f7b2b4a06409fac72c32e94f66b221592178",
+              "executable": false
+            },
+            "tests/test_diffusion_transformer.py": {
+              "sha256": "0c615b8eb2d4f819766410d7d770fc6e68c4e0602f6a2019959616b4386a4752",
+              "executable": false
+            },
+            "tests/test_esm_loading.py": {
+              "sha256": "e111c39fc4ac08175cecc8d6b6bec1a38991dfaa25592321394772ac61eaf5a0",
+              "executable": false
+            },
+            "tests/test_featurizer_optimizations.py": {
+              "sha256": "96c283e7d53ded271ed9a18095f3fe83791ec65a263cbbc2750be806612dcf3f",
+              "executable": false
+            },
+            "tests/test_fetch_remote_cif.py": {
+              "sha256": "69c36dc12e70190cf1244ebb9395872548835ff9383d25341a3551d3cefc1c0e",
+              "executable": false
+            },
+            "tests/test_frame.py": {
+              "sha256": "f250227237d5e322ca062351503c3ef53005ad8417ef61a7708ca2eeaefe075b",
+              "executable": false
+            },
+            "tests/test_fused_dropout_add.py": {
+              "sha256": "c263abcbb369d3bd95cd42c2c30fd8492ca9e9c3b2a9dc92a85b549970fcd51c",
+              "executable": false
+            },
+            "tests/test_installation.py": {
+              "sha256": "5c9f5a8fee7a01da9e98cee5772a26ce9fe9634d2e78487ef87de017287ae3ad",
+              "executable": false
+            },
+            "tests/test_local_rearrange.py": {
+              "sha256": "6a91144c3b81f0bb880d29ce03fce7cd3b3d4868738676eea727e65b3dc0728f",
+              "executable": false
+            },
+            "tests/test_lr_schedule.py": {
+              "sha256": "c42574638e3ca9dbd9634c4bca1911640983b3353186de70dbee4bd5ba329129",
+              "executable": false
+            },
+            "tests/test_msa_encoding.py": {
+              "sha256": "33e51f7a4045de41b07d908d3f58ab3bc9733a7585ee6135a755fe79b368260c",
+              "executable": false
+            },
+            "tests/test_triton_compatibility.py": {
+              "sha256": "c7c9bb150c3b02e01adc7c793301ea441fcc66a6e96603dbb185e11809d25d3a",
+              "executable": false
+            },
+            "tests/test_utils.py": {
+              "sha256": "15c014e08ce0466e3bc91e08f790da3936f25be4a69f79d3f997add0c361498e",
+              "executable": false
+            },
+            "tests/test_weighted_rigid_align.py": {
+              "sha256": "a48eb95450e6ebab73c491344de06c25ff4ae7c7891c212afc44bddd6a9bd206",
+              "executable": false
+            },
+            "train_demo.sh": {
+              "sha256": "3efbdf84384655a8dc6d67353c5f0ca4d3a11d300c745fd2e285fbd4fb37451d",
+              "executable": false
+            }
+          }
+        },
+        "exported_manifest": {
+          "path": "/media/IntelSSD/fireprot/provenance/sources/protenix-bb3be993.json",
+          "sha256": "dc759ec3ca45e92596c5b23771b0645da9d9e34d2b6082ba664ca90b2fe0d32c",
+          "bytes": 39806
+        },
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac",
+          "bytes": 1180
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_default_v0.5.0.pt",
+            "sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81",
+            "bytes": 537049294
+          }
+        },
+        "resources": {
+          "ccd_components_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+            "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5",
+            "bytes": 490777362
+          },
+          "ccd_components_rdkit_mol_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+            "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35",
+            "bytes": 142498117
+          },
+          "obsolete_release_data_csv": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+            "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33",
+            "bytes": 134716
+          },
+          "pdb_cluster_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+            "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c",
+            "bytes": 21699572
+          }
+        }
+      },
+      "predictions": {
+        "schema_version": 1,
+        "run_id": "protenix-n1000-published-cabi-v1",
+        "seed": 101,
+        "workload": {
+          "model": "protenix",
+          "model_name": "protenix_mini_default_v0.5.0",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "precision": "float32"
+        },
+        "predictions": [
+          {
+            "sample": 0,
+            "archive": "sample-0.npz",
+            "arrays": {
+              "coordinates": {
+                "shape": [
+                  7979,
+                  3
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.atom_plddt": {
+                "shape": [
+                  7979
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.token_pair_pde": {
+                "shape": [
+                  1000,
+                  1000
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.token_pair_pae": {
+                "shape": [
+                  1000,
+                  1000
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.contact_probs": {
+                "shape": [
+                  1000,
+                  1000
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.token_has_frame": {
+                "shape": [
+                  1000
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              },
+              "confidence.token_asym_id": {
+                "shape": [
+                  1000
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              },
+              "confidence.atom_to_token_idx": {
+                "shape": [
+                  7979
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              },
+              "confidence.atom_is_polymer": {
+                "shape": [
+                  7979
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              }
+            },
+            "confidence": {
+              "plddt": 34.46320724487305,
+              "gpde": 7.2383036613464355,
+              "ptm": 0.17145486176013947,
+              "iptm": 0.0,
+              "chain_gpde": [
+                7.2383036613464355
+              ],
+              "chain_pair_gpde": [
+                [
+                  0.0
+                ]
+              ],
+              "chain_ptm": [
+                0.17145486176013947
+              ],
+              "chain_iptm": [
+                0.0
+              ],
+              "chain_pair_iptm": [
+                [
+                  0.0
+                ]
+              ],
+              "chain_pair_iptm_global": [
+                [
+                  0.0
+                ]
+              ],
+              "chain_plddt": [
+                0.3446320593357086
+              ],
+              "chain_pair_plddt": [
+                [
+                  0.0
+                ]
+              ],
+              "has_clash": false,
+              "disorder": 0.0,
+              "ranking_score": 0.03429097309708595,
+              "num_recycles": 4
+            }
+          }
+        ],
+        "model_seconds": 31.728573485976085,
+        "request_seconds": 42.53291710803751,
+        "environment": {
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850",
+          "python": "3.12.13"
+        }
+      },
+      "supervisor": {
+        "run_id": "protenix-n1000-published-cabi-v1",
+        "phase": "succeeded",
+        "worker_pid": 1289882,
+        "elapsed_seconds": 49.45136769,
+        "isolation_samples": 53,
+        "failure": null
+      },
+      "runtime_manifest_sha256": "8ff84d126c35e1f381b3ea5e5ff9682308dcf0408c589d2549d342803b02d766",
+      "runtime": {
+        "adapter": "protenix",
+        "blas": {
+          "requested": "hipblas",
+          "before": "_BlasBackend.Cublaslt",
+          "effective": "_BlasBackend.Cublas",
+          "changed": true
+        },
+        "registration_modules": [
+          "fireprot.backends.amd.ck_gemm",
+          "fireprot.backends.amd.triangle_multiplication",
+          "fireprot.backends.amd.triangle_attention",
+          "fireprot.backends.amd.ck_attention",
+          "fireprot.backends.amd.recycle"
+        ],
+        "hooks": {
+          "installed": true,
+          "enabled": true,
+          "hooks": [
+            "OpenFoldLayerNorm.forward",
+            "Transition.forward",
+            "Attention._prep_qkv"
+          ],
+          "qkv_projection": {
+            "enabled": true,
+            "counts": {
+              "n1000": 144,
+              "n1536": 0,
+              "fallback": 0
+            }
+          },
+          "fast_paths": {
+            "selection_counts": [
+              {
+                "operation": "gated_transition",
+                "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+                "count": 72
+              },
+              {
+                "operation": "gated_transition",
+                "implementation": "amd-gfx90a-transition-projection",
+                "count": 72
+              },
+              {
+                "operation": "gated_transition",
+                "implementation": "native",
+                "count": 72
+              },
+              {
+                "operation": "layer_norm",
+                "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                "count": 366
+              },
+              {
+                "operation": "layer_norm",
+                "implementation": "amd-gfx90a-transposed-layernorm-subgroup",
+                "count": 72
+              },
+              {
+                "operation": "layer_norm",
+                "implementation": "native",
+                "count": 223
+              }
+            ],
+            "backends": {
+              "recycle": {
+                "channel_first_layer_norm_enabled": true,
+                "long_layer_norm_enabled": true,
+                "long_transition_enabled": true,
+                "long1536_epilogues_enabled": true,
+                "selection_counts": [
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+                    "count": 72
+                  },
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "amd-gfx90a-transition-projection",
+                    "count": 72
+                  },
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "native",
+                    "count": 72
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                    "count": 366
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "amd-gfx90a-transposed-layernorm-subgroup",
+                    "count": 72
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "native",
+                    "count": 223
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "operations": {
+          "implementations": {
+            "gated_transition": [
+              {
+                "name": "amd-gfx90a-hip-transition-f32-c128-long",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-transition-f32-c128",
+                "priority": 20,
+                "version": "1"
+              }
+            ],
+            "layer_norm": [
+              {
+                "name": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-layernorm-f32-c128-channel-first",
+                "priority": 25,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-layernorm-f32-c128",
+                "priority": 20,
+                "version": "1"
+              }
+            ],
+            "linear": [
+              {
+                "name": "amd-ck-gemm-f32-m124-k64-n32",
+                "priority": 30,
+                "version": "1"
+              }
+            ],
+            "triangle_attention": [
+              {
+                "name": "amd-gfx90a-ck-tile-attention-f32-n1000",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-ck-tile-attention-f32-n1536",
+                "priority": 30,
+                "version": "exact-shape-1"
+              },
+              {
+                "name": "amd-gfx90a-efficient-sdpa-direct-n1000",
+                "priority": 20,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-efficient-sdpa-direct-n1536",
+                "priority": 20,
+                "version": "experimental-1"
+              },
+              {
+                "name": "amd-gfx90a-efficient-sdpa",
+                "priority": 10,
+                "version": "1"
+              }
+            ],
+            "triangle_multiplication": [
+              {
+                "name": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                "priority": 40,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+                "priority": 40,
+                "version": "experimental-1"
+              },
+              {
+                "name": "amd-gfx90a-hip-triangle-gates-f32-n1000-c128",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-triangle-gates-f32-n124-c128",
+                "priority": 20,
+                "version": "1"
+              },
+              {
+                "name": "amd-short-sequence-torch",
+                "priority": 10,
+                "version": "1"
+              }
+            ]
+          },
+          "selection_counts": [
+            {
+              "operation": "triangle_attention",
+              "implementation": "amd-gfx90a-ck-tile-attention-f32-n1000",
+              "count": 144
+            },
+            {
+              "operation": "triangle_multiplication",
+              "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+              "count": 144
+            }
+          ],
+          "decisions": [
+            {
+              "signature": {
+                "operation": "triangle_attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1000,
+                  4,
+                  1000,
+                  32
+                ],
+                "strides": [
+                  128000,
+                  32,
+                  128,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "triangle-bias",
+                "inplace": false,
+                "attributes": {
+                  "bias_count": "1",
+                  "bias_shapes": "((1, 4, 1000, 1000),)",
+                  "ck_tile_compatible": "True",
+                  "head_dim": "32",
+                  "heads": "4",
+                  "qkv_strides": "((128000, 32, 128, 1), (128000, 32, 128, 1), (128000, 32, 128, 1))"
+                }
+              },
+              "selected": "amd-gfx90a-ck-tile-attention-f32-n1000",
+              "rejected": []
+            },
+            {
+              "signature": {
+                "operation": "triangle_multiplication",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1000,
+                  1000,
+                  128
+                ],
+                "strides": [
+                  128000,
+                  128,
+                  1
+                ],
+                "layout": "contiguous",
+                "mode": "inference",
+                "mask": "none",
+                "inplace": true,
+                "attributes": {
+                  "add_with_inplace": "True",
+                  "c_hidden": "128",
+                  "c_z": "128",
+                  "direction": "incoming"
+                }
+              },
+              "selected": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+              "rejected": []
+            },
+            {
+              "signature": {
+                "operation": "triangle_multiplication",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1000,
+                  1000,
+                  128
+                ],
+                "strides": [
+                  128000,
+                  128,
+                  1
+                ],
+                "layout": "contiguous",
+                "mode": "inference",
+                "mask": "none",
+                "inplace": true,
+                "attributes": {
+                  "add_with_inplace": "True",
+                  "c_hidden": "128",
+                  "c_z": "128",
+                  "direction": "outgoing"
+                }
+              },
+              "selected": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+              "rejected": []
+            }
+          ],
+          "policy_engine": {
+            "name": "fireprot-core",
+            "bridge_abi": 1,
+            "library": "/media/IntelSSD/fireprot/target/release/lib_fireprot_bridge.so",
+            "sha256": "f036778cc4ef7da0f1dc2ffba87c397fdcb0c4900905ac29863cb04cb213c2b1"
+          }
+        },
+        "amd_extension": {
+          "loaded": true,
+          "error": null,
+          "build": {
+            "directory": "/media/IntelSSD/fireprot/runtime/torch_extensions/rust-v1/fireprot_amd_ops_645d2ec44e0a262f60140062af69247c0c6acb89a9db7312f9996d9352fea480",
+            "cache_hit": true,
+            "identity_sha256": "645d2ec44e0a262f60140062af69247c0c6acb89a9db7312f9996d9352fea480",
+            "package": "fireprot_amd_ops",
+            "arguments": {
+              "cxx": [
+                "-O3"
+              ],
+              "fireprot_torch_process": [
+                "3",
+                "/home/pc/anaconda3/envs/fold/bin/python",
+                "/media/IntelSSD/fireprot/fireprot/backends/amd/_compile_native.py",
+                "/media/IntelSSD/fireprot/target/release/fireprot-compiler-guard",
+                "600000",
+                "[\"/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_amd_ops.cpp\",\"/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_amd_ops.cu\"]",
+                "600000",
+                "/home/pc/anaconda3/envs/fold/bin/python"
+              ],
+              "hip": [
+                "-O3"
+              ],
+              "include": [
+                "/opt/rocm/core-10.0/include"
+              ]
+            },
+            "versions": {
+              "hip": "7.14.60850",
+              "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:38:16) [GCC 14.3.0]",
+              "recipe": "torch-hip-6",
+              "soabi": "cpython-312-x86_64-linux-gnu",
+              "torch": "2.12.0a0+git78258b9"
+            },
+            "inventory_counts": {
+              "files": 13,
+              "tree_files": 25048,
+              "dynamic_files": 48
+            },
+            "artifacts": {
+              "fireprot_amd_ops_645d2ec44e0a262f60140062af69247c0c6acb89a9db7312f9996d9352fea480.so": "eab70a03ba5ae217d320e493391644e776ced35dc6f59420246a4acb04e76f03"
+            },
+            "receipt_sha256": "bc3ad7d9e3e67df1b6041c3ffbec85abae28f31cbb0b86a9e5b00d83877ffb33"
+          }
+        },
+        "ck_gemm_extension": {
+          "loaded": false,
+          "error": null,
+          "build": null,
+          "api": "ATen/native/hip/ck_gemm.h"
+        },
+        "ck_attention": {
+          "enabled": true,
+          "long1536_enabled": true,
+          "exact1536_enabled": true,
+          "vector1000_enabled": true,
+          "loaded": true,
+          "error": null,
+          "build": {
+            "mode": "published",
+            "kernel": {
+              "directory": "/media/IntelSSD/fireprot/runtime/kernels/protenix-ck_attention-cabi-v1",
+              "library": "/media/IntelSSD/fireprot/runtime/kernels/protenix-ck_attention-cabi-v1/fireprot_ck_attention_e86557e12cf36bea3bb6eb7d248d6c1697d019b8c824ca5cc661bcb8d8d20bc3.so",
+              "manifest_sha256": "ea39ea45489c9b1f014adcb7b4297d433c65d59a9d3d4fcb4b0b432c5d6e2885",
+              "build_identity_sha256": "e86557e12cf36bea3bb6eb7d248d6c1697d019b8c824ca5cc661bcb8d8d20bc3",
+              "compatibility": {
+                "package": "fireprot_ck_attention",
+                "target": "gfx90a",
+                "torch": "2.12.0a0+git78258b9",
+                "hip": "7.14.60850",
+                "c_abi": "ck-attention-v1"
+              }
+            }
+          }
+        },
+        "lt_bmm": {
+          "enabled": false,
+          "loaded": false,
+          "error": null,
+          "build": {},
+          "counts": {
+            "outgoing": 0,
+            "incoming": 0,
+            "fallback": 144
+          },
+          "workspace_bytes_per_call": 33554432
+        },
+        "attention_gate": {
+          "enabled": false,
+          "counts": {
+            "selected": 0,
+            "fallback": 0
+          },
+          "fallback_signatures": []
+        },
+        "two_gcd_attention": {
+          "enabled": false,
+          "synchronize": false,
+          "counts": {},
+          "primary_batch": 320,
+          "secondary_batch": 192
+        },
+        "triangle_vector": {
+          "enabled": true,
+          "counts": {
+            "n1000": 144,
+            "n1536": 0,
+            "fallback": 0
+          },
+          "packed_norm_enabled": true,
+          "packed_norm_counts": {
+            "n1000": 144,
+            "n1536": 0
+          },
+          "dual_projection_enabled": true,
+          "dual_projection_counts": {
+            "n1000": 144,
+            "n1536": 0,
+            "fallback": 0
+          },
+          "tiled_dual_projection_enabled": true,
+          "tiled_dual_projection_counts": {
+            "n1000": 144,
+            "n1536": 0
+          }
+        },
+        "construction": {
+          "enabled": true,
+          "installed": true,
+          "unavailable": null,
+          "contract": {
+            "scipy": "1.18.1",
+            "source_sha256": {
+              "initializer": "72e6ede89fb399efd49db04631802f05cce93eb6f81ee5cf16f11f5d55c1e14d",
+              "init_model": "14b306c00c2427536642f80f85a09f2a15b14b872e825614a186671b802d3c4a",
+              "load_checkpoint": "6da10f959743bb9ef95d4184f64b1def38df3b9874c02ec19021e1de991316ff",
+              "sampler": "bd951a20257379d57e1b9fd97844c7fae6eb6d1f0207f39572f5687fbbcd919a"
+            },
+            "model_sha256": "6628a5db11d411479f9046005ab5306ba9fb6180bb82190a877e961f1361cf23"
+          },
+          "counts": {
+            "attempted": 1,
+            "selected": 1,
+            "recovered": 0,
+            "native": 0,
+            "errors": 0
+          },
+          "native_reasons": {},
+          "records": [
+            {
+              "uniform_calls": 621,
+              "uniform_elements": 97331488,
+              "native_initializer_calls": 0,
+              "initialization_ms": 1486.9955150061287,
+              "selected": true,
+              "missing_keys": [],
+              "checkpoint_and_recovery_ms": 301.7166890203953
+            }
+          ]
+        },
+        "feature_preparation": {
+          "enabled": true,
+          "counts": {
+            "skipped_templates": 1,
+            "native_templates": 0
+          },
+          "contract": {
+            "consumer_sha256": "74cf338ebc53b572dc12d6519392a09972c2a807beb1017c7fe0773536e301e5"
+          }
+        }
+      },
+      "comparisons": {
+        "native": {
+          "reference": "/media/IntelSSD/fireprot/outputs/protenix-n1000-native",
+          "reference_npz_sha256": "c5e40ca0150e3e35b9bb406254f35fbcc62dfdfa5bcecb26d32f786d9dac03c5",
+          "reference_confidence_sha256": "d3fc77244a1673e147806c8d2f21d54e1d16d5f6c9d569c95a7f02f9abb6fcd1",
+          "result": {
+            "confidence": {
+              "extra_in_candidate": [],
+              "max_abs_delta": 2.980232241545089e-08,
+              "mean_abs_delta": 6.457169854368061e-09,
+              "missing_from_candidate": [],
+              "numeric_leaf_count": 15
+            },
+            "confidence_tolerance": 0.001,
+            "coordinate_tolerance_angstrom": 0.001,
+            "coordinates": {
+              "aligned_rmsd_angstrom": 9.143471128931435e-05,
+              "atom_count": 7979,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625,
+              "raw_rmsd_angstrom": 9.26974104960042e-05
+            },
+            "passed": true
+          }
+        },
+        "preceding-fireprot": {
+          "reference": "/media/IntelSSD/fireprot/outputs/protenix-n1000-fireprot",
+          "reference_npz_sha256": "b6cb5a080cd7098bae6670eeaf33f9cfb38f4e8024397c75af7b773ba5fdde84",
+          "reference_confidence_sha256": "48525b854fbba0b3b6e16441e73953b396ceea9257ca69667fa7d0dd1ad482ec",
+          "result": {
+            "confidence": {
+              "extra_in_candidate": [],
+              "max_abs_delta": 3.814697265625e-06,
+              "mean_abs_delta": 2.585351467169576e-07,
+              "missing_from_candidate": [],
+              "numeric_leaf_count": 15
+            },
+            "confidence_tolerance": 0.001,
+            "coordinate_tolerance_angstrom": 0.001,
+            "coordinates": {
+              "aligned_rmsd_angstrom": 8.746158975229589e-05,
+              "atom_count": 7979,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625,
+              "raw_rmsd_angstrom": 8.781995317757532e-05
+            },
+            "passed": true
+          }
+        }
+      },
+      "raw_array_diagnostics_not_acceptance_gate": {
+        "confidence.atom_is_polymer": {
+          "bitwise_equal": true,
+          "max_abs_delta": null,
+          "passed": true
+        },
+        "confidence.atom_plddt": {
+          "bitwise_equal": false,
+          "max_abs_delta": 1.8417835235595703e-05,
+          "passed": false
+        },
+        "confidence.atom_to_token_idx": {
+          "bitwise_equal": true,
+          "max_abs_delta": null,
+          "passed": true
+        },
+        "confidence.contact_probs": {
+          "bitwise_equal": false,
+          "max_abs_delta": 2.682209014892578e-06,
+          "passed": false
+        },
+        "confidence.token_asym_id": {
+          "bitwise_equal": true,
+          "max_abs_delta": null,
+          "passed": true
+        },
+        "confidence.token_has_frame": {
+          "bitwise_equal": true,
+          "max_abs_delta": null,
+          "passed": true
+        },
+        "confidence.token_pair_pae": {
+          "bitwise_equal": false,
+          "max_abs_delta": 0.01355743408203125,
+          "passed": false
+        },
+        "confidence.token_pair_pde": {
+          "bitwise_equal": false,
+          "max_abs_delta": 0.04901313781738281,
+          "passed": false
+        },
+        "coordinates": {
+          "bitwise_equal": false,
+          "max_abs_delta": 0.0009765625,
+          "passed": false
+        }
+      }
+    },
+    {
+      "model": "protenix",
+      "length": 1536,
+      "path": "/media/IntelSSD/fireprot/outputs/protenix-n1536-published-cabi-v1",
+      "sample_sha256": "3436b12b9885ab16a3d21dd40ae5a27a5cc7b9de2a6d7a7a3911e3f1c1cba36f",
+      "request": {
+        "schema_version": 1,
+        "run_id": "protenix-n1536-published-cabi-v1",
+        "workload": {
+          "model": "protenix",
+          "model_name": "protenix_mini_default_v0.5.0",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "precision": "float32"
+        },
+        "backend": "fireprot",
+        "seed": 101,
+        "hip_device": 5,
+        "source": {
+          "root": "/media/IntelSSD/fireprot/Protenix",
+          "commit": "bb3be993b52713795796c72cf0a46ef8a7323442"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_default_v0.5.0.pt",
+            "sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81"
+          }
+        },
+        "resources": {
+          "ccd_components_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+            "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5"
+          },
+          "ccd_components_rdkit_mol_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+            "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35"
+          },
+          "obsolete_release_data_csv": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+            "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33"
+          },
+          "pdb_cluster_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+            "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c"
+          }
+        },
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "sha256": "3f3c19af52b40972ce1961eba6800afeba548d28c643fc23da0a9321485989a1"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/protenix-n1536-published-cabi-v1"
+      },
+      "provenance": {
+        "source_root": "/media/IntelSSD/fireprot/Protenix",
+        "source": {
+          "schema_version": 1,
+          "commit": "bb3be993b52713795796c72cf0a46ef8a7323442",
+          "files": {
+            ".flake8": {
+              "sha256": "9247551a20e29e83bafdef16404fdadc9e62dbd0116f08d9516dc489d3229fba",
+              "executable": false
+            },
+            ".github/workflows/ci.yml": {
+              "sha256": "226c2bb2145161b4b9fbbfb2bbf5305a91815e6117e9dbbd4001441d253ad604",
+              "executable": false
+            },
+            ".github/workflows/publish_to_pypi.yml": {
+              "sha256": "996a005bdcbdb769ac4adcea7897747d1c851ca54f67cac364a6fd7afc31bad7",
+              "executable": false
+            },
+            ".github/workflows/scorecard.yml": {
+              "sha256": "98e05d123f1025e89f5dbc8e390c2177ca82ebc9817a5b721373624189ba391d",
+              "executable": false
+            },
+            ".gitignore": {
+              "sha256": "dd4dea8e9f9787294f6fe7ac1805a70986ad936e26f201b567919624788eb63d",
+              "executable": false
+            },
+            ".pre-commit-config.yaml": {
+              "sha256": "0259472ccd5c72d9ca4c7877eb667fca818507a07f10736b1937e62d6880412e",
+              "executable": false
+            },
+            "CHANGELOG.md": {
+              "sha256": "b0023ebcfced5dbe718243807e46d61930ffa4a4a47a7eabe520548959233dc4",
+              "executable": false
+            },
+            "CODE_OF_CONDUCT.md": {
+              "sha256": "d702a2eb425fad2977a5dc086e3fd500bcbcf1e35a527e08bde364cdfc3e0b36",
+              "executable": false
+            },
+            "CONTRIBUTING.md": {
+              "sha256": "13fec2d9b2fe0787fe3ee29add2d79f97745a7362ad7e5d01bc21f5522806592",
+              "executable": false
+            },
+            "Dockerfile": {
+              "sha256": "657e90df4584c1b7697de88c709093d4970db96a3cb00305476ff8d90403c06c",
+              "executable": false
+            },
+            "LICENSE": {
+              "sha256": "add3b0d4449b29559d6f429d84a09a9b363d78fd516b3315a8ed946eb12ad8eb",
+              "executable": false
+            },
+            "README.md": {
+              "sha256": "64e5453ca37dbe12af86eeb4b297baaa03946f31eaa00193acffe55aa27f66c0",
+              "executable": false
+            },
+            "assets/inference_time_vs_ntoken.png": {
+              "sha256": "911e317f2338ebded2a42035bab3b7df78c34845e5b3c1e8925e74a8dd440d62",
+              "executable": false
+            },
+            "assets/license_header.txt": {
+              "sha256": "67c77925c6347a897d36a21dea133da79a3e2433300038fc7b4b8667d5bc5166",
+              "executable": false
+            },
+            "assets/mini_tiny_0.5.0_performance.png": {
+              "sha256": "383d078099b15bf69a1bd1bf89a25f898863761b7815f0720824bcfa67a20b4d",
+              "executable": false
+            },
+            "assets/protenix_base_constraint_v0.5.0_metrics.png": {
+              "sha256": "7d96e0825b99f159a9644be057fdb50a75f78d94b0040262c67b4a48983ee8ed",
+              "executable": false
+            },
+            "assets/protenix_base_default_v0.5.0_metrics.png": {
+              "sha256": "3ff727dac76ad6686a26535169c9d8196dab9176a13be8da4a3439f30927a8a9",
+              "executable": false
+            },
+            "assets/protenix_base_default_v1.0.0_metrics.png": {
+              "sha256": "7c705355b10a844a0439fd331132891eed06d95dea2c19a28251ac470435104b",
+              "executable": false
+            },
+            "assets/protenix_base_default_v1.0.0_metrics2.png": {
+              "sha256": "e73aa9398481dd0a30598d76d522781c98a3aa43943dab5496e14ac8d6bcff6c",
+              "executable": false
+            },
+            "assets/protenix_predictions.gif": {
+              "sha256": "400c4b72786c6ab2816a23cd03276502a32705dbdf663f7292659d892ed78a7b",
+              "executable": false
+            },
+            "configs/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "configs/configs_base.py": {
+              "sha256": "13c36fb5624bb804aee78cd95d04b08832dcabc7de8378886dd99a67251d66b9",
+              "executable": false
+            },
+            "configs/configs_data.py": {
+              "sha256": "4699fc39387203bb861437dfa2dec89cc73e375539d37b2140c2b82fa6796e69",
+              "executable": false
+            },
+            "configs/configs_inference.py": {
+              "sha256": "0a1b8f79f6b770af74d3e27f3b60b21f05848aa3477bc33ca9b16abcd7755bab",
+              "executable": false
+            },
+            "configs/configs_model_type.py": {
+              "sha256": "d7f59f1b2d83b3657555893be085502b04c38b21a069e8ebb4b05229a8f12552",
+              "executable": false
+            },
+            "docs/PTX_V1_Technical_Report_202602042356.pdf": {
+              "sha256": "3a9fdfe260cee1bd5351fa3392740ab80bb4782a1e57bd8082783cb6e4c6cb5e",
+              "executable": false
+            },
+            "docs/Protenix_Technical_Report_2024.pdf": {
+              "sha256": "b4150ea75c2772c27e8fb64153434b568850bd724ac22d47cc73158737e3ee44",
+              "executable": false
+            },
+            "docs/colabfold_compatible_msa.md": {
+              "sha256": "5546697778392f5da9b0752c63a4615325cd6ef07aab12347728478b0af9ddae",
+              "executable": false
+            },
+            "docs/docker_installation.md": {
+              "sha256": "41da6066cfa504575a28e7a66b863005c5f7fbbb454b32293539a593d80d32d1",
+              "executable": false
+            },
+            "docs/infer_json_format.md": {
+              "sha256": "fa7f48d076136df941d5120f50ff00d688be4510fa73d9a6e75f6e21ea95d556",
+              "executable": false
+            },
+            "docs/kernels.md": {
+              "sha256": "8cfe0e7df1d4d1dfc1266ba1df86bcdcb2d9905a16b353e89c5609fd6495347c",
+              "executable": false
+            },
+            "docs/model_0.5.0_benchmark.md": {
+              "sha256": "b09eb2389a7bfd6ff7d9832161c8b8e2e53c9cc0633d2b1321a58ae4b595a0e1",
+              "executable": false
+            },
+            "docs/model_1.0.0_benchmark.md": {
+              "sha256": "41021284f0c9d1bf9d69756629494addacec557a8884e0300ef8c74a2ccc0cff",
+              "executable": false
+            },
+            "docs/msa_template_pipeline.md": {
+              "sha256": "befce5e75dbc2dd8a4e199874120365cc14b7c587fd85831e7aa1da7757486e6",
+              "executable": false
+            },
+            "docs/prepare_training_data.md": {
+              "sha256": "8c26be979184878904a37c0a36dc808259fa59fafe3a802b07ef9fb8e75ae324",
+              "executable": false
+            },
+            "docs/supported_models.md": {
+              "sha256": "1285c600c3e809e2aff7415067ed6e43f9509c7eb951f09ac4958c9354f69816",
+              "executable": false
+            },
+            "docs/training_inference_instructions.md": {
+              "sha256": "d8312eb63ecf6d0ce03969ddef4f6d3aca2c5a2470e107b8e9bca1517f40c967",
+              "executable": false
+            },
+            "examples/2lwu.cif": {
+              "sha256": "81f96a56b4d6a1d8576dad57a29a7219c54debf70002eb5d8bb4dadccf3c3a67",
+              "executable": false
+            },
+            "examples/5sak/1/non_pairing.a3m": {
+              "sha256": "6c9a6237d84990287f4ddef29f327b9dfe0715f055b70c20ef777c84adf89165",
+              "executable": false
+            },
+            "examples/5sak/1/pairing.a3m": {
+              "sha256": "a6f20813da470de6121dc4e97659053463fb9bc2a61fc7d5095bf4d48aa65781",
+              "executable": false
+            },
+            "examples/7pzb/msa/1/non_pairing.a3m": {
+              "sha256": "98c033b02e728815681bdba74dfa93dde88b27a56adf4941dd91ca295f8b966a",
+              "executable": false
+            },
+            "examples/7pzb/msa/1/pairing.a3m": {
+              "sha256": "df92e850929ebc56d83b59d7173c0d92ff6cf4d22fdb03636a0750ef2d7a3cd9",
+              "executable": false
+            },
+            "examples/7pzb.pdb": {
+              "sha256": "69eac5c93d75b73bd740852b15654183685a533e9ae79caf19947caf1d652e1f",
+              "executable": false
+            },
+            "examples/7r6r/msa/1/non_pairing.a3m": {
+              "sha256": "15388d7ed4fa8dac77770d2887d7234847b5aee1252651917efc5c1dba149066",
+              "executable": false
+            },
+            "examples/7r6r/msa/1/pairing.a3m": {
+              "sha256": "105e7c949a533f488248476e0b13307a2c94fbf138b3859ea8b1ccbdb8e27223",
+              "executable": false
+            },
+            "examples/7st3/msa/1/non_pairing.a3m": {
+              "sha256": "e3014847fa1b42d914ba4c030d4ed91f19508bf3ccc7454ba48bbe927d73612b",
+              "executable": false
+            },
+            "examples/7st3/msa/1/pairing.a3m": {
+              "sha256": "8758f2a66fd3fec0804851640b407741be1e0d0c87cf72f4733d5680dfa9b7a6",
+              "executable": false
+            },
+            "examples/7st3/msa/2/non_pairing.a3m": {
+              "sha256": "f273af04f49978c4c64e01b202aaf23b9c72945d4243ad7ba8a563fb23d8ea7b",
+              "executable": false
+            },
+            "examples/7st3/msa/2/pairing.a3m": {
+              "sha256": "cf2ddb00ca019ec52d979f456408ea71a1cc8de7ab2bc8a4f3216675e04e9d25",
+              "executable": false
+            },
+            "examples/7wux/msa/1/non_pairing.a3m": {
+              "sha256": "0aff2182af3f28d02ac526cb391a1faa8f75b18f3e8df8fc9046b2918647017f",
+              "executable": false
+            },
+            "examples/7wux/msa/1/pairing.a3m": {
+              "sha256": "1fd47550efdadc57ac7483fedff2fe0a362ad0fbde7bae52a08afe08c1f58912",
+              "executable": false
+            },
+            "examples/7wux/msa/2/non_pairing.a3m": {
+              "sha256": "9baa25bbffd2cc4b0e36b0bbf1fab43d2fa79d8eefa751455fcb80053f095e6e",
+              "executable": false
+            },
+            "examples/7wux/msa/2/pairing.a3m": {
+              "sha256": "e30d005be6ef75972498148f056dbd637892891bedbc36489129855c6390604f",
+              "executable": false
+            },
+            "examples/dimer.fasta": {
+              "sha256": "9770d6ce96400fc1a284c186291cc3188b3f8276fec6a4d327aa266e38c77ca1",
+              "executable": false
+            },
+            "examples/example.json": {
+              "sha256": "34c701ed139083201a8faa46831d2a00c84ee44eb10a36a938e42f56b7fb193d",
+              "executable": false
+            },
+            "examples/example_constraint_msa.json": {
+              "sha256": "56776851ecfb14d08daddb9915985af9083797d78185a49f752c5e9b56c2bc8d",
+              "executable": false
+            },
+            "examples/example_without_msa.json": {
+              "sha256": "cc30e4fc1073854069611a138dcec5e0aeefacbad5889784d4e97cf6f0bc1d9e",
+              "executable": false
+            },
+            "examples/examples_with_rna_msa/9gmw/9gmw_2_all.a3m": {
+              "sha256": "beb1253df1856aad3c3226735cf1e201f443c58340e86692dcb5af7a1254191c",
+              "executable": false
+            },
+            "examples/examples_with_rna_msa/example_9gmw_2.json": {
+              "sha256": "c58449542a8eff60aefb18ae29fd9e3e63736123315b7666e6bd4ea4db10842e",
+              "executable": false
+            },
+            "examples/examples_with_template/9fm7/hmmsearch.a3m": {
+              "sha256": "210c76abc79e85b39c6530932214ecca134ed9a5d2d020d6e560717c804f52f3",
+              "executable": false
+            },
+            "examples/examples_with_template/9fm7/non_pairing.a3m": {
+              "sha256": "c463a900d0287463ac1fa9b93123227f59bd2a4024740c26ea2df39eaec31086",
+              "executable": false
+            },
+            "examples/examples_with_template/9fm7/pairing.a3m": {
+              "sha256": "d5f09ce2beed7925b0dea8785341a36f64c887594e8b6a046f9d2f758e4f1311",
+              "executable": false
+            },
+            "examples/examples_with_template/MGYP004658859411/concat.hhr": {
+              "sha256": "85f79dbbb26505324d45a1051049ad02ab98330bc696c9dcc57ccbd118348596",
+              "executable": false
+            },
+            "examples/examples_with_template/MGYP004658859411/non_pairing.a3m": {
+              "sha256": "c52fee7b588dde30f009cda70c8de563fad1e5256c023532f1de9cbb4f59381b",
+              "executable": false
+            },
+            "examples/examples_with_template/MGYP004658859411/pairing.a3m": {
+              "sha256": "201cb3c18ddecbf05a562bffe971b87520b65f9473cd6f62287454a335ce04db",
+              "executable": false
+            },
+            "examples/examples_with_template/example_9fm7.json": {
+              "sha256": "3ee53046d38b9a41c45dceb991b43edeefc54e75e5f4ef62a5ae3d2617102694",
+              "executable": false
+            },
+            "examples/examples_with_template/example_mgyp004658859411.json": {
+              "sha256": "ea0569ffb16c9285d0c2ebc825f133dc012ae349778811def1f457aa352170a2",
+              "executable": false
+            },
+            "examples/finetune_subset.txt": {
+              "sha256": "82b3ec04493bd2235136f4c162d5194c72aa126881df5e648e979e55fd569c2c",
+              "executable": false
+            },
+            "examples/input.json": {
+              "sha256": "3bfe91c73117f3f234891e61945bda0ff361ae41d0d4068ad96e40c40a9bc67d",
+              "executable": false
+            },
+            "examples/ligands/7wux_smiles.smi": {
+              "sha256": "6e84db6483f20d60b040f75c4ba15a72256e6e2941b0cc37c0b4d785733dae30",
+              "executable": false
+            },
+            "examples/ligands/compounds-3d-R.sdf": {
+              "sha256": "da0ad70027c82cf876d0d95a3034a38d23e47cb8e09b62020f8af9e2e07135d3",
+              "executable": false
+            },
+            "examples/ligands/compounds-3d-RS.sdf": {
+              "sha256": "d9ef95df8934f6f940e63bdc8152f198bc29f772ce3d5081c8b020d9a460a356",
+              "executable": false
+            },
+            "examples/prot.fasta": {
+              "sha256": "0a7069e74462c6ae548466bb98de11eca680293a45630d0eb841abbe3e62d4fb",
+              "executable": false
+            },
+            "finetune_demo.sh": {
+              "sha256": "b387d774a68c003643c88808827d856415210921ff1b893c56dab2ddea41db07",
+              "executable": false
+            },
+            "inference_demo.sh": {
+              "sha256": "a8a8b3530f40e331fe1178e2f11894ec33ee3291c790f40772e5a61e7cf1b0c9",
+              "executable": true
+            },
+            "protenix/__init__.py": {
+              "sha256": "2736ff45f82f5c2ae6fd243801f786562d4ddfa6326f19cce66a72c6b9e28602",
+              "executable": false
+            },
+            "protenix/config/__init__.py": {
+              "sha256": "50d0fc5cbb80a0ef4c68227b9a523b0042ce101f1954126d9b4dcc0ffb5f84a5",
+              "executable": false
+            },
+            "protenix/config/config.py": {
+              "sha256": "22c134a75bf00c98b1ec85d9fb753830bca97e8b782a3c90ec60109087854c7e",
+              "executable": false
+            },
+            "protenix/config/extend_types.py": {
+              "sha256": "279c6eff86e90ca22bbd91e904a1c748773a745b92ab0735d0ec7325f1baeba4",
+              "executable": false
+            },
+            "protenix/data/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/data/constants.py": {
+              "sha256": "10a526bd64e1206052c307239ff92109c245aec3d2c10e6ef0d4deae295092a4",
+              "executable": false
+            },
+            "protenix/data/constraint/__init__.py": {
+              "sha256": "9448792dbd9aa44112cb16e9cdb77cca263cd50193ab8c7761d6a51d6d0d4d29",
+              "executable": false
+            },
+            "protenix/data/constraint/constraint_featurizer.py": {
+              "sha256": "a413febd327df54065dd4cc1786870f7f617f29a4e46214f9edaf472f99eaab4",
+              "executable": false
+            },
+            "protenix/data/core/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/data/core/ccd.py": {
+              "sha256": "f8262a29130c453f6d0a84c1752f4e11062c77df2baba686964018cfd5f88714",
+              "executable": false
+            },
+            "protenix/data/core/featurizer.py": {
+              "sha256": "634a845d031c35e2e926a7aa4f10201fd88ab1725e5aae8e8396b8e001ae291d",
+              "executable": false
+            },
+            "protenix/data/core/filter.py": {
+              "sha256": "c2642455544cf8e96d95c8bb0e789b9e02acbe88c42251a456f1a0fd3c12625e",
+              "executable": false
+            },
+            "protenix/data/core/parser.py": {
+              "sha256": "f6f801195f9fdce3b17c43b141b6037491bf1f7e395fff4dc2a499ca8c739cf7",
+              "executable": false
+            },
+            "protenix/data/core/substructure_perms.py": {
+              "sha256": "da92fbb4fcaca716a9e7f32eff4119375e131b4684ca5a33f84c5cdcc98709a6",
+              "executable": false
+            },
+            "protenix/data/esm/__init__.py": {
+              "sha256": "42489adb08de889bb649185121b7d86b2aed3b4ea89b1ffdaa2d8d8bdf87f413",
+              "executable": false
+            },
+            "protenix/data/esm/compute_esm.py": {
+              "sha256": "ce3fc45709d088ecba45fb49c8dafd4882a74401a24f7df9a91f8115091a9363",
+              "executable": false
+            },
+            "protenix/data/esm/esm_featurizer.py": {
+              "sha256": "2ac3a6fa513e84a736f14e5d2d57ad156014b5cb7e785e2ca17e6f9d896ea657",
+              "executable": false
+            },
+            "protenix/data/inference/__init__.py": {
+              "sha256": "beeabcb42895075d0b6d5ab678307bbdfc87820273374dd5b685618272ecdbce",
+              "executable": false
+            },
+            "protenix/data/inference/infer_dataloader.py": {
+              "sha256": "d56800bceb33388d5fa0c275f6769aca2214e7f470757d521eedd262259dff0a",
+              "executable": false
+            },
+            "protenix/data/inference/json_maker.py": {
+              "sha256": "de9fdfc297886d924d1c207d8e1e79109087f32339c1c0ac25469bd32e8caf29",
+              "executable": false
+            },
+            "protenix/data/inference/json_parser.py": {
+              "sha256": "204a6ec0fdd5a00f0cf0725401efb7321ea1ece8c7f2326960c8068241f27c8e",
+              "executable": false
+            },
+            "protenix/data/inference/json_to_feature.py": {
+              "sha256": "e09bffa380acf3f3a1aa215ba8f2e3e87e6b23dbfe078120b4a498994f246afc",
+              "executable": false
+            },
+            "protenix/data/msa/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/data/msa/msa_featurizer.py": {
+              "sha256": "cac245cd3165fc3ca2318ffa8dba0b77ac961024f09e6b3dec48d768001e8fd6",
+              "executable": false
+            },
+            "protenix/data/msa/msa_utils.py": {
+              "sha256": "fbacbbdfa5afd0e17cacb9dba33f8e9e094531640ff665a285f507ecd4395918",
+              "executable": false
+            },
+            "protenix/data/pipeline/__init__.py": {
+              "sha256": "61b7184ce678a06c93ae88d2e1a27d00fa3621d3da15959f7b276c353e63bc2a",
+              "executable": false
+            },
+            "protenix/data/pipeline/data_pipeline.py": {
+              "sha256": "b071b38e741b090205a35da8eba0139d62e04cf4bed73c8b27ec3ccf53bffc99",
+              "executable": false
+            },
+            "protenix/data/pipeline/dataloader.py": {
+              "sha256": "2f6a68ba8a85c130001ecc18033722e86d99054ecc3954bb995578bb47e5cc29",
+              "executable": false
+            },
+            "protenix/data/pipeline/dataset.py": {
+              "sha256": "4d2706060aca6719dc43365e30384b2b471141e14fc84ae27b5a8b1997235c07",
+              "executable": false
+            },
+            "protenix/data/template/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/data/template/template_featurizer.py": {
+              "sha256": "728120aa433ef76dd064d200d1bb6f3304777c09844377ad1e634920d2aa28c0",
+              "executable": false
+            },
+            "protenix/data/template/template_parser.py": {
+              "sha256": "1d2e0a5c3ee7b44d1f5b1dcf0e4fadb0d4114f46f5c34e302b3fe4be058ecbe8",
+              "executable": false
+            },
+            "protenix/data/template/template_utils.py": {
+              "sha256": "6da8425ce2688994cd0882963116e6294c0ef77b86b461aa32c26cfd50b4b9df",
+              "executable": false
+            },
+            "protenix/data/tokenizer.py": {
+              "sha256": "ad70ef6e5a0c976132ee1e96af71b8ba0d27b92ab9d9284a1c68326ca8d1a265",
+              "executable": false
+            },
+            "protenix/data/tools/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/data/tools/common.py": {
+              "sha256": "833ceeb47c1460a1ac7bed498a536284f30e6af3e9bbf43a74cd03aefdd6c14b",
+              "executable": false
+            },
+            "protenix/data/tools/kalign.py": {
+              "sha256": "df068344839cda5d89df8bffe885b8b7a19918828aa3a21622b5530c76eaa48f",
+              "executable": false
+            },
+            "protenix/data/tools/search.py": {
+              "sha256": "2a33e74ddfb42d14026b2c2b219438babf9337f2e59c5754b36c9ccee7bb576c",
+              "executable": false
+            },
+            "protenix/data/utils.py": {
+              "sha256": "1c8ea6c8f9541ee081410d677bda7b2003ea91765b66cccb47e935e110b33a97",
+              "executable": false
+            },
+            "protenix/metrics/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/metrics/clash.py": {
+              "sha256": "4f8f47b8020cdf21c3332a87561ecbfb7e826ddcf23512fc10ad940d758f0adc",
+              "executable": false
+            },
+            "protenix/metrics/lddt_metrics.py": {
+              "sha256": "f78dde38592ee2bbdb8386b83e038255a6fae2fbc24d4f6b08885970d52b0501",
+              "executable": false
+            },
+            "protenix/metrics/rmsd.py": {
+              "sha256": "23ec3fc1993fafa6323fb6fc2a4662212e5f7ba667f12b3e9922bf8bbac6ff46",
+              "executable": false
+            },
+            "protenix/model/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/model/generator.py": {
+              "sha256": "84338db0cda852d859e498c9aee972747a319e4e701cfae271ac882215fe25ae",
+              "executable": false
+            },
+            "protenix/model/layer_norm/__init__.py": {
+              "sha256": "1c21a7a0bf9787f07c68caf16dfe80c7451bc28ff138bc8510cb9e0712a4333d",
+              "executable": false
+            },
+            "protenix/model/layer_norm/kernel/compat.h": {
+              "sha256": "24da65d5e0a58c6483abd60e7a6d6fca7e4abc9303f08c902975c77bdeacbc08",
+              "executable": false
+            },
+            "protenix/model/layer_norm/kernel/layer_norm_cuda.cpp": {
+              "sha256": "b03d995042fede126b1e36a8e9c9e73433a598f523ad914789d7aeaeb8ac842d",
+              "executable": false
+            },
+            "protenix/model/layer_norm/kernel/layer_norm_cuda_kernel.cu": {
+              "sha256": "ad75251f6fabbf59bbc83637a9600204c62a20c6ac563a742694bbfc8c0c180a",
+              "executable": false
+            },
+            "protenix/model/layer_norm/kernel/type_shim.h": {
+              "sha256": "824a0dfdb5bfb1316187b3a3f7c10c9b41496b97259ddf84c882152ccec66a7a",
+              "executable": false
+            },
+            "protenix/model/layer_norm/layer_norm.py": {
+              "sha256": "30b9a8803530a6fbdaa3c9302a7091eb04bca2d10dd2f79aa79a5efc1e4dfb8a",
+              "executable": false
+            },
+            "protenix/model/layer_norm/torch_ext_compile.py": {
+              "sha256": "1237b09c7a3f3494429d1dbb6547aad66a0682b199b3274e7d2e18b975ce2c1d",
+              "executable": false
+            },
+            "protenix/model/loss.py": {
+              "sha256": "c5a8c348d589829f3ed1eee36dbc04206773b50a4f22cac00f11fa4d7d978a88",
+              "executable": false
+            },
+            "protenix/model/modules/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/model/modules/confidence.py": {
+              "sha256": "064375730d100f1536cf1a2061fa08ad0a039f21c4bf2965275a74646d33cebd",
+              "executable": false
+            },
+            "protenix/model/modules/diffusion.py": {
+              "sha256": "c92001aeb046ea9a5dbbc8120a5487c76d0497c52ff7fe178143f443dd4cc988",
+              "executable": false
+            },
+            "protenix/model/modules/embedders.py": {
+              "sha256": "05e9e8d7bc8e9f917a6cadb3534b4b95764ea9968c19bc38d4743a29daf982f8",
+              "executable": false
+            },
+            "protenix/model/modules/frames.py": {
+              "sha256": "375bc7478c566338c5bce6e325f7dd912c1865df51bc373e1b9a21477a1f80b1",
+              "executable": false
+            },
+            "protenix/model/modules/fused_ops.py": {
+              "sha256": "89d80eae7d5fd688fac7c2c3f956de943022acd486427047eb1c584b0b58cd23",
+              "executable": false
+            },
+            "protenix/model/modules/head.py": {
+              "sha256": "5b79308417267c7072b9d220c78970d458ea44b94450e5e3f14140459331f1b4",
+              "executable": false
+            },
+            "protenix/model/modules/pairformer.py": {
+              "sha256": "90fc6b48207fcee017b2a71ac7c745a76c1dbcbc2e733916e827417cfc76b4f4",
+              "executable": false
+            },
+            "protenix/model/modules/primitives.py": {
+              "sha256": "48474abdd5b37a70f5d2579c0c2f1b2d2e6876961db7100f0eb9ebfad0198363",
+              "executable": false
+            },
+            "protenix/model/modules/transformer.py": {
+              "sha256": "4d4d56b0fdf0f0fd6eff2cbcafd4a2f35b24f217746e671cac4e1238ae649ed6",
+              "executable": false
+            },
+            "protenix/model/protenix.py": {
+              "sha256": "c4250bd93d592a11d9019285cfd84b71b26fa6a8aca6944a239fb31e0337e179",
+              "executable": false
+            },
+            "protenix/model/sample_confidence.py": {
+              "sha256": "66ca9d6001a429a8c613dfcdcbbe30fe515894cd851452073ef4aca1854e8de1",
+              "executable": false
+            },
+            "protenix/model/tri_attention/__init__.py": {
+              "sha256": "f738f69a1e4c6036957b5e852e139629bf3f3cf29a0a88220e8c1b00cb19c7eb",
+              "executable": false
+            },
+            "protenix/model/tri_attention/autotune.py": {
+              "sha256": "4da7f146f0c7e399b624ed818354c6e5044213ff873a3b995f66d3af988f0de8",
+              "executable": false
+            },
+            "protenix/model/tri_attention/autotune_helpers.py": {
+              "sha256": "e9f1a96c63a0218b2bd25198d9aa31a9165a0ec20534e5607a0692995d3743d7",
+              "executable": false
+            },
+            "protenix/model/tri_attention/backward.py": {
+              "sha256": "fac61c5601a2b0fe5d6f236f5de0e59a3382e094115f8654c0f9d675c14eea46",
+              "executable": false
+            },
+            "protenix/model/tri_attention/forward.py": {
+              "sha256": "42fc170c998d3170fbf5781837a71b7d7b9f7e569be7554f39287236a7d4ae93",
+              "executable": false
+            },
+            "protenix/model/tri_attention/op.py": {
+              "sha256": "e0942e6d6b06607ad399ee972465edbcb868fa1328cf39322730f3b3e4a4135b",
+              "executable": false
+            },
+            "protenix/model/triangular/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/model/triangular/layers.py": {
+              "sha256": "c2a709d65ee40ab2fa7bdb100bccdd1f04f6b9036e7341a654510429f8f114ee",
+              "executable": false
+            },
+            "protenix/model/triangular/triangular.py": {
+              "sha256": "675b8c2872caba78cc8a5ee66f5bada4013c1273203e89fa7053f27860da84a9",
+              "executable": false
+            },
+            "protenix/model/utils.py": {
+              "sha256": "81784461673c929002f59a43c4a8980e7c638a01e0d0a7d8ec14263b0c76f5ef",
+              "executable": false
+            },
+            "protenix/utils/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/utils/cropping.py": {
+              "sha256": "5a6045b2df53822313bd67a792972452b35cef8da5f72cfdf27640d0c8b9ab0b",
+              "executable": false
+            },
+            "protenix/utils/distributed.py": {
+              "sha256": "10e8a47fe679cfc8844534e45f032d9908bb16fb8ab714e90d74ebfc439fbbb2",
+              "executable": false
+            },
+            "protenix/utils/file_io.py": {
+              "sha256": "ff17fac71adf30131790328c008b38de549357d42259d40ef9fcfd38c7f6947b",
+              "executable": false
+            },
+            "protenix/utils/geometry.py": {
+              "sha256": "18bf79f41026e8211196ae8d789849252e5b93f54c19ca94179ed8e7e6ca9622",
+              "executable": false
+            },
+            "protenix/utils/logger.py": {
+              "sha256": "d4597c92f044ea5a3c9954e44824928aeb7f6f222e0050754eb495025280995a",
+              "executable": false
+            },
+            "protenix/utils/lr_scheduler.py": {
+              "sha256": "a4758ed1e3df0d623b5ca3c829edb88dd027624178ecc17aea6baf43b5487ba0",
+              "executable": false
+            },
+            "protenix/utils/metrics.py": {
+              "sha256": "e69dbd717875f876ab21e33c17fa7eaa6a7d11a4543dd6d54c1ce63b188dac71",
+              "executable": false
+            },
+            "protenix/utils/permutation/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/utils/permutation/atom_permutation.py": {
+              "sha256": "428dfb0e6e7362435c5132b064888e63751a58d1e63f460053258f48a7527fca",
+              "executable": false
+            },
+            "protenix/utils/permutation/chain_permutation/__init__.py": {
+              "sha256": "e9b9411bbb55acd7f59db7e767268d7b24d5d2ce46552fc7b447366ac8b1c182",
+              "executable": false
+            },
+            "protenix/utils/permutation/chain_permutation/heuristic.py": {
+              "sha256": "63164ba4f8c33b2877c30af36ae0e2fb0db296016b026cf43c9ce2557bcc90e9",
+              "executable": false
+            },
+            "protenix/utils/permutation/chain_permutation/pocket_based_permutation.py": {
+              "sha256": "854c650f45eec574e3dbd4fbb958d4b6330341bf5498cfa69765f8e1902249c9",
+              "executable": false
+            },
+            "protenix/utils/permutation/chain_permutation/utils.py": {
+              "sha256": "7a8d7d0882f6ff7e8db25ede61bb23c5439d46a3b6ae8e865a4e229dda69707d",
+              "executable": false
+            },
+            "protenix/utils/permutation/permutation.py": {
+              "sha256": "4684fcf24b0fa01e58703d907db6d4cca9e51cf9ed50781a7723244497c2682e",
+              "executable": false
+            },
+            "protenix/utils/permutation/utils.py": {
+              "sha256": "22549e0cc17fecde6e37804a0c651da9a1d62f20a6c4ce12378b30bbe31685b7",
+              "executable": false
+            },
+            "protenix/utils/scatter_utils.py": {
+              "sha256": "5a4683c560140529f2ffc9e948206d46d80586c2a06ca17a9d498fc2e8917dad",
+              "executable": false
+            },
+            "protenix/utils/seed.py": {
+              "sha256": "dfb5611fd421d1316eafde5ecc82879a736682b4613ad9465a3982059148e744",
+              "executable": false
+            },
+            "protenix/utils/torch_utils.py": {
+              "sha256": "f7e60efd6c069c71cf7d2accb9204441168763c7629e723b8c93a3dcad8aa5c8",
+              "executable": false
+            },
+            "protenix/utils/training.py": {
+              "sha256": "b97c8904f6a7517e592b1730fb9cf74299717ca057400529dc116cef3498742f",
+              "executable": false
+            },
+            "protenix/version.py": {
+              "sha256": "f9c360c6efbbb5aed27ea3405265b6bc26ebceee25bdc7df69c7ccd8cbf8f33a",
+              "executable": false
+            },
+            "protenix/web_service/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "protenix/web_service/colab_request_parser.py": {
+              "sha256": "0b781cb10a1cd92f19a4924fb7273f97895c9bbb737aa741d241e4805d273d9c",
+              "executable": false
+            },
+            "protenix/web_service/colab_request_utils.py": {
+              "sha256": "11cf40531d6af7b335c21846d4199033ec1964b7cb6a649e122c869238cba1e7",
+              "executable": false
+            },
+            "protenix/web_service/dependency_url.py": {
+              "sha256": "f65331d36221a8c3fd715ff8760b39dda9c880b88054216b04d5e39277478fd8",
+              "executable": false
+            },
+            "protenix/web_service/prediction_visualization.py": {
+              "sha256": "a0f149784b2efaafae217c11610cab7471f85a29be61b36df1907ada1abb107c",
+              "executable": false
+            },
+            "protenix/web_service/viewer.py": {
+              "sha256": "d72c11014161b34e5d1fd9f77ec4e76e19264858b9db56600616f61591a68ec3",
+              "executable": false
+            },
+            "requirements.txt": {
+              "sha256": "2ee61736c8f8021cd22a040e794f470728b52739256004d20acb70b54243c9bf",
+              "executable": false
+            },
+            "runner/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "runner/batch_inference.py": {
+              "sha256": "b7151ae1fca92d0607f38480d5a439e3287108e607995c753db39991069482be",
+              "executable": false
+            },
+            "runner/dumper.py": {
+              "sha256": "c7ba3d2d42c9a700fea5efc1c9636118513a90906fd270204a4c12b72ad656d6",
+              "executable": false
+            },
+            "runner/ema.py": {
+              "sha256": "9500d6e0357d1686f5650fc418c322b1f647fa98f27139ab1975ad784bb9481c",
+              "executable": false
+            },
+            "runner/inference.py": {
+              "sha256": "f2c981b38936ff863e280602fc0ce4a32bc83e3103589b0111df73c00ac297f6",
+              "executable": false
+            },
+            "runner/msa_search.py": {
+              "sha256": "f2e6da81a178244e25c04ca4666a73028b4d3078280d52d6c1b070869ebc0dfc",
+              "executable": false
+            },
+            "runner/rna_msa_search.py": {
+              "sha256": "8106ea53953e6b49a5744e5813055f82a9c6854e238e360eedf2788da89e2976",
+              "executable": false
+            },
+            "runner/template_search.py": {
+              "sha256": "b62d711de0f8af3429c000ea60eaa43c1538431e91e8951c4bc6b93e07decd2a",
+              "executable": false
+            },
+            "runner/train.py": {
+              "sha256": "831ad0abd5cc46cc75419287a179cc3d66b27edc7d0003c8f9f32b5d5f6709ab",
+              "executable": false
+            },
+            "scripts/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "scripts/colabfold_msa.py": {
+              "sha256": "1c51ac4214a96eaaa5f1569c2f80ee62ceff0cff6b51f3a5274f6d7123e4fc60",
+              "executable": false
+            },
+            "scripts/database/download_protenix_data.sh": {
+              "sha256": "27da2585d0ea1d820f4693099653aab1fdff7d4e18c21e6d90a0dc18f718dd89",
+              "executable": true
+            },
+            "scripts/database/generate_pdb_seqres.py": {
+              "sha256": "b332136ce3d32dced11c68b7a8bef51e13f667ae208803bf58eddde8185cb5a1",
+              "executable": false
+            },
+            "scripts/database/generate_rfam_cluster_file.sh": {
+              "sha256": "ec41337203fd8adc981118892d0ee2570e6b145e9a1d860d8789f54562c13c66",
+              "executable": false
+            },
+            "scripts/database/generate_rnacentral_cluster_file.sh": {
+              "sha256": "09dfac6a9eda9655ebe5a06b631b126ad660ff8eeb98624f5e91674badbf9d77",
+              "executable": false
+            },
+            "scripts/gen_ccd_cache.py": {
+              "sha256": "259094d42ad1db9e18888e2f4a6ddb487fc787a41f7d636c315467dad8fa9318",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif/102m.cif": {
+              "sha256": "4e52ffbab847f864799d3bc6f76c378810144b7deabdff6a353b40c65cea1c47",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif/1k1a.cif": {
+              "sha256": "9227cc7228ba832a57b8f7a3b75442a5175e5e9b07730c2c4a305c30acedeeee",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif/5zyh.cif": {
+              "sha256": "7b8113ee0a305a688429ec29524e6f5c3656e735a0e871fca7bad90c2d169b23",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif/7zzx.cif": {
+              "sha256": "0def3e31b2b0a3bc68ce30713f2043000905bcd990bd9d2bb937bada184195ba",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif/8f9h.cif": {
+              "sha256": "90f34aa0052c5a4f2ef3225f41d1a567aea1dbae26efb5c7d6d790df93c84529",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa/0/non_pairing.a3m": {
+              "sha256": "b830d22c2c5dc39c7963bedbcbf0f9a5366a4d052c66ec047179b96d2de08f16",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa/0/pairing.a3m": {
+              "sha256": "60c7b62c3adfbf39a2d211051016cf77a4957d24d23752e73c8fae1609ccdaf1",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa/1/non_pairing.a3m": {
+              "sha256": "bc82da304b2f5c45f87a617f31ed6795be430118cc8ce8599fe8f0222df7c809",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa/1/pairing.a3m": {
+              "sha256": "e053084742cbbe7012032f782950abfcdba9d59db71f0ad4acc97221234b2d44",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa/2/non_pairing.a3m": {
+              "sha256": "2dac422f785ae656243cb0eab3c34e49e2bf91ad62443b455c027adf1c9b11e8",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa/2/pairing.a3m": {
+              "sha256": "1e2dafba108310018bac81070556942386109b910738b8aa4072b332a0c90f5e",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa/3/non_pairing.a3m": {
+              "sha256": "e20ec88c7d1d9cdc966d35a151394b91d190636274ec7515fd6496ca8e327a69",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa/3/pairing.a3m": {
+              "sha256": "7188778b6a3ff089431a102f4c331a1703d7e82356754c37ea563aff49dd107e",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa_initial/0.a3m": {
+              "sha256": "3281cda9b281a42d7f29ca19938d7dca1e492553129401c0cf3923813c4f858d",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa_initial/1.a3m": {
+              "sha256": "7caaeac79d592fe6185e9612e6cccc8d69a1591f1e99d0e4e2e11f349436966d",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa_initial/2.a3m": {
+              "sha256": "33de7a1a5cdf672b44539227437f9be602238c528509d29a31afd54f15d26eee",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa_initial/3.a3m": {
+              "sha256": "789f32f02bc56115d57c61d89f2d5be5bfe51d425fec5252860b9a8679b8fade",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa_initial/pdb70_220313_db.m8": {
+              "sha256": "d0e01e03ceac54b7edfd3bd6df8b3e8e24dbecc8dc948cb19eb33bf4d86b17e3",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa_initial/uniref_tax.m8": {
+              "sha256": "c598e6de46d55c9e7cfb3ecca4fa422fb084592010cada5169c1e6c0fbf76724",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa_with_taxid/0.a3m": {
+              "sha256": "f589a7bea6b245e2465a9eafb17ecf508eb7136d2840dc18d1ca6f17be99d56e",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa_with_taxid/1.a3m": {
+              "sha256": "aefb364e83aaf7ace330bc8f44afba58f971c59e6005f776ffcd7d59b3d81001",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa_with_taxid/2.a3m": {
+              "sha256": "aef9272e23f9cd7a0d5206574346c6a5f178a69542e515bf86af397353c266e4",
+              "executable": false
+            },
+            "scripts/msa/data/mmcif_msa_with_taxid/3.a3m": {
+              "sha256": "f42ab3afe843b8b601bda06db1353a4817883bb0e4d9675c921826182258a39b",
+              "executable": false
+            },
+            "scripts/msa/data/pdb_seqs/pdb_index_to_seq.json": {
+              "sha256": "7fe199ba762b776ae3723d8a2b0464c97033207c7a2c6610d51a41c24c535ff4",
+              "executable": false
+            },
+            "scripts/msa/data/pdb_seqs/pdb_seq.csv": {
+              "sha256": "149aaa954a6564253bccf1f32ae71f086ce34c6b66d39a091979eeac185d1780",
+              "executable": false
+            },
+            "scripts/msa/data/pdb_seqs/pdb_seq.fasta": {
+              "sha256": "1953e667e15f1edc468b622b83f4bddc1d2c90cfc5dddc1235daada0b3223b9f",
+              "executable": false
+            },
+            "scripts/msa/data/pdb_seqs/seq_to_pdb_id_entity_id.json": {
+              "sha256": "961031384cb5f55206681a84f696f393e1d66d97d785b8158f6e6dacc196d6cf",
+              "executable": false
+            },
+            "scripts/msa/data/pdb_seqs/seq_to_pdb_index.json": {
+              "sha256": "9d369e6ae0f69527d6850dd5f11849559760944d4664b6abea70f9ca67b8b5a5",
+              "executable": false
+            },
+            "scripts/msa/step1-get_prot_seq.py": {
+              "sha256": "0a3eb4aeb1dff6a2dca5f152ff98d1de0ea9e92b81c164350c2a52af72739c0a",
+              "executable": false
+            },
+            "scripts/msa/step2-get_msa.ipynb": {
+              "sha256": "e45d8cd578714070dd3d73de04a93a9971ca734c5cdafbf9034070ccd5f1ce5d",
+              "executable": false
+            },
+            "scripts/msa/step3-uniref_add_taxid.py": {
+              "sha256": "c910073d002cd72c8b8cc15b2eb95e95fff790a037bbea2c4835b8530e560404",
+              "executable": false
+            },
+            "scripts/msa/step4-split_msa_to_uniref_and_others.py": {
+              "sha256": "24c16ccbd4b6abcd0539e8c24dba79b07c4b435d2a40b33b9a67e126dd147a59",
+              "executable": false
+            },
+            "scripts/msa/utils.py": {
+              "sha256": "02513b2aceed5b8fccd77bd8197c4b8b7f71d76cb394ea498be7f39abfabf4ee",
+              "executable": false
+            },
+            "scripts/prepare_training_data.py": {
+              "sha256": "13167bf58c1cda19cf48fd2c0b250243e1cb1f73d68ee3c31d36fc9a35d06e57",
+              "executable": false
+            },
+            "setup.py": {
+              "sha256": "108c7945b6ff57935285ec5ce8d2108b4be8706e09479cb04ceec67df16727de",
+              "executable": false
+            },
+            "tests/__init__.py": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "executable": false
+            },
+            "tests/test_attention_lddt_loss.py": {
+              "sha256": "532ab1b0ae02130ffceab6e3720ab90eddd7a96b559cdc9395c84c86b8672913",
+              "executable": false
+            },
+            "tests/test_attention_pair_bias.py": {
+              "sha256": "0702de2b5215af3bffb2c5ce09f2f999f78758c7d9ae9a58e0176ab676451de4",
+              "executable": false
+            },
+            "tests/test_condition_transition.py": {
+              "sha256": "e64c300e285833444a70c23e9b7c55276821fea08876e02ba448ce27b72b3f46",
+              "executable": false
+            },
+            "tests/test_dataset_vectorization.py": {
+              "sha256": "f38773f7795af17ceb301b943480f7b2b4a06409fac72c32e94f66b221592178",
+              "executable": false
+            },
+            "tests/test_diffusion_transformer.py": {
+              "sha256": "0c615b8eb2d4f819766410d7d770fc6e68c4e0602f6a2019959616b4386a4752",
+              "executable": false
+            },
+            "tests/test_esm_loading.py": {
+              "sha256": "e111c39fc4ac08175cecc8d6b6bec1a38991dfaa25592321394772ac61eaf5a0",
+              "executable": false
+            },
+            "tests/test_featurizer_optimizations.py": {
+              "sha256": "96c283e7d53ded271ed9a18095f3fe83791ec65a263cbbc2750be806612dcf3f",
+              "executable": false
+            },
+            "tests/test_fetch_remote_cif.py": {
+              "sha256": "69c36dc12e70190cf1244ebb9395872548835ff9383d25341a3551d3cefc1c0e",
+              "executable": false
+            },
+            "tests/test_frame.py": {
+              "sha256": "f250227237d5e322ca062351503c3ef53005ad8417ef61a7708ca2eeaefe075b",
+              "executable": false
+            },
+            "tests/test_fused_dropout_add.py": {
+              "sha256": "c263abcbb369d3bd95cd42c2c30fd8492ca9e9c3b2a9dc92a85b549970fcd51c",
+              "executable": false
+            },
+            "tests/test_installation.py": {
+              "sha256": "5c9f5a8fee7a01da9e98cee5772a26ce9fe9634d2e78487ef87de017287ae3ad",
+              "executable": false
+            },
+            "tests/test_local_rearrange.py": {
+              "sha256": "6a91144c3b81f0bb880d29ce03fce7cd3b3d4868738676eea727e65b3dc0728f",
+              "executable": false
+            },
+            "tests/test_lr_schedule.py": {
+              "sha256": "c42574638e3ca9dbd9634c4bca1911640983b3353186de70dbee4bd5ba329129",
+              "executable": false
+            },
+            "tests/test_msa_encoding.py": {
+              "sha256": "33e51f7a4045de41b07d908d3f58ab3bc9733a7585ee6135a755fe79b368260c",
+              "executable": false
+            },
+            "tests/test_triton_compatibility.py": {
+              "sha256": "c7c9bb150c3b02e01adc7c793301ea441fcc66a6e96603dbb185e11809d25d3a",
+              "executable": false
+            },
+            "tests/test_utils.py": {
+              "sha256": "15c014e08ce0466e3bc91e08f790da3936f25be4a69f79d3f997add0c361498e",
+              "executable": false
+            },
+            "tests/test_weighted_rigid_align.py": {
+              "sha256": "a48eb95450e6ebab73c491344de06c25ff4ae7c7891c212afc44bddd6a9bd206",
+              "executable": false
+            },
+            "train_demo.sh": {
+              "sha256": "3efbdf84384655a8dc6d67353c5f0ca4d3a11d300c745fd2e285fbd4fb37451d",
+              "executable": false
+            }
+          }
+        },
+        "exported_manifest": {
+          "path": "/media/IntelSSD/fireprot/provenance/sources/protenix-bb3be993.json",
+          "sha256": "dc759ec3ca45e92596c5b23771b0645da9d9e34d2b6082ba664ca90b2fe0d32c",
+          "bytes": 39806
+        },
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "sha256": "3f3c19af52b40972ce1961eba6800afeba548d28c643fc23da0a9321485989a1",
+          "bytes": 1716
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_default_v0.5.0.pt",
+            "sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81",
+            "bytes": 537049294
+          }
+        },
+        "resources": {
+          "ccd_components_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+            "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5",
+            "bytes": 490777362
+          },
+          "ccd_components_rdkit_mol_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+            "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35",
+            "bytes": 142498117
+          },
+          "obsolete_release_data_csv": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+            "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33",
+            "bytes": 134716
+          },
+          "pdb_cluster_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+            "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c",
+            "bytes": 21699572
+          }
+        }
+      },
+      "predictions": {
+        "schema_version": 1,
+        "run_id": "protenix-n1536-published-cabi-v1",
+        "seed": 101,
+        "workload": {
+          "model": "protenix",
+          "model_name": "protenix_mini_default_v0.5.0",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "precision": "float32"
+        },
+        "predictions": [
+          {
+            "sample": 0,
+            "archive": "sample-0.npz",
+            "arrays": {
+              "coordinates": {
+                "shape": [
+                  12139,
+                  3
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.atom_plddt": {
+                "shape": [
+                  12139
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.token_pair_pde": {
+                "shape": [
+                  1536,
+                  1536
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.token_pair_pae": {
+                "shape": [
+                  1536,
+                  1536
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.contact_probs": {
+                "shape": [
+                  1536,
+                  1536
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.token_has_frame": {
+                "shape": [
+                  1536
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              },
+              "confidence.token_asym_id": {
+                "shape": [
+                  1536
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              },
+              "confidence.atom_to_token_idx": {
+                "shape": [
+                  12139
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              },
+              "confidence.atom_is_polymer": {
+                "shape": [
+                  12139
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              }
+            },
+            "confidence": {
+              "plddt": 41.46251678466797,
+              "gpde": 7.019122123718262,
+              "ptm": 0.20033451914787292,
+              "iptm": 0.0,
+              "chain_gpde": [
+                7.019122123718262
+              ],
+              "chain_pair_gpde": [
+                [
+                  0.0
+                ]
+              ],
+              "chain_ptm": [
+                0.20033451914787292
+              ],
+              "chain_iptm": [
+                0.0
+              ],
+              "chain_pair_iptm": [
+                [
+                  0.0
+                ]
+              ],
+              "chain_pair_iptm_global": [
+                [
+                  0.0
+                ]
+              ],
+              "chain_plddt": [
+                0.4146251678466797
+              ],
+              "chain_pair_plddt": [
+                [
+                  0.0
+                ]
+              ],
+              "has_clash": false,
+              "disorder": 0.0,
+              "ranking_score": 0.040066905319690704,
+              "num_recycles": 4
+            }
+          }
+        ],
+        "model_seconds": 57.48505313298665,
+        "request_seconds": 68.92516894597793,
+        "environment": {
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850",
+          "python": "3.12.13"
+        }
+      },
+      "supervisor": {
+        "run_id": "protenix-n1536-published-cabi-v1",
+        "phase": "succeeded",
+        "worker_pid": 1289918,
+        "elapsed_seconds": 75.827371917,
+        "isolation_samples": 83,
+        "failure": null
+      },
+      "runtime_manifest_sha256": "5138a77c073eef6b0d4dc37b494e63fdeecf778ccd2d93da246f29ce3157e924",
+      "runtime": {
+        "adapter": "protenix",
+        "blas": {
+          "requested": "hipblas",
+          "before": "_BlasBackend.Cublaslt",
+          "effective": "_BlasBackend.Cublas",
+          "changed": true
+        },
+        "registration_modules": [
+          "fireprot.backends.amd.ck_gemm",
+          "fireprot.backends.amd.triangle_multiplication",
+          "fireprot.backends.amd.triangle_attention",
+          "fireprot.backends.amd.ck_attention",
+          "fireprot.backends.amd.recycle"
+        ],
+        "hooks": {
+          "installed": true,
+          "enabled": true,
+          "hooks": [
+            "OpenFoldLayerNorm.forward",
+            "Transition.forward",
+            "Attention._prep_qkv"
+          ],
+          "qkv_projection": {
+            "enabled": true,
+            "counts": {
+              "n1000": 0,
+              "n1536": 432,
+              "fallback": 0
+            }
+          },
+          "fast_paths": {
+            "selection_counts": [
+              {
+                "operation": "gated_transition",
+                "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+                "count": 72
+              },
+              {
+                "operation": "gated_transition",
+                "implementation": "amd-gfx90a-transition-projection",
+                "count": 72
+              },
+              {
+                "operation": "gated_transition",
+                "implementation": "native",
+                "count": 72
+              },
+              {
+                "operation": "layer_norm",
+                "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                "count": 366
+              },
+              {
+                "operation": "layer_norm",
+                "implementation": "amd-gfx90a-transposed-layernorm-subgroup",
+                "count": 72
+              },
+              {
+                "operation": "layer_norm",
+                "implementation": "native",
+                "count": 223
+              }
+            ],
+            "backends": {
+              "recycle": {
+                "channel_first_layer_norm_enabled": true,
+                "long_layer_norm_enabled": true,
+                "long_transition_enabled": true,
+                "long1536_epilogues_enabled": true,
+                "selection_counts": [
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+                    "count": 72
+                  },
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "amd-gfx90a-transition-projection",
+                    "count": 72
+                  },
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "native",
+                    "count": 72
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                    "count": 366
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "amd-gfx90a-transposed-layernorm-subgroup",
+                    "count": 72
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "native",
+                    "count": 223
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "operations": {
+          "implementations": {
+            "gated_transition": [
+              {
+                "name": "amd-gfx90a-hip-transition-f32-c128-long",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-transition-f32-c128",
+                "priority": 20,
+                "version": "1"
+              }
+            ],
+            "layer_norm": [
+              {
+                "name": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-layernorm-f32-c128-channel-first",
+                "priority": 25,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-layernorm-f32-c128",
+                "priority": 20,
+                "version": "1"
+              }
+            ],
+            "linear": [
+              {
+                "name": "amd-ck-gemm-f32-m124-k64-n32",
+                "priority": 30,
+                "version": "1"
+              }
+            ],
+            "triangle_attention": [
+              {
+                "name": "amd-gfx90a-ck-tile-attention-f32-n1000",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-ck-tile-attention-f32-n1536",
+                "priority": 30,
+                "version": "exact-shape-1"
+              },
+              {
+                "name": "amd-gfx90a-efficient-sdpa-direct-n1000",
+                "priority": 20,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-efficient-sdpa-direct-n1536",
+                "priority": 20,
+                "version": "experimental-1"
+              },
+              {
+                "name": "amd-gfx90a-efficient-sdpa",
+                "priority": 10,
+                "version": "1"
+              }
+            ],
+            "triangle_multiplication": [
+              {
+                "name": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                "priority": 40,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+                "priority": 40,
+                "version": "experimental-1"
+              },
+              {
+                "name": "amd-gfx90a-hip-triangle-gates-f32-n1000-c128",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-triangle-gates-f32-n124-c128",
+                "priority": 20,
+                "version": "1"
+              },
+              {
+                "name": "amd-short-sequence-torch",
+                "priority": 10,
+                "version": "1"
+              }
+            ]
+          },
+          "selection_counts": [
+            {
+              "operation": "triangle_attention",
+              "implementation": "amd-gfx90a-ck-tile-attention-f32-n1536",
+              "count": 432
+            },
+            {
+              "operation": "triangle_multiplication",
+              "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+              "count": 144
+            }
+          ],
+          "decisions": [
+            {
+              "signature": {
+                "operation": "triangle_attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  512,
+                  4,
+                  1536,
+                  32
+                ],
+                "strides": [
+                  196608,
+                  32,
+                  128,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "triangle-bias",
+                "inplace": false,
+                "attributes": {
+                  "bias_count": "1",
+                  "bias_shapes": "((1, 4, 1536, 1536),)",
+                  "ck_tile_compatible": "True",
+                  "head_dim": "32",
+                  "heads": "4",
+                  "qkv_strides": "((196608, 32, 128, 1), (196608, 32, 128, 1), (196608, 32, 128, 1))"
+                }
+              },
+              "selected": "amd-gfx90a-ck-tile-attention-f32-n1536",
+              "rejected": [
+                {
+                  "implementation": "amd-gfx90a-ck-tile-attention-f32-n1000",
+                  "reason": "CK Tile attention requires an exact measured bucket"
+                }
+              ]
+            },
+            {
+              "signature": {
+                "operation": "triangle_multiplication",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1536,
+                  1536,
+                  128
+                ],
+                "strides": [
+                  196608,
+                  128,
+                  1
+                ],
+                "layout": "contiguous",
+                "mode": "inference",
+                "mask": "none",
+                "inplace": true,
+                "attributes": {
+                  "add_with_inplace": "True",
+                  "c_hidden": "128",
+                  "c_z": "128",
+                  "direction": "incoming"
+                }
+              },
+              "selected": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+              "rejected": [
+                {
+                  "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                  "reason": "shape is not the exact supported long bucket"
+                }
+              ]
+            },
+            {
+              "signature": {
+                "operation": "triangle_multiplication",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1536,
+                  1536,
+                  128
+                ],
+                "strides": [
+                  196608,
+                  128,
+                  1
+                ],
+                "layout": "contiguous",
+                "mode": "inference",
+                "mask": "none",
+                "inplace": true,
+                "attributes": {
+                  "add_with_inplace": "True",
+                  "c_hidden": "128",
+                  "c_z": "128",
+                  "direction": "outgoing"
+                }
+              },
+              "selected": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+              "rejected": [
+                {
+                  "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                  "reason": "shape is not the exact supported long bucket"
+                }
+              ]
+            }
+          ],
+          "policy_engine": {
+            "name": "fireprot-core",
+            "bridge_abi": 1,
+            "library": "/media/IntelSSD/fireprot/target/release/lib_fireprot_bridge.so",
+            "sha256": "f036778cc4ef7da0f1dc2ffba87c397fdcb0c4900905ac29863cb04cb213c2b1"
+          }
+        },
+        "amd_extension": {
+          "loaded": true,
+          "error": null,
+          "build": {
+            "directory": "/media/IntelSSD/fireprot/runtime/torch_extensions/rust-v1/fireprot_amd_ops_645d2ec44e0a262f60140062af69247c0c6acb89a9db7312f9996d9352fea480",
+            "cache_hit": true,
+            "identity_sha256": "645d2ec44e0a262f60140062af69247c0c6acb89a9db7312f9996d9352fea480",
+            "package": "fireprot_amd_ops",
+            "arguments": {
+              "cxx": [
+                "-O3"
+              ],
+              "fireprot_torch_process": [
+                "3",
+                "/home/pc/anaconda3/envs/fold/bin/python",
+                "/media/IntelSSD/fireprot/fireprot/backends/amd/_compile_native.py",
+                "/media/IntelSSD/fireprot/target/release/fireprot-compiler-guard",
+                "600000",
+                "[\"/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_amd_ops.cpp\",\"/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_amd_ops.cu\"]",
+                "600000",
+                "/home/pc/anaconda3/envs/fold/bin/python"
+              ],
+              "hip": [
+                "-O3"
+              ],
+              "include": [
+                "/opt/rocm/core-10.0/include"
+              ]
+            },
+            "versions": {
+              "hip": "7.14.60850",
+              "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:38:16) [GCC 14.3.0]",
+              "recipe": "torch-hip-6",
+              "soabi": "cpython-312-x86_64-linux-gnu",
+              "torch": "2.12.0a0+git78258b9"
+            },
+            "inventory_counts": {
+              "files": 13,
+              "tree_files": 25048,
+              "dynamic_files": 48
+            },
+            "artifacts": {
+              "fireprot_amd_ops_645d2ec44e0a262f60140062af69247c0c6acb89a9db7312f9996d9352fea480.so": "eab70a03ba5ae217d320e493391644e776ced35dc6f59420246a4acb04e76f03"
+            },
+            "receipt_sha256": "bc3ad7d9e3e67df1b6041c3ffbec85abae28f31cbb0b86a9e5b00d83877ffb33"
+          }
+        },
+        "ck_gemm_extension": {
+          "loaded": false,
+          "error": null,
+          "build": null,
+          "api": "ATen/native/hip/ck_gemm.h"
+        },
+        "ck_attention": {
+          "enabled": true,
+          "long1536_enabled": true,
+          "exact1536_enabled": true,
+          "vector1000_enabled": true,
+          "loaded": true,
+          "error": null,
+          "build": {
+            "mode": "published",
+            "kernel": {
+              "directory": "/media/IntelSSD/fireprot/runtime/kernels/protenix-ck_attention-cabi-v1",
+              "library": "/media/IntelSSD/fireprot/runtime/kernels/protenix-ck_attention-cabi-v1/fireprot_ck_attention_e86557e12cf36bea3bb6eb7d248d6c1697d019b8c824ca5cc661bcb8d8d20bc3.so",
+              "manifest_sha256": "ea39ea45489c9b1f014adcb7b4297d433c65d59a9d3d4fcb4b0b432c5d6e2885",
+              "build_identity_sha256": "e86557e12cf36bea3bb6eb7d248d6c1697d019b8c824ca5cc661bcb8d8d20bc3",
+              "compatibility": {
+                "package": "fireprot_ck_attention",
+                "target": "gfx90a",
+                "torch": "2.12.0a0+git78258b9",
+                "hip": "7.14.60850",
+                "c_abi": "ck-attention-v1"
+              }
+            }
+          }
+        },
+        "lt_bmm": {
+          "enabled": false,
+          "loaded": false,
+          "error": null,
+          "build": {},
+          "counts": {
+            "outgoing": 0,
+            "incoming": 0,
+            "fallback": 144
+          },
+          "workspace_bytes_per_call": 33554432
+        },
+        "attention_gate": {
+          "enabled": false,
+          "counts": {
+            "selected": 0,
+            "fallback": 0
+          },
+          "fallback_signatures": []
+        },
+        "two_gcd_attention": {
+          "enabled": false,
+          "synchronize": false,
+          "counts": {},
+          "primary_batch": 320,
+          "secondary_batch": 192
+        },
+        "triangle_vector": {
+          "enabled": true,
+          "counts": {
+            "n1000": 0,
+            "n1536": 144,
+            "fallback": 0
+          },
+          "packed_norm_enabled": true,
+          "packed_norm_counts": {
+            "n1000": 0,
+            "n1536": 144
+          },
+          "dual_projection_enabled": true,
+          "dual_projection_counts": {
+            "n1000": 0,
+            "n1536": 144,
+            "fallback": 0
+          },
+          "tiled_dual_projection_enabled": true,
+          "tiled_dual_projection_counts": {
+            "n1000": 0,
+            "n1536": 144
+          }
+        },
+        "construction": {
+          "enabled": true,
+          "installed": true,
+          "unavailable": null,
+          "contract": {
+            "scipy": "1.18.1",
+            "source_sha256": {
+              "initializer": "72e6ede89fb399efd49db04631802f05cce93eb6f81ee5cf16f11f5d55c1e14d",
+              "init_model": "14b306c00c2427536642f80f85a09f2a15b14b872e825614a186671b802d3c4a",
+              "load_checkpoint": "6da10f959743bb9ef95d4184f64b1def38df3b9874c02ec19021e1de991316ff",
+              "sampler": "bd951a20257379d57e1b9fd97844c7fae6eb6d1f0207f39572f5687fbbcd919a"
+            },
+            "model_sha256": "6628a5db11d411479f9046005ab5306ba9fb6180bb82190a877e961f1361cf23"
+          },
+          "counts": {
+            "attempted": 1,
+            "selected": 1,
+            "recovered": 0,
+            "native": 0,
+            "errors": 0
+          },
+          "native_reasons": {},
+          "records": [
+            {
+              "uniform_calls": 621,
+              "uniform_elements": 97331488,
+              "native_initializer_calls": 0,
+              "initialization_ms": 1485.8625970082358,
+              "selected": true,
+              "missing_keys": [],
+              "checkpoint_and_recovery_ms": 285.459308011923
+            }
+          ]
+        },
+        "feature_preparation": {
+          "enabled": true,
+          "counts": {
+            "skipped_templates": 1,
+            "native_templates": 0
+          },
+          "contract": {
+            "consumer_sha256": "74cf338ebc53b572dc12d6519392a09972c2a807beb1017c7fe0773536e301e5"
+          }
+        }
+      },
+      "comparisons": {
+        "native": {
+          "reference": "/media/IntelSSD/fireprot/outputs/protenix-n1536-native",
+          "reference_npz_sha256": "e4a327c89a9868ded8fc0adefcb1ccec80ad43ff062fd354843a238a2df658ec",
+          "reference_confidence_sha256": "017711e924b34ca7ffcc78a9b44813d339acd2c7f182a391a51f407912dab2c0",
+          "result": {
+            "confidence": {
+              "extra_in_candidate": [],
+              "max_abs_delta": 2.9802322387695312e-08,
+              "mean_abs_delta": 4.221995671590169e-09,
+              "missing_from_candidate": [],
+              "numeric_leaf_count": 15
+            },
+            "confidence_tolerance": 0.001,
+            "coordinate_tolerance_angstrom": 0.001,
+            "coordinates": {
+              "aligned_rmsd_angstrom": 0.0001359872640911499,
+              "atom_count": 12139,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625,
+              "raw_rmsd_angstrom": 0.0001397497583412832
+            },
+            "passed": true
+          }
+        },
+        "preceding-fireprot": {
+          "reference": "/media/IntelSSD/fireprot/outputs/protenix-n1536-fireprot",
+          "reference_npz_sha256": "d406961d634604bab7667b5f1f44cbfbd7f3cf9d8960b3cb6de68db8513ba06e",
+          "reference_confidence_sha256": "52a8157e4f9a391fb9648872a51f8e791e83a61a90d0d94c50994c470fe250cb",
+          "result": {
+            "confidence": {
+              "extra_in_candidate": [],
+              "max_abs_delta": 3.814697265625e-06,
+              "mean_abs_delta": 4.5125683148701983e-07,
+              "missing_from_candidate": [],
+              "numeric_leaf_count": 15
+            },
+            "confidence_tolerance": 0.001,
+            "coordinate_tolerance_angstrom": 0.001,
+            "coordinates": {
+              "aligned_rmsd_angstrom": 0.00012332415739967764,
+              "atom_count": 12139,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625,
+              "raw_rmsd_angstrom": 0.0001268269354767441
+            },
+            "passed": true
+          }
+        }
+      },
+      "raw_array_diagnostics_not_acceptance_gate": {
+        "confidence.atom_is_polymer": {
+          "bitwise_equal": true,
+          "max_abs_delta": null,
+          "passed": true
+        },
+        "confidence.atom_plddt": {
+          "bitwise_equal": false,
+          "max_abs_delta": 4.607439041137695e-05,
+          "passed": false
+        },
+        "confidence.atom_to_token_idx": {
+          "bitwise_equal": true,
+          "max_abs_delta": null,
+          "passed": true
+        },
+        "confidence.contact_probs": {
+          "bitwise_equal": false,
+          "max_abs_delta": 6.139278411865234e-06,
+          "passed": false
+        },
+        "confidence.token_asym_id": {
+          "bitwise_equal": true,
+          "max_abs_delta": null,
+          "passed": true
+        },
+        "confidence.token_has_frame": {
+          "bitwise_equal": true,
+          "max_abs_delta": null,
+          "passed": true
+        },
+        "confidence.token_pair_pae": {
+          "bitwise_equal": false,
+          "max_abs_delta": 0.03812599182128906,
+          "passed": false
+        },
+        "confidence.token_pair_pde": {
+          "bitwise_equal": false,
+          "max_abs_delta": 0.07036972045898438,
+          "passed": false
+        },
+        "coordinates": {
+          "bitwise_equal": false,
+          "max_abs_delta": 0.0009765625,
+          "passed": false
+        }
+      }
+    }
+  ],
+  "published_loader_status": {
+    "fireprot.backends.amd.ck_attention": {
+      "enabled": true,
+      "long1536_enabled": true,
+      "exact1536_enabled": true,
+      "vector1000_enabled": true,
+      "loaded": true,
+      "error": null,
+      "build": {
+        "mode": "published",
+        "kernel": {
+          "directory": "/media/IntelSSD/fireprot/runtime/kernels/protenix-ck_attention-cabi-v1",
+          "library": "/media/IntelSSD/fireprot/runtime/kernels/protenix-ck_attention-cabi-v1/fireprot_ck_attention_e86557e12cf36bea3bb6eb7d248d6c1697d019b8c824ca5cc661bcb8d8d20bc3.so",
+          "manifest_sha256": "ea39ea45489c9b1f014adcb7b4297d433c65d59a9d3d4fcb4b0b432c5d6e2885",
+          "build_identity_sha256": "e86557e12cf36bea3bb6eb7d248d6c1697d019b8c824ca5cc661bcb8d8d20bc3",
+          "compatibility": {
+            "package": "fireprot_ck_attention",
+            "target": "gfx90a",
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "c_abi": "ck-attention-v1"
+          }
+        }
+      }
+    },
+    "fireprot.backends.amd.lt_bmm": {
+      "enabled": false,
+      "loaded": true,
+      "error": null,
+      "build": {
+        "mode": "published",
+        "kernel": {
+          "directory": "/media/IntelSSD/fireprot/runtime/kernels/protenix-lt_bmm-cabi-v1",
+          "library": "/media/IntelSSD/fireprot/runtime/kernels/protenix-lt_bmm-cabi-v1/fireprot_lt_bmm_66479c0e7059408e52b7d9b1d0848203bb2ee0692dbef26bd86885191aaf466c.so",
+          "manifest_sha256": "edba84ba899f4c8ee071ab026f1bd7043a1f3b3aa14007030cbc9f73db1bab1c",
+          "build_identity_sha256": "66479c0e7059408e52b7d9b1d0848203bb2ee0692dbef26bd86885191aaf466c",
+          "compatibility": {
+            "package": "fireprot_lt_bmm",
+            "target": "gfx90a",
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "c_abi": "lt-packed-bmm-v1"
+          }
+        }
+      },
+      "counts": {
+        "outgoing": 0,
+        "incoming": 0,
+        "fallback": 0
+      },
+      "workspace_bytes_per_call": 33554432
+    }
+  },
+  "legacy_python_loader_status": {
+    "loaded": true,
+    "name": "fireprot_mask_bias_8ad23449f370dc0f127f0bc324bfe18e42512a0cbdb03d6643cced7d498774f2",
+    "error": null,
+    "build": {
+      "mode": "published",
+      "kernel": {
+        "directory": "/media/IntelSSD/fireprot/runtime/kernels/atlasfold-mask-bias-v3",
+        "library": "/media/IntelSSD/fireprot/runtime/kernels/atlasfold-mask-bias-v3/fireprot_mask_bias_8ad23449f370dc0f127f0bc324bfe18e42512a0cbdb03d6643cced7d498774f2.so",
+        "module_name": "fireprot_mask_bias_8ad23449f370dc0f127f0bc324bfe18e42512a0cbdb03d6643cced7d498774f2",
+        "manifest_sha256": "98407eaadf469aebad0183ba88ddad55f6ee71d958a3eced2bbcff75ea08fa7c",
+        "build_identity_sha256": "8ad23449f370dc0f127f0bc324bfe18e42512a0cbdb03d6643cced7d498774f2",
+        "compatibility": {
+          "package": "fireprot_mask_bias",
+          "target": "gfx90a",
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850",
+          "python_soabi": "cpython-312-x86_64-linux-gnu"
+        }
+      }
+    }
+  }
+}

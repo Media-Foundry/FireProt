@@ -23,12 +23,17 @@ def load_extension() -> Any:
             return _entry
         try:
             import torch
-            root = pathlib.Path(os.environ.get("FIREPROT_ROCM_HOME", "/opt/rocm"))
-            from ._native_hip import load as build_native
-            source = pathlib.Path(__file__).parent / "csrc/fireprot_lt_bmm.cpp"
-            _library, _build = build_native('fireprot_lt_bmm', source, root,
-                link_flags=[f"-L{root / 'lib'}", f"-Wl,-rpath,{root / 'lib'}", "-lhipblaslt"],
-                libraries=[root / 'lib/libhipblaslt.so'], extra_files=[__file__])
+            from ._published import select_c
+            published = select_c('fireprot_lt_bmm', 'FIREPROT_LT_BMM', 'lt-packed-bmm-v1')
+            if published is not None:
+                _library, _build = published
+            else:
+                root = pathlib.Path(os.environ.get("FIREPROT_ROCM_HOME", "/opt/rocm"))
+                from ._native_hip import load as build_native
+                source = pathlib.Path(__file__).parent / "csrc/fireprot_lt_bmm.cpp"
+                _library, _build = build_native('fireprot_lt_bmm', source, root,
+                    link_flags=[f"-L{root / 'lib'}", f"-Wl,-rpath,{root / 'lib'}", "-lhipblaslt"],
+                    libraries=[root / 'lib/libhipblaslt.so'], extra_files=[__file__], versions={'c_abi': 'lt-packed-bmm-v1'})
             _entry = _library.lt_packed_bmm
             _entry.argtypes = [ctypes.c_void_p] * 3 + [ctypes.c_int] * 3 + [ctypes.c_void_p] * 2 + [ctypes.c_size_t]
             _entry.restype = ctypes.c_int

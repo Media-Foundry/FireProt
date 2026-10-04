@@ -73,10 +73,10 @@ are not interruptible; lock wait and compilation have separate ten-minute limits
 The inherited process-group containment limits in [the process guide](torch-build-process.md)
 apply. On-disk compiler logs are not capped.
 
-C ABI builds are cache artifacts, not published deployment bundles yet. They do
-not declare a Python SOABI, so the current Python-extension publisher rejects
-them. Extending pinned artifact acceptance to a typed C ABI manifest remains
-separate work. Historical benchmark scripts retain their original build paths
+C ABI builds declare a package-specific ABI revision and can be published as
+schema-2 deployment bundles. They never declare a Python SOABI. Rust rejects
+ambiguous ABI metadata and preserves schema-1 Python compatibility. See
+[published kernel artifacts](kernel-artifacts.md). Historical benchmark scripts retain their original build paths
 for reproduction; the maintained inference loaders use Rust.
 
 ## Validation on DiamondHill (2026-10-04)

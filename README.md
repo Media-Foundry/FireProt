@@ -7,8 +7,8 @@ including the measured 1,000- and 1,536-residue workloads.
 **Status: Rust framework migration in progress.** Rust owns request contracts,
 operator selection, process supervision, GPU isolation, provenance preflight and
 output validation. Native build/cache services now own maintained Torch and standalone HIP loaders.
-Published C ABI artifacts, repository layout, packaging and some model
-parity gates are unfinished. Rust itself is not claimed to accelerate GPU kernels.
+Pinned Python/C ABI artifacts are supported for selected loaders. Repository
+layout, packaging and some model parity gates are unfinished. Rust itself is not claimed to accelerate GPU kernels.
 
 ## Model coverage
 

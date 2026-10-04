@@ -2,10 +2,10 @@
 
 ## Status
 
-Rust can publish a verified cached Python extension and accept a pinned bundle
-without reading its compiler inputs. AtlasFold's mask/bias loader has an explicit
-published-artifact path. Direct build orchestration, other HIP/CK recipes and
-C ABI bundles remain pending. Publication does not establish numerical quality;
+Rust can publish verified cached Python extensions and C ABI libraries, then
+accept pinned bundles without reading compiler inputs. AtlasFold mask/bias,
+Protenix CK attention and the optional hipBLASLt BMM loader have explicit
+published-artifact paths. Other Torch extension selectors remain pending. Publication does not establish numerical quality;
 operator and model validation are separate gates.
 
 ## Publish on the build host
@@ -82,7 +82,7 @@ when verifying that an inference actually exercised the requested HIP operator.
 See [build services and historical migration evidence](kernel-builds.md) and
 [model execution scope](rust-running.md).
 
-## Validation evidence
+## Historical Python bundle validation
 
 The published DiamondHill mask/bias library is byte-identical to its previously
 validated build output. Eleven GPU tests pass through the published loader, with
@@ -96,3 +96,71 @@ mismatch, corrupt libraries/receipts, inconsistent metadata, symlinks and existi
 destinations. The real CLI acceptance check also succeeds with build tools absent
 from `PATH`. These checks establish this deployment path; parallel model timings
 are not a new E2E speedup claim. See [publication evidence](../provenance/rust_published_kernel_integration.json).
+
+## C ABI bundles
+
+C ABI publication uses schema 2. Compatibility contains `package`, `target`,
+`torch`, `hip` and `c_abi`; it has no Python SOABI or module name. The typed Rust
+compatibility enum rejects mixed Python/C fields, wrong ABI revisions and schema
+mismatches. Schema-1 Python manifests retain their existing JSON representation.
+The build receipt must declare `abi = "c"` and a nonempty `c_abi` revision.
+Maintained revisions are `ck-attention-v1` and `lt-packed-bmm-v1`.
+
+`publish-kernel` and `verify-kernel` use the same commands and integrity checks
+for both types. A C ABI compatibility file looks like:
+
+```json
+{
+  "package": "fireprot_ck_attention",
+  "target": "gfx90a",
+  "torch": "2.12.0a0+git78258b9",
+  "hip": "7.14.60850",
+  "c_abi": "ck-attention-v1"
+}
+```
+
+Select a bundle with `FIREPROT_CK_ATTENTION_BUNDLE` and
+`FIREPROT_CK_ATTENTION_BUNDLE_SHA256`, or `FIREPROT_LT_BMM_BUNDLE` and
+`FIREPROT_LT_BMM_BUNDLE_SHA256`. The expected package/ABI is fixed by the loader;
+Torch/HIP/architecture come from the actual tensor environment. Python loads the
+Rust-accepted file through ctypes, with unchanged entry-point signatures.
+Explicit bundles bypass CK header checks and compiler discovery; the pinned build
+receipt identifies the original CK installation. Rejected explicit bundles keep
+native fallback and never initiate a replacement build. The CK disable switch
+still takes precedence. Selecting the hipBLASLt bundle does not enable its
+experimental inference route.
+
+Bundles contain one library, not a complete ROCm environment. Dynamic HIP/BLAS
+libraries and their data must still be installed in compatible locations; ABI
+metadata and hashes do not establish cross-host or cross-version portability.
+The recipe's runtime-plugin/device-data inventory limits still apply. See
+[direct HIP builds](hip-builds.md).
+
+## C ABI validation on DiamondHill (2026-10-04)
+
+[Versioned evidence](../provenance/rust_published_cabi_integration.json) includes
+both publication manifests, source/library hashes, CLI acceptance without build
+tools in `PATH`, loaded artifacts and complete requests. The deployment profile
+is `configs/diamondhill/protenix-published.json`.
+
+Five C ABI GPU tests pass with the compiler-descriptor module unavailable:
+ordinary/exact1536/vector1000 CK attention, full long attention, and hipBLASLt
+stream/workspace behavior. Eleven legacy schema-1 AtlasFold GPU tests pass with
+its compiler helper unavailable. CPU checks pass 91 Rust and 232 Python tests
+(110 GPU-dependent skips), including real compiled C library publication/loading,
+missing build inputs, mixed ABI metadata and incorrect ABI/schema rejection.
+Clippy and formatting pass.
+
+Two complete Mini-default FP32 requests retain seed 101, four total cycles, one
+diffusion step and one sample. Both record CK `mode = "published"` and pass the
+existing 1e-3 coordinate/summary-confidence gates against stored native and prior
+FireProt references. Native-reference results are:
+
+| Length | Aligned RMSD (Angstrom) | Summary max absolute delta | Supervisor seconds / isolation samples |
+| ---: | ---: | ---: | ---: |
+| 1000 | 9.14347e-5 | 2.98023e-8 | 49.451 / 53 |
+| 1536 | 1.35987e-4 | 2.98023e-8 | 75.827 / 83 |
+
+The runs used separate GCDs concurrently. Their times establish no new E2E
+speedup. Raw Protenix arrays remain diagnostic and are not bitwise identical.
+hipBLASLt model dispatch remains disabled; its bundle is operator-tested only.

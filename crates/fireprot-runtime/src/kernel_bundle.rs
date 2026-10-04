@@ -17,21 +17,47 @@ use std::{
 const MANIFEST: &str = "kernel.json";
 const RECEIPT: &str = "build-receipt.json";
 
+/// Untagged only to preserve schema-1 Python deployment JSON. The required ABI
+/// field and denied unknown fields make the two variants mutually exclusive.
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
-#[serde(deny_unknown_fields)]
-pub struct KernelCompatibility {
-    pub package: String,
-    pub target: String,
-    pub torch: String,
-    pub hip: String,
-    pub python_soabi: String,
+#[serde(untagged, deny_unknown_fields)]
+pub enum KernelCompatibility {
+    Python {
+        package: String,
+        target: String,
+        torch: String,
+        hip: String,
+        python_soabi: String,
+    },
+    C {
+        package: String,
+        target: String,
+        torch: String,
+        hip: String,
+        c_abi: String,
+    },
+}
+impl KernelCompatibility {
+    fn schema_version(&self) -> u32 {
+        match self {
+            Self::Python { .. } => 1,
+            Self::C { .. } => 2,
+        }
+    }
+    fn module_name(&self, name: &str) -> Option<String> {
+        match self {
+            Self::Python { .. } => Some(name.into()),
+            Self::C { .. } => None,
+        }
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct KernelManifest {
     pub schema_version: u32,
-    pub module_name: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub module_name: Option<String>,
     pub compatibility: KernelCompatibility,
     pub build_identity_sha256: String,
     pub library: ArtifactRef,
@@ -50,7 +76,8 @@ pub struct PublishedKernel {
 pub struct AcceptedKernel {
     directory: PathBuf,
     library: PathBuf,
-    module_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    module_name: Option<String>,
     manifest_sha256: String,
     build_identity_sha256: String,
     compatibility: KernelCompatibility,
@@ -90,13 +117,41 @@ fn compatibility(receipt: &BuildReceipt) -> io::Result<KernelCompatibility> {
             .cloned()
             .ok_or_else(|| io::Error::other(format!("missing build compatibility field: {key}")))
     };
-    Ok(KernelCompatibility {
-        package: receipt.identity.package.clone(),
-        target: receipt.identity.target.clone(),
-        torch: version("torch")?,
-        hip: version("hip")?,
-        python_soabi: version("soabi")?,
-    })
+    let package = receipt.identity.package.clone();
+    let target = receipt.identity.target.clone();
+    let torch = version("torch")?;
+    let hip = version("hip")?;
+    match receipt.identity.versions.get("abi").map(String::as_str) {
+        Some("c") => {
+            if receipt.identity.versions.contains_key("soabi") {
+                return Err(io::Error::other(
+                    "C ABI build cannot declare a Python SOABI",
+                ));
+            }
+            Ok(KernelCompatibility::C {
+                package,
+                target,
+                torch,
+                hip,
+                c_abi: version("c_abi")?,
+            })
+        }
+        None | Some("python") => {
+            if receipt.identity.versions.contains_key("c_abi") {
+                return Err(io::Error::other(
+                    "Python build cannot declare a C ABI revision",
+                ));
+            }
+            Ok(KernelCompatibility::Python {
+                package,
+                target,
+                torch,
+                hip,
+                python_soabi: version("soabi")?,
+            })
+        }
+        Some(_) => Err(io::Error::other("unsupported kernel ABI")),
+    }
 }
 
 fn module_name(receipt: &BuildReceipt) -> io::Result<String> {
@@ -148,7 +203,7 @@ pub fn publish(cache_directory: &Path, destination: &Path) -> io::Result<Publish
     let library_name = format!("{name}.so");
     if receipt.artifacts.len() != 1 || !receipt.artifacts.contains_key(&library_name) {
         return Err(io::Error::other(
-            "publishing currently requires one named Python extension library",
+            "publishing requires one library named by its build identity",
         ));
     }
     let destination = std::path::absolute(destination)?;
@@ -195,8 +250,8 @@ pub fn publish(cache_directory: &Path, destination: &Path) -> io::Result<Publish
     }
     write_json(&staging.path().join(RECEIPT), &receipt)?;
     let manifest = KernelManifest {
-        schema_version: 1,
-        module_name: name,
+        schema_version: compatibility.schema_version(),
+        module_name: compatibility.module_name(&name),
         compatibility: compatibility.clone(),
         build_identity_sha256: receipt.identity.sha256.clone(),
         library: ArtifactRef {
@@ -234,7 +289,7 @@ pub fn accept(
         return Err(io::Error::other("kernel manifest SHA-256 mismatch"));
     }
     let manifest: KernelManifest = read_json(&manifest_path, 64 * 1024)?;
-    if manifest.schema_version != 1 || &manifest.compatibility != expected {
+    if manifest.schema_version != expected.schema_version() || &manifest.compatibility != expected {
         return Err(io::Error::other("kernel schema or compatibility mismatch"));
     }
     if manifest.build_receipt.path != Path::new(RECEIPT) {
@@ -247,7 +302,7 @@ pub fn accept(
     let receipt: BuildReceipt = read_json(&receipt_path, 64 * 1024 * 1024)?;
     let name = module_name(&receipt)?;
     let filename = format!("{name}.so");
-    if manifest.module_name != name
+    if manifest.module_name != expected.module_name(&name)
         || compatibility(&receipt)? != manifest.compatibility
         || manifest.build_identity_sha256 != receipt.identity.sha256
         || manifest.library.path != Path::new(&filename)
@@ -265,7 +320,7 @@ pub fn accept(
     Ok(AcceptedKernel {
         directory,
         library,
-        module_name: name,
+        module_name: expected.module_name(&name),
         manifest_sha256: manifest_sha256.into(),
         build_identity_sha256: receipt.identity.sha256,
         compatibility: manifest.compatibility,

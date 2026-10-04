@@ -45,16 +45,21 @@ def load_extension() -> Any:
 
             if not torch.version.hip:
                 raise RuntimeError("PyTorch HIP is required")
-            root = pathlib.Path(os.environ.get("FIREPROT_ROCM_HOME", "/opt/rocm"))
-            version = (root / "include/ck/version.h").read_text()
-            if "8d1ae90eff7d022f26019ec55b2ec6a7674b3112" not in version:
-                raise RuntimeError("CK installation is outside the measured version")
-            from ._native_hip import load as build_native
-            source = pathlib.Path(__file__).parent / "csrc/fireprot_ck_attention.cpp"
-            if not (root / "include/ck_tile").is_dir():
-                raise RuntimeError("CK Tile headers are unavailable")
-            _library, _build = build_native('fireprot_ck_attention', source, root,
-                extra_files=[__file__], versions={'ck_version': version})
+            from ._published import select_c
+            published = select_c('fireprot_ck_attention', 'FIREPROT_CK_ATTENTION', 'ck-attention-v1')
+            if published is not None:
+                _library, _build = published
+            else:
+                root = pathlib.Path(os.environ.get("FIREPROT_ROCM_HOME", "/opt/rocm"))
+                version = (root / "include/ck/version.h").read_text()
+                if "8d1ae90eff7d022f26019ec55b2ec6a7674b3112" not in version:
+                    raise RuntimeError("CK installation is outside the measured version")
+                from ._native_hip import load as build_native
+                source = pathlib.Path(__file__).parent / "csrc/fireprot_ck_attention.cpp"
+                if not (root / "include/ck_tile").is_dir():
+                    raise RuntimeError("CK Tile headers are unavailable")
+                _library, _build = build_native('fireprot_ck_attention', source, root,
+                    extra_files=[__file__], versions={'ck_version': version, 'c_abi': 'ck-attention-v1'})
             _entry = _library.ck_attention
             _entry.argtypes = [ctypes.c_void_p] * 5 + [ctypes.c_int] * 2 + [ctypes.c_void_p]
             _entry.restype = ctypes.c_int

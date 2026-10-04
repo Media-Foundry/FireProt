@@ -3,7 +3,7 @@ use fireprot_runtime::{
     artifacts::sha256,
     build::{BuildFile, BuildSpec},
     build_cache::get_or_build,
-    kernel_bundle::{accept, publish},
+    kernel_bundle::{KernelCompatibility, accept, publish},
 };
 use std::{collections::BTreeMap, fs};
 
@@ -61,10 +61,14 @@ fn deployment_acceptance_needs_no_build_inputs_and_never_overwrites() {
         path.file_stem().unwrap()
     );
     let mut incompatible = published.compatibility.clone();
-    incompatible.target = "gfx942".into();
+    if let KernelCompatibility::Python { target, .. } = &mut incompatible {
+        *target = "gfx942".into();
+    }
     assert!(accept(&destination, &published.manifest_sha256, &incompatible).is_err());
     incompatible = published.compatibility.clone();
-    incompatible.torch = "another-torch".into();
+    if let KernelCompatibility::Python { torch, .. } = &mut incompatible {
+        *torch = "another-torch".into();
+    }
     assert!(accept(&destination, &published.manifest_sha256, &incompatible).is_err());
     assert!(accept(&destination, &"0".repeat(64), &published.compatibility).is_err());
 }

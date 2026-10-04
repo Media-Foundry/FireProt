@@ -577,3 +577,215 @@ fn paired_cli_withholds_performance_when_resealed_finite_outputs_disagree() {
         false
     );
 }
+
+fn benchmark_spec(root: &Path, mode: &str) -> Value {
+    let (request, profile) = fixture(root);
+    let mut other_profile = profile.clone();
+    if mode == "numeric_failure" {
+        let bad = root.join("bad-fixture");
+        fs::create_dir(&bad).unwrap();
+        for file in ["sample.cif", "sample-0.npz", "predictions.json"] {
+            fs::copy(root.join("fixture").join(file), bad.join(file)).unwrap();
+        }
+        let changed=Command::new("/usr/bin/python3").arg("-c").arg(
+            "import sys,zipfile,struct\np=sys.argv[1]\nwith zipfile.ZipFile(p) as z: d={k:z.read(k) for k in z.namelist()}\nk='confidence.ptm.npy'\nd[k]=d[k][:-4]+struct.pack('<f',0.75)\nwith zipfile.ZipFile(p,'w') as z:\n for k,v in d.items(): z.writestr(k,v)\n"
+        ).arg(bad.join("sample-0.npz")).output().unwrap();
+        assert!(changed.status.success());
+        other_profile["environment"]["FIREPROT_TEST_FIXTURE"] = json!(bad);
+    }
+    if mode == "bad_profile" {
+        other_profile["unknown_option"] = json!(true);
+    }
+    if mode == "cancel" || mode == "deadline" {
+        let path = root.join("python/fireprot_workers/__main__.py");
+        let source = fs::read_to_string(&path).unwrap();
+        fs::write(&path,source.replace("fixture = Path","Path('worker.pid').write_text(str(os.getpid()))\nimport time; time.sleep(30)\nfixture = Path")).unwrap();
+    }
+    let mut pairs = Vec::new();
+    for pair in 0..2 {
+        let mut arms = serde_json::Map::new();
+        for arm in ["baseline", "candidate"] {
+            let id = format!("bench-{arm}-{pair}");
+            let mut r = request.clone();
+            r["run_id"] = json!(id);
+            r["output_dir"] = json!(root.join(&id));
+            let rp = root.join(format!("{id}-request.json"));
+            let pp = root.join(format!("{id}-profile.json"));
+            write(&rp, &r);
+            write(
+                &pp,
+                if arm == "baseline" {
+                    &profile
+                } else {
+                    &other_profile
+                },
+            );
+            arms.insert(arm.into(),json!({"request":{"path":rp,"sha256":sha256(&rp).unwrap()},"profile":{"path":pp,"sha256":sha256(&pp).unwrap()}}));
+        }
+        arms.insert(
+            "first".into(),
+            json!(if pair == 0 { "baseline" } else { "candidate" }),
+        );
+        pairs.push(Value::Object(arms));
+    }
+    let changes = if mode == "numeric_failure" {
+        json!({"launch.environment.FIREPROT_TEST_FIXTURE":{
+        "baseline":profile["environment"]["FIREPROT_TEST_FIXTURE"],"candidate":other_profile["environment"]["FIREPROT_TEST_FIXTURE"]}})
+    } else {
+        json!({})
+    };
+    json!({"schema_version":1,"execution":{"schema_version":1,"timeout_seconds":if mode=="deadline" {1} else {60},
+        "invocation_timeout_seconds":30,"pairs":pairs},
+        "comparison":{"scope":if mode=="numeric_failure" {"model"} else {"end_to_end"},
+            "cache_state":"synthetic scheduler fixture","treatment_description":"synthetic repeat comparison","expected_changes":changes}})
+}
+
+fn benchmark_command(root: &Path, spec: &Value) -> Command {
+    write(&root.join("benchmark-spec.json"), spec);
+    let mut command = Command::new(env!("CARGO_BIN_EXE_fireprot"));
+    command
+        .current_dir(root)
+        .args(["benchmark-pairs", "benchmark-spec.json", "benchmark"]);
+    command
+}
+
+#[test]
+fn benchmark_records_actual_order_and_all_reference_pair_and_aggregate_checks() {
+    let d = tempfile::tempdir().unwrap();
+    let root = d.path();
+    let spec = benchmark_spec(root, "success");
+    let output = benchmark_command(root, &spec).output().unwrap();
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let outcome: Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(outcome["phase"], "succeeded");
+    assert_eq!(
+        outcome["report"]["sha256"],
+        sha256(Path::new(outcome["report"]["path"].as_str().unwrap())).unwrap()
+    );
+    let report: Value =
+        serde_json::from_slice(&fs::read(root.join("benchmark/benchmark.json")).unwrap()).unwrap();
+    assert_eq!(report["measurements"].as_array().unwrap().len(), 4);
+    assert_eq!(report["checks"].as_array().unwrap().len(), 5);
+    let lines = fs::read_to_string(root.join("benchmark/order.jsonl")).unwrap();
+    let events: Vec<Value> = lines
+        .lines()
+        .map(|s| serde_json::from_str(s).unwrap())
+        .collect();
+    assert_eq!(
+        events
+            .iter()
+            .filter(|e| e["event"] == "started")
+            .map(|e| e["run_id"].as_str().unwrap())
+            .collect::<Vec<_>>(),
+        vec![
+            "bench-baseline-0",
+            "bench-candidate-0",
+            "bench-candidate-1",
+            "bench-baseline-1"
+        ]
+    );
+    assert_eq!(events.len(), 12);
+    assert!(
+        events
+            .windows(2)
+            .all(|w| w[0]["offset_seconds"].as_f64().unwrap()
+                <= w[1]["offset_seconds"].as_f64().unwrap())
+    );
+    let comparison: Value =
+        serde_json::from_slice(&fs::read(root.join("benchmark/comparison.json")).unwrap()).unwrap();
+    assert_eq!(comparison["correctness_passed"], true);
+    assert_eq!(comparison["performance"]["baseline"]["count"], 2);
+}
+
+#[test]
+fn benchmark_rejects_bad_profiles_before_launch_and_stops_on_numeric_failure() {
+    for mode in ["bad_profile", "numeric_failure"] {
+        let d = tempfile::tempdir().unwrap();
+        let root = d.path();
+        let spec = benchmark_spec(root, mode);
+        let output = benchmark_command(root, &spec).output().unwrap();
+        assert!(!output.status.success());
+        if mode == "bad_profile" {
+            assert!(!root.join("benchmark").exists());
+            assert!(!root.join("bench-baseline-0").exists());
+        } else {
+            let result: Value = serde_json::from_slice(&output.stdout).unwrap();
+            assert_eq!(result["phase"], "failed");
+            assert!(result["comparison"].is_null());
+            let report: Value =
+                serde_json::from_slice(&fs::read(root.join("benchmark/benchmark.json")).unwrap())
+                    .unwrap();
+            assert_eq!(report["batch"]["jobs"][2]["phase"], "skipped");
+            assert_eq!(report["batch"]["jobs"][3]["phase"], "skipped");
+            assert!(!root.join("bench-candidate-1").exists());
+            assert!(!root.join("benchmark/comparison.json").exists());
+            let check: Value = serde_json::from_slice(
+                &fs::read(root.join("benchmark/reference-check-001.json")).unwrap(),
+            )
+            .unwrap();
+            assert_eq!(check["correctness_passed"], false);
+            assert!(check["performance"].is_null());
+        }
+    }
+}
+
+#[test]
+fn benchmark_cancellation_and_global_deadline_stop_later_jobs_and_reap_workers() {
+    for mode in ["cancel", "deadline"] {
+        let d = tempfile::tempdir().unwrap();
+        let root = d.path();
+        let spec = benchmark_spec(root, mode);
+        let mut command = benchmark_command(root, &spec);
+        command
+            .stdout(std::process::Stdio::piped())
+            .stderr(std::process::Stdio::piped());
+        let mut child = command.spawn().unwrap();
+        let pid_file = root.join("bench-baseline-0/worker.pid");
+        if mode == "cancel" {
+            let start = std::time::Instant::now();
+            while !pid_file.exists() {
+                assert!(
+                    child.try_wait().unwrap().is_none(),
+                    "benchmark exited before worker ready"
+                );
+                assert!(start.elapsed() < std::time::Duration::from_secs(15));
+                std::thread::sleep(std::time::Duration::from_millis(10));
+            }
+            assert!(
+                Command::new("kill")
+                    .args(["-TERM", &child.id().to_string()])
+                    .status()
+                    .unwrap()
+                    .success()
+            );
+        }
+        let output = child.wait_with_output().unwrap();
+        assert!(!output.status.success());
+        let outcome: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(
+            outcome["phase"],
+            if mode == "cancel" {
+                "cancelled"
+            } else {
+                "timed_out"
+            }
+        );
+        assert!(outcome["comparison"].is_null());
+        assert!(!root.join("bench-candidate-0").exists());
+        if pid_file.exists() {
+            let pid = fs::read_to_string(pid_file).unwrap();
+            assert!(
+                !Command::new("kill")
+                    .args(["-0", pid.trim()])
+                    .output()
+                    .unwrap()
+                    .status
+                    .success()
+            );
+        }
+    }
+}

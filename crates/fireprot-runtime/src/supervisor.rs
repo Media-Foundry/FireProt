@@ -5,7 +5,7 @@ use crate::{
     build::BuildFile, build_tree::BuildTree, device::PhysicalDevice, execution::ExecutionRecord,
 };
 use fireprot_core::protocol::{CompletionChecks, DeviceIdentity, Envelope, Phase, Session};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::{
     ffi::OsString,
     fs::{self, File},
@@ -60,7 +60,7 @@ impl Default for Limits {
     }
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct RunReport {
     pub run_id: String,
     pub phase: Phase,

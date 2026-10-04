@@ -188,5 +188,19 @@ for model time (2.157x) and 87.618/41.309 s for complete invocation time (2.121x
 This uses existing published operators and fresh model processes, not new kernel
 optimizations or a warm resident-model measurement. See
 `docs/paired-comparisons.md` and `provenance/rust_paired_comparison_integration.json`.
-Paired execution orchestration, environment coverage/overhead, AtlasFold CIF
-mapping, final installation/model acceptance, CI and push remain outstanding.
+Environment coverage/overhead, AtlasFold CIF mapping, final installation/model
+acceptance, CI and push remain outstanding.
+
+## Rust paired execution (2026-10-05)
+
+`benchmark-pairs SPECIFICATION DESTINATION` validates and snapshots every control
+before launch, executes explicit pair order through the existing Rust batch
+lifecycle, checks every later run against the first baseline anchor, checks each
+pair, and retains an aggregate report and hashed order journal. Failure or
+cancellation stops later jobs. Two N1000 Mini-default native/FireProt pairs run
+entirely through this command on HIP 6 / PCI 8e / SMI 4 and pass all checks.
+The 263.419-second batch interval includes comparisons and is not inference E2E;
+two pairs correctly produce an insufficient-repeat timing trend. See
+`docs/paired-execution.md` and `provenance/rust_paired_execution_integration.json`.
+Full Rust tests pass 157; relevant Rust 1.85 tests pass 10. Avoid concurrent
+toolchain builds into the same target while identity-pinned CLI tests are active.

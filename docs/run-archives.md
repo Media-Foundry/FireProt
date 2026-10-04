@@ -79,7 +79,8 @@ cannot be reconstructed from a successful run. Continuous isolation remains an
 observation made during inference, not something the collector can repeat later.
 [`compare-runs`](paired-comparisons.md) adds declared treatment changes,
 per-sample numerical gates and paired timing ratios. Full environment locking
-and paired execution orchestration remain unfinished.
+remains unfinished. [`benchmark-pairs`](paired-execution.md) supplies Rust paired
+execution with per-run checks and a recorded launch order.
 
 ## Verified integration (2026-10-04)
 

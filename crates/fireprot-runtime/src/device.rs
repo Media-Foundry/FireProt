@@ -11,7 +11,7 @@ pub struct HipIdentity {
     pub pci_address: String,
     pub architecture: String,
 }
-#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PhysicalDevice {
     pub hip_device: u32,
     pub smi_device: u32,

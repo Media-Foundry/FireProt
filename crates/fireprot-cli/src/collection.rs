@@ -28,6 +28,21 @@ pub struct Collection {
 }
 
 impl Collection {
+    pub(crate) fn from_runs(
+        scope: TimingScope,
+        cache_state: String,
+        runs: Vec<ArtifactRef>,
+        invocations: Vec<ArtifactRef>,
+    ) -> Self {
+        Self {
+            schema_version: 1,
+            scope,
+            cache_state,
+            runs,
+            invocations,
+        }
+    }
+
     pub fn single(pin: ArtifactRef) -> Self {
         Self {
             schema_version: 1,

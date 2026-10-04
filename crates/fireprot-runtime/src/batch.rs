@@ -20,7 +20,7 @@ pub struct BatchSpec {
     pub jobs: Vec<JobSpec>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct JobSpec {
     pub request: ArtifactRef,

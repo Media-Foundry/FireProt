@@ -1,0 +1,1651 @@
+{
+  "schema_version": 1,
+  "framework_base_commit": "a10117d13a3b817a98c08ee0559e81b6bd2f65d3",
+  "claim": "Rust paired scheduler integration with existing kernels; two pairs are insufficient for a timing trend",
+  "command": [
+    "target/release/fireprot",
+    "benchmark-pairs",
+    "/tmp/fireprot-rust-benchmark-v1/specification.json",
+    "outputs/protenix-n1000-rust-benchmark-v1"
+  ],
+  "invocation_specification": {
+    "schema_version": 1,
+    "execution": {
+      "schema_version": 1,
+      "timeout_seconds": 1800,
+      "invocation_timeout_seconds": 600,
+      "pairs": [
+        {
+          "first": "baseline",
+          "baseline": {
+            "request": {
+              "path": "/tmp/fireprot-rust-benchmark-v1/native-0.json",
+              "sha256": "fee2988d08c731063eaef510f036c8ca66e627a9c4ee0fecaec0a415c50b8fa6"
+            },
+            "profile": {
+              "path": "/media/IntelSSD/fireprot/configs/diamondhill/protenix-all-published.json",
+              "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+            }
+          },
+          "candidate": {
+            "request": {
+              "path": "/tmp/fireprot-rust-benchmark-v1/fireprot-0.json",
+              "sha256": "81772e4823b7fb401e02bb218a2901fd1f0119f48cc9900f79f27bf3d2cfd1a7"
+            },
+            "profile": {
+              "path": "/media/IntelSSD/fireprot/configs/diamondhill/protenix-all-published.json",
+              "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+            }
+          }
+        },
+        {
+          "first": "candidate",
+          "baseline": {
+            "request": {
+              "path": "/tmp/fireprot-rust-benchmark-v1/native-1.json",
+              "sha256": "28d4644d54aa7da6be1ce5c874a106ee40b5abde2fd1f3669efd331083324da6"
+            },
+            "profile": {
+              "path": "/media/IntelSSD/fireprot/configs/diamondhill/protenix-all-published.json",
+              "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+            }
+          },
+          "candidate": {
+            "request": {
+              "path": "/tmp/fireprot-rust-benchmark-v1/fireprot-1.json",
+              "sha256": "8822025f9635d092260e7645e09e49aae7b84c5829c8d728a1386a53580db89c"
+            },
+            "profile": {
+              "path": "/media/IntelSSD/fireprot/configs/diamondhill/protenix-all-published.json",
+              "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+            }
+          }
+        }
+      ]
+    },
+    "comparison": {
+      "scope": "end_to_end",
+      "cache_state": "published kernels; fresh model process per request; filesystem cache not flushed; no warmups removed; executable hashed before spawn",
+      "treatment_description": "Rust scheduler integration using existing N1000 Mini-default FP32/C4/step1/sample1/seed101 native and published FireProt routes on HIP 6",
+      "expected_changes": {
+        "backend": {
+          "baseline": "native",
+          "candidate": "fireprot"
+        },
+        "launch.inputs.rust-bridge": {
+          "baseline": null,
+          "candidate": {
+            "name": "rust-bridge",
+            "canonical_path": "/media/IntelSSD/fireprot/target/release/lib_fireprot_bridge.so",
+            "sha256": "0b09340e24633e19af10299e726e25552a5e761a63ca263475917b7a97ad6b66"
+          }
+        }
+      }
+    }
+  },
+  "outcome": {
+    "phase": "succeeded",
+    "report": {
+      "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/benchmark.json",
+      "sha256": "67375c3f1e4e1ff343389f4d5795b842b0b8d1525a078a9e506f6b021c3e405f"
+    },
+    "comparison": {
+      "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/comparison.json",
+      "sha256": "74f5ecf0e87eef915c54d0a862fc9a3b8f658ded7f8ed6b39e88f181cd9bc01a"
+    }
+  },
+  "benchmark_report": {
+    "batch": {
+      "execution_seconds": 263.41854008,
+      "jobs": [
+        {
+          "error": null,
+          "output_dir": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1-native-0",
+          "phase": "succeeded",
+          "profile": {
+            "path": "/media/IntelSSD/fireprot/configs/diamondhill/protenix-all-published.json",
+            "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+          },
+          "report": {
+            "announced_device": {
+              "architecture": "gfx90a",
+              "logical_device": 0,
+              "pci_address": "0000:8e:00.0",
+              "worker_pid": 1419811
+            },
+            "device_verified": true,
+            "elapsed_seconds": 86.770442932,
+            "execution_sha256": "a6b9594edd8fcd0d7f769efbafc91bfdcdff2b498300a7adabd33c32090daea4",
+            "failure": null,
+            "isolation_samples": 97,
+            "phase": "succeeded",
+            "physical_device": {
+              "architecture": "gfx90a",
+              "hip_device": 6,
+              "pci_address": "0000:8e:00.0",
+              "smi_device": 4
+            },
+            "run_id": "protenix-n1000-rust-benchmark-v1-native-0",
+            "worker_pid": 1419811
+          },
+          "request": {
+            "path": "/tmp/fireprot-rust-benchmark-v1/native-0.json",
+            "sha256": "fee2988d08c731063eaef510f036c8ca66e627a9c4ee0fecaec0a415c50b8fa6"
+          },
+          "run_id": "protenix-n1000-rust-benchmark-v1-native-0"
+        },
+        {
+          "error": null,
+          "output_dir": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1-fireprot-0",
+          "phase": "succeeded",
+          "profile": {
+            "path": "/media/IntelSSD/fireprot/configs/diamondhill/protenix-all-published.json",
+            "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+          },
+          "report": {
+            "announced_device": {
+              "architecture": "gfx90a",
+              "logical_device": 0,
+              "pci_address": "0000:8e:00.0",
+              "worker_pid": 1420272
+            },
+            "device_verified": true,
+            "elapsed_seconds": 40.603144877,
+            "execution_sha256": "6219b77e2666cdea28ed3d74dba4e51645e2d3ac0f4957723a6dc2afa8f9721a",
+            "failure": null,
+            "isolation_samples": 44,
+            "phase": "succeeded",
+            "physical_device": {
+              "architecture": "gfx90a",
+              "hip_device": 6,
+              "pci_address": "0000:8e:00.0",
+              "smi_device": 4
+            },
+            "run_id": "protenix-n1000-rust-benchmark-v1-fireprot-0",
+            "worker_pid": 1420272
+          },
+          "request": {
+            "path": "/tmp/fireprot-rust-benchmark-v1/fireprot-0.json",
+            "sha256": "81772e4823b7fb401e02bb218a2901fd1f0119f48cc9900f79f27bf3d2cfd1a7"
+          },
+          "run_id": "protenix-n1000-rust-benchmark-v1-fireprot-0"
+        },
+        {
+          "error": null,
+          "output_dir": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1-fireprot-1",
+          "phase": "succeeded",
+          "profile": {
+            "path": "/media/IntelSSD/fireprot/configs/diamondhill/protenix-all-published.json",
+            "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+          },
+          "report": {
+            "announced_device": {
+              "architecture": "gfx90a",
+              "logical_device": 0,
+              "pci_address": "0000:8e:00.0",
+              "worker_pid": 1420475
+            },
+            "device_verified": true,
+            "elapsed_seconds": 40.584587042,
+            "execution_sha256": "cc152a94a0075471584863e5d085e4d687110e657119f16c8329a1908cfd5327",
+            "failure": null,
+            "isolation_samples": 44,
+            "phase": "succeeded",
+            "physical_device": {
+              "architecture": "gfx90a",
+              "hip_device": 6,
+              "pci_address": "0000:8e:00.0",
+              "smi_device": 4
+            },
+            "run_id": "protenix-n1000-rust-benchmark-v1-fireprot-1",
+            "worker_pid": 1420475
+          },
+          "request": {
+            "path": "/tmp/fireprot-rust-benchmark-v1/fireprot-1.json",
+            "sha256": "8822025f9635d092260e7645e09e49aae7b84c5829c8d728a1386a53580db89c"
+          },
+          "run_id": "protenix-n1000-rust-benchmark-v1-fireprot-1"
+        },
+        {
+          "error": null,
+          "output_dir": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1-native-1",
+          "phase": "succeeded",
+          "profile": {
+            "path": "/media/IntelSSD/fireprot/configs/diamondhill/protenix-all-published.json",
+            "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+          },
+          "report": {
+            "announced_device": {
+              "architecture": "gfx90a",
+              "logical_device": 0,
+              "pci_address": "0000:8e:00.0",
+              "worker_pid": 1420887
+            },
+            "device_verified": true,
+            "elapsed_seconds": 88.71486894,
+            "execution_sha256": "fd54c3d431bd5b365d1cba9f04218a19b76b1a2fd0dbee28cc0dcb8075039ec2",
+            "failure": null,
+            "isolation_samples": 99,
+            "phase": "succeeded",
+            "physical_device": {
+              "architecture": "gfx90a",
+              "hip_device": 6,
+              "pci_address": "0000:8e:00.0",
+              "smi_device": 4
+            },
+            "run_id": "protenix-n1000-rust-benchmark-v1-native-1",
+            "worker_pid": 1420887
+          },
+          "request": {
+            "path": "/tmp/fireprot-rust-benchmark-v1/native-1.json",
+            "sha256": "28d4644d54aa7da6be1ce5c874a106ee40b5abde2fd1f3669efd331083324da6"
+          },
+          "run_id": "protenix-n1000-rust-benchmark-v1-native-1"
+        }
+      ],
+      "phase": "succeeded",
+      "schema_version": 1,
+      "timeout_seconds": 1800
+    },
+    "checks": [
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/reference-check-001.json",
+        "sha256": "a75345b82eb67172846f952f1840cf289d1dd6159ec9fd90132f0957cbdd6a94"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/pair-check-000.json",
+        "sha256": "a75345b82eb67172846f952f1840cf289d1dd6159ec9fd90132f0957cbdd6a94"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/reference-check-002.json",
+        "sha256": "3db3becd1e61245db4d31edd7edbcee989e9ac77d070f6161958037be849ef79"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/reference-check-003.json",
+        "sha256": "c1cde214a839cdbcbcf87dee9b097dd5827a331a7d89f6da2ee7ceda3bbc19ae"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/pair-check-001.json",
+        "sha256": "14d5b8a12f6d823e915226e37431e820f851b4f11b87b2695aedd234f8813b49"
+      }
+    ],
+    "comparison": {
+      "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/comparison.json",
+      "sha256": "74f5ecf0e87eef915c54d0a862fc9a3b8f658ded7f8ed6b39e88f181cd9bc01a"
+    },
+    "comparison_settings": {
+      "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/comparison-settings.json",
+      "sha256": "7a57465645c500fcbf4af192fbf8cb6844072bb3671be58baba737c6e48a5456"
+    },
+    "execution_plan": {
+      "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/execution-plan.json",
+      "sha256": "3a9be0ed1a74bb342e4f619d86f86d7baee8133d03534fffc6d7bd9c54178e54"
+    },
+    "measurements": [
+      {
+        "accepted": {
+          "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1-native-0/accepted.json",
+          "sha256": "e1e6f287debaeb6f3f177a9197c44cf3292060cf74897efe61739ed8986bea42"
+        },
+        "index": 0,
+        "invocation": {
+          "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/measurement-000/invocation.json",
+          "sha256": "62eefa58fcadf3ad6404c76288449594b93be99ec76df6a53bc288febfd675f5"
+        },
+        "slot": {
+          "arm": "baseline",
+          "pair": 0
+        }
+      },
+      {
+        "accepted": {
+          "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1-fireprot-0/accepted.json",
+          "sha256": "15e4fc301c81d99dc52e2cc62d6ccb3a41a71e70ce127472b63dc952d15a8386"
+        },
+        "index": 1,
+        "invocation": {
+          "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/measurement-001/invocation.json",
+          "sha256": "8501f3690f42ec0adad605a8d57141443d0c15686ec437130cd49dee8d7a563d"
+        },
+        "slot": {
+          "arm": "candidate",
+          "pair": 0
+        }
+      },
+      {
+        "accepted": {
+          "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1-fireprot-1/accepted.json",
+          "sha256": "3f009cc53f7965289f233c7cecf7bd215d0184b6f4d8007296989fb468c79646"
+        },
+        "index": 2,
+        "invocation": {
+          "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/measurement-002/invocation.json",
+          "sha256": "c07b6516a9c5d3b7ee65cac003c663d2b3786ce5e473a30c53e66fc3bb45d4e0"
+        },
+        "slot": {
+          "arm": "candidate",
+          "pair": 1
+        }
+      },
+      {
+        "accepted": {
+          "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1-native-1/accepted.json",
+          "sha256": "d283dd6fdde061d87ca9c08ab3aac2619c7e254fcf0568fce6b7614fa15ead43"
+        },
+        "index": 3,
+        "invocation": {
+          "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/measurement-003/invocation.json",
+          "sha256": "2b5f858160f0f35d3de2ad3c50748afdb32cc914dacd3c9447c5f099685c4f7b"
+        },
+        "slot": {
+          "arm": "baseline",
+          "pair": 1
+        }
+      }
+    ],
+    "model_residency": "fresh_process_per_job",
+    "order": {
+      "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/order.jsonl",
+      "sha256": "f5522844e51699b73d9bedeeed2f3b77a0d17626f44c5a4d8ccc86056b706bae"
+    },
+    "phase": "succeeded",
+    "reference_policy": "first_baseline_anchor",
+    "schema_version": 1
+  },
+  "execution_plan": {
+    "schema_version": 1,
+    "timeout_seconds": 1800,
+    "invocation_timeout_seconds": 600,
+    "pairs": [
+      {
+        "first": "baseline",
+        "baseline": {
+          "request": {
+            "path": "/tmp/fireprot-rust-benchmark-v1/native-0.json",
+            "sha256": "fee2988d08c731063eaef510f036c8ca66e627a9c4ee0fecaec0a415c50b8fa6"
+          },
+          "profile": {
+            "path": "/media/IntelSSD/fireprot/configs/diamondhill/protenix-all-published.json",
+            "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+          }
+        },
+        "candidate": {
+          "request": {
+            "path": "/tmp/fireprot-rust-benchmark-v1/fireprot-0.json",
+            "sha256": "81772e4823b7fb401e02bb218a2901fd1f0119f48cc9900f79f27bf3d2cfd1a7"
+          },
+          "profile": {
+            "path": "/media/IntelSSD/fireprot/configs/diamondhill/protenix-all-published.json",
+            "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+          }
+        }
+      },
+      {
+        "first": "candidate",
+        "baseline": {
+          "request": {
+            "path": "/tmp/fireprot-rust-benchmark-v1/native-1.json",
+            "sha256": "28d4644d54aa7da6be1ce5c874a106ee40b5abde2fd1f3669efd331083324da6"
+          },
+          "profile": {
+            "path": "/media/IntelSSD/fireprot/configs/diamondhill/protenix-all-published.json",
+            "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+          }
+        },
+        "candidate": {
+          "request": {
+            "path": "/tmp/fireprot-rust-benchmark-v1/fireprot-1.json",
+            "sha256": "8822025f9635d092260e7645e09e49aae7b84c5829c8d728a1386a53580db89c"
+          },
+          "profile": {
+            "path": "/media/IntelSSD/fireprot/configs/diamondhill/protenix-all-published.json",
+            "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+          }
+        }
+      }
+    ]
+  },
+  "comparison_settings": {
+    "scope": "end_to_end",
+    "cache_state": "published kernels; fresh model process per request; filesystem cache not flushed; no warmups removed; executable hashed before spawn",
+    "treatment_description": "Rust scheduler integration using existing N1000 Mini-default FP32/C4/step1/sample1/seed101 native and published FireProt routes on HIP 6",
+    "expected_changes": {
+      "backend": {
+        "baseline": "native",
+        "candidate": "fireprot"
+      },
+      "launch.inputs.rust-bridge": {
+        "baseline": null,
+        "candidate": {
+          "canonical_path": "/media/IntelSSD/fireprot/target/release/lib_fireprot_bridge.so",
+          "name": "rust-bridge",
+          "sha256": "0b09340e24633e19af10299e726e25552a5e761a63ca263475917b7a97ad6b66"
+        }
+      }
+    }
+  },
+  "order_events": [
+    {
+      "arm": "baseline",
+      "error": null,
+      "event": "started",
+      "index": 0,
+      "offset_seconds": 0.000119553,
+      "pair": 0,
+      "run_id": "protenix-n1000-rust-benchmark-v1-native-0"
+    },
+    {
+      "arm": "baseline",
+      "error": null,
+      "event": "measured",
+      "index": 0,
+      "offset_seconds": 87.781201062,
+      "pair": 0,
+      "run_id": "protenix-n1000-rust-benchmark-v1-native-0"
+    },
+    {
+      "arm": "baseline",
+      "error": null,
+      "event": "verified",
+      "index": 0,
+      "offset_seconds": 87.781568709,
+      "pair": 0,
+      "run_id": "protenix-n1000-rust-benchmark-v1-native-0"
+    },
+    {
+      "arm": "candidate",
+      "error": null,
+      "event": "started",
+      "index": 1,
+      "offset_seconds": 87.781897399,
+      "pair": 0,
+      "run_id": "protenix-n1000-rust-benchmark-v1-fireprot-0"
+    },
+    {
+      "arm": "candidate",
+      "error": null,
+      "event": "measured",
+      "index": 1,
+      "offset_seconds": 129.414025321,
+      "pair": 0,
+      "run_id": "protenix-n1000-rust-benchmark-v1-fireprot-0"
+    },
+    {
+      "arm": "candidate",
+      "error": null,
+      "event": "verified",
+      "index": 1,
+      "offset_seconds": 130.173583437,
+      "pair": 0,
+      "run_id": "protenix-n1000-rust-benchmark-v1-fireprot-0"
+    },
+    {
+      "arm": "candidate",
+      "error": null,
+      "event": "started",
+      "index": 2,
+      "offset_seconds": 130.173965133,
+      "pair": 1,
+      "run_id": "protenix-n1000-rust-benchmark-v1-fireprot-1"
+    },
+    {
+      "arm": "candidate",
+      "error": null,
+      "event": "measured",
+      "index": 2,
+      "offset_seconds": 171.793967943,
+      "pair": 1,
+      "run_id": "protenix-n1000-rust-benchmark-v1-fireprot-1"
+    },
+    {
+      "arm": "candidate",
+      "error": null,
+      "event": "verified",
+      "index": 2,
+      "offset_seconds": 172.165619773,
+      "pair": 1,
+      "run_id": "protenix-n1000-rust-benchmark-v1-fireprot-1"
+    },
+    {
+      "arm": "baseline",
+      "error": null,
+      "event": "started",
+      "index": 3,
+      "offset_seconds": 172.166011099,
+      "pair": 1,
+      "run_id": "protenix-n1000-rust-benchmark-v1-native-1"
+    },
+    {
+      "arm": "baseline",
+      "error": null,
+      "event": "measured",
+      "index": 3,
+      "offset_seconds": 261.914020027,
+      "pair": 1,
+      "run_id": "protenix-n1000-rust-benchmark-v1-native-1"
+    },
+    {
+      "arm": "baseline",
+      "error": null,
+      "event": "verified",
+      "index": 3,
+      "offset_seconds": 263.417993313,
+      "pair": 1,
+      "run_id": "protenix-n1000-rust-benchmark-v1-native-1"
+    }
+  ],
+  "checks": [
+    {
+      "pin": {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/reference-check-001.json",
+        "sha256": "a75345b82eb67172846f952f1840cf289d1dd6159ec9fd90132f0957cbdd6a94"
+      },
+      "correctness_passed": true,
+      "pairs": [
+        {
+          "baseline_run_id": "protenix-n1000-rust-benchmark-v1-native-0",
+          "candidate_run_id": "protenix-n1000-rust-benchmark-v1-fireprot-0",
+          "samples": [
+            {
+              "sample": 0,
+              "policy": "protenix-established-1e-3-v1",
+              "coordinates": {
+                "atom_count": 7979,
+                "raw_rmsd_angstrom": 0.00010119281279413028,
+                "aligned_rmsd_angstrom": 9.885641799161423e-05,
+                "max_abs_coordinate_delta_angstrom": 0.0009765625
+              },
+              "confidence": {
+                "numeric_leaf_count": 15,
+                "max_abs_delta": 7.62939453125e-06,
+                "mean_abs_delta": 7.075568040211996e-07,
+                "missing_from_candidate": [],
+                "extra_in_candidate": []
+              },
+              "exact_arrays": {
+                "confidence.atom_is_polymer": true,
+                "confidence.atom_to_token_idx": true,
+                "confidence.token_asym_id": true,
+                "confidence.token_has_frame": true
+              },
+              "floating_confidence_diagnostics": {
+                "confidence.atom_plddt": {
+                  "bitwise_equal": false,
+                  "max_abs_delta": 1.3172626495361328e-05,
+                  "passed": false
+                },
+                "confidence.contact_probs": {
+                  "bitwise_equal": false,
+                  "max_abs_delta": 2.9802322387695312e-06,
+                  "passed": false
+                },
+                "confidence.token_pair_pae": {
+                  "bitwise_equal": false,
+                  "max_abs_delta": 0.020906448364257812,
+                  "passed": false
+                },
+                "confidence.token_pair_pde": {
+                  "bitwise_equal": false,
+                  "max_abs_delta": 0.06229209899902344,
+                  "passed": false
+                }
+              },
+              "passed": true
+            }
+          ],
+          "cif_atom_identities_checked": true
+        }
+      ]
+    },
+    {
+      "pin": {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/pair-check-000.json",
+        "sha256": "a75345b82eb67172846f952f1840cf289d1dd6159ec9fd90132f0957cbdd6a94"
+      },
+      "correctness_passed": true,
+      "pairs": [
+        {
+          "baseline_run_id": "protenix-n1000-rust-benchmark-v1-native-0",
+          "candidate_run_id": "protenix-n1000-rust-benchmark-v1-fireprot-0",
+          "samples": [
+            {
+              "sample": 0,
+              "policy": "protenix-established-1e-3-v1",
+              "coordinates": {
+                "atom_count": 7979,
+                "raw_rmsd_angstrom": 0.00010119281279413028,
+                "aligned_rmsd_angstrom": 9.885641799161423e-05,
+                "max_abs_coordinate_delta_angstrom": 0.0009765625
+              },
+              "confidence": {
+                "numeric_leaf_count": 15,
+                "max_abs_delta": 7.62939453125e-06,
+                "mean_abs_delta": 7.075568040211996e-07,
+                "missing_from_candidate": [],
+                "extra_in_candidate": []
+              },
+              "exact_arrays": {
+                "confidence.atom_is_polymer": true,
+                "confidence.atom_to_token_idx": true,
+                "confidence.token_asym_id": true,
+                "confidence.token_has_frame": true
+              },
+              "floating_confidence_diagnostics": {
+                "confidence.atom_plddt": {
+                  "bitwise_equal": false,
+                  "max_abs_delta": 1.3172626495361328e-05,
+                  "passed": false
+                },
+                "confidence.contact_probs": {
+                  "bitwise_equal": false,
+                  "max_abs_delta": 2.9802322387695312e-06,
+                  "passed": false
+                },
+                "confidence.token_pair_pae": {
+                  "bitwise_equal": false,
+                  "max_abs_delta": 0.020906448364257812,
+                  "passed": false
+                },
+                "confidence.token_pair_pde": {
+                  "bitwise_equal": false,
+                  "max_abs_delta": 0.06229209899902344,
+                  "passed": false
+                }
+              },
+              "passed": true
+            }
+          ],
+          "cif_atom_identities_checked": true
+        }
+      ]
+    },
+    {
+      "pin": {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/reference-check-002.json",
+        "sha256": "3db3becd1e61245db4d31edd7edbcee989e9ac77d070f6161958037be849ef79"
+      },
+      "correctness_passed": true,
+      "pairs": [
+        {
+          "baseline_run_id": "protenix-n1000-rust-benchmark-v1-native-0",
+          "candidate_run_id": "protenix-n1000-rust-benchmark-v1-fireprot-1",
+          "samples": [
+            {
+              "sample": 0,
+              "policy": "protenix-established-1e-3-v1",
+              "coordinates": {
+                "atom_count": 7979,
+                "raw_rmsd_angstrom": 9.77625358002322e-05,
+                "aligned_rmsd_angstrom": 9.710966117159228e-05,
+                "max_abs_coordinate_delta_angstrom": 0.0009765625
+              },
+              "confidence": {
+                "numeric_leaf_count": 15,
+                "max_abs_delta": 3.814697265625e-06,
+                "mean_abs_delta": 4.5994917551676433e-07,
+                "missing_from_candidate": [],
+                "extra_in_candidate": []
+              },
+              "exact_arrays": {
+                "confidence.atom_is_polymer": true,
+                "confidence.atom_to_token_idx": true,
+                "confidence.token_asym_id": true,
+                "confidence.token_has_frame": true
+              },
+              "floating_confidence_diagnostics": {
+                "confidence.atom_plddt": {
+                  "bitwise_equal": false,
+                  "max_abs_delta": 8.761882781982422e-06,
+                  "passed": false
+                },
+                "confidence.contact_probs": {
+                  "bitwise_equal": false,
+                  "max_abs_delta": 2.9206275939941406e-06,
+                  "passed": false
+                },
+                "confidence.token_pair_pae": {
+                  "bitwise_equal": false,
+                  "max_abs_delta": 0.0043239593505859375,
+                  "passed": false
+                },
+                "confidence.token_pair_pde": {
+                  "bitwise_equal": false,
+                  "max_abs_delta": 0.03472709655761719,
+                  "passed": false
+                }
+              },
+              "passed": true
+            }
+          ],
+          "cif_atom_identities_checked": true
+        }
+      ]
+    },
+    {
+      "pin": {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/reference-check-003.json",
+        "sha256": "c1cde214a839cdbcbcf87dee9b097dd5827a331a7d89f6da2ee7ceda3bbc19ae"
+      },
+      "correctness_passed": true,
+      "pairs": [
+        {
+          "baseline_run_id": "protenix-n1000-rust-benchmark-v1-native-0",
+          "candidate_run_id": "protenix-n1000-rust-benchmark-v1-native-1",
+          "samples": [
+            {
+              "sample": 0,
+              "policy": "protenix-established-1e-3-v1",
+              "coordinates": {
+                "atom_count": 7979,
+                "raw_rmsd_angstrom": 9.112046549121645e-05,
+                "aligned_rmsd_angstrom": 9.021081547135969e-05,
+                "max_abs_coordinate_delta_angstrom": 0.0009765625
+              },
+              "confidence": {
+                "numeric_leaf_count": 15,
+                "max_abs_delta": 7.62939453125e-06,
+                "mean_abs_delta": 5.804002285003661e-07,
+                "missing_from_candidate": [],
+                "extra_in_candidate": []
+              },
+              "exact_arrays": {
+                "confidence.atom_is_polymer": true,
+                "confidence.atom_to_token_idx": true,
+                "confidence.token_asym_id": true,
+                "confidence.token_has_frame": true
+              },
+              "floating_confidence_diagnostics": {
+                "confidence.atom_plddt": {
+                  "bitwise_equal": false,
+                  "max_abs_delta": 1.3113021850585938e-05,
+                  "passed": false
+                },
+                "confidence.contact_probs": {
+                  "bitwise_equal": false,
+                  "max_abs_delta": 3.4570693969726562e-06,
+                  "passed": false
+                },
+                "confidence.token_pair_pae": {
+                  "bitwise_equal": false,
+                  "max_abs_delta": 0.020900726318359375,
+                  "passed": false
+                },
+                "confidence.token_pair_pde": {
+                  "bitwise_equal": false,
+                  "max_abs_delta": 0.06231498718261719,
+                  "passed": false
+                }
+              },
+              "passed": true
+            }
+          ],
+          "cif_atom_identities_checked": true
+        }
+      ]
+    },
+    {
+      "pin": {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/pair-check-001.json",
+        "sha256": "14d5b8a12f6d823e915226e37431e820f851b4f11b87b2695aedd234f8813b49"
+      },
+      "correctness_passed": true,
+      "pairs": [
+        {
+          "baseline_run_id": "protenix-n1000-rust-benchmark-v1-native-1",
+          "candidate_run_id": "protenix-n1000-rust-benchmark-v1-fireprot-1",
+          "samples": [
+            {
+              "sample": 0,
+              "policy": "protenix-established-1e-3-v1",
+              "coordinates": {
+                "atom_count": 7979,
+                "raw_rmsd_angstrom": 0.0001030768965128022,
+                "aligned_rmsd_angstrom": 0.00010214268485729452,
+                "max_abs_coordinate_delta_angstrom": 0.0009765625
+              },
+              "confidence": {
+                "numeric_leaf_count": 15,
+                "max_abs_delta": 3.814697265625e-06,
+                "mean_abs_delta": 3.921488920847575e-07,
+                "missing_from_candidate": [],
+                "extra_in_candidate": []
+              },
+              "exact_arrays": {
+                "confidence.atom_is_polymer": true,
+                "confidence.atom_to_token_idx": true,
+                "confidence.token_asym_id": true,
+                "confidence.token_has_frame": true
+              },
+              "floating_confidence_diagnostics": {
+                "confidence.atom_plddt": {
+                  "bitwise_equal": false,
+                  "max_abs_delta": 1.3113021850585938e-05,
+                  "passed": false
+                },
+                "confidence.contact_probs": {
+                  "bitwise_equal": false,
+                  "max_abs_delta": 3.4570693969726562e-06,
+                  "passed": false
+                },
+                "confidence.token_pair_pae": {
+                  "bitwise_equal": false,
+                  "max_abs_delta": 0.020906448364257812,
+                  "passed": false
+                },
+                "confidence.token_pair_pde": {
+                  "bitwise_equal": false,
+                  "max_abs_delta": 0.06231689453125,
+                  "passed": false
+                }
+              },
+              "passed": true
+            }
+          ],
+          "cif_atom_identities_checked": true
+        }
+      ]
+    }
+  ],
+  "aggregate_comparison": {
+    "performance": {
+      "baseline": {
+        "count": 2,
+        "min": 87.682260679,
+        "median": 88.66982427049999,
+        "p95": 89.657387862,
+        "max": 89.657387862,
+        "mean": 88.6698242705
+      },
+      "candidate": {
+        "count": 2,
+        "min": 41.515091306,
+        "median": 41.5222727775,
+        "p95": 41.529454249,
+        "max": 41.529454249,
+        "mean": 41.5222727775
+      },
+      "median_speedup": 2.1354761755370046,
+      "p95_speedup": 2.1588867343268516,
+      "paired_speedups": [
+        2.1120575174148213,
+        2.1588867343268516
+      ],
+      "paired_summary": {
+        "count": 2,
+        "min": 2.1120575174148213,
+        "median": 2.1354721258708365,
+        "p95": 2.1588867343268516,
+        "max": 2.1588867343268516,
+        "mean": 2.1354721258708365
+      },
+      "observed_trend": "insufficient_repeats",
+      "changes": {
+        "backend": {
+          "baseline": "native",
+          "candidate": "fireprot"
+        },
+        "launch.inputs.rust-bridge": {
+          "baseline": null,
+          "candidate": {
+            "canonical_path": "/media/IntelSSD/fireprot/target/release/lib_fireprot_bridge.so",
+            "name": "rust-bridge",
+            "sha256": "0b09340e24633e19af10299e726e25552a5e761a63ca263475917b7a97ad6b66"
+          }
+        }
+      }
+    },
+    "pairs": [
+      {
+        "baseline_run_id": "protenix-n1000-rust-benchmark-v1-native-0",
+        "candidate_run_id": "protenix-n1000-rust-benchmark-v1-fireprot-0",
+        "samples": [
+          {
+            "sample": 0,
+            "policy": "protenix-established-1e-3-v1",
+            "coordinates": {
+              "atom_count": 7979,
+              "raw_rmsd_angstrom": 0.00010119281279413028,
+              "aligned_rmsd_angstrom": 9.885641799161423e-05,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "max_abs_delta": 7.62939453125e-06,
+              "mean_abs_delta": 7.075568040211996e-07,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "exact_arrays": {
+              "confidence.atom_is_polymer": true,
+              "confidence.atom_to_token_idx": true,
+              "confidence.token_asym_id": true,
+              "confidence.token_has_frame": true
+            },
+            "floating_confidence_diagnostics": {
+              "confidence.atom_plddt": {
+                "bitwise_equal": false,
+                "max_abs_delta": 1.3172626495361328e-05,
+                "passed": false
+              },
+              "confidence.contact_probs": {
+                "bitwise_equal": false,
+                "max_abs_delta": 2.9802322387695312e-06,
+                "passed": false
+              },
+              "confidence.token_pair_pae": {
+                "bitwise_equal": false,
+                "max_abs_delta": 0.020906448364257812,
+                "passed": false
+              },
+              "confidence.token_pair_pde": {
+                "bitwise_equal": false,
+                "max_abs_delta": 0.06229209899902344,
+                "passed": false
+              }
+            },
+            "passed": true
+          }
+        ],
+        "cif_atom_identities_checked": true
+      },
+      {
+        "baseline_run_id": "protenix-n1000-rust-benchmark-v1-native-1",
+        "candidate_run_id": "protenix-n1000-rust-benchmark-v1-fireprot-1",
+        "samples": [
+          {
+            "sample": 0,
+            "policy": "protenix-established-1e-3-v1",
+            "coordinates": {
+              "atom_count": 7979,
+              "raw_rmsd_angstrom": 0.0001030768965128022,
+              "aligned_rmsd_angstrom": 0.00010214268485729452,
+              "max_abs_coordinate_delta_angstrom": 0.0009765625
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "max_abs_delta": 3.814697265625e-06,
+              "mean_abs_delta": 3.921488920847575e-07,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "exact_arrays": {
+              "confidence.atom_is_polymer": true,
+              "confidence.atom_to_token_idx": true,
+              "confidence.token_asym_id": true,
+              "confidence.token_has_frame": true
+            },
+            "floating_confidence_diagnostics": {
+              "confidence.atom_plddt": {
+                "bitwise_equal": false,
+                "max_abs_delta": 1.3113021850585938e-05,
+                "passed": false
+              },
+              "confidence.contact_probs": {
+                "bitwise_equal": false,
+                "max_abs_delta": 3.4570693969726562e-06,
+                "passed": false
+              },
+              "confidence.token_pair_pae": {
+                "bitwise_equal": false,
+                "max_abs_delta": 0.020906448364257812,
+                "passed": false
+              },
+              "confidence.token_pair_pde": {
+                "bitwise_equal": false,
+                "max_abs_delta": 0.06231689453125,
+                "passed": false
+              }
+            },
+            "passed": true
+          }
+        ],
+        "cif_atom_identities_checked": true
+      }
+    ]
+  },
+  "baseline_anchor_reference": {
+    "reference": {
+      "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-native/sample-0.npz",
+      "sha256": "c5e40ca0150e3e35b9bb406254f35fbcc62dfdfa5bcecb26d32f786d9dac03c5"
+    },
+    "confidence": {
+      "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-native/native/umem_L01000_462bb697ecdcce2f/seed_101/predictions/umem_L01000_462bb697ecdcce2f_summary_confidence_sample_0.json",
+      "sha256": "d3fc77244a1673e147806c8d2f21d54e1d16d5f6c9d569c95a7f02f9abb6fcd1"
+    },
+    "comparison": {
+      "confidence": {
+        "extra_in_candidate": [],
+        "max_abs_delta": 1.1444091796875e-05,
+        "mean_abs_delta": 9.725491205851237e-07,
+        "missing_from_candidate": [],
+        "numeric_leaf_count": 15
+      },
+      "confidence_tolerance": 0.001,
+      "coordinate_tolerance_angstrom": 0.001,
+      "coordinates": {
+        "aligned_rmsd_angstrom": 9.232526870051291e-05,
+        "atom_count": 7979,
+        "max_abs_coordinate_delta_angstrom": 0.0009765625,
+        "raw_rmsd_angstrom": 9.295768387634487e-05
+      },
+      "passed": true
+    }
+  },
+  "measurements": [
+    {
+      "index": 0,
+      "slot": {
+        "arm": "baseline",
+        "pair": 0
+      },
+      "invocation": {
+        "schema_version": 1,
+        "boundary": "before-spawn-through-observed-exit-v1",
+        "elapsed_seconds": 87.682260679,
+        "exit_code": 0,
+        "specification": {
+          "schema_version": 1,
+          "timeout_seconds": 600,
+          "request": {
+            "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/request-000.json",
+            "sha256": "274dc786ee57b46c1a0c8f5a7947940af85651258ee955f241d235b4258ef204"
+          },
+          "profile": {
+            "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/profile-000.json",
+            "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+          }
+        },
+        "request": {
+          "path": "request.json",
+          "sha256": "274dc786ee57b46c1a0c8f5a7947940af85651258ee955f241d235b4258ef204"
+        },
+        "profile": {
+          "path": "profile.json",
+          "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+        },
+        "launch": {
+          "schema_version": 1,
+          "environment_policy": "explicit-v1",
+          "invocation_path": "/media/IntelSSD/fireprot/target/release/fireprot",
+          "program": {
+            "name": "worker-executable",
+            "canonical_path": "/media/IntelSSD/fireprot/target/release/fireprot",
+            "sha256": "640889ac70cc8e6c8fd01d3af677475e79d2fe51a950ba6c64a4413bbd03c259"
+          },
+          "arguments": [
+            "infer",
+            "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/measurement-000/request.json",
+            "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/measurement-000/profile.json"
+          ],
+          "working_directory": "/media/IntelSSD/fireprot",
+          "environment": {
+            "HOME": "/home/pc",
+            "LANG": "zh_CN.UTF-8",
+            "LC_ALL": "C.UTF-8",
+            "LOGNAME": "pc",
+            "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+            "USER": "pc"
+          },
+          "inputs": [
+            {
+              "name": "profile",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/measurement-000/profile.json",
+              "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+            },
+            {
+              "name": "request",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/measurement-000/request.json",
+              "sha256": "274dc786ee57b46c1a0c8f5a7947940af85651258ee955f241d235b4258ef204"
+            }
+          ],
+          "sha256": "2c6c64453bb942f0a691eeafe034f064540d3247c212d5f0b84d5865ab93c2c0"
+        },
+        "accepted": {
+          "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1-native-0/accepted.json",
+          "sha256": "e1e6f287debaeb6f3f177a9197c44cf3292060cf74897efe61739ed8986bea42"
+        }
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1-native-0/accepted.json",
+        "sha256": "e1e6f287debaeb6f3f177a9197c44cf3292060cf74897efe61739ed8986bea42"
+      },
+      "request": {
+        "schema_version": 1,
+        "run_id": "protenix-n1000-rust-benchmark-v1-native-0",
+        "workload": {
+          "model": "protenix",
+          "model_name": "protenix_mini_default_v0.5.0",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "precision": "float32"
+        },
+        "backend": "native",
+        "seed": 101,
+        "hip_device": 6,
+        "source": {
+          "root": "/media/IntelSSD/fireprot/Protenix",
+          "commit": "bb3be993b52713795796c72cf0a46ef8a7323442"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_default_v0.5.0.pt",
+            "sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81"
+          }
+        },
+        "resources": {
+          "ccd_components_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+            "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5"
+          },
+          "ccd_components_rdkit_mol_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+            "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35"
+          },
+          "obsolete_release_data_csv": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+            "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33"
+          },
+          "pdb_cluster_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+            "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c"
+          }
+        },
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1-native-0"
+      }
+    },
+    {
+      "index": 1,
+      "slot": {
+        "arm": "candidate",
+        "pair": 0
+      },
+      "invocation": {
+        "schema_version": 1,
+        "boundary": "before-spawn-through-observed-exit-v1",
+        "elapsed_seconds": 41.515091306,
+        "exit_code": 0,
+        "specification": {
+          "schema_version": 1,
+          "timeout_seconds": 600,
+          "request": {
+            "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/request-001.json",
+            "sha256": "97dfaf68035af3b1a045928d428d853233ea31a91798b57773603efdde62500e"
+          },
+          "profile": {
+            "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/profile-001.json",
+            "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+          }
+        },
+        "request": {
+          "path": "request.json",
+          "sha256": "97dfaf68035af3b1a045928d428d853233ea31a91798b57773603efdde62500e"
+        },
+        "profile": {
+          "path": "profile.json",
+          "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+        },
+        "launch": {
+          "schema_version": 1,
+          "environment_policy": "explicit-v1",
+          "invocation_path": "/media/IntelSSD/fireprot/target/release/fireprot",
+          "program": {
+            "name": "worker-executable",
+            "canonical_path": "/media/IntelSSD/fireprot/target/release/fireprot",
+            "sha256": "640889ac70cc8e6c8fd01d3af677475e79d2fe51a950ba6c64a4413bbd03c259"
+          },
+          "arguments": [
+            "infer",
+            "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/measurement-001/request.json",
+            "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/measurement-001/profile.json"
+          ],
+          "working_directory": "/media/IntelSSD/fireprot",
+          "environment": {
+            "HOME": "/home/pc",
+            "LANG": "zh_CN.UTF-8",
+            "LC_ALL": "C.UTF-8",
+            "LOGNAME": "pc",
+            "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+            "USER": "pc"
+          },
+          "inputs": [
+            {
+              "name": "profile",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/measurement-001/profile.json",
+              "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+            },
+            {
+              "name": "request",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/measurement-001/request.json",
+              "sha256": "97dfaf68035af3b1a045928d428d853233ea31a91798b57773603efdde62500e"
+            }
+          ],
+          "sha256": "b7f94a85006e78e72bd772823c26009efd5682e00844b4d20d0bf4ee974f8a65"
+        },
+        "accepted": {
+          "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1-fireprot-0/accepted.json",
+          "sha256": "15e4fc301c81d99dc52e2cc62d6ccb3a41a71e70ce127472b63dc952d15a8386"
+        }
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1-fireprot-0/accepted.json",
+        "sha256": "15e4fc301c81d99dc52e2cc62d6ccb3a41a71e70ce127472b63dc952d15a8386"
+      },
+      "request": {
+        "schema_version": 1,
+        "run_id": "protenix-n1000-rust-benchmark-v1-fireprot-0",
+        "workload": {
+          "model": "protenix",
+          "model_name": "protenix_mini_default_v0.5.0",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "precision": "float32"
+        },
+        "backend": "fireprot",
+        "seed": 101,
+        "hip_device": 6,
+        "source": {
+          "root": "/media/IntelSSD/fireprot/Protenix",
+          "commit": "bb3be993b52713795796c72cf0a46ef8a7323442"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_default_v0.5.0.pt",
+            "sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81"
+          }
+        },
+        "resources": {
+          "ccd_components_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+            "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5"
+          },
+          "ccd_components_rdkit_mol_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+            "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35"
+          },
+          "obsolete_release_data_csv": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+            "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33"
+          },
+          "pdb_cluster_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+            "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c"
+          }
+        },
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1-fireprot-0"
+      }
+    },
+    {
+      "index": 2,
+      "slot": {
+        "arm": "candidate",
+        "pair": 1
+      },
+      "invocation": {
+        "schema_version": 1,
+        "boundary": "before-spawn-through-observed-exit-v1",
+        "elapsed_seconds": 41.529454249,
+        "exit_code": 0,
+        "specification": {
+          "schema_version": 1,
+          "timeout_seconds": 600,
+          "request": {
+            "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/request-002.json",
+            "sha256": "d8fd93a22ad3da49c139a12ab2e9721d43bae0d33ab33b5ed78bb1de49bdb37f"
+          },
+          "profile": {
+            "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/profile-002.json",
+            "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+          }
+        },
+        "request": {
+          "path": "request.json",
+          "sha256": "d8fd93a22ad3da49c139a12ab2e9721d43bae0d33ab33b5ed78bb1de49bdb37f"
+        },
+        "profile": {
+          "path": "profile.json",
+          "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+        },
+        "launch": {
+          "schema_version": 1,
+          "environment_policy": "explicit-v1",
+          "invocation_path": "/media/IntelSSD/fireprot/target/release/fireprot",
+          "program": {
+            "name": "worker-executable",
+            "canonical_path": "/media/IntelSSD/fireprot/target/release/fireprot",
+            "sha256": "640889ac70cc8e6c8fd01d3af677475e79d2fe51a950ba6c64a4413bbd03c259"
+          },
+          "arguments": [
+            "infer",
+            "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/measurement-002/request.json",
+            "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/measurement-002/profile.json"
+          ],
+          "working_directory": "/media/IntelSSD/fireprot",
+          "environment": {
+            "HOME": "/home/pc",
+            "LANG": "zh_CN.UTF-8",
+            "LC_ALL": "C.UTF-8",
+            "LOGNAME": "pc",
+            "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+            "USER": "pc"
+          },
+          "inputs": [
+            {
+              "name": "profile",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/measurement-002/profile.json",
+              "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+            },
+            {
+              "name": "request",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/measurement-002/request.json",
+              "sha256": "d8fd93a22ad3da49c139a12ab2e9721d43bae0d33ab33b5ed78bb1de49bdb37f"
+            }
+          ],
+          "sha256": "17c01a3b6388a28068c0471a1651089a49d10f26c72ee02aae13ccec95de8dc0"
+        },
+        "accepted": {
+          "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1-fireprot-1/accepted.json",
+          "sha256": "3f009cc53f7965289f233c7cecf7bd215d0184b6f4d8007296989fb468c79646"
+        }
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1-fireprot-1/accepted.json",
+        "sha256": "3f009cc53f7965289f233c7cecf7bd215d0184b6f4d8007296989fb468c79646"
+      },
+      "request": {
+        "schema_version": 1,
+        "run_id": "protenix-n1000-rust-benchmark-v1-fireprot-1",
+        "workload": {
+          "model": "protenix",
+          "model_name": "protenix_mini_default_v0.5.0",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "precision": "float32"
+        },
+        "backend": "fireprot",
+        "seed": 101,
+        "hip_device": 6,
+        "source": {
+          "root": "/media/IntelSSD/fireprot/Protenix",
+          "commit": "bb3be993b52713795796c72cf0a46ef8a7323442"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_default_v0.5.0.pt",
+            "sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81"
+          }
+        },
+        "resources": {
+          "ccd_components_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+            "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5"
+          },
+          "ccd_components_rdkit_mol_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+            "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35"
+          },
+          "obsolete_release_data_csv": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+            "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33"
+          },
+          "pdb_cluster_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+            "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c"
+          }
+        },
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1-fireprot-1"
+      }
+    },
+    {
+      "index": 3,
+      "slot": {
+        "arm": "baseline",
+        "pair": 1
+      },
+      "invocation": {
+        "schema_version": 1,
+        "boundary": "before-spawn-through-observed-exit-v1",
+        "elapsed_seconds": 89.657387862,
+        "exit_code": 0,
+        "specification": {
+          "schema_version": 1,
+          "timeout_seconds": 600,
+          "request": {
+            "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/request-003.json",
+            "sha256": "178684903656f8db6b0f7e0dc20e75b8421b47871810182b6a65789b39fbeec3"
+          },
+          "profile": {
+            "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/profile-003.json",
+            "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+          }
+        },
+        "request": {
+          "path": "request.json",
+          "sha256": "178684903656f8db6b0f7e0dc20e75b8421b47871810182b6a65789b39fbeec3"
+        },
+        "profile": {
+          "path": "profile.json",
+          "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+        },
+        "launch": {
+          "schema_version": 1,
+          "environment_policy": "explicit-v1",
+          "invocation_path": "/media/IntelSSD/fireprot/target/release/fireprot",
+          "program": {
+            "name": "worker-executable",
+            "canonical_path": "/media/IntelSSD/fireprot/target/release/fireprot",
+            "sha256": "640889ac70cc8e6c8fd01d3af677475e79d2fe51a950ba6c64a4413bbd03c259"
+          },
+          "arguments": [
+            "infer",
+            "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/measurement-003/request.json",
+            "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/measurement-003/profile.json"
+          ],
+          "working_directory": "/media/IntelSSD/fireprot",
+          "environment": {
+            "HOME": "/home/pc",
+            "LANG": "zh_CN.UTF-8",
+            "LC_ALL": "C.UTF-8",
+            "LOGNAME": "pc",
+            "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+            "USER": "pc"
+          },
+          "inputs": [
+            {
+              "name": "profile",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/measurement-003/profile.json",
+              "sha256": "3545e689ea55ff2b7c5ca5d6d8289d11060b978b71cd111a51fa865c9eaad9a2"
+            },
+            {
+              "name": "request",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1/measurement-003/request.json",
+              "sha256": "178684903656f8db6b0f7e0dc20e75b8421b47871810182b6a65789b39fbeec3"
+            }
+          ],
+          "sha256": "7d090cc686af9d58353c8fba438e938766309bd4e6bf1bf4145029ba6b66cb82"
+        },
+        "accepted": {
+          "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1-native-1/accepted.json",
+          "sha256": "d283dd6fdde061d87ca9c08ab3aac2619c7e254fcf0568fce6b7614fa15ead43"
+        }
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1-native-1/accepted.json",
+        "sha256": "d283dd6fdde061d87ca9c08ab3aac2619c7e254fcf0568fce6b7614fa15ead43"
+      },
+      "request": {
+        "schema_version": 1,
+        "run_id": "protenix-n1000-rust-benchmark-v1-native-1",
+        "workload": {
+          "model": "protenix",
+          "model_name": "protenix_mini_default_v0.5.0",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "precision": "float32"
+        },
+        "backend": "native",
+        "seed": 101,
+        "hip_device": 6,
+        "source": {
+          "root": "/media/IntelSSD/fireprot/Protenix",
+          "commit": "bb3be993b52713795796c72cf0a46ef8a7323442"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_default_v0.5.0.pt",
+            "sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81"
+          }
+        },
+        "resources": {
+          "ccd_components_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+            "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5"
+          },
+          "ccd_components_rdkit_mol_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+            "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35"
+          },
+          "obsolete_release_data_csv": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+            "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33"
+          },
+          "pdb_cluster_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+            "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c"
+          }
+        },
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/protenix-n1000-rust-benchmark-v1-native-1"
+      }
+    }
+  ],
+  "deployed_rust_inputs": {
+    "Cargo.lock": "c5d090380c88f5763db4a2ba7fc0f942223d0f3c0adc74ddba2d858a643e13a5",
+    "Cargo.toml": "1a856a6b1674dd52f4f91246247cee702a0e651092b0da1d255fe17d22f1d13e",
+    "crates/fireprot-bridge/Cargo.toml": "ef94250a3587ebc5c0abcbb96f45c0d71bceb4c624f78b388c8f9cac29a03746",
+    "crates/fireprot-bridge/src/build.rs": "2fdc2afbc8c2874a1f65f137aa8e26b6bde8e0a70b97cc1c60a388ffe6e890c2",
+    "crates/fireprot-bridge/src/lib.rs": "39b7152fb65901eed7ef459c98afa3f705880daf078538aaa0d00d31c89b9220",
+    "crates/fireprot-cli/Cargo.toml": "7f68c3d2579399e92b1463a9494e8d5eafb0327338c8cff3884e414ec3bbe969",
+    "crates/fireprot-cli/src/app.rs": "a5b37e37a7cd5429b1d5718b87a09bac519ebe6f81e6e9efea79bf6b56ff3ba6",
+    "crates/fireprot-cli/src/args.rs": "95cacb1d360d4e2943dc19a9889a907e7f27fc5e40cd264afc3a5b84201be658",
+    "crates/fireprot-cli/src/benchmark.rs": "65e3b0e07b6d7e07dc951292ce52e92e313d89ab942c4da1b213d267bf9ba099",
+    "crates/fireprot-cli/src/collection.rs": "aa971b9234cbf175eb3213a0f88e70b92b2308b297d6e0923b18a6ca397ff08d",
+    "crates/fireprot-cli/src/comparison.rs": "cc3d57f0157b19e2dd6a75fc69077f9585f78911e2426808e16a5574ea1ba7e4",
+    "crates/fireprot-cli/src/inference.rs": "4d82a57bf200a2e6c51c0faef5aceaf00d25c0740c0b8d737cce12688a81a325",
+    "crates/fireprot-cli/src/main.rs": "a751102670081f14c17bad7ff72ac3aa08bfdccdf01a12815560c2eefec8ee0f",
+    "crates/fireprot-cli/src/support.rs": "c37d43576b2c5f726b51825faaeba65b7dcd7d62a2752523c5d68cdd7010a676",
+    "crates/fireprot-cli/tests/collection.rs": "4deb9b9d478360c7e654e44406d323eeaf47d41783555de032f388d0865852f8",
+    "crates/fireprot-cli/tests/entrypoints.rs": "ad8518aa09f3727a55a61a9d1e6e24b04bd8a3e948dfef7ab5361d02e6f6c365",
+    "crates/fireprot-cli/tests/inference.rs": "a149110dbed640506208bdf1d54dd576cffa23b912f10b39a1ee78aa1c4712ce",
+    "crates/fireprot-cli/tests/interface.rs": "604cfa47414f60d5cd3233e84545b9f89147c1366a67de0b08d82eb3909aa5e6",
+    "crates/fireprot-cli/tests/timings.rs": "b43617681abad8832c3550557bd66608fb2fe8c68b9603ec5833346022e2875d",
+    "crates/fireprot-core/Cargo.toml": "5b7b647fe0882ab95fc9f9f1f20aa0e9c8694bb5627a49f2ecd4b952d2627dfe",
+    "crates/fireprot-core/src/lib.rs": "b275714355e9cd32db12b779e1c942166fc5ddab4a797a1bad7c142625e1f084",
+    "crates/fireprot-core/src/protocol.rs": "0747c15823e3fa9bd6160c98894f51b6eb0b1c2af87b55ca0216a2b99b018056",
+    "crates/fireprot-core/src/registry.rs": "e8126028302455022bc4640445b3773cc5f118de4da78f163b6c9c67d0b71a56",
+    "crates/fireprot-core/src/request.rs": "a77491c08f38431bc8c6226f54460d8da53d2c741b76ffc1e348b72ad1684ab8",
+    "crates/fireprot-core/tests/contracts.rs": "8239319179d06301de93a0341048fbeb66d0e7fdcc6272c4be69eb869b667904",
+    "crates/fireprot-core/tests/protocol.rs": "60f062f533a58738815d2bcb0f415707c231db684d7b99b087e645a59afff78b",
+    "crates/fireprot-core/tests/registry.rs": "d508fc45cac40d3bb8f88f293bb2740f88e5ce68194901a582f1f7811f16165b",
+    "crates/fireprot-runtime/Cargo.toml": "3771b793bed15e3d9aacd15a0202cb8aadee2b11bb38a7466c112964b0221fd3",
+    "crates/fireprot-runtime/examples/device_check.rs": "ea83591a57bd88c582fdc426781e17723ba0f45e929b79e11858c19f9240d523",
+    "crates/fireprot-runtime/examples/preflight.rs": "26460a9e351c735558a79e4d78ad037df4dce5dcb69ca456373135abc5f8223f",
+    "crates/fireprot-runtime/examples/source_manifest.rs": "4d0918afeee97675bebed1cd6b5c99111bb1ecfe8598a90875af63cad058c460",
+    "crates/fireprot-runtime/src/artifacts.rs": "475de663ffe9dc7d77c53c9f5eda06403f96934aec52019a58630ed5141436cc",
+    "crates/fireprot-runtime/src/batch.rs": "e3189a5cf0fb7394eff650391a758ab998abdea4dbd4f0675ba5d5a7599d9577",
+    "crates/fireprot-runtime/src/bin/fireprot-compiler-guard.rs": "c9a7a618f45ff1af1c6e4c1453eb61c14dd3c737075ae1e454f77213b669df69",
+    "crates/fireprot-runtime/src/build.rs": "993457c3f72c19d488461fa795ef4958f1d1c79b85dddc8a6e7b208ccd12766f",
+    "crates/fireprot-runtime/src/build_cache.rs": "412abee7753426b63fe25bce7fa87a683b67c0698532e0d05f340258c343ee1a",
+    "crates/fireprot-runtime/src/build_dynamic.rs": "b72d5229884a274ef3eafa10b30bcdfa9c3279f2458e1388d1227a096b400235",
+    "crates/fireprot-runtime/src/build_process.rs": "7f584cdb99c59734bdb21b36fc47745e67e60aa9594521346175fae9b9ad1912",
+    "crates/fireprot-runtime/src/build_tree.rs": "2390ee61bfd799b3b2b9770ade198bf9ba9ef213ec288a0ffbe6d40820cb8e6b",
+    "crates/fireprot-runtime/src/command.rs": "5f900ac31df8bbc81e4b28ff84734944e422a8a1b25f07efce35525bb57a9f0f",
+    "crates/fireprot-runtime/src/device.rs": "1088805f30f394ebe4c4c3c75b2f3642b45fdb61911d28a33d8302d14a0400f5",
+    "crates/fireprot-runtime/src/environment_inventory.rs": "ecde36f51c721bf85af337677021568f0785560c6d23581a7da86b6d072d658a",
+    "crates/fireprot-runtime/src/execution.rs": "efc77347f8d33ca1879a96562116e5d5af6734e03bad0c48753d6b260b5e3008",
+    "crates/fireprot-runtime/src/experiment.rs": "bb8826ce312e94ec096f33f614e4848362f6ed9eb531b5e11b90dbcbaf0edbfd",
+    "crates/fireprot-runtime/src/hip_build.rs": "82c3d28c88a93db1d92e6356b99c97c9f54d014364a24b47af58c5ec90f285ce",
+    "crates/fireprot-runtime/src/installation.rs": "6e43d4fa54092f724463ea1d290734c80cba54d037dcb8836b65eaa8b9f446f3",
+    "crates/fireprot-runtime/src/invocation.rs": "4c4456224c325a015dafb3dccadb628bf2367e33dc6c14e8230e3a9568000322",
+    "crates/fireprot-runtime/src/kernel_bundle.rs": "7246917dee94443dd8fb8d8844749228b01ca74dd526ab66c9904ba3bcd78375",
+    "crates/fireprot-runtime/src/lib.rs": "bf0fd3df0a7f14885d9a719b9da067c975fd5d41b04d3611d24584c900962657",
+    "crates/fireprot-runtime/src/measured_run.rs": "e09c9ba54dc9ea4897142ff6fc4e24cd67bb1808f16b39be78447e1fee62242d",
+    "crates/fireprot-runtime/src/preflight.rs": "3e2d45fdf4725899ec368c4b5653a42bd2089cefc3b02f6bb4fbf9287530cb5a",
+    "crates/fireprot-runtime/src/run_archive.rs": "9f32a46c93edadfe3b1625f9fe548e92162890c0816a348e734ec1431447a407",
+    "crates/fireprot-runtime/src/supervisor.rs": "44522af9387c784015582f0ae790aff10dba3a720b75343eecef30f77eb9e953",
+    "crates/fireprot-runtime/src/torch_build.rs": "93473ddd337f4a086a3b1b3fcba62fdfdfbdc44e6a6bbcd02e8c817cbfcb8984",
+    "crates/fireprot-runtime/tests/artifacts.rs": "7ffebc6e5096c70a805f2bc72c23d315c271cc822eb865ed77b3872cdd937490",
+    "crates/fireprot-runtime/tests/batch.rs": "d94d541b9d2440c1041fc3cdd82df1f63360ed6fc51253479c6e2be94f6b2259",
+    "crates/fireprot-runtime/tests/build.rs": "09165f05e6510f2648bd947e6b4462b20aa004b0a6278665098adc57c006a2a6",
+    "crates/fireprot-runtime/tests/build_cache.rs": "c82fb7f14375562bc4be44a47c89d8870c60f71cbd65a54bc8f987e08fb38fef",
+    "crates/fireprot-runtime/tests/build_dynamic.rs": "a54ae8aadec037b8639f09fc1661c08de384381e368f8fbf854779dbfc9cb563",
+    "crates/fireprot-runtime/tests/build_tree.rs": "3662264883fff43e47a3e78bf0b796fea6581cfd94b0d3c707d21a177805601e",
+    "crates/fireprot-runtime/tests/command.rs": "749d4fc8db543cbec98a540342735a2eaed0717e3776f6646e1b53aa76eefe45",
+    "crates/fireprot-runtime/tests/device.rs": "16749bd0e603514b47c99322f8e1f66ebd0663f359351690c95d7f0fe91127a4",
+    "crates/fireprot-runtime/tests/device_monitor.rs": "d1848eb9cf0154f805d77de23a6f2e3dfc158334f0be807f8ca12179e9e4d42c",
+    "crates/fireprot-runtime/tests/environment_inventory.rs": "a97b1c867fdc7783d22180f7a683650acc74de06279649be5b5d66eef2785b92",
+    "crates/fireprot-runtime/tests/execution.rs": "e27b856d2aa3b56fcb3ee82f6f3cedec51ec30ab0e0147166d040c3279d43824",
+    "crates/fireprot-runtime/tests/experiment.rs": "b06293f549dbd2f12026fe5dff555eb156e87525663c41cccb519fe92fd7d98e",
+    "crates/fireprot-runtime/tests/hardware_monitor.rs": "308e05a5271f699b5e0543c4cc6ae744c3dd466eba6b91fa4520d3b4c0283ecf",
+    "crates/fireprot-runtime/tests/hip_build.rs": "409648d9f4bf1951e88f4d7d4654415d18bff86ddd923a7a2842de7a7ac4fd4e",
+    "crates/fireprot-runtime/tests/installation.rs": "c879651bedb6f4268696fc62fecce124fbed66a909d7e2040ba2d6e15f191c24",
+    "crates/fireprot-runtime/tests/invocation.rs": "1603c0662be70e9d69f9d09f26537ba7ab31d666d0699a77f9e876d00d518c5c",
+    "crates/fireprot-runtime/tests/kernel_bundle.rs": "58c7522cf5803439cf10a10185927b717927910841a331f6008f7102dbb03357",
+    "crates/fireprot-runtime/tests/preflight.rs": "8148b143e672995c22c6f4728343abf2ea7a960ed7cc94204653c57959570512",
+    "crates/fireprot-runtime/tests/supervisor.rs": "f128dbc1cda5cc46e224b97fdda5996aee24a80ce2f6563b5acc341ffd146d6c",
+    "crates/fireprot-runtime/tests/torch_build.rs": "44e70b2a01b086439ef57be8707b076e09ffa249b14cf99bbc29bf04adfff34b",
+    "crates/fireprot-validation/Cargo.toml": "65b46333dcfc6baaa48d6abc017edb14d19116d935d911879e3d126e61963b44",
+    "crates/fireprot-validation/examples/compare_npz.rs": "570c8ce363d0efa04661c19a28dfa5913db6aea76ec71a80875fb7e29a6e959f",
+    "crates/fireprot-validation/examples/compare_openfold3_capture.rs": "076ad1c973ee774717544ea54c24a3c56862a777449280662d201f08e58d784d",
+    "crates/fireprot-validation/examples/compare_protenix.rs": "97e3e36ebcf6bb66558ad22f8e1518ee40b6156b2d47b5a4ad964328e0f5719e",
+    "crates/fireprot-validation/src/array.rs": "8fe8bc6a1e809ebed5b2778375e7cd1654f901b738039f5e66621ada02efb075",
+    "crates/fireprot-validation/src/bundle.rs": "083f7102bf92afc7297547d4153d895b7c01850c15781827aea8959edcd503e5",
+    "crates/fireprot-validation/src/lib.rs": "71f7fadf74e63122d4bc49e260148c7f02efdf22f539e92dcbee33d7b03b4810",
+    "crates/fireprot-validation/src/metrics.rs": "82c6d29fcf0700e7a658a4f211b582c21023dbf5bbf795fd20a7cace85ccad02",
+    "crates/fireprot-validation/src/numpy.rs": "4489c87cef6edd1c4c883160a3b8f4eba897bdd73aad1d16883915b69cbe913a",
+    "crates/fireprot-validation/src/paired.rs": "8f01977450781505322d362ed1a6313c8e4e83fc86f2db680b7e29ca99e28561",
+    "crates/fireprot-validation/src/structure.rs": "395d761433618394a300a1fe2a18888ee1540e6a3897bbc06485bf099037c1b2",
+    "crates/fireprot-validation/src/timing.rs": "4579c698cae8d187819116693fa03fcf2b922a5c63632ca2e59b56f4ea942e5a",
+    "crates/fireprot-validation/tests/bundle.rs": "0bda98fd02653e309336acfefc79bd476321c6a55a23d76e4b7db6622c0c6ba8",
+    "crates/fireprot-validation/tests/numerics.rs": "98a5f4fb1921b6720769aeb451eb6be7b71b27b949af0b91e17dba668445158e",
+    "crates/fireprot-validation/tests/paired.rs": "f18a38aaee5e6adef3ab49b9997fdb8810544b0d7fc4407c0e10cb9e22c4bf83",
+    "crates/fireprot-validation/tests/structure.rs": "71827545decb174a884246499a0259536b525f5a732badc5e9a4576cd4c5e192",
+    "crates/fireprot-validation/tests/timing.rs": "d749bb7fbfdd1452b14d8f7294860959e6421d10b07fadcb97351efbbcdb523d"
+  },
+  "matched_deployed_rust_file_count": 91,
+  "binaries": [
+    {
+      "path": "/media/IntelSSD/fireprot/target/release/fireprot",
+      "sha256": "640889ac70cc8e6c8fd01d3af677475e79d2fe51a950ba6c64a4413bbd03c259"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/target/release/examples/compare_protenix",
+      "sha256": "68d2f3cbb23f5551a9be274b26ab1f1756caadb3ac5dce9a3e241cb3cb6b51ba"
+    }
+  ],
+  "tests": {
+    "rust_workspace": 157,
+    "minimum_rust_1_85_relevant": 10,
+    "clippy": "passed",
+    "formatting": "passed",
+    "initial_test_interference": "Concurrent toolchains replaced the shared CLI during identity checks; serial full-suite rerun passed without weakening verification"
+  }
+}

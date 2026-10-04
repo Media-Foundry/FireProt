@@ -31,6 +31,11 @@ struct Execution {
     environment: BTreeMap<String, String>,
 }
 
+pub(crate) fn validate_profile(bytes: &[u8]) -> Result<()> {
+    let _: Execution = serde_json::from_slice(bytes)?;
+    Ok(())
+}
+
 pub fn run(request: &Path, profile: &Path) -> Result<RunReport> {
     let request = read_request(request)?;
     let execution: Execution = read_json(profile)?;

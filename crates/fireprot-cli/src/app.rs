@@ -1,7 +1,7 @@
 //! Compose command handlers. Inference setup, collection and parsing are separate.
 use crate::{
     args::{self, Command},
-    collection, comparison, inference,
+    benchmark, collection, comparison, inference,
     support::{Result, cancellation, check_build_cancelled, print_json, read_json, read_request},
 };
 use fireprot_core::protocol::Phase;
@@ -29,6 +29,19 @@ fn execute(command: Command<'_>) -> Result<()> {
     match command {
         Command::Help(name) => print!("{}", args::help(name)),
         Command::Version => println!("fireprot {}", env!("CARGO_PKG_VERSION")),
+        Command::BenchmarkPairs {
+            specification,
+            destination,
+        } => {
+            let outcome = benchmark::run(read_json(specification)?, destination)?;
+            print_json(&outcome)?;
+            if outcome.phase != fireprot_runtime::batch::BatchPhase::Succeeded {
+                return Err(
+                    "paired benchmark failed or cancelled; inspect its report and order journal"
+                        .into(),
+                );
+            }
+        }
         Command::CompareRuns(path) => {
             let report = comparison::run(read_json(path)?)?;
             print_json(&report)?;

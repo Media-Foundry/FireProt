@@ -15,6 +15,8 @@ pub mod command;
 #[cfg(unix)]
 pub mod device;
 #[cfg(unix)]
+pub mod experiment;
+#[cfg(unix)]
 pub mod invocation;
 #[cfg(unix)]
 pub mod measured_run;

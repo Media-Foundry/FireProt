@@ -86,8 +86,9 @@ Execution order and cache preparation remain caller declarations. The comparison
 tool does not infer chronology from file names, prove balanced/randomized
 execution, or eliminate thermal and system-load drift. Use explicit alternating
 execution on the same physical device, validate each run, and retain the launch
-order alongside the pinned measurement records. A general experiment scheduler
-and final cross-model benchmark acceptance remain migration work.
+order alongside the pinned measurement records.
+[`benchmark-pairs`](paired-execution.md) executes pinned pairs and records that
+order in Rust. Final cross-model benchmark acceptance remains migration work.
 
 ## N1000 integration evidence
 
@@ -122,4 +123,5 @@ resident-model benchmarks or establish memory improvements or significance.
 All 88 audited Rust/build files match the deployed source. The full Rust suite
 passes 152 tests; the four paired-validation tests, CLI rejection integration
 test and five interface tests also pass Rust 1.85. Workspace Clippy and formatting
-pass. Paired execution orchestration and final cross-model acceptance remain open.
+pass. Rust execution orchestration is now provided by `benchmark-pairs`; final
+cross-model acceptance remains open.

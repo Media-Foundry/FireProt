@@ -18,6 +18,23 @@ pub struct Specification {
     candidate: Collection,
 }
 
+impl Specification {
+    pub(crate) fn new(
+        treatment_description: String,
+        expected_changes: BTreeMap<String, paired::Difference>,
+        baseline: Collection,
+        candidate: Collection,
+    ) -> Self {
+        Self {
+            schema_version: 1,
+            treatment_description,
+            expected_changes,
+            baseline,
+            candidate,
+        }
+    }
+}
+
 #[derive(Serialize)]
 pub struct Pair {
     baseline_run_id: String,

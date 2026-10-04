@@ -2,8 +2,8 @@
 
 Status: the Rust contracts and state machine are implemented in `fireprot-core`.
 The Unix process transport and artifact hashing are implemented in
-`fireprot-runtime`. Production device probes, model content validators and
-model-worker integration are still pending. Existing Python workflows do not yet use this
+`fireprot-runtime`. The independent HIP/SMI device monitor is implemented. Model content validators
+and model-worker integration are still pending. Existing Python workflows do not yet use this
 protocol or the Rust operator registry.
 
 ## Ownership
@@ -104,8 +104,44 @@ Post-launch failures are retained in `supervisor.json`; setup/spawn failures
 return an I/O error and may leave the reserved directory for diagnosis. Existing
 output directories are never reused.
 
-This layer currently exposes an independent `DeviceMonitor` trait. Its real
-HIP/SMI implementation, input/source/checkpoint preflight, numerical validators
-and production workers remain integration work. CPU tests use a standard-library
+This layer exposes an independent `DeviceMonitor` trait and an `AmdSmiMonitor`
+implementation. Input/source/checkpoint preflight, numerical validators and
+production workers remain integration work. CPU tests use a standard-library
 Python fixture as a real child process and an injected host monitor; they do not
 establish GPU isolation or full-model parity.
+
+## Independent AMD device monitor
+
+`AmdSmiMonitor` runs a separate HIP identity probe under the requested visibility
+mask, compares its PCI address and architecture with the worker, and matches the
+PCI address to `amd-smi list --json`. It never assumes HIP and SMI ordinals agree.
+Each sample rechecks that mapping and parses `amd-smi process --json`. Only the
+verified worker PID is allowed; descendants need a future explicit policy.
+Missing devices/lists, duplicate identities/PIDs, unknown no-process messages,
+command failures and malformed JSON all fail the run. The observed idle sentinel
+`No running processes detected` is accepted only as the sole process entry.
+
+Probe subprocesses have a timeout and output-size checks, separate stdout/stderr
+and process-group cleanup. Monitoring is synchronous at present: the requested
+interval is a minimum delay, and each probe may take up to its configured timeout.
+This is infrastructure validation, not a measured model-overhead result.
+
+Build the tiny native HIP identity helper on DiamondHill (the explicit RPATH is
+required on the tested host):
+
+```bash
+/opt/rocm/bin/hipcc kernels/amd/tools/hip_device_probe.cpp \
+  -Wl,-rpath,/opt/rocm/lib -o runtime/fireprot-hip-probe
+/opt/rocm/bin/hipcc crates/fireprot-runtime/tests/fixtures/gpu_process.cpp \
+  -Wl,-rpath,/opt/rocm/lib -o runtime/fireprot-gpu-fixture
+FIREPROT_HIP_PROBE="$PWD/runtime/fireprot-hip-probe" \
+FIREPROT_GPU_FIXTURE="$PWD/runtime/fireprot-gpu-fixture" \
+  cargo test -p fireprot-runtime --test hardware_monitor -- --ignored --nocapture
+```
+
+The hardware test requires an idle authorized GPU. Its defaults are DiamondHill
+HIP 7, PCI `0000:93:00.0`, gfx90a; override `FIREPROT_TEST_HIP_DEVICE` and
+`FIREPROT_TEST_PCI` together for another device. It starts a real HIP allocation
+process, proves that process is detected as external, then proves it is excluded
+only when explicitly selected as the allowed worker. It cleans up the process.
+CPU-only `cargo test --workspace` intentionally skips this hardware test.

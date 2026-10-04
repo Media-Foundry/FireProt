@@ -1,11 +1,8 @@
 use crate::artifacts::verify_outputs;
+use crate::command::ProcessGroup;
 use fireprot_core::{
     ValidatedRequest,
     protocol::{CompletionChecks, DeviceIdentity, Envelope, Phase, Session},
-};
-use nix::{
-    sys::signal::{Signal, killpg},
-    unistd::Pid,
 };
 use serde::Serialize;
 use std::{
@@ -17,7 +14,7 @@ use std::{
         process::CommandExt,
     },
     path::{Path, PathBuf},
-    process::{Child, Command, Stdio},
+    process::{Command, Stdio},
     sync::atomic::{AtomicBool, Ordering},
     thread,
     time::{Duration, Instant},
@@ -64,25 +61,6 @@ pub struct RunReport {
     pub elapsed_seconds: f64,
     pub isolation_samples: usize,
     pub failure: Option<String>,
-}
-
-struct ProcessGroup(Child, bool);
-impl ProcessGroup {
-    fn stop(&mut self) {
-        if self.1 {
-            return;
-        }
-        self.1 = true;
-        // process_group(0) makes the child's PID its PGID. Kill descendants too,
-        // including descendants left behind by an already exited worker.
-        let _ = killpg(Pid::from_raw(self.0.id() as i32), Signal::SIGKILL);
-        let _ = self.0.wait();
-    }
-}
-impl Drop for ProcessGroup {
-    fn drop(&mut self) {
-        self.stop();
-    }
 }
 
 /// Supervise one fresh output directory. The caller must complete source,

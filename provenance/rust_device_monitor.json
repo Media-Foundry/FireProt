@@ -1,0 +1,58 @@
+{
+  "scope": "Rust runtime infrastructure; not model parity or E2E performance",
+  "base_commit": "0a531cee37ae1a8173e6824aeb14e601596e21f6",
+  "source_state": "candidate on base commit; exact file digests below",
+  "date": "2026-10-04",
+  "host": "DiamondHill",
+  "rust_version": "1.97.1",
+  "hip_probe_toolchain": "HIP 7.15.26333-0000000",
+  "cpu_tests": {
+    "local_passed": 37,
+    "diamondhill_passed": 37
+  },
+  "hardware_test": {
+    "name": "identifies_real_gpu_process_and_rejects_it_unless_allowed",
+    "passed": true,
+    "hip_device": 7,
+    "smi_device": 5,
+    "pci_address": "0000:93:00.0",
+    "architecture": "gfx90a",
+    "allowed_pid": 1166942,
+    "detected_external_pid": [
+      1166942
+    ]
+  },
+  "limits": [
+    "No model worker integration or model accuracy validation in this test",
+    "SMI probes are synchronous; runtime overhead remains unmeasured",
+    "Initial helper launch failed without RPATH; rebuilt with /opt/rocm/lib RPATH",
+    "Remote Cargo used locally vendored locked sources after crates.io timeout"
+  ],
+  "sha256": {
+    "Cargo.lock": "c591118e25f4af30d9ba2912b257e2fdae3f487ee2f385e358b6e1b1ef36d8d0",
+    "Cargo.toml": "8cd30abc66fdb5f9b87133c77599dd47258b430cb825834703e1b0a990c1270a",
+    "crates/fireprot-core/Cargo.toml": "5b7b647fe0882ab95fc9f9f1f20aa0e9c8694bb5627a49f2ecd4b952d2627dfe",
+    "crates/fireprot-core/src/lib.rs": "b275714355e9cd32db12b779e1c942166fc5ddab4a797a1bad7c142625e1f084",
+    "crates/fireprot-core/src/protocol.rs": "904f237ef592d0e94a8c032c4010e2d8db6b16d1d0073d4890294bd830e33322",
+    "crates/fireprot-core/src/registry.rs": "4b8b67ed0ac1b4aba6cdac824996a63b9cec1d63eedd1ce55f68945bd22b8bf6",
+    "crates/fireprot-core/src/request.rs": "0e44a3e5c0cf52adc86736da99659820ad94b9bf4fe29d6d53f81e483ee16a47",
+    "crates/fireprot-core/tests/contracts.rs": "4dd314e6871a7c4a15fd9d6a77e1873d5eaea8544b5b8a2ff1167fced6f235dd",
+    "crates/fireprot-core/tests/protocol.rs": "60f062f533a58738815d2bcb0f415707c231db684d7b99b087e645a59afff78b",
+    "crates/fireprot-core/tests/registry.rs": "c75fcbb1644ae9e59f0db871cf2021ecc63f7f626ef4052591c09fbafca0eb80",
+    "crates/fireprot-runtime/Cargo.toml": "c3bfe3b97953ea47ef115406732c50748c4390a3faec8aef6f11cfd53fb15a17",
+    "crates/fireprot-runtime/examples/device_check.rs": "ea83591a57bd88c582fdc426781e17723ba0f45e929b79e11858c19f9240d523",
+    "crates/fireprot-runtime/src/artifacts.rs": "475de663ffe9dc7d77c53c9f5eda06403f96934aec52019a58630ed5141436cc",
+    "crates/fireprot-runtime/src/command.rs": "5f900ac31df8bbc81e4b28ff84734944e422a8a1b25f07efce35525bb57a9f0f",
+    "crates/fireprot-runtime/src/device.rs": "728a9273d8b2c5a0438c231f20c8f21256cece18e18a0dc852a79a90a89d6c94",
+    "crates/fireprot-runtime/src/lib.rs": "99a0446bd780fbb53fcbc168c5ed18b55e6fca4a3343eee490413b0933dcbacc",
+    "crates/fireprot-runtime/src/supervisor.rs": "f8b0ef5574dc534826a9d884897217170fd91ed5d7d4b8e0a8d0c8ac83bc5d7f",
+    "crates/fireprot-runtime/tests/artifacts.rs": "7ffebc6e5096c70a805f2bc72c23d315c271cc822eb865ed77b3872cdd937490",
+    "crates/fireprot-runtime/tests/command.rs": "749d4fc8db543cbec98a540342735a2eaed0717e3776f6646e1b53aa76eefe45",
+    "crates/fireprot-runtime/tests/device.rs": "16749bd0e603514b47c99322f8e1f66ebd0663f359351690c95d7f0fe91127a4",
+    "crates/fireprot-runtime/tests/device_monitor.rs": "d1848eb9cf0154f805d77de23a6f2e3dfc158334f0be807f8ca12179e9e4d42c",
+    "crates/fireprot-runtime/tests/fixtures/gpu_process.cpp": "b4aefe85cb916883b8d30255b9f964d29d68c363d19444d48ad3b22e9d7e9564",
+    "crates/fireprot-runtime/tests/hardware_monitor.rs": "308e05a5271f699b5e0543c4cc6ae744c3dd466eba6b91fa4520d3b4c0283ecf",
+    "crates/fireprot-runtime/tests/supervisor.rs": "572e6d8cc2c66709065fca45a94ee50760b62bde892d2973ec84f4d11c809b6a",
+    "kernels/amd/tools/hip_device_probe.cpp": "b4e0d82420f8afcfd8caaebec185ff96bfc7cfaeec7acc62bf8a95f459c8c18b"
+  }
+}

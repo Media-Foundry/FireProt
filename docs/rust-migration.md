@@ -71,10 +71,11 @@ See [worker protocol](worker-protocol.md).
 Also implemented: Unix worker transport, bounded frames, timeout/cancellation,
 process-group cleanup, isolated logs, fresh output directories, streaming SHA-256
 and output containment checks. Real subprocess tests exercise failure paths.
-Device monitoring and model content validation are injected Rust interfaces;
-production implementations and preflight remain pending.
+The AMD device monitor now independently probes HIP identity, maps PCI to SMI,
+and rejects invalid process observations. Model content validation remains an
+injected Rust interface; its production implementation and preflight are pending.
 
-Pending: production device probes and provenance preflight, Rust operator-policy bridge, numerical
+Pending: provenance preflight, Rust operator-policy bridge, numerical
 comparison/artifact tooling, CLI, model-worker extraction, kernel layout/build
 migration, GPU parity, and replacement of maintained Python entry points. The
 repository is in migration; the full framework is not yet rebuilt.

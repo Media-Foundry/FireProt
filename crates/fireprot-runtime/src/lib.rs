@@ -2,3 +2,8 @@
 pub mod artifacts;
 #[cfg(unix)]
 pub mod supervisor;
+
+#[cfg(unix)]
+pub mod command;
+#[cfg(unix)]
+pub mod device;

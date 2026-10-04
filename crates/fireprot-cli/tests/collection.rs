@@ -158,3 +158,52 @@ fn semantic_failures_remain_failures_even_with_recomputed_receipt_hashes() {
         assert!(output.stdout.is_empty());
     }
 }
+
+#[test]
+fn run_local_working_directories_compare_without_hiding_fixed_directory_changes() {
+    let dir = tempfile::tempdir().unwrap();
+    let roots = [dir.path().join("a"), dir.path().join("b")];
+    for (index, root) in roots.iter().enumerate() {
+        fixture(root, &format!("run-{index}"), 2.0 + index as f64);
+        let original = format!("/original/unavailable/run-{index}");
+        for (file, key) in [
+            ("request.json", "output_dir"),
+            ("execution.json", "working_directory"),
+        ] {
+            let mut data: Value =
+                serde_json::from_slice(&fs::read(root.join(file)).unwrap()).unwrap();
+            data[key] = original.clone().into();
+            write(root, file, &data);
+        }
+    }
+    let pins = || roots.iter().map(|root| repin(root)).collect();
+    let output = collect(dir.path(), pins(), "model");
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let result: Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(result["summary"]["median"], 2.5);
+    assert_eq!(
+        result["series"]["observations"][0]["request"]["output_dir"],
+        "/original/unavailable/run-0"
+    );
+
+    // A fixed directory is still a condition, including a marker-like string.
+    for fixed in ["/different/fixed/directory", "<run-output-directory>"] {
+        let mut launch: Value =
+            serde_json::from_slice(&fs::read(roots[1].join("execution.json")).unwrap()).unwrap();
+        launch["working_directory"] = fixed.into();
+        write(&roots[1], "execution.json", &launch);
+        assert!(!collect(dir.path(), pins(), "model").status.success());
+    }
+    // Historical runs sharing a fixed cwd still form a valid series.
+    for root in &roots {
+        let mut launch: Value =
+            serde_json::from_slice(&fs::read(root.join("execution.json")).unwrap()).unwrap();
+        launch["working_directory"] = "/shared/upstream".into();
+        write(root, "execution.json", &launch);
+    }
+    assert!(collect(dir.path(), pins(), "model").status.success());
+}

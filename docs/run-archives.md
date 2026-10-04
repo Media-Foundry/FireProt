@@ -54,7 +54,10 @@ The comparison environment includes the full launch record, worker environment,
 physical GPU mapping and source/resource provenance-file hash. Only the launch
 digest and three invocation-specific environment values (`FIREPROT_REQUEST`,
 `FIREPROT_OUTPUT_DIR`, `FIREPROT_WORKER_SOCKET`) are removed from the condition
-comparison. Different binaries, source inventories, settings, seeds, devices or
+comparison. A working directory exactly equal to the archived request's output
+directory is represented as that relationship for comparison. Other fixed working
+directories remain unchanged; no live-path resolution is needed for copied archives.
+Different binaries, source inventories, settings, seeds, devices or
 backends are not silently pooled. Every submitted run is included; duplicate
 directories and run IDs fail.
 

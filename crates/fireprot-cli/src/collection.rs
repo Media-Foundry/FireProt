@@ -127,6 +127,12 @@ pub fn collect(plan: Collection) -> Result<Collected> {
             .as_object_mut()
             .ok_or("invalid launch record")?
             .remove("sha256");
+        // Fresh workers run inside their own output directory. Compare that
+        // relationship using archived paths, without consulting the live FS.
+        // An object marker cannot collide with a historical fixed path string.
+        if launch["working_directory"].as_str() == request.output_dir.to_str() {
+            launch["working_directory"] = serde_json::json!({"relative_to": "request.output_dir"});
+        }
         let provenance = archive
             .receipt
             .metadata

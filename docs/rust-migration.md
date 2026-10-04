@@ -68,7 +68,13 @@ invalidation, rejection reasons and native fallback. These components are tested
 offline; production Python workers and dispatch still await bridge integration.
 See [worker protocol](worker-protocol.md).
 
-Pending: process supervision and worker transport, Rust operator-policy bridge, numerical
+Also implemented: Unix worker transport, bounded frames, timeout/cancellation,
+process-group cleanup, isolated logs, fresh output directories, streaming SHA-256
+and output containment checks. Real subprocess tests exercise failure paths.
+Device monitoring and model content validation are injected Rust interfaces;
+production implementations and preflight remain pending.
+
+Pending: production device probes and provenance preflight, Rust operator-policy bridge, numerical
 comparison/artifact tooling, CLI, model-worker extraction, kernel layout/build
 migration, GPU parity, and replacement of maintained Python entry points. The
 repository is in migration; the full framework is not yet rebuilt.

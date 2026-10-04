@@ -1,0 +1,217 @@
+use fireprot_core::{
+    Request, ValidatedRequest,
+    protocol::{DeviceIdentity, Phase},
+};
+use fireprot_runtime::supervisor::*;
+use serde_json::json;
+use std::{
+    path::PathBuf,
+    sync::atomic::{AtomicBool, Ordering},
+    time::Duration,
+};
+
+struct Monitor {
+    calls: usize,
+    fail_at: usize,
+    external: bool,
+    wrong_device: bool,
+}
+impl DeviceMonitor for Monitor {
+    fn verify_device(&mut self, hip: u32, device: &DeviceIdentity) -> Result<(), String> {
+        assert_eq!(hip, 7);
+        assert_eq!(device.pci_address, "0000:93:00.0");
+        if self.wrong_device {
+            Err("PCI mismatch".into())
+        } else {
+            Ok(())
+        }
+    }
+    fn sample(&mut self, _: u32) -> Result<Vec<u32>, String> {
+        self.calls += 1;
+        if self.calls == self.fail_at {
+            return Err("SMI unavailable".into());
+        }
+        Ok(if self.external { vec![999] } else { vec![] })
+    }
+}
+fn monitor() -> Monitor {
+    Monitor {
+        calls: 0,
+        fail_at: usize::MAX,
+        external: false,
+        wrong_device: false,
+    }
+}
+fn request(output: PathBuf) -> ValidatedRequest {
+    let a = json!({"path":"/unused","sha256":"a".repeat(64)});
+    let r: Request = serde_json::from_value(json!({"schema_version":1,"run_id":"test","backend":"native","seed":101,"hip_device":7,
+        "workload":{"model":"openfold3","model_name":"openbind-0","recycles":3,"diffusion_steps":200,"samples":1,"precision":"float32"},
+        "source":{"root":"/unused","commit":"b".repeat(40)},"checkpoints":{"model":a},"input":a,"output_dir":output})).unwrap();
+    ValidatedRequest::try_from(r).unwrap()
+}
+fn worker(mode: &str) -> WorkerCommand {
+    WorkerCommand {
+        program: "python3".into(),
+        args: vec![
+            concat!(env!("CARGO_MANIFEST_DIR"), "/tests/fixtures/worker.py").into(),
+            mode.into(),
+        ],
+        working_directory: std::env::current_dir().unwrap(),
+        environment: vec![
+            ("ROCR_VISIBLE_DEVICES".into(), "wrong".into()),
+            ("HIP_VISIBLE_DEVICES".into(), "wrong".into()),
+        ],
+    }
+}
+fn limits() -> Limits {
+    Limits {
+        timeout: Duration::from_secs(3),
+        poll_interval: Duration::from_millis(2),
+        monitor_interval: Duration::from_millis(5),
+        max_frame_bytes: 4096,
+    }
+}
+#[test]
+fn success_requires_outputs_exit_monitor_and_content() {
+    let dir = tempfile::tempdir().unwrap();
+    let output = dir.path().join("run");
+    let report = run(
+        &request(output.clone()),
+        &worker("success"),
+        &mut monitor(),
+        &limits(),
+        &AtomicBool::new(false),
+        |paths| {
+            assert_eq!(std::fs::read(&paths[0]).unwrap(), b"prediction");
+            Ok(())
+        },
+    )
+    .unwrap();
+    assert_eq!(report.phase, Phase::Succeeded);
+    assert!(report.isolation_samples >= 2);
+    assert!(
+        std::fs::read_to_string(output.join("stdout.log"))
+            .unwrap()
+            .contains("model logs")
+    );
+    assert!(output.join("supervisor.json").exists());
+    assert!(
+        run(
+            &request(output),
+            &worker("success"),
+            &mut monitor(),
+            &limits(),
+            &AtomicBool::new(false),
+            |_| Ok(())
+        )
+        .is_err()
+    );
+}
+#[test]
+fn protocol_and_process_failures_never_succeed() {
+    for mode in [
+        "exit",
+        "malformed",
+        "oversize",
+        "partial",
+        "failure",
+        "sequence",
+        "hash",
+        "escape",
+        "nonzero",
+    ] {
+        let dir = tempfile::tempdir().unwrap();
+        let output = dir.path().join("run");
+        let report = run(
+            &request(output.clone()),
+            &worker(mode),
+            &mut monitor(),
+            &limits(),
+            &AtomicBool::new(false),
+            |_| Ok(()),
+        )
+        .unwrap();
+        assert_eq!(report.phase, Phase::Failed, "{mode}");
+        assert!(report.failure.is_some(), "{mode}");
+        assert!(output.join("supervisor.json").exists());
+    }
+}
+#[test]
+fn content_validation_is_mandatory() {
+    let dir = tempfile::tempdir().unwrap();
+    let r = run(
+        &request(dir.path().join("run")),
+        &worker("success"),
+        &mut monitor(),
+        &limits(),
+        &AtomicBool::new(false),
+        |_| Err("nonfinite coordinates".into()),
+    )
+    .unwrap();
+    assert_eq!(r.phase, Phase::Failed);
+    assert_eq!(r.failure.as_deref(), Some("nonfinite coordinates"));
+}
+#[test]
+fn device_and_monitor_failures_reject_run() {
+    for failure in 0..4 {
+        let dir = tempfile::tempdir().unwrap();
+        let mut m = monitor();
+        match failure {
+            0 => m.wrong_device = true,
+            1 => m.external = true,
+            2 => m.fail_at = 1,
+            _ => m.fail_at = 2,
+        }
+        let r = run(
+            &request(dir.path().join("run")),
+            &worker("wait"),
+            &mut m,
+            &limits(),
+            &AtomicBool::new(false),
+            |_| Ok(()),
+        )
+        .unwrap();
+        assert_eq!(r.phase, Phase::Failed);
+        assert!(r.elapsed_seconds < 2.0);
+    }
+}
+#[test]
+fn timeout_kills_entire_process_group() {
+    let dir = tempfile::tempdir().unwrap();
+    let output = dir.path().join("run");
+    let mut l = limits();
+    l.timeout = Duration::from_millis(350);
+    let r = run(
+        &request(output.clone()),
+        &worker("descendant"),
+        &mut monitor(),
+        &l,
+        &AtomicBool::new(false),
+        |_| Ok(()),
+    )
+    .unwrap();
+    assert_eq!(r.failure.as_deref(), Some("worker timeout"));
+    std::thread::sleep(Duration::from_millis(1100));
+    assert!(!output.join("escaped").exists());
+}
+#[test]
+fn cancellation_stops_live_worker() {
+    let dir = tempfile::tempdir().unwrap();
+    let cancelled = AtomicBool::new(false);
+    std::thread::scope(|scope| {
+        scope.spawn(|| {
+            std::thread::sleep(Duration::from_millis(150));
+            cancelled.store(true, Ordering::Relaxed);
+        });
+        let r = run(
+            &request(dir.path().join("run")),
+            &worker("wait"),
+            &mut monitor(),
+            &limits(),
+            &cancelled,
+            |_| Ok(()),
+        )
+        .unwrap();
+        assert_eq!(r.failure.as_deref(), Some("run cancelled"));
+    });
+}

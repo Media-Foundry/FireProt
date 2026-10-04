@@ -299,3 +299,79 @@ fn source_changes_before_start_or_after_predictions_fail_acceptance() {
         assert_eq!(r.device_verified, mode == "mutate-after-ready");
     }
 }
+
+#[test]
+fn accepted_archive_binds_metadata_and_outputs_and_rejects_later_changes() {
+    let dir = tempfile::tempdir().unwrap();
+    let root = dir.path().join("run");
+    let report = run(
+        &request(root.clone()),
+        &worker("success"),
+        &mut monitor(),
+        &limits(),
+        &AtomicBool::new(false),
+        |_| Ok(()),
+    )
+    .unwrap();
+    assert_eq!(report.phase, Phase::Succeeded);
+    let path = root.join("accepted.json");
+    let pin = fireprot_core::request::ArtifactRef {
+        sha256: fireprot_runtime::artifacts::sha256(&path).unwrap(),
+        path,
+    };
+    let archive = fireprot_runtime::run_archive::verify(&pin).unwrap();
+    assert_eq!(archive.receipt.metadata.len(), 4);
+    assert_eq!(archive.outputs.len(), 1);
+    for name in [
+        "prediction.bin",
+        "request.json",
+        "provenance.json",
+        "execution.json",
+        "supervisor.json",
+        "accepted.json",
+    ] {
+        let file = root.join(name);
+        let original = std::fs::read(&file).unwrap();
+        std::fs::write(&file, b"changed").unwrap();
+        assert!(
+            fireprot_runtime::run_archive::verify(&pin).is_err(),
+            "{name}"
+        );
+        std::fs::write(&file, original).unwrap();
+    }
+}
+
+#[test]
+fn changed_metadata_or_receipt_collision_cannot_leave_success_report() {
+    for name in [
+        "request.json",
+        "provenance.json",
+        "execution.json",
+        "accepted.json",
+    ] {
+        let dir = tempfile::tempdir().unwrap();
+        let root = dir.path().join("run");
+        let report = run(
+            &request(root.clone()),
+            &worker("success"),
+            &mut monitor(),
+            &limits(),
+            &AtomicBool::new(false),
+            |_| {
+                std::fs::write(root.join(name), b"changed").unwrap();
+                Ok(())
+            },
+        )
+        .unwrap();
+        assert_eq!(report.phase, Phase::Failed, "{name}");
+        assert!(
+            report
+                .failure
+                .unwrap()
+                .starts_with("acceptance archive failed:")
+        );
+        let stored: serde_json::Value =
+            serde_json::from_slice(&std::fs::read(root.join("supervisor.json")).unwrap()).unwrap();
+        assert_eq!(stored["phase"], "failed");
+    }
+}

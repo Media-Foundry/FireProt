@@ -48,8 +48,9 @@ Different seeds or devices need separate series. Backend A/B comparison also
 requires separate series and the established model-correctness and isolation
 gates. This command produces descriptive statistics, not a speedup verdict or
 proof of structural accuracy. It does not authenticate caller-supplied timings,
-reopen weights, or revalidate prediction artifacts. Automated collection from
-supervisor runs and paired performance comparisons remain migration work.
+reopen weights, or revalidate prediction artifacts. For collection with artifact
+and output-content verification, use [accepted run archives](run-archives.md).
+Paired performance verdicts remain migration work.
 
 Historical Python benchmark reports are preserved for reproduction. Their
 statistical definition is covered by Rust fixtures, including odd/even medians,

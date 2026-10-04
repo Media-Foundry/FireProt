@@ -64,6 +64,10 @@ Each run writes:
 - `sample-N.npz`: one sample's coordinates and confidence arrays;
 - `native/`: upstream output structures and associated files;
 - `supervisor.json`: Rust's terminal decision, elapsed time, isolation count, device verification/mapping, execution digest and errors.
+- `accepted.json`: successful-run receipt binding the original metadata, final supervisor report and accepted worker outputs.
+
+Use [archive collection](run-archives.md) to reverify completed runs and summarize
+their recorded timing intervals. Keep receipt hashes separately from the archive.
 
 The model output gate requires every requested sample exactly once, verified
 archive paths, matching descriptor names/shapes/storage dtypes, model-required
@@ -77,7 +81,7 @@ preserves its `[residues,14,3]` coordinate layout.
 The CLI is not yet a replacement for every maintained workflow. Pending work
 includes additional model variants and accelerated routes,
 environment/build provenance, richer model schemas, CIF comparison,
-statistics, deployment packaging, and full parity across the established length
+paired performance verdicts, deployment packaging, and full parity across the established length
 buckets. The historical E2E speedups do not establish this entry point's overhead.
 
 ## First N1000 execution evidence

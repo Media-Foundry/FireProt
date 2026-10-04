@@ -96,6 +96,8 @@ structural accuracy.
 - [Current architecture and dependency boundaries](docs/architecture.md)
 - [Repository layout and historical path compatibility](docs/repository-layout.md)
 - [Worker launch and physical device provenance](docs/execution-provenance.md)
+- [Accepted run archives and timing collection](docs/run-archives.md)
+- [Framework CPU continuous integration](docs/continuous-integration.md)
 - [Operator policy and bridge deployment](docs/rust-operators.md)
 - [Published kernel artifacts](docs/kernel-artifacts.md)
 - [Torch extension loader ownership](docs/torch-loaders.md)

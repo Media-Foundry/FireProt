@@ -195,7 +195,7 @@ pub fn run(
             let _ = session.abort(error);
         }
     }
-    let report = RunReport {
+    let mut report = RunReport {
         run_id: r.run_id.clone(),
         phase: session.phase(),
         worker_pid: pid,
@@ -205,8 +205,21 @@ pub fn run(
         announced_device: session.device().cloned(),
         device_verified,
         physical_device: monitor.physical_device(),
-        execution_sha256: execution.sha256,
+        execution_sha256: execution.sha256.clone(),
     };
+    if report.phase == Phase::Succeeded {
+        let metadata = vec![
+            crate::run_archive::json_identity("request.json", request)?,
+            crate::run_archive::json_identity("provenance.json", prepared.provenance())?,
+            crate::run_archive::json_identity("execution.json", &execution)?,
+        ];
+        if let Err(error) =
+            crate::run_archive::seal(&output, metadata, &report, session.artifacts())
+        {
+            report.phase = Phase::Failed;
+            report.failure = Some(format!("acceptance archive failed: {error}"));
+        }
+    }
     write_report(&output, &report)?;
     Ok(report)
 }

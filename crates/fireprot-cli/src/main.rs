@@ -1,4 +1,5 @@
 use fireprot_core::{Request, ValidatedRequest, request::ArtifactRef};
+mod collection;
 use fireprot_runtime::{
     build::BuildFile,
     build_tree::BuildTree,
@@ -43,6 +44,10 @@ fn execute() -> Result<(), Box<dyn std::error::Error>> {
             let series:fireprot_validation::timing::TimingSeries=serde_json::from_slice(&fs::read(path)?)?;
             let summary=series.summarize()?;
             println!("{}",serde_json::to_string_pretty(&serde_json::json!({"series":series,"summary":summary}))?);
+        },
+        ["collect-timings",path]=>{
+            let plan=serde_json::from_slice(&fs::read(path)?)?;
+            println!("{}",serde_json::to_string_pretty(&collection::collect(plan)?)?);
         },
         ["export-source",root,commit]=>println!("{}",serde_json::to_string_pretty(&export_source(std::path::Path::new(root),commit)?)?),
         ["compare-npz",reference,candidate]=>{
@@ -116,7 +121,7 @@ fn execute() -> Result<(), Box<dyn std::error::Error>> {
             println!("{}",serde_json::to_string_pretty(&report)?);
             if report.phase!=fireprot_core::protocol::Phase::Succeeded{return Err("inference failed; inspect supervisor.json and stderr.log".into());}
         },
-        _=>return Err("usage: fireprot inspect REQUEST | summarize-timings SERIES_JSON | infer REQUEST EXECUTION | export-source ROOT COMMIT | compare-npz REFERENCE CANDIDATE | build-torch SPECIFICATION CACHE | build-hip SPECIFICATION CACHE | publish-kernel CACHE DESTINATION | verify-kernel DIRECTORY MANIFEST_SHA256 COMPATIBILITY_JSON".into())
+        _=>return Err("usage: fireprot inspect REQUEST | summarize-timings SERIES_JSON | collect-timings COLLECTION_JSON | infer REQUEST EXECUTION | export-source ROOT COMMIT | compare-npz REFERENCE CANDIDATE | build-torch SPECIFICATION CACHE | build-hip SPECIFICATION CACHE | publish-kernel CACHE DESTINATION | verify-kernel DIRECTORY MANIFEST_SHA256 COMPATIBILITY_JSON".into())
     }
     Ok(())
 }

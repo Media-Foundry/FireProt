@@ -62,14 +62,15 @@ is active and the completion gates above remain in force.
 | Operator policy | Rust ordering, cache identity/invalidation, rejection reasons and fallback via the CPython bridge | Python tensor predicates and calls remain an explicit boundary |
 | Process and device control | Rust preflight, explicit launch environments and input identities, worker supervision, timeouts/cancellation, process cleanup, persisted HIP-to-PCI-to-SMI mapping and continuous isolation | Complete model-environment and dynamic-library evidence |
 | Source and resource provenance | Rust streaming hashes, pinned Git/exported sources, checkpoints, inputs and Protenix CCD/data resources | Complete adapter environment/resource coverage |
-| Output validation | Rust sample/tensor acceptance, primitive NPY/NPZ, exact array comparison, alignment, confidence schemas/deltas and experimental coordinate masks | CIF/statistics workflow coverage |
+| Output validation | Rust sample/tensor acceptance, primitive NPY/NPZ, exact array comparison, alignment, confidence schemas/deltas and experimental coordinate masks | CIF workflow coverage |
+| Timing collection | Rust descriptive statistics and pinned accepted-run archive collection, with content/device/condition checks | Paired performance verdicts and complete invocation timing |
 | Protenix | Native and accelerated Mini-default FP32 N1000/N1536 under Rust supervision | Other variants before retiring the old entry point |
 | AtlasFold + AtlasLM-3B | Native/chunked/HIP/fused HIP with dual weights and model-specific semantics | Final acceptance after layout migration |
 | OpenFold3 / OpenBind-0 | Native N1000 inference executes under Rust supervision | Numerical migration parity remains unpassed; unchanged native runs also vary |
 | Native builds | Rust dependency identities, directory inventories, cache locking/publication, guarded compiler lifecycle; all six maintained loaders connected | Complete model-environment/plugin inventories remain outside the build recipe |
 | Precompiled artifacts | Rust publication and pinned acceptance for Python and C ABI bundles; all six loaders have explicit selectors | Packaging and final deployment acceptance |
 | Repository layout | Root five-crate Cargo workspace; workers/tensor glue under `python/`, native sources under `kernels/amd`, checked path map and a root import shim | Final packaging and maintained entry points |
-| Maintained entry points | Rust CLI covers current request profiles | Replace remaining maintained scripts after parity; CI and packaging |
+| Maintained entry points | Rust CLI covers current request profiles; CPU CI configuration and local clean-checkout tests added | Replace remaining maintained scripts after parity; remote CI execution awaits workflow permission; packaging |
 
 ### Verified model scope
 

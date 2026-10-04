@@ -30,7 +30,11 @@ pinned artifact selectors. Maintained Python is under `python/fireprot`, native
 sources under `kernels/amd`, with a root import shim and an explicit historical source path map.
 Rust now records explicit launch environments, interpreter/worker inputs and
 verified physical device mapping. Complete Python package/runtime provenance and
-final packaging still need work; see `docs/execution-provenance.md`. Rust owns compiler staging,
+final packaging still need work; see `docs/execution-provenance.md`.
+Successful runs now retain pinned acceptance receipts. Rust `collect-timings`
+rechecks archived files and output content before collecting model, worker-request
+or supervisor intervals; it cannot infer complete invocation E2E or cache preparation.
+See `docs/run-archives.md`. Rust owns compiler staging,
 subprocess environment, cancellable lock waits, timeout and cache publication.
 A separate Rust guard stops compiler descendants when the caller exits, including
 forced worker termination; see `docs/torch-loaders.md` and `docs/torch-build-process.md`.

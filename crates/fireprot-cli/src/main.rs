@@ -39,6 +39,11 @@ fn execute() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<_> = std::env::args().skip(1).collect();
     match args.iter().map(String::as_str).collect::<Vec<_>>().as_slice(){
         ["inspect",request]=>{let r=read_request(request)?;println!("{}",serde_json::to_string_pretty(&r)?);},
+        ["summarize-timings",path]=>{
+            let series:fireprot_validation::timing::TimingSeries=serde_json::from_slice(&fs::read(path)?)?;
+            let summary=series.summarize()?;
+            println!("{}",serde_json::to_string_pretty(&serde_json::json!({"series":series,"summary":summary}))?);
+        },
         ["export-source",root,commit]=>println!("{}",serde_json::to_string_pretty(&export_source(std::path::Path::new(root),commit)?)?),
         ["compare-npz",reference,candidate]=>{
             let r=read_npz(std::path::Path::new(reference),512*1024*1024)?;let c=read_npz(std::path::Path::new(candidate),512*1024*1024)?;
@@ -111,7 +116,7 @@ fn execute() -> Result<(), Box<dyn std::error::Error>> {
             println!("{}",serde_json::to_string_pretty(&report)?);
             if report.phase!=fireprot_core::protocol::Phase::Succeeded{return Err("inference failed; inspect supervisor.json and stderr.log".into());}
         },
-        _=>return Err("usage: fireprot inspect REQUEST | infer REQUEST EXECUTION | export-source ROOT COMMIT | compare-npz REFERENCE CANDIDATE | build-torch SPECIFICATION CACHE | build-hip SPECIFICATION CACHE | publish-kernel CACHE DESTINATION | verify-kernel DIRECTORY MANIFEST_SHA256 COMPATIBILITY_JSON".into())
+        _=>return Err("usage: fireprot inspect REQUEST | summarize-timings SERIES_JSON | infer REQUEST EXECUTION | export-source ROOT COMMIT | compare-npz REFERENCE CANDIDATE | build-torch SPECIFICATION CACHE | build-hip SPECIFICATION CACHE | publish-kernel CACHE DESTINATION | verify-kernel DIRECTORY MANIFEST_SHA256 COMPATIBILITY_JSON".into())
     }
     Ok(())
 }

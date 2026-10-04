@@ -3,6 +3,7 @@ pub mod array;
 pub mod bundle;
 pub mod metrics;
 pub mod numpy;
+pub mod timing;
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error("invalid, empty or mismatched array shape/byte count")]

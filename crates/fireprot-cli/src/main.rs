@@ -51,7 +51,8 @@ fn execute() -> Result<(), Box<dyn std::error::Error>> {
             let prepared=prepare(request,origin)?;
             let workers=execution.workers.canonicalize()?;
             let root=prepared.request().as_request().source.root.clone();
-            let pythonpath=std::env::join_paths([workers.clone(),root.join("src"),root.clone()])?;
+            let framework=workers.parent().ok_or("worker package needs a framework parent directory")?.to_path_buf();
+            let pythonpath=std::env::join_paths([workers.clone(),root.join("src"),root.clone(),framework])?;
             let mut env:Vec<_>=execution.environment.into_iter().map(|(k,v)|(k.into(),v.into())).collect();
             env.push(("PYTHONPATH".into(),pythonpath));env.push(("PYTHONNOUSERSITE".into(),"1".into()));
             let worker=WorkerCommand{program:std::path::absolute(execution.python)?,args:vec!["-m".into(),"fireprot_workers".into()],working_directory:workers,environment:env};

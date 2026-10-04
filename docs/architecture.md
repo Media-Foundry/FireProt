@@ -9,17 +9,19 @@ cross-model API and packaged kernel builds are not complete.
 | Layer | Current owner | Integration status |
 | --- | --- | --- |
 | Typed requests, cycle semantics and operator selection | `fireprot-core` | Rust; shared Python dispatch uses the Rust registry |
-| Source/weight preflight, worker lifecycle and GPU isolation | `fireprot-runtime` | Rust; native AtlasFold and OpenFold3 workers connected |
+| Source/weight/resource preflight, worker lifecycle and GPU isolation | `fireprot-runtime` | Rust; Protenix, AtlasFold and OpenFold3 workers connected |
 | Output acceptance and numerical comparison | `fireprot-validation` | Rust; output bundles, NPY/NPZ, alignment and confidence checks |
-| User entry point | `fireprot-cli` | Rust; native AtlasFold/OpenFold3 request execution |
+| User entry point | `fireprot-cli` | Rust; Protenix native/FireProt and native AtlasFold/OpenFold3 requests |
 | In-process operator policy boundary | `fireprot-bridge` | CPython stable C ABI; metadata and callbacks only |
-| Model execution | `python/fireprot_workers` and independent upstream checkouts | Explicit PyTorch boundary; Protenix worker integration pending |
+| Model execution | `python/fireprot_workers` and independent upstream checkouts | Explicit PyTorch boundary; additional model variants pending |
 | AMD kernels and tensor glue | `fireprot/backends/amd` | Existing HIP/CK paths; build and layout migration pending |
 
 AtlasFold N1000 native output migration passes exactly. OpenFold3 N1000 executes
 under Rust supervision, but numerical parity remains unpassed after variation
-was also observed between unchanged native runs. Operator bridge checks exercise
-the existing Protenix model glue separately from the pending Rust worker route.
+was also observed between unchanged native runs. Protenix Mini-default native and
+FireProt workers now pass existing coordinate/summary gates at N1000 and N1536.
+Their full confidence arrays are retained and shape/finite-value checked; this
+does not imply bitwise native/accelerated array equality.
 See [migration gates](rust-migration.md), [running](rust-running.md), and
 [operator bridge](rust-operators.md). Historical benchmark Python remains for
 reproduction; it is not the target owner of new framework policy.

@@ -5,9 +5,9 @@ request has completed with the Rust supervisor, 297 isolation samples, and
 validated output content. Exact agreement with the older native capture did not
 pass; a fresh native-repeat control also differs from the older native capture. This route is not yet
 promoted as migration-parity validated. The workers
-implement native OpenFold3/OpenBind-0 and AtlasFold plus AtlasLM-3B monomer
-inference. Protenix, accelerated backends and the in-process Rust operator bridge are not connected
-to this entry point yet. Their existing workflows remain the migration references.
+implement native OpenFold3/OpenBind-0, AtlasFold plus AtlasLM-3B, and Protenix
+Mini-default monomer inference. Protenix also has a FireProt backend connected to
+the Rust operator bridge. Accelerated AtlasFold/OpenFold3 routes remain pending.
 
 ## Commands
 
@@ -24,7 +24,7 @@ Run from the FireProt root on that host. Build the HIP identity probe following
 [the worker protocol](worker-protocol.md#independent-amd-device-monitor).
 Use a fresh output directory and run ID for every request; the supervisor refuses
 to reuse an output directory. The request fixes source commit, input/checkpoint
-paths/hashes, precision, additional recycle count, diffusion steps, sample count
+paths/hashes, named data resources, precision, cycle/recycle count, diffusion steps, sample count
 and seed. The example retains 1000 residues, 3 additional recycles (4 trunk
 passes), 200 diffusion steps, one sample, FP32, seed 101, and no MSA/template search.
 
@@ -41,7 +41,7 @@ exact dtype/shape/value-byte comparison of every array key.
 
 ## Ownership and outputs
 
-Rust performs source/input/weight preflight, launches the process, independently
+Rust performs source/input/weight/resource preflight, launches the process, independently
 checks HIP-to-SMI identity, continuously samples GPU processes, enforces protocol
 ordering and verifies output hashes/content before reporting success.
 
@@ -65,14 +65,14 @@ The model output gate requires every requested sample exactly once, verified
 archive paths, matching descriptor names/shapes/storage dtypes, model-required
 coordinate/confidence fields and finite numerical values. BF16 is serialized as
 raw uint16 bits with explicit original dtype; BF16-to-FP32 conversion is rejected.
-OpenFold3 batch/sample axes are split into individual sample archives. AtlasFold's
-future worker must preserve its `[residues,14,3]` coordinate layout.
+OpenFold3 batch/sample axes are split into individual sample archives. AtlasFold
+preserves its `[residues,14,3]` coordinate layout.
 
 ## Remaining migration gates
 
 The CLI is not yet a replacement for every maintained workflow. Pending work
-includes the other model workers and accelerated routes, Rust operator bridge,
-resource/environment/build provenance, richer model schemas, CIF comparison,
+includes additional model variants and accelerated routes,
+environment/build provenance, richer model schemas, CIF comparison,
 statistics, deployment packaging, and full parity across the established length
 buckets. The historical E2E speedups do not establish this entry point's overhead.
 
@@ -117,3 +117,86 @@ AtlasFold's public API already exports FP32 NumPy arrays and a Python float pTM.
 The worker preserves that native API. `atlasfold-model.json` separately records
 internal output tensor dtypes, effective bucket, sampling settings and model
 configuration; it is a worker diagnostic, not a supervisor-authenticated report.
+
+## Protenix Mini-default
+
+```bash
+cargo build --release -p fireprot-cli -p fireprot-bridge --locked
+target/release/fireprot infer configs/requests/protenix-n1000-native.json \
+  configs/diamondhill/protenix-native.json
+target/release/fireprot infer configs/requests/protenix-n1000-fireprot.json \
+  configs/diamondhill/protenix-fireprot.json
+```
+
+Equivalent N1536 request examples are supplied. These requests preserve FP32,
+four total trunk cycles, one diffusion step, one sample and seed 101. They use
+hipBLAS, disable TF32, MSA/RNA-MSA/template searches, and keep upstream cache and
+fusion settings enabled. The FireProt execution profile explicitly enables the
+existing validated long-sequence paths. This is backend migration, not a new
+kernel optimization. Requests outside the current Mini-default FP32,
+sequence-only single-monomer contract fail clearly; ESM variants, modified
+residues, external features and multimer workers remain pending.
+
+The request's `resources` map pins all four upstream CCD/data assets, verified
+with streaming SHA-256 before launch. The worker passes these exact paths to
+upstream configuration before importing CCD. Missing assets never trigger a
+download. `provenance/sources/protenix-bb3be993.json` pins all 248 tracked source
+files without modifying the independent remote Git checkout.
+
+Upstream `inference_jsons` still owns feature construction, seeding and native
+model invocation. The thin worker checks the instantiated workload, captures
+exactly one query, exports coordinates and complete unrounded full-data
+confidence arrays, retains summary confidence, and requires all native CIFs.
+It detects errors swallowed by the upstream runner and restores its capture
+wrappers on exit. Sample IDs retain generation order rather than ranking order.
+Rust requires pLDDT/PAE/PDE/contact arrays with matching atom/token shapes and the
+requested cycle count in the confidence summary. The FireProt route also emits
+`operator-runtime.json`, included in the supervisor's hash-verified artifacts.
+
+`model_seconds` is synchronized wall time around upstream `predict`, including
+its input transfer; `request_seconds` includes model imports, initialization,
+features, prediction and serialization. Supervisor wall adds worker startup,
+monitoring and output verification, excluding the earlier provenance preflight.
+No historical timing boundary is silently substituted for these fields.
+
+For migration checks against an archived native CIF, export its model-1
+coordinates losslessly to NPZ, then run the Rust comparator:
+
+```bash
+cargo run --release -p fireprot-validation --example compare_protenix -- \
+  reference.npz reference-confidence.json sample-0.npz candidate-confidence.json
+```
+
+This example preserves the existing 1e-3 Angstrom aligned-RMSD and 1e-3 numeric
+summary-confidence gates. It does not assert bitwise equality or compare raw
+confidence arrays that were absent from historical CIF/summary references.
+
+### Protenix migration evidence
+
+One request per route and length completed on DiamondHill HIP 7 with Rust PCI
+mapping and continuous isolation. All six existing-gate comparisons pass: two
+native versus archived native, two FireProt versus archived FireProt, and two
+FireProt versus the new native requests.
+
+| Length / route | Worker request | Synchronized predict | Supervisor wall, excluding preflight | Isolation samples |
+| --- | ---: | ---: | ---: | ---: |
+| 1000 native | 79.688 s | 50.759 s | 86.426 s | 97 |
+| 1000 FireProt | 25.812 s | 15.289 s | 32.423 s | 35 |
+| 1536 native | 176.818 s | 144.545 s | 184.354 s | 209 |
+| 1536 FireProt | 43.851 s | 32.477 s | 50.796 s | 56 |
+
+These are migration checks with fresh workers and warm filesystem/kernel caches,
+not a repeated, interleaved speedup experiment. Exact hashes for the native worker
+and subsequent accelerated-routing build are retained. The migrated FireProt
+route still selects the measured CK attention and packed HIP multiplication,
+fast model construction and unused-template omission.
+
+The new complete confidence captures expose native/accelerated maximum absolute
+PAE differences of 0.009623 / 0.011969 Angstrom and PDE differences of
+0.039787 / 0.058372 Angstrom at N1000 / N1536. Exact-array comparison therefore
+fails, as do exact coordinates. Integer atom/token metadata is identical. No raw
+array tolerance was introduced after seeing these results. The established
+coordinate/summary gate remains distinct: maximum paired aligned RMSD is
+1.074e-4 Angstrom and maximum paired summary delta is 3.815e-6.
+
+See [complete requests, build identities, outputs and comparisons](../provenance/rust_protenix_integration.json).

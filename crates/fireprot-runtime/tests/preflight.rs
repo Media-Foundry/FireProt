@@ -75,6 +75,34 @@ fn pins_actual_source_input_and_weights() {
     assert_eq!(p.provenance().checkpoints.values().next().unwrap().bytes, 7);
     assert!(!p.request().as_request().output_dir.exists());
 }
+
+#[test]
+fn named_model_resources_are_hashed_and_cannot_change_silently() {
+    let f = Fixture::new();
+    let path = f.dir.path().join("ccd");
+    fs::write(&path, b"chemical components").unwrap();
+    let mut r = f.request();
+    r.resources.insert(
+        "ccd".into(),
+        ArtifactRef {
+            path: path.clone(),
+            sha256: sha256(&path).unwrap(),
+        },
+    );
+    let prepared = prepare(checked(r.clone()), SourceOrigin::GitCheckout).unwrap();
+    assert_eq!(prepared.provenance().resources["ccd"].bytes, 19);
+    assert_eq!(
+        prepared.request().as_request().resources["ccd"].path,
+        path.canonicalize().unwrap()
+    );
+    fs::write(&path, b"changed components").unwrap();
+    assert!(
+        prepare(checked(r), SourceOrigin::GitCheckout)
+            .err()
+            .unwrap()
+            .contains("artifact digest mismatch")
+    );
+}
 #[test]
 fn wrong_commit_and_hidden_dirty_source_fail() {
     let f = Fixture::new();

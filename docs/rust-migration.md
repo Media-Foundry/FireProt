@@ -107,6 +107,16 @@ four public output arrays against the stored native reference. Dual weights,
 recycles, sampling steps and native precision boundaries are retained. Accelerated
 AtlasFold routes and N1536 parity remain pending.
 
+Protenix Mini-default FP32 now runs natively and through the existing CK/HIP
+backend under Rust supervision, with four pinned CCD/data resources in preflight.
+N1000 and N1536 pass the established coordinate/summary-confidence gates against
+stored references, and both accelerated requests pass against their new native
+counterparts. Full confidence arrays are now preserved; raw native/accelerated
+PAE/PDE values are not bitwise identical and are recorded without widening any
+gate. See [Protenix worker scope](rust-running.md#protenix-mini-default) and
+`provenance/rust_protenix_integration.json`. This does not complete the full
+framework migration or establish parity for other Protenix variants.
+
 The shared operator registry now routes candidate ordering, cache invalidation,
 fallback decisions and manifests through `fireprot-core` via a CPython stable-ABI
 bridge. Python retains tensor introspection, capability predicates and callable

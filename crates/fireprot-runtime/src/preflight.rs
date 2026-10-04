@@ -49,6 +49,7 @@ pub struct Provenance {
     pub exported_manifest: Option<VerifiedArtifact>,
     pub input: VerifiedArtifact,
     pub checkpoints: BTreeMap<CheckpointRole, VerifiedArtifact>,
+    pub resources: BTreeMap<String, VerifiedArtifact>,
 }
 
 /// Only `prepare` can construct this token. It is deliberately not deserializable.
@@ -218,10 +219,17 @@ pub fn prepare(request: ValidatedRequest, origin: SourceOrigin) -> Result<Prepar
     for (role, artifact) in &r.checkpoints {
         checkpoints.insert(*role, verify_artifact(artifact)?);
     }
+    let mut resources = BTreeMap::new();
+    for (name, artifact) in &r.resources {
+        resources.insert(name.clone(), verify_artifact(artifact)?);
+    }
     r.source.root = root.clone();
     r.input.path = input.path.clone();
     for (role, artifact) in &mut r.checkpoints {
         artifact.path = checkpoints[role].path.clone();
+    }
+    for (name, artifact) in &mut r.resources {
+        artifact.path = resources[name].path.clone();
     }
     // Absolute paths survive changing the worker's current directory.
     if !r.output_dir.is_absolute() {
@@ -238,6 +246,7 @@ pub fn prepare(request: ValidatedRequest, origin: SourceOrigin) -> Result<Prepar
             exported_manifest,
             input,
             checkpoints,
+            resources,
         },
     })
 }

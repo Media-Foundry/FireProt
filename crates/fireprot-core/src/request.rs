@@ -175,6 +175,9 @@ pub struct Request {
     pub hip_device: u32,
     pub source: SourcePin,
     pub checkpoints: BTreeMap<CheckpointRole, ArtifactRef>,
+    /// Named non-weight model assets, verified by the same preflight gate.
+    #[serde(default)]
+    pub resources: BTreeMap<String, ArtifactRef>,
     pub input: ArtifactRef,
     pub output_dir: PathBuf,
 }
@@ -232,6 +235,12 @@ impl TryFrom<Request> for ValidatedRequest {
             return Err(RequestError::CheckpointRoles);
         }
         for artifact in request.checkpoints.values() {
+            validate_artifact(artifact)?;
+        }
+        for (name, artifact) in &request.resources {
+            if name.is_empty() {
+                return Err(RequestError::EmptyField("resource name"));
+            }
             validate_artifact(artifact)?;
         }
         Ok(Self(request))

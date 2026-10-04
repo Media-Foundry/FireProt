@@ -11,7 +11,8 @@ def main():
     request = json.loads(Path(os.environ['FIREPROT_REQUEST']).read_text())
     channel = Channel(request)
     try:
-        if request['backend'] != 'native':
+        if request['backend'] != 'native' and not (
+                request['workload']['model'] == 'protenix' and request['backend'] == 'fireprot'):
             raise ValueError('Accelerated worker backends are not integrated yet')
         import torch
         channel.ready(torch)
@@ -19,6 +20,8 @@ def main():
             from .openfold3 import predict
         elif request['workload']['model'] == 'atlasfold':
             from .atlasfold import predict
+        elif request['workload']['model'] == 'protenix':
+            from .protenix import predict
         else:
             raise ValueError('This model worker is not integrated yet')
         bundle = predict(request, channel)

@@ -1,0 +1,2368 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-04",
+  "base_commit": "d515b7402eab0bb09fa870f6b0df38d644e5d92e",
+  "scope": "Protenix Mini-default FP32 monomer workers under Rust supervision, native and existing FireProt kernels",
+  "native_build": {
+    "target/release/fireprot": "0bb9dd51f4f7d7d776a537210e172dddec6cd3fea816ed3ea16e434480390cca",
+    "crates/fireprot-cli/src/main.rs": "304267e250d64e5128882e4e49309f4935fd17a59123b9c39c296b8009f77ce7",
+    "crates/fireprot-core/src/request.rs": "59e9f106491a9207d2834ea5bb9334c6a3370e78961ca356b0a5820cd4ea7952",
+    "crates/fireprot-runtime/src/preflight.rs": "3e2d45fdf4725899ec368c4b5653a42bd2089cefc3b02f6bb4fbf9287530cb5a",
+    "crates/fireprot-validation/src/bundle.rs": "a5e7e17bc7d5e9b017f6299f99f6e624ee16dff0f80b1aa16447a839d660ead1",
+    "python/fireprot_workers/__main__.py": "4bc77c8e9e30e2286d031bb9c41c18a53d16baa3eb69b74ea2e88d5517306255",
+    "python/fireprot_workers/protenix.py": "67214939a650bdb79cce15d66251730486ceea817900daffdb80fb2be462e9c0",
+    "python/fireprot_workers/transport.py": "edcc548f79494fa611249e1076f373147379c0e1c7753362b4bcaaebb48dc361"
+  },
+  "fireprot_build": {
+    "target/release/fireprot": "2cb27c60dedfd7a26d37da1c6c2908f0f4f5bf58cdb1f304d9bd8fcfb78479d0",
+    "crates/fireprot-cli/src/main.rs": "fa8022bd83063ebd85764cca6b765b1e333c1b06b322fba6dfcfa11000f12490",
+    "crates/fireprot-core/src/request.rs": "59e9f106491a9207d2834ea5bb9334c6a3370e78961ca356b0a5820cd4ea7952",
+    "crates/fireprot-runtime/src/preflight.rs": "3e2d45fdf4725899ec368c4b5653a42bd2089cefc3b02f6bb4fbf9287530cb5a",
+    "crates/fireprot-validation/src/bundle.rs": "774892441c8fa991d0d2ecaa33bf17fd0b0db0f8ccbc4f928fc5eb2b73a02d65",
+    "python/fireprot_workers/__main__.py": "70065f1fa075aec108b4e812aefee1227a70c094a4929b73999ecaefefb5d9c3",
+    "python/fireprot_workers/protenix.py": "e190929c4409e0683b596ca7713eeab8b90f76d2cb6abdc98d372b6870173151",
+    "python/fireprot_workers/transport.py": "3db6f684125143bd48d1ebfb357887a1d4440e300d2cd50be4e9918b9b5270c2"
+  },
+  "environment": {
+    "python": "3.12.13",
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850"
+  },
+  "source_manifest": {
+    "path": "provenance/sources/protenix-bb3be993.json",
+    "sha256": "dc759ec3ca45e92596c5b23771b0645da9d9e34d2b6082ba664ca90b2fe0d32c"
+  },
+  "execution_profiles": {
+    "native": {
+      "python": "/home/pc/anaconda3/envs/fold/bin/python",
+      "workers": "/media/IntelSSD/fireprot/python",
+      "hip_probe": "/media/IntelSSD/fireprot/runtime/fireprot-hip-probe",
+      "amd_smi": "/usr/bin/amd-smi",
+      "source_manifest": {
+        "path": "/media/IntelSSD/fireprot/provenance/sources/protenix-bb3be993.json",
+        "sha256": "dc759ec3ca45e92596c5b23771b0645da9d9e34d2b6082ba664ca90b2fe0d32c"
+      },
+      "environment": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "PYTORCH_ALLOC_CONF": "expandable_segments:True"
+      }
+    },
+    "fireprot": {
+      "python": "/home/pc/anaconda3/envs/fold/bin/python",
+      "workers": "/media/IntelSSD/fireprot/python",
+      "hip_probe": "/media/IntelSSD/fireprot/runtime/fireprot-hip-probe",
+      "amd_smi": "/usr/bin/amd-smi",
+      "source_manifest": {
+        "path": "/media/IntelSSD/fireprot/provenance/sources/protenix-bb3be993.json",
+        "sha256": "dc759ec3ca45e92596c5b23771b0645da9d9e34d2b6082ba664ca90b2fe0d32c"
+      },
+      "environment": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "PYTORCH_ALLOC_CONF": "expandable_segments:True",
+        "FIREPROT_ENABLE_LONG1536": "1",
+        "FIREPROT_ENABLE_PAIR_LAYOUT": "1",
+        "FIREPROT_ENABLE_TRANSPOSED_LAYERNORM": "1",
+        "FIREPROT_ENABLE_TRANSPOSED_NORM_SUBGROUP": "1",
+        "FIREPROT_ENABLE_TRANSITION_PROJECTION": "1",
+        "FIREPROT_ENABLE_FAST_MODEL_INIT": "1",
+        "FIREPROT_SKIP_UNUSED_TEMPLATES": "1",
+        "FIREPROT_ENABLE_TWO_GCD_ATTENTION": "0",
+        "FIREPROT_ENABLE_LT_BMM_1536": "0",
+        "FIREPROT_ENABLE_ATTENTION_GATE_1536": "0"
+      }
+    }
+  },
+  "runs": {
+    "n1000-native": {
+      "root": "/media/IntelSSD/fireprot/outputs/protenix-n1000-native",
+      "request": {
+        "schema_version": 1,
+        "run_id": "protenix-n1000-native",
+        "workload": {
+          "model": "protenix",
+          "model_name": "protenix_mini_default_v0.5.0",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "precision": "float32"
+        },
+        "backend": "native",
+        "seed": 101,
+        "hip_device": 7,
+        "source": {
+          "root": "/media/IntelSSD/fireprot/Protenix",
+          "commit": "bb3be993b52713795796c72cf0a46ef8a7323442"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_default_v0.5.0.pt",
+            "sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81"
+          }
+        },
+        "resources": {
+          "ccd_components_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+            "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5"
+          },
+          "ccd_components_rdkit_mol_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+            "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35"
+          },
+          "obsolete_release_data_csv": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+            "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33"
+          },
+          "pdb_cluster_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+            "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c"
+          }
+        },
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/protenix-n1000-native"
+      },
+      "provenance_file_sha256": "0ddc59145ba0438082e75bd94a349532989a5d069f0895c1231462f90d034d13",
+      "verified_provenance": {
+        "source_root": "/media/IntelSSD/fireprot/Protenix",
+        "exported_manifest": {
+          "path": "/media/IntelSSD/fireprot/provenance/sources/protenix-bb3be993.json",
+          "sha256": "dc759ec3ca45e92596c5b23771b0645da9d9e34d2b6082ba664ca90b2fe0d32c",
+          "bytes": 39806
+        },
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac",
+          "bytes": 1180
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_default_v0.5.0.pt",
+            "sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81",
+            "bytes": 537049294
+          }
+        },
+        "resources": {
+          "ccd_components_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+            "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5",
+            "bytes": 490777362
+          },
+          "ccd_components_rdkit_mol_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+            "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35",
+            "bytes": 142498117
+          },
+          "obsolete_release_data_csv": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+            "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33",
+            "bytes": 134716
+          },
+          "pdb_cluster_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+            "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c",
+            "bytes": 21699572
+          }
+        }
+      },
+      "verified_source_file_count": 248,
+      "predictions": {
+        "schema_version": 1,
+        "run_id": "protenix-n1000-native",
+        "seed": 101,
+        "workload": {
+          "model": "protenix",
+          "model_name": "protenix_mini_default_v0.5.0",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "precision": "float32"
+        },
+        "predictions": [
+          {
+            "sample": 0,
+            "archive": "sample-0.npz",
+            "arrays": {
+              "coordinates": {
+                "shape": [
+                  7979,
+                  3
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.atom_plddt": {
+                "shape": [
+                  7979
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.token_pair_pde": {
+                "shape": [
+                  1000,
+                  1000
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.token_pair_pae": {
+                "shape": [
+                  1000,
+                  1000
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.contact_probs": {
+                "shape": [
+                  1000,
+                  1000
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.token_has_frame": {
+                "shape": [
+                  1000
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              },
+              "confidence.token_asym_id": {
+                "shape": [
+                  1000
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              },
+              "confidence.atom_to_token_idx": {
+                "shape": [
+                  7979
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              },
+              "confidence.atom_is_polymer": {
+                "shape": [
+                  7979
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              }
+            },
+            "confidence": {
+              "plddt": 34.46320724487305,
+              "gpde": 7.2383036613464355,
+              "ptm": 0.17145483195781708,
+              "iptm": 0.0,
+              "chain_gpde": [
+                7.2383036613464355
+              ],
+              "chain_pair_gpde": [
+                [
+                  0.0
+                ]
+              ],
+              "chain_ptm": [
+                0.17145483195781708
+              ],
+              "chain_iptm": [
+                0.0
+              ],
+              "chain_pair_iptm": [
+                [
+                  0.0
+                ]
+              ],
+              "chain_pair_iptm_global": [
+                [
+                  0.0
+                ]
+              ],
+              "chain_plddt": [
+                0.344632089138031
+              ],
+              "chain_pair_plddt": [
+                [
+                  0.0
+                ]
+              ],
+              "has_clash": false,
+              "disorder": 0.0,
+              "ranking_score": 0.034290965646505356,
+              "num_recycles": 4
+            }
+          }
+        ],
+        "model_seconds": 50.75949991599191,
+        "request_seconds": 79.68807932501659,
+        "environment": {
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850",
+          "python": "3.12.13"
+        }
+      },
+      "supervisor": {
+        "run_id": "protenix-n1000-native",
+        "phase": "succeeded",
+        "worker_pid": 1202951,
+        "elapsed_seconds": 86.426324681,
+        "isolation_samples": 97,
+        "failure": null
+      },
+      "output_sha256": {
+        "predictions.json": "f8048f1fa3fa67adc2d9eeb7d45c83a4ef789d0527562754f89cab01b3953aea",
+        "sample-0.npz": "c5e40ca0150e3e35b9bb406254f35fbcc62dfdfa5bcecb26d32f786d9dac03c5",
+        "native/umem_L01000_462bb697ecdcce2f/seed_101/predictions/umem_L01000_462bb697ecdcce2f_sample_0.cif": "bfd9fa82b08a9506d421fea6208b450f245cd6a72d36c6f0ba5cca02eeff83a6"
+      },
+      "comparisons": {
+        "comparison": {
+          "confidence": {
+            "extra_in_candidate": [],
+            "max_abs_delta": 3.814697265625e-06,
+            "mean_abs_delta": 2.649923165639241e-07,
+            "missing_from_candidate": [],
+            "numeric_leaf_count": 15
+          },
+          "confidence_tolerance": 0.001,
+          "coordinate_tolerance_angstrom": 0.001,
+          "coordinates": {
+            "aligned_rmsd_angstrom": 9.635705402944898e-05,
+            "atom_count": 7979,
+            "max_abs_coordinate_delta_angstrom": 0.0009765625,
+            "raw_rmsd_angstrom": 9.796987308444233e-05
+          },
+          "passed": true
+        },
+        "reference": {
+          "outputs/benchmarks/native-requests-fa7cc55/n1000/pair0/native/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/native/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000_sample_0.cif": "d26efc76b497920718d0ddcb7031a8a65b9f38d2e9e402983f8adc4c6b0b8e47",
+          "outputs/benchmarks/native-requests-fa7cc55/n1000/pair0/native/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/native/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000_summary_confidence_sample_0.json": "5f13c79dfb97e79478d16efad98ccaed89fe764c475e1f5217ad55693210a34c"
+        },
+        "candidate-confidence": {
+          "plddt": 34.46320724487305,
+          "gpde": 7.2383036613464355,
+          "ptm": 0.17145483195781708,
+          "iptm": 0.0,
+          "chain_gpde": [
+            7.2383036613464355
+          ],
+          "chain_pair_gpde": [
+            [
+              0.0
+            ]
+          ],
+          "chain_ptm": [
+            0.17145483195781708
+          ],
+          "chain_iptm": [
+            0.0
+          ],
+          "chain_pair_iptm": [
+            [
+              0.0
+            ]
+          ],
+          "chain_pair_iptm_global": [
+            [
+              0.0
+            ]
+          ],
+          "chain_plddt": [
+            0.344632089138031
+          ],
+          "chain_pair_plddt": [
+            [
+              0.0
+            ]
+          ],
+          "has_clash": false,
+          "disorder": 0.0,
+          "ranking_score": 0.034290965646505356,
+          "num_recycles": 4
+        }
+      }
+    },
+    "n1000-fireprot": {
+      "root": "/media/IntelSSD/fireprot/outputs/protenix-n1000-fireprot",
+      "request": {
+        "schema_version": 1,
+        "run_id": "protenix-n1000-fireprot",
+        "workload": {
+          "model": "protenix",
+          "model_name": "protenix_mini_default_v0.5.0",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "precision": "float32"
+        },
+        "backend": "fireprot",
+        "seed": 101,
+        "hip_device": 7,
+        "source": {
+          "root": "/media/IntelSSD/fireprot/Protenix",
+          "commit": "bb3be993b52713795796c72cf0a46ef8a7323442"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_default_v0.5.0.pt",
+            "sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81"
+          }
+        },
+        "resources": {
+          "ccd_components_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+            "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5"
+          },
+          "ccd_components_rdkit_mol_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+            "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35"
+          },
+          "obsolete_release_data_csv": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+            "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33"
+          },
+          "pdb_cluster_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+            "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c"
+          }
+        },
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/protenix-n1000-fireprot"
+      },
+      "provenance_file_sha256": "0ddc59145ba0438082e75bd94a349532989a5d069f0895c1231462f90d034d13",
+      "verified_provenance": {
+        "source_root": "/media/IntelSSD/fireprot/Protenix",
+        "exported_manifest": {
+          "path": "/media/IntelSSD/fireprot/provenance/sources/protenix-bb3be993.json",
+          "sha256": "dc759ec3ca45e92596c5b23771b0645da9d9e34d2b6082ba664ca90b2fe0d32c",
+          "bytes": 39806
+        },
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac",
+          "bytes": 1180
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_default_v0.5.0.pt",
+            "sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81",
+            "bytes": 537049294
+          }
+        },
+        "resources": {
+          "ccd_components_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+            "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5",
+            "bytes": 490777362
+          },
+          "ccd_components_rdkit_mol_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+            "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35",
+            "bytes": 142498117
+          },
+          "obsolete_release_data_csv": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+            "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33",
+            "bytes": 134716
+          },
+          "pdb_cluster_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+            "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c",
+            "bytes": 21699572
+          }
+        }
+      },
+      "verified_source_file_count": 248,
+      "predictions": {
+        "schema_version": 1,
+        "run_id": "protenix-n1000-fireprot",
+        "seed": 101,
+        "workload": {
+          "model": "protenix",
+          "model_name": "protenix_mini_default_v0.5.0",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "precision": "float32"
+        },
+        "predictions": [
+          {
+            "sample": 0,
+            "archive": "sample-0.npz",
+            "arrays": {
+              "coordinates": {
+                "shape": [
+                  7979,
+                  3
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.atom_plddt": {
+                "shape": [
+                  7979
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.token_pair_pde": {
+                "shape": [
+                  1000,
+                  1000
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.token_pair_pae": {
+                "shape": [
+                  1000,
+                  1000
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.contact_probs": {
+                "shape": [
+                  1000,
+                  1000
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.token_has_frame": {
+                "shape": [
+                  1000
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              },
+              "confidence.token_asym_id": {
+                "shape": [
+                  1000
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              },
+              "confidence.atom_to_token_idx": {
+                "shape": [
+                  7979
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              },
+              "confidence.atom_is_polymer": {
+                "shape": [
+                  7979
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              }
+            },
+            "confidence": {
+              "plddt": 34.46320343017578,
+              "gpde": 7.2383036613464355,
+              "ptm": 0.17145484685897827,
+              "iptm": 0.0,
+              "chain_gpde": [
+                7.2383036613464355
+              ],
+              "chain_pair_gpde": [
+                [
+                  0.0
+                ]
+              ],
+              "chain_ptm": [
+                0.17145484685897827
+              ],
+              "chain_iptm": [
+                0.0
+              ],
+              "chain_pair_iptm": [
+                [
+                  0.0
+                ]
+              ],
+              "chain_pair_iptm_global": [
+                [
+                  0.0
+                ]
+              ],
+              "chain_plddt": [
+                0.34463202953338623
+              ],
+              "chain_pair_plddt": [
+                [
+                  0.0
+                ]
+              ],
+              "has_clash": false,
+              "disorder": 0.0,
+              "ranking_score": 0.034290969371795654,
+              "num_recycles": 4
+            }
+          }
+        ],
+        "model_seconds": 15.28914150595665,
+        "request_seconds": 25.81175268802326,
+        "environment": {
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850",
+          "python": "3.12.13"
+        }
+      },
+      "supervisor": {
+        "run_id": "protenix-n1000-fireprot",
+        "phase": "succeeded",
+        "worker_pid": 1205749,
+        "elapsed_seconds": 32.422586568,
+        "isolation_samples": 35,
+        "failure": null
+      },
+      "output_sha256": {
+        "predictions.json": "9fa2a6261ea0d5f93e5309f0b438122f92be0ba0258e1e43fb21e1c873caae72",
+        "sample-0.npz": "b6cb5a080cd7098bae6670eeaf33f9cfb38f4e8024397c75af7b773ba5fdde84",
+        "native/umem_L01000_462bb697ecdcce2f/seed_101/predictions/umem_L01000_462bb697ecdcce2f_sample_0.cif": "1692b0a295b4978705d0ea46a4a24ad296a1a6465fd0478e725184a9ad785855",
+        "operator-runtime.json": "457e674a3f3b0d43d74b48e549ff4bb655e509eaf071cd8b2b002f0fc127acf5"
+      },
+      "comparisons": {
+        "raw-array-diagnostics": {
+          "confidence.atom_is_polymer": {
+            "bitwise_equal": true,
+            "max_abs_delta": null,
+            "passed": true
+          },
+          "confidence.atom_plddt": {
+            "bitwise_equal": false,
+            "max_abs_delta": 1.1473894119262695e-05,
+            "passed": false
+          },
+          "confidence.atom_to_token_idx": {
+            "bitwise_equal": true,
+            "max_abs_delta": null,
+            "passed": true
+          },
+          "confidence.contact_probs": {
+            "bitwise_equal": false,
+            "max_abs_delta": 3.7848949432373047e-06,
+            "passed": false
+          },
+          "confidence.token_asym_id": {
+            "bitwise_equal": true,
+            "max_abs_delta": null,
+            "passed": true
+          },
+          "confidence.token_has_frame": {
+            "bitwise_equal": true,
+            "max_abs_delta": null,
+            "passed": true
+          },
+          "confidence.token_pair_pae": {
+            "bitwise_equal": false,
+            "max_abs_delta": 0.009622573852539062,
+            "passed": false
+          },
+          "confidence.token_pair_pde": {
+            "bitwise_equal": false,
+            "max_abs_delta": 0.03978729248046875,
+            "passed": false
+          },
+          "coordinates": {
+            "bitwise_equal": false,
+            "max_abs_delta": 0.0009765625,
+            "passed": false
+          }
+        },
+        "vs-legacy-fireprot": {
+          "confidence": {
+            "extra_in_candidate": [],
+            "max_abs_delta": 3.814697265625e-06,
+            "mean_abs_delta": 2.649923165639241e-07,
+            "missing_from_candidate": [],
+            "numeric_leaf_count": 15
+          },
+          "confidence_tolerance": 0.001,
+          "coordinate_tolerance_angstrom": 0.001,
+          "coordinates": {
+            "aligned_rmsd_angstrom": 8.696782231851819e-05,
+            "atom_count": 7979,
+            "max_abs_coordinate_delta_angstrom": 0.0009765625,
+            "raw_rmsd_angstrom": 8.781974268353897e-05
+          },
+          "passed": true
+        },
+        "reference": {
+          "outputs/benchmarks/native-requests-fa7cc55/n1000/pair0/fireprot/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000_sample_0.cif": "594dfeb6cbda7a6d3479a421b2f1f781b75ed789b8739fbaeb34785b8e087789",
+          "outputs/benchmarks/native-requests-fa7cc55/n1000/pair0/fireprot/mini-default-umem_L01000_462bb697ecdcce2f-c4-s1-fp32/fireprot/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000/seed_101/predictions/umem_L01000_462bb697ecdcce2f__fireprot_measure_000_summary_confidence_sample_0.json": "07f69b4b0295a16b9271b8b645b0abb1474d6bd8c79043518979161ca5ee9296"
+        },
+        "candidate-confidence": {
+          "plddt": 34.46320343017578,
+          "gpde": 7.2383036613464355,
+          "ptm": 0.17145484685897827,
+          "iptm": 0.0,
+          "chain_gpde": [
+            7.2383036613464355
+          ],
+          "chain_pair_gpde": [
+            [
+              0.0
+            ]
+          ],
+          "chain_ptm": [
+            0.17145484685897827
+          ],
+          "chain_iptm": [
+            0.0
+          ],
+          "chain_pair_iptm": [
+            [
+              0.0
+            ]
+          ],
+          "chain_pair_iptm_global": [
+            [
+              0.0
+            ]
+          ],
+          "chain_plddt": [
+            0.34463202953338623
+          ],
+          "chain_pair_plddt": [
+            [
+              0.0
+            ]
+          ],
+          "has_clash": false,
+          "disorder": 0.0,
+          "ranking_score": 0.034290969371795654,
+          "num_recycles": 4
+        },
+        "vs-rust-native": {
+          "confidence": {
+            "extra_in_candidate": [],
+            "max_abs_delta": 3.814697265625e-06,
+            "mean_abs_delta": 2.605219682057698e-07,
+            "missing_from_candidate": [],
+            "numeric_leaf_count": 15
+          },
+          "confidence_tolerance": 0.001,
+          "coordinate_tolerance_angstrom": 0.001,
+          "coordinates": {
+            "aligned_rmsd_angstrom": 8.71537192792273e-05,
+            "atom_count": 7979,
+            "max_abs_coordinate_delta_angstrom": 0.0009765625,
+            "raw_rmsd_angstrom": 8.809402807389606e-05
+          },
+          "passed": true
+        }
+      },
+      "operator_runtime": {
+        "adapter": "protenix",
+        "blas": {
+          "requested": "hipblas",
+          "before": "_BlasBackend.Cublaslt",
+          "effective": "_BlasBackend.Cublas",
+          "changed": true
+        },
+        "registration_modules": [
+          "fireprot.backends.amd.ck_gemm",
+          "fireprot.backends.amd.triangle_multiplication",
+          "fireprot.backends.amd.triangle_attention",
+          "fireprot.backends.amd.ck_attention",
+          "fireprot.backends.amd.recycle"
+        ],
+        "hooks": {
+          "installed": true,
+          "enabled": true,
+          "hooks": [
+            "OpenFoldLayerNorm.forward",
+            "Transition.forward",
+            "Attention._prep_qkv"
+          ],
+          "qkv_projection": {
+            "enabled": true,
+            "counts": {
+              "n1000": 144,
+              "n1536": 0,
+              "fallback": 0
+            }
+          },
+          "fast_paths": {
+            "selection_counts": [
+              {
+                "operation": "gated_transition",
+                "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+                "count": 72
+              },
+              {
+                "operation": "gated_transition",
+                "implementation": "amd-gfx90a-transition-projection",
+                "count": 72
+              },
+              {
+                "operation": "gated_transition",
+                "implementation": "native",
+                "count": 72
+              },
+              {
+                "operation": "layer_norm",
+                "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                "count": 366
+              },
+              {
+                "operation": "layer_norm",
+                "implementation": "amd-gfx90a-transposed-layernorm-subgroup",
+                "count": 72
+              },
+              {
+                "operation": "layer_norm",
+                "implementation": "native",
+                "count": 223
+              }
+            ],
+            "backends": {
+              "recycle": {
+                "channel_first_layer_norm_enabled": true,
+                "long_layer_norm_enabled": true,
+                "long_transition_enabled": true,
+                "long1536_epilogues_enabled": true,
+                "selection_counts": [
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+                    "count": 72
+                  },
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "amd-gfx90a-transition-projection",
+                    "count": 72
+                  },
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "native",
+                    "count": 72
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                    "count": 366
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "amd-gfx90a-transposed-layernorm-subgroup",
+                    "count": 72
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "native",
+                    "count": 223
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "operations": {
+          "implementations": {
+            "gated_transition": [
+              {
+                "name": "amd-gfx90a-hip-transition-f32-c128-long",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-transition-f32-c128",
+                "priority": 20,
+                "version": "1"
+              }
+            ],
+            "layer_norm": [
+              {
+                "name": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-layernorm-f32-c128-channel-first",
+                "priority": 25,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-layernorm-f32-c128",
+                "priority": 20,
+                "version": "1"
+              }
+            ],
+            "linear": [
+              {
+                "name": "amd-ck-gemm-f32-m124-k64-n32",
+                "priority": 30,
+                "version": "1"
+              }
+            ],
+            "triangle_attention": [
+              {
+                "name": "amd-gfx90a-ck-tile-attention-f32-n1000",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-ck-tile-attention-f32-n1536",
+                "priority": 30,
+                "version": "exact-shape-1"
+              },
+              {
+                "name": "amd-gfx90a-efficient-sdpa-direct-n1000",
+                "priority": 20,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-efficient-sdpa-direct-n1536",
+                "priority": 20,
+                "version": "experimental-1"
+              },
+              {
+                "name": "amd-gfx90a-efficient-sdpa",
+                "priority": 10,
+                "version": "1"
+              }
+            ],
+            "triangle_multiplication": [
+              {
+                "name": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                "priority": 40,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+                "priority": 40,
+                "version": "experimental-1"
+              },
+              {
+                "name": "amd-gfx90a-hip-triangle-gates-f32-n1000-c128",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-triangle-gates-f32-n124-c128",
+                "priority": 20,
+                "version": "1"
+              },
+              {
+                "name": "amd-short-sequence-torch",
+                "priority": 10,
+                "version": "1"
+              }
+            ]
+          },
+          "selection_counts": [
+            {
+              "operation": "triangle_attention",
+              "implementation": "amd-gfx90a-ck-tile-attention-f32-n1000",
+              "count": 144
+            },
+            {
+              "operation": "triangle_multiplication",
+              "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+              "count": 144
+            }
+          ],
+          "decisions": [
+            {
+              "signature": {
+                "operation": "triangle_attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1000,
+                  4,
+                  1000,
+                  32
+                ],
+                "strides": [
+                  128000,
+                  32,
+                  128,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "triangle-bias",
+                "inplace": false,
+                "attributes": {
+                  "bias_count": "1",
+                  "bias_shapes": "((1, 4, 1000, 1000),)",
+                  "ck_tile_compatible": "True",
+                  "head_dim": "32",
+                  "heads": "4",
+                  "qkv_strides": "((128000, 32, 128, 1), (128000, 32, 128, 1), (128000, 32, 128, 1))"
+                }
+              },
+              "selected": "amd-gfx90a-ck-tile-attention-f32-n1000",
+              "rejected": []
+            },
+            {
+              "signature": {
+                "operation": "triangle_multiplication",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1000,
+                  1000,
+                  128
+                ],
+                "strides": [
+                  128000,
+                  128,
+                  1
+                ],
+                "layout": "contiguous",
+                "mode": "inference",
+                "mask": "none",
+                "inplace": true,
+                "attributes": {
+                  "add_with_inplace": "True",
+                  "c_hidden": "128",
+                  "c_z": "128",
+                  "direction": "incoming"
+                }
+              },
+              "selected": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+              "rejected": []
+            },
+            {
+              "signature": {
+                "operation": "triangle_multiplication",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1000,
+                  1000,
+                  128
+                ],
+                "strides": [
+                  128000,
+                  128,
+                  1
+                ],
+                "layout": "contiguous",
+                "mode": "inference",
+                "mask": "none",
+                "inplace": true,
+                "attributes": {
+                  "add_with_inplace": "True",
+                  "c_hidden": "128",
+                  "c_z": "128",
+                  "direction": "outgoing"
+                }
+              },
+              "selected": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+              "rejected": []
+            }
+          ],
+          "policy_engine": {
+            "name": "fireprot-core",
+            "bridge_abi": 1,
+            "library": "/media/IntelSSD/fireprot/target/release/lib_fireprot_bridge.so",
+            "sha256": "534ba2049910e69d93ec3eb3108bed1ed96b0f8730675d8f770751a1316e6be9"
+          }
+        },
+        "ck_attention": {
+          "enabled": true,
+          "long1536_enabled": true,
+          "exact1536_enabled": true,
+          "vector1000_enabled": true,
+          "loaded": true,
+          "error": null,
+          "build": {
+            "source_sha256": "d50865b27a66956b391a331cc0daf9e33962c1fd1c0d93b3243fab9d25af016c",
+            "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+            "header_count": 581,
+            "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+            "command": [
+              "/opt/rocm/bin/hipcc",
+              "-O3",
+              "-std=c++17",
+              "-fPIC",
+              "-shared",
+              "--offload-arch=gfx90a",
+              "-I/opt/rocm/include",
+              "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+              "-o",
+              "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.pending.so"
+            ],
+            "library_sha256": "e0db29648fbc9e4895663604a93c3729503039310761abdf19ed8e637d49ca63",
+            "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.so",
+            "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+          }
+        },
+        "lt_bmm": {
+          "enabled": false,
+          "loaded": false,
+          "error": null,
+          "build": {},
+          "counts": {
+            "outgoing": 0,
+            "incoming": 0,
+            "fallback": 144
+          },
+          "workspace_bytes_per_call": 33554432
+        },
+        "attention_gate": {
+          "enabled": false,
+          "counts": {
+            "selected": 0,
+            "fallback": 0
+          },
+          "fallback_signatures": []
+        },
+        "two_gcd_attention": {
+          "enabled": false,
+          "synchronize": false,
+          "counts": {},
+          "primary_batch": 320,
+          "secondary_batch": 192
+        },
+        "triangle_vector": {
+          "enabled": true,
+          "counts": {
+            "n1000": 144,
+            "n1536": 0,
+            "fallback": 0
+          },
+          "packed_norm_enabled": true,
+          "packed_norm_counts": {
+            "n1000": 144,
+            "n1536": 0
+          },
+          "dual_projection_enabled": true,
+          "dual_projection_counts": {
+            "n1000": 144,
+            "n1536": 0,
+            "fallback": 0
+          },
+          "tiled_dual_projection_enabled": true,
+          "tiled_dual_projection_counts": {
+            "n1000": 144,
+            "n1536": 0
+          }
+        },
+        "construction": {
+          "enabled": true,
+          "installed": true,
+          "unavailable": null,
+          "contract": {
+            "scipy": "1.18.1",
+            "source_sha256": {
+              "initializer": "72e6ede89fb399efd49db04631802f05cce93eb6f81ee5cf16f11f5d55c1e14d",
+              "init_model": "14b306c00c2427536642f80f85a09f2a15b14b872e825614a186671b802d3c4a",
+              "load_checkpoint": "6da10f959743bb9ef95d4184f64b1def38df3b9874c02ec19021e1de991316ff",
+              "sampler": "bd951a20257379d57e1b9fd97844c7fae6eb6d1f0207f39572f5687fbbcd919a"
+            },
+            "model_sha256": "6628a5db11d411479f9046005ab5306ba9fb6180bb82190a877e961f1361cf23"
+          },
+          "counts": {
+            "attempted": 1,
+            "selected": 1,
+            "recovered": 0,
+            "native": 0,
+            "errors": 0
+          },
+          "native_reasons": {},
+          "records": [
+            {
+              "uniform_calls": 621,
+              "uniform_elements": 97331488,
+              "native_initializer_calls": 0,
+              "initialization_ms": 1540.5635600327514,
+              "selected": true,
+              "missing_keys": [],
+              "checkpoint_and_recovery_ms": 298.47977904137224
+            }
+          ]
+        },
+        "feature_preparation": {
+          "enabled": true,
+          "counts": {
+            "skipped_templates": 1,
+            "native_templates": 0
+          },
+          "contract": {
+            "consumer_sha256": "74cf338ebc53b572dc12d6519392a09972c2a807beb1017c7fe0773536e301e5"
+          }
+        }
+      }
+    },
+    "n1536-native": {
+      "root": "/media/IntelSSD/fireprot/outputs/protenix-n1536-native",
+      "request": {
+        "schema_version": 1,
+        "run_id": "protenix-n1536-native",
+        "workload": {
+          "model": "protenix",
+          "model_name": "protenix_mini_default_v0.5.0",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "precision": "float32"
+        },
+        "backend": "native",
+        "seed": 101,
+        "hip_device": 7,
+        "source": {
+          "root": "/media/IntelSSD/fireprot/Protenix",
+          "commit": "bb3be993b52713795796c72cf0a46ef8a7323442"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_default_v0.5.0.pt",
+            "sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81"
+          }
+        },
+        "resources": {
+          "ccd_components_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+            "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5"
+          },
+          "ccd_components_rdkit_mol_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+            "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35"
+          },
+          "obsolete_release_data_csv": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+            "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33"
+          },
+          "pdb_cluster_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+            "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c"
+          }
+        },
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "sha256": "3f3c19af52b40972ce1961eba6800afeba548d28c643fc23da0a9321485989a1"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/protenix-n1536-native"
+      },
+      "provenance_file_sha256": "1c675c3eaa059e31f0f7f68a065d116353b3bcf74b1cd7e1aaeea239809d12a6",
+      "verified_provenance": {
+        "source_root": "/media/IntelSSD/fireprot/Protenix",
+        "exported_manifest": {
+          "path": "/media/IntelSSD/fireprot/provenance/sources/protenix-bb3be993.json",
+          "sha256": "dc759ec3ca45e92596c5b23771b0645da9d9e34d2b6082ba664ca90b2fe0d32c",
+          "bytes": 39806
+        },
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "sha256": "3f3c19af52b40972ce1961eba6800afeba548d28c643fc23da0a9321485989a1",
+          "bytes": 1716
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_default_v0.5.0.pt",
+            "sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81",
+            "bytes": 537049294
+          }
+        },
+        "resources": {
+          "ccd_components_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+            "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5",
+            "bytes": 490777362
+          },
+          "ccd_components_rdkit_mol_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+            "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35",
+            "bytes": 142498117
+          },
+          "obsolete_release_data_csv": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+            "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33",
+            "bytes": 134716
+          },
+          "pdb_cluster_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+            "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c",
+            "bytes": 21699572
+          }
+        }
+      },
+      "verified_source_file_count": 248,
+      "predictions": {
+        "schema_version": 1,
+        "run_id": "protenix-n1536-native",
+        "seed": 101,
+        "workload": {
+          "model": "protenix",
+          "model_name": "protenix_mini_default_v0.5.0",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "precision": "float32"
+        },
+        "predictions": [
+          {
+            "sample": 0,
+            "archive": "sample-0.npz",
+            "arrays": {
+              "coordinates": {
+                "shape": [
+                  12139,
+                  3
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.atom_plddt": {
+                "shape": [
+                  12139
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.token_pair_pde": {
+                "shape": [
+                  1536,
+                  1536
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.token_pair_pae": {
+                "shape": [
+                  1536,
+                  1536
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.contact_probs": {
+                "shape": [
+                  1536,
+                  1536
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.token_has_frame": {
+                "shape": [
+                  1536
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              },
+              "confidence.token_asym_id": {
+                "shape": [
+                  1536
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              },
+              "confidence.atom_to_token_idx": {
+                "shape": [
+                  12139
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              },
+              "confidence.atom_is_polymer": {
+                "shape": [
+                  12139
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              }
+            },
+            "confidence": {
+              "plddt": 41.46251678466797,
+              "gpde": 7.019122123718262,
+              "ptm": 0.2003345489501953,
+              "iptm": 0.0,
+              "chain_gpde": [
+                7.019122123718262
+              ],
+              "chain_pair_gpde": [
+                [
+                  0.0
+                ]
+              ],
+              "chain_ptm": [
+                0.2003345489501953
+              ],
+              "chain_iptm": [
+                0.0
+              ],
+              "chain_pair_iptm": [
+                [
+                  0.0
+                ]
+              ],
+              "chain_pair_iptm_global": [
+                [
+                  0.0
+                ]
+              ],
+              "chain_plddt": [
+                0.4146251678466797
+              ],
+              "chain_pair_plddt": [
+                [
+                  0.0
+                ]
+              ],
+              "has_clash": false,
+              "disorder": 0.0,
+              "ranking_score": 0.040066909044981,
+              "num_recycles": 4
+            }
+          }
+        ],
+        "model_seconds": 144.545045492996,
+        "request_seconds": 176.81820578098996,
+        "environment": {
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850",
+          "python": "3.12.13"
+        }
+      },
+      "supervisor": {
+        "run_id": "protenix-n1536-native",
+        "phase": "succeeded",
+        "worker_pid": 1204053,
+        "elapsed_seconds": 184.354041935,
+        "isolation_samples": 209,
+        "failure": null
+      },
+      "output_sha256": {
+        "predictions.json": "6c8a8ca8e265eb9c97f0bcd6892a0129d1c00a177a11fd3dbd0ffe2b209fa7e1",
+        "sample-0.npz": "e4a327c89a9868ded8fc0adefcb1ccec80ad43ff062fd354843a238a2df658ec",
+        "native/umem_L01536_6b140cc19f02d9b9/seed_101/predictions/umem_L01536_6b140cc19f02d9b9_sample_0.cif": "e4b5c32f94343f47bed578ed69e2cddf00f513d4be4fb5eb169c6a8f7ab249d4"
+      },
+      "comparisons": {
+        "comparison": {
+          "confidence": {
+            "extra_in_candidate": [],
+            "max_abs_delta": 7.62939453125e-06,
+            "mean_abs_delta": 5.170702934265136e-07,
+            "missing_from_candidate": [],
+            "numeric_leaf_count": 15
+          },
+          "confidence_tolerance": 0.001,
+          "coordinate_tolerance_angstrom": 0.001,
+          "coordinates": {
+            "aligned_rmsd_angstrom": 9.64023606759422e-05,
+            "atom_count": 12139,
+            "max_abs_coordinate_delta_angstrom": 0.0009765625,
+            "raw_rmsd_angstrom": 9.757160246260382e-05
+          },
+          "passed": true
+        },
+        "reference": {
+          "outputs/benchmarks/native-requests-fa7cc55/n1536/pair0/native/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/native/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000_sample_0.cif": "668e306d39fd60a9109bb4c59e54ed3dc5eaad52d8e0a2df17e70aa2683f7423",
+          "outputs/benchmarks/native-requests-fa7cc55/n1536/pair0/native/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/native/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000_summary_confidence_sample_0.json": "26ff7042b7ccbd107ebfcf9730477317cb57534c3a0f30616e4ba8bf9c68b3f2"
+        },
+        "candidate-confidence": {
+          "plddt": 41.46251678466797,
+          "gpde": 7.019122123718262,
+          "ptm": 0.2003345489501953,
+          "iptm": 0.0,
+          "chain_gpde": [
+            7.019122123718262
+          ],
+          "chain_pair_gpde": [
+            [
+              0.0
+            ]
+          ],
+          "chain_ptm": [
+            0.2003345489501953
+          ],
+          "chain_iptm": [
+            0.0
+          ],
+          "chain_pair_iptm": [
+            [
+              0.0
+            ]
+          ],
+          "chain_pair_iptm_global": [
+            [
+              0.0
+            ]
+          ],
+          "chain_plddt": [
+            0.4146251678466797
+          ],
+          "chain_pair_plddt": [
+            [
+              0.0
+            ]
+          ],
+          "has_clash": false,
+          "disorder": 0.0,
+          "ranking_score": 0.040066909044981,
+          "num_recycles": 4
+        }
+      }
+    },
+    "n1536-fireprot": {
+      "root": "/media/IntelSSD/fireprot/outputs/protenix-n1536-fireprot",
+      "request": {
+        "schema_version": 1,
+        "run_id": "protenix-n1536-fireprot",
+        "workload": {
+          "model": "protenix",
+          "model_name": "protenix_mini_default_v0.5.0",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "precision": "float32"
+        },
+        "backend": "fireprot",
+        "seed": 101,
+        "hip_device": 7,
+        "source": {
+          "root": "/media/IntelSSD/fireprot/Protenix",
+          "commit": "bb3be993b52713795796c72cf0a46ef8a7323442"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_default_v0.5.0.pt",
+            "sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81"
+          }
+        },
+        "resources": {
+          "ccd_components_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+            "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5"
+          },
+          "ccd_components_rdkit_mol_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+            "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35"
+          },
+          "obsolete_release_data_csv": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+            "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33"
+          },
+          "pdb_cluster_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+            "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c"
+          }
+        },
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "sha256": "3f3c19af52b40972ce1961eba6800afeba548d28c643fc23da0a9321485989a1"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/protenix-n1536-fireprot"
+      },
+      "provenance_file_sha256": "1c675c3eaa059e31f0f7f68a065d116353b3bcf74b1cd7e1aaeea239809d12a6",
+      "verified_provenance": {
+        "source_root": "/media/IntelSSD/fireprot/Protenix",
+        "exported_manifest": {
+          "path": "/media/IntelSSD/fireprot/provenance/sources/protenix-bb3be993.json",
+          "sha256": "dc759ec3ca45e92596c5b23771b0645da9d9e34d2b6082ba664ca90b2fe0d32c",
+          "bytes": 39806
+        },
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "sha256": "3f3c19af52b40972ce1961eba6800afeba548d28c643fc23da0a9321485989a1",
+          "bytes": 1716
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_default_v0.5.0.pt",
+            "sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81",
+            "bytes": 537049294
+          }
+        },
+        "resources": {
+          "ccd_components_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+            "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5",
+            "bytes": 490777362
+          },
+          "ccd_components_rdkit_mol_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+            "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35",
+            "bytes": 142498117
+          },
+          "obsolete_release_data_csv": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+            "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33",
+            "bytes": 134716
+          },
+          "pdb_cluster_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+            "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c",
+            "bytes": 21699572
+          }
+        }
+      },
+      "verified_source_file_count": 248,
+      "predictions": {
+        "schema_version": 1,
+        "run_id": "protenix-n1536-fireprot",
+        "seed": 101,
+        "workload": {
+          "model": "protenix",
+          "model_name": "protenix_mini_default_v0.5.0",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "precision": "float32"
+        },
+        "predictions": [
+          {
+            "sample": 0,
+            "archive": "sample-0.npz",
+            "arrays": {
+              "coordinates": {
+                "shape": [
+                  12139,
+                  3
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.atom_plddt": {
+                "shape": [
+                  12139
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.token_pair_pde": {
+                "shape": [
+                  1536,
+                  1536
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.token_pair_pae": {
+                "shape": [
+                  1536,
+                  1536
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.contact_probs": {
+                "shape": [
+                  1536,
+                  1536
+                ],
+                "original_dtype": "float32",
+                "storage_dtype": "float32"
+              },
+              "confidence.token_has_frame": {
+                "shape": [
+                  1536
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              },
+              "confidence.token_asym_id": {
+                "shape": [
+                  1536
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              },
+              "confidence.atom_to_token_idx": {
+                "shape": [
+                  12139
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              },
+              "confidence.atom_is_polymer": {
+                "shape": [
+                  12139
+                ],
+                "original_dtype": "int64",
+                "storage_dtype": "int64"
+              }
+            },
+            "confidence": {
+              "plddt": 41.4625129699707,
+              "gpde": 7.019123554229736,
+              "ptm": 0.2003345489501953,
+              "iptm": 0.0,
+              "chain_gpde": [
+                7.019123554229736
+              ],
+              "chain_pair_gpde": [
+                [
+                  0.0
+                ]
+              ],
+              "chain_ptm": [
+                0.2003345489501953
+              ],
+              "chain_iptm": [
+                0.0
+              ],
+              "chain_pair_iptm": [
+                [
+                  0.0
+                ]
+              ],
+              "chain_pair_iptm_global": [
+                [
+                  0.0
+                ]
+              ],
+              "chain_plddt": [
+                0.4146251380443573
+              ],
+              "chain_pair_plddt": [
+                [
+                  0.0
+                ]
+              ],
+              "has_clash": false,
+              "disorder": 0.0,
+              "ranking_score": 0.040066909044981,
+              "num_recycles": 4
+            }
+          }
+        ],
+        "model_seconds": 32.47692956996616,
+        "request_seconds": 43.85083189199213,
+        "environment": {
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850",
+          "python": "3.12.13"
+        }
+      },
+      "supervisor": {
+        "run_id": "protenix-n1536-fireprot",
+        "phase": "succeeded",
+        "worker_pid": 1206039,
+        "elapsed_seconds": 50.795668871,
+        "isolation_samples": 56,
+        "failure": null
+      },
+      "output_sha256": {
+        "predictions.json": "a19e214429bfd9fe70d7147b7e3352b2c488aaeb6cb0f090c96cd43eec0805f9",
+        "sample-0.npz": "d406961d634604bab7667b5f1f44cbfbd7f3cf9d8960b3cb6de68db8513ba06e",
+        "native/umem_L01536_6b140cc19f02d9b9/seed_101/predictions/umem_L01536_6b140cc19f02d9b9_sample_0.cif": "9aee5e1c27e36baa8194977938f6e7a92c832520bc839eb2026813b2aa9caaf5",
+        "operator-runtime.json": "8d2d3b3080f80fb07c4c5c48366ef75b4c9196302870fa9d7032c10baa6093b9"
+      },
+      "comparisons": {
+        "raw-array-diagnostics": {
+          "confidence.atom_is_polymer": {
+            "bitwise_equal": true,
+            "max_abs_delta": null,
+            "passed": true
+          },
+          "confidence.atom_plddt": {
+            "bitwise_equal": false,
+            "max_abs_delta": 5.543231964111328e-06,
+            "passed": false
+          },
+          "confidence.atom_to_token_idx": {
+            "bitwise_equal": true,
+            "max_abs_delta": null,
+            "passed": true
+          },
+          "confidence.contact_probs": {
+            "bitwise_equal": false,
+            "max_abs_delta": 5.662441253662109e-06,
+            "passed": false
+          },
+          "confidence.token_asym_id": {
+            "bitwise_equal": true,
+            "max_abs_delta": null,
+            "passed": true
+          },
+          "confidence.token_has_frame": {
+            "bitwise_equal": true,
+            "max_abs_delta": null,
+            "passed": true
+          },
+          "confidence.token_pair_pae": {
+            "bitwise_equal": false,
+            "max_abs_delta": 0.011968612670898438,
+            "passed": false
+          },
+          "confidence.token_pair_pde": {
+            "bitwise_equal": false,
+            "max_abs_delta": 0.05837249755859375,
+            "passed": false
+          },
+          "coordinates": {
+            "bitwise_equal": false,
+            "max_abs_delta": 0.0009765625,
+            "passed": false
+          }
+        },
+        "vs-legacy-fireprot": {
+          "confidence": {
+            "extra_in_candidate": [],
+            "max_abs_delta": 3.4332275390625e-05,
+            "mean_abs_delta": 3.0780831972720964e-06,
+            "missing_from_candidate": [],
+            "numeric_leaf_count": 15
+          },
+          "confidence_tolerance": 0.001,
+          "coordinate_tolerance_angstrom": 0.001,
+          "coordinates": {
+            "aligned_rmsd_angstrom": 0.00011874811902815213,
+            "atom_count": 12139,
+            "max_abs_coordinate_delta_angstrom": 0.0009765625,
+            "raw_rmsd_angstrom": 0.00012239776347488675
+          },
+          "passed": true
+        },
+        "reference": {
+          "outputs/benchmarks/native-requests-fa7cc55/n1536/pair0/fireprot/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000_sample_0.cif": "7b1abe2da29c92bd1a2b46fa78c3ae9ff2a7326a6c7b1b929e926ba8dc57a3c7",
+          "outputs/benchmarks/native-requests-fa7cc55/n1536/pair0/fireprot/mini-default-umem_L01536_6b140cc19f02d9b9-c4-s1-fp32/fireprot/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000/seed_101/predictions/umem_L01536_6b140cc19f02d9b9__fireprot_measure_000_summary_confidence_sample_0.json": "f725ddc10c25aeaba6497eb519cd48fc1777bea746811eff5246539d7c589565"
+        },
+        "candidate-confidence": {
+          "plddt": 41.4625129699707,
+          "gpde": 7.019123554229736,
+          "ptm": 0.2003345489501953,
+          "iptm": 0.0,
+          "chain_gpde": [
+            7.019123554229736
+          ],
+          "chain_pair_gpde": [
+            [
+              0.0
+            ]
+          ],
+          "chain_ptm": [
+            0.2003345489501953
+          ],
+          "chain_iptm": [
+            0.0
+          ],
+          "chain_pair_iptm": [
+            [
+              0.0
+            ]
+          ],
+          "chain_pair_iptm_global": [
+            [
+              0.0
+            ]
+          ],
+          "chain_plddt": [
+            0.4146251380443573
+          ],
+          "chain_pair_plddt": [
+            [
+              0.0
+            ]
+          ],
+          "has_clash": false,
+          "disorder": 0.0,
+          "ranking_score": 0.040066909044981,
+          "num_recycles": 4
+        },
+        "vs-rust-native": {
+          "confidence": {
+            "extra_in_candidate": [],
+            "max_abs_delta": 3.814697265625e-06,
+            "mean_abs_delta": 4.470348358154297e-07,
+            "missing_from_candidate": [],
+            "numeric_leaf_count": 15
+          },
+          "confidence_tolerance": 0.001,
+          "coordinate_tolerance_angstrom": 0.001,
+          "coordinates": {
+            "aligned_rmsd_angstrom": 0.0001073206633385626,
+            "atom_count": 12139,
+            "max_abs_coordinate_delta_angstrom": 0.0009765625,
+            "raw_rmsd_angstrom": 0.00010845608183389222
+          },
+          "passed": true
+        }
+      },
+      "operator_runtime": {
+        "adapter": "protenix",
+        "blas": {
+          "requested": "hipblas",
+          "before": "_BlasBackend.Cublaslt",
+          "effective": "_BlasBackend.Cublas",
+          "changed": true
+        },
+        "registration_modules": [
+          "fireprot.backends.amd.ck_gemm",
+          "fireprot.backends.amd.triangle_multiplication",
+          "fireprot.backends.amd.triangle_attention",
+          "fireprot.backends.amd.ck_attention",
+          "fireprot.backends.amd.recycle"
+        ],
+        "hooks": {
+          "installed": true,
+          "enabled": true,
+          "hooks": [
+            "OpenFoldLayerNorm.forward",
+            "Transition.forward",
+            "Attention._prep_qkv"
+          ],
+          "qkv_projection": {
+            "enabled": true,
+            "counts": {
+              "n1000": 0,
+              "n1536": 432,
+              "fallback": 0
+            }
+          },
+          "fast_paths": {
+            "selection_counts": [
+              {
+                "operation": "gated_transition",
+                "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+                "count": 72
+              },
+              {
+                "operation": "gated_transition",
+                "implementation": "amd-gfx90a-transition-projection",
+                "count": 72
+              },
+              {
+                "operation": "gated_transition",
+                "implementation": "native",
+                "count": 72
+              },
+              {
+                "operation": "layer_norm",
+                "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                "count": 366
+              },
+              {
+                "operation": "layer_norm",
+                "implementation": "amd-gfx90a-transposed-layernorm-subgroup",
+                "count": 72
+              },
+              {
+                "operation": "layer_norm",
+                "implementation": "native",
+                "count": 223
+              }
+            ],
+            "backends": {
+              "recycle": {
+                "channel_first_layer_norm_enabled": true,
+                "long_layer_norm_enabled": true,
+                "long_transition_enabled": true,
+                "long1536_epilogues_enabled": true,
+                "selection_counts": [
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "amd-gfx90a-hip-transition-f32-c128-long",
+                    "count": 72
+                  },
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "amd-gfx90a-transition-projection",
+                    "count": 72
+                  },
+                  {
+                    "operation": "gated_transition",
+                    "implementation": "native",
+                    "count": 72
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                    "count": 366
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "amd-gfx90a-transposed-layernorm-subgroup",
+                    "count": 72
+                  },
+                  {
+                    "operation": "layer_norm",
+                    "implementation": "native",
+                    "count": 223
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "operations": {
+          "implementations": {
+            "gated_transition": [
+              {
+                "name": "amd-gfx90a-hip-transition-f32-c128-long",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-transition-f32-c128",
+                "priority": 20,
+                "version": "1"
+              }
+            ],
+            "layer_norm": [
+              {
+                "name": "amd-gfx90a-hip-layernorm-f32-c128-long",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-layernorm-f32-c128-channel-first",
+                "priority": 25,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-layernorm-f32-c128",
+                "priority": 20,
+                "version": "1"
+              }
+            ],
+            "linear": [
+              {
+                "name": "amd-ck-gemm-f32-m124-k64-n32",
+                "priority": 30,
+                "version": "1"
+              }
+            ],
+            "triangle_attention": [
+              {
+                "name": "amd-gfx90a-ck-tile-attention-f32-n1000",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-ck-tile-attention-f32-n1536",
+                "priority": 30,
+                "version": "exact-shape-1"
+              },
+              {
+                "name": "amd-gfx90a-efficient-sdpa-direct-n1000",
+                "priority": 20,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-efficient-sdpa-direct-n1536",
+                "priority": 20,
+                "version": "experimental-1"
+              },
+              {
+                "name": "amd-gfx90a-efficient-sdpa",
+                "priority": 10,
+                "version": "1"
+              }
+            ],
+            "triangle_multiplication": [
+              {
+                "name": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                "priority": 40,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+                "priority": 40,
+                "version": "experimental-1"
+              },
+              {
+                "name": "amd-gfx90a-hip-triangle-gates-f32-n1000-c128",
+                "priority": 30,
+                "version": "1"
+              },
+              {
+                "name": "amd-gfx90a-hip-triangle-gates-f32-n124-c128",
+                "priority": 20,
+                "version": "1"
+              },
+              {
+                "name": "amd-short-sequence-torch",
+                "priority": 10,
+                "version": "1"
+              }
+            ]
+          },
+          "selection_counts": [
+            {
+              "operation": "triangle_attention",
+              "implementation": "amd-gfx90a-ck-tile-attention-f32-n1536",
+              "count": 432
+            },
+            {
+              "operation": "triangle_multiplication",
+              "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+              "count": 144
+            }
+          ],
+          "decisions": [
+            {
+              "signature": {
+                "operation": "triangle_attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  512,
+                  4,
+                  1536,
+                  32
+                ],
+                "strides": [
+                  196608,
+                  32,
+                  128,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "triangle-bias",
+                "inplace": false,
+                "attributes": {
+                  "bias_count": "1",
+                  "bias_shapes": "((1, 4, 1536, 1536),)",
+                  "ck_tile_compatible": "True",
+                  "head_dim": "32",
+                  "heads": "4",
+                  "qkv_strides": "((196608, 32, 128, 1), (196608, 32, 128, 1), (196608, 32, 128, 1))"
+                }
+              },
+              "selected": "amd-gfx90a-ck-tile-attention-f32-n1536",
+              "rejected": [
+                {
+                  "implementation": "amd-gfx90a-ck-tile-attention-f32-n1000",
+                  "reason": "CK Tile attention requires an exact measured bucket"
+                }
+              ]
+            },
+            {
+              "signature": {
+                "operation": "triangle_multiplication",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1536,
+                  1536,
+                  128
+                ],
+                "strides": [
+                  196608,
+                  128,
+                  1
+                ],
+                "layout": "contiguous",
+                "mode": "inference",
+                "mask": "none",
+                "inplace": true,
+                "attributes": {
+                  "add_with_inplace": "True",
+                  "c_hidden": "128",
+                  "c_z": "128",
+                  "direction": "incoming"
+                }
+              },
+              "selected": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+              "rejected": [
+                {
+                  "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                  "reason": "shape is not the exact supported long bucket"
+                }
+              ]
+            },
+            {
+              "signature": {
+                "operation": "triangle_multiplication",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1536,
+                  1536,
+                  128
+                ],
+                "strides": [
+                  196608,
+                  128,
+                  1
+                ],
+                "layout": "contiguous",
+                "mode": "inference",
+                "mask": "none",
+                "inplace": true,
+                "attributes": {
+                  "add_with_inplace": "True",
+                  "c_hidden": "128",
+                  "c_z": "128",
+                  "direction": "outgoing"
+                }
+              },
+              "selected": "amd-gfx90a-hip-triangle-packed-f32-n1536-c128",
+              "rejected": [
+                {
+                  "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+                  "reason": "shape is not the exact supported long bucket"
+                }
+              ]
+            }
+          ],
+          "policy_engine": {
+            "name": "fireprot-core",
+            "bridge_abi": 1,
+            "library": "/media/IntelSSD/fireprot/target/release/lib_fireprot_bridge.so",
+            "sha256": "534ba2049910e69d93ec3eb3108bed1ed96b0f8730675d8f770751a1316e6be9"
+          }
+        },
+        "ck_attention": {
+          "enabled": true,
+          "long1536_enabled": true,
+          "exact1536_enabled": true,
+          "vector1000_enabled": true,
+          "loaded": true,
+          "error": null,
+          "build": {
+            "source_sha256": "d50865b27a66956b391a331cc0daf9e33962c1fd1c0d93b3243fab9d25af016c",
+            "header_sha256": "626ba00271d62e2e6d307a56492d8f73f9153256e7a5e9e99b7b9190cb2feb9d",
+            "header_count": 581,
+            "compiler_version": "HIP version: 7.15.26333-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 8f497e0992fb7513f7f78a6f6b6f1056c375e961)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-10.0/lib/llvm/bin\n",
+            "command": [
+              "/opt/rocm/bin/hipcc",
+              "-O3",
+              "-std=c++17",
+              "-fPIC",
+              "-shared",
+              "--offload-arch=gfx90a",
+              "-I/opt/rocm/include",
+              "/media/IntelSSD/fireprot/fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+              "-o",
+              "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.pending.so"
+            ],
+            "library_sha256": "e0db29648fbc9e4895663604a93c3729503039310761abdf19ed8e637d49ca63",
+            "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/ck_attention_b6075462a781dbdd/attention.so",
+            "ck_version": "/*******************************************************************************\n *\n * MIT License\n *\n * Copyright (c) 2023 Advanced Micro Devices, Inc.\n *\n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n *\n * The above copyright notice and this permission notice shall be included in all\n * copies or substantial portions of the Software.\n *\n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n *\n *******************************************************************************/\n\n/* the configured version and settings for miopen- Composable Kernel */\n\n#ifndef CK_VERSION_H_\n#define CK_VERSION_H_\n\n// clang-format off\n#define CK_VERSION 1.2.0\n#define CK_VERSION_MAJOR 1\n#define CK_VERSION_MINOR 2\n#define CK_VERSION_PATCH 0\n#define CK_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n#define CK_PARENT_COMMIT_ID 8d1ae90eff7d022f26019ec55b2ec6a7674b3112\n// clang-format on\n\n#endif\n"
+          }
+        },
+        "lt_bmm": {
+          "enabled": false,
+          "loaded": false,
+          "error": null,
+          "build": {},
+          "counts": {
+            "outgoing": 0,
+            "incoming": 0,
+            "fallback": 144
+          },
+          "workspace_bytes_per_call": 33554432
+        },
+        "attention_gate": {
+          "enabled": false,
+          "counts": {
+            "selected": 0,
+            "fallback": 0
+          },
+          "fallback_signatures": []
+        },
+        "two_gcd_attention": {
+          "enabled": false,
+          "synchronize": false,
+          "counts": {},
+          "primary_batch": 320,
+          "secondary_batch": 192
+        },
+        "triangle_vector": {
+          "enabled": true,
+          "counts": {
+            "n1000": 0,
+            "n1536": 144,
+            "fallback": 0
+          },
+          "packed_norm_enabled": true,
+          "packed_norm_counts": {
+            "n1000": 0,
+            "n1536": 144
+          },
+          "dual_projection_enabled": true,
+          "dual_projection_counts": {
+            "n1000": 0,
+            "n1536": 144,
+            "fallback": 0
+          },
+          "tiled_dual_projection_enabled": true,
+          "tiled_dual_projection_counts": {
+            "n1000": 0,
+            "n1536": 144
+          }
+        },
+        "construction": {
+          "enabled": true,
+          "installed": true,
+          "unavailable": null,
+          "contract": {
+            "scipy": "1.18.1",
+            "source_sha256": {
+              "initializer": "72e6ede89fb399efd49db04631802f05cce93eb6f81ee5cf16f11f5d55c1e14d",
+              "init_model": "14b306c00c2427536642f80f85a09f2a15b14b872e825614a186671b802d3c4a",
+              "load_checkpoint": "6da10f959743bb9ef95d4184f64b1def38df3b9874c02ec19021e1de991316ff",
+              "sampler": "bd951a20257379d57e1b9fd97844c7fae6eb6d1f0207f39572f5687fbbcd919a"
+            },
+            "model_sha256": "6628a5db11d411479f9046005ab5306ba9fb6180bb82190a877e961f1361cf23"
+          },
+          "counts": {
+            "attempted": 1,
+            "selected": 1,
+            "recovered": 0,
+            "native": 0,
+            "errors": 0
+          },
+          "native_reasons": {},
+          "records": [
+            {
+              "uniform_calls": 621,
+              "uniform_elements": 97331488,
+              "native_initializer_calls": 0,
+              "initialization_ms": 1461.8158039520495,
+              "selected": true,
+              "missing_keys": [],
+              "checkpoint_and_recovery_ms": 296.3660259847529
+            }
+          ]
+        },
+        "feature_preparation": {
+          "enabled": true,
+          "counts": {
+            "skipped_templates": 1,
+            "native_templates": 0
+          },
+          "contract": {
+            "consumer_sha256": "74cf338ebc53b572dc12d6519392a09972c2a807beb1017c7fe0773536e301e5"
+          }
+        }
+      }
+    }
+  },
+  "limitations": [
+    "One request per backend and length, seed 101, FP32 C4/S1, warm filesystem and compiled-kernel caches, fresh model process.",
+    "Migration gate uses existing 1e-3 Angstrom aligned RMSD and 1e-3 numeric summary-confidence delta. It is not an exact-array equality gate.",
+    "Historical references contain rounded CIF coordinates and summary confidence only. Raw PAE/PDE arrays are newly retained; exact differences between new native and accelerated arrays are diagnostics, not a newly calibrated acceptance gate.",
+    "Native workers were run before the final accelerated routing addition; exact worker/build hashes for each phase are retained. No new kernel optimization or controlled migration-overhead claim is made.",
+    "Remaining migration work includes other model variants, accelerated AtlasFold, environment/build provenance, kernel packaging, Rust comparison input parsing and statistics, maintained entrypoint replacement, and OpenFold3 numerical parity."
+  ],
+  "tests": {
+    "local_rust_passed": 58,
+    "local_python_passed": 199,
+    "local_python_gpu_tests_skipped": 110,
+    "remote_rust_passed": 58,
+    "remote_protenix_contract_tests_passed": 13,
+    "hardware_monitor_opt_in_not_rerun": true,
+    "clippy_all_targets_deny_warnings": "passed",
+    "cargo_fmt": "passed"
+  },
+  "post_run_test_only_change": "The bundle unit test now restores valid pLDDT before testing missing PAE. Production validation behavior is unchanged from the recorded build."
+}

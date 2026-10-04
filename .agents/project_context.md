@@ -11,7 +11,10 @@ Native AtlasFold plus AtlasLM-3B and OpenFold3 execute under Rust supervision.
 AtlasFold N1000 exact parity passes; OpenFold3 numerical migration parity remains
 unpassed because repeated native runs also vary. Preserve all existing gates.
 The shared Python operator API now requires the Rust bridge build described in
-`docs/rust-operators.md`. Protenix worker integration, accelerated model routes,
+`docs/rust-operators.md`. Protenix Mini-default native/FireProt workers are also
+connected: N1000 and N1536 pass existing coordinate/summary gates under Rust PCI
+monitoring. Preserve the separately recorded nonzero full PAE/PDE differences;
+do not claim all confidence arrays are identical. Additional model variants, accelerated AtlasFold,
 kernel build migration and full framework acceptance remain outstanding.
 
 DiamondHill: `pc@10.120.16.9`, workspace `/media/IntelSSD/fireprot`. All eight GCDs

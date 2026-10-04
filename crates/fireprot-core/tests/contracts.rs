@@ -27,6 +27,7 @@ fn request(workload: Workload) -> Request {
             commit: "b".repeat(40),
         },
         checkpoints,
+        resources: BTreeMap::new(),
         input: artifact(),
         output_dir: "/outputs/new-run".into(),
     }

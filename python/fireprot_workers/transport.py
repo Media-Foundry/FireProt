@@ -66,6 +66,8 @@ def announce_outputs(channel, bundle):
     paths = [output / 'predictions.json'] + [output / p['archive'] for p in bundle['predictions']]
     # Keep upstream structure files available and covered by the artifact hashes.
     paths += sorted((output / 'native').rglob('*.cif'))
+    if (output / 'operator-runtime.json').is_file():
+        paths.append(output / 'operator-runtime.json')
     artifacts = []
     for path in paths:
         digest = hashlib.sha256()
@@ -74,4 +76,3 @@ def announce_outputs(channel, bundle):
                 digest.update(chunk)
         artifacts.append(dict(path=str(path.relative_to(output)), sha256=digest.hexdigest()))
     channel.emit(dict(event='outputs', artifacts=artifacts))
-

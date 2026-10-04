@@ -223,3 +223,17 @@ on stable and Rust 1.85, and the additional Python regression passes. Final
 archive replay covers all four runs; Clippy/format pass. Remaining
 rebuild work: environment coverage/overhead, final packaging and cross-model
 acceptance, coverage audit, remote CI and push. Do not resume kernel tuning yet.
+
+## Environment scan reuse (2026-10-05)
+
+Rust environment capture now reuses a canonical file's digest only within that
+capture, while preserving every alias and rehashing at each later checkpoint.
+Unix inode/size/mode/mtime/ctime guards reject changes during the scan. Existing
+build-tree callers keep ordinary per-entry hashing. All three pinned environment
+manifests remain byte-identical. AtlasFold capture medians improve 15.855 to
+12.202 seconds across three runs per arm (1.299x); this is not inference E2E.
+84 runtime tests and ten Rust 1.85 tests pass; Clippy/format pass. See
+`provenance/rust_environment_scan_dedup.json`. A point-in-time AtlasFold loaded-
+library audit identifies system dependencies outside the current roots; the
+full environment coverage audit remains open. Do not equate scan deduplication
+with complete environment provenance or resume kernel tuning yet.

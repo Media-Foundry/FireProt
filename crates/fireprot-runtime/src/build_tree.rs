@@ -20,6 +20,13 @@ pub struct BuildTree {
 
 impl BuildTree {
     pub fn identify(&self) -> io::Result<Vec<FileIdentity>> {
+        self.identify_with(&mut sha256)
+    }
+
+    pub(crate) fn identify_with(
+        &self,
+        digest: &mut impl FnMut(&Path) -> io::Result<String>,
+    ) -> io::Result<Vec<FileIdentity>> {
         if self.name.is_empty()
             || !self.path.is_absolute()
             || !self.path.is_dir()
@@ -28,7 +35,14 @@ impl BuildTree {
             return Err(io::Error::other("invalid build input tree"));
         }
         let mut files = Vec::new();
-        walk(self, &self.path, &mut BTreeSet::new(), &mut files, 0)?;
+        walk(
+            self,
+            &self.path,
+            &mut BTreeSet::new(),
+            &mut files,
+            0,
+            digest,
+        )?;
         Ok(files)
     }
 }
@@ -39,6 +53,7 @@ fn walk(
     ancestors: &mut BTreeSet<PathBuf>,
     files: &mut Vec<FileIdentity>,
     depth: usize,
+    digest: &mut impl FnMut(&Path) -> io::Result<String>,
 ) -> io::Result<()> {
     if depth > 128 {
         return Err(io::Error::other("build tree exceeds directory depth limit"));
@@ -54,7 +69,7 @@ fn walk(
             .collect::<io::Result<_>>()?;
         entries.sort();
         for entry in entries {
-            walk(tree, &entry, ancestors, files, depth + 1)?;
+            walk(tree, &entry, ancestors, files, depth + 1, digest)?;
         }
         ancestors.remove(&canonical);
     } else if metadata.is_file() {
@@ -71,7 +86,7 @@ fn walk(
             .ok_or_else(|| io::Error::other("non-UTF8 build input path"))?;
         files.push(FileIdentity {
             name: format!("{}/{}", tree.name, relative),
-            sha256: sha256(&canonical)?,
+            sha256: digest(&canonical)?,
             canonical_path: canonical,
         });
     } else {

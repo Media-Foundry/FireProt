@@ -1,11 +1,13 @@
 //! Pinned content inventories for explicitly declared model environments.
 //! Completeness depends on the selected roots; discovery and isolation are separate.
+mod scan;
 use crate::{
     artifacts::sha256,
     build::{BuildFile, FileIdentity},
     build_tree::BuildTree,
 };
 use fireprot_core::request::ArtifactRef;
+use scan::ContentScan;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::{collections::BTreeSet, fs, io};
@@ -33,18 +35,21 @@ impl InventorySpec {
             ));
         }
         let mut files = Vec::new();
+        let mut scan = ContentScan::new(sha256);
         for input in &self.files {
             if !input.path.is_absolute() {
                 return Err(io::Error::other("environment input path must be absolute"));
             }
+            let canonical_path = input.path.canonicalize()?;
+            let sha256 = scan.hash(&canonical_path)?;
             files.push(FileIdentity {
                 name: input.name.clone(),
-                canonical_path: input.path.canonicalize()?,
-                sha256: sha256(&input.path)?,
+                canonical_path,
+                sha256,
             });
         }
         for tree in &self.trees {
-            files.extend(tree.identify()?);
+            files.extend(tree.identify_with(&mut |path| scan.hash(path))?);
         }
         files.sort_by(|a, b| a.name.cmp(&b.name));
         let mut names = BTreeSet::new();
@@ -57,6 +62,7 @@ impl InventorySpec {
                 "environment inventory has no files or duplicate/empty names",
             ));
         }
+        scan.finish()?;
         Ok(EnvironmentInventory {
             specification: self.clone(),
             files,

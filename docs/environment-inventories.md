@@ -73,9 +73,10 @@ operating-system libraries, drivers or external cache contents. An inventory may
 be incomplete even when every declared byte matches. Complete model-environment
 coverage still requires discovery and an explicit audit.
 
-All bytes are rehashed on every verification. This has measurable overhead and
-can produce large JSON records; shared libraries and aliased import roots can be
-visited more than once. It is an explicit strict validation option, not a claimed
+All unique canonical file bytes are rehashed on every verification. This has
+measurable overhead and can produce large JSON records; aliased import roots
+still retain every declared identity. Within one Unix capture, duplicate
+canonical-file reads are avoided as described below. It is an explicit strict validation option, not a claimed
 performance optimization. Keep manifest generation outside the measured inference
 interval and report launch/preflight, model and supervisor times separately.
 
@@ -116,3 +117,48 @@ first reproduced cancellation during output validation incorrectly producing suc
 then passed after the final acceptance checkpoint was added. The GPU runs preceded
 that last cancellation/timeout guard change; the scientific and inventory paths
 were unchanged, and CPU tests verify the new failure behavior.
+
+## Scan-local canonical-file reuse
+
+On Unix, each environment capture now hashes a canonical file once, retaining
+all declared file/tree aliases in the returned inventory. A fresh capture at
+every verification checkpoint rehashes the bytes. No digest is reused across
+requests or Start/acceptance checks. Default build-tree callers keep their
+existing per-entry hashing behavior.
+
+Before reuse and at the end of a scan, Rust checks device/inode, size, mode,
+mtime and ctime (including nanoseconds). Replacement or a metadata change during
+capture rejects the scan. These guards do not create a filesystem snapshot. Metadata observations have
+filesystem granularity limits and cannot establish immutability; inputs must
+still remain unchanged during capture. Non-Unix builds retain
+per-entry reads. The schema, aliases, canonical paths and digest bytes are
+unchanged, and all three existing pinned DiamondHill inventories still match.
+
+Sequential capture-only measurements use explicit before/after/after/before/
+before/after order for AtlasFold, with no filesystem cache flush or discarded
+warmup. Its three-run medians change from **15.855 s to 12.202 s (1.299x)**,
+about 23% less scan time. Its 118,560 identities refer to 68,281 canonical files.
+Protenix and OpenFold3 each have one before/after equality check (13.723/10.746 s
+and 16.875/13.484 s); those single observations do not establish stable performance
+ratios. Every emitted inventory is byte-identical to its existing pinned manifest.
+These are inventory-command wall times, not inference or E2E speedups.
+
+All 84 runtime tests, ten relevant Rust 1.85 tests, workspace Clippy and format
+checks pass. Tests exercise one read per canonical file within a scan, fresh
+reads on later scans, same-sized rewrites with restored mtime, inode replacement,
+late changes, alias preservation and supervisor rejection of changed environments.
+See `provenance/rust_environment_scan_dedup.json`.
+
+## Loaded-library coverage audit in progress
+
+Point-in-time process maps from two AtlasFold workers expose system libraries
+and locale data outside the current environment roots. Device mappings require
+separate hardware/driver evidence. The Rust bridge and published operator use
+separate execution/kernel identities; absence from the environment inventory
+alone does not imply that such an artifact is unverified.
+
+`provenance/atlasfold_loaded_environment_audit.json` records the observed paths
+and their classification. It is a discovery artifact, not complete process-
+lifetime coverage. The remaining audit must bind the observed system dependencies
+and loading paths, check the other model environments, and account for runtime
+plugins and driver identity. The current strict profiles remain opt-in.

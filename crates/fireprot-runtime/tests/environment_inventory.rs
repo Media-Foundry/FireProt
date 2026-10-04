@@ -92,3 +92,55 @@ fn environment_rejects_ambiguous_names_and_retargeted_inputs() {
     spec.files.clear();
     assert!(spec.capture().is_err());
 }
+
+#[cfg(unix)]
+#[test]
+fn overlapping_roots_keep_every_alias_and_legacy_inventory_identity() {
+    use fireprot_runtime::build::FileIdentity;
+    use std::os::unix::fs::symlink;
+    let tmp = tempfile::tempdir().unwrap();
+    let packages = tmp.path().join("packages");
+    fs::create_dir(&packages).unwrap();
+    let module = packages.join("model.py");
+    fs::write(&module, "model source").unwrap();
+    let alias = tmp.path().join("linked-packages");
+    symlink(&packages, &alias).unwrap();
+    let spec = InventorySpec {
+        schema_version: 1,
+        files: vec![BuildFile {
+            name: "explicit".into(),
+            path: alias.join("model.py"),
+        }],
+        trees: vec![
+            BuildTree {
+                name: "first".into(),
+                path: packages,
+                suffixes: vec![],
+            },
+            BuildTree {
+                name: "second".into(),
+                path: alias,
+                suffixes: vec![],
+            },
+        ],
+    };
+    let captured = spec.capture().unwrap();
+    let expected: Vec<_> = ["explicit", "first/model.py", "second/model.py"]
+        .into_iter()
+        .map(|name| FileIdentity {
+            name: name.into(),
+            canonical_path: module.canonicalize().unwrap(),
+            sha256: sha256(&module).unwrap(),
+        })
+        .collect();
+    assert_eq!(captured.files, expected);
+    let manifest = tmp.path().join("inventory.json");
+    fs::write(&manifest, serde_json::to_vec(&captured).unwrap()).unwrap();
+    let pin = ArtifactRef {
+        sha256: sha256(&manifest).unwrap(),
+        path: manifest,
+    };
+    accept(&pin).unwrap();
+    fs::write(&module, "new contents").unwrap();
+    assert!(accept(&pin).is_err());
+}

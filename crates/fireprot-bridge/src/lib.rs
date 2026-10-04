@@ -152,5 +152,6 @@ fn _fireprot_bridge(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(build::cached_build, module)?)?;
     module.add_function(wrap_pyfunction!(build::accept_kernel, module)?)?;
     module.add_function(wrap_pyfunction!(build::build_torch, module)?)?;
+    module.add_function(wrap_pyfunction!(build::build_hip, module)?)?;
     Ok(())
 }

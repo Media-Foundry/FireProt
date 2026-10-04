@@ -2,11 +2,8 @@
 from __future__ import annotations
 
 import ctypes
-import hashlib
-import json
 import os
 import pathlib
-import subprocess
 import threading
 from typing import Any
 
@@ -44,7 +41,6 @@ def load_extension() -> Any:
             _error = "disabled by FIREPROT_DISABLE_CK_EXTENSION"
             return None
         try:
-            import fcntl
             import torch
 
             if not torch.version.hip:
@@ -53,42 +49,12 @@ def load_extension() -> Any:
             version = (root / "include/ck/version.h").read_text()
             if "8d1ae90eff7d022f26019ec55b2ec6a7674b3112" not in version:
                 raise RuntimeError("CK installation is outside the measured version")
-            compiler = root / "bin/hipcc"
-            compiler_version = subprocess.check_output([str(compiler), "--version"], text=True)
+            from ._native_hip import load as build_native
             source = pathlib.Path(__file__).parent / "csrc/fireprot_ck_attention.cpp"
-            digest = hashlib.sha256()
-            headers = sorted((root / "include/ck_tile").rglob("*.hpp"))
-            if not headers:
+            if not (root / "include/ck_tile").is_dir():
                 raise RuntimeError("CK Tile headers are unavailable")
-            for path in headers:
-                digest.update(str(path.relative_to(root / "include")).encode() + b"\0")
-                digest.update(hashlib.sha256(path.read_bytes()).digest())
-            header_digest = digest.hexdigest()
-            for value in (source.read_bytes(), pathlib.Path(__file__).read_bytes(),
-                          compiler_version.encode(), str(torch.__version__).encode(),
-                          str(torch.version.hip).encode()):
-                digest.update(value)
-            cache = pathlib.Path(os.environ.get("FIREPROT_EXTENSION_CACHE",
-                                                pathlib.Path(__file__).resolve().parents[3] / "runtime/torch_extensions"))
-            directory = cache / ("ck_attention_" + digest.hexdigest()[:16])
-            directory.mkdir(parents=True, exist_ok=True)
-            output = directory / "attention.so"
-            command = [str(compiler), "-O3", "-std=c++17", "-fPIC", "-shared",
-                       "--offload-arch=gfx90a", f"-I{root / 'include'}", str(source),
-                       "-o", str(directory / "attention.pending.so")]
-            with (directory / "build.lock").open("w") as lock:
-                fcntl.flock(lock, fcntl.LOCK_EX)
-                if not output.is_file():
-                    with (directory / "build.log").open("w") as log:
-                        subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, check=True)
-                    (directory / "attention.pending.so").replace(output)
-            _build = dict(source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),
-                          header_sha256=header_digest, header_count=len(headers),
-                          compiler_version=compiler_version, command=command,
-                          library_sha256=hashlib.sha256(output.read_bytes()).hexdigest(),
-                          library=str(output), ck_version=version)
-            (directory / "manifest.json").write_text(json.dumps(_build, indent=2) + "\n")
-            _library = ctypes.CDLL(str(output))
+            _library, _build = build_native('fireprot_ck_attention', source, root,
+                extra_files=[__file__], versions={'ck_version': version})
             _entry = _library.ck_attention
             _entry.argtypes = [ctypes.c_void_p] * 5 + [ctypes.c_int] * 2 + [ctypes.c_void_p]
             _entry.restype = ctypes.c_int

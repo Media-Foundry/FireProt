@@ -45,7 +45,8 @@ def test_ck_attention_disable_prevents_build(monkeypatch):
     monkeypatch.setattr(ck, "_entry", None)
     monkeypatch.setattr(ck, "_error", None)
     monkeypatch.setenv("FIREPROT_DISABLE_CK_EXTENSION", "1")
-    monkeypatch.setattr(ck.subprocess, "check_output", lambda *a, **k: pytest.fail("unexpected build"))
+    from fireprot.backends.amd import _native_hip
+    monkeypatch.setattr(_native_hip, "load", lambda *a, **k: pytest.fail("unexpected build"))
     assert ck.load_extension() is None
     assert ck.extension_status()["error"] == "disabled by FIREPROT_DISABLE_CK_EXTENSION"
 

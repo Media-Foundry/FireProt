@@ -6,8 +6,8 @@ including the measured 1,000- and 1,536-residue workloads.
 
 **Status: Rust framework migration in progress.** Rust owns request contracts,
 operator selection, process supervision, GPU isolation, provenance preflight and
-output validation. Native build/cache services now own the maintained Torch extension loaders.
-Standalone C ABI loaders, repository layout, packaging and some model
+output validation. Native build/cache services now own maintained Torch and standalone HIP loaders.
+Published C ABI artifacts, repository layout, packaging and some model
 parity gates are unfinished. Rust itself is not claimed to accelerate GPU kernels.
 
 ## Model coverage
@@ -94,6 +94,7 @@ structural accuracy.
 - [Operator policy and bridge deployment](docs/rust-operators.md)
 - [Published kernel artifacts](docs/kernel-artifacts.md)
 - [Torch extension loader ownership](docs/torch-loaders.md)
+- [Direct HIP builds and C ABI loaders](docs/hip-builds.md)
 - [Native build/cache migration](docs/kernel-builds.md)
 - [AtlasFold performance and exact-output evidence](docs/atlasfold-performance.md)
 - [Protenix request performance and historical isolation correction](docs/protenix-native-requests.md)

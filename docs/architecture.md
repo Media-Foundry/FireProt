@@ -14,7 +14,7 @@ cross-model API and packaged kernel builds are not complete.
 | User entry point | `fireprot-cli` | Rust; Protenix native/FireProt, AtlasFold native/chunked/HIP/fused HIP, native OpenFold3 |
 | In-process operator policy boundary | `fireprot-bridge` | CPython stable C ABI; metadata and callbacks only |
 | Model execution | `python/fireprot_workers` and independent upstream checkouts | Explicit PyTorch boundary; additional model variants pending |
-| Native build identity, dependency inventories and cache transactions | `fireprot-runtime` via `fireprot-bridge` | Maintained Torch loaders use Rust; standalone C ABI loaders pending |
+| Native build identity, dependency inventories and cache transactions | `fireprot-runtime` via `fireprot-bridge` | Maintained Torch and standalone HIP loaders use Rust |
 | AMD kernels and tensor glue | `fireprot/backends/amd` | Existing HIP/CK paths; build and layout migration pending |
 
 AtlasFold N1000 native output migration passes exactly. Its chunked/HIP/fused HIP
@@ -112,8 +112,9 @@ checks pinned artifacts with `verify-kernel`. The AtlasFold mask/bias loader can
 accept that artifact through the bridge using actual runtime compatibility.
 Compiler dependency scans belong to build acceptance; published-artifact loading
 checks the manifest, receipt and library without reopening build inputs. Rust now orchestrates the experimental Torch compiler process, including staging,
-timeout and diagnostics. The four maintained Torch loaders now use that service; standalone C ABI loaders
-and bundles still require migration. See [loader ownership](torch-loaders.md). See [published kernel artifacts](kernel-artifacts.md).
+timeout and diagnostics. Maintained Torch and standalone C ABI loaders now use the shared guarded compiler
+service. Pinned C ABI deployment bundles remain pending. See [Torch loader
+ownership](torch-loaders.md) and [direct HIP builds](hip-builds.md). See [published kernel artifacts](kernel-artifacts.md).
 
 Keep `Protenix/` as an independent upstream checkout. Other upstream implementations should follow the same independent-source approach. Keep adapters and local patches in the top-level repository. When an upstream edit is unavoidable, record the baseline commit, patch, and license. Do not copy upstream source into the shared core.
 

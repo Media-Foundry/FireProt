@@ -5,8 +5,8 @@
 Rust owns native build identities, dependency inventories, dynamic-library
 resolution, cache transactions and guarded compiler processes. The four
 maintained Torch extension loaders now use this service; see
-[Torch loader ownership](torch-loaders.md). Standalone C ABI CK attention and
-hipBLASLt loaders remain pending. The mask/bias published-artifact route is also
+[Torch loader ownership](torch-loaders.md). Standalone C ABI CK attention and hipBLASLt loaders also use Rust; see
+[direct HIP builds](hip-builds.md). The mask/bias published-artifact route is also
 implemented; see [kernel artifacts](kernel-artifacts.md). The chronological
 validation sections below retain earlier experimental recipe evidence.
 
@@ -77,7 +77,7 @@ Before/after hashes detect persistent input changes, not changes restored while
 the compiler is reading. Immutable input snapshots and complete recipe inputs
 remain integration requirements. Loading is outside this service; only declared,
 verified artifacts may be loaded, and intermediates must not be reused for a
-future compilation. All maintained Torch loaders use this service; standalone C ABI loaders are pending.
+future compilation. All maintained Torch and standalone HIP loaders use this service.
 
 
 ## Python bridge

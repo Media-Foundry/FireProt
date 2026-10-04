@@ -13,9 +13,9 @@ use std::{
 
 fn run() -> io::Result<()> {
     let args: Vec<_> = std::env::args_os().skip(1).collect();
-    if args.len() != 4 || getpid() != getpgrp() {
+    if args.len() < 2 || getpid() != getpgrp() {
         return Err(io::Error::other(
-            "compiler guard requires a private process group and four arguments",
+            "compiler guard requires a private process group and a program/status path",
         ));
     }
     let watcher = std::thread::spawn(|| {
@@ -31,11 +31,10 @@ fn run() -> io::Result<()> {
         }
     });
     let status = Command::new(&args[0])
-        .arg(&args[1])
-        .arg(&args[2])
+        .args(&args[1..args.len() - 1])
         .stdin(Stdio::null())
         .status()?;
-    let destination = PathBuf::from(&args[3]);
+    let destination = PathBuf::from(args.last().expect("validated arguments"));
     let pending = destination.with_extension("pending");
     fs::write(
         &pending,

@@ -52,6 +52,16 @@ fn execute() -> Result<(), Box<dyn std::error::Error>> {
             })?;
             println!("{}",serde_json::to_string_pretty(&serde_json::json!({"directory":result.directory,"cache_hit":result.cache_hit,"receipt":result.receipt}))?);
         },
+        ["build-hip",specification,cache]=>{
+            let spec:fireprot_runtime::hip_build::HipBuildSpec=serde_json::from_slice(&fs::read(specification)?)?;
+            let cancelled=Arc::new(AtomicBool::new(false));
+            signal_hook::flag::register(signal_hook::consts::SIGINT,Arc::clone(&cancelled))?;
+            signal_hook::flag::register(signal_hook::consts::SIGTERM,Arc::clone(&cancelled))?;
+            let result=spec.run_checked(std::path::Path::new(cache), &mut || {
+                if cancelled.load(std::sync::atomic::Ordering::Relaxed) {Err(std::io::Error::new(std::io::ErrorKind::Interrupted,"build cancelled"))} else {Ok(())}
+            })?;
+            println!("{}",serde_json::to_string_pretty(&serde_json::json!({"directory":result.directory,"cache_hit":result.cache_hit,"receipt":result.receipt}))?);
+        },
         ["publish-kernel",cache,destination]=>println!("{}",serde_json::to_string_pretty(&fireprot_runtime::kernel_bundle::publish(std::path::Path::new(cache),std::path::Path::new(destination))?)?),
         ["verify-kernel",directory,digest,compatibility]=>{
             let expected=serde_json::from_slice(&fs::read(compatibility)?)?;
@@ -76,7 +86,7 @@ fn execute() -> Result<(), Box<dyn std::error::Error>> {
             println!("{}",serde_json::to_string_pretty(&report)?);
             if report.phase!=fireprot_core::protocol::Phase::Succeeded{return Err("inference failed; inspect supervisor.json and stderr.log".into());}
         },
-        _=>return Err("usage: fireprot inspect REQUEST | infer REQUEST EXECUTION | export-source ROOT COMMIT | compare-npz REFERENCE CANDIDATE | build-torch SPECIFICATION CACHE | publish-kernel CACHE DESTINATION | verify-kernel DIRECTORY MANIFEST_SHA256 COMPATIBILITY_JSON".into())
+        _=>return Err("usage: fireprot inspect REQUEST | infer REQUEST EXECUTION | export-source ROOT COMMIT | compare-npz REFERENCE CANDIDATE | build-torch SPECIFICATION CACHE | build-hip SPECIFICATION CACHE | publish-kernel CACHE DESTINATION | verify-kernel DIRECTORY MANIFEST_SHA256 COMPATIBILITY_JSON".into())
     }
     Ok(())
 }

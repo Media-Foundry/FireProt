@@ -129,3 +129,36 @@ pub fn build_torch(py: Python<'_>, specification: &str, root: PathBuf) -> PyResu
         .map_err(|error| PyValueError::new_err(error.to_string()))
     })
 }
+
+/// Compile a declared direct HIP recipe under Rust process/cache ownership.
+#[pyfunction]
+pub fn build_hip(py: Python<'_>, specification: &str, root: PathBuf) -> PyResult<String> {
+    let specification: fireprot_runtime::hip_build::HipBuildSpec =
+        serde_json::from_str(specification)
+            .map_err(|error| PyValueError::new_err(error.to_string()))?;
+    if BUILDING.with(|value| value.replace(true)) {
+        return Err(PyRuntimeError::new_err(
+            "build callbacks must not reenter build_hip",
+        ));
+    }
+    let _guard = BuildGuard;
+    py.detach(move || {
+        let mut signal_error = None;
+        let result = specification.run_checked(&root, &mut || {
+            Python::attach(|py| py.check_signals()).map_err(|error| {
+                signal_error = Some(error);
+                io::Error::new(io::ErrorKind::Interrupted, "Python build interrupted")
+            })
+        });
+        if let Some(error) = signal_error {
+            return Err(error);
+        }
+        let result = result.map_err(|error| PyOSError::new_err(error.to_string()))?;
+        serde_json::to_string(&serde_json::json!({
+            "directory": result.directory,
+            "cache_hit": result.cache_hit,
+            "receipt": result.receipt,
+        }))
+        .map_err(|error| PyValueError::new_err(error.to_string()))
+    })
+}

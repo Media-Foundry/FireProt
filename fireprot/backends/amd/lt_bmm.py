@@ -2,10 +2,8 @@
 from __future__ import annotations
 
 import ctypes
-import hashlib
 import os
 import pathlib
-import subprocess
 import threading
 from typing import Any
 
@@ -24,41 +22,16 @@ def load_extension() -> Any:
         if _entry is not None or _error is not None:
             return _entry
         try:
-            import fcntl
             import torch
             root = pathlib.Path(os.environ.get("FIREPROT_ROCM_HOME", "/opt/rocm"))
-            compiler = root / "bin/hipcc"
-            version = subprocess.check_output([str(compiler), "--version"], text=True)
+            from ._native_hip import load as build_native
             source = pathlib.Path(__file__).parent / "csrc/fireprot_lt_bmm.cpp"
-            digest = hashlib.sha256(source.read_bytes() + pathlib.Path(__file__).read_bytes())
-            digest.update((version + str(torch.__version__) + str(torch.version.hip)).encode())
-            for header in sorted((root / "include/hipblaslt").glob("*.h")):
-                digest.update(header.name.encode() + header.read_bytes())
-            library = (root / "lib/libhipblaslt.so").resolve()
-            stat = library.stat()
-            digest.update(f"{root.resolve()}:{library}:{stat.st_size}:{stat.st_mtime_ns}".encode())
-            cache = pathlib.Path(os.environ.get("FIREPROT_EXTENSION_CACHE",
-                                 pathlib.Path(__file__).resolve().parents[3] / "runtime/torch_extensions"))
-            directory = cache / ("lt_bmm_" + digest.hexdigest()[:16])
-            directory.mkdir(parents=True, exist_ok=True)
-            output = directory / "bmm.so"
-            command = [str(compiler), "-O3", "-std=c++17", "-fPIC", "-shared",
-                       "--offload-arch=gfx90a", f"-I{root / 'include'}", str(source),
-                       f"-L{root / 'lib'}", f"-Wl,-rpath,{root / 'lib'}", "-lhipblaslt",
-                       "-o", str(directory / "pending.so")]
-            with (directory / "build.lock").open("w") as handle:
-                fcntl.flock(handle, fcntl.LOCK_EX)
-                if not output.is_file():
-                    with (directory / "build.log").open("w") as log:
-                        subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, check=True)
-                    (directory / "pending.so").replace(output)
-            _library = ctypes.CDLL(str(output))
+            _library, _build = build_native('fireprot_lt_bmm', source, root,
+                link_flags=[f"-L{root / 'lib'}", f"-Wl,-rpath,{root / 'lib'}", "-lhipblaslt"],
+                libraries=[root / 'lib/libhipblaslt.so'], extra_files=[__file__])
             _entry = _library.lt_packed_bmm
             _entry.argtypes = [ctypes.c_void_p] * 3 + [ctypes.c_int] * 3 + [ctypes.c_void_p] * 2 + [ctypes.c_size_t]
             _entry.restype = ctypes.c_int
-            _build = dict(source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),
-                          library_sha256=hashlib.sha256(output.read_bytes()).hexdigest(),
-                          fingerprint=digest.hexdigest(), command=command, compiler=version)
         except Exception as error:
             _error = f"{type(error).__name__}: {error}"
             return None

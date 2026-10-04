@@ -44,10 +44,10 @@ The bridge and `fireprot-compiler-guard` must be available in the deployment.
 changes kernel math. Original optimization opt-ins, shape/stride/dtype gates,
 model cycle semantics and native fallback policies remain model-specific.
 
-The standalone C ABI CK Tile attention and hipBLASLt BMM loaders still have their
-previous build paths. Their migration requires a direct HIP process recipe and
-C ABI artifact acceptance; they are not converted by this Torch service. The CK
-GEMM wrapper's build migration does not promote its opt-in inference dispatch.
+The standalone C ABI CK Tile attention and hipBLASLt BMM loaders now use the
+Rust [direct HIP service](hip-builds.md), sharing the process guard and cache.
+Pinned C ABI deployment bundles remain pending. The CK GEMM wrapper's build
+migration does not promote its opt-in inference dispatch.
 
 See [build identity](kernel-builds.md), [process lifetime](torch-build-process.md)
 and [published artifacts](kernel-artifacts.md). Runtime artifacts and predictions

@@ -5,22 +5,12 @@ use crate::{
     build::{BuildIdentity, BuildSpec},
     build_cache::{CachedBuild, get_or_build_checked},
 };
-use nix::{
-    sys::signal::{Signal, killpg},
-    unistd::Pid,
-};
 use serde::{Deserialize, Serialize};
 use std::{
     collections::BTreeSet,
-    fs::{self, File},
-    io::{self, Read, Seek, SeekFrom},
-    os::{
-        fd::OwnedFd,
-        unix::{net::UnixStream, process::CommandExt},
-    },
+    fs, io,
     path::{Path, PathBuf},
-    process::{Child, Command, Stdio},
-    time::{Duration, Instant},
+    time::Duration,
 };
 
 const RECIPE_KEY: &str = "fireprot_torch_process";
@@ -47,28 +37,6 @@ struct CompilerRecipe<'a> {
     extra_cflags: &'a [String],
     extra_cuda_cflags: &'a [String],
     extra_include_paths: &'a [String],
-}
-
-struct CompilerGroup(Child, UnixStream);
-impl Drop for CompilerGroup {
-    fn drop(&mut self) {
-        // Also stop descendants left behind by a failed or prematurely exited helper.
-        let _ = killpg(Pid::from_raw(self.0.id() as i32), Signal::SIGKILL);
-        let _ = self.0.wait();
-        let _ = self.1.shutdown(std::net::Shutdown::Both);
-    }
-}
-
-fn log_tail(path: &Path) -> String {
-    let read = || -> io::Result<String> {
-        let mut file = File::open(path)?;
-        let start = file.metadata()?.len().saturating_sub(16 * 1024);
-        file.seek(SeekFrom::Start(start))?;
-        let mut bytes = Vec::new();
-        file.take(16 * 1024).read_to_end(&mut bytes)?;
-        Ok(String::from_utf8_lossy(&bytes).into_owned())
-    };
-    read().unwrap_or_else(|error| format!("compiler log unavailable: {error}"))
 }
 
 impl TorchBuildSpec {
@@ -233,85 +201,24 @@ impl TorchBuildSpec {
                 };
                 let recipe_path = directory.join("recipe.json");
                 fs::write(&recipe_path, serde_json::to_vec(&recipe)?)?;
-                let log_path = directory.join("compiler.log");
-                let log = File::create(&log_path)?;
                 let python = self.python_path()?;
                 if python.canonicalize()? != self.input(&identity, &self.python)? {
                     return Err(io::Error::other("Python executable link changed"));
                 }
                 // Preserve the venv invocation path: resolving this symlink before
                 // exec would silently select the base interpreter's environment.
-                let (lifetime, child_lifetime) = UnixStream::pair()?;
-                let status_path = directory.join("compiler-status.json");
-                let mut command = Command::new(self.input(&identity, &self.guard)?);
-                command
-                    .arg(python)
-                    .arg(self.input(&identity, &self.helper)?)
-                    .arg(&recipe_path)
-                    .arg(&status_path)
-                    .current_dir(directory)
-                    .env_clear()
-                    .envs(
-                        identity
-                            .environment
-                            .iter()
-                            .filter_map(|(key, value)| value.as_ref().map(|v| (key, v))),
-                    )
-                    .stdin(Stdio::from(OwnedFd::from(child_lifetime)))
-                    .stdout(log.try_clone()?)
-                    .stderr(log)
-                    .process_group(0);
-                let mut group = CompilerGroup(command.spawn()?, lifetime);
-                drop(command); // Close the parent copy of the child socket endpoint.
-                let started = Instant::now();
-                let result = loop {
-                    if let Err(error) = check() {
-                        break Err(error);
-                    }
-                    match fs::read(&status_path) {
-                        Ok(bytes) => {
-                            #[derive(Deserialize)]
-                            #[serde(deny_unknown_fields)]
-                            struct Status {
-                                success: bool,
-                                code: Option<i32>,
-                            }
-                            let status: Status = serde_json::from_slice(&bytes)?;
-                            break if status.success && status.code == Some(0) {
-                                Ok(())
-                            } else {
-                                Err(io::Error::other(format!(
-                                    "Torch compiler exited with {:?}",
-                                    status.code
-                                )))
-                            };
-                        }
-                        Err(e) if e.kind() == io::ErrorKind::NotFound => (),
-                        Err(e) => break Err(e),
-                    }
-                    if let Some(status) = group.0.try_wait()? {
-                        break Err(io::Error::other(format!(
-                            "compiler guard exited without status: {status}"
-                        )));
-                    }
-                    if started.elapsed() >= Duration::from_millis(self.timeout_ms) {
-                        break Err(io::Error::new(
-                            io::ErrorKind::TimedOut,
-                            "Torch compiler timed out",
-                        ));
-                    }
-                    std::thread::sleep(Duration::from_millis(20));
-                };
-                drop(group);
-                if let Err(error) = result {
-                    return Err(io::Error::new(
-                        error.kind(),
-                        format!(
-                            "{error}\nCompiler log (last 16 KiB):\n{}",
-                            log_tail(&log_path)
-                        ),
-                    ));
+                crate::build_process::CompilerCommand {
+                    guard: self.input(&identity, &self.guard)?,
+                    program: python,
+                    arguments: vec![
+                        self.input(&identity, &self.helper)?.into(),
+                        recipe_path.into(),
+                    ],
+                    directory,
+                    environment: &identity.environment,
+                    timeout: Duration::from_millis(self.timeout_ms),
                 }
+                .run(check)?;
                 Ok(vec![format!("{name}.so")])
             },
         )

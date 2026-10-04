@@ -237,3 +237,12 @@ native fallback occurred. All six supervisors passed continuous PCI-mapped GPU
 isolation and output acceptance. Local validation passed 58 Rust tests and 201
 Python tests (110 GPU cases skipped); the remote targeted GPU suite passed 62.
 See [requests, identities and complete comparisons](../provenance/rust_atlasfold_accelerated.json).
+
+
+### Published AtlasFold mask/bias library
+
+`configs/diamondhill/atlasfold-published.json` selects a pinned prebuilt library
+for AtlasFold `hip` requests. Rust checks artifact integrity and compatibility;
+the loader does not enter a build path. N1000/N1536 public outputs pass exactly.
+See [publication, acceptance and deployment scope](kernel-artifacts.md). Direct
+build orchestration and other kernel recipes remain migration work.

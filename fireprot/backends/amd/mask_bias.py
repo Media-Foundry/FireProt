@@ -29,6 +29,15 @@ def load():
                 raise RuntimeError('disabled by FIREPROT_DISABLE_MASK_BIAS_HIP')
             if not torch.version.hip or not torch.cuda.is_available():
                 raise RuntimeError('HIP is unavailable')
+            bundle = os.environ.get('FIREPROT_MASK_BIAS_BUNDLE')
+            if bundle:
+                digest = os.environ.get('FIREPROT_MASK_BIAS_BUNDLE_SHA256')
+                if not digest:
+                    raise RuntimeError('FIREPROT_MASK_BIAS_BUNDLE_SHA256 is required')
+                from ._published import load as published_load
+                _extension, _build = published_load('fireprot_mask_bias', bundle, digest)
+                _name = _extension.__name__
+                return _extension
             from torch.utils.cpp_extension import load as compile_extension
             source = Path(__file__).with_name('csrc')/'fireprot_mask_bias.cu'
             if os.environ.get('FIREPROT_RUST_BUILD') == '1':

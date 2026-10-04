@@ -2,12 +2,13 @@
 
 ## Migration status
 
-`fireprot-runtime::build` implements the shared build identity primitive in Rust.
-`fireprot-runtime::build_cache` adds transactional cache management on local Unix
-filesystems. The existing Python loaders are not connected yet. Their historical cache names
-and build behavior remain in use until each loader is migrated and GPU parity is
-verified. The identity primitive does not compile or load an extension. The cache service
-serializes a supplied build callback and publishes its declared library artifacts.
+Rust owns native build identities, dependency inventories, dynamic-library
+resolution and cache transactions through `fireprot-runtime`. The bridge exposes
+these services to Torch compiler callbacks. AtlasFold mask/bias has both an
+experimental build path and a pinned published-artifact loader. Rust publication
+and acceptance commands are described in [kernel artifacts](kernel-artifacts.md).
+Other HIP/CK recipes, C ABI bundles and direct build orchestration remain pending.
+The chronological validation sections below preserve earlier recipe evidence.
 
 ## Contract
 
@@ -44,8 +45,8 @@ verify the resulting library, and publish its receipt atomically. Interrupted
 builds must never become reusable successes. PyTorch-specific compilation/loading
 may remain a tensor ABI boundary; build policy and cache acceptance belong in Rust.
 
-Next connect this contract to the bridge and migrate the HIP/CK loader recipes,
-then rerun their operator and long-model correctness gates before moving kernels.
+The bridge and first mask/bias recipe are connected. Migrate the remaining HIP/CK
+recipes and rerun their operator and long-model gates before moving kernels.
 
 
 ## Transactional cache service
@@ -76,7 +77,7 @@ Before/after hashes detect persistent input changes, not changes restored while
 the compiler is reading. Immutable input snapshots and complete recipe inputs
 remain integration requirements. Loading is outside this service; only declared,
 verified artifacts may be loaded, and intermediates must not be reused for a
-future compilation. No HIP/CK loader uses this service yet.
+future compilation. The mask/bias candidate uses this service; remaining loaders are pending.
 
 
 ## Python bridge
@@ -103,6 +104,9 @@ by merely exposing this interface: dependency enumeration, immutable inputs,
 Torch compilation/loading integration and fresh GPU parity are still required.
 
 ## First HIP integration candidate
+
+This section records historical recipe 1. Later directory/dynamic inventories
+and published-artifact acceptance extend this initial implementation.
 
 `FIREPROT_RUST_BUILD=1` selects an experimental Rust cache recipe for AtlasFold's
 mask/bias extension only. It is not the default or a completed loader migration.

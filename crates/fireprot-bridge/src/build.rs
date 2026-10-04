@@ -66,3 +66,21 @@ pub fn cached_build(
         .map_err(|error| PyValueError::new_err(error.to_string()))
     })
 }
+
+/// Validate a published artifact without consulting compiler inputs or tools.
+#[pyfunction]
+pub fn accept_kernel(
+    py: Python<'_>,
+    directory: PathBuf,
+    digest: String,
+    compatibility: &str,
+) -> PyResult<String> {
+    let expected: fireprot_runtime::kernel_bundle::KernelCompatibility =
+        serde_json::from_str(compatibility)
+            .map_err(|error| PyValueError::new_err(error.to_string()))?;
+    py.detach(move || {
+        let accepted = fireprot_runtime::kernel_bundle::accept(&directory, &digest, &expected)
+            .map_err(|error| PyOSError::new_err(error.to_string()))?;
+        serde_json::to_string(&accepted).map_err(|error| PyValueError::new_err(error.to_string()))
+    })
+}

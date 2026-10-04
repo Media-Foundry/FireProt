@@ -150,5 +150,6 @@ fn _fireprot_bridge(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add("ABI_VERSION", 1)?;
     module.add_class::<OperatorRegistry>()?;
     module.add_function(wrap_pyfunction!(build::cached_build, module)?)?;
+    module.add_function(wrap_pyfunction!(build::accept_kernel, module)?)?;
     Ok(())
 }

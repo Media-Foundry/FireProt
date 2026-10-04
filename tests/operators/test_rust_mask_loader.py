@@ -44,3 +44,24 @@ def test_rust_build_failure_preserves_fallback(monkeypatch):
     assert len(calls) == 1
     assert mask_bias.manifest()['error'] == 'OSError: corrupt cached library'
     assert mask_bias.manifest()['build'] is None
+
+
+def test_published_choice_precedes_build_and_requires_pin(monkeypatch):
+    from fireprot.backends.amd import _published
+    prepare(monkeypatch)
+    monkeypatch.setenv('FIREPROT_MASK_BIAS_BUNDLE', '/declared/bundle')
+    monkeypatch.delenv('FIREPROT_MASK_BIAS_BUNDLE_SHA256', raising=False)
+    def forbidden(*args):
+        raise AssertionError('must not enter build path')
+    monkeypatch.setattr(_native_build, 'load', forbidden)
+    assert mask_bias.load() is None
+    assert 'SHA256 is required' in mask_bias.manifest()['error']
+    monkeypatch.setattr(mask_bias, '_error', None)
+    monkeypatch.setenv('FIREPROT_MASK_BIAS_BUNDLE_SHA256', 'a' * 64)
+    extension = SimpleNamespace(__name__='published_extension')
+    def published(package, directory, digest):
+        assert (package, directory, digest) == ('fireprot_mask_bias', '/declared/bundle', 'a' * 64)
+        return extension, {'mode': 'published'}
+    monkeypatch.setattr(_published, 'load', published)
+    assert mask_bias.load() is extension
+    assert mask_bias.manifest()['build']['mode'] == 'published'

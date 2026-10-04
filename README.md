@@ -92,6 +92,7 @@ structural accuracy.
 - [Rust migration acceptance and remaining work](docs/rust-migration.md)
 - [Current architecture and dependency boundaries](docs/architecture.md)
 - [Operator policy and bridge deployment](docs/rust-operators.md)
+- [Published kernel artifacts](docs/kernel-artifacts.md)
 - [Native build/cache migration](docs/kernel-builds.md)
 - [AtlasFold performance and exact-output evidence](docs/atlasfold-performance.md)
 - [Protenix request performance and historical isolation correction](docs/protenix-native-requests.md)

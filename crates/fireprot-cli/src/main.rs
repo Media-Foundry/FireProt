@@ -42,6 +42,11 @@ fn execute() -> Result<(), Box<dyn std::error::Error>> {
             let result=compare_archives(&r,&c,Policy::Exact)?;println!("{}",serde_json::to_string_pretty(&result)?);
             if result.values().any(|r|!r.passed){return Err("prediction comparison failed".into());}
         },
+        ["publish-kernel",cache,destination]=>println!("{}",serde_json::to_string_pretty(&fireprot_runtime::kernel_bundle::publish(std::path::Path::new(cache),std::path::Path::new(destination))?)?),
+        ["verify-kernel",directory,digest,compatibility]=>{
+            let expected=serde_json::from_slice(&fs::read(compatibility)?)?;
+            println!("{}",serde_json::to_string_pretty(&fireprot_runtime::kernel_bundle::accept(std::path::Path::new(directory),digest,&expected)?)?);
+        },
         ["infer",request,execution]=>{
             let request=read_request(request)?;let execution:Execution=serde_json::from_slice(&fs::read(execution)?)?;
             let origin=match execution.source_manifest{Some(manifest)=>SourceOrigin::Exported{manifest},None=>SourceOrigin::GitCheckout};
@@ -61,7 +66,7 @@ fn execute() -> Result<(), Box<dyn std::error::Error>> {
             println!("{}",serde_json::to_string_pretty(&report)?);
             if report.phase!=fireprot_core::protocol::Phase::Succeeded{return Err("inference failed; inspect supervisor.json and stderr.log".into());}
         },
-        _=>return Err("usage: fireprot inspect REQUEST | infer REQUEST EXECUTION | export-source ROOT COMMIT | compare-npz REFERENCE CANDIDATE".into())
+        _=>return Err("usage: fireprot inspect REQUEST | infer REQUEST EXECUTION | export-source ROOT COMMIT | compare-npz REFERENCE CANDIDATE | publish-kernel CACHE DESTINATION | verify-kernel DIRECTORY MANIFEST_SHA256 COMPATIBILITY_JSON".into())
     }
     Ok(())
 }

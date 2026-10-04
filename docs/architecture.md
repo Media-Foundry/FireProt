@@ -107,14 +107,13 @@ yet implemented. Rust core must remain independent of Torch and host process API
 the runtime owns process/device/build policy, and the CLI composes those services.
 The bridge receives metadata and invokes local callbacks without copying tensors.
 
-Deployment should build and validate native artifacts before inference. A future
-explicit build command will publish the operator ABI, architecture/capabilities,
-Torch/HIP compatibility, source/build identity and library hashes. Inference will
-verify the published artifact and its compatibility before loading it. The current
-opt-in integration still performs build/cache discovery inside a fresh worker;
-this is an intermediate implementation, not the final deployment workflow.
-Compiler dependency scans belong to build acceptance. Packaging and the explicit
-build command remain required migration work.
+Deployment should build and validate native artifacts before inference. Rust now publishes verified cached Python extensions with `publish-kernel` and
+checks pinned artifacts with `verify-kernel`. The AtlasFold mask/bias loader can
+accept that artifact through the bridge using actual runtime compatibility.
+Compiler dependency scans belong to build acceptance; published-artifact loading
+checks the manifest, receipt and library without reopening build inputs. Direct
+build orchestration, C ABI bundles and the remaining loaders still require
+migration. See [published kernel artifacts](kernel-artifacts.md).
 
 Keep `Protenix/` as an independent upstream checkout. Other upstream implementations should follow the same independent-source approach. Keep adapters and local patches in the top-level repository. When an upstream edit is unavoidable, record the baseline commit, patch, and license. Do not copy upstream source into the shared core.
 

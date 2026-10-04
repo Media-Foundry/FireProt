@@ -18,3 +18,6 @@ pub mod build_cache;
 pub mod build_tree;
 
 pub mod build_dynamic;
+
+#[cfg(unix)]
+pub mod kernel_bundle;

@@ -1,0 +1,61 @@
+{
+  "scope": "Rust numerical validation and saved AtlasFold output replay; no new inference or speed measurement",
+  "date": "2026-10-04",
+  "base_commit": "8c408e300067c641ce7dbc6f6bf26a5e41397a63",
+  "tests": {
+    "local_passed": 52,
+    "diamondhill_passed": 52,
+    "hardware_monitor_not_rerun": true
+  },
+  "replay": {
+    "model": "AtlasFold plus AtlasLM-3B",
+    "length": 1536,
+    "seed": 102,
+    "configuration_evidence": "provenance/atlasfold_final_qkv_repeats.json",
+    "reference": "/media/IntelSSD/fireprot/outputs/atlasfold/chunked-native-n1536-seed102-noevents/repeat0-seed102-sample0.npz",
+    "candidate": "/media/IntelSSD/fireprot/outputs/atlasfold/packaged-qkv-n1536-seed102-r1/repeat0-seed102-sample0.npz",
+    "policy": "exact canonical array bytes, shape and dtype; identical archive keys",
+    "results": {
+      "coordinates": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "pae": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "plddt": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "ptm": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      }
+    }
+  },
+  "regression": "Duplicate ZIP-member test failed before raw central-directory count validation and passed after it.",
+  "limitations": [
+    "Model worker integration and mandatory model output schemas remain pending",
+    "Historical OpenFold3 BF16-to-FP32 captures do not preserve original tensor dtype",
+    "No CIF parser or repeated-timing statistics yet"
+  ],
+  "source_sha256": {
+    "crates/fireprot-validation/Cargo.toml": "4c2f7ee02915877376b46f83e6c1a373e4603a011ae0e601275598ac26964c7b",
+    "crates/fireprot-validation/examples/compare_npz.rs": "570c8ce363d0efa04661c19a28dfa5913db6aea76ec71a80875fb7e29a6e959f",
+    "crates/fireprot-validation/src/array.rs": "770c401892e16d9e302587cdb55df1fd5e8660261527776d59ec4001007c35c0",
+    "crates/fireprot-validation/src/lib.rs": "d05e65f2c49b62eaa4b1a6d14b16cb9fbfae929dbd8dc28b784acb0529ca132b",
+    "crates/fireprot-validation/src/metrics.rs": "82c6d29fcf0700e7a658a4f211b582c21023dbf5bbf795fd20a7cace85ccad02",
+    "crates/fireprot-validation/src/numpy.rs": "4489c87cef6edd1c4c883160a3b8f4eba897bdd73aad1d16883915b69cbe913a",
+    "crates/fireprot-validation/tests/fixtures/alignment.json": "209c2073386ca3c6e55df8f1233effa999b4c7dde9d95a95dbf62ef6c99106e1",
+    "crates/fireprot-validation/tests/fixtures/duplicate.npz": "4a1d4b5dc6af95ede26148195b4bda3b4dfd3fe74320538305ddacc84afb5761",
+    "crates/fireprot-validation/tests/fixtures/fortran_be.npy": "c07d3f7ce97c5dd03d96884791fef314630de2e0319d0baeccfa72d549bd8fab",
+    "crates/fireprot-validation/tests/fixtures/generate.py": "e79e3382c4f5817e26f9f59fdbdf7351e47f18ec99776ffcbb1d86e830938c39",
+    "crates/fireprot-validation/tests/fixtures/mapping.npz": "8a0b05656490ac66d7df795fdb3393f41cb67b60f806cd2e38d20e239e0320ec",
+    "crates/fireprot-validation/tests/numerics.rs": "98a5f4fb1921b6720769aeb451eb6be7b71b27b949af0b91e17dba668445158e"
+  }
+}

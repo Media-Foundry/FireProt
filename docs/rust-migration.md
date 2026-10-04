@@ -77,8 +77,14 @@ injected Rust interface; its production implementation is pending. Source/input/
 checkpoint preflight now gates the supervisor via `PreparedRequest`, with pinned
 Git or exported-manifest source verification and canonical artifact identities.
 
-Pending: adapter resource/environment provenance, Rust operator-policy bridge, numerical
-comparison/artifact tooling, CLI, model-worker extraction, kernel layout/build
+Also implemented: `fireprot-validation` array identity, primitive NPY/NPZ
+loading, Kabsch alignment, numeric confidence schema/deltas, and experimental
+coordinate masking. NumPy fixtures pin interoperability and numerical behavior.
+See [Rust validation](rust-validation.md). Model-required output schemas and
+supervisor callback integration remain pending.
+
+Pending: adapter resource/environment provenance, Rust operator-policy bridge,
+validation integration/CIF/statistics tooling, CLI, model-worker extraction, kernel layout/build
 migration, GPU parity, and replacement of maintained Python entry points. The
 repository is in migration; the full framework is not yet rebuilt.
 

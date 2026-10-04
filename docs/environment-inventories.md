@@ -162,3 +162,31 @@ and their classification. It is a discovery artifact, not complete process-
 lifetime coverage. The remaining audit must bind the observed system dependencies
 and loading paths, check the other model environments, and account for runtime
 plugins and driver identity. The current strict profiles remain opt-in.
+
+## Extended system inventories: acceptance pending
+
+The specifications in `configs/environments/diamondhill-*-system-v2.json`
+extend the original inventories with system library and locale directories,
+loader configuration/cache, OS and kernel identity, and readable AMDGPU module
+version/source/taint fields. OpenFold3 also includes its external static cache
+configuration. The corresponding `configs/diamondhill/*-system-inventoried.json`
+profiles pin newly captured manifests; the original profiles remain available.
+
+Specifications may declare `absent_paths`. Rust checks these paths before and
+after capture and rejects files, directories, and dangling symlinks at those
+locations. Paths must be absolute, have an existing directory parent, and contain
+no traversal components. Empty or omitted lists preserve the original schema-1
+serialization. An older implementation rejects this extension as an unknown
+field. The new profiles require `/etc/ld.so.preload` and
+`/usr/local/lib/x86_64-linux-gnu` to remain absent.
+
+All three extended manifests have been captured on DiamondHill. Capture alone
+does not establish model acceptance: inference, output parity, archive replay,
+and observed library coverage still require validation with these exact pins.
+The checks observe mutable filesystems; they do not provide an atomic snapshot,
+prove every transient library load, or lock GPU firmware identity.
+
+The current implementation passes all 172 Rust workspace tests on both the
+local default toolchain and Rust 1.85. The absence tests cover files, directories, dangling links, invalid
+paths, legacy serialization, and supervisor rejection before Start and after
+worker output. These CPU results do not substitute for the pending GPU runs.

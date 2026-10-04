@@ -10,7 +10,11 @@ use fireprot_core::request::ArtifactRef;
 use scan::ContentScan;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
-use std::{collections::BTreeSet, fs, io};
+use std::{
+    collections::BTreeSet,
+    fs, io,
+    path::{Component, PathBuf},
+};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -18,6 +22,9 @@ pub struct InventorySpec {
     pub schema_version: u32,
     pub files: Vec<BuildFile>,
     pub trees: Vec<BuildTree>,
+    /// Explicit optional loader inputs that must remain absent.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub absent_paths: Vec<PathBuf>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -34,6 +41,7 @@ impl InventorySpec {
                 "environment inventory requires schema 1 and declared inputs",
             ));
         }
+        check_absent(&self.absent_paths)?;
         let mut files = Vec::new();
         let mut scan = ContentScan::new(sha256);
         for input in &self.files {
@@ -63,6 +71,7 @@ impl InventorySpec {
             ));
         }
         scan.finish()?;
+        check_absent(&self.absent_paths)?;
         Ok(EnvironmentInventory {
             specification: self.clone(),
             files,
@@ -91,4 +100,45 @@ pub fn accept(pin: &ArtifactRef) -> io::Result<EnvironmentInventory> {
         ));
     }
     Ok(expected)
+}
+
+/// Observe absence without following a leaf symlink (including a dangling one).
+/// Parents must exist so missing ancestors cannot silently broaden the claim.
+fn check_absent(paths: &[PathBuf]) -> io::Result<()> {
+    let mut seen = BTreeSet::new();
+    for path in paths {
+        if !path.is_absolute()
+            || !path
+                .components()
+                .all(|c| matches!(c, Component::RootDir | Component::Normal(_)))
+            || path.file_name().is_none()
+            || !seen.insert(path)
+        {
+            return Err(io::Error::other(
+                "invalid or duplicate absent environment path",
+            ));
+        }
+        // Remove redundant separators before lstat; a trailing slash must not
+        // turn a dangling leaf symlink into a false absence observation.
+        let normalized: PathBuf = path.components().collect();
+        let parent = normalized
+            .parent()
+            .ok_or_else(|| io::Error::other("absent path has no parent"))?;
+        if !fs::metadata(parent)?.is_dir() {
+            return Err(io::Error::other(
+                "absent environment path parent is not a directory",
+            ));
+        }
+        match fs::symlink_metadata(&normalized) {
+            Err(error) if error.kind() == io::ErrorKind::NotFound => {}
+            Err(error) => return Err(error),
+            Ok(_) => {
+                return Err(io::Error::other(format!(
+                    "expected environment path to remain absent: {}",
+                    normalized.display()
+                )));
+            }
+        }
+    }
+    Ok(())
 }

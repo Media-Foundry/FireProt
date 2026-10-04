@@ -80,11 +80,14 @@ preserves its `[residues,14,3]` coordinate layout.
 
 ## Remaining migration gates
 
-The CLI is not yet a replacement for every maintained workflow. Pending work
-includes additional model variants and accelerated routes,
-complete environment provenance, richer model schemas,
-paired performance verdicts, and full parity across the established length
-buckets. The historical E2E speedups do not establish this entry point's overhead.
+Rust owns the maintained single, batch and paired-benchmark entry points.
+Remaining migration acceptance covers environment dependencies and scan overhead,
+an updated independent installation, and final cross-model regression across
+the established workflows and length buckets. Paired execution and numerical
+verdicts are implemented; see [paired execution](paired-execution.md).
+OpenFold3 operator acceleration follows framework acceptance. OpenFold2 and
+ESMFold remain future integrations. Historical E2E speedups do not establish
+this entry point's overhead; use the explicitly scoped Rust invocation records.
 
 ## First N1000 execution evidence
 

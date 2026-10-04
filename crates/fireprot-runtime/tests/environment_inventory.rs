@@ -16,6 +16,7 @@ fn pinned_environment_rejects_changes_before_capture_and_later_verification() {
     let module = packages.join("model.py");
     fs::write(&module, "original").unwrap();
     let spec = InventorySpec {
+        absent_paths: vec![],
         schema_version: 1,
         files: vec![],
         trees: vec![BuildTree {
@@ -70,6 +71,7 @@ fn environment_rejects_ambiguous_names_and_retargeted_inputs() {
     let link = tmp.path().join("active");
     std::os::unix::fs::symlink(&a, &link).unwrap();
     let mut spec = InventorySpec {
+        absent_paths: vec![],
         schema_version: 1,
         files: vec![BuildFile {
             name: "library".into(),
@@ -106,6 +108,7 @@ fn overlapping_roots_keep_every_alias_and_legacy_inventory_identity() {
     let alias = tmp.path().join("linked-packages");
     symlink(&packages, &alias).unwrap();
     let spec = InventorySpec {
+        absent_paths: vec![],
         schema_version: 1,
         files: vec![BuildFile {
             name: "explicit".into(),
@@ -143,4 +146,59 @@ fn overlapping_roots_keep_every_alias_and_legacy_inventory_identity() {
     accept(&pin).unwrap();
     fs::write(&module, "new contents").unwrap();
     assert!(accept(&pin).is_err());
+}
+
+#[cfg(unix)]
+#[test]
+fn absent_loader_inputs_reject_files_directories_and_dangling_links() {
+    use std::os::unix::fs::symlink;
+    let tmp = tempfile::tempdir().unwrap();
+    let module = tmp.path().join("module");
+    fs::write(&module, "content").unwrap();
+    let absent = tmp.path().join("preload");
+    let mut spec = InventorySpec {
+        schema_version: 1,
+        files: vec![BuildFile {
+            name: "module".into(),
+            path: module,
+        }],
+        trees: vec![],
+        absent_paths: vec![absent.clone()],
+    };
+    let manifest = tmp.path().join("manifest.json");
+    fs::write(
+        &manifest,
+        serde_json::to_vec(&spec.capture().unwrap()).unwrap(),
+    )
+    .unwrap();
+    let pin = ArtifactRef {
+        sha256: sha256(&manifest).unwrap(),
+        path: manifest,
+    };
+    accept(&pin).unwrap();
+    fs::write(&absent, "library.so").unwrap();
+    assert!(accept(&pin).is_err());
+    fs::remove_file(&absent).unwrap();
+    fs::create_dir(&absent).unwrap();
+    assert!(accept(&pin).is_err());
+    fs::remove_dir(&absent).unwrap();
+    symlink(tmp.path().join("missing"), &absent).unwrap();
+    assert!(accept(&pin).is_err());
+    spec.absent_paths = vec![std::path::PathBuf::from(format!("{}/", absent.display()))];
+    assert!(spec.capture().is_err());
+    fs::remove_file(&absent).unwrap();
+    spec.absent_paths = vec![absent.clone()];
+    assert!(spec.capture().is_ok());
+    for bad in [
+        vec![absent.clone(), absent],
+        vec!["relative".into()],
+        vec![tmp.path().join("../absent")],
+        vec![tmp.path().join("missing-parent/child")],
+    ] {
+        spec.absent_paths = bad;
+        assert!(spec.capture().is_err());
+    }
+    let old = serde_json::json!({"schema_version":1,"files":[],"trees":[]});
+    let old_spec: InventorySpec = serde_json::from_value(old.clone()).unwrap();
+    assert_eq!(serde_json::to_value(old_spec).unwrap(), old);
 }

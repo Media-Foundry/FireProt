@@ -1,0 +1,290 @@
+{
+  "date": "2026-10-04",
+  "scope": "First Rust-supervised native OpenFold3 integration; exact numerical migration parity remains unpassed",
+  "base_commit": "ff8c6cdd56de002a0aee01b82bd6c1a3946ac246",
+  "request": {
+    "schema_version": 1,
+    "run_id": "rust-openfold3-n1000-v2",
+    "workload": {
+      "model": "openfold3",
+      "model_name": "openbind-0",
+      "recycles": 3,
+      "diffusion_steps": 200,
+      "samples": 1,
+      "precision": "float32"
+    },
+    "backend": "native",
+    "seed": 101,
+    "hip_device": 7,
+    "source": {
+      "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+      "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+    },
+    "checkpoints": {
+      "model": {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+        "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+      }
+    },
+    "input": {
+      "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01000_462bb697ecdcce2f.json",
+      "sha256": "2715542db697dbd2dd5021063173f6e91a405ac0f46a46a69b748c815826ae5b"
+    },
+    "output_dir": "/media/IntelSSD/fireprot/outputs/rust-openfold3-n1000-v2"
+  },
+  "supervisor": {
+    "run_id": "rust-openfold3-n1000-v2",
+    "phase": "succeeded",
+    "worker_pid": 1179001,
+    "elapsed_seconds": 262.460614421,
+    "isolation_samples": 297,
+    "failure": null
+  },
+  "model_seconds": 228.61136293201707,
+  "request_seconds": 254.50512581301155,
+  "environment": {
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850",
+    "python": "3.12.13"
+  },
+  "original_dtypes": {
+    "coordinates": "float32",
+    "confidence.plddt": "float32",
+    "confidence.pde": "float32",
+    "confidence.gpde": "float32",
+    "confidence.pae": "float32",
+    "confidence.iptm": "float32",
+    "confidence.ptm": "float32",
+    "confidence.disorder": "float32",
+    "confidence.has_clash": "float32",
+    "confidence.sample_ranking_score": "float32",
+    "confidence.chain_ptm.1": "float32"
+  },
+  "tests": {
+    "rust_local_passed": 55,
+    "rust_diamondhill_passed": 55,
+    "cpu_python_tensor_serialization_passed": 2
+  },
+  "native_model_config_equal_to_legacy": true,
+  "legacy_native_vs_rust": {
+    "confidence.chain_ptm.1": {
+      "bitwise_equal": false,
+      "max_abs_delta": 1.4901161193847656e-07,
+      "passed": false
+    },
+    "confidence.disorder": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.gpde": {
+      "bitwise_equal": false,
+      "max_abs_delta": 1.6689300537109375e-06,
+      "passed": false
+    },
+    "confidence.has_clash": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.iptm": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.pae": {
+      "bitwise_equal": false,
+      "max_abs_delta": 0.10321807861328125,
+      "passed": false
+    },
+    "confidence.pde": {
+      "bitwise_equal": false,
+      "max_abs_delta": 0.03331184387207031,
+      "passed": false
+    },
+    "confidence.plddt": {
+      "bitwise_equal": false,
+      "max_abs_delta": 0.012683868408203125,
+      "passed": false
+    },
+    "confidence.ptm": {
+      "bitwise_equal": false,
+      "max_abs_delta": 1.4901161193847656e-07,
+      "passed": false
+    },
+    "confidence.sample_ranking_score": {
+      "bitwise_equal": false,
+      "max_abs_delta": 2.9802322387695312e-08,
+      "passed": false
+    },
+    "coordinates": {
+      "bitwise_equal": false,
+      "max_abs_delta": 0.0002346038818359375,
+      "passed": false
+    }
+  },
+  "native_repeat": {
+    "path": "outputs/openfold3/native-n1000-rust-migration-control",
+    "manifest": {
+      "status": "complete",
+      "source_commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f",
+      "weight": {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+        "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4",
+        "bytes": 2287872989
+      },
+      "input_sha256": "2715542db697dbd2dd5021063173f6e91a405ac0f46a46a69b748c815826ae5b",
+      "cache": "Weights hashed before request; filesystem warm; fresh model; no MSA or template search",
+      "model_calls": 1,
+      "recycles": 3,
+      "model_seconds": 231.87116143101593,
+      "request_seconds": 258.18528189195786,
+      "isolation": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 5,
+        "interval_seconds": 1.0,
+        "samples": 197,
+        "allowed_pid": 1184926,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "legacy_vs_repeat": {
+      "confidence.chain_ptm.1": {
+        "bitwise_equal": false,
+        "max_abs_delta": 2.086162567138672e-07,
+        "passed": false
+      },
+      "confidence.disorder": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.gpde": {
+        "bitwise_equal": false,
+        "max_abs_delta": 2.86102294921875e-06,
+        "passed": false
+      },
+      "confidence.has_clash": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.iptm": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.pae": {
+        "bitwise_equal": false,
+        "max_abs_delta": 0.10321521759033203,
+        "passed": false
+      },
+      "confidence.pde": {
+        "bitwise_equal": false,
+        "max_abs_delta": 0.2075519561767578,
+        "passed": false
+      },
+      "confidence.plddt": {
+        "bitwise_equal": false,
+        "max_abs_delta": 0.012674331665039062,
+        "passed": false
+      },
+      "confidence.ptm": {
+        "bitwise_equal": false,
+        "max_abs_delta": 2.086162567138672e-07,
+        "passed": false
+      },
+      "confidence.sample_ranking_score": {
+        "bitwise_equal": false,
+        "max_abs_delta": 4.470348358154297e-08,
+        "passed": false
+      },
+      "coordinates": {
+        "bitwise_equal": false,
+        "max_abs_delta": 0.0009737014770507812,
+        "passed": false
+      }
+    },
+    "repeat_vs_rust": {
+      "confidence.chain_ptm.1": {
+        "bitwise_equal": false,
+        "max_abs_delta": 3.5762786865234375e-07,
+        "passed": false
+      },
+      "confidence.disorder": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.gpde": {
+        "bitwise_equal": false,
+        "max_abs_delta": 1.1920928955078125e-06,
+        "passed": false
+      },
+      "confidence.has_clash": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.iptm": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.pae": {
+        "bitwise_equal": false,
+        "max_abs_delta": 0.03220367431640625,
+        "passed": false
+      },
+      "confidence.pde": {
+        "bitwise_equal": false,
+        "max_abs_delta": 0.20759963989257812,
+        "passed": false
+      },
+      "confidence.plddt": {
+        "bitwise_equal": false,
+        "max_abs_delta": 0.0024566650390625,
+        "passed": false
+      },
+      "confidence.ptm": {
+        "bitwise_equal": false,
+        "max_abs_delta": 3.5762786865234375e-07,
+        "passed": false
+      },
+      "confidence.sample_ranking_score": {
+        "bitwise_equal": false,
+        "max_abs_delta": 7.450580596923828e-08,
+        "passed": false
+      },
+      "coordinates": {
+        "bitwise_equal": false,
+        "max_abs_delta": 0.0011396408081054688,
+        "passed": false
+      }
+    }
+  },
+  "initial_failure": {
+    "run": "rust-openfold3-n1000-v1",
+    "cause": "CLI canonicalized the virtual-environment Python symlink and selected the base interpreter, missing gemmi",
+    "resolution": "Preserve the executable symlink using an absolute lexical path; v2 completed"
+  },
+  "conclusion": "Request completion, content validation and GPU isolation passed. Neither the original native repeat nor Rust output is bitwise equal to the older native capture. No tolerance was relaxed and no numerical parity or E2E speedup is claimed.",
+  "source_sha256": {
+    "Cargo.lock": "88c1199c42f638b3fea11692678035abd0ebcf2f0c5ae2a5b5cd7eed0934ef21",
+    "Cargo.toml": "1484c9cf0c6451d01b4ec8d85680d8fc4399c7277fe8264e68b95cfc50960cca",
+    "crates/fireprot-cli/src/main.rs": "304267e250d64e5128882e4e49309f4935fd17a59123b9c39c296b8009f77ce7",
+    "crates/fireprot-validation/src/array.rs": "8fe8bc6a1e809ebed5b2778375e7cd1654f901b738039f5e66621ada02efb075",
+    "crates/fireprot-validation/src/bundle.rs": "f0fc33fd7668562583f431db94129576eb1b3bdb26028d6400f95b13f6cbb370",
+    "python/fireprot_workers/__init__.py": "4d3f99912815c2e067831f2217be7ce1128bf9316c223589247ff752a4030bfd",
+    "python/fireprot_workers/__main__.py": "2e8bcdee57a9edd8c0e2f668055427e28e8a7528fbc5823911b5bb853d29fbbd",
+    "python/fireprot_workers/openfold3.py": "f5f476dd7c18caa3c812e89553adc2a09570fe75b9112b15d32ff7bbb8254230",
+    "python/fireprot_workers/transport.py": "edcc548f79494fa611249e1076f373147379c0e1c7753362b4bcaaebb48dc361"
+  }
+}

@@ -1,8 +1,9 @@
 # Rust numerical validation
 
 `fireprot-validation` implements the numerical comparison primitives needed by
-the Rust migration. Model-worker extraction and model-specific required-output
-schemas remain pending; this crate alone does not establish inference success.
+the Rust migration. An output-bundle gate now validates model-required fields, sample identity and
+original dtype metadata through the Rust supervisor. Model-worker integration
+and parity remain in progress.
 
 ## Array identity and files
 
@@ -58,8 +59,7 @@ cargo run --release --example compare_npz -- reference.npz candidate.npz
 ```
 
 The example checks every archive key with exact comparison and returns nonzero
-on failure. Model-specific output schemas, original-dtype sidecars, CIF handling,
-repeated-timing statistics and integration with the supervisor's content callback
+on failure. Broader model output schemas, CIF handling and repeated-timing statistics
 remain migration work. Saved-output replay is not a new inference benchmark.
 
 NPY parsing uses [npyz](https://docs.rs/npyz/0.9.1/npyz/), and coordinate

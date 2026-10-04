@@ -32,3 +32,10 @@ with warnings.catch_warnings():
     with zipfile.ZipFile(root / 'duplicate.npz', 'w') as archive:
         archive.writestr('coordinates.npy', stream.getvalue())
         archive.writestr('coordinates.npy', stream.getvalue())
+arrays = {'coordinates': np.zeros((4, 3), dtype=np.float32),
+          'confidence.plddt': np.ones(4, dtype=np.float32),
+          'confidence.pde': np.ones((2, 2), dtype=np.float32),
+          'confidence.pae': np.ones((2, 2), dtype=np.float32)}
+for key in ['ptm', 'iptm', 'gpde', 'disorder', 'has_clash', 'sample_ranking_score', 'chain_ptm.1']:
+    arrays['confidence.' + key] = np.asarray(0.5, dtype=np.float32)
+np.savez(root / 'openfold_sample.npz', **arrays)

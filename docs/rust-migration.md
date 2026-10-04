@@ -80,11 +80,14 @@ Git or exported-manifest source verification and canonical artifact identities.
 Also implemented: `fireprot-validation` array identity, primitive NPY/NPZ
 loading, Kabsch alignment, numeric confidence schema/deltas, and experimental
 coordinate masking. NumPy fixtures pin interoperability and numerical behavior.
-See [Rust validation](rust-validation.md). Model-required output schemas and
-supervisor callback integration remain pending.
+See [Rust validation](rust-validation.md). A model-output bundle now connects
+required sample/tensor checks to the supervisor callback. The Rust CLI and
+native OpenFold3 worker are implemented; one N1000 request completed with 297 isolation samples. Exact comparison
+failed, and a fresh unchanged native control also showed repeat variation.
+The numerical migration gate remains unpassed. See [Rust running](rust-running.md).
 
 Pending: adapter resource/environment provenance, Rust operator-policy bridge,
-validation integration/CIF/statistics tooling, CLI, model-worker extraction, kernel layout/build
+CIF/statistics tooling, remaining model-worker integrations, kernel layout/build
 migration, GPU parity, and replacement of maintained Python entry points. The
 repository is in migration; the full framework is not yet rebuilt.
 

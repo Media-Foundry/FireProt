@@ -1,0 +1,428 @@
+{
+  "reports": {
+    "packaged-qkv-tests.json": {
+      "device": {
+        "gpu": 0,
+        "bdf": "0000:11:00.0",
+        "uuid": "0e00740c-0000-1000-8087-722801eb4921",
+        "kfd_id": 57586,
+        "node_id": 4,
+        "partition_id": 0
+      },
+      "isolation": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 0,
+        "interval_seconds": 1.0,
+        "samples": 35,
+        "allowed_pid": 1145378,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      },
+      "exit_code": 0,
+      "pytest_source": "/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages/pytest/__init__.py",
+      "torch_source": "/home/pc/anaconda3/envs/BIO/lib/python3.12/site-packages/torch/__init__.py"
+    },
+    "packaged-qkv-n1000-seed102-r1/validation.json": {
+      "status": "complete",
+      "source_sha256": {
+        "fireprot/adapters/atlasfold/runtime.py": "d7455e6b58af784e76405a280c9ff2f084d7a3f9236da22415c5d892f8970c75",
+        "fireprot/backends/amd/pair_fusions.py": "09d9e1da4b42b18208dc9ce78d0fb4d887c60f4fb0e065471a6da2b76367ac9b",
+        "fireprot/backends/amd/csrc/fireprot_pair_fusions.cpp": "0a21f6cf760a91427b95e4a9bdc6d4d7ff181e187d806f97fb73e00ee4ebf0d9",
+        "fireprot/backends/amd/csrc/fireprot_pair_softmax.cu": "45298f0edeb18ec3aa26411fdc2f75f57a70062b251687fa4b62a1256a90bdc9",
+        "fireprot/backends/amd/csrc/fireprot_pair_transpose.cu": "bc0779458326662c088c7cad564a0bb1c7ce5dcf7f03630c140e306665f00b9f",
+        "fireprot/backends/amd/csrc/fireprot_pair_qkv.cu": "53881fc24c4f4d9e183234bc9b312e6837d51d7afa68a937bfdb94e676197b4e"
+      },
+      "reference": "/media/IntelSSD/fireprot/outputs/atlasfold/native-n1000-seed102-noevents",
+      "raw_bytes_equal": {
+        "coordinates": true,
+        "plddt": true,
+        "pae": true,
+        "ptm": true
+      },
+      "manifest": {
+        "status": "complete",
+        "args": {
+          "input": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "out": "/media/IntelSSD/fireprot/outputs/atlasfold/packaged-qkv-n1000-seed102-r1",
+          "model_path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlasfold/snapshot/weights/atlasfold-260703.pth",
+          "lm_path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlaslm3b/snapshot/weights/atlaslm_3b_base.pth",
+          "kernel": "torch",
+          "backend": "hip-fused",
+          "allow_long1536": false,
+          "stage_events": "off",
+          "seed": 102,
+          "recycles": 4,
+          "samples": 1,
+          "repeats": 1
+        },
+        "sequence_sha256": "462bb697ecdcce2f979b00075e60d96fbfcd1b18ba3d92f5427cb03befbcc570",
+        "length": 1000,
+        "cache": "Weights hashed before timer; filesystem warm; model fresh; no LM feature cache",
+        "dtype": "Native mixed BF16/FP32; BF16 autocast; FP32 diffusion",
+        "mlm_prob": 0.15,
+        "trunk_passes": 5,
+        "records": [
+          {
+            "repeat": 0,
+            "phase": "first",
+            "prediction_wall_seconds": 77.17548160505248,
+            "stages": {},
+            "peak_allocated_bytes": 14347726336,
+            "peak_reserved_bytes": 17119051776,
+            "outputs": [
+              "repeat0-seed102-sample0"
+            ]
+          }
+        ],
+        "source_commit": "8ab3aca0e18c8b814d5ca6756b2617a07d72c68d",
+        "weights": {
+          "atlasfold": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlasfold/snapshot/weights/atlasfold-260703.pth",
+            "bytes": 859549307,
+            "sha256": "cbadb227d40e801a3d268d6e884e6ed3c6b9fb89d558739fcf5970492732e5ea"
+          },
+          "atlaslm": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlaslm3b/snapshot/weights/atlaslm_3b_base.pth",
+            "bytes": 6128042331,
+            "sha256": "8097cc4a234853f19ca97435844829d84fe7f13215c900e74659fa9682cc0ddb"
+          }
+        },
+        "device": {
+          "gpu": 2,
+          "bdf": "0000:32:00.0",
+          "uuid": "0e00740c-0000-1000-80cf-54daf70a58aa",
+          "kfd_id": 51627,
+          "node_id": 2,
+          "partition_id": 0
+        },
+        "environment": {
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850",
+          "gpu": "AMD Instinct MI250X / MI250",
+          "HIP_VISIBLE_DEVICES": "0"
+        },
+        "load_seconds": 4.831826378009282,
+        "config": {
+          "name": "atlasfold-260703",
+          "lm_name": "atlaslm-3b",
+          "lm_path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlaslm3b/snapshot/weights/atlaslm_3b_base.pth",
+          "channel_s": 384,
+          "channel_s_lm": 768,
+          "channel_z": 128,
+          "trunk": {
+            "num_heads": 16,
+            "num_tri_heads": 4,
+            "dropout_z": 0.25,
+            "num_lm_blocks": 4,
+            "num_blocks": 48,
+            "num_pair_to_single_blocks": 12,
+            "blocks_per_ckpt": null
+          },
+          "distogram_head": {
+            "num_bins": 64,
+            "min_dist": 2.0,
+            "max_dist": 22.0
+          },
+          "diffusion_head": {
+            "channel_a": 768,
+            "channel_atom": 96,
+            "channel_cond": 384,
+            "num_heads": 16,
+            "num_blocks": 12,
+            "num_atom_heads": 2,
+            "num_atom_blocks": 3,
+            "blocks_per_ckpt": null
+          },
+          "confidence_head": {
+            "num_heads": 16,
+            "num_tri_heads": 4,
+            "dropout_z": 0.25,
+            "num_blocks": 2,
+            "num_bins": 39,
+            "min_dist": 3.25,
+            "max_dist": 50.75,
+            "num_plddt_bins": 50,
+            "max_pae_error": 32.0,
+            "num_pae_bins": 64,
+            "blocks_per_ckpt": null
+          }
+        },
+        "effective_bucket_length": 1024,
+        "padding_residues": 24,
+        "sampling": {
+          "num_steps": 30,
+          "sigma_min": 0.0004,
+          "sigma_max": 160.0,
+          "rho": 7,
+          "gamma_0": 0.8,
+          "gamma_min": 1.0,
+          "noise_scale": 1.003,
+          "step_scale": 1.5,
+          "chunk_size": 5
+        },
+        "first_request_seconds": 82.5529193370021,
+        "fireprot": {
+          "adapter": "atlasfold",
+          "requested_backend": "hip-fused",
+          "valid_length": 1000,
+          "bucket_length": 1024,
+          "implementation_sha256": {
+            "runtime.py": "d7455e6b58af784e76405a280c9ff2f084d7a3f9236da22415c5d892f8970c75",
+            "pair_fusions.py": "09d9e1da4b42b18208dc9ce78d0fb4d887c60f4fb0e065471a6da2b76367ac9b",
+            "fireprot_pair_fusions.cpp": "0a21f6cf760a91427b95e4a9bdc6d4d7ff181e187d806f97fb73e00ee4ebf0d9",
+            "fireprot_pair_softmax.cu": "45298f0edeb18ec3aa26411fdc2f75f57a70062b251687fa4b62a1256a90bdc9",
+            "fireprot_pair_transpose.cu": "bc0779458326662c088c7cad564a0bb1c7ce5dcf7f03630c140e306665f00b9f",
+            "fireprot_pair_qkv.cu": "53881fc24c4f4d9e183234bc9b312e6837d51d7afa68a937bfdb94e676197b4e"
+          },
+          "chunk_size": 128,
+          "counts": {
+            "hip_attention": 0,
+            "chunked_attention": 0,
+            "native_fallback": 0,
+            "fused_attention": 528,
+            "hip_multiplication": 528,
+            "native_multiplication": 0
+          },
+          "extension": {
+            "loaded": true,
+            "name": "fireprot_pair_fusions_bbfe768158ab1929",
+            "error": null
+          }
+        },
+        "isolation": {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 2,
+          "interval_seconds": 1.0,
+          "samples": 63,
+          "allowed_pid": 1146839,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
+      },
+      "scope": "Packaged correctness validation; saved native reference was measured separately. No new paired native speedup claim."
+    },
+    "packaged-qkv-n1536-seed102-r1/validation.json": {
+      "status": "complete",
+      "source_sha256": {
+        "fireprot/adapters/atlasfold/runtime.py": "d7455e6b58af784e76405a280c9ff2f084d7a3f9236da22415c5d892f8970c75",
+        "fireprot/backends/amd/pair_fusions.py": "09d9e1da4b42b18208dc9ce78d0fb4d887c60f4fb0e065471a6da2b76367ac9b",
+        "fireprot/backends/amd/csrc/fireprot_pair_fusions.cpp": "0a21f6cf760a91427b95e4a9bdc6d4d7ff181e187d806f97fb73e00ee4ebf0d9",
+        "fireprot/backends/amd/csrc/fireprot_pair_softmax.cu": "45298f0edeb18ec3aa26411fdc2f75f57a70062b251687fa4b62a1256a90bdc9",
+        "fireprot/backends/amd/csrc/fireprot_pair_transpose.cu": "bc0779458326662c088c7cad564a0bb1c7ce5dcf7f03630c140e306665f00b9f",
+        "fireprot/backends/amd/csrc/fireprot_pair_qkv.cu": "53881fc24c4f4d9e183234bc9b312e6837d51d7afa68a937bfdb94e676197b4e"
+      },
+      "reference": "/media/IntelSSD/fireprot/outputs/atlasfold/chunked-native-n1536-seed102-noevents",
+      "raw_bytes_equal": {
+        "coordinates": true,
+        "plddt": true,
+        "pae": true,
+        "ptm": true
+      },
+      "manifest": {
+        "status": "complete",
+        "args": {
+          "input": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "out": "/media/IntelSSD/fireprot/outputs/atlasfold/packaged-qkv-n1536-seed102-r1",
+          "model_path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlasfold/snapshot/weights/atlasfold-260703.pth",
+          "lm_path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlaslm3b/snapshot/weights/atlaslm_3b_base.pth",
+          "kernel": "torch",
+          "backend": "hip-fused",
+          "allow_long1536": true,
+          "stage_events": "off",
+          "seed": 102,
+          "recycles": 4,
+          "samples": 1,
+          "repeats": 1
+        },
+        "sequence_sha256": "6b140cc19f02d9b9c7055b0317c205868d808a58c278d41e01847355da6565a8",
+        "length": 1536,
+        "cache": "Weights hashed before timer; filesystem warm; model fresh; no LM feature cache",
+        "dtype": "Native mixed BF16/FP32; BF16 autocast; FP32 diffusion",
+        "mlm_prob": 0.15,
+        "trunk_passes": 5,
+        "records": [
+          {
+            "repeat": 0,
+            "phase": "first",
+            "prediction_wall_seconds": 198.6349797459552,
+            "stages": {},
+            "peak_allocated_bytes": 23435419136,
+            "peak_reserved_bytes": 29160898560,
+            "outputs": [
+              "repeat0-seed102-sample0"
+            ]
+          }
+        ],
+        "source_commit": "8ab3aca0e18c8b814d5ca6756b2617a07d72c68d",
+        "weights": {
+          "atlasfold": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlasfold/snapshot/weights/atlasfold-260703.pth",
+            "bytes": 859549307,
+            "sha256": "cbadb227d40e801a3d268d6e884e6ed3c6b9fb89d558739fcf5970492732e5ea"
+          },
+          "atlaslm": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlaslm3b/snapshot/weights/atlaslm_3b_base.pth",
+            "bytes": 6128042331,
+            "sha256": "8097cc4a234853f19ca97435844829d84fe7f13215c900e74659fa9682cc0ddb"
+          }
+        },
+        "device": {
+          "gpu": 5,
+          "bdf": "0000:93:00.0",
+          "uuid": "9000740c-0000-1000-8007-d3c11591c16f",
+          "kfd_id": 8466,
+          "node_id": 9,
+          "partition_id": 0
+        },
+        "environment": {
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850",
+          "gpu": "AMD Instinct MI250X / MI250",
+          "HIP_VISIBLE_DEVICES": "7"
+        },
+        "load_seconds": 4.936784902994987,
+        "config": {
+          "name": "atlasfold-260703",
+          "lm_name": "atlaslm-3b",
+          "lm_path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlaslm3b/snapshot/weights/atlaslm_3b_base.pth",
+          "channel_s": 384,
+          "channel_s_lm": 768,
+          "channel_z": 128,
+          "trunk": {
+            "num_heads": 16,
+            "num_tri_heads": 4,
+            "dropout_z": 0.25,
+            "num_lm_blocks": 4,
+            "num_blocks": 48,
+            "num_pair_to_single_blocks": 12,
+            "blocks_per_ckpt": null
+          },
+          "distogram_head": {
+            "num_bins": 64,
+            "min_dist": 2.0,
+            "max_dist": 22.0
+          },
+          "diffusion_head": {
+            "channel_a": 768,
+            "channel_atom": 96,
+            "channel_cond": 384,
+            "num_heads": 16,
+            "num_blocks": 12,
+            "num_atom_heads": 2,
+            "num_atom_blocks": 3,
+            "blocks_per_ckpt": null
+          },
+          "confidence_head": {
+            "num_heads": 16,
+            "num_tri_heads": 4,
+            "dropout_z": 0.25,
+            "num_blocks": 2,
+            "num_bins": 39,
+            "min_dist": 3.25,
+            "max_dist": 50.75,
+            "num_plddt_bins": 50,
+            "max_pae_error": 32.0,
+            "num_pae_bins": 64,
+            "blocks_per_ckpt": null
+          }
+        },
+        "effective_bucket_length": 1536,
+        "padding_residues": 0,
+        "sampling": {
+          "num_steps": 100,
+          "sigma_min": 0.0004,
+          "sigma_max": 160.0,
+          "rho": 7,
+          "gamma_0": 0.8,
+          "gamma_min": 1.0,
+          "noise_scale": 1.003,
+          "step_scale": 1.5,
+          "chunk_size": 5
+        },
+        "first_request_seconds": 204.15316173504107,
+        "fireprot": {
+          "adapter": "atlasfold",
+          "requested_backend": "hip-fused",
+          "valid_length": 1536,
+          "bucket_length": 1536,
+          "implementation_sha256": {
+            "runtime.py": "d7455e6b58af784e76405a280c9ff2f084d7a3f9236da22415c5d892f8970c75",
+            "pair_fusions.py": "09d9e1da4b42b18208dc9ce78d0fb4d887c60f4fb0e065471a6da2b76367ac9b",
+            "fireprot_pair_fusions.cpp": "0a21f6cf760a91427b95e4a9bdc6d4d7ff181e187d806f97fb73e00ee4ebf0d9",
+            "fireprot_pair_softmax.cu": "45298f0edeb18ec3aa26411fdc2f75f57a70062b251687fa4b62a1256a90bdc9",
+            "fireprot_pair_transpose.cu": "bc0779458326662c088c7cad564a0bb1c7ce5dcf7f03630c140e306665f00b9f",
+            "fireprot_pair_qkv.cu": "53881fc24c4f4d9e183234bc9b312e6837d51d7afa68a937bfdb94e676197b4e"
+          },
+          "chunk_size": 128,
+          "counts": {
+            "hip_attention": 0,
+            "chunked_attention": 0,
+            "native_fallback": 0,
+            "fused_attention": 528,
+            "hip_multiplication": 528,
+            "native_multiplication": 0
+          },
+          "extension": {
+            "loaded": true,
+            "name": "fireprot_pair_fusions_bbfe768158ab1929",
+            "error": null
+          }
+        },
+        "isolation": {
+          "available": true,
+          "command": [
+            "/usr/bin/amd-smi",
+            "process",
+            "--json"
+          ],
+          "physical_device_index": 5,
+          "interval_seconds": 1.0,
+          "samples": 152,
+          "allowed_pid": 1146869,
+          "external_pids": [],
+          "errors": [],
+          "passed": true
+        }
+      },
+      "scope": "Packaged correctness validation; saved native reference was measured separately. No new paired native speedup claim."
+    }
+  },
+  "sources": {
+    "fireprot_atlas_qkv_packaged_tests.py": {
+      "source": "import torch,os,json,pathlib,sys,importlib.machinery\nclass TestDependencies:\n def find_spec(self,fullname,path=None,target=None):\n  if path is None and fullname in {'pytest','_pytest','pluggy','iniconfig','packaging','pygments','py'}:\n   return importlib.machinery.PathFinder.find_spec(fullname,['/home/pc/anaconda3/envs/fold/lib/python3.12/site-packages'])\nsys.meta_path.insert(0,TestDependencies())\nimport pytest\nfrom benchmarks.atlasfold.profile_inference import resolve_physical_device,_GpuProcessMonitor\ntorch.cuda.init();device=resolve_physical_device();monitor=_GpuProcessMonitor(device['gpu'],os.getpid(),1);monitor.start();code=1\ntry:code=pytest.main(['-q','tests/operators/test_atlasfold_runtime.py','tests/operators/test_atlasfold_pair_fusions.py'])\nfinally:\n report={'device':device,'isolation':monitor.stop(),'exit_code':int(code),'pytest_source':pytest.__file__,'torch_source':torch.__file__}\n pathlib.Path('outputs/atlasfold/packaged-qkv-tests.json').write_text(json.dumps(report,indent=2));print(json.dumps(report))\nraise SystemExit(code)\n",
+      "sha256": "c8e2237f8449c7b7159a19c9f370a4dfbe88602b969502b32b526a60ed1a162a"
+    },
+    "fireprot_atlas_qkv_packaged_model.py": {
+      "source": "\"\"\"Validate packaged QKV kernels against saved native outputs with source hashes.\"\"\"\nimport hashlib,json,os,pathlib,subprocess,sys\nimport numpy as np\nroot=pathlib.Path('/media/IntelSSD/fireprot')\nn=int(sys.argv[1]);assert n in (1000,1536)\nout=root/f'outputs/atlasfold/packaged-qkv-n{n}-seed102-r1';assert not out.exists()\nfiles=['fireprot/adapters/atlasfold/runtime.py','fireprot/backends/amd/pair_fusions.py','fireprot/backends/amd/csrc/fireprot_pair_fusions.cpp','fireprot/backends/amd/csrc/fireprot_pair_softmax.cu','fireprot/backends/amd/csrc/fireprot_pair_transpose.cu','fireprot/backends/amd/csrc/fireprot_pair_qkv.cu']\nhashes={p:hashlib.sha256((root/p).read_bytes()).hexdigest() for p in files}\npython='/media/PM982/engramfold/folding_e2e_20260921/venvs/atlasfold-rocm/bin/python'\nsubprocess.run([python,'-c','from fireprot.backends.amd.pair_fusions import load,manifest; assert load() is not None,manifest(); print(manifest())'],cwd=root,check=True)\nsource='umem_L01000_462bb697ecdcce2f.json' if n==1000 else 'umem_L01536_6b140cc19f02d9b9.json'\ncmd=[python,'-m','benchmarks.atlasfold.profile_inference','--input',str(root/'benchmarks/protenix/inputs'/source),'--out',str(out),'--backend','hip-fused','--seed','102','--repeats','1','--stage-events','off']\nif n==1536:cmd+=['--allow-long1536']\nwith out.with_suffix('.log').open('w') as log:subprocess.run(cmd,cwd=root,stdout=log,stderr=subprocess.STDOUT,check=True)\nm=json.loads((out/'manifest.json').read_text());assert m['status']=='complete' and m['isolation']['passed']\nassert m['fireprot']['counts']['fused_attention']==528 and m['fireprot']['counts']['hip_multiplication']==528\nassert m['fireprot']['counts']['native_fallback']==0\nfor p,h in hashes.items():\n assert hashlib.sha256((root/p).read_bytes()).hexdigest()==h,p\n assert m['fireprot']['implementation_sha256'][pathlib.Path(p).name]==h,p\nref=root/'outputs/atlasfold'/('native-n1000-seed102-noevents' if n==1000 else 'chunked-native-n1536-seed102-noevents')\na=np.load(ref/'repeat0-seed102-sample0.npz');b=np.load(out/'repeat0-seed102-sample0.npz')\nchecks={k:a[k].shape==b[k].shape and a[k].dtype==b[k].dtype and a[k].tobytes()==b[k].tobytes() for k in a.files}\nassert set(a.files)==set(b.files) and all(checks.values())\nr={'status':'complete','source_sha256':hashes,'reference':str(ref),'raw_bytes_equal':checks,'manifest':m,'scope':'Packaged correctness validation; saved native reference was measured separately. No new paired native speedup claim.'}\n(out/'validation.json').write_text(json.dumps(r,indent=2)+'\\n')\nprint(json.dumps({'length':n,'request_seconds':m['first_request_seconds'],'raw_bytes_equal':checks,'device':m['device']}),flush=True)\n",
+      "sha256": "4c3dc4bb0666ebc9b839a493919cef4f868c5d84e749c5213eab158339470f1d"
+    }
+  },
+  "local_tests": {
+    "passed": 167,
+    "skipped": 110,
+    "seconds": 6.14
+  },
+  "gpu_tests": {
+    "passed": 60,
+    "seconds": 45.21
+  },
+  "artifact_notes": [
+    "Initial validation launch failed before model execution because its controller precreated the output directory. Both failed launch logs were retained in packaged-qkv-n1000-seed102 and packaged-qkv-n1536-seed102; corrected runs use the -r1 suffix."
+  ],
+  "limitations": [
+    "Full-model runs validate packaging against saved native output, not a newly paired native performance measurement.",
+    "N1536 native reference is chunked native math; unchunked upstream OOMs."
+  ]
+}

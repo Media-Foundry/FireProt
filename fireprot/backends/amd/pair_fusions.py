@@ -32,7 +32,8 @@ def load():
                 raise RuntimeError('unvalidated Torch/HIP softmax implementation')
             from torch.utils.cpp_extension import load as compile_extension
             sources = [Path(__file__).with_name('csrc')/name for name in (
-                'fireprot_pair_fusions.cpp', 'fireprot_pair_softmax.cu', 'fireprot_pair_transpose.cu')]
+                'fireprot_pair_fusions.cpp', 'fireprot_pair_softmax.cu', 'fireprot_pair_transpose.cu',
+                'fireprot_pair_qkv.cu')]
             digest = hashlib.sha256()
             for source in sources:
                 digest.update(source.name.encode())

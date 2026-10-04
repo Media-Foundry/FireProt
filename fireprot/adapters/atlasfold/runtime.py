@@ -35,7 +35,8 @@ def triangle_attention(module, z, mask, *, ending, extension, valid_length, chun
     z = module.layernorm(z)
     batch, length, _, channels = z.shape
     heads, width = module.num_heads, module.channel_hidden
-    q, k, v = module.linear_qkv(z).chunk(3, dim=-1)
+    qkv = module.linear_qkv(z)
+    q, k, v = qkv.chunk(3, dim=-1)
     q, k, v = [t.reshape(batch, length, length, heads, width).transpose(-2, -3)
                for t in (q, k, v)]
     bias = module.linear_bias(z).permute(0, 3, 1, 2).unsqueeze(1)
@@ -44,6 +45,10 @@ def triangle_attention(module, z, mask, *, ending, extension, valid_length, chun
     mask = mask[:, :, None, None, :]
     gate = module.linear_g(z).sigmoid().reshape(batch, length, length, heads, width)
     q *= module.scale
+    if extension is not None and fuse_softmax:
+        # Scaling remains native; packing copies BF16 bits into native BLAS layouts.
+        q, k, v = extension.pack_qkv(qkv)
+    del qkv
     chunks = []
     for offset in range(0, length, chunk_size):
         stop = min(offset + chunk_size, length)
@@ -104,7 +109,8 @@ class AtlasFoldRuntime:
         self.linear_type = LinearNoBias
         backend_root = Path(__file__).resolve().parents[2]/'backends/amd'
         sources = (backend_root/'pair_fusions.py', backend_root/'csrc/fireprot_pair_fusions.cpp',
-                   backend_root/'csrc/fireprot_pair_softmax.cu', backend_root/'csrc/fireprot_pair_transpose.cu') if backend == 'hip-fused' else (
+                   backend_root/'csrc/fireprot_pair_softmax.cu', backend_root/'csrc/fireprot_pair_transpose.cu',
+                   backend_root/'csrc/fireprot_pair_qkv.cu') if backend == 'hip-fused' else (
                        backend_root/'mask_bias.py', backend_root/'csrc/fireprot_mask_bias.cu')
         self.implementation_hashes = {
             str(path.name): hashlib.sha256(path.read_bytes()).hexdigest()

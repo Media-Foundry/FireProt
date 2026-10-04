@@ -143,3 +143,28 @@ def test_batched_transpose_bits_stream_and_rejections(n):
     for invalid in (x.mT, x[:1], x[:, :32, :32].contiguous()):
         with pytest.raises(RuntimeError):
             ext.batched_transpose(invalid)
+
+
+@HIP
+@pytest.mark.parametrize('n', [1024, 1536])
+def test_qkv_packing_bits_layout_stream_and_rejections(n):
+    ext = pair_fusions.load()
+    assert ext is not None, pair_fusions.manifest()
+    torch.manual_seed(1199)
+    # Random bits distinguish outer rows as well as preserving NaN payloads.
+    bits = torch.randint(-32768, 32768, (1, n, n, 384),
+                         device='cuda', dtype=torch.int16)
+    x = bits.view(torch.bfloat16)
+    stream = torch.cuda.Stream()
+    stream.wait_stream(torch.cuda.current_stream())
+    with torch.cuda.stream(stream):
+        q, k, v = ext.pack_qkv(x)
+    torch.cuda.current_stream().wait_stream(stream)
+    for output, reference in zip((q, k, v), bits.chunk(3, dim=-1)):
+        reference = reference.reshape(1, n, n, 4, 32).transpose(-2, -3)
+        assert torch.equal(output.view(torch.int16), reference)
+    assert q.is_contiguous() and v.is_contiguous()
+    assert k.transpose(-1, -2).is_contiguous()
+    for invalid in (x.transpose(1, 2), x[0], x[..., :128], x[:, :32, :32].contiguous()):
+        with pytest.raises(RuntimeError):
+            ext.pack_qkv(invalid)

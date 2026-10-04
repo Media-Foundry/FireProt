@@ -26,10 +26,11 @@ point with dual-checkpoint provenance, complete LM/recycle timing, PCI-based
 GPU monitoring, and repeated-output validation. A HIP mask/bias path is available
 for the exact 1000-residue input bucket and explicitly enabled N1536 experiments.
 The explicit `hip-fused` backend adds validated softmax fusion and multiplication
-packing. A matched N1000 seed102 process pair improves complete request time
-from 184.581 to 84.174 seconds (2.193x), with all output bytes unchanged;
-N1536 improves from 551.360 to 206.919 seconds (2.665x) against bounded-memory
-native math, also with identical output bytes. These are single process pairs. See [AtlasFold performance work](docs/atlasfold-performance.md)
+packing, including exact QKV layout copies. A matched N1000 seed102 process pair improves complete request time
+from 184.581 to 84.174 seconds (2.193x), with all output bytes unchanged.
+Three fresh-process N1536 pairs give a median of 553.359 to 207.146 seconds
+(2.671x) against bounded-memory native math, with all output bytes identical.
+The N1000 result remains a single process pair. See [AtlasFold performance work](docs/atlasfold-performance.md)
 and [DiamondHill checkpoint locations](docs/diamondhill-checkpoints.md).
 
 ## Latest single-request E2E comparison

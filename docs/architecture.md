@@ -165,3 +165,11 @@ Unsupported calls retain upstream methods; unavailable builds use bounded
 native attention and original multiplication. Source hashes and route counts
 are captured per request. See `docs/atlasfold-performance.md` for exact scope,
 paired measurements, numerical validation, and experimental follow-ups.
+
+
+The AtlasFold fused route additionally packs already-scaled Q/K/V BF16 bits
+into the native physical BLAS operand layouts. Q and V are contiguous in
+`[1,N,4,N,32]`; K has contiguous physical `[1,N,4,32,N]` storage. The native
+Q scaling, QK/PV contractions, probabilities, gates, and projections retain
+their arithmetic. This path is restricted to the validated gfx90a N1024 and
+N1536 buckets and included in the extension and request source fingerprints.

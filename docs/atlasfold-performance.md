@@ -396,11 +396,61 @@ implementations. An earlier exploratory screen used explicit hipBLAS as
 reference; its report filename was reused by the corrected screen. The
 artifact history is documented in the evidence record.
 
-A separate three-pair N1536 native-math/packaged comparison is also running.
+A separate three-pair N1536 native-math/packaged comparison completed; see
+the repeated-measurement results below.
 It copies framework and benchmark source into a frozen snapshot, verifies
 all code hashes against commit `0f15349`, starts a fresh model per request,
 primes compilation outside timing, and checks every saved output field.
-Pending results must not be reported as repeated medians.
+All three pairs passed raw-byte equality.
 
 Evidence and controller sources:
 [`atlasfold_layout_blas_trials.json`](../provenance/atlasfold_layout_blas_trials.json).
+
+## Repeated measurements and further attention layouts
+
+The frozen `0f15349` packaged route completes three fresh-process N1536 pairs
+on SMI5, seed102, five trunk passes, native AtlasLM-3B work, 100 diffusion
+steps, one sample, and stage events disabled. First-request medians are
+**553.359 s chunked native math to 207.146 s hip-fused (2.671x)**. Every pair
+matches all coordinate/confidence bytes and passes selected-device isolation.
+The source snapshot is checked before every worker. Filesystem and extension
+caches are warm; timing includes loading, adapter setup, features, prediction,
+and serialization, excluding imports, checkpoint hashing, and preflight.
+
+Further trials:
+
+| Candidate | Complete request comparison | Decision |
+| --- | --- | --- |
+| Transposed FP32 conversion before native LayerNorm | Three matched-wrapper pairs: 205.847 to 205.044 s median, 1.0039x | Not promoted: small gain |
+| Outer chunk256 instead of chunk128 | One pair: 208.769 to 206.909 s, 1.0090x; peak 23.435 to 26.575 GB | Retain chunk128 for long-input memory headroom |
+| Packed Q/K/V copies preserving native BLAS layouts | Three N1536 pairs: 208.178 to 205.112 s median, 1.0149x; unchanged peak | Integrated after operator and model validation |
+| In-place softmax storage reuse | Exact direct probabilities/operators, no speed benefit | Not promoted; no full-model claim |
+
+All completed model comparisons in this table match raw output bytes. Q/K/V
+packing also passes random BF16 bit-pattern checks at both buckets, physical
+layout checks, invalid-layout rejection, and a non-default stream. All three N1536 pairs are complete. The N1000 pair measures 83.792 to
+82.080 s (1.0208x), with unchanged peak and identical output bytes. Both
+sides import the same experimental wrapper before timing. These incremental
+ratios must not be multiplied into the separate native comparison.
+These are development workloads on a shared host, not an independent accuracy
+study or a claim of a global performance optimum.
+
+Evidence: [`atlasfold_attention_layout_followups.json`](../provenance/atlasfold_attention_layout_followups.json).
+
+
+### Packaged QKV validation
+
+The `hip-fused` backend now includes QKV bit-copy packing after native Q
+scaling. Both supported buckets pass all four saved native output byte checks;
+N1000 request time is 82.553 s and N1536 is 204.153 s. Each selects 528 fused
+attention and 528 multiplication calls, with zero native fallback. These are
+packaging checks against saved reference outputs, not new interleaved native
+performance pairs. Source hashes match the tested local implementation.
+All 60 GPU tests pass with selected-device isolation; local regression has
+167 passes and 110 GPU-dependent skips. Complete tests include random BF16
+bits, physical operand layouts, non-default streams, invalid input rejection,
+trained operators, and unavailable-extension fallback. Final packaged N1536
+repeated requests are being collected on the same SMI5 device as the earlier
+three native references; the new median remains pending.
+
+Evidence: [`atlasfold_packaged_qkv.json`](../provenance/atlasfold_packaged_qkv.json).

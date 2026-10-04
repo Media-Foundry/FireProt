@@ -48,5 +48,7 @@ DiamondHill operator and complete-model checks remain separate acceptance gates.
 CI passing does not complete the Rust migration or resolve OpenFold3 parity.
 
 Independent Linux installation and Rust single/batch entry points are available.
-Final environment/performance acceptance and remote CI execution remain pending.
+Remote CI passed for commit `514e42bbc49ad2e151b2d8c959bcbfdd06f2d7c5` on both
+Rust 1.85.0 and stable; see [the completed workflow run](https://github.com/Media-Foundry/FireProt/actions/runs/37232879155).
+Final environment and installed-model acceptance remain pending.
 The workflow does not publish binaries or claim portable model installation.

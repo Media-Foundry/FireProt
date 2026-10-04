@@ -1,0 +1,698 @@
+{
+  "schema_version": 1,
+  "purpose": "Extended environment acceptance; no E2E performance claim",
+  "runs": {
+    "atlasfold": {
+      "request": {
+        "schema_version": 1,
+        "run_id": "atlasfold-system-v2-n1000",
+        "workload": {
+          "model": "atlasfold",
+          "model_name": "atlasfold-260703",
+          "recycles": 4,
+          "diffusion_steps": 30,
+          "samples": 1,
+          "precision": "native"
+        },
+        "backend": "hip_fused",
+        "seed": 102,
+        "hip_device": 6,
+        "source": {
+          "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold",
+          "commit": "8ab3aca0e18c8b814d5ca6756b2617a07d72c68d"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlasfold/snapshot/weights/atlasfold-260703.pth",
+            "sha256": "cbadb227d40e801a3d268d6e884e6ed3c6b9fb89d558739fcf5970492732e5ea"
+          },
+          "language_model": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlaslm3b/snapshot/weights/atlaslm_3b_base.pth",
+            "sha256": "8097cc4a234853f19ca97435844829d84fe7f13215c900e74659fa9682cc0ddb"
+          }
+        },
+        "resources": {},
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/atlasfold-system-v2-n1000"
+      },
+      "supervisor": {
+        "run_id": "atlasfold-system-v2-n1000",
+        "phase": "succeeded",
+        "worker_pid": 1443712,
+        "elapsed_seconds": 123.854510428,
+        "isolation_samples": 102,
+        "failure": null,
+        "announced_device": {
+          "worker_pid": 1443712,
+          "logical_device": 0,
+          "pci_address": "0000:8e:00.0",
+          "architecture": "gfx90a"
+        },
+        "device_verified": true,
+        "physical_device": {
+          "hip_device": 6,
+          "smi_device": 4,
+          "pci_address": "0000:8e:00.0",
+          "architecture": "gfx90a"
+        },
+        "execution_sha256": "009937e699b4cbed59d38e73eea26fbf05ebbb6f72a91c37e936df7688d1bcd2"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/atlasfold-system-v2-n1000/accepted.json",
+        "sha256": "7726d868d3923e73ae76c6726e33f9092c5a7daead34d601c1eb1968ab89a220"
+      },
+      "comparison": {
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "archive_replay": {
+        "passed": true,
+        "record_path": "/tmp/fireprot-system-inventory-v2/atlasfold-archive.json",
+        "record_sha256": "1b67ef1e545a3abf0ef0145125814ca5055a85d8ca1024a27894262ae48c9e1c"
+      }
+    },
+    "protenix": {
+      "request": {
+        "schema_version": 1,
+        "run_id": "protenix-system-v2-n1000",
+        "workload": {
+          "model": "protenix",
+          "model_name": "protenix_mini_default_v0.5.0",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "precision": "float32"
+        },
+        "backend": "fireprot",
+        "seed": 101,
+        "hip_device": 6,
+        "source": {
+          "root": "/media/IntelSSD/fireprot/Protenix",
+          "commit": "bb3be993b52713795796c72cf0a46ef8a7323442"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_default_v0.5.0.pt",
+            "sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81"
+          }
+        },
+        "resources": {
+          "ccd_components_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+            "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5"
+          },
+          "ccd_components_rdkit_mol_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+            "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35"
+          },
+          "obsolete_release_data_csv": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+            "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33"
+          },
+          "pdb_cluster_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+            "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c"
+          }
+        },
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/protenix-system-v2-n1000"
+      },
+      "supervisor": {
+        "run_id": "protenix-system-v2-n1000",
+        "phase": "succeeded",
+        "worker_pid": 1449468,
+        "elapsed_seconds": 66.107805521,
+        "isolation_samples": 44,
+        "failure": null,
+        "announced_device": {
+          "worker_pid": 1449468,
+          "logical_device": 0,
+          "pci_address": "0000:8e:00.0",
+          "architecture": "gfx90a"
+        },
+        "device_verified": true,
+        "physical_device": {
+          "hip_device": 6,
+          "smi_device": 4,
+          "pci_address": "0000:8e:00.0",
+          "architecture": "gfx90a"
+        },
+        "execution_sha256": "31bfde8aa17210cf0adc964d14c2ebf34abc4423fd52eef8e2fdf8e25f1a203b"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-system-v2-n1000/accepted.json",
+        "sha256": "4967aada23ce13cb898c133390e465c3e418f125326032396d9c728bb188cc4f"
+      },
+      "comparison": {
+        "confidence": {
+          "extra_in_candidate": [],
+          "max_abs_delta": 7.450580596923828e-08,
+          "mean_abs_delta": 1.0927518208821614e-08,
+          "missing_from_candidate": [],
+          "numeric_leaf_count": 15
+        },
+        "confidence_tolerance": 0.001,
+        "coordinate_tolerance_angstrom": 0.001,
+        "coordinates": {
+          "aligned_rmsd_angstrom": 9.538954944458982e-05,
+          "atom_count": 7979,
+          "max_abs_coordinate_delta_angstrom": 0.0009765625,
+          "raw_rmsd_angstrom": 9.719795661459664e-05
+        },
+        "passed": true
+      },
+      "archive_replay": {
+        "passed": true,
+        "record_path": "/tmp/fireprot-system-inventory-v2/protenix-archive.json",
+        "record_sha256": "b1b7df460bc7cc5dcd67645f78e9004218d0cbfd908a197a0ada4641a554942e"
+      }
+    },
+    "openfold3": {
+      "request": {
+        "schema_version": 1,
+        "run_id": "openfold3-system-v2-n1000",
+        "workload": {
+          "model": "openfold3",
+          "model_name": "openbind-0",
+          "recycles": 3,
+          "diffusion_steps": 200,
+          "samples": 1,
+          "precision": "float32",
+          "deterministic": true
+        },
+        "backend": "native",
+        "seed": 101,
+        "hip_device": 7,
+        "source": {
+          "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+          "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+            "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+          }
+        },
+        "resources": {},
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "sha256": "2715542db697dbd2dd5021063173f6e91a405ac0f46a46a69b748c815826ae5b"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/openfold3-system-v2-n1000"
+      },
+      "supervisor": {
+        "run_id": "openfold3-system-v2-n1000",
+        "phase": "succeeded",
+        "worker_pid": 1443547,
+        "elapsed_seconds": 304.940027582,
+        "isolation_samples": 305,
+        "failure": null,
+        "announced_device": {
+          "worker_pid": 1443547,
+          "logical_device": 0,
+          "pci_address": "0000:93:00.0",
+          "architecture": "gfx90a"
+        },
+        "device_verified": true,
+        "physical_device": {
+          "hip_device": 7,
+          "smi_device": 5,
+          "pci_address": "0000:93:00.0",
+          "architecture": "gfx90a"
+        },
+        "execution_sha256": "a49c1b4ef39d517f7fb3824a483254ddb4facc31ca1a661d12dd5a9b879e3260"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-system-v2-n1000/accepted.json",
+        "sha256": "0eb1f076b24a05dce24850c81fee2d42e7e2310e2031faf642862238b75b5fc6"
+      },
+      "comparison": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "archive_replay": {
+        "passed": true,
+        "record_path": "/tmp/fireprot-system-inventory-v2/openfold3-archive.json",
+        "record_sha256": "cad423c387213ee9ca69fe0e65ca1fb5b0612249a0c232785f6ebe05c225e1f0"
+      }
+    }
+  },
+  "capture_observations": [
+    {
+      "model": "atlasfold",
+      "inventory": {
+        "path": "/media/IntelSSD/fireprot/runtime/environments/atlasfold-system-v2.json",
+        "sha256": "ee181d49ea448f1a1632c31a9f483fb2bf19fd50036c62383e04886ec11fb4ff"
+      },
+      "capture_seconds": 15.605219215038233,
+      "identities": 141656,
+      "canonical_files": 74665,
+      "specification": {
+        "schema_version": 1,
+        "files": [
+          {
+            "name": "python",
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/venvs/atlasfold-rocm/bin/python"
+          },
+          {
+            "name": "pyvenv",
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/venvs/atlasfold-rocm/pyvenv.cfg"
+          },
+          {
+            "name": "host/loader-config",
+            "path": "/etc/ld.so.conf"
+          },
+          {
+            "name": "host/loader-cache",
+            "path": "/etc/ld.so.cache"
+          },
+          {
+            "name": "host/os-release",
+            "path": "/etc/os-release"
+          },
+          {
+            "name": "host/kernel-release",
+            "path": "/proc/sys/kernel/osrelease"
+          },
+          {
+            "name": "host/kernel-build",
+            "path": "/proc/version"
+          },
+          {
+            "name": "host/amdgpu-version",
+            "path": "/sys/module/amdgpu/version"
+          },
+          {
+            "name": "host/amdgpu-source-version",
+            "path": "/sys/module/amdgpu/srcversion"
+          },
+          {
+            "name": "host/amdgpu-taint",
+            "path": "/sys/module/amdgpu/taint"
+          }
+        ],
+        "trees": [
+          {
+            "name": "root-0",
+            "path": "/home/pc/anaconda3/envs/BIO/lib",
+            "suffixes": []
+          },
+          {
+            "name": "root-1",
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/venvs/atlasfold-rocm/lib",
+            "suffixes": []
+          },
+          {
+            "name": "root-2",
+            "path": "/opt/rocm/lib",
+            "suffixes": []
+          },
+          {
+            "name": "root-3",
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold/src",
+            "suffixes": []
+          },
+          {
+            "name": "host/system-libraries",
+            "path": "/usr/lib/x86_64-linux-gnu",
+            "suffixes": []
+          },
+          {
+            "name": "host/system-libraries-alias",
+            "path": "/lib/x86_64-linux-gnu",
+            "suffixes": []
+          },
+          {
+            "name": "host/local-libraries",
+            "path": "/usr/local/lib",
+            "suffixes": []
+          },
+          {
+            "name": "host/system-locales",
+            "path": "/usr/lib/locale",
+            "suffixes": []
+          },
+          {
+            "name": "host/loader-config-parts",
+            "path": "/etc/ld.so.conf.d",
+            "suffixes": []
+          },
+          {
+            "name": "host/loader-lib32",
+            "path": "/lib32",
+            "suffixes": []
+          },
+          {
+            "name": "host/loader-usr-lib32",
+            "path": "/usr/lib32",
+            "suffixes": []
+          },
+          {
+            "name": "host/loader-libx32",
+            "path": "/libx32",
+            "suffixes": []
+          },
+          {
+            "name": "host/loader-usr-libx32",
+            "path": "/usr/libx32",
+            "suffixes": []
+          }
+        ],
+        "absent_paths": [
+          "/etc/ld.so.preload",
+          "/usr/local/lib/x86_64-linux-gnu"
+        ]
+      }
+    },
+    {
+      "model": "protenix",
+      "inventory": {
+        "path": "/media/IntelSSD/fireprot/runtime/environments/protenix-system-v2.json",
+        "sha256": "305b2458431c88aea65d86d0907219479823f653c9eaeaf206a446f05cc95578"
+      },
+      "capture_seconds": 12.718268704018556,
+      "identities": 125286,
+      "canonical_files": 65634,
+      "specification": {
+        "schema_version": 1,
+        "files": [
+          {
+            "name": "python",
+            "path": "/home/pc/anaconda3/envs/fold/bin/python"
+          },
+          {
+            "name": "host/loader-config",
+            "path": "/etc/ld.so.conf"
+          },
+          {
+            "name": "host/loader-cache",
+            "path": "/etc/ld.so.cache"
+          },
+          {
+            "name": "host/os-release",
+            "path": "/etc/os-release"
+          },
+          {
+            "name": "host/kernel-release",
+            "path": "/proc/sys/kernel/osrelease"
+          },
+          {
+            "name": "host/kernel-build",
+            "path": "/proc/version"
+          },
+          {
+            "name": "host/amdgpu-version",
+            "path": "/sys/module/amdgpu/version"
+          },
+          {
+            "name": "host/amdgpu-source-version",
+            "path": "/sys/module/amdgpu/srcversion"
+          },
+          {
+            "name": "host/amdgpu-taint",
+            "path": "/sys/module/amdgpu/taint"
+          }
+        ],
+        "trees": [
+          {
+            "name": "root-0",
+            "path": "/home/pc/anaconda3/envs/fold/lib",
+            "suffixes": []
+          },
+          {
+            "name": "root-1",
+            "path": "/opt/rocm/lib",
+            "suffixes": []
+          },
+          {
+            "name": "root-2",
+            "path": "/media/PM982/engramfold/src",
+            "suffixes": []
+          },
+          {
+            "name": "root-3",
+            "path": "/media/PM982/projects/onestepfold/src",
+            "suffixes": []
+          },
+          {
+            "name": "host/system-libraries",
+            "path": "/usr/lib/x86_64-linux-gnu",
+            "suffixes": []
+          },
+          {
+            "name": "host/system-libraries-alias",
+            "path": "/lib/x86_64-linux-gnu",
+            "suffixes": []
+          },
+          {
+            "name": "host/local-libraries",
+            "path": "/usr/local/lib",
+            "suffixes": []
+          },
+          {
+            "name": "host/system-locales",
+            "path": "/usr/lib/locale",
+            "suffixes": []
+          },
+          {
+            "name": "host/loader-config-parts",
+            "path": "/etc/ld.so.conf.d",
+            "suffixes": []
+          },
+          {
+            "name": "host/loader-lib32",
+            "path": "/lib32",
+            "suffixes": []
+          },
+          {
+            "name": "host/loader-usr-lib32",
+            "path": "/usr/lib32",
+            "suffixes": []
+          },
+          {
+            "name": "host/loader-libx32",
+            "path": "/libx32",
+            "suffixes": []
+          },
+          {
+            "name": "host/loader-usr-libx32",
+            "path": "/usr/libx32",
+            "suffixes": []
+          }
+        ],
+        "absent_paths": [
+          "/etc/ld.so.preload",
+          "/usr/local/lib/x86_64-linux-gnu"
+        ]
+      }
+    },
+    {
+      "model": "openfold3",
+      "inventory": {
+        "path": "/media/IntelSSD/fireprot/runtime/environments/openfold3-system-v2.json",
+        "sha256": "d1cda55c572d17186728864f5090b0d2708db05012f38bdec5c259f71dd56b07"
+      },
+      "capture_seconds": 15.423723958083428,
+      "identities": 157874,
+      "canonical_files": 90883,
+      "specification": {
+        "schema_version": 1,
+        "files": [
+          {
+            "name": "python",
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/venvs/openfold3-amd/bin/python"
+          },
+          {
+            "name": "pyvenv",
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/venvs/openfold3-amd/pyvenv.cfg"
+          },
+          {
+            "name": "host/loader-config",
+            "path": "/etc/ld.so.conf"
+          },
+          {
+            "name": "host/loader-cache",
+            "path": "/etc/ld.so.cache"
+          },
+          {
+            "name": "host/os-release",
+            "path": "/etc/os-release"
+          },
+          {
+            "name": "host/kernel-release",
+            "path": "/proc/sys/kernel/osrelease"
+          },
+          {
+            "name": "host/kernel-build",
+            "path": "/proc/version"
+          },
+          {
+            "name": "host/amdgpu-version",
+            "path": "/sys/module/amdgpu/version"
+          },
+          {
+            "name": "host/amdgpu-source-version",
+            "path": "/sys/module/amdgpu/srcversion"
+          },
+          {
+            "name": "host/amdgpu-taint",
+            "path": "/sys/module/amdgpu/taint"
+          }
+        ],
+        "trees": [
+          {
+            "name": "root-0",
+            "path": "/home/pc/anaconda3/envs/BIO/lib",
+            "suffixes": []
+          },
+          {
+            "name": "root-1",
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/venvs/openfold3-amd/lib",
+            "suffixes": []
+          },
+          {
+            "name": "root-2",
+            "path": "/opt/rocm/lib",
+            "suffixes": []
+          },
+          {
+            "name": "host/system-libraries",
+            "path": "/usr/lib/x86_64-linux-gnu",
+            "suffixes": []
+          },
+          {
+            "name": "host/system-libraries-alias",
+            "path": "/lib/x86_64-linux-gnu",
+            "suffixes": []
+          },
+          {
+            "name": "host/local-libraries",
+            "path": "/usr/local/lib",
+            "suffixes": []
+          },
+          {
+            "name": "host/system-locales",
+            "path": "/usr/lib/locale",
+            "suffixes": []
+          },
+          {
+            "name": "host/loader-config-parts",
+            "path": "/etc/ld.so.conf.d",
+            "suffixes": []
+          },
+          {
+            "name": "host/loader-lib32",
+            "path": "/lib32",
+            "suffixes": []
+          },
+          {
+            "name": "host/loader-usr-lib32",
+            "path": "/usr/lib32",
+            "suffixes": []
+          },
+          {
+            "name": "host/loader-libx32",
+            "path": "/libx32",
+            "suffixes": []
+          },
+          {
+            "name": "host/loader-usr-libx32",
+            "path": "/usr/libx32",
+            "suffixes": []
+          },
+          {
+            "name": "openfold3-static-cache",
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/cache/openfold3",
+            "suffixes": []
+          }
+        ],
+        "absent_paths": [
+          "/etc/ld.so.preload",
+          "/usr/local/lib/x86_64-linux-gnu"
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "Concurrent model validation is not controlled timing evidence.",
+    "Live maps unavailable for completed AtlasFold/OpenFold3 runs during SSH interruption.",
+    "Final installation acceptance and dependency coverage audit remain open."
+  ]
+}

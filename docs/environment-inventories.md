@@ -163,7 +163,7 @@ lifetime coverage. The remaining audit must bind the observed system dependencie
 and loading paths, check the other model environments, and account for runtime
 plugins and driver identity. The current strict profiles remain opt-in.
 
-## Extended system inventories: acceptance pending
+## Extended system inventories: N1000 acceptance
 
 The specifications in `configs/environments/diamondhill-*-system-v2.json`
 extend the original inventories with system library and locale directories,
@@ -180,9 +180,16 @@ serialization. An older implementation rejects this extension as an unknown
 field. The new profiles require `/etc/ld.so.preload` and
 `/usr/local/lib/x86_64-linux-gnu` to remain absent.
 
-All three extended manifests have been captured on DiamondHill. Capture alone
-does not establish model acceptance: inference, output parity, archive replay,
-and observed library coverage still require validation with these exact pins.
+All three extended manifests have been captured on DiamondHill. N1000 inference,
+reference comparison and archive replay pass with these exact pins: AtlasFold's
+four public arrays and OpenFold3's eleven arrays are bitwise equal to their
+matching references. Protenix's aligned coordinate RMSD is 9.539e-5 Angstrom and
+maximum summary-confidence delta is 7.451e-8, within the unchanged 1e-3 gates.
+See `provenance/rust_system_environment_integration.json` for requests, receipts,
+supervisor/device records and comparisons. Concurrent validation does not
+establish E2E speedup. Observed library coverage and final installation acceptance
+remain open; the SSH interruption prevented live map capture for these AtlasFold
+and OpenFold3 workers.
 The checks observe mutable filesystems; they do not provide an atomic snapshot,
 prove every transient library load, or lock GPU firmware identity.
 

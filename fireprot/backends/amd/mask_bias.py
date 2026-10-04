@@ -5,7 +5,6 @@ rounds to BF16 independently, matching native in-place Torch arithmetic.
 """
 from __future__ import annotations
 
-import hashlib
 import os
 from pathlib import Path
 import threading
@@ -38,24 +37,10 @@ def load():
                 _extension, _build = published_load('fireprot_mask_bias', bundle, digest)
                 _name = _extension.__name__
                 return _extension
-            from torch.utils.cpp_extension import load as compile_extension
+            from ._native_build import load as rust_load
             source = Path(__file__).with_name('csrc')/'fireprot_mask_bias.cu'
-            if os.environ.get('FIREPROT_RUST_BUILD') == '1':
-                from ._native_build import load as rust_load
-                _extension, _build = rust_load('fireprot_mask_bias', [source])
-                _name = _extension.__name__
-                return _extension
-            digest = hashlib.sha256(source.read_bytes())
-            digest.update(f'{torch.__version__}|{torch.version.hip}|gfx90a|-O3'.encode())
-            _name = 'fireprot_mask_bias_' + digest.hexdigest()[:16]
-            cache = Path(os.environ.get('FIREPROT_EXTENSION_CACHE',
-                         str(Path(__file__).resolve().parents[3]/'runtime/torch_extensions')))
-            build = cache/_name
-            build.mkdir(parents=True, exist_ok=True)
-            _extension = compile_extension(name=_name, sources=[str(source)],
-                extra_cflags=['-O3'], extra_cuda_cflags=['-O3', '--offload-arch=gfx90a'],
-                build_directory=str(build), with_cuda=True,
-                verbose=os.environ.get('FIREPROT_EXTENSION_VERBOSE') == '1')
+            _extension, _build = rust_load('fireprot_mask_bias', [source])
+            _name = _extension.__name__
         except Exception as error:
             _error = f'{type(error).__name__}: {error}'
         return _extension

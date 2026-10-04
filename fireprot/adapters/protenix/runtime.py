@@ -56,6 +56,8 @@ def install(blas_backend: str | None = None) -> dict[str, Any]:
 def manifest() -> dict[str, Any]:
     from fireprot.adapters.protenix.features import manifest as features_manifest
     from fireprot.adapters.protenix.construction import manifest as construction_manifest
+    from fireprot.backends.amd.extension import extension_status as amd_status
+    from fireprot.backends.amd.ck_extension import extension_status as ck_gemm_status
     from fireprot.backends.amd.ck_attention import extension_status
     from fireprot.backends.amd.lt_bmm import extension_status as lt_status
     from fireprot.backends.amd.attention_gate import manifest as gate_manifest
@@ -66,6 +68,8 @@ def manifest() -> dict[str, Any]:
         **(_installed or {"adapter": "protenix", "installed": False}),
         "blas": configuration_manifest(),
         "operations": registry.manifest(),
+        "amd_extension": amd_status(),
+        "ck_gemm_extension": ck_gemm_status(),
         "ck_attention": extension_status(),
         "lt_bmm": lt_status(),
         "attention_gate": gate_manifest(),

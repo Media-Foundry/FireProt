@@ -259,3 +259,35 @@ fn cancellation_during_compilation_stops_process_and_returns_original_reason() {
     assert!(e.to_string().contains("requested cancellation"));
     assert!(started.elapsed() < Duration::from_secs(2));
 }
+
+#[test]
+fn include_paths_reach_compiler_and_require_complete_inventories() {
+    use fireprot_runtime::build_tree::BuildTree;
+    let dir = tempfile::tempdir().unwrap();
+    let include = dir.path().join("include");
+    fs::create_dir(&include).unwrap();
+    fs::write(include.join("kernel.h"), "header").unwrap();
+    let mut spec = fixture(
+        dir.path(),
+        &format!(
+            "assert r['extra_include_paths']==[{}]\nassert pathlib.Path(r['extra_include_paths'][0],'kernel.h').read_text()\n{SUCCESS}",
+            serde_json::to_string(&include).unwrap()
+        ),
+    );
+    spec.build
+        .arguments
+        .insert("include".into(), vec![include.to_str().unwrap().into()]);
+    assert!(spec.identify().is_err());
+    spec.build.trees.push(BuildTree {
+        name: "include".into(),
+        path: include.clone(),
+        suffixes: vec![".h".into()],
+    });
+    assert!(spec.identify().is_err());
+    spec.build.trees[0].suffixes.clear();
+    let first = spec.run(&dir.path().join("cache")).unwrap();
+    fs::write(include.join("new.h"), "new dependency").unwrap();
+    let second = spec.run(&dir.path().join("cache")).unwrap();
+    assert!(!second.cache_hit);
+    assert_ne!(first.directory, second.directory);
+}

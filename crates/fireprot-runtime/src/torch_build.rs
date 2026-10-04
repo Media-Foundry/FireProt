@@ -46,6 +46,7 @@ struct CompilerRecipe<'a> {
     build_directory: &'a Path,
     extra_cflags: &'a [String],
     extra_cuda_cflags: &'a [String],
+    extra_include_paths: &'a [String],
 }
 
 struct CompilerGroup(Child, UnixStream);
@@ -102,12 +103,28 @@ impl TorchBuildSpec {
                 return Err(io::Error::other("invalid compiler environment"));
             }
         }
+        if let Some(includes) = self.build.arguments.get("include") {
+            for include in includes {
+                let path = Path::new(include);
+                if !path.is_absolute()
+                    || !self
+                        .build
+                        .trees
+                        .iter()
+                        .any(|tree| tree.path == path && tree.suffixes.is_empty())
+                {
+                    return Err(io::Error::other(
+                        "include path requires a complete declared build tree",
+                    ));
+                }
+            }
+        }
         let python = self.python_path()?;
         let mut spec = self.build.clone();
         spec.arguments.insert(
             RECIPE_KEY.into(),
             vec![
-                "2".into(),
+                "3".into(),
                 self.python.clone(),
                 self.helper.clone(),
                 self.guard.clone(),
@@ -208,6 +225,11 @@ impl TorchBuildSpec {
                     build_directory: directory,
                     extra_cflags: &identity.arguments["cxx"],
                     extra_cuda_cflags: &identity.arguments["hip"],
+                    extra_include_paths: identity
+                        .arguments
+                        .get("include")
+                        .map(Vec::as_slice)
+                        .unwrap_or_default(),
                 };
                 let recipe_path = directory.join("recipe.json");
                 fs::write(&recipe_path, serde_json::to_vec(&recipe)?)?;

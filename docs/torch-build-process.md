@@ -28,6 +28,8 @@ probe accepts `FIREPROT_BUILD_GUARD` as an explicit override. The selected execu
 and its load-time dependencies are fingerprinted; an absent guard rejects the
 experimental build path. The bridge ABI remains 1.
 
+Current maintained loaders use recipe 6 by default; see [loader ownership](torch-loaders.md).
+
 ## Specification
 
 The outer JSON has these fields:
@@ -88,10 +90,10 @@ compiler has a separate timeout. Logs are bounded when included in errors, but
 their on-disk size is not capped. Helpers/specifications must be trusted, and each
 recipe remains responsible for complete dependency coverage.
 
-## AtlasFold integration
+## Historical AtlasFold recipe-5 integration
 
-The opt-in `FIREPROT_RUST_BUILD=1` mask/bias path uses this service with recipe 5
-and separate ten-minute compiler and lock-wait timeouts. The former Python compile callback is removed
+Recipe 5 introduced the opt-in `FIREPROT_RUST_BUILD=1` mask/bias path
+with separate ten-minute compiler and lock-wait timeouts. The former Python compile callback is removed
 from that path. The existing pinned published-artifact path takes precedence and
 continues using its validated binary. Other HIP/CK recipes remain to be migrated.
 

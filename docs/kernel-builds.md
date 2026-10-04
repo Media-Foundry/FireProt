@@ -3,13 +3,12 @@
 ## Migration status
 
 Rust owns native build identities, dependency inventories, dynamic-library
-resolution and cache transactions through `fireprot-runtime`. The bridge exposes
-these services to Torch compiler callbacks. AtlasFold mask/bias has both an
-experimental build path and a pinned published-artifact loader. Rust publication
-and acceptance commands are described in [kernel artifacts](kernel-artifacts.md).
-Rust [Torch process orchestration](torch-build-process.md) now owns the experimental
-mask/bias compiler process. Other HIP/CK recipes and C ABI bundles remain pending.
-The chronological validation sections below preserve earlier recipe evidence.
+resolution, cache transactions and guarded compiler processes. The four
+maintained Torch extension loaders now use this service; see
+[Torch loader ownership](torch-loaders.md). Standalone C ABI CK attention and
+hipBLASLt loaders remain pending. The mask/bias published-artifact route is also
+implemented; see [kernel artifacts](kernel-artifacts.md). The chronological
+validation sections below retain earlier experimental recipe evidence.
 
 ## Contract
 
@@ -78,7 +77,7 @@ Before/after hashes detect persistent input changes, not changes restored while
 the compiler is reading. Immutable input snapshots and complete recipe inputs
 remain integration requirements. Loading is outside this service; only declared,
 verified artifacts may be loaded, and intermediates must not be reused for a
-future compilation. The mask/bias candidate uses this service; remaining loaders are pending.
+future compilation. All maintained Torch loaders use this service; standalone C ABI loaders are pending.
 
 
 ## Python bridge

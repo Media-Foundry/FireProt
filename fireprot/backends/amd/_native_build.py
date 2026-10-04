@@ -1,6 +1,6 @@
 """Torch compilation boundary for the Rust-owned native build cache.
 
-This initial recipe is opt-in. Host dependency discovery is explicit and the
+Maintained Torch extension loaders use this recipe. Host dependency discovery is explicit and the
 result records its coverage; it does not claim a hermetic compiler environment.
 """
 from __future__ import annotations
@@ -15,7 +15,8 @@ import sys
 import sysconfig
 
 
-def load(package, sources):
+def load(package, sources, *, cxx_flags=('-O3',),
+         hip_flags=('-O3', '--offload-arch=gfx90a'), include_paths=()):
     import torch
     from torch.utils import cpp_extension
     from fireprot.ops._bridge import bridge
@@ -37,6 +38,8 @@ def load(package, sources):
              Path('/usr/include'), Path('/usr/local/include'), Path('/usr/lib/gcc')]
     trees = [dict(name=f'dependency-{index}', path=str(root.absolute()), suffixes=[])
              for index, root in enumerate(roots)]
+    trees.extend(dict(name=f'extra-include-{index}', path=str(Path(root).absolute()), suffixes=[])
+                 for index, root in enumerate(include_paths))
     trees.append(dict(name='hipify', path=str(torch_root/'utils/hipify'), suffixes=['.py']))
     inspector = shutil.which('ldd')
     cxx = shutil.which(cpp_extension.get_cxx_compiler())
@@ -52,7 +55,6 @@ def load(package, sources):
             raise RuntimeError(f'missing compiler subprogram: {program}')
         objects.append(resolved)
     dynamic_inputs = dict(inspector=inspector, objects=[str(Path(path).absolute()) for path in objects])
-    flags = ['-O3', '--offload-arch=gfx90a']
     environment = {key: os.environ.get(key) for key in (
         'PATH', 'HOME', 'TMPDIR', 'MAX_JOBS', 'CXX', 'CC', 'CFLAGS', 'CXXFLAGS', 'LDFLAGS', 'CPATH',
         'CPLUS_INCLUDE_PATH', 'LIBRARY_PATH', 'LD_LIBRARY_PATH', 'ROCM_HOME',
@@ -62,8 +64,9 @@ def load(package, sources):
                        PYTHONDONTWRITEBYTECODE='1', LC_ALL='C', HIP_VISIBLE_DEVICES='')
     spec = dict(schema_version=1, package=package, target='gfx90a',
         files=[dict(name=str(Path(path).absolute()), path=str(Path(path).absolute()))
-               for path in paths], trees=trees, dynamic_inputs=dynamic_inputs, arguments=dict(cxx=['-O3'], hip=flags),
-        environment=environment, versions=dict(recipe='torch-hip-experimental-5',
+               for path in paths], trees=trees, dynamic_inputs=dynamic_inputs, arguments=dict(cxx=list(cxx_flags), hip=list(hip_flags),
+            include=[str(Path(path).absolute()) for path in include_paths]),
+        environment=environment, versions=dict(recipe='torch-hip-6',
             torch=str(torch.__version__), hip=str(torch.version.hip),
             python=sys.version, soabi=str(sysconfig.get_config_var('SOABI'))))
     cache = Path(os.environ.get('FIREPROT_EXTENSION_CACHE',

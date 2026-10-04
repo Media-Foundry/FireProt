@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import os
 import pathlib
 import threading
@@ -12,6 +11,7 @@ from typing import Any
 _lock = threading.RLock()
 _extension: Any | None = None
 _load_error: str | None = None
+_build: dict[str, Any] | None = None
 
 
 def _source_paths() -> tuple[pathlib.Path, ...]:
@@ -19,18 +19,9 @@ def _source_paths() -> tuple[pathlib.Path, ...]:
     return (root / "fireprot_amd_ops.cpp", root / "fireprot_amd_ops.cu")
 
 
-def _extension_name(torch_module: Any, sources: tuple[pathlib.Path, ...]) -> str:
-    digest = hashlib.sha256()
-    digest.update(str(torch_module.__version__).encode())
-    digest.update(str(getattr(torch_module.version, "hip", None)).encode())
-    for source in sources:
-        digest.update(source.read_bytes())
-    return f"fireprot_amd_ops_{digest.hexdigest()[:12]}"
-
-
 def load_amd_extension(*, torch_module: Any | None = None) -> Any | None:
     """Build once into the excluded runtime cache, returning None on failure."""
-    global _extension, _load_error
+    global _extension, _load_error, _build
     with _lock:
         if _extension is not None:
             return _extension
@@ -48,7 +39,8 @@ def load_amd_extension(*, torch_module: Any | None = None) -> Any | None:
                 _load_error = "PyTorch HIP is unavailable"
                 return None
 
-            from torch.utils.cpp_extension import ROCM_HOME, load
+            from torch.utils.cpp_extension import ROCM_HOME
+            from ._native_build import load as rust_load
 
             sources = _source_paths()
             missing = [str(path) for path in sources if not path.is_file()]
@@ -58,26 +50,8 @@ def load_amd_extension(*, torch_module: Any | None = None) -> Any | None:
             rocm_home = pathlib.Path(
                 os.environ.get("FIREPROT_ROCM_HOME") or ROCM_HOME or "/opt/rocm"
             )
-            repo_root = pathlib.Path(__file__).resolve().parents[3]
-            cache_root = pathlib.Path(
-                os.environ.get(
-                    "FIREPROT_EXTENSION_CACHE",
-                    repo_root / "runtime" / "torch_extensions",
-                )
-            )
-            name = _extension_name(torch_module, sources)
-            build_directory = cache_root / name
-            build_directory.mkdir(parents=True, exist_ok=True)
-            _extension = load(
-                name=name,
-                sources=[str(path) for path in sources],
-                extra_include_paths=[str(rocm_home / "include")],
-                extra_cflags=["-O3"],
-                extra_cuda_cflags=["-O3"],
-                build_directory=str(build_directory),
-                with_cuda=True,
-                verbose=os.environ.get("FIREPROT_EXTENSION_VERBOSE") == "1",
-            )
+            _extension, _build = rust_load('fireprot_amd_ops', sources, hip_flags=['-O3'],
+                                            include_paths=[rocm_home / 'include'])
         except Exception as error:  # Native fallback owns unsupported builds.
             _load_error = f"{type(error).__name__}: {error}"
             return None
@@ -89,11 +63,13 @@ def extension_status() -> dict[str, Any]:
         return {
             "loaded": _extension is not None,
             "error": _load_error,
+            "build": _build,
         }
 
 
 def _reset_for_testing() -> None:
-    global _extension, _load_error
+    global _extension, _load_error, _build
     with _lock:
         _extension = None
         _load_error = None
+        _build = None

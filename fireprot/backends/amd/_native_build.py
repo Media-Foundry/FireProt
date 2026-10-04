@@ -23,35 +23,19 @@ def load(package, sources):
     rocm = Path(cpp_extension.ROCM_HOME)
     torch_root = Path(torch.__file__).resolve().parent
     helper = Path(__file__).with_name('_compile_native.py')
-    inputs = {}
-    def add(path):
-        path = Path(path)
-        if not path.is_file():
-            raise RuntimeError(f'missing build dependency: {path}')
-        inputs[str(path.absolute())] = dict(name=str(path.absolute()), path=str(path.absolute()))
-
-    for source in sources:
-        add(source)
-    for path in [__file__, helper, cpp_extension.__file__, sys.executable,
-                 shutil.which(cpp_extension.get_cxx_compiler()), shutil.which('ninja'),
-                 rocm/'bin/hipcc', rocm/'llvm/bin/clang++', rocm/'llvm/bin/ld.lld']:
-        if path is None:
-            raise RuntimeError('required compiler or Ninja is unavailable')
-        add(path)
-    # Include transitive Torch/ROCm/Python headers and device-library contents.
+    paths = [*sources, __file__, helper, cpp_extension.__file__, sys.executable,
+             shutil.which(cpp_extension.get_cxx_compiler()), shutil.which('ninja'),
+             rocm/'bin/hipcc', rocm/'llvm/bin/clang++', rocm/'llvm/bin/ld.lld',
+             rocm/'lib/libamdhip64.so']
+    if any(path is None for path in paths):
+        raise RuntimeError('required compiler or Ninja is unavailable')
+    # Python describes environment-owned roots; Rust traverses and rechecks them.
     roots = [torch_root/'include', rocm/'include', rocm/'llvm/lib/clang',
-             Path(sysconfig.get_path('include'))]
-    for root in roots:
-        if not root.is_dir():
-            raise RuntimeError(f'missing header tree: {root}')
-        for path in sorted(root.rglob('*')):
-            if path.is_file():
-                add(path)
-    for path in sorted((torch_root/'utils/hipify').glob('*.py')):
-        add(path)
-    for path in sorted((torch_root/'lib').glob('*.so*')):
-        if path.is_file():
-            add(path)
+             Path(sysconfig.get_path('include')), torch_root/'lib',
+             Path('/usr/include'), Path('/usr/local/include'), Path('/usr/lib/gcc')]
+    trees = [dict(name=f'dependency-{index}', path=str(root.absolute()), suffixes=[])
+             for index, root in enumerate(roots)]
+    trees.append(dict(name='hipify', path=str(torch_root/'utils/hipify'), suffixes=['.py']))
     flags = ['-O3', '--offload-arch=gfx90a']
     environment = {key: os.environ.get(key) for key in (
         'PATH', 'CXX', 'CC', 'CFLAGS', 'CXXFLAGS', 'LDFLAGS', 'CPATH',
@@ -60,8 +44,9 @@ def load(package, sources):
         'HIPCC_LINK_FLAGS_APPEND', 'PYTORCH_ROCM_ARCH')}
     environment['PYTORCH_ROCM_ARCH'] = 'gfx90a'
     spec = dict(schema_version=1, package=package, target='gfx90a',
-        files=list(inputs.values()), arguments=dict(cxx=['-O3'], hip=flags),
-        environment=environment, versions=dict(recipe='torch-hip-experimental-1',
+        files=[dict(name=str(Path(path).absolute()), path=str(Path(path).absolute()))
+               for path in paths], trees=trees, arguments=dict(cxx=['-O3'], hip=flags),
+        environment=environment, versions=dict(recipe='torch-hip-experimental-2',
             torch=str(torch.__version__), hip=str(torch.version.hip),
             python=sys.version, soabi=str(sysconfig.get_config_var('SOABI'))))
     cache = Path(os.environ.get('FIREPROT_EXTENSION_CACHE',
@@ -90,5 +75,5 @@ def load(package, sources):
     module_spec = importlib.util.spec_from_file_location(name, library)
     module = importlib.util.module_from_spec(module_spec)
     module_spec.loader.exec_module(module)
-    result['dependency_scope'] = 'Torch/ROCm/Python headers, Torch libraries and listed compiler/helper files; system compiler runtime closure is not complete'
+    result['dependency_scope'] = 'Rust-enumerated Torch/ROCm/Python/system headers, GCC trees, Torch libraries and listed compiler/helper files; complete dynamic compiler/runtime closure remains unverified'
     return module, result

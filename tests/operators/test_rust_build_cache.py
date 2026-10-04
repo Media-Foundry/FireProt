@@ -82,3 +82,22 @@ assert len(calls) == 1, calls
 '''
     subprocess.run([sys.executable, '-c', program, request, str(tmp_path / 'cache')],
                    check=True, capture_output=True, text=True, timeout=15)
+
+
+def test_directory_changes_during_callback_cannot_publish(tmp_path):
+    request = json.loads(spec(tmp_path))
+    headers = tmp_path / 'headers'
+    headers.mkdir()
+    request['trees'] = [dict(name='headers', path=str(headers), suffixes=[])]
+    def mutate(directory, name):
+        (headers / 'new.h').write_text('added while compiling')
+        return compile_fake(directory, name)
+    with pytest.raises(OSError, match='build inputs or receipt changed'):
+        bridge.cached_build(json.dumps(request), tmp_path / 'cache', mutate)
+    result = json.loads(bridge.cached_build(json.dumps(request), tmp_path / 'cache', compile_fake))
+    assert not result['cache_hit']
+    assert len(result['receipt']['identity']['tree_files']) == 1
+    (headers / 'another.h').write_text('new dependency')
+    changed = json.loads(bridge.cached_build(json.dumps(request), tmp_path / 'cache', compile_fake))
+    assert not changed['cache_hit']
+    assert changed['directory'] != result['directory']

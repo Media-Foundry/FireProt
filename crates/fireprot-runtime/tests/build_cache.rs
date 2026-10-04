@@ -17,6 +17,7 @@ fn identity(root: &std::path::Path) -> fireprot_runtime::build::BuildIdentity {
     fs::write(&source, "original").unwrap();
     BuildSpec {
         schema_version: 1,
+        trees: vec![],
         package: "test_kernel".into(),
         target: "gfx90a".into(),
         files: vec![BuildFile {

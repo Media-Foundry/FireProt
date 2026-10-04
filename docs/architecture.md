@@ -14,6 +14,7 @@ cross-model API and packaged kernel builds are not complete.
 | User entry point | `fireprot-cli` | Rust; Protenix native/FireProt, AtlasFold native/chunked/HIP/fused HIP, native OpenFold3 |
 | In-process operator policy boundary | `fireprot-bridge` | CPython stable C ABI; metadata and callbacks only |
 | Model execution | `python/fireprot_workers` and independent upstream checkouts | Explicit PyTorch boundary; additional model variants pending |
+| Native build identity, dependency inventories and cache transactions | `fireprot-runtime` via `fireprot-bridge` | Rust service implemented; opt-in AtlasFold mask/bias integration, other loaders pending |
 | AMD kernels and tensor glue | `fireprot/backends/amd` | Existing HIP/CK paths; build and layout migration pending |
 
 AtlasFold N1000 native output migration passes exactly. Its chunked/HIP/fused HIP

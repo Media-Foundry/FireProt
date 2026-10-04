@@ -4,6 +4,7 @@
 //! value. An identity is a reproducibility record, not proof that an input list is
 //! complete or that a compiler is deterministic.
 use crate::artifacts::sha256;
+use crate::build_tree::BuildTree;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::{collections::BTreeMap, io, path::PathBuf};
@@ -24,6 +25,8 @@ pub struct BuildSpec {
     pub target: String,
     /// Ordered translation units, headers, compiler executables and build helpers.
     pub files: Vec<BuildFile>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub trees: Vec<BuildTree>,
     /// Exact ordered arguments for each compiler/linker stage.
     pub arguments: BTreeMap<String, Vec<String>>,
     /// Effective values, including explicit absence for relevant unset variables.
@@ -47,6 +50,10 @@ pub struct BuildIdentity {
     pub package: String,
     pub target: String,
     pub files: Vec<FileIdentity>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub trees: Vec<BuildTree>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub tree_files: Vec<FileIdentity>,
     pub arguments: BTreeMap<String, Vec<String>>,
     pub environment: BTreeMap<String, Option<String>>,
     pub versions: BTreeMap<String, String>,
@@ -89,11 +96,21 @@ impl BuildSpec {
                 sha256: digest,
             });
         }
+        let mut tree_names = std::collections::BTreeSet::new();
+        let mut tree_files = Vec::new();
+        for tree in &self.trees {
+            if !tree_names.insert(&tree.name) {
+                return Err(io::Error::other("duplicate build tree name"));
+            }
+            tree_files.extend(tree.identify()?);
+        }
         let mut result = BuildIdentity {
             schema_version: 1,
             package: self.package.clone(),
             target: self.target.clone(),
             files,
+            trees: self.trees.clone(),
+            tree_files,
             arguments: self.arguments.clone(),
             environment: self.environment.clone(),
             versions: self.versions.clone(),
@@ -131,6 +148,7 @@ impl BuildIdentity {
                     path: f.canonical_path.clone(),
                 })
                 .collect(),
+            trees: self.trees.clone(),
             arguments: self.arguments.clone(),
             environment: self.environment.clone(),
             versions: self.versions.clone(),

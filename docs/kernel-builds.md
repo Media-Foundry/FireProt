@@ -139,3 +139,33 @@ RPATH/RUNPATH. Local Python validation passed 209 tests with 110 GPU cases skipp
 Complete requests, comparisons, receipt/library identities and dependency limits
 are recorded in [candidate evidence](../provenance/rust_mask_build_candidate.json).
 Dependency-coverage gaps above still prevent promotion.
+
+## Rust dependency directory inventories
+
+The next experimental recipe replaces Python globbing with `BuildSpec.trees`.
+Each tree declares a stable name, absolute root and optional filename suffixes.
+Rust enumerates entries deterministically, follows directory symlinks, rejects
+cycles/broken links/non-regular inputs, and hashes all selected files. A depth
+limit prevents unbounded recursive traversal. The receipt retains tree declarations
+and `tree_files` separately from explicitly listed files.
+
+Verification repeats directory enumeration as well as file hashing. Added or
+removed headers and changed symlink targets therefore invalidate the identity,
+including mutations made while the compiler callback is running. Filtering is
+explicit: the hipify Python tree includes `.py` files and excludes generated
+bytecode. Existing schema-1 receipts without trees retain their cache identity;
+a golden receipt test pins this backward compatibility.
+
+The recipe now also declares `/usr/include`, `/usr/local/include`, `/usr/lib/gcc`
+and the ROCm HIP runtime library, in addition to the preceding environment roots.
+This is broader dependency coverage, not a claim of a hermetic toolchain:
+complete dynamic compiler/runtime closure and all compiler environment effects
+still require verification. The route remains opt-in.
+
+The directory-inventory recipe passed a fresh HIP build (11 explicit inputs plus
+20,846 tree files), eleven GPU tests and both N1000/N1536 complete-model checks.
+All public output arrays remain byte-identical, each request records 528 HIP
+attention calls, and both requests reuse the new Rust cache. PCI isolation passed
+with 153/403 samples. These parallel migration requests are not a performance
+comparison. The local suite passed 69 Rust tests and 210 Python tests (110 GPU
+cases skipped). See [directory-inventory evidence](../provenance/rust_build_tree_integration.json).

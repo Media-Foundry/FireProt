@@ -11,6 +11,7 @@ fn fixture(root: &std::path::Path) -> BuildSpec {
     }
     BuildSpec {
         schema_version: 1,
+        trees: vec![],
         package: "fireprot_pair".into(),
         target: "gfx90a".into(),
         files: ["kernel.cu", "kernel.h", "hipcc"]

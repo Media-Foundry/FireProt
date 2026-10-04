@@ -18,6 +18,12 @@ do not claim all confidence arrays are identical. AtlasFold chunked/HIP/fused HI
 N1000 and N1536 pass exact parity for all three routes. Additional model variants,
 kernel build migration and full framework acceptance remain outstanding.
 
+Rust now owns native build identities, directory inventories, cache locks, artifact
+hashes and atomic publication. `FIREPROT_RUST_BUILD=1` enables the initial AtlasFold
+mask/bias loader integration. It is experimental: dynamic toolchain dependency
+coverage and the remaining HIP/CK loaders still need migration. See
+`docs/kernel-builds.md`; preserve its explicit acceptance limits.
+
 DiamondHill: `pc@10.120.16.9`, workspace `/media/IntelSSD/fireprot`. All eight GCDs
 are authorized; verify isolation for each run. Checkpoint locations are recorded
 in `docs/diamondhill-checkpoints.md`. The independent Protenix integration HEAD is

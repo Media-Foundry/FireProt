@@ -10,6 +10,7 @@ fn setup(root: &std::path::Path) -> BuildSpec {
     fs::write(root.join("include/a.h"), "a").unwrap();
     BuildSpec {
         schema_version: 1,
+        dynamic_inputs: None,
         package: "test".into(),
         target: "gfx90a".into(),
         files: vec![BuildFile {

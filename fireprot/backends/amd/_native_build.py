@@ -36,17 +36,32 @@ def load(package, sources):
     trees = [dict(name=f'dependency-{index}', path=str(root.absolute()), suffixes=[])
              for index, root in enumerate(roots)]
     trees.append(dict(name='hipify', path=str(torch_root/'utils/hipify'), suffixes=['.py']))
+    inspector = shutil.which('ldd')
+    cxx = shutil.which(cpp_extension.get_cxx_compiler())
+    if inspector is None:
+        raise RuntimeError('ldd is required for the experimental toolchain receipt')
+    objects = [sys.executable, cxx, shutil.which('ninja'), rocm/'bin/hipcc',
+               rocm/'llvm/bin/clang++', rocm/'llvm/bin/ld.lld',
+               rocm/'lib/libamdhip64.so', '/bin/sh', '/bin/bash']
+    for program in ('cc1plus', 'collect2', 'ld'):
+        resolved = subprocess.check_output([cxx, '-print-prog-name=' + program], text=True).strip()
+        resolved = str(Path(resolved).absolute()) if '/' in resolved else shutil.which(resolved)
+        if resolved is None:
+            raise RuntimeError(f'missing compiler subprogram: {program}')
+        objects.append(resolved)
+    dynamic_inputs = dict(inspector=inspector, objects=[str(Path(path).absolute()) for path in objects])
     flags = ['-O3', '--offload-arch=gfx90a']
     environment = {key: os.environ.get(key) for key in (
-        'PATH', 'CXX', 'CC', 'CFLAGS', 'CXXFLAGS', 'LDFLAGS', 'CPATH',
+        'PATH', 'HOME', 'TMPDIR', 'MAX_JOBS', 'CXX', 'CC', 'CFLAGS', 'CXXFLAGS', 'LDFLAGS', 'CPATH',
         'CPLUS_INCLUDE_PATH', 'LIBRARY_PATH', 'LD_LIBRARY_PATH', 'ROCM_HOME',
         'HIP_PATH', 'HIP_CLANG_PATH', 'HIPCC_COMPILE_FLAGS_APPEND',
         'HIPCC_LINK_FLAGS_APPEND', 'PYTORCH_ROCM_ARCH')}
-    environment['PYTORCH_ROCM_ARCH'] = 'gfx90a'
+    environment.update(PYTORCH_ROCM_ARCH='gfx90a', PYTHONHASHSEED='0',
+                       PYTHONDONTWRITEBYTECODE='1', LC_ALL='C', HIP_VISIBLE_DEVICES='')
     spec = dict(schema_version=1, package=package, target='gfx90a',
         files=[dict(name=str(Path(path).absolute()), path=str(Path(path).absolute()))
-               for path in paths], trees=trees, arguments=dict(cxx=['-O3'], hip=flags),
-        environment=environment, versions=dict(recipe='torch-hip-experimental-2',
+               for path in paths], trees=trees, dynamic_inputs=dynamic_inputs, arguments=dict(cxx=['-O3'], hip=flags),
+        environment=environment, versions=dict(recipe='torch-hip-experimental-3',
             torch=str(torch.__version__), hip=str(torch.version.hip),
             python=sys.version, soabi=str(sysconfig.get_config_var('SOABI'))))
     cache = Path(os.environ.get('FIREPROT_EXTENSION_CACHE',
@@ -63,7 +78,7 @@ def load(package, sources):
                       extra_cflags=['-O3'], extra_cuda_cflags=flags)
         recipe_path = directory/'recipe.json'
         recipe_path.write_text(json.dumps(recipe))
-        env = dict(os.environ, PYTORCH_ROCM_ARCH='gfx90a')
+        env = {key: value for key, value in environment.items() if value is not None}
         with (directory/'compiler.log').open('w') as log:
             subprocess.run([sys.executable, str(helper), str(recipe_path)], env=env,
                            stdout=log, stderr=subprocess.STDOUT, check=True)
@@ -75,5 +90,5 @@ def load(package, sources):
     module_spec = importlib.util.spec_from_file_location(name, library)
     module = importlib.util.module_from_spec(module_spec)
     module_spec.loader.exec_module(module)
-    result['dependency_scope'] = 'Rust-enumerated Torch/ROCm/Python/system headers, GCC trees, Torch libraries and listed compiler/helper files; complete dynamic compiler/runtime closure remains unverified'
+    result['dependency_scope'] = 'Rust-enumerated Torch/ROCm/Python/system headers, GCC trees, Torch libraries and listed compiler/helper files; load-time dependencies of declared compiler tools and HIP runtime are re-resolved in Rust; runtime plugins and the complete model environment remain outside this recipe'
     return module, result

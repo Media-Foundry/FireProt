@@ -81,22 +81,40 @@ Framework entry points call adapters; adapters call upstream implementations. Op
 
 The latest N1000 specialization retains sequence-tail masking while overriding bias access alignment to four FP32 elements, with M128/N32/W4 tiles. Same-source warm Mini-default C4/S1 model median improves 12.615 to 10.745 seconds (1.174x), with unchanged peak allocation and passing output comparisons. It is the default in the validated exact bucket; `FIREPROT_ENABLE_CK_VECTOR_BIAS1000=0` restores the preceding CK implementation. See [validation](protenix-ck-vector1000.md).
 
-## 3. Proposed repository boundaries
+## 3. Repository boundaries
+
+The maintained Rust workspace has five crates with explicit responsibilities:
 
 ```text
-fireprot/
-  api/             # Versioned task, capability, result, and error contracts
-  runtime/         # Devices, weights, cache, coordination, timing, and logs
-  adapters/        # protenix/, openfold/, esmfold/, atlasfold/
-  ops/             # Stable operator entry points, dispatch, PyTorch baselines
-  backends/        # CK, hipBLASLt, other ROCm kernels, and build integration
-  validation/      # Numerical, structural, performance, reproducibility tools
-tests/
-  contracts/       # Adapter and operator contracts
-  numerical/       # Dtypes, shapes, masks, and edge conditions
-  integration/     # Per-model end-to-end smoke tests
-benchmarks/        # Fixed inputs and measurement programs; raw results excluded
+crates/
+  fireprot-core/        # Requests, model semantics, protocol, operator policy
+  fireprot-runtime/     # Processes, devices, provenance, native build/cache services
+  fireprot-validation/  # Output acceptance, numerical and structural comparisons
+  fireprot-cli/         # User commands and exit status
+  fireprot-bridge/      # CPython metadata/callback ABI, no tensor ownership
+python/fireprot_workers/ # Pinned upstream invocation and tensor serialization
+fireprot/               # Existing adapter/tensor glue; relocation still pending
+configs/                # Explicit requests and deployment profiles
+tests/                  # Contract, numerical, worker and GPU integration checks
+provenance/             # Versioned evidence; generated predictions stay excluded
+benchmarks/             # Historical reproduction tools during migration
 ```
+
+The remaining layout migration will place maintained tensor glue under `python/`
+and native sources under `kernels/amd/`, with compatibility shims for upstream
+patch imports and a checked path map for historical scripts. Those moves are not
+yet implemented. Rust core must remain independent of Torch and host process APIs;
+the runtime owns process/device/build policy, and the CLI composes those services.
+The bridge receives metadata and invokes local callbacks without copying tensors.
+
+Deployment should build and validate native artifacts before inference. A future
+explicit build command will publish the operator ABI, architecture/capabilities,
+Torch/HIP compatibility, source/build identity and library hashes. Inference will
+verify the published artifact and its compatibility before loading it. The current
+opt-in integration still performs build/cache discovery inside a fresh worker;
+this is an intermediate implementation, not the final deployment workflow.
+Compiler dependency scans belong to build acceptance. Packaging and the explicit
+build command remain required migration work.
 
 Keep `Protenix/` as an independent upstream checkout. Other upstream implementations should follow the same independent-source approach. Keep adapters and local patches in the top-level repository. When an upstream edit is unavoidable, record the baseline commit, patch, and license. Do not copy upstream source into the shared core.
 
@@ -134,7 +152,10 @@ The operator library may contain many implementations, but should expose a small
 4. **Performance validation:** report cold and warm start, preprocessing/ESM, model load, major model stages, end-to-end latency, and peak GPU memory separately. Synchronize GPU timing; record warmup, repetitions, concurrency, physical device, GPU model, and ROCm/PyTorch/library versions. Check device state before launch and continuously reject a run if another process joins the selected physical GPU.
 5. **Dataset limits:** the current eight short-chain examples are a development set. The 1,000-token input is a performance-only case without an experimental-coordinate mapping. It establishes throughput and native agreement for one exact bucket, not accuracy or generalization. Structural metrics for cases with mappings must use `coordinates[mask]` in `gt_mapping.npz`. Add untouched evaluation cases and more long-chain/complex benchmarks.
 
-## 7. Implementation stages
+## 7. Historical pre-migration stages
+
+This table preserves earlier milestones. Current Rust ownership and acceptance
+limits are listed at the start of this document and in `docs/rust-migration.md`.
 
 | Stage | Status | Deliverable and acceptance |
 | --- | --- | --- |

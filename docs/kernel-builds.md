@@ -169,3 +169,36 @@ attention calls, and both requests reuse the new Rust cache. PCI isolation passe
 with 153/403 samples. These parallel migration requests are not a performance
 comparison. The local suite passed 69 Rust tests and 210 Python tests (110 GPU
 cases skipped). See [directory-inventory evidence](../provenance/rust_build_tree_integration.json).
+
+
+## Dynamic toolchain dependencies
+
+`BuildSpec.dynamic_inputs` optionally declares an absolute `ldd` inspector and
+trusted host ELF objects. Rust records the inspector, objects and resolved
+load-time libraries as `dynamic_files`. Verification re-runs dependency resolution
+and hashes the resolved files. Runtime addresses are excluded from identity.
+Missing libraries, malformed output, inspector errors and non-ELF inputs fail.
+Static executables are unsupported by this initial inspector. Schema-1 receipts
+without dynamic inputs retain their original identity.
+
+The experimental HIP recipe declares Python, Ninja, the C++ driver, GCC's
+`cc1plus`/`collect2`/linker, HIPCC, Clang, LLD, shell interpreters and the HIP runtime.
+The compiler child receives only recorded environment values, a fixed gfx90a
+target, deterministic Python hashing and no visible GPU. Model execution keeps
+its separately supervised device assignment.
+
+This records load-time dependencies of the declared objects. It does not discover
+libraries opened later through runtime plugins or capture the complete upstream
+model environment. Torch libraries remain directly fingerprinted by the directory
+inventory. The route stays experimental until the remaining integration and
+packaging gates pass. See the deployment boundary in `docs/architecture.md`:
+explicit artifact building and lightweight artifact acceptance during inference
+remain the target workflow.
+
+The dynamic-dependency recipe passed a fresh HIP build, eleven GPU tests and
+N1000/N1536 full AtlasFold checks. Its receipt contains 11 explicit files,
+20,846 tree files and 47 dynamic files. Both model requests hit the cache,
+selected 528 HIP attention calls and retained exact public-output bytes.
+PCI isolation passed with 156/410 samples. Local validation passed 72 Rust tests
+and 210 Python tests (110 GPU cases skipped). Parallel migration timings are
+not a new E2E speedup comparison. See [dynamic build evidence](../provenance/rust_dynamic_build_integration.json).

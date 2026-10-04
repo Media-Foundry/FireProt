@@ -19,9 +19,12 @@ N1000 and N1536 pass exact parity for all three routes. Additional model variant
 kernel build migration and full framework acceptance remain outstanding.
 
 Rust now owns native build identities, directory inventories, cache locks, artifact
-hashes and atomic publication. `FIREPROT_RUST_BUILD=1` enables the initial AtlasFold
-mask/bias loader integration. It is experimental: dynamic toolchain dependency
-coverage and the remaining HIP/CK loaders still need migration. See
+hashes and atomic publication. Declared host ELF tools also have their load-time
+dynamic dependencies resolved and hashed in Rust. `FIREPROT_RUST_BUILD=1` enables the initial AtlasFold
+mask/bias loader integration. It is experimental: remaining HIP/CK recipes,
+explicit build/publication commands and model-environment provenance still need
+work. Inference should ultimately accept published artifacts without repeating
+compiler discovery; the current worker-driven build path is transitional. See
 `docs/kernel-builds.md`; preserve its explicit acceptance limits.
 
 DiamondHill: `pc@10.120.16.9`, workspace `/media/IntelSSD/fireprot`. All eight GCDs

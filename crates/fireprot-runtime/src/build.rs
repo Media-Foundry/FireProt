@@ -4,6 +4,7 @@
 //! value. An identity is a reproducibility record, not proof that an input list is
 //! complete or that a compiler is deterministic.
 use crate::artifacts::sha256;
+use crate::build_dynamic::DynamicInputs;
 use crate::build_tree::BuildTree;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -27,6 +28,8 @@ pub struct BuildSpec {
     pub files: Vec<BuildFile>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub trees: Vec<BuildTree>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub dynamic_inputs: Option<DynamicInputs>,
     /// Exact ordered arguments for each compiler/linker stage.
     pub arguments: BTreeMap<String, Vec<String>>,
     /// Effective values, including explicit absence for relevant unset variables.
@@ -52,8 +55,12 @@ pub struct BuildIdentity {
     pub files: Vec<FileIdentity>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub trees: Vec<BuildTree>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub dynamic_inputs: Option<DynamicInputs>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub tree_files: Vec<FileIdentity>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub dynamic_files: Vec<FileIdentity>,
     pub arguments: BTreeMap<String, Vec<String>>,
     pub environment: BTreeMap<String, Option<String>>,
     pub versions: BTreeMap<String, String>,
@@ -104,13 +111,21 @@ impl BuildSpec {
             }
             tree_files.extend(tree.identify()?);
         }
+        let dynamic_files = self
+            .dynamic_inputs
+            .as_ref()
+            .map(DynamicInputs::identify)
+            .transpose()?
+            .unwrap_or_default();
         let mut result = BuildIdentity {
             schema_version: 1,
             package: self.package.clone(),
             target: self.target.clone(),
             files,
             trees: self.trees.clone(),
+            dynamic_inputs: self.dynamic_inputs.clone(),
             tree_files,
+            dynamic_files,
             arguments: self.arguments.clone(),
             environment: self.environment.clone(),
             versions: self.versions.clone(),
@@ -149,6 +164,7 @@ impl BuildIdentity {
                 })
                 .collect(),
             trees: self.trees.clone(),
+            dynamic_inputs: self.dynamic_inputs.clone(),
             arguments: self.arguments.clone(),
             environment: self.environment.clone(),
             versions: self.versions.clone(),

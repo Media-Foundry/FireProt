@@ -44,9 +44,11 @@ sample count, workload, seed, shapes, dtypes, finiteness and model confidence
 requirements. This is content acceptance; numerical agreement with a reference
 remains a separate correctness gate.
 
-All three recorded intervals are supported: `model`, `worker_request` and
-`supervisor`. `end_to_end` is rejected because the complete invocation is not
-measured by these records. No interval is relabeled as E2E.
+The supervisor archives support `model`, `worker_request` and `supervisor`.
+`end_to_end` requires additional pinned records produced by
+[`measure-inference`](invocation-timing.md), supplied as `invocations` in the
+same order as `runs`. The collector rejects missing or mismatched records;
+no supervisor interval is relabeled as E2E.
 
 The collector builds a [timing series](timing-statistics.md) and its statistics.
 It retains original requests and receipt pins, and rejects mixed conditions.

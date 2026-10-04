@@ -159,5 +159,19 @@ against an independent upstream reference on that development case. No long
 Tiny performance claim is established. `scripts/infer.sh REQUEST PROFILE` and
 `scripts/smoke.sh [MANIFEST]` now exec Rust; original launchers are archived under
 `.agents/legacy_*` with `provenance/entrypoint_path_map.json`. See
-`docs/entrypoints.md`. Environment coverage, complete invocation timing, paired
-performance verdicts, final acceptance and remote CI/push remain outstanding.
+`docs/entrypoints.md`. Environment coverage, paired performance verdicts, final
+acceptance and remote CI/push remain outstanding.
+
+## Complete inference invocation timing (2026-10-05)
+
+`measure-inference SPECIFICATION DESTINATION` snapshots pinned controls and
+measures a child `infer` command from before spawn through observed exit. It
+binds successful records to accepted model archives; `collect-timings` accepts
+E2E only with corresponding pinned invocation records. Cancellation/deadlines
+remain cooperative so the child supervisor can clean up separate worker groups.
+Two sequential Protenix Mini-default N1000 FP32/C4/S1/seed101 published-operator
+runs on HIP 6 / PCI 8e / SMI 4 collect together and pass existing raw-array/CIF
+gates against the native reference. E2E times 42.219/41.491 seconds establish
+workflow integration, not a new speedup. See `docs/invocation-timing.md` and
+`provenance/rust_invocation_timing_integration.json`. Paired performance verdicts
+and complete cross-model E2E acceptance remain unfinished.

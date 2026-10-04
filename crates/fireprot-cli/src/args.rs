@@ -4,6 +4,10 @@ use std::path::Path;
 pub enum Command<'a> {
     Help(Option<&'a str>),
     Version,
+    MeasureInference {
+        specification: &'a Path,
+        destination: &'a Path,
+    },
     InferBatch(&'a Path),
     InspectCif(&'a Path),
     CompareProtenixCif {
@@ -56,6 +60,11 @@ pub enum Command<'a> {
 }
 
 const COMMANDS: &[(&str, &str, &str)] = &[
+    (
+        "measure-inference",
+        "SPECIFICATION DESTINATION",
+        "Measure a complete pinned inference invocation and bind its accepted archive.",
+    ),
     (
         "infer-batch",
         "MANIFEST",
@@ -170,6 +179,10 @@ pub fn parse(args: &[String]) -> Result<Command<'_>, String> {
         ["--help" | "-h" | "help"] => Command::Help(None),
         ["--version" | "-V"] => Command::Version,
         ["help", name] | [name, "--help" | "-h"] if known(name) => Command::Help(Some(*name)),
+        ["measure-inference", specification, destination] => Command::MeasureInference {
+            specification: Path::new(*specification),
+            destination: Path::new(*destination),
+        },
         ["infer-batch", path] => Command::InferBatch(Path::new(*path)),
         ["inspect-cif", path] => Command::InspectCif(Path::new(*path)),
         ["compare-protenix-cif", r, rc, c, cc] => Command::CompareProtenixCif {

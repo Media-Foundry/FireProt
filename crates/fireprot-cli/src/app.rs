@@ -29,6 +29,24 @@ fn execute(command: Command<'_>) -> Result<()> {
     match command {
         Command::Help(name) => print!("{}", args::help(name)),
         Command::Version => println!("fireprot {}", env!("CARGO_PKG_VERSION")),
+        Command::MeasureInference {
+            specification,
+            destination,
+        } => {
+            let cancelled = cancellation()?;
+            let pin = fireprot_runtime::measured_run::run(
+                read_json(specification)?,
+                destination,
+                &std::env::current_exe()?,
+                &cancelled,
+                |pin| {
+                    collection::collect(collection::Collection::single(pin.clone()))
+                        .map(|_| ())
+                        .map_err(|e| std::io::Error::other(e.to_string()))
+                },
+            )?;
+            print_json(&pin)?;
+        }
         Command::InspectCif(path) => {
             let structure = fireprot_validation::structure::read(path)?;
             print_json(&json!({"atom_count":structure.atoms.len(),"model_count":1,"finite":true}))?;

@@ -6,7 +6,7 @@ use crate::{
     build_tree::BuildTree,
 };
 use fireprot_core::request::ArtifactRef;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::{
     collections::{BTreeMap, BTreeSet},
@@ -98,7 +98,7 @@ pub fn resolve_program(
         })
 }
 
-#[derive(Debug, Clone, Serialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct ExecutionRecord {
     pub schema_version: u32,
     pub environment_policy: String,

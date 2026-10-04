@@ -1,6 +1,6 @@
 //! Compose archived runtime evidence with model-content and timing validation.
 use fireprot_core::{Request, ValidatedRequest, request::ArtifactRef};
-use fireprot_runtime::{device::normalize_pci, run_archive};
+use fireprot_runtime::{device::normalize_pci, measured_run, run_archive};
 use fireprot_validation::{
     bundle,
     timing::{TimingObservation, TimingScope, TimingSeries, TimingSummary},
@@ -22,6 +22,21 @@ pub struct Collection {
     /// Caller declaration: cache preparation cannot be inferred after execution.
     cache_state: String,
     runs: Vec<ArtifactRef>,
+    /// Required, in run order, only for complete-invocation E2E collection.
+    #[serde(default)]
+    invocations: Vec<ArtifactRef>,
+}
+
+impl Collection {
+    pub fn single(pin: ArtifactRef) -> Self {
+        Self {
+            schema_version: 1,
+            scope: TimingScope::Supervisor,
+            cache_state: "content validation only; not a performance comparison".into(),
+            runs: vec![pin],
+            invocations: Vec::new(),
+        }
+    }
 }
 
 #[derive(Serialize)]
@@ -29,21 +44,27 @@ pub struct Collected {
     series: TimingSeries,
     summary: TimingSummary,
     receipts: Vec<ArtifactRef>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    invocations: Vec<ArtifactRef>,
 }
 
 pub fn collect(plan: Collection) -> Result<Collected> {
     if plan.schema_version != 1
         || plan.runs.is_empty()
         || plan.cache_state.trim().is_empty()
-        || plan.scope == TimingScope::EndToEnd
+        || if plan.scope == TimingScope::EndToEnd {
+            plan.invocations.len() != plan.runs.len()
+        } else {
+            !plan.invocations.is_empty()
+        }
     {
         return Err(
-            "invalid collection; complete invocation E2E is not recorded by the supervisor".into(),
+            "invalid collection; E2E requires one pinned invocation record per accepted run".into(),
         );
     }
     let mut observations = Vec::new();
     let mut roots = BTreeSet::new();
-    for pin in &plan.runs {
+    for (index, pin) in plan.runs.iter().enumerate() {
         let archive = run_archive::verify(pin)?;
         if !roots.insert(archive.root.clone()) {
             return Err("duplicate run directory".into());
@@ -99,11 +120,27 @@ pub fn collect(plan: Collection) -> Result<Collected> {
         let mut relocated = request.clone();
         relocated.output_dir = archive.root.clone();
         let content = bundle::validate(&relocated.try_into()?, &archive.outputs)?;
+        let invocation = plan
+            .invocations
+            .get(index)
+            .map(|invocation| measured_run::verify(invocation, pin, &archive))
+            .transpose()?;
         let seconds = match plan.scope {
             TimingScope::Model => content.model_seconds,
             TimingScope::WorkerRequest => content.request_seconds,
             TimingScope::Supervisor => elapsed,
-            TimingScope::EndToEnd => unreachable!(),
+            TimingScope::EndToEnd => {
+                let seconds = invocation
+                    .as_ref()
+                    .ok_or("missing invocation record")?
+                    .elapsed_seconds;
+                if seconds < elapsed {
+                    return Err(
+                        "complete invocation is shorter than its supervisor interval".into(),
+                    );
+                }
+                seconds
+            }
         };
         let environment = launch["environment"]
             .as_object_mut()
@@ -139,20 +176,27 @@ pub fn collect(plan: Collection) -> Result<Collected> {
             .iter()
             .find(|p| p.path == std::path::Path::new("provenance.json"))
             .ok_or("missing provenance pin")?;
+        let mut environment = BTreeMap::from([
+            ("launch".into(), serde_json::to_string(&launch)?),
+            (
+                "worker".into(),
+                serde_json::to_string(&content.environment)?,
+            ),
+            ("physical_device".into(), serde_json::to_string(physical)?),
+            ("provenance_sha256".into(), provenance.sha256.clone()),
+        ]);
+        if let Some(invocation) = invocation {
+            environment.insert(
+                "invocation".into(),
+                serde_json::to_string(&invocation.conditions())?,
+            );
+        }
         observations.push(TimingObservation {
             request,
             scope: plan.scope,
             cache_state: plan.cache_state.clone(),
             seconds,
-            environment: BTreeMap::from([
-                ("launch".into(), serde_json::to_string(&launch)?),
-                (
-                    "worker".into(),
-                    serde_json::to_string(&content.environment)?,
-                ),
-                ("physical_device".into(), serde_json::to_string(physical)?),
-                ("provenance_sha256".into(), provenance.sha256.clone()),
-            ]),
+            environment,
         });
     }
     let series = TimingSeries {
@@ -164,5 +208,6 @@ pub fn collect(plan: Collection) -> Result<Collected> {
         series,
         summary,
         receipts: plan.runs,
+        invocations: plan.invocations,
     })
 }

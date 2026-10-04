@@ -24,7 +24,7 @@ The scope is one of:
 | --- | --- |
 | `model` | Worker-reported model interval |
 | `worker_request` | Worker request interval, including its initialization |
-| `supervisor` | Rust process-spawn-to-final-report interval; excludes preflight |
+| `supervisor` | Internal supervisor interval; excludes preflight, archive sealing and final report writing |
 | `end_to_end` | An explicitly externally measured complete invocation |
 
 Callers must record the actual interval they measured. The command does not
@@ -50,6 +50,8 @@ gates. This command produces descriptive statistics, not a speedup verdict or
 proof of structural accuracy. It does not authenticate caller-supplied timings,
 reopen weights, or revalidate prediction artifacts. For collection with artifact
 and output-content verification, use [accepted run archives](run-archives.md).
+Complete inference invocations can be measured and bound to those archives with
+[`measure-inference`](invocation-timing.md).
 Paired performance verdicts remain migration work.
 
 Historical Python benchmark reports are preserved for reproduction. Their

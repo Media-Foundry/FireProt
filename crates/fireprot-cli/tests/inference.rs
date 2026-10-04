@@ -285,3 +285,221 @@ fn maintained_shell_entrypoint_executes_the_validated_model_pipeline() {
     );
     assert!(root.join("run/accepted.json").is_file());
 }
+
+fn measure_fixture(
+    root: &Path,
+    request: &Value,
+    profile: &Value,
+    name: &str,
+    timeout: u64,
+) -> std::process::Output {
+    let r = root.join("measurement-request.json");
+    let p = root.join("measurement-profile.json");
+    write(&r, request);
+    write(&p, profile);
+    write(
+        &root.join("measurement-spec.json"),
+        &json!({
+            "schema_version":1,"timeout_seconds":timeout,
+            "request":{"path":r,"sha256":sha256(&r).unwrap()},
+            "profile":{"path":p,"sha256":sha256(&p).unwrap()},
+        }),
+    );
+    Command::new(env!("CARGO_BIN_EXE_fireprot"))
+        .current_dir(root)
+        .args(["measure-inference", "measurement-spec.json", name])
+        .output()
+        .unwrap()
+}
+
+fn collect_invocations(root: &Path, runs: &Value, invocations: &Value) -> std::process::Output {
+    write(
+        &root.join("e2e-collection.json"),
+        &json!({
+            "schema_version":1,"scope":"end_to_end","cache_state":"synthetic CLI fixture",
+            "runs":runs,"invocations":invocations,
+        }),
+    );
+    Command::new(env!("CARGO_BIN_EXE_fireprot"))
+        .current_dir(root)
+        .args(["collect-timings", "e2e-collection.json"])
+        .output()
+        .unwrap()
+}
+
+#[test]
+fn complete_invocations_collect_repeated_and_relocated_archives() {
+    let dir = tempfile::tempdir().unwrap();
+    let root = dir.path();
+    let (mut request, profile) = fixture(root);
+    let mut invocations = Vec::new();
+    let mut runs = Vec::new();
+    for index in 0..2 {
+        request["run_id"] = json!(format!("measured-{index}"));
+        request["output_dir"] = json!(root.join(format!("run-{index}")));
+        let output = measure_fixture(
+            root,
+            &request,
+            &profile,
+            &format!("measurement-{index}"),
+            30,
+        );
+        assert!(
+            output.status.success(),
+            "{}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        let pin: Value = serde_json::from_slice(&output.stdout).unwrap();
+        let record: Value =
+            serde_json::from_slice(&fs::read(pin["path"].as_str().unwrap()).unwrap()).unwrap();
+        let supervisor: Value = serde_json::from_slice(
+            &fs::read(root.join(format!("run-{index}/supervisor.json"))).unwrap(),
+        )
+        .unwrap();
+        assert!(
+            record["elapsed_seconds"].as_f64().unwrap()
+                >= supervisor["elapsed_seconds"].as_f64().unwrap()
+        );
+        assert_eq!(record["launch"]["arguments"][0], "infer");
+        assert_eq!(record["exit_code"], 0);
+        invocations.push(pin);
+        runs.push(record["accepted"].clone());
+    }
+    let output = collect_invocations(root, &json!(runs), &json!(invocations));
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let result: Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(result["summary"]["count"], 2);
+    assert_eq!(result["invocations"], json!(invocations));
+    let swapped = json!([invocations[1], invocations[0]]);
+    assert!(
+        !collect_invocations(root, &json!(runs), &swapped)
+            .status
+            .success()
+    );
+    // Replaying requires the two archives, not original configs/model assets.
+    fs::remove_file(root.join("measurement-request.json")).unwrap();
+    fs::remove_file(root.join("measurement-profile.json")).unwrap();
+    fs::remove_dir_all(root.join("source")).unwrap();
+    for index in 0..2 {
+        for (old, new, name, pins) in [
+            (
+                format!("run-{index}"),
+                format!("relocated-run-{index}"),
+                "accepted.json",
+                &mut runs,
+            ),
+            (
+                format!("measurement-{index}"),
+                format!("relocated-measurement-{index}"),
+                "invocation.json",
+                &mut invocations,
+            ),
+        ] {
+            fs::rename(root.join(old), root.join(&new)).unwrap();
+            pins[index]["path"] = json!(root.join(new).join(name));
+        }
+    }
+    let output = collect_invocations(root, &json!(runs), &json!(invocations));
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    // Control snapshots remain bound after relocation.
+    fs::write(root.join("relocated-measurement-0/profile.json"), b"{}").unwrap();
+    assert!(
+        !collect_invocations(root, &json!(runs), &json!(invocations))
+            .status
+            .success()
+    );
+}
+
+#[test]
+fn invocation_record_semantics_are_checked_after_receipt_repinning() {
+    let dir = tempfile::tempdir().unwrap();
+    let root = dir.path();
+    let (request, profile) = fixture(root);
+    let output = measure_fixture(root, &request, &profile, "measurement", 30);
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let mut pin: Value = serde_json::from_slice(&output.stdout).unwrap();
+    let path = root.join("measurement/invocation.json");
+    let original: Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+    let runs = json!([original["accepted"]]);
+    for (field, value) in [
+        ("exit_code", json!(1)),
+        ("elapsed_seconds", json!(0.0)),
+        ("elapsed_seconds", json!(0.0000001)),
+        ("elapsed_seconds", json!(31.0)),
+        ("boundary", json!("model-time-only")),
+        ("schema_version", json!(99)),
+    ] {
+        let mut changed = original.clone();
+        changed[field] = value;
+        write(&path, &changed);
+        pin["sha256"] = sha256(&path).unwrap().into();
+        assert!(
+            !collect_invocations(root, &runs, &json!([pin]))
+                .status
+                .success(),
+            "{field}"
+        );
+    }
+    let mut changed = original.clone();
+    changed["launch"]["program"]["sha256"] = "0".repeat(64).into();
+    write(&path, &changed);
+    pin["sha256"] = sha256(&path).unwrap().into();
+    assert!(
+        !collect_invocations(root, &runs, &json!([pin]))
+            .status
+            .success()
+    );
+}
+
+#[test]
+fn failed_or_timed_out_invocations_never_publish_timing_records() {
+    for timeout in [false, true] {
+        let dir = tempfile::tempdir().unwrap();
+        let root = dir.path();
+        let (request, mut profile) = fixture(root);
+        if timeout {
+            let worker = root.join("python/fireprot_workers/__main__.py");
+            let source = fs::read_to_string(&worker).unwrap();
+            fs::write(
+                &worker,
+                source.replace(
+                    "fixture = Path",
+                    "import time; time.sleep(30)\nfixture = Path",
+                ),
+            )
+            .unwrap();
+        } else {
+            profile["environment"]["FIREPROT_TEST_INVALID"] = "1".into();
+        }
+        let output = measure_fixture(
+            root,
+            &request,
+            &profile,
+            "measurement",
+            if timeout { 1 } else { 30 },
+        );
+        assert!(!output.status.success());
+        assert!(output.stdout.is_empty());
+        assert!(!root.join("measurement/invocation.json").exists());
+        assert!(!root.join("run/accepted.json").exists());
+        let failed: Value =
+            serde_json::from_slice(&fs::read(root.join("measurement/failure.json")).unwrap())
+                .unwrap();
+        if timeout {
+            assert_eq!(failed["stop_reason"], "Deadline");
+        }
+        assert!(failed["elapsed_seconds"].as_f64().unwrap() > 0.0);
+    }
+}

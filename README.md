@@ -106,6 +106,7 @@ structural accuracy.
 - [Worker launch and physical device provenance](docs/execution-provenance.md)
 - [Explicit environment content inventories](docs/environment-inventories.md)
 - [Accepted run archives and timing collection](docs/run-archives.md)
+- [Complete inference invocation timing](docs/invocation-timing.md)
 - [Framework CPU continuous integration](docs/continuous-integration.md)
 - [Operator policy and bridge deployment](docs/rust-operators.md)
 - [Published kernel artifacts](docs/kernel-artifacts.md)

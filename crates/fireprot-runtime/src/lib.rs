@@ -17,6 +17,8 @@ pub mod device;
 #[cfg(unix)]
 pub mod invocation;
 #[cfg(unix)]
+pub mod measured_run;
+#[cfg(unix)]
 pub mod preflight;
 
 pub mod build;

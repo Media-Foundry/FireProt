@@ -1,0 +1,63 @@
+name: Framework
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: framework-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cpu:
+    name: Linux CPU / Rust ${{ matrix.rust }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        rust: ['1.85.0', stable]
+    env:
+      CARGO_TERM_COLOR: always
+      PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'
+      PYTHONPATH: python
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Install host tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes build-essential python3-venv
+          rustup toolchain install '${{ matrix.rust }}' --profile minimal --component rustfmt --component clippy
+          rustup override set '${{ matrix.rust }}'
+          rustc --version --verbose
+          cargo --version
+          python3 --version
+      - name: Rust tests
+        run: cargo test --workspace --locked
+      - name: Format and lint
+        if: matrix.rust == 'stable'
+        run: |
+          cargo fmt --all --check
+          cargo clippy --workspace --all-targets --locked -- -D warnings
+      - name: Build maintained entry points and bridge
+        run: cargo build --locked -p fireprot-cli -p fireprot-runtime -p fireprot-bridge
+      - name: Inspect all example requests without runtime assets
+        run: |
+          for request in configs/requests/*.json; do
+            target/debug/fireprot inspect "$request"
+          done
+      - name: Test policy bridge without Torch
+        env:
+          FIREPROT_BRIDGE_LIBRARY: ${{ github.workspace }}/target/debug/lib_fireprot_bridge.so
+        run: |
+          python3 -m venv /tmp/fireprot-ci-python
+          /tmp/fireprot-ci-python/bin/python -m pip install pytest==9.0.2
+          /tmp/fireprot-ci-python/bin/python -m pytest -q \
+            tests/operators/test_registry.py tests/operators/test_rust_registry.py \
+            -k 'not test_tensor_signature_records_actual_strides'

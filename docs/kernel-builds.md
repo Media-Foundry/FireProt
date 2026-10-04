@@ -77,3 +77,27 @@ the compiler is reading. Immutable input snapshots and complete recipe inputs
 remain integration requirements. Loading is outside this service; only declared,
 verified artifacts may be loaded, and intermediates must not be reused for a
 future compilation. No HIP/CK loader uses this service yet.
+
+
+## Python bridge
+
+The explicitly built `_fireprot_bridge` library now exposes
+`cached_build(specification_json, cache_root, callback)`. Rust parses the schema,
+hashes files, resolves the cache name, owns the lock and decides reuse/publication.
+The Python callback receives `(staging_directory, module_name)` and returns a
+list of flat artifact filenames after its compiler processes finish. The result
+is JSON containing `directory`, `cache_hit` and the complete `receipt`.
+
+The bridge releases the GIL during file hashing, cache verification and lock
+waiting. It reacquires the GIL only to execute the callback; Python subprocess
+and compiler calls can release it normally. All callback exceptions, including
+`KeyboardInterrupt` and `SystemExit`, propagate as the original Python exception
+objects after Rust drops its staging directory and lock. Callbacks must not
+reenter this API or wait for another caller of the same cache identity. Same-thread
+reentry is rejected before acquiring another lock. Lock acquisition currently
+waits for the active builder; timed/cancellable acquisition is not implemented.
+
+This additive API retains bridge ABI version 1. Rebuild the bridge before using
+it. Operator dispatch remains unchanged. No production HIP/CK recipe is migrated
+by merely exposing this interface: dependency enumeration, immutable inputs,
+Torch compilation/loading integration and fresh GPU parity are still required.

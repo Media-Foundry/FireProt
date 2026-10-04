@@ -374,3 +374,33 @@ and 254.724 to 250.274 ms (N1536). It is not integrated; full-model validation
 and repeated request measurements remain outstanding.
 
 Evidence: [`atlasfold_packaged_scheduling.json`](../provenance/atlasfold_packaged_scheduling.json).
+
+## Small-gain layout and BLAS screening
+
+The transposed BF16-to-FP32 layout candidate passes N1536 seed102 full-output
+byte comparisons: 205.061 s request / 200.114 s prediction, versus packaged
+206.919 / 201.304 s on the same SMI2 GCD. All 264 ending-attention calls use
+the candidate. The apparent request gain is only 0.906%; the experimental
+wrapper also imports/loads its extension before the timer. It is not promoted.
+A matched-wrapper, alternating-order three-pair run holds initialization
+placement equal and checks all output bytes after every pair.
+
+The Atlas environment's observed initial BLAS preference is hipBLASLt
+(`_BlasBackend.Cublaslt` on ROCm). The retained raw screen uses this as the
+reference. At both buckets, hipBLAS is about 2–4% faster for the tested
+trained triangle operators but fails exact output equality. CK preference
+raises unsupported-GEMM errors in attention tests and fails multiplication
+equality. Keep the native preference. These preference tests do not prove
+that every operation used a particular library, nor exhaust specialized CK
+implementations. An earlier exploratory screen used explicit hipBLAS as
+reference; its report filename was reused by the corrected screen. The
+artifact history is documented in the evidence record.
+
+A separate three-pair N1536 native-math/packaged comparison is also running.
+It copies framework and benchmark source into a frozen snapshot, verifies
+all code hashes against commit `0f15349`, starts a fresh model per request,
+primes compilation outside timing, and checks every saved output field.
+Pending results must not be reported as repeated medians.
+
+Evidence and controller sources:
+[`atlasfold_layout_blas_trials.json`](../provenance/atlasfold_layout_blas_trials.json).

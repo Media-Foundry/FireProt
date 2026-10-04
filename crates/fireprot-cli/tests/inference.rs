@@ -653,12 +653,19 @@ fn benchmark_command(root: &Path, spec: &Value) -> Command {
 fn benchmark_records_actual_order_and_all_reference_pair_and_aggregate_checks() {
     let d = tempfile::tempdir().unwrap();
     let root = d.path();
-    let spec = benchmark_spec(root, "success");
+    let mut spec = benchmark_spec(root, "success");
+    // Four separately pinned invocations plus five archive comparisons can exceed
+    // 60 seconds on shared CI runners. This test checks ordering and correctness;
+    // the separate deadline/cancellation fixture keeps its explicit short limit.
+    spec["execution"]["timeout_seconds"] = json!(180);
     let output = benchmark_command(root, &spec).output().unwrap();
     assert!(
         output.status.success(),
-        "{}",
-        String::from_utf8_lossy(&output.stderr)
+        "stderr: {}\nstdout: {}\nreport: {}\norder: {}",
+        String::from_utf8_lossy(&output.stderr),
+        String::from_utf8_lossy(&output.stdout),
+        fs::read_to_string(root.join("benchmark/benchmark.json")).unwrap_or_default(),
+        fs::read_to_string(root.join("benchmark/order.jsonl")).unwrap_or_default()
     );
     let outcome: Value = serde_json::from_slice(&output.stdout).unwrap();
     assert_eq!(outcome["phase"], "succeeded");

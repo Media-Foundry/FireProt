@@ -101,3 +101,29 @@ def test_directory_changes_during_callback_cannot_publish(tmp_path):
     changed = json.loads(bridge.cached_build(json.dumps(request), tmp_path / 'cache', compile_fake))
     assert not changed['cache_hit']
     assert changed['directory'] != result['directory']
+
+
+def test_cache_wait_preserves_keyboard_interrupt(tmp_path):
+    # The child owns its flock, then requests the same identity on its main thread.
+    # A timer supplies SIGINT, so a blocking Rust lock would hit subprocess timeout.
+    program = '''
+import fcntl,json,os,pathlib,signal,sys,threading
+from fireprot.ops._bridge import bridge
+request,root=sys.argv[1:]
+def build(directory,name):
+    pathlib.Path(directory,name+'.so').write_bytes(b'fixture')
+    return [name+'.so']
+first=json.loads(bridge.cached_build(request,pathlib.Path(root),build))
+lock=open(pathlib.Path(first['directory']).with_suffix('.lock'),'a')
+fcntl.flock(lock,fcntl.LOCK_EX)
+threading.Timer(.2,lambda:os.kill(os.getpid(),signal.SIGINT)).start()
+try:
+    bridge.cached_build(request,pathlib.Path(root),build)
+except KeyboardInterrupt:
+    print('interrupted lock wait')
+else:
+    raise AssertionError('lock wait ignored interruption')
+'''
+    result = subprocess.run([sys.executable, '-c', program, spec(tmp_path), str(tmp_path / 'cache')],
+                            text=True, capture_output=True, timeout=10, check=True)
+    assert 'interrupted lock wait' in result.stdout

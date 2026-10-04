@@ -23,6 +23,10 @@ fn fixture(root: &Path, body: &str) -> TorchBuildSpec {
                     path: root.join("helper.py"),
                 },
                 BuildFile {
+                    name: "guard".into(),
+                    path: env!("CARGO_BIN_EXE_fireprot-compiler-guard").into(),
+                },
+                BuildFile {
                     name: "source".into(),
                     path: root.join("source.cu"),
                 },
@@ -41,6 +45,8 @@ fn fixture(root: &Path, body: &str) -> TorchBuildSpec {
         },
         python: "python".into(),
         helper: "helper".into(),
+        guard: "guard".into(),
+        lock_timeout_ms: 3000,
         sources: vec!["source".into()],
         timeout_ms: 3000,
     }
@@ -160,4 +166,96 @@ fn interpreter_symlink_spelling_is_preserved_and_part_of_identity() {
     spec.build.files[0].path = alias;
     assert_ne!(spec.identify().unwrap().sha256, original);
     spec.run(&dir.path().join("cache")).unwrap();
+}
+
+#[test]
+fn build_host_child() {
+    let Some(root) = std::env::var_os("FIREPROT_TEST_BUILD_HOST") else {
+        return;
+    };
+    let root = std::path::PathBuf::from(root);
+    let spec: TorchBuildSpec =
+        serde_json::from_slice(&fs::read(root.join("spec.json")).unwrap()).unwrap();
+    spec.run(&root.join("cache")).unwrap();
+}
+
+#[test]
+fn killing_host_stops_compiler_group_and_never_publishes() {
+    use std::{
+        process::{Command, Stdio},
+        time::{Duration, Instant},
+    };
+    let dir = tempfile::tempdir().unwrap();
+    let ready = dir.path().join("ready.json");
+    let marker = dir.path().join("escaped-write");
+    let body = format!(
+        "import subprocess\nc=subprocess.Popen([sys.executable,'-c',{}])\npathlib.Path({}).write_text(json.dumps([os.getpid(),os.getpgrp(),c.pid]))\ntime.sleep(30)",
+        serde_json::to_string(&format!(
+            "import time,pathlib; time.sleep(2); pathlib.Path({}).write_text('escaped')",
+            serde_json::to_string(&marker).unwrap()
+        ))
+        .unwrap(),
+        serde_json::to_string(&ready).unwrap()
+    );
+    let mut spec = fixture(dir.path(), &body);
+    spec.timeout_ms = 30000;
+    let name = spec.identify().unwrap().cache_name().unwrap();
+    fs::write(
+        dir.path().join("spec.json"),
+        serde_json::to_vec(&spec).unwrap(),
+    )
+    .unwrap();
+    let mut host = Command::new(std::env::current_exe().unwrap())
+        .args(["--exact", "build_host_child"])
+        .env("FIREPROT_TEST_BUILD_HOST", dir.path())
+        .stdout(Stdio::null())
+        .spawn()
+        .unwrap();
+    let deadline = Instant::now() + Duration::from_secs(10);
+    while !ready.exists() {
+        if host.try_wait().unwrap().is_some() || Instant::now() > deadline {
+            let _ = host.kill();
+            let _ = host.wait();
+            panic!("compiler did not start");
+        }
+        std::thread::sleep(Duration::from_millis(10));
+    }
+    let pids: Vec<i32> = serde_json::from_slice(&fs::read(&ready).unwrap()).unwrap();
+    host.kill().unwrap();
+    host.wait().unwrap();
+    std::thread::sleep(Duration::from_millis(2300));
+    let escaped = marker.exists();
+    // Clean the deliberately reproduced old implementation leak before asserting.
+    let _ = nix::sys::signal::killpg(
+        nix::unistd::Pid::from_raw(pids[1]),
+        nix::sys::signal::Signal::SIGKILL,
+    );
+    assert!(!escaped, "compiler descendant survived its host");
+    assert!(!dir.path().join("cache").join(name).exists());
+}
+
+#[test]
+fn cancellation_during_compilation_stops_process_and_returns_original_reason() {
+    use std::{
+        io,
+        time::{Duration, Instant},
+    };
+    let dir = tempfile::tempdir().unwrap();
+    let spec = fixture(dir.path(), "time.sleep(30)");
+    let started = Instant::now();
+    let e = spec
+        .run_checked(&dir.path().join("cache"), &mut || {
+            if started.elapsed() > Duration::from_millis(250) {
+                Err(io::Error::new(
+                    io::ErrorKind::Interrupted,
+                    "requested cancellation",
+                ))
+            } else {
+                Ok(())
+            }
+        })
+        .unwrap_err();
+    assert_eq!(e.kind(), io::ErrorKind::Interrupted);
+    assert!(e.to_string().contains("requested cancellation"));
+    assert!(started.elapsed() < Duration::from_secs(2));
 }

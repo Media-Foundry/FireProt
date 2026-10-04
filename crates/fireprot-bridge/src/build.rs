@@ -1,10 +1,10 @@
 //! Slow build operations release the GIL, including waiting for another builder.
-use fireprot_runtime::{build::BuildSpec, build_cache::get_or_build};
+use fireprot_runtime::{build::BuildSpec, build_cache::get_or_build_checked};
 use pyo3::{
     exceptions::{PyOSError, PyRuntimeError, PyTypeError, PyValueError},
     prelude::*,
 };
-use std::{cell::Cell, io, path::PathBuf};
+use std::{cell::Cell, io, path::PathBuf, time::Duration};
 
 thread_local! { static BUILDING: Cell<bool> = const { Cell::new(false) }; }
 
@@ -43,18 +43,30 @@ pub fn cached_build(
             .cache_name()
             .map_err(|error| PyOSError::new_err(error.to_string()))?;
         let mut callback_error = None;
-        let result = get_or_build(&root, &identity, |directory| {
-            let result = Python::attach(|py| {
-                callback
-                    .call1(py, (directory.to_path_buf(), name.clone()))?
-                    .extract::<Vec<String>>(py)
-            });
-            result.map_err(|error| {
-                callback_error = Some(error);
-                io::Error::other("Python build callback failed")
-            })
-        });
-        if let Some(error) = callback_error {
+        let mut signal_error = None;
+        let result = get_or_build_checked(
+            &root,
+            &identity,
+            Duration::from_secs(600),
+            &mut || {
+                Python::attach(|py| py.check_signals()).map_err(|error| {
+                    signal_error = Some(error);
+                    io::Error::new(io::ErrorKind::Interrupted, "Python build interrupted")
+                })
+            },
+            |directory, _| {
+                let result = Python::attach(|py| {
+                    callback
+                        .call1(py, (directory.to_path_buf(), name.clone()))?
+                        .extract::<Vec<String>>(py)
+                });
+                result.map_err(|error| {
+                    callback_error = Some(error);
+                    io::Error::other("Python build callback failed")
+                })
+            },
+        );
+        if let Some(error) = callback_error.or(signal_error) {
             return Err(error);
         }
         let result = result.map_err(|error| PyOSError::new_err(error.to_string()))?;
@@ -91,10 +103,24 @@ pub fn build_torch(py: Python<'_>, specification: &str, root: PathBuf) -> PyResu
     let specification: fireprot_runtime::torch_build::TorchBuildSpec =
         serde_json::from_str(specification)
             .map_err(|error| PyValueError::new_err(error.to_string()))?;
+    if BUILDING.with(|value| value.replace(true)) {
+        return Err(PyRuntimeError::new_err(
+            "build callbacks must not reenter build_torch",
+        ));
+    }
+    let _guard = BuildGuard;
     py.detach(move || {
-        let result = specification
-            .run(&root)
-            .map_err(|error| PyOSError::new_err(error.to_string()))?;
+        let mut signal_error = None;
+        let result = specification.run_checked(&root, &mut || {
+            Python::attach(|py| py.check_signals()).map_err(|error| {
+                signal_error = Some(error);
+                io::Error::new(io::ErrorKind::Interrupted, "Python build interrupted")
+            })
+        });
+        if let Some(error) = signal_error {
+            return Err(error);
+        }
+        let result = result.map_err(|error| PyOSError::new_err(error.to_string()))?;
         serde_json::to_string(&serde_json::json!({
             "directory": result.directory,
             "cache_hit": result.cache_hit,

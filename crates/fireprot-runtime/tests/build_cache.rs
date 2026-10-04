@@ -190,3 +190,75 @@ fn killed_process_releases_lock_without_publishing_partial_build() {
     // A stale temporary directory may remain. It must never count as a hit.
     assert!(!get_or_build(&cache, &id, compile).unwrap().cache_hit);
 }
+
+#[test]
+fn waiting_for_lock_can_timeout_or_cancel_without_touching_owner() {
+    use fireprot_runtime::build_cache::get_or_build_checked;
+    use nix::fcntl::{Flock, FlockArg};
+    use std::time::{Duration, Instant};
+    let dir = tempfile::tempdir().unwrap();
+    let id = identity(dir.path());
+    let cache = dir.path().join("cache");
+    fs::create_dir(&cache).unwrap();
+    let file = fs::File::create(cache.join(format!("{}.lock", id.cache_name().unwrap()))).unwrap();
+    let owner = Flock::lock(file, FlockArg::LockExclusive).unwrap();
+    let e = get_or_build_checked(
+        &cache,
+        &id,
+        Duration::from_millis(80),
+        &mut || Ok(()),
+        |_, _| panic!("locked build must not run"),
+    )
+    .unwrap_err();
+    assert_eq!(e.kind(), io::ErrorKind::TimedOut);
+    let start = Instant::now();
+    let e = get_or_build_checked(
+        &cache,
+        &id,
+        Duration::from_secs(5),
+        &mut || {
+            if start.elapsed() > Duration::from_millis(60) {
+                Err(io::Error::new(io::ErrorKind::Interrupted, "cancelled"))
+            } else {
+                Ok(())
+            }
+        },
+        |_, _| panic!("cancelled build must not run"),
+    )
+    .unwrap_err();
+    assert_eq!(e.kind(), io::ErrorKind::Interrupted);
+    assert!(start.elapsed() < Duration::from_secs(1));
+    drop(owner);
+    assert!(!get_or_build(&cache, &id, compile).unwrap().cache_hit);
+}
+
+#[test]
+fn cancellation_after_compilation_cannot_publish() {
+    use fireprot_runtime::build_cache::get_or_build_checked;
+    use std::{cell::Cell, time::Duration};
+    let dir = tempfile::tempdir().unwrap();
+    let id = identity(dir.path());
+    let cancel = Cell::new(false);
+    let cache = dir.path().join("cache");
+    let e = get_or_build_checked(
+        &cache,
+        &id,
+        Duration::from_secs(1),
+        &mut || {
+            if cancel.get() {
+                Err(io::Error::new(io::ErrorKind::Interrupted, "cancelled"))
+            } else {
+                Ok(())
+            }
+        },
+        |path, _| {
+            let result = compile(path);
+            cancel.set(true);
+            result
+        },
+    )
+    .unwrap_err();
+    assert_eq!(e.kind(), io::ErrorKind::Interrupted);
+    assert!(!cache.join(id.cache_name().unwrap()).exists());
+    assert!(!get_or_build(&cache, &id, compile).unwrap().cache_hit);
+}

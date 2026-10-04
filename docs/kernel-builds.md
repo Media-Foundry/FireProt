@@ -96,8 +96,8 @@ and compiler calls can release it normally. All callback exceptions, including
 `KeyboardInterrupt` and `SystemExit`, propagate as the original Python exception
 objects after Rust drops its staging directory and lock. Callbacks must not
 reenter this API or wait for another caller of the same cache identity. Same-thread
-reentry is rejected before acquiring another lock. Lock acquisition currently
-waits for the active builder; timed/cancellable acquisition is not implemented.
+reentry is rejected before acquiring another lock. Lock acquisition now uses cancellable nonblocking polling with a ten-minute
+timeout in this compatibility API. Python signal exceptions propagate after cleanup.
 
 This additive API retains bridge ABI version 1. Rebuild the bridge before using
 it. Operator dispatch remains unchanged. No production HIP/CK recipe is migrated

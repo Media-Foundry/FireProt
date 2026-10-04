@@ -23,7 +23,9 @@ def load(package, sources):
     rocm = Path(cpp_extension.ROCM_HOME)
     torch_root = Path(torch.__file__).resolve().parent
     helper = Path(__file__).with_name('_compile_native.py')
-    paths = [*sources, __file__, helper, cpp_extension.__file__, sys.executable,
+    guard = Path(os.environ.get('FIREPROT_BUILD_GUARD',
+        str(Path(__file__).resolve().parents[3]/'target/release/fireprot-compiler-guard')))
+    paths = [guard, *sources, __file__, helper, cpp_extension.__file__, sys.executable,
              shutil.which(cpp_extension.get_cxx_compiler()), shutil.which('ninja'),
              rocm/'bin/hipcc', rocm/'llvm/bin/clang++', rocm/'llvm/bin/ld.lld',
              rocm/'lib/libamdhip64.so']
@@ -40,7 +42,7 @@ def load(package, sources):
     cxx = shutil.which(cpp_extension.get_cxx_compiler())
     if inspector is None:
         raise RuntimeError('ldd is required for the experimental toolchain receipt')
-    objects = [sys.executable, cxx, shutil.which('ninja'), rocm/'bin/hipcc',
+    objects = [guard, sys.executable, cxx, shutil.which('ninja'), rocm/'bin/hipcc',
                rocm/'llvm/bin/clang++', rocm/'llvm/bin/ld.lld',
                rocm/'lib/libamdhip64.so', '/bin/sh', '/bin/bash']
     for program in ('cc1plus', 'collect2', 'ld'):
@@ -61,14 +63,15 @@ def load(package, sources):
     spec = dict(schema_version=1, package=package, target='gfx90a',
         files=[dict(name=str(Path(path).absolute()), path=str(Path(path).absolute()))
                for path in paths], trees=trees, dynamic_inputs=dynamic_inputs, arguments=dict(cxx=['-O3'], hip=flags),
-        environment=environment, versions=dict(recipe='torch-hip-experimental-4',
+        environment=environment, versions=dict(recipe='torch-hip-experimental-5',
             torch=str(torch.__version__), hip=str(torch.version.hip),
             python=sys.version, soabi=str(sysconfig.get_config_var('SOABI'))))
     cache = Path(os.environ.get('FIREPROT_EXTENSION_CACHE',
         str(Path(__file__).resolve().parents[3]/'runtime/torch_extensions')))/'rust-v1'
 
     process_spec = dict(build=spec, python=str(Path(sys.executable).absolute()),
-                        helper=str(helper.absolute()),
+                        helper=str(helper.absolute()), guard=str(guard.absolute()),
+                        lock_timeout_ms=600_000,
                         sources=[str(Path(source).absolute()) for source in sources],
                         timeout_ms=600_000)
     result = json.loads(bridge.build_torch(json.dumps(process_spec), cache))

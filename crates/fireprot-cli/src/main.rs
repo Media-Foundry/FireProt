@@ -44,7 +44,12 @@ fn execute() -> Result<(), Box<dyn std::error::Error>> {
         },
         ["build-torch",specification,cache]=>{
             let spec:fireprot_runtime::torch_build::TorchBuildSpec=serde_json::from_slice(&fs::read(specification)?)?;
-            let result=spec.run(std::path::Path::new(cache))?;
+            let cancelled=Arc::new(AtomicBool::new(false));
+            signal_hook::flag::register(signal_hook::consts::SIGINT,Arc::clone(&cancelled))?;
+            signal_hook::flag::register(signal_hook::consts::SIGTERM,Arc::clone(&cancelled))?;
+            let result=spec.run_checked(std::path::Path::new(cache), &mut || {
+                if cancelled.load(std::sync::atomic::Ordering::Relaxed) {Err(std::io::Error::new(std::io::ErrorKind::Interrupted,"build cancelled"))} else {Ok(())}
+            })?;
             println!("{}",serde_json::to_string_pretty(&serde_json::json!({"directory":result.directory,"cache_hit":result.cache_hit,"receipt":result.receipt}))?);
         },
         ["publish-kernel",cache,destination]=>println!("{}",serde_json::to_string_pretty(&fireprot_runtime::kernel_bundle::publish(std::path::Path::new(cache),std::path::Path::new(destination))?)?),

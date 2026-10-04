@@ -122,7 +122,7 @@ is not an independent scientific validation.
 ## Protenix Mini-default
 
 ```bash
-cargo build --release -p fireprot-cli -p fireprot-bridge --locked
+cargo build --release -p fireprot-cli -p fireprot-bridge -p fireprot-runtime --locked
 target/release/fireprot infer configs/requests/protenix-n1000-native.json \
   configs/diamondhill/protenix-native.json
 target/release/fireprot infer configs/requests/protenix-n1000-fireprot.json \
@@ -208,7 +208,7 @@ See [complete requests, build identities, outputs and comparisons](../provenance
 Build both CLI and bridge before using the supplied requests:
 
 ```bash
-cargo build --release -p fireprot-cli -p fireprot-bridge --locked
+cargo build --release -p fireprot-cli -p fireprot-bridge -p fireprot-runtime --locked
 target/release/fireprot infer configs/requests/atlasfold-n1536-hip-fused.json \
   configs/diamondhill/atlasfold-native.json
 ```

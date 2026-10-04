@@ -3,7 +3,7 @@
 use crate::{
     artifacts::sha256,
     build::{BuildIdentity, BuildSpec},
-    build_cache::{CachedBuild, get_or_build},
+    build_cache::{CachedBuild, get_or_build_checked},
 };
 use nix::{
     sys::signal::{Signal, killpg},
@@ -14,7 +14,10 @@ use std::{
     collections::BTreeSet,
     fs::{self, File},
     io::{self, Read, Seek, SeekFrom},
-    os::unix::process::CommandExt,
+    os::{
+        fd::OwnedFd,
+        unix::{net::UnixStream, process::CommandExt},
+    },
     path::{Path, PathBuf},
     process::{Child, Command, Stdio},
     time::{Duration, Instant},
@@ -29,6 +32,8 @@ pub struct TorchBuildSpec {
     pub build: BuildSpec,
     pub python: String,
     pub helper: String,
+    pub guard: String,
+    pub lock_timeout_ms: u64,
     pub sources: Vec<String>,
     /// Applies to the compiler process, not dependency scans or cache-lock waits.
     pub timeout_ms: u64,
@@ -43,12 +48,13 @@ struct CompilerRecipe<'a> {
     extra_cuda_cflags: &'a [String],
 }
 
-struct CompilerGroup(Child);
+struct CompilerGroup(Child, UnixStream);
 impl Drop for CompilerGroup {
     fn drop(&mut self) {
         // Also stop descendants left behind by a failed or prematurely exited helper.
         let _ = killpg(Pid::from_raw(self.0.id() as i32), Signal::SIGKILL);
         let _ = self.0.wait();
+        let _ = self.1.shutdown(std::net::Shutdown::Both);
     }
 }
 
@@ -69,6 +75,7 @@ impl TorchBuildSpec {
     /// Existing callback-built artifacts are intentionally different cache entries.
     pub fn identify(&self) -> io::Result<BuildIdentity> {
         if self.timeout_ms == 0
+            || self.lock_timeout_ms == 0
             || self.sources.is_empty()
             || self.build.arguments.contains_key(RECIPE_KEY)
             || !self.build.arguments.contains_key("cxx")
@@ -100,9 +107,11 @@ impl TorchBuildSpec {
         spec.arguments.insert(
             RECIPE_KEY.into(),
             vec![
-                "1".into(),
+                "2".into(),
                 self.python.clone(),
                 self.helper.clone(),
+                self.guard.clone(),
+                self.lock_timeout_ms.to_string(),
                 serde_json::to_string(&self.sources)?,
                 self.timeout_ms.to_string(),
                 python
@@ -114,6 +123,7 @@ impl TorchBuildSpec {
         let identity = spec.identify()?;
         self.input(&identity, &self.python)?;
         self.input(&identity, &self.helper)?;
+        self.input(&identity, &self.guard)?;
         let mut names = BTreeSet::new();
         for source in &self.sources {
             let path = self.input(&identity, source)?;
@@ -157,94 +167,131 @@ impl TorchBuildSpec {
     }
 
     pub fn run(&self, root: &Path) -> io::Result<CachedBuild> {
+        self.run_checked(root, &mut || Ok(()))
+    }
+
+    pub fn run_checked(
+        &self,
+        root: &Path,
+        check: &mut dyn FnMut() -> io::Result<()>,
+    ) -> io::Result<CachedBuild> {
+        check()?;
         let identity = self.identify()?;
+        check()?;
         let name = identity.cache_name()?;
-        get_or_build(root, &identity, |directory| {
-            let mut sources = Vec::new();
-            for role in &self.sources {
-                let input = self.input(&identity, role)?;
-                let target = directory.join(input.file_name().expect("validated source name"));
-                fs::copy(input, &target)?;
-                let expected = identity
-                    .files
-                    .iter()
-                    .find(|f| &f.name == role)
-                    .expect("validated input");
-                if sha256(&target)? != expected.sha256 {
-                    return Err(io::Error::other(
-                        "source changed while copying into staging",
-                    ));
-                }
-                sources.push(target);
-            }
-            let recipe = CompilerRecipe {
-                name: &name,
-                sources,
-                build_directory: directory,
-                extra_cflags: &identity.arguments["cxx"],
-                extra_cuda_cflags: &identity.arguments["hip"],
-            };
-            let recipe_path = directory.join("recipe.json");
-            fs::write(&recipe_path, serde_json::to_vec(&recipe)?)?;
-            let log_path = directory.join("compiler.log");
-            let log = File::create(&log_path)?;
-            let python = self.python_path()?;
-            if python.canonicalize()? != self.input(&identity, &self.python)? {
-                return Err(io::Error::other("Python executable link changed"));
-            }
-            // Preserve the venv invocation path: resolving this symlink before
-            // exec would silently select the base interpreter's environment.
-            let mut command = Command::new(python);
-            command
-                .arg(self.input(&identity, &self.helper)?)
-                .arg(&recipe_path)
-                .current_dir(directory)
-                .env_clear()
-                .envs(
-                    identity
-                        .environment
+        get_or_build_checked(
+            root,
+            &identity,
+            Duration::from_millis(self.lock_timeout_ms),
+            check,
+            |directory, check| {
+                let mut sources = Vec::new();
+                for role in &self.sources {
+                    let input = self.input(&identity, role)?;
+                    let target = directory.join(input.file_name().expect("validated source name"));
+                    fs::copy(input, &target)?;
+                    let expected = identity
+                        .files
                         .iter()
-                        .filter_map(|(key, value)| value.as_ref().map(|v| (key, v))),
-                )
-                .stdin(Stdio::null())
-                .stdout(log.try_clone()?)
-                .stderr(log)
-                .process_group(0);
-            let mut group = CompilerGroup(command.spawn()?);
-            let started = Instant::now();
-            let result = loop {
-                match group.0.try_wait() {
-                    Ok(Some(status)) => {
-                        break if status.success() {
-                            Ok(())
-                        } else {
-                            Err(io::Error::other(format!(
-                                "Torch compiler exited with {status}"
-                            )))
-                        };
+                        .find(|f| &f.name == role)
+                        .expect("validated input");
+                    if sha256(&target)? != expected.sha256 {
+                        return Err(io::Error::other(
+                            "source changed while copying into staging",
+                        ));
                     }
-                    Err(error) => break Err(error),
-                    Ok(None) => (),
+                    sources.push(target);
                 }
-                if started.elapsed() >= Duration::from_millis(self.timeout_ms) {
-                    break Err(io::Error::new(
-                        io::ErrorKind::TimedOut,
-                        "Torch compiler timed out",
+                let recipe = CompilerRecipe {
+                    name: &name,
+                    sources,
+                    build_directory: directory,
+                    extra_cflags: &identity.arguments["cxx"],
+                    extra_cuda_cflags: &identity.arguments["hip"],
+                };
+                let recipe_path = directory.join("recipe.json");
+                fs::write(&recipe_path, serde_json::to_vec(&recipe)?)?;
+                let log_path = directory.join("compiler.log");
+                let log = File::create(&log_path)?;
+                let python = self.python_path()?;
+                if python.canonicalize()? != self.input(&identity, &self.python)? {
+                    return Err(io::Error::other("Python executable link changed"));
+                }
+                // Preserve the venv invocation path: resolving this symlink before
+                // exec would silently select the base interpreter's environment.
+                let (lifetime, child_lifetime) = UnixStream::pair()?;
+                let status_path = directory.join("compiler-status.json");
+                let mut command = Command::new(self.input(&identity, &self.guard)?);
+                command
+                    .arg(python)
+                    .arg(self.input(&identity, &self.helper)?)
+                    .arg(&recipe_path)
+                    .arg(&status_path)
+                    .current_dir(directory)
+                    .env_clear()
+                    .envs(
+                        identity
+                            .environment
+                            .iter()
+                            .filter_map(|(key, value)| value.as_ref().map(|v| (key, v))),
+                    )
+                    .stdin(Stdio::from(OwnedFd::from(child_lifetime)))
+                    .stdout(log.try_clone()?)
+                    .stderr(log)
+                    .process_group(0);
+                let mut group = CompilerGroup(command.spawn()?, lifetime);
+                drop(command); // Close the parent copy of the child socket endpoint.
+                let started = Instant::now();
+                let result = loop {
+                    if let Err(error) = check() {
+                        break Err(error);
+                    }
+                    match fs::read(&status_path) {
+                        Ok(bytes) => {
+                            #[derive(Deserialize)]
+                            #[serde(deny_unknown_fields)]
+                            struct Status {
+                                success: bool,
+                                code: Option<i32>,
+                            }
+                            let status: Status = serde_json::from_slice(&bytes)?;
+                            break if status.success && status.code == Some(0) {
+                                Ok(())
+                            } else {
+                                Err(io::Error::other(format!(
+                                    "Torch compiler exited with {:?}",
+                                    status.code
+                                )))
+                            };
+                        }
+                        Err(e) if e.kind() == io::ErrorKind::NotFound => (),
+                        Err(e) => break Err(e),
+                    }
+                    if let Some(status) = group.0.try_wait()? {
+                        break Err(io::Error::other(format!(
+                            "compiler guard exited without status: {status}"
+                        )));
+                    }
+                    if started.elapsed() >= Duration::from_millis(self.timeout_ms) {
+                        break Err(io::Error::new(
+                            io::ErrorKind::TimedOut,
+                            "Torch compiler timed out",
+                        ));
+                    }
+                    std::thread::sleep(Duration::from_millis(20));
+                };
+                drop(group);
+                if let Err(error) = result {
+                    return Err(io::Error::new(
+                        error.kind(),
+                        format!(
+                            "{error}\nCompiler log (last 16 KiB):\n{}",
+                            log_tail(&log_path)
+                        ),
                     ));
                 }
-                std::thread::sleep(Duration::from_millis(20));
-            };
-            drop(group);
-            if let Err(error) = result {
-                return Err(io::Error::new(
-                    error.kind(),
-                    format!(
-                        "{error}\nCompiler log (last 16 KiB):\n{}",
-                        log_tail(&log_path)
-                    ),
-                ));
-            }
-            Ok(vec![format!("{name}.so")])
-        })
+                Ok(vec![format!("{name}.so")])
+            },
+        )
     }
 }

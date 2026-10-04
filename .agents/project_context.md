@@ -22,9 +22,10 @@ Rust now owns native build identities, directory inventories, cache locks, artif
 hashes and atomic publication. Declared host ELF tools also have their load-time
 dynamic dependencies resolved and hashed in Rust. `FIREPROT_RUST_BUILD=1` enables the initial AtlasFold
 mask/bias loader integration. It is experimental: remaining HIP/CK recipes,
-compiler cancellation across worker termination and model-environment provenance
-still need work. Rust owns recipe-4 compiler staging, subprocess environment,
-timeout and cache publication; see `docs/torch-build-process.md`.
+model-environment provenance still needs work. Rust owns recipe-5 compiler staging,
+subprocess environment, cancellable lock waits, timeout and cache publication. A
+separate Rust guard stops compiler descendants when the caller exits, including
+forced worker termination; see `docs/torch-build-process.md`.
 Rust publication/acceptance commands and the pinned mask/bias bundle path are
 implemented; see `docs/kernel-artifacts.md`. Inference should ultimately accept published artifacts without repeating
 compiler discovery; the current worker-driven build path is transitional. See

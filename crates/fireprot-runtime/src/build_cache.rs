@@ -1,7 +1,10 @@
 //! Transactional cache for native libraries on a local Unix filesystem.
 //! The cache root is owned by the current user, not a hostile shared directory.
 use crate::{artifacts::sha256, build::BuildIdentity};
-use nix::fcntl::{Flock, FlockArg, OFlag};
+use nix::{
+    errno::Errno,
+    fcntl::{Flock, FlockArg, OFlag},
+};
 use serde::{Deserialize, Serialize};
 use std::{
     collections::BTreeMap,
@@ -9,6 +12,7 @@ use std::{
     io::{self, Write},
     os::unix::fs::OpenOptionsExt,
     path::{Component, Path, PathBuf},
+    time::{Duration, Instant},
 };
 
 const RECEIPT: &str = "fireprot-build.json";
@@ -85,11 +89,37 @@ pub fn get_or_build<F>(root: &Path, identity: &BuildIdentity, build: F) -> io::R
 where
     F: FnOnce(&Path) -> io::Result<Vec<String>>,
 {
+    get_or_build_checked(
+        root,
+        identity,
+        Duration::from_secs(600),
+        &mut || Ok(()),
+        |path, _| build(path),
+    )
+}
+
+/// Check cancellation at phase boundaries and while waiting for the identity lock.
+/// Hashing an individual phase is not interruptible. The timeout bounds lock wait.
+pub fn get_or_build_checked<F>(
+    root: &Path,
+    identity: &BuildIdentity,
+    lock_timeout: Duration,
+    check: &mut dyn FnMut() -> io::Result<()>,
+    build: F,
+) -> io::Result<CachedBuild>
+where
+    F: FnOnce(&Path, &mut dyn FnMut() -> io::Result<()>) -> io::Result<Vec<String>>,
+{
+    if lock_timeout.is_zero() {
+        return Err(io::Error::other("cache lock timeout must be positive"));
+    }
+    check()?;
     identity.verify()?;
+    check()?;
     let name = identity.cache_name()?;
     fs::create_dir_all(root)?;
     let root = root.canonicalize()?;
-    let lock_file = OpenOptions::new()
+    let mut lock_file = OpenOptions::new()
         .read(true)
         .write(true)
         .create(true)
@@ -100,14 +130,31 @@ where
         return Err(io::Error::other("invalid cache lock file"));
     }
     // Never unlink lock files: waiters must all continue locking the same inode.
-    let _lock = Flock::lock(lock_file, FlockArg::LockExclusive)
-        .map_err(|(_, error)| io::Error::from_raw_os_error(error as i32))?;
+    let waiting = Instant::now();
+    let _lock = loop {
+        check()?;
+        if waiting.elapsed() >= lock_timeout {
+            return Err(io::Error::new(
+                io::ErrorKind::TimedOut,
+                "cache lock wait timed out",
+            ));
+        }
+        match Flock::lock(lock_file, FlockArg::LockExclusiveNonblock) {
+            Ok(lock) => break lock,
+            Err((file, Errno::EWOULDBLOCK)) => lock_file = file,
+            Err((_, error)) => return Err(io::Error::from_raw_os_error(error as i32)),
+        }
+        std::thread::sleep(Duration::from_millis(20));
+    };
     identity.verify()?;
+    check()?;
     let directory = root.join(&name);
     match fs::symlink_metadata(&directory) {
         Ok(_) => {
+            let receipt = read_cached(&directory, identity)?;
+            check()?;
             return Ok(CachedBuild {
-                receipt: read_cached(&directory, identity)?,
+                receipt,
                 directory,
                 cache_hit: true,
             });
@@ -118,7 +165,8 @@ where
     let staging = tempfile::Builder::new()
         .prefix(".building-")
         .tempdir_in(&root)?;
-    let names = build(staging.path())?;
+    let names = build(staging.path(), check)?;
+    check()?;
     if names.is_empty() {
         return Err(io::Error::other("build returned no artifacts"));
     }
@@ -144,6 +192,7 @@ where
     file.sync_all()?;
     File::open(staging.path())?.sync_all()?;
     // Under the identity lock, no cooperating writer can create this destination.
+    check()?;
     fs::rename(staging.path(), &directory)?;
     File::open(&root)?.sync_all()?;
     Ok(CachedBuild {

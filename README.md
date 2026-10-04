@@ -26,7 +26,7 @@ are changes to inference work and require an explicit, separately validated poli
 ## Build and inspect
 
 ```bash
-cargo build --release -p fireprot-cli -p fireprot-bridge --locked
+cargo build --release -p fireprot-cli -p fireprot-bridge -p fireprot-runtime --locked
 target/release/fireprot inspect configs/requests/atlasfold-n1000-native.json
 cargo test --workspace --locked
 ```

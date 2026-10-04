@@ -21,3 +21,6 @@ pub mod build_dynamic;
 
 #[cfg(unix)]
 pub mod kernel_bundle;
+
+#[cfg(unix)]
+pub mod torch_build;

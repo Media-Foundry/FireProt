@@ -151,5 +151,6 @@ fn _fireprot_bridge(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_class::<OperatorRegistry>()?;
     module.add_function(wrap_pyfunction!(build::cached_build, module)?)?;
     module.add_function(wrap_pyfunction!(build::accept_kernel, module)?)?;
+    module.add_function(wrap_pyfunction!(build::build_torch, module)?)?;
     Ok(())
 }

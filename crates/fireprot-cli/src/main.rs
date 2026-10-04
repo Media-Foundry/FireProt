@@ -42,6 +42,11 @@ fn execute() -> Result<(), Box<dyn std::error::Error>> {
             let result=compare_archives(&r,&c,Policy::Exact)?;println!("{}",serde_json::to_string_pretty(&result)?);
             if result.values().any(|r|!r.passed){return Err("prediction comparison failed".into());}
         },
+        ["build-torch",specification,cache]=>{
+            let spec:fireprot_runtime::torch_build::TorchBuildSpec=serde_json::from_slice(&fs::read(specification)?)?;
+            let result=spec.run(std::path::Path::new(cache))?;
+            println!("{}",serde_json::to_string_pretty(&serde_json::json!({"directory":result.directory,"cache_hit":result.cache_hit,"receipt":result.receipt}))?);
+        },
         ["publish-kernel",cache,destination]=>println!("{}",serde_json::to_string_pretty(&fireprot_runtime::kernel_bundle::publish(std::path::Path::new(cache),std::path::Path::new(destination))?)?),
         ["verify-kernel",directory,digest,compatibility]=>{
             let expected=serde_json::from_slice(&fs::read(compatibility)?)?;
@@ -66,7 +71,7 @@ fn execute() -> Result<(), Box<dyn std::error::Error>> {
             println!("{}",serde_json::to_string_pretty(&report)?);
             if report.phase!=fireprot_core::protocol::Phase::Succeeded{return Err("inference failed; inspect supervisor.json and stderr.log".into());}
         },
-        _=>return Err("usage: fireprot inspect REQUEST | infer REQUEST EXECUTION | export-source ROOT COMMIT | compare-npz REFERENCE CANDIDATE | publish-kernel CACHE DESTINATION | verify-kernel DIRECTORY MANIFEST_SHA256 COMPATIBILITY_JSON".into())
+        _=>return Err("usage: fireprot inspect REQUEST | infer REQUEST EXECUTION | export-source ROOT COMMIT | compare-npz REFERENCE CANDIDATE | build-torch SPECIFICATION CACHE | publish-kernel CACHE DESTINATION | verify-kernel DIRECTORY MANIFEST_SHA256 COMPATIBILITY_JSON".into())
     }
     Ok(())
 }

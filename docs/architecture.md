@@ -111,8 +111,8 @@ Deployment should build and validate native artifacts before inference. Rust now
 checks pinned artifacts with `verify-kernel`. The AtlasFold mask/bias loader can
 accept that artifact through the bridge using actual runtime compatibility.
 Compiler dependency scans belong to build acceptance; published-artifact loading
-checks the manifest, receipt and library without reopening build inputs. Direct
-build orchestration, C ABI bundles and the remaining loaders still require
+checks the manifest, receipt and library without reopening build inputs. Rust now orchestrates the experimental Torch compiler process, including staging,
+timeout and diagnostics. C ABI bundles and the remaining loaders still require
 migration. See [published kernel artifacts](kernel-artifacts.md).
 
 Keep `Protenix/` as an independent upstream checkout. Other upstream implementations should follow the same independent-source approach. Keep adapters and local patches in the top-level repository. When an upstream edit is unavoidable, record the baseline commit, patch, and license. Do not copy upstream source into the shared core.

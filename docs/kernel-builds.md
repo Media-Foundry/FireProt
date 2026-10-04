@@ -7,7 +7,8 @@ resolution and cache transactions through `fireprot-runtime`. The bridge exposes
 these services to Torch compiler callbacks. AtlasFold mask/bias has both an
 experimental build path and a pinned published-artifact loader. Rust publication
 and acceptance commands are described in [kernel artifacts](kernel-artifacts.md).
-Other HIP/CK recipes, C ABI bundles and direct build orchestration remain pending.
+Rust [Torch process orchestration](torch-build-process.md) now owns the experimental
+mask/bias compiler process. Other HIP/CK recipes and C ABI bundles remain pending.
 The chronological validation sections below preserve earlier recipe evidence.
 
 ## Contract

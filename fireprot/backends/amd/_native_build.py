@@ -61,30 +61,17 @@ def load(package, sources):
     spec = dict(schema_version=1, package=package, target='gfx90a',
         files=[dict(name=str(Path(path).absolute()), path=str(Path(path).absolute()))
                for path in paths], trees=trees, dynamic_inputs=dynamic_inputs, arguments=dict(cxx=['-O3'], hip=flags),
-        environment=environment, versions=dict(recipe='torch-hip-experimental-3',
+        environment=environment, versions=dict(recipe='torch-hip-experimental-4',
             torch=str(torch.__version__), hip=str(torch.version.hip),
             python=sys.version, soabi=str(sysconfig.get_config_var('SOABI'))))
     cache = Path(os.environ.get('FIREPROT_EXTENSION_CACHE',
         str(Path(__file__).resolve().parents[3]/'runtime/torch_extensions')))/'rust-v1'
 
-    def compile(directory, name):
-        directory = Path(directory)
-        copied = []
-        for source in sources:
-            target = directory / Path(source).name
-            shutil.copyfile(source, target)
-            copied.append(str(target))
-        recipe = dict(name=name, sources=copied, build_directory=str(directory),
-                      extra_cflags=['-O3'], extra_cuda_cflags=flags)
-        recipe_path = directory/'recipe.json'
-        recipe_path.write_text(json.dumps(recipe))
-        env = {key: value for key, value in environment.items() if value is not None}
-        with (directory/'compiler.log').open('w') as log:
-            subprocess.run([sys.executable, str(helper), str(recipe_path)], env=env,
-                           stdout=log, stderr=subprocess.STDOUT, check=True)
-        return [name + '.so']
-
-    result = json.loads(bridge.cached_build(json.dumps(spec), cache, compile))
+    process_spec = dict(build=spec, python=str(Path(sys.executable).absolute()),
+                        helper=str(helper.absolute()),
+                        sources=[str(Path(source).absolute()) for source in sources],
+                        timeout_ms=600_000)
+    result = json.loads(bridge.build_torch(json.dumps(process_spec), cache))
     name = result['receipt']['identity']['package'] + '_' + result['receipt']['identity']['sha256']
     library = Path(result['directory'])/(name+'.so')
     module_spec = importlib.util.spec_from_file_location(name, library)

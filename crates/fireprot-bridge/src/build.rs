@@ -84,3 +84,22 @@ pub fn accept_kernel(
         serde_json::to_string(&accepted).map_err(|error| PyValueError::new_err(error.to_string()))
     })
 }
+
+/// Compile a declared Torch recipe under Rust process/cache ownership.
+#[pyfunction]
+pub fn build_torch(py: Python<'_>, specification: &str, root: PathBuf) -> PyResult<String> {
+    let specification: fireprot_runtime::torch_build::TorchBuildSpec =
+        serde_json::from_str(specification)
+            .map_err(|error| PyValueError::new_err(error.to_string()))?;
+    py.detach(move || {
+        let result = specification
+            .run(&root)
+            .map_err(|error| PyOSError::new_err(error.to_string()))?;
+        serde_json::to_string(&serde_json::json!({
+            "directory": result.directory,
+            "cache_hit": result.cache_hit,
+            "receipt": result.receipt,
+        }))
+        .map_err(|error| PyValueError::new_err(error.to_string()))
+    })
+}

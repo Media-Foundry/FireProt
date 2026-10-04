@@ -99,6 +99,7 @@ structural accuracy.
 - [Independent Linux installation](docs/installation.md)
 - [Repository layout and historical path compatibility](docs/repository-layout.md)
 - [Worker launch and physical device provenance](docs/execution-provenance.md)
+- [Explicit environment content inventories](docs/environment-inventories.md)
 - [Accepted run archives and timing collection](docs/run-archives.md)
 - [Framework CPU continuous integration](docs/continuous-integration.md)
 - [Operator policy and bridge deployment](docs/rust-operators.md)

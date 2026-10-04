@@ -242,3 +242,13 @@ separate external dependencies; generated execution profiles identify them and
 point all framework code/tools at the installation. Binary input hashes and an
 exact installed file inventory support independent verification. This does not
 replace model/environment provenance checks. See [installation](installation.md).
+
+## Explicit environment content identity
+
+`fireprot-runtime::environment_inventory` captures named file/tree inventories and
+accepts independently pinned manifest bytes. `ExecutionRecord` composes this
+optional contract with existing worker/tool/source identities and rechecks it before
+Start and before final output acceptance. Python workers do not own inventory or
+acceptance policy. `capture-environment` exposes the Rust capture operation; profiles
+select its result explicitly. Inventory coverage must be audited against actual
+import roots and native dependencies. See [scope and cost](environment-inventories.md).

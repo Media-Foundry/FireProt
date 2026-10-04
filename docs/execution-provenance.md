@@ -54,8 +54,11 @@ This is launch provenance on a trusted host, not a hermetic process sandbox or a
 complete Python package lock. It does not inventory all installed distributions,
 late-loaded shared libraries, driver state or external caches. Dynamic dependencies
 of the Python executable and AMD SMI's interpreter are not fully captured here.
-Python/HIP/Torch version strings in prediction outputs remain observations of the
-model process. Complete model-environment/resource acceptance remains unfinished.
+Optional pinned [environment inventories](environment-inventories.md) now add
+explicit package/import-root and runtime-library file trees to all three launch
+verification points. Coverage still depends on declared roots; automatic loaded-library
+and driver coverage remains unfinished. Python/HIP/Torch version strings in prediction
+outputs remain observations of the model process.
 
 `supervisor.elapsed_seconds` starts at process spawn and excludes source/weight
 preflight and initial launch-identity capture. No E2E speedup follows from these
@@ -98,3 +101,11 @@ execution profile had not been deployed; it failed before creating a run directo
 or worker. The existing profile was synchronized before the successful launch.
 
 These concurrent requests validate behavior and provenance, not an E2E speedup.
+
+With `environment_inventory` configured, the manifest pin and its verified file
+identities are included in the execution digest. Bytecode writing is disabled in
+the worker. Existing records without an inventory retain their previous serialized
+shape. Cancellation and timeout are rechecked after pre-Start validation and after
+output validation, before authorizing work or accepting predictions. Synchronous
+hashing can delay reaching those checkpoints; it is not an interruptible filesystem
+snapshot or a concurrency sandbox.

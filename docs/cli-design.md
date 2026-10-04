@@ -76,3 +76,7 @@ The `install SPECIFICATION DESTINATION` and
 installation services. Publication, byte inventories and profile rewriting remain
 in `fireprot-runtime::installation`; the CLI only parses arguments, reads JSON and
 presents results. See [deployment](installation.md).
+
+`capture-environment SPECIFICATION` delegates file/tree hashing to
+`fireprot-runtime::environment_inventory` and emits the content manifest as JSON.
+The execution profile references that manifest through a pinned artifact reference.

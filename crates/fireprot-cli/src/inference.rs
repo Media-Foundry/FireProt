@@ -25,6 +25,8 @@ struct Execution {
     amd_smi: PathBuf,
     source_manifest: Option<ArtifactRef>,
     #[serde(default)]
+    environment_inventory: Option<ArtifactRef>,
+    #[serde(default)]
     environment: BTreeMap<String, String>,
 }
 
@@ -56,6 +58,9 @@ pub fn run(request: &Path, profile: &Path) -> Result<RunReport> {
         .collect();
     env.push(("PYTHONPATH".into(), pythonpath));
     env.push(("PYTHONNOUSERSITE".into(), "1".into()));
+    if execution.environment_inventory.is_some() {
+        env.push(("PYTHONDONTWRITEBYTECODE".into(), "1".into()));
+    }
     let program = std::path::absolute(execution.python)?;
     let host_environment = execution::environment(std::env::vars_os(), &env)?;
     let hip_probe = execution.hip_probe.canonicalize()?;
@@ -137,6 +142,7 @@ pub fn run(request: &Path, profile: &Path) -> Result<RunReport> {
         environment: env,
         identity_files,
         identity_trees,
+        environment_inventory: execution.environment_inventory,
     };
     let mut monitor = AmdSmiMonitor::new(hip_probe, amd_smi, Duration::from_secs(10));
     let report = supervisor::run(

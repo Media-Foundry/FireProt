@@ -112,3 +112,16 @@ existing AtlasFold/Protenix N1000/N1536 and deterministic OpenFold3 N1000 gates.
 See `docs/installation.md` and `provenance/rust_installation_integration.json`.
 Do not move a prefix without regenerating its absolute profiles. Environments,
 weights, sources, published kernels and writable caches remain external.
+
+## Explicit environment inventories (2026-10-05)
+
+`capture-environment` and execution-profile `environment_inventory` pin declared
+Python/import/library trees in Rust. `configs/diamondhill/*-inventoried.json` refer
+to immutable snapshots in `runtime/environments` on DiamondHill. Three N1000 runs
+pass existing correctness and isolation gates. Coverage is not yet a complete
+runtime lock: OS libraries, plugins and external resources still need audit.
+Full scans take 17-25 seconds in the recorded captures and are repeated at launch
+and acceptance, so default profiles remain unchanged. See
+`docs/environment-inventories.md`. Output validation now rechecks cancellation and
+timeout before accepting a run; the new cancellation regression failed before the
+fix and passes afterward. Final environment acceptance remains outstanding.

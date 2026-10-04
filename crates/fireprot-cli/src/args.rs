@@ -4,6 +4,7 @@ use std::path::Path;
 pub enum Command<'a> {
     Help(Option<&'a str>),
     Version,
+    CaptureEnvironment(&'a Path),
     Install {
         specification: &'a Path,
         destination: &'a Path,
@@ -47,6 +48,11 @@ pub enum Command<'a> {
 }
 
 const COMMANDS: &[(&str, &str, &str)] = &[
+    (
+        "capture-environment",
+        "SPECIFICATION",
+        "Hash declared model environment files and trees into a reusable inventory.",
+    ),
     (
         "install",
         "SPECIFICATION DESTINATION",
@@ -140,6 +146,7 @@ pub fn parse(args: &[String]) -> Result<Command<'_>, String> {
     Ok(match words.as_slice() {
         ["--help" | "-h" | "help"] => Command::Help(None),
         ["--version" | "-V"] => Command::Version,
+        ["capture-environment", path] => Command::CaptureEnvironment(Path::new(*path)),
         ["install", specification, destination] => Command::Install {
             specification: Path::new(*specification),
             destination: Path::new(*destination),

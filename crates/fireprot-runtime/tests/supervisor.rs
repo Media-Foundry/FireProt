@@ -89,6 +89,7 @@ fn worker(mode: &str) -> WorkerCommand {
             path: concat!(env!("CARGO_MANIFEST_DIR"), "/tests/fixtures/worker.py").into(),
         }],
         identity_trees: vec![],
+        environment_inventory: None,
         program: "python3".into(),
         args: vec![
             concat!(env!("CARGO_MANIFEST_DIR"), "/tests/fixtures/worker.py").into(),
@@ -374,4 +375,74 @@ fn changed_metadata_or_receipt_collision_cannot_leave_success_report() {
             serde_json::from_slice(&std::fs::read(root.join("supervisor.json")).unwrap()).unwrap();
         assert_eq!(stored["phase"], "failed");
     }
+}
+
+#[test]
+fn pinned_environment_changes_veto_start_and_final_acceptance() {
+    use fireprot_runtime::{
+        artifacts::sha256, build::BuildFile, environment_inventory::InventorySpec,
+    };
+    for mode in ["mutate-before-ready", "mutate-after-ready"] {
+        let dir = tempfile::tempdir().unwrap();
+        let input = dir.path().join("package.py");
+        std::fs::write(&input, "initial").unwrap();
+        let spec = InventorySpec {
+            schema_version: 1,
+            files: vec![BuildFile {
+                name: "package".into(),
+                path: input.clone(),
+            }],
+            trees: vec![],
+        };
+        let manifest = dir.path().join("environment.json");
+        std::fs::write(
+            &manifest,
+            serde_json::to_vec(&spec.capture().unwrap()).unwrap(),
+        )
+        .unwrap();
+        let mut worker = worker(mode);
+        worker.environment_inventory = Some(fireprot_core::request::ArtifactRef {
+            sha256: sha256(&manifest).unwrap(),
+            path: manifest,
+        });
+        worker
+            .environment
+            .push(("MUTATE_INPUT".into(), input.into()));
+        let r = run(
+            &request(dir.path().join("run")),
+            &worker,
+            &mut monitor(),
+            &limits(),
+            &AtomicBool::new(false),
+            |_| Ok(()),
+        )
+        .unwrap();
+        assert_eq!(r.phase, Phase::Failed);
+        assert_eq!(
+            r.failure.as_deref(),
+            Some("environment files or topology differ from pinned inventory")
+        );
+        assert!(!dir.path().join("run/accepted.json").exists());
+    }
+}
+
+#[test]
+fn cancellation_during_output_validation_cannot_accept_predictions() {
+    let dir = tempfile::tempdir().unwrap();
+    let cancelled = AtomicBool::new(false);
+    let r = run(
+        &request(dir.path().join("run")),
+        &worker("valid"),
+        &mut monitor(),
+        &limits(),
+        &cancelled,
+        |_| {
+            cancelled.store(true, Ordering::Relaxed);
+            Ok(())
+        },
+    )
+    .unwrap();
+    assert_eq!(r.phase, Phase::Failed);
+    assert_eq!(r.failure.as_deref(), Some("run cancelled"));
+    assert!(!dir.path().join("run/accepted.json").exists());
 }

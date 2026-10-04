@@ -5,6 +5,7 @@ use crate::{
     build::{BuildFile, FileIdentity},
     build_tree::BuildTree,
 };
+use fireprot_core::request::ArtifactRef;
 use serde::Serialize;
 use sha2::{Digest, Sha256};
 use std::{
@@ -107,6 +108,8 @@ pub struct ExecutionRecord {
     pub working_directory: PathBuf,
     pub environment: BTreeMap<String, String>,
     pub inputs: Vec<FileIdentity>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment_inventory: Option<ArtifactRef>,
     pub sha256: String,
 }
 impl ExecutionRecord {
@@ -117,6 +120,7 @@ impl ExecutionRecord {
         environment: BTreeMap<String, String>,
         files: &[BuildFile],
         trees: &[BuildTree],
+        environment_inventory: Option<&ArtifactRef>,
     ) -> io::Result<Self> {
         let working_directory = cwd.canonicalize()?;
         if !working_directory.is_dir() {
@@ -140,6 +144,12 @@ impl ExecutionRecord {
         for tree in trees {
             inputs.extend(tree.identify()?);
         }
+        if let Some(pin) = environment_inventory {
+            for mut file in crate::environment_inventory::accept(pin)?.files {
+                file.name = format!("environment/{}", file.name);
+                inputs.push(file);
+            }
+        }
         inputs.sort_by(|a, b| a.name.cmp(&b.name));
         let mut names = BTreeSet::new();
         for f in &inputs {
@@ -156,6 +166,7 @@ impl ExecutionRecord {
             working_directory,
             environment,
             inputs,
+            environment_inventory: environment_inventory.cloned(),
             sha256: String::new(),
         };
         record.sha256 = format!("{:x}", Sha256::digest(serde_json::to_vec(&record)?));
@@ -170,6 +181,7 @@ impl ExecutionRecord {
             self.environment.clone(),
             files,
             trees,
+            self.environment_inventory.as_ref(),
         )?;
         if &current != self {
             return Err(io::Error::other(

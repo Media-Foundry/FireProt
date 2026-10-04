@@ -29,6 +29,11 @@ fn execute(command: Command<'_>) -> Result<()> {
     match command {
         Command::Help(name) => print!("{}", args::help(name)),
         Command::Version => println!("fireprot {}", env!("CARGO_PKG_VERSION")),
+        Command::CaptureEnvironment(path) => {
+            let specification: fireprot_runtime::environment_inventory::InventorySpec =
+                read_json(path)?;
+            print_json(&specification.capture()?)?;
+        }
         Command::Install {
             specification,
             destination,

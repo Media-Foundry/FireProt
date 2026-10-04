@@ -1,5 +1,6 @@
 //! Linux/Unix model-worker supervision. Model execution remains in pinned workers.
 pub mod artifacts;
+pub mod environment_inventory;
 #[cfg(target_os = "linux")]
 pub mod installation;
 #[cfg(unix)]

@@ -68,6 +68,7 @@ fn execution_tracks_content_topology_and_virtual_environment_invocation() {
         env,
         &files,
         &trees,
+        None,
     )
     .unwrap();
     assert_eq!(record.invocation_path, python);

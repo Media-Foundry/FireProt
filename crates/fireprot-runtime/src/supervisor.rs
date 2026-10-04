@@ -40,6 +40,7 @@ pub struct WorkerCommand {
     pub environment: Vec<(OsString, OsString)>,
     pub identity_files: Vec<BuildFile>,
     pub identity_trees: Vec<BuildTree>,
+    pub environment_inventory: Option<fireprot_core::request::ArtifactRef>,
 }
 
 pub struct Limits {
@@ -134,6 +135,7 @@ pub fn run(
         environment,
         &worker.identity_files,
         &worker.identity_trees,
+        worker.environment_inventory.as_ref(),
     )?;
     fs::write(
         output.join("execution.json"),
@@ -180,6 +182,7 @@ pub fn run(
         }
         let paths = verify_outputs(&output, session.artifacts()).map_err(|e| e.to_string())?;
         validate_content(&paths)?;
+        check_limits(cancelled, started, limits)?;
         session
             .finish(CompletionChecks {
                 exit_code,
@@ -230,6 +233,16 @@ fn write_report(output: &Path, report: &RunReport) -> io::Result<()> {
     fs::rename(pending, output.join("supervisor.json"))
 }
 
+fn check_limits(cancelled: &AtomicBool, started: Instant, limits: &Limits) -> Result<(), String> {
+    if cancelled.load(Ordering::Relaxed) {
+        return Err("run cancelled".into());
+    }
+    if started.elapsed() >= limits.timeout {
+        return Err("worker timeout".into());
+    }
+    Ok(())
+}
+
 #[allow(clippy::too_many_arguments)]
 fn drive(
     child: &mut ProcessGroup,
@@ -250,12 +263,7 @@ fn drive(
     let mut eof = false;
     let mut last_sample = Instant::now();
     loop {
-        if cancelled.load(Ordering::Relaxed) {
-            return Err("run cancelled".into());
-        }
-        if started.elapsed() >= limits.timeout {
-            return Err("worker timeout".into());
-        }
+        check_limits(cancelled, started, limits)?;
         if stream.is_none() {
             match listener.accept() {
                 Ok((socket, _)) => {
@@ -297,6 +305,7 @@ fn drive(
                     *device_verified = true;
                     sample(monitor, child.0.id(), samples)?;
                     last_sample = Instant::now();
+                    check_limits(cancelled, started, limits)?;
                     session.authorize_start().map_err(|e| e.to_string())?;
                     socket
                         .write_all(b"{\"schema_version\":1,\"command\":\"start\"}\n")

@@ -17,8 +17,7 @@ The shared Python operator API now requires the Rust bridge build described in
 connected: N1000 and N1536 pass existing coordinate/summary gates under Rust PCI
 monitoring. Preserve the separately recorded nonzero full PAE/PDE differences;
 do not claim all confidence arrays are identical. AtlasFold chunked/HIP/fused HIP workers and Rust registry dispatch are connected;
-N1000 and N1536 pass exact parity for all three routes. Additional model variants,
-kernel build migration and full framework acceptance remain outstanding.
+N1000 and N1536 pass exact parity for all three routes. Additional model variants and full framework acceptance remain outstanding.
 
 Rust now owns native build identities, directory inventories, cache locks, artifact
 hashes and atomic publication. Declared host ELF tools also have their load-time
@@ -31,8 +30,8 @@ now complements the existing Python bundle path. All six maintained loaders have
 pinned artifact selectors. Maintained Python is under `python/fireprot`, native
 sources under `kernels/amd`, with a root import shim and an explicit historical source path map.
 Rust now records explicit launch environments, interpreter/worker inputs and
-verified physical device mapping. Complete Python package/runtime provenance and
-final packaging still need work; see `docs/execution-provenance.md`.
+verified physical device mapping. Complete Python package/runtime provenance still needs work; see
+`docs/execution-provenance.md`. Independent installation is described below.
 Successful runs now retain pinned acceptance receipts. Rust `collect-timings`
 rechecks archived files and output content before collecting model, worker-request
 or supervisor intervals; it cannot infer complete invocation E2E or cache preparation.
@@ -102,3 +101,14 @@ CK Tile QRKSVS is now compiled, measured, integrated, and promoted for the exact
 - Latest CK Tile implementation and model results: `docs/protenix-ck-tile.md`.
 - Final tests: local 99 passed / 13 skipped; DiamondHill GPU 7 with HIP tests enabled 111 passed / 1 skipped.
 - Use `PYTHONPATH=.:Protenix python -m pytest -q tests`; omitting the test directory also collects independent upstream tests. For synchronized remote inference set `FIREPROT_PROTENIX_COMMIT` to the verified integration commit because remote Git metadata remains at upstream.
+
+## Independent installation (2026-10-05)
+
+Rust `install` and `verify-installation` create a Linux prefix independently of the
+source/build tree. DiamondHill `/media/IntelSSD/fireprot-install-v1` contains the
+validated 57-file installation; its generated profiles point to installed worker,
+bridge, HIP probe and compiler guard paths. Five installed model runs pass the
+existing AtlasFold/Protenix N1000/N1536 and deterministic OpenFold3 N1000 gates.
+See `docs/installation.md` and `provenance/rust_installation_integration.json`.
+Do not move a prefix without regenerating its absolute profiles. Environments,
+weights, sources, published kernels and writable caches remain external.

@@ -70,3 +70,9 @@ The complete local Rust suite passes 108 tests. All nine CLI integration tests
 pass under Rust 1.85 and on DiamondHill; formatting and Clippy pass. An initial
 remote compile found two absent request-example files. Synchronizing those
 tracked configurations resolved the setup issue before testing the new binary.
+
+The `install SPECIFICATION DESTINATION` and
+`verify-installation DIRECTORY MANIFEST_SHA256` commands compose Rust runtime
+installation services. Publication, byte inventories and profile rewriting remain
+in `fireprot-runtime::installation`; the CLI only parses arguments, reads JSON and
+presents results. See [deployment](installation.md).

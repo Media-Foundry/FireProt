@@ -68,9 +68,9 @@ is active and the completion gates above remain in force.
 | AtlasFold + AtlasLM-3B | Native/chunked/HIP/fused HIP with dual weights and model-specific semantics | Final acceptance after layout migration |
 | OpenFold3 / OpenBind-0 | Native N1000 strict deterministic inference passes exact parity under Rust supervision | Legacy default-mode parity remains unpassed; unchanged native runs also vary |
 | Native builds | Rust dependency identities, directory inventories, cache locking/publication, guarded compiler lifecycle; all six maintained loaders connected | Complete model-environment/plugin inventories remain outside the build recipe |
-| Precompiled artifacts | Rust publication and pinned acceptance for Python and C ABI bundles; all six loaders have explicit selectors | Packaging and final deployment acceptance |
-| Repository layout | Root five-crate Cargo workspace; workers/tensor glue under `python/`, native sources under `kernels/amd`, checked path map and a root import shim | Final packaging and maintained entry points |
-| Maintained entry points | Rust CLI covers current request profiles; CPU CI configuration and local clean-checkout tests added | Replace remaining maintained scripts after parity; remote CI execution awaits workflow permission; packaging |
+| Precompiled artifacts | Rust publication and pinned acceptance for Python and C ABI bundles; all six loaders have explicit selectors | Linux installation verified for published routes; full environment acceptance remains |
+| Repository layout | Root five-crate Cargo workspace; workers/tensor glue under `python/`, native sources under `kernels/amd`, checked path map and a root import shim | Independent Linux installation available; remaining maintained entry points |
+| Maintained entry points | Rust CLI covers current request profiles; CPU CI configuration and local clean-checkout tests added | Replace remaining maintained scripts after parity; remote CI execution awaits workflow permission |
 
 ### Verified model scope
 
@@ -115,3 +115,13 @@ changes and must record physical isolation, inputs, weights, precision, cycles,
 steps, samples, seed and cache state. Concurrent migration timings do not establish
 new E2E speedups. Finish environment evidence, model parity, maintained
 entry points and packaging before declaring this rebuild complete.
+
+### Independent installation
+
+The Rust `install` and `verify-installation` commands create and verify a new Linux
+prefix with CLI, compiler guard, device probe, bridge, workers and kernel sources.
+Five complete installed runs pass the existing AtlasFold/Protenix N1000/N1536 and
+deterministic OpenFold3 N1000 gates. Profiles keep model environments and assets
+external while binding framework paths to the installation. See
+[installation](installation.md) and `provenance/rust_installation_integration.json`.
+Full environment provenance, remaining workflows and remote CI are still required.

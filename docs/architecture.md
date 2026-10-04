@@ -232,3 +232,13 @@ into the native physical BLAS operand layouts. Q and V are contiguous in
 Q scaling, QK/PV contractions, probabilities, gates, and projections retain
 their arithmetic. This path is restricted to the validated gfx90a N1024 and
 N1536 buckets and included in the extension and request source fingerprints.
+
+## Independent Linux deployment
+
+`fireprot-runtime::installation` owns selection, copying, hashing and atomic
+publication of the framework installation. The CLI composes this service through
+`install` and `verify-installation`. Model-specific Python environments remain
+separate external dependencies; generated execution profiles identify them and
+point all framework code/tools at the installation. Binary input hashes and an
+exact installed file inventory support independent verification. This does not
+replace model/environment provenance checks. See [installation](installation.md).

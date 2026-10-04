@@ -4,6 +4,14 @@ use std::path::Path;
 pub enum Command<'a> {
     Help(Option<&'a str>),
     Version,
+    Install {
+        specification: &'a Path,
+        destination: &'a Path,
+    },
+    VerifyInstallation {
+        directory: &'a Path,
+        digest: &'a str,
+    },
     Inspect(&'a Path),
     Infer {
         request: &'a Path,
@@ -39,6 +47,16 @@ pub enum Command<'a> {
 }
 
 const COMMANDS: &[(&str, &str, &str)] = &[
+    (
+        "install",
+        "SPECIFICATION DESTINATION",
+        "Install framework files and generate execution profiles in a new directory.",
+    ),
+    (
+        "verify-installation",
+        "DIRECTORY MANIFEST_SHA256",
+        "Verify all installed files against a pinned manifest.",
+    ),
     (
         "inspect",
         "REQUEST",
@@ -122,6 +140,14 @@ pub fn parse(args: &[String]) -> Result<Command<'_>, String> {
     Ok(match words.as_slice() {
         ["--help" | "-h" | "help"] => Command::Help(None),
         ["--version" | "-V"] => Command::Version,
+        ["install", specification, destination] => Command::Install {
+            specification: Path::new(*specification),
+            destination: Path::new(*destination),
+        },
+        ["verify-installation", directory, digest] => Command::VerifyInstallation {
+            directory: Path::new(*directory),
+            digest,
+        },
         ["help", name] | [name, "--help" | "-h"] if known(name) => Command::Help(Some(*name)),
         ["inspect", request] => Command::Inspect(Path::new(*request)),
         ["infer", request, profile] => Command::Infer {

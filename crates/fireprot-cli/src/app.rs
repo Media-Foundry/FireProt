@@ -29,6 +29,16 @@ fn execute(command: Command<'_>) -> Result<()> {
     match command {
         Command::Help(name) => print!("{}", args::help(name)),
         Command::Version => println!("fireprot {}", env!("CARGO_PKG_VERSION")),
+        Command::Install {
+            specification,
+            destination,
+        } => print_json(&fireprot_runtime::installation::install(
+            &read_json(specification)?,
+            destination,
+        )?)?,
+        Command::VerifyInstallation { directory, digest } => {
+            print_json(&fireprot_runtime::installation::verify(directory, digest)?)?
+        }
         Command::Inspect(path) => print_json(&read_request(path)?)?,
         Command::Infer { request, profile } => {
             let report = inference::run(request, profile)?;

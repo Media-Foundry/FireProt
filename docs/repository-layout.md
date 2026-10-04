@@ -66,8 +66,9 @@ source directory at `runtime/layout-backups/fireprot-before-python-layout`.
 Source-path changes produce new Rust build identities. Published artifact
 acceptance remains independent of original build paths: pinned bundles continue
 to load without scanning old compiler inputs. Native source builds must still be
-validated from their new paths. Packaging as an installable distribution and the
-remaining maintained entry-point migration are separate unfinished work.
+validated from their new paths. The [Rust installer](installation.md) now creates an independent Linux prefix
+with pinned binaries, Python/kernel source and generated model profiles. Remaining
+maintained entry points and complete environment inventories still need work.
 
 ## Validation on DiamondHill (2026-10-04)
 
@@ -100,5 +101,7 @@ Protenix also passes the existing 1e-3 gates against preceding FireProt outputs;
 raw confidence arrays remain diagnostic. AtlasFold records 528 fused attention
 and 528 HIP multiplication calls with no native fallback. These concurrent
 migration timings are not new E2E speedup measurements. OpenFold3 numerical parity,
-other model variants, environment evidence, entry points and packaging remain
-unfinished acceptance work.
+other model variants, environment evidence and entry points remain unfinished
+acceptance work. Later deterministic OpenFold3 parity and independent installation
+results are described in [deterministic validation](openfold3-determinism.md) and
+[installation](installation.md).

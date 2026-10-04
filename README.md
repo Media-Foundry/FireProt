@@ -7,8 +7,9 @@ including the measured 1,000- and 1,536-residue workloads.
 **Status: Rust framework migration in progress.** Rust owns request contracts,
 operator selection, process supervision, GPU isolation, provenance preflight and
 output validation. Native build/cache services now own maintained Torch and standalone HIP loaders.
-All six maintained loaders support pinned Python/C ABI artifacts. Packaging,
-environment provenance and some model parity gates remain unfinished. Rust itself
+All six maintained loaders support pinned Python/C ABI artifacts. A Linux installer
+provides an independent deployment prefix. Complete environment provenance and
+remaining workflow/model coverage are still unfinished. Rust itself
 is not claimed to accelerate GPU kernels.
 
 ## Model coverage
@@ -35,7 +36,8 @@ cargo test --workspace --locked
 Request inspection is CPU-only and does not open weights. Model execution requires
 the pinned upstream checkout, model-specific Python/Torch ROCm environment,
 checkpoints, HIP identity probe and AMD SMI. The checked-in deployment profiles
-reference existing DiamondHill paths; they are not portable installation scripts.
+reference existing DiamondHill paths. Use the [Rust installer](docs/installation.md)
+to generate profiles for an independent deployment prefix.
 The bridge must be built explicitly before importing the shared Python operator API.
 
 ## Run on DiamondHill
@@ -94,6 +96,7 @@ structural accuracy.
 
 - [Rust migration acceptance and remaining work](docs/rust-migration.md)
 - [Current architecture and dependency boundaries](docs/architecture.md)
+- [Independent Linux installation](docs/installation.md)
 - [Repository layout and historical path compatibility](docs/repository-layout.md)
 - [Worker launch and physical device provenance](docs/execution-provenance.md)
 - [Accepted run archives and timing collection](docs/run-archives.md)

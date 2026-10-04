@@ -87,3 +87,11 @@ propagation and manifest collection without triggering a build. See
 [complete migration evidence](../provenance/rust_torch_loaders_integration.json)
 for requests, references, source/binary hashes, build summaries, route records and
 raw numerical diagnostics. Full receipts and predictions remain on DiamondHill.
+
+## Precompiled deployment
+
+All four maintained Torch loaders now accept pinned Python-extension bundles.
+Their disable/HIP/version checks precede selection; selected bundles bypass
+source/compiler discovery and never trigger a replacement build when rejected.
+See [bundle selectors and deployment profiles](kernel-artifacts.md#complete-maintained-loader-coverage).
+Native construction remains available through Rust when no bundle is selected.

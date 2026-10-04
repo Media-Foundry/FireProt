@@ -38,3 +38,16 @@ def select_c(package, environment_prefix, c_abi):
                     hip=str(torch.version.hip), c_abi=c_abi)
     accepted = json.loads(bridge.accept_kernel(directory, digest, json.dumps(expected)))
     return ctypes.CDLL(accepted['library']), dict(mode='published', kernel=accepted)
+
+
+def select_python(package, environment_prefix):
+    """Select a pinned Python extension before any compiler/source discovery."""
+    import os
+
+    directory = os.environ.get(environment_prefix + '_BUNDLE')
+    if not directory:
+        return None
+    digest = os.environ.get(environment_prefix + '_BUNDLE_SHA256')
+    if not digest:
+        raise RuntimeError(environment_prefix + '_BUNDLE_SHA256 is required')
+    return load(package, directory, digest)

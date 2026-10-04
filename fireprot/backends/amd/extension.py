@@ -39,6 +39,12 @@ def load_amd_extension(*, torch_module: Any | None = None) -> Any | None:
                 _load_error = "PyTorch HIP is unavailable"
                 return None
 
+            from ._published import select_python
+            published = select_python('fireprot_amd_ops', 'FIREPROT_AMD_OPS')
+            if published is not None:
+                _extension, _build = published
+                return _extension
+
             from torch.utils.cpp_extension import ROCM_HOME
             from ._native_build import load as rust_load
 

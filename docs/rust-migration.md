@@ -49,78 +49,65 @@ A detailed dependency and interface inventory will be written after the current
 OpenFold3 cycle finishes and before implementation begins.
 
 
-## Implementation progress
+## Implementation progress (2026-10-04)
 
-The full implementation plan is
-[the Rust framework rebuild plan](plans/2026-10-04-gitnexus-plan-rust-framework-rebuild.md).
-The initial OpenFold3 cycle is closed with both long native baselines and the
-first attention screen recorded. No candidate was promoted.
+The immutable [implementation plan](plans/2026-10-04-gitnexus-plan-rust-framework-rebuild.md)
+defines the full scope. The initial OpenFold3 cycle is closed with native long
+baselines and an attention screen recorded; no candidate was promoted. Migration
+is active and the completion gates above remain in force.
 
-Implemented: root Cargo workspace and `fireprot-core` typed request contracts,
-model-specific cycle semantics, explicit precision/backend checks, checkpoint
-roles, source/artifact identity syntax checks, and an immutable validated-request
-boundary. These checks do not yet verify files, hardware, or executable model
-compatibility; those belong to the pending runtime layer.
+| Area | Current implementation | Remaining acceptance |
+| --- | --- | --- |
+| Request and worker contracts | Typed Rust model workloads, precision/cycle rules, artifact roles, protocol and lifecycle states | Additional model variants |
+| Operator policy | Rust ordering, cache identity/invalidation, rejection reasons and fallback via the CPython bridge | Python tensor predicates and calls remain an explicit boundary |
+| Process and device control | Rust preflight, fresh output directories, worker supervision, timeouts/cancellation, process cleanup, HIP-to-PCI-to-SMI mapping and continuous isolation | Complete environment/worker identity evidence |
+| Source and resource provenance | Rust streaming hashes, pinned Git/exported sources, checkpoints, inputs and Protenix CCD/data resources | Complete adapter environment/resource coverage |
+| Output validation | Rust sample/tensor acceptance, primitive NPY/NPZ, exact array comparison, alignment, confidence schemas/deltas and experimental coordinate masks | CIF/statistics workflow coverage |
+| Protenix | Native and accelerated Mini-default FP32 N1000/N1536 under Rust supervision | Other variants before retiring the old entry point |
+| AtlasFold + AtlasLM-3B | Native/chunked/HIP/fused HIP with dual weights and model-specific semantics | Final acceptance after layout migration |
+| OpenFold3 / OpenBind-0 | Native N1000 inference executes under Rust supervision | Numerical migration parity remains unpassed; unchanged native runs also vary |
+| Native builds | Rust dependency identities, directory inventories, cache locking/publication, guarded compiler lifecycle; all six maintained loaders connected | Complete model-environment/plugin inventories remain outside the build recipe |
+| Precompiled artifacts | Rust publication and pinned acceptance for Python and C ABI bundles; all six loaders have explicit selectors | Packaging and final deployment acceptance |
+| Repository layout | Root five-crate Cargo workspace and explicit model workers under `python/` | Move remaining tensor glue into `python/`, native sources into `kernels/amd`, checked historical path map |
+| Maintained entry points | Rust CLI covers current request profiles | Replace remaining maintained scripts after parity; CI and packaging |
 
-Also implemented: versioned worker events, supervisor-owned lifecycle state, and
-a Rust operator registry with deterministic selection, exact signature caching,
-invalidation, rejection reasons and native fallback. These components are tested
-offline. Shared Python operator dispatch now delegates policy to the Rust bridge;
-model worker integration remains partial.
-See [worker protocol](worker-protocol.md).
+### Verified model scope
 
-Also implemented: Unix worker transport, bounded frames, timeout/cancellation,
-process-group cleanup, isolated logs, fresh output directories, streaming SHA-256
-and output containment checks. Real subprocess tests exercise failure paths.
-The AMD device monitor now independently probes HIP identity, maps PCI to SMI,
-and rejects invalid process observations. Model content validation remains an
-injected Rust interface; its production implementation is pending. Source/input/
-checkpoint preflight now gates the supervisor via `PreparedRequest`, with pinned
-Git or exported-manifest source verification and canonical artifact identities.
+AtlasFold N1000 native and N1000/N1536 chunked/HIP/fused HIP routes pass exact
+coordinates, pLDDT, PAE and pTM comparisons. N1536 uses the bounded native
+reference. Model weights, additional recycles, diffusion steps, sample count and
+precision boundaries are preserved. See [running](rust-running.md) and
+`provenance/rust_atlasfold_accelerated.json`.
 
-Also implemented: `fireprot-validation` array identity, primitive NPY/NPZ
-loading, Kabsch alignment, numeric confidence schema/deltas, and experimental
-coordinate masking. NumPy fixtures pin interoperability and numerical behavior.
-See [Rust validation](rust-validation.md). A model-output bundle now connects
-required sample/tensor checks to the supervisor callback. The Rust CLI and
-native OpenFold3 worker are implemented; one N1000 request completed with 297 isolation samples. Exact comparison
-failed, and a fresh unchanged native control also showed repeat variation.
-The numerical migration gate remains unpassed. See [Rust running](rust-running.md).
+Protenix Mini-default FP32 native/accelerated N1000/N1536 requests pass existing
+aligned-coordinate and summary-confidence gates. Full arrays retain their native
+shape/dtype and finite-value checks; raw accelerated PAE/PDE arrays are not
+bitwise identical to native. Four CCD/data resources are pinned in preflight.
+See `provenance/rust_protenix_integration.json` and the later loader/publication
+records linked from [kernel artifacts](kernel-artifacts.md).
 
-Pending: adapter resource/environment provenance,
-CIF/statistics tooling, remaining model-worker integrations, kernel layout/build
-migration, GPU parity, and replacement of maintained Python entry points. The
-repository is in migration; the full framework is not yet rebuilt.
+OpenFold3 numerical parity has not passed. Native-repeat variation is recorded in
+`provenance/rust_openfold3_integration.json`; it is not permission to widen a gate
+or resume operator optimization. Final migration acceptance remains incomplete.
 
-Local core checks:
+### Ownership and checks
+
+Python remains at upstream model execution, tensor introspection/capability checks,
+local operator calls and tensor serialization. Historical Python benchmarks remain
+reproduction tools. Shared dispatch, builds, supervision and output acceptance are
+Rust-owned. See [operator policy](rust-operators.md), [build services](kernel-builds.md),
+[worker protocol](worker-protocol.md) and [validation](rust-validation.md).
 
 ```bash
-cargo test --workspace
-cargo build --release -p fireprot-bridge --locked
+cargo test --workspace --locked
+cargo build --release -p fireprot-cli -p fireprot-bridge -p fireprot-runtime --locked
 cargo fmt --all --check
-cargo clippy --workspace --all-targets -- -D warnings
+cargo clippy --workspace --all-targets --locked -- -D warnings
+PYTHONPATH=.:Protenix python -m pytest -q tests
 ```
 
-AtlasFold plus AtlasLM-3B now also runs through the Rust CLI. The N1000 seed102
-native request completed with 216 isolation samples and exact agreement for all
-four public output arrays against the stored native reference. Dual weights,
-recycles, sampling steps and native precision boundaries are retained. AtlasFold
-chunked/HIP/fused HIP routes now use Rust dispatch and supervision; N1000 and N1536
-pass exact comparisons for all four public arrays across all three routes.
-See `provenance/rust_atlasfold_accelerated.json`.
-
-Protenix Mini-default FP32 now runs natively and through the existing CK/HIP
-backend under Rust supervision, with four pinned CCD/data resources in preflight.
-N1000 and N1536 pass the established coordinate/summary-confidence gates against
-stored references, and both accelerated requests pass against their new native
-counterparts. Full confidence arrays are now preserved; raw native/accelerated
-PAE/PDE values are not bitwise identical and are recorded without widening any
-gate. See [Protenix worker scope](rust-running.md#protenix-mini-default) and
-`provenance/rust_protenix_integration.json`. This does not complete the full
-framework migration or establish parity for other Protenix variants.
-
-The shared operator registry now routes candidate ordering, cache invalidation,
-fallback decisions and manifests through `fireprot-core` via a CPython stable-ABI
-bridge. Python retains tensor introspection, capability predicates and callable
-execution. Exact strides join the cache key; manifests identify the loaded Rust
-library. See [Rust operator policy](rust-operators.md) for deployment and validation.
+GPU tests are explicit. Full-model acceptance must be repeated after source-path
+changes and must record physical isolation, inputs, weights, precision, cycles,
+steps, samples, seed and cache state. Concurrent migration timings do not establish
+new E2E speedups. Finish layout, environment evidence, model parity, maintained
+entry points and packaging before declaring this rebuild complete.

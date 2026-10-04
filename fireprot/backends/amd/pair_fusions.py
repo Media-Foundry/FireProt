@@ -30,6 +30,12 @@ def load():
                 raise RuntimeError('HIP is unavailable')
             if str(torch.__version__) != '2.12.0a0+git78258b9' or torch.version.hip != '7.14.60850':
                 raise RuntimeError('unvalidated Torch/HIP softmax implementation')
+            from ._published import select_python
+            published = select_python('fireprot_pair_fusions', 'FIREPROT_PAIR_FUSIONS')
+            if published is not None:
+                _extension, _build = published
+                _name = _extension.__name__
+                return _extension
             from ._native_build import load as rust_load
             sources = [Path(__file__).with_name('csrc')/name for name in (
                 'fireprot_pair_fusions.cpp', 'fireprot_pair_softmax.cu', 'fireprot_pair_transpose.cu',

@@ -4,8 +4,8 @@
 
 Rust can publish verified cached Python extensions and C ABI libraries, then
 accept pinned bundles without reading compiler inputs. AtlasFold mask/bias,
-Protenix CK attention and the optional hipBLASLt BMM loader have explicit
-published-artifact paths. Other Torch extension selectors remain pending. Publication does not establish numerical quality;
+Protenix AMD operations, CK GEMM, CK attention, AtlasFold pair fusions and the
+optional hipBLASLt BMM loader all have explicit published-artifact paths. Publication does not establish numerical quality;
 operator and model validation are separate gates.
 
 ## Publish on the build host
@@ -164,3 +164,58 @@ FireProt references. Native-reference results are:
 The runs used separate GCDs concurrently. Their times establish no new E2E
 speedup. Raw Protenix arrays remain diagnostic and are not bitwise identical.
 hipBLASLt model dispatch remains disabled; its bundle is operator-tested only.
+
+## Complete maintained loader coverage
+
+All six maintained loaders can select pinned bundles before compiler discovery.
+The same Rust acceptance service checks both Python and C ABI artifacts.
+
+| Loader package | Environment prefix | ABI |
+| --- | --- | --- |
+| `fireprot_amd_ops` | `FIREPROT_AMD_OPS` | Python / schema 1 |
+| `fireprot_ck_ops` | `FIREPROT_CK_OPS` | Python / schema 1 |
+| `fireprot_pair_fusions` | `FIREPROT_PAIR_FUSIONS` | Python / schema 1 |
+| `fireprot_mask_bias` | `FIREPROT_MASK_BIAS` | Python / schema 1 |
+| `fireprot_ck_attention` | `FIREPROT_CK_ATTENTION` | C / schema 2 |
+| `fireprot_lt_bmm` | `FIREPROT_LT_BMM` | C / schema 2 |
+
+For each prefix, set both `_BUNDLE` and `_BUNDLE_SHA256`. An explicit selection
+bypasses source existence checks, `torch.utils.cpp_extension` imports and native
+build descriptors. Disable switches and model/operator capability checks still
+apply; pair softmax retains its validated Torch/HIP version gate. A rejected bundle
+records an error and keeps native fallback. Without a bundle, the existing Rust
+build/cache route remains available.
+
+`configs/diamondhill/protenix-all-published.json` selects all four Protenix
+libraries while preserving the default disabled CK GEMM/hipBLASLt model routes.
+`configs/diamondhill/atlasfold-all-published.json` selects mask/bias and pair
+fusions; the request's backend still determines which operators are used.
+These configurations pin DiamondHill artifacts and are not portable installers.
+
+
+### Complete-loader validation (2026-10-04)
+
+[The integration record](../provenance/rust_all_published_integration.json) pins
+all three newly published Torch libraries and both complete deployment profiles.
+244 CPU Python tests pass (110 GPU cases skipped). GPU checks pass 159 Protenix
+and 60 AtlasFold tests with the Torch native-build module unavailable. A separate
+FP32 CK GEMM probe passes against Torch matmul at rtol/atol 1e-4; it does not
+promote CK GEMM model dispatch. Rust implementation bytes are unchanged from the
+preceding 91-test validation.
+
+Complete requests use original weights and fixed semantics: AtlasFold seed 102,
+four additional recycles, native precision, one sample and 30/100 diffusion steps;
+Protenix Mini-default FP32 seed 101, four total cycles, one step and one sample.
+
+| Model / route | Length | Native-reference result | Supervisor seconds / isolation samples |
+| --- | ---: | --- | ---: |
+| AtlasFold + AtlasLM-3B, fused HIP | 1000 | Four public arrays bitwise equal | 95.386 / 98 |
+| AtlasFold + AtlasLM-3B, fused HIP | 1536 | Four public arrays bitwise equal, bounded native reference | 217.008 / 237 |
+| Protenix Mini-default, FireProt | 1000 | Aligned RMSD 8.65243e-5 Angstrom; summary delta 7.62939e-6 | 44.215 / 41 |
+| Protenix Mini-default, FireProt | 1536 | Aligned RMSD 1.25892e-4 Angstrom; summary delta 3.81470e-6 | 61.783 / 60 |
+
+AtlasFold records 528 fused-attention calls, 528 HIP multiplication calls and zero
+native fallbacks. Protenix records published AMD and CK-attention libraries;
+CK GEMM and hipBLASLt stay unloaded in model inference. It also passes the existing
+1e-3 gates against preceding FireProt outputs. These concurrently run migration
+checks are not E2E speedup measurements. Raw Protenix arrays remain diagnostic.

@@ -4,9 +4,9 @@ The maintained Rust entry point is under active migration. One N1000 OpenFold3
 request has completed with the Rust supervisor, 297 isolation samples, and
 validated output content. Exact agreement with the older native capture did not
 pass; a fresh native-repeat control also differs from the older native capture. This route is not yet
-promoted as migration-parity validated. The current worker
-implements native OpenFold3/OpenBind-0 monomer inference. Protenix, AtlasFold,
-accelerated backends and the in-process Rust operator bridge are not connected
+promoted as migration-parity validated. The workers
+implement native OpenFold3/OpenBind-0 and AtlasFold plus AtlasLM-3B monomer
+inference. Protenix, accelerated backends and the in-process Rust operator bridge are not connected
 to this entry point yet. Their existing workflows remain the migration references.
 
 ## Commands
@@ -92,3 +92,28 @@ is insufficient to establish migration equivalence. No tolerance was widened.
 The exact migration gate remains unpassed; the route is experimental.
 See [the complete comparison record](../provenance/rust_openfold3_integration.json).
 These single requests are not a controlled E2E speedup measurement.
+
+## AtlasFold with AtlasLM-3B
+
+```bash
+target/release/fireprot infer configs/requests/atlasfold-n1000-native.json \
+  configs/diamondhill/atlasfold-native.json
+```
+
+The profile pins both original checkpoints and the independent AtlasFold source.
+It preserves four additional recycles (five trunk passes), 30 diffusion steps,
+one sample, seed 102, MLM probability 0.15, and the native BF16/FP32 boundaries.
+`sampling_config` is passed explicitly; the worker checks recycle, step and
+sample counts at the model boundary. It calls upstream `load_model` and `fold`
+directly, with no benchmark-harness orchestration.
+
+One N1000 request completed through the Rust supervisor with 216 isolation
+samples. Its coordinates, pLDDT, PAE and pTM are byte-identical to the stored
+seed102 native output, including shape and dtype. This verifies that exact
+request only; native N1536 and accelerated AtlasFold routes are not migrated yet.
+See [the request and complete comparison](../provenance/rust_atlasfold_integration.json).
+
+AtlasFold's public API already exports FP32 NumPy arrays and a Python float pTM.
+The worker preserves that native API. `atlasfold-model.json` separately records
+internal output tensor dtypes, effective bucket, sampling settings and model
+configuration; it is a worker diagnostic, not a supervisor-authenticated report.

@@ -2,6 +2,17 @@
 
 FireProt is an AMD GPU focused framework for protein structure inference. It is designed around model adapters and capability-gated operator backends so Protenix, AtlasFold, OpenFold, ESMFold, and later models can preserve their own scientific semantics while sharing reproducible execution, validation, and AMD optimization infrastructure.
 
+## Rust rebuild status
+
+The experimental Rust CLI now owns request validation, source/weight preflight,
+process supervision, GPU isolation and output acceptance for native AtlasFold
+plus AtlasLM-3B and OpenFold3. AtlasFold N1000 output parity passes exactly.
+OpenFold3 executes successfully, but numerical migration parity remains unpassed
+after native-repeat variation was observed. Protenix integration, accelerated
+backend migration and the Rust operator bridge remain in progress. See
+[Rust commands and scope](docs/rust-running.md) and
+[migration gates](docs/rust-migration.md).
+
 ## Current status
 
 Protenix v1.1.0 is the first working adapter target. The repository now contains:

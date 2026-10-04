@@ -11,11 +11,16 @@ def main():
     request = json.loads(Path(os.environ['FIREPROT_REQUEST']).read_text())
     channel = Channel(request)
     try:
-        if request['backend'] != 'native' or request['workload']['model'] != 'openfold3':
-            raise ValueError('This worker currently implements only native OpenFold3; other integrations are pending')
+        if request['backend'] != 'native':
+            raise ValueError('Accelerated worker backends are not integrated yet')
         import torch
         channel.ready(torch)
-        from .openfold3 import predict
+        if request['workload']['model'] == 'openfold3':
+            from .openfold3 import predict
+        elif request['workload']['model'] == 'atlasfold':
+            from .atlasfold import predict
+        else:
+            raise ValueError('This model worker is not integrated yet')
         bundle = predict(request, channel)
         bundle['environment'] = dict(torch=str(torch.__version__), hip=str(torch.version.hip),
                                      python=platform.python_version())

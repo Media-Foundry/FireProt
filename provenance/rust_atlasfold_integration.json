@@ -1,0 +1,122 @@
+{
+  "date": "2026-10-04",
+  "scope": "Native AtlasFold plus AtlasLM-3B through Rust CLI, N1000; no acceleration or speedup claim",
+  "base_commit": "16f26524dba0e06e9bbca16381ebb5dc3359d3ac",
+  "request": {
+    "schema_version": 1,
+    "run_id": "rust-atlasfold-n1000-v1",
+    "workload": {
+      "model": "atlasfold",
+      "model_name": "atlasfold-260703",
+      "recycles": 4,
+      "diffusion_steps": 30,
+      "samples": 1,
+      "precision": "native"
+    },
+    "backend": "native",
+    "seed": 102,
+    "hip_device": 7,
+    "source": {
+      "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold",
+      "commit": "8ab3aca0e18c8b814d5ca6756b2617a07d72c68d"
+    },
+    "checkpoints": {
+      "model": {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlasfold/snapshot/weights/atlasfold-260703.pth",
+        "sha256": "cbadb227d40e801a3d268d6e884e6ed3c6b9fb89d558739fcf5970492732e5ea"
+      },
+      "language_model": {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlaslm3b/snapshot/weights/atlaslm_3b_base.pth",
+        "sha256": "8097cc4a234853f19ca97435844829d84fe7f13215c900e74659fa9682cc0ddb"
+      }
+    },
+    "input": {
+      "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+      "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+    },
+    "output_dir": "/media/IntelSSD/fireprot/outputs/rust-atlasfold-n1000-v1"
+  },
+  "supervisor": {
+    "run_id": "rust-atlasfold-n1000-v1",
+    "phase": "succeeded",
+    "worker_pid": 1191777,
+    "elapsed_seconds": 190.51305675,
+    "isolation_samples": 216,
+    "failure": null
+  },
+  "model_seconds": 179.7051053509931,
+  "request_seconds": 184.4190296480083,
+  "environment": {
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850",
+    "python": "3.12.13"
+  },
+  "sampling": {
+    "num_steps": 30,
+    "sigma_min": 0.0004,
+    "sigma_max": 160.0,
+    "rho": 7,
+    "gamma_0": 0.8,
+    "gamma_min": 1.0,
+    "noise_scale": 1.003,
+    "step_scale": 1.5,
+    "chunk_size": 5
+  },
+  "trunk_passes": 5,
+  "bucket": 1024,
+  "internal_tensor_dtypes": {
+    "distogram.logits": "torch.bfloat16",
+    "distogram.boundaries": "torch.float32",
+    "sample_coords": "torch.float32",
+    "plddt": "torch.float32",
+    "pae": "torch.float32",
+    "ptm": "torch.float32"
+  },
+  "public_output_dtypes": {
+    "coordinates": "float32",
+    "plddt": "float32",
+    "pae": "float32",
+    "ptm": "float64"
+  },
+  "reference": "/media/IntelSSD/fireprot/outputs/atlasfold/native-n1000-seed102-noevents/repeat0-seed102-sample0.npz",
+  "candidate": "/media/IntelSSD/fireprot/outputs/rust-atlasfold-n1000-v1/sample-0.npz",
+  "comparison": {
+    "coordinates": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "pae": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "plddt": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "ptm": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    }
+  },
+  "tests": {
+    "rust_workspace_passed": 55,
+    "python_worker_cpu_passed": 9
+  },
+  "limitations": [
+    "One N1000 seed102 native request; accelerated routes and N1536 not yet migrated",
+    "Descriptor original_dtype is the upstream public output API dtype; internal tensor dtypes are recorded separately",
+    "Worker model_seconds covers model.inference; request_seconds includes loading, features, prediction and output writing; supervisor elapsed excludes provenance preflight",
+    "No new controlled E2E speedup measurement"
+  ],
+  "source_sha256": {
+    "python/fireprot_workers/__init__.py": "4d3f99912815c2e067831f2217be7ce1128bf9316c223589247ff752a4030bfd",
+    "python/fireprot_workers/__main__.py": "a4b233d2516fb3266a1b3b302f6d128e8dad9f21e1ee62170d6fbc657bbd916c",
+    "python/fireprot_workers/atlasfold.py": "f6ed7547f0449e2bfdfd9192b1bfdf7e54079fae6f22f2e160458c8aab7f4bd3",
+    "python/fireprot_workers/openfold3.py": "f5f476dd7c18caa3c812e89553adc2a09570fe75b9112b15d32ff7bbb8254230",
+    "python/fireprot_workers/transport.py": "edcc548f79494fa611249e1076f373147379c0e1c7753362b4bcaaebb48dc361"
+  }
+}

@@ -98,3 +98,9 @@ cargo test --workspace
 cargo fmt --all --check
 cargo clippy --workspace --all-targets -- -D warnings
 ```
+
+AtlasFold plus AtlasLM-3B now also runs through the Rust CLI. The N1000 seed102
+native request completed with 216 isolation samples and exact agreement for all
+four public output arrays against the stored native reference. Dual weights,
+recycles, sampling steps and native precision boundaries are retained. Accelerated
+AtlasFold routes and N1536 parity remain pending.

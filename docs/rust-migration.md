@@ -66,7 +66,7 @@ is active and the completion gates above remain in force.
 | Timing collection | Rust descriptive statistics and pinned accepted-run archive collection, with content/device/condition checks | Paired performance verdicts and complete invocation timing |
 | Protenix | Native and accelerated Mini-default FP32 N1000/N1536 under Rust supervision | Other variants before retiring the old entry point |
 | AtlasFold + AtlasLM-3B | Native/chunked/HIP/fused HIP with dual weights and model-specific semantics | Final acceptance after layout migration |
-| OpenFold3 / OpenBind-0 | Native N1000 inference executes under Rust supervision | Numerical migration parity remains unpassed; unchanged native runs also vary |
+| OpenFold3 / OpenBind-0 | Native N1000 strict deterministic inference passes exact parity under Rust supervision | Legacy default-mode parity remains unpassed; unchanged native runs also vary |
 | Native builds | Rust dependency identities, directory inventories, cache locking/publication, guarded compiler lifecycle; all six maintained loaders connected | Complete model-environment/plugin inventories remain outside the build recipe |
 | Precompiled artifacts | Rust publication and pinned acceptance for Python and C ABI bundles; all six loaders have explicit selectors | Packaging and final deployment acceptance |
 | Repository layout | Root five-crate Cargo workspace; workers/tensor glue under `python/`, native sources under `kernels/amd`, checked path map and a root import shim | Final packaging and maintained entry points |
@@ -87,9 +87,12 @@ bitwise identical to native. Four CCD/data resources are pinned in preflight.
 See `provenance/rust_protenix_integration.json` and the later loader/publication
 records linked from [kernel artifacts](kernel-artifacts.md).
 
-OpenFold3 numerical parity has not passed. Native-repeat variation is recorded in
-`provenance/rust_openfold3_integration.json`; it is not permission to widen a gate
-or resume operator optimization. Final migration acceptance remains incomplete.
+OpenFold3 N1000 strict deterministic execution now passes exact coordinate and
+all captured confidence comparisons against matching native runs. The explicit
+request policy and evidence are described in [deterministic validation](openfold3-determinism.md).
+Legacy default-mode parity remains unpassed; native-repeat variation is retained in
+`provenance/rust_openfold3_integration.json`. No gate was widened. Final framework
+acceptance remains incomplete, so operator optimization has not resumed.
 
 ### Ownership and checks
 

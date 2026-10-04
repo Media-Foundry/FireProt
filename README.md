@@ -17,7 +17,7 @@ is not claimed to accelerate GPU kernels.
 | --- | --- | --- |
 | Protenix | Mini-default FP32, native and FireProt CK/HIP paths | N1000/N1536 pass established coordinate and summary-confidence gates. Full raw confidence arrays are retained but are not bitwise identical. Other variants remain pending. |
 | AtlasFold + AtlasLM-3B | Monomer, original dual weights, native/chunked/HIP/fused HIP | N1000 native and N1000/N1536 accelerated routes pass exact public-output parity. N1536 reference uses bounded native math. |
-| OpenFold3 / OpenBind-0 | Native inference under Rust supervision | N1000 runs successfully; numerical migration parity remains unpassed, including observed native-repeat variation. No accelerated route promoted. |
+| OpenFold3 / OpenBind-0 | Native inference under Rust supervision | N1000 strict deterministic mode passes exact native parity. Legacy default-mode parity remains unpassed because native repeats vary. No accelerated route promoted. |
 | OpenFold2, ESMFold, other adapters | Planned | No verified integration claim. |
 
 Protenix and OpenFold3 are separate implementations. Model adapters preserve each

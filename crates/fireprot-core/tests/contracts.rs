@@ -54,6 +54,7 @@ fn workloads() -> [Workload; 3] {
             diffusion_steps: 200,
             samples: 1,
             precision: Precision::Float32,
+            deterministic: None,
         },
     ]
 }
@@ -172,4 +173,28 @@ fn invalid_provenance_and_path_like_ids_are_rejected() {
         r.run_id = id.into();
         assert_eq!(ValidatedRequest::try_from(r), Err(RequestError::RunId));
     }
+}
+
+#[test]
+fn openfold3_determinism_is_explicit_and_preserves_legacy_wire_identity() {
+    let old: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../configs/requests/openfold3-n1000-native.json"
+    ))
+    .unwrap();
+    let decoded: Request = serde_json::from_value(old.clone()).unwrap();
+    let encoded = serde_json::to_value(&decoded).unwrap();
+    assert_eq!(encoded["workload"], old["workload"]);
+    for flag in [false, true] {
+        let mut explicit = old.clone();
+        explicit["workload"]["deterministic"] = flag.into();
+        let decoded: Request = serde_json::from_value(explicit.clone()).unwrap();
+        ValidatedRequest::try_from(decoded.clone()).unwrap();
+        assert_eq!(
+            serde_json::to_value(decoded).unwrap()["workload"],
+            explicit["workload"]
+        );
+    }
+    let mut invalid = old;
+    invalid["workload"]["deterministic"] = "true".into();
+    assert!(serde_json::from_value::<Request>(invalid).is_err());
 }

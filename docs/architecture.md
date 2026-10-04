@@ -18,9 +18,10 @@ cross-model API and packaged kernel builds are not complete.
 | AMD kernels and tensor glue | `kernels/amd`, `python/fireprot` | Rust build services and pinned artifact loaders; root Python imports use a small compatibility shim |
 
 AtlasFold N1000 native output migration passes exactly. Its chunked/HIP/fused HIP
-routes also pass exact public-output parity at N1000 and N1536. OpenFold3 N1000 executes
-under Rust supervision, but numerical parity remains unpassed after variation
-was also observed between unchanged native runs. Protenix Mini-default native and
+routes also pass exact public-output parity at N1000 and N1536. OpenFold3 N1000
+with explicit strict deterministic execution now passes exact native parity under
+Rust supervision. Legacy default-mode comparisons remain unpassed after variation
+between unchanged native runs; see [deterministic validation](openfold3-determinism.md). Protenix Mini-default native and
 FireProt workers now pass existing coordinate/summary gates at N1000 and N1536.
 Their full confidence arrays are retained and shape/finite-value checked; this
 does not imply bitwise native/accelerated array equality.

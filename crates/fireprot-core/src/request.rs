@@ -73,6 +73,9 @@ pub enum Workload {
         diffusion_steps: u32,
         samples: u32,
         precision: Precision,
+        /// None preserves the upstream trainer default and legacy wire identity.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        deterministic: Option<bool>,
     },
 }
 

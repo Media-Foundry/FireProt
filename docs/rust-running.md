@@ -1,10 +1,9 @@
 # Rust inference entry point
 
-The maintained Rust entry point is under active migration. One N1000 OpenFold3
-request has completed with the Rust supervisor, 297 isolation samples, and
-validated output content. Exact agreement with the older native capture did not
-pass; a fresh native-repeat control also differs from the older native capture. This route is not yet
-promoted as migration-parity validated. The workers
+The maintained Rust entry point is under active migration. OpenFold3 N1000 with
+explicit strict deterministic execution passes exact native-output parity; see
+[policy and evidence](openfold3-determinism.md). The legacy default-mode route has
+native-repeat variation and remains unpassed for numerical migration parity. Workers
 implement native OpenFold3/OpenBind-0, AtlasFold plus AtlasLM-3B, and Protenix
 Mini-default monomer inference. Protenix also has a FireProt backend connected to
 the Rust operator bridge. AtlasFold chunked, HIP and fused HIP routes also use Rust dispatch and supervision; accelerated OpenFold3 remains pending.
@@ -100,7 +99,8 @@ the unchanged original harness also failed exact comparison with that capture:
 maximum coordinate delta 9.74e-4 Angstrom, PAE 0.1032, PDE 0.2076. The instantiated
 model configurations are equal. This demonstrates native repeat variation, but
 is insufficient to establish migration equivalence. No tolerance was widened.
-The exact migration gate remains unpassed; the route is experimental.
+That legacy default-mode comparison remains unpassed. A later explicit deterministic
+configuration passes exact parity, as described above.
 See [the complete comparison record](../provenance/rust_openfold3_integration.json).
 These single requests are not a controlled E2E speedup measurement.
 

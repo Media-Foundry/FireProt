@@ -1,0 +1,897 @@
+{
+  "schema_version": 1,
+  "status": "native_repeat_and_rust_deterministic_n1000_exact_parity_passed",
+  "scope": "OpenBind-0 N1000 FP32, three additional recycles, 200 diffusion steps, one sample, seed 101; diagnostic migration validation, not a performance claim",
+  "framework_base_commit": "1eac8b6fbbe2f18efac50cefdfd4118db0f5b14e",
+  "native_environment_override": {
+    "PYTHONHASHSEED": "101"
+  },
+  "native_runs": [
+    {
+      "status": "complete",
+      "source_commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f",
+      "source": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+      "weight": {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+        "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4",
+        "bytes": 2287872989
+      },
+      "input_sha256": "2715542db697dbd2dd5021063173f6e91a405ac0f46a46a69b748c815826ae5b",
+      "config_yaml": "experiment_settings:\n  seeds: [101]\n  use_msa_server: false\n  use_templates: false\npl_trainer_args:\n  devices: 1\n  num_nodes: 1\n  precision: 32-true\n  deterministic: true\nmodel_update:\n  presets: [predict]\n  custom:\n    settings:\n      memory:\n        eval:\n          use_triton_triangle_kernels: false\n          use_deepspeed_evo_attention: false\n          use_cueq_triangle_kernels: false\n",
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "stage_events": false,
+      "harness_sha256": "7b3c7b58a09001e421afc8f3a2309096edc6afbc3cb0716afc0f94fe34154bdb",
+      "model_calls": 1,
+      "cache": "Weights hashed before request; filesystem warm; fresh model; no MSA or template search",
+      "timing_scope": "Request excludes imports, weight hashing and device preflight; includes upstream setup/loading/features/prediction/writing and raw output capture. Stage times are inclusive.",
+      "device": {
+        "gpu": 4,
+        "bdf": "0000:8e:00.0",
+        "uuid": "9100740c-0000-1000-8027-662e20db9af6",
+        "kfd_id": 30939,
+        "node_id": 8,
+        "partition_id": 0
+      },
+      "model_seconds": 260.1825108889607,
+      "recycles": 3,
+      "output_fields": {
+        "coordinates": {
+          "shape": [
+            1,
+            1,
+            7978,
+            3
+          ],
+          "dtype": "float32",
+          "finite": true
+        },
+        "confidence.plddt": {
+          "shape": [
+            1,
+            1,
+            7978
+          ],
+          "dtype": "float32",
+          "finite": true
+        },
+        "confidence.pde": {
+          "shape": [
+            1,
+            1,
+            1000,
+            1000
+          ],
+          "dtype": "float32",
+          "finite": true
+        },
+        "confidence.gpde": {
+          "shape": [
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "finite": true
+        },
+        "confidence.pae": {
+          "shape": [
+            1,
+            1,
+            1000,
+            1000
+          ],
+          "dtype": "float32",
+          "finite": true
+        },
+        "confidence.iptm": {
+          "shape": [
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "finite": true
+        },
+        "confidence.ptm": {
+          "shape": [
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "finite": true
+        },
+        "confidence.disorder": {
+          "shape": [
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "finite": true
+        },
+        "confidence.has_clash": {
+          "shape": [
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "finite": true
+        },
+        "confidence.sample_ranking_score": {
+          "shape": [
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "finite": true
+        },
+        "confidence.chain_ptm.1": {
+          "shape": [
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "finite": true
+        }
+      },
+      "request_seconds": 287.10825511201983,
+      "peak_allocated_bytes": 38636892160,
+      "blas_preference": "_BlasBackend.Cublas",
+      "isolation": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 4,
+        "interval_seconds": 1.0,
+        "samples": 218,
+        "allowed_pid": 1336930,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      },
+      "model_config_sha256": "c86fbcc5d3a43642c77b8eaa605322329bab9e32c413a067a4936db30a348984"
+    },
+    {
+      "status": "complete",
+      "source_commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f",
+      "source": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+      "weight": {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+        "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4",
+        "bytes": 2287872989
+      },
+      "input_sha256": "2715542db697dbd2dd5021063173f6e91a405ac0f46a46a69b748c815826ae5b",
+      "config_yaml": "experiment_settings:\n  seeds: [101]\n  use_msa_server: false\n  use_templates: false\npl_trainer_args:\n  devices: 1\n  num_nodes: 1\n  precision: 32-true\n  deterministic: true\nmodel_update:\n  presets: [predict]\n  custom:\n    settings:\n      memory:\n        eval:\n          use_triton_triangle_kernels: false\n          use_deepspeed_evo_attention: false\n          use_cueq_triangle_kernels: false\n",
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "stage_events": false,
+      "harness_sha256": "7b3c7b58a09001e421afc8f3a2309096edc6afbc3cb0716afc0f94fe34154bdb",
+      "model_calls": 1,
+      "cache": "Weights hashed before request; filesystem warm; fresh model; no MSA or template search",
+      "timing_scope": "Request excludes imports, weight hashing and device preflight; includes upstream setup/loading/features/prediction/writing and raw output capture. Stage times are inclusive.",
+      "device": {
+        "gpu": 5,
+        "bdf": "0000:93:00.0",
+        "uuid": "9000740c-0000-1000-8007-d3c11591c16f",
+        "kfd_id": 8466,
+        "node_id": 9,
+        "partition_id": 0
+      },
+      "model_seconds": 237.78198428399628,
+      "recycles": 3,
+      "output_fields": {
+        "coordinates": {
+          "shape": [
+            1,
+            1,
+            7978,
+            3
+          ],
+          "dtype": "float32",
+          "finite": true
+        },
+        "confidence.plddt": {
+          "shape": [
+            1,
+            1,
+            7978
+          ],
+          "dtype": "float32",
+          "finite": true
+        },
+        "confidence.pde": {
+          "shape": [
+            1,
+            1,
+            1000,
+            1000
+          ],
+          "dtype": "float32",
+          "finite": true
+        },
+        "confidence.gpde": {
+          "shape": [
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "finite": true
+        },
+        "confidence.pae": {
+          "shape": [
+            1,
+            1,
+            1000,
+            1000
+          ],
+          "dtype": "float32",
+          "finite": true
+        },
+        "confidence.iptm": {
+          "shape": [
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "finite": true
+        },
+        "confidence.ptm": {
+          "shape": [
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "finite": true
+        },
+        "confidence.disorder": {
+          "shape": [
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "finite": true
+        },
+        "confidence.has_clash": {
+          "shape": [
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "finite": true
+        },
+        "confidence.sample_ranking_score": {
+          "shape": [
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "finite": true
+        },
+        "confidence.chain_ptm.1": {
+          "shape": [
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "finite": true
+        }
+      },
+      "request_seconds": 263.8455105230096,
+      "peak_allocated_bytes": 38636892160,
+      "blas_preference": "_BlasBackend.Cublas",
+      "isolation": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 5,
+        "interval_seconds": 1.0,
+        "samples": 200,
+        "allowed_pid": 1342499,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      },
+      "model_config_sha256": "c86fbcc5d3a43642c77b8eaa605322329bab9e32c413a067a4936db30a348984"
+    }
+  ],
+  "native_artifacts": [
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/openfold3/deterministic-diagnostic-n1000-v1/manifest.json",
+      "bytes": 47771,
+      "sha256": "59b5c004856e434cc28d50840d126979164f3c1731515169e8343f563c515ae8"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/openfold3/deterministic-diagnostic-n1000-v1/prediction.npz",
+      "bytes": 8130632,
+      "sha256": "400aa09a68627edbe6662865915b329a0613b39ff6d636ab272b92cfe942ef01"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/openfold3/deterministic-diagnostic-n1000-v2/manifest.json",
+      "bytes": 47770,
+      "sha256": "6444ccea309e82f9f2229b52c066064479a8e3226b1c7e43ec397a0af0dbbe2f"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/openfold3/deterministic-diagnostic-n1000-v2/prediction.npz",
+      "bytes": 8130632,
+      "sha256": "400aa09a68627edbe6662865915b329a0613b39ff6d636ab272b92cfe942ef01"
+    },
+    {
+      "path": "/tmp/fireprot-openfold3-deterministic.yml",
+      "bytes": 391,
+      "sha256": "79a96114a8aca35cb5e12478118ae14a6831a35de3aede68760c6e1fa5e68f50"
+    },
+    {
+      "path": "/tmp/fireprot-openfold3-scatter-replay.py",
+      "bytes": 1300,
+      "sha256": "0ab73fff0455fca6f71808a204bfdad623f32fbbb6113a78384d218cccd5ba50"
+    }
+  ],
+  "native_comparison": {
+    "confidence.chain_ptm.1": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.disorder": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.gpde": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.has_clash": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.iptm": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.pae": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.pde": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.plddt": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.ptm": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.sample_ranking_score": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "coordinates": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    }
+  },
+  "scatter_probe": {
+    "device": {
+      "gpu": 5,
+      "bdf": "0000:93:00.0",
+      "uuid": "9000740c-0000-1000-8007-d3c11591c16f",
+      "kfd_id": 8466,
+      "node_id": 9,
+      "partition_id": 0
+    },
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850",
+    "shape": [
+      1,
+      10000,
+      128
+    ],
+    "seed": 101,
+    "synthetic": true,
+    "modes": {
+      "False": {
+        "unique_hashes": 20,
+        "hashes": [
+          "7980d3dc5b8ce3170b4fd0791d7d720ff94a7d44f447aeeaf1144250bc4cca44",
+          "a932906f45d726f672405a45f52d756c61b5fe66e01111fb61cd74948c762c51",
+          "b86e1ad7037afdd29f61d2cb4c01e4e0f31ccc5d1f6146a2847b064dc2adcbea",
+          "166f8a832b26cb4336f2f3f3b36b4039398491ff59696f4ab84f8287a6b3432d",
+          "b687fe2e3e1c1db71257ecbd3ece5e49f9d32b2f3c9fb484bfa481039c28d4b6",
+          "f96e1a3e72ca5197a32d0abeb36efd6aafeb670f6f7b0303d79d492dc1bdc125",
+          "6b5d4b222b4831da7c2849b7d4c59b78498c1dee8d284cc0b11a2e0567ae2534",
+          "85a7ee02fdce82dcfb649675b70c57d024fc09e7b3d16aa999bb39dd1db7dac4",
+          "2d387f1f894419eea72f641bf5a29ef821dee7822d08071dc4bbab556fc8d6d9",
+          "96df9df68122da7a1392df1c45ef30820974402b863388500eb264ec3fd6cace",
+          "62d03b6d956a705e414c7465045b57d469152eaed2e9a20d6d3136029cd17a53",
+          "ad38fae425be7fff24af82bcef7c49e7f1a082adc68daa65811c41dcb4799e17",
+          "969248aa896261089e91ec69674bc958648e7a4266a3aafd7adb4c11d40daf4d",
+          "27f9f785cc3f10fb093dc797c6f62d46eeb3b3f32b3e0001b116854410561e39",
+          "728b707c5918ed4fce0f093bac6a01af1363c41713a56c82ace2afb892a05b0d",
+          "d1e947584621fe1565f2ad39c133c49aee87bfbe9aec980e46ef09056598990d",
+          "336c8d2e5eb1f686cd64dbbd474cf3986e1fa34446c53b239197a25782719daf",
+          "c4be27afa642d907c7ef182aa0f9a5d40a93e9e1a73869f2edc10d3ebc1a9c25",
+          "3b135bd9c823f168f8e6773aecf1392b4aad49f5857ba6e2870f0996b1f57a6b",
+          "fbe1f2dc8db2477ab4de1a85b50bbdf839cd80cfd091d48e72e53cc125e2ba80"
+        ],
+        "max_delta_to_first": 2.384185791015625e-07,
+        "deterministic_enabled": false
+      },
+      "True": {
+        "unique_hashes": 1,
+        "hashes": [
+          "86e6d17ffb361b61fc9e40e12cf58ef1e9af192817bac3655fddf5cd30ab39e6",
+          "86e6d17ffb361b61fc9e40e12cf58ef1e9af192817bac3655fddf5cd30ab39e6",
+          "86e6d17ffb361b61fc9e40e12cf58ef1e9af192817bac3655fddf5cd30ab39e6",
+          "86e6d17ffb361b61fc9e40e12cf58ef1e9af192817bac3655fddf5cd30ab39e6",
+          "86e6d17ffb361b61fc9e40e12cf58ef1e9af192817bac3655fddf5cd30ab39e6",
+          "86e6d17ffb361b61fc9e40e12cf58ef1e9af192817bac3655fddf5cd30ab39e6",
+          "86e6d17ffb361b61fc9e40e12cf58ef1e9af192817bac3655fddf5cd30ab39e6",
+          "86e6d17ffb361b61fc9e40e12cf58ef1e9af192817bac3655fddf5cd30ab39e6",
+          "86e6d17ffb361b61fc9e40e12cf58ef1e9af192817bac3655fddf5cd30ab39e6",
+          "86e6d17ffb361b61fc9e40e12cf58ef1e9af192817bac3655fddf5cd30ab39e6",
+          "86e6d17ffb361b61fc9e40e12cf58ef1e9af192817bac3655fddf5cd30ab39e6",
+          "86e6d17ffb361b61fc9e40e12cf58ef1e9af192817bac3655fddf5cd30ab39e6",
+          "86e6d17ffb361b61fc9e40e12cf58ef1e9af192817bac3655fddf5cd30ab39e6",
+          "86e6d17ffb361b61fc9e40e12cf58ef1e9af192817bac3655fddf5cd30ab39e6",
+          "86e6d17ffb361b61fc9e40e12cf58ef1e9af192817bac3655fddf5cd30ab39e6",
+          "86e6d17ffb361b61fc9e40e12cf58ef1e9af192817bac3655fddf5cd30ab39e6",
+          "86e6d17ffb361b61fc9e40e12cf58ef1e9af192817bac3655fddf5cd30ab39e6",
+          "86e6d17ffb361b61fc9e40e12cf58ef1e9af192817bac3655fddf5cd30ab39e6",
+          "86e6d17ffb361b61fc9e40e12cf58ef1e9af192817bac3655fddf5cd30ab39e6",
+          "86e6d17ffb361b61fc9e40e12cf58ef1e9af192817bac3655fddf5cd30ab39e6"
+        ],
+        "max_delta_to_first": 0.0,
+        "deterministic_enabled": true
+      }
+    },
+    "isolation": {
+      "available": true,
+      "command": [
+        "/usr/bin/amd-smi",
+        "process",
+        "--json"
+      ],
+      "physical_device_index": 5,
+      "interval_seconds": 0.1,
+      "samples": 4,
+      "allowed_pid": 1341808,
+      "external_pids": [],
+      "errors": [],
+      "passed": true
+    }
+  },
+  "scatter_probe_source": "import json,hashlib,torch\nfrom openfold3.core.utils.atomize_utils import aggregate_atom_feat_to_tokens\nfrom benchmarks.atlasfold.profile_inference import resolve_physical_device,_GpuProcessMonitor\nimport os\nphysical=resolve_physical_device();monitor=_GpuProcessMonitor(physical['gpu'],os.getpid(),0.1);monitor.start()\ntry:\n torch.manual_seed(101)\n x=torch.randn(1,10000,128,device='cuda',dtype=torch.float32)\n idx=(torch.arange(10000,device='cuda')//10).reshape(1,-1)\n tm=torch.ones(1,1000,device='cuda');am=torch.ones(1,10000,device='cuda')\n out=dict(device=physical,torch=str(torch.__version__),hip=torch.version.hip,shape=list(x.shape),seed=101,synthetic=True,modes={})\n for deterministic in [False,True]:\n  torch.use_deterministic_algorithms(deterministic)\n  values=[]\n  for _ in range(20):\n   v=aggregate_atom_feat_to_tokens(tm,idx,am,x,atom_dim=1,aggregate_fn='mean')\n   torch.cuda.synchronize();values.append(v.cpu())\n  hashes=[hashlib.sha256(v.numpy().tobytes()).hexdigest() for v in values]\n  out['modes'][str(deterministic)]=dict(unique_hashes=len(set(hashes)),hashes=hashes,max_delta_to_first=max((v-values[0]).abs().max().item() for v in values),deterministic_enabled=torch.are_deterministic_algorithms_enabled())\nfinally:\n out['isolation']=monitor.stop()\nprint(json.dumps(out,indent=2))\n",
+  "limits": [
+    "The synthetic scatter probe identifies one nondeterministic operation; it does not prove the sole cause of full-model drift.",
+    "Native repeats change both trainer deterministic mode and explicitly set PYTHONHASHSEED=101 relative to the earlier uncontrolled runs.",
+    "Earlier nondeterministic migration comparisons remain unpassed.",
+    "Two repeats of one input do not establish reproducibility across versions, devices, inputs or all operators.",
+    "Concurrent diagnostic timings do not establish speedup."
+  ],
+  "normalization": {
+    "operation": "Remove exactly the leading batch and sample axes with [0,0]; no dtype conversion or arithmetic",
+    "source": {
+      "path": "/media/IntelSSD/fireprot/outputs/openfold3/deterministic-diagnostic-n1000-v2/prediction.npz",
+      "sha256": "400aa09a68627edbe6662865915b329a0613b39ff6d636ab272b92cfe942ef01"
+    },
+    "normalized": {
+      "path": "/media/IntelSSD/fireprot/outputs/openfold3/deterministic-diagnostic-n1000-v2/sample-0-normalized.npz",
+      "sha256": "e6ea97dc8a3e9b5df0eb924f51d440918658a2f50d957338f8be8da24d8c7709"
+    },
+    "arrays": {
+      "coordinates": {
+        "source_shape": [
+          1,
+          1,
+          7978,
+          3
+        ],
+        "normalized_shape": [
+          7978,
+          3
+        ],
+        "dtype": "float32"
+      },
+      "confidence.plddt": {
+        "source_shape": [
+          1,
+          1,
+          7978
+        ],
+        "normalized_shape": [
+          7978
+        ],
+        "dtype": "float32"
+      },
+      "confidence.pde": {
+        "source_shape": [
+          1,
+          1,
+          1000,
+          1000
+        ],
+        "normalized_shape": [
+          1000,
+          1000
+        ],
+        "dtype": "float32"
+      },
+      "confidence.gpde": {
+        "source_shape": [
+          1,
+          1
+        ],
+        "normalized_shape": [],
+        "dtype": "float32"
+      },
+      "confidence.pae": {
+        "source_shape": [
+          1,
+          1,
+          1000,
+          1000
+        ],
+        "normalized_shape": [
+          1000,
+          1000
+        ],
+        "dtype": "float32"
+      },
+      "confidence.iptm": {
+        "source_shape": [
+          1,
+          1
+        ],
+        "normalized_shape": [],
+        "dtype": "float32"
+      },
+      "confidence.ptm": {
+        "source_shape": [
+          1,
+          1
+        ],
+        "normalized_shape": [],
+        "dtype": "float32"
+      },
+      "confidence.disorder": {
+        "source_shape": [
+          1,
+          1
+        ],
+        "normalized_shape": [],
+        "dtype": "float32"
+      },
+      "confidence.has_clash": {
+        "source_shape": [
+          1,
+          1
+        ],
+        "normalized_shape": [],
+        "dtype": "float32"
+      },
+      "confidence.sample_ranking_score": {
+        "source_shape": [
+          1,
+          1
+        ],
+        "normalized_shape": [],
+        "dtype": "float32"
+      },
+      "confidence.chain_ptm.1": {
+        "source_shape": [
+          1,
+          1
+        ],
+        "normalized_shape": [],
+        "dtype": "float32"
+      }
+    }
+  },
+  "checks": {
+    "rust_workspace_tests": 109,
+    "worker_policy_tests": 7,
+    "rust_1_85_core_tests": "passed",
+    "clippy_all_targets": "passed",
+    "fmt": "passed",
+    "regression_before_fix": "New deterministic request test failed with unknown field deterministic; passed after adding the typed policy"
+  },
+  "rust_run": {
+    "directory": "/media/IntelSSD/fireprot/outputs/openfold3-n1000-deterministic-v1",
+    "supervisor": {
+      "run_id": "openfold3-n1000-deterministic-v1",
+      "phase": "succeeded",
+      "worker_pid": 1348837,
+      "elapsed_seconds": 283.92698547,
+      "isolation_samples": 321,
+      "failure": null,
+      "announced_device": {
+        "worker_pid": 1348837,
+        "logical_device": 0,
+        "pci_address": "0000:93:00.0",
+        "architecture": "gfx90a"
+      },
+      "device_verified": true,
+      "physical_device": {
+        "hip_device": 7,
+        "smi_device": 5,
+        "pci_address": "0000:93:00.0",
+        "architecture": "gfx90a"
+      },
+      "execution_sha256": "e1089b1787c47d09cb76d403e8dac4de7e76ac84304258c6fbefcfb21ed22657"
+    },
+    "comparison": {
+      "confidence.chain_ptm.1": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.disorder": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.gpde": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.has_clash": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.iptm": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.pae": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.pde": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.plddt": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.ptm": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.sample_ranking_score": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "coordinates": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      }
+    },
+    "bundle": {
+      "schema_version": 1,
+      "run_id": "openfold3-n1000-deterministic-v1",
+      "seed": 101,
+      "workload": {
+        "model": "openfold3",
+        "model_name": "openbind-0",
+        "recycles": 3,
+        "diffusion_steps": 200,
+        "samples": 1,
+        "precision": "float32",
+        "deterministic": true
+      },
+      "predictions": [
+        {
+          "sample": 0,
+          "archive": "sample-0.npz",
+          "arrays": {
+            "coordinates": {
+              "shape": [
+                7978,
+                3
+              ],
+              "original_dtype": "float32",
+              "storage_dtype": "float32"
+            },
+            "confidence.plddt": {
+              "shape": [
+                7978
+              ],
+              "original_dtype": "float32",
+              "storage_dtype": "float32"
+            },
+            "confidence.pde": {
+              "shape": [
+                1000,
+                1000
+              ],
+              "original_dtype": "float32",
+              "storage_dtype": "float32"
+            },
+            "confidence.gpde": {
+              "shape": [],
+              "original_dtype": "float32",
+              "storage_dtype": "float32"
+            },
+            "confidence.pae": {
+              "shape": [
+                1000,
+                1000
+              ],
+              "original_dtype": "float32",
+              "storage_dtype": "float32"
+            },
+            "confidence.iptm": {
+              "shape": [],
+              "original_dtype": "float32",
+              "storage_dtype": "float32"
+            },
+            "confidence.ptm": {
+              "shape": [],
+              "original_dtype": "float32",
+              "storage_dtype": "float32"
+            },
+            "confidence.disorder": {
+              "shape": [],
+              "original_dtype": "float32",
+              "storage_dtype": "float32"
+            },
+            "confidence.has_clash": {
+              "shape": [],
+              "original_dtype": "float32",
+              "storage_dtype": "float32"
+            },
+            "confidence.sample_ranking_score": {
+              "shape": [],
+              "original_dtype": "float32",
+              "storage_dtype": "float32"
+            },
+            "confidence.chain_ptm.1": {
+              "shape": [],
+              "original_dtype": "float32",
+              "storage_dtype": "float32"
+            }
+          },
+          "confidence": null
+        }
+      ],
+      "model_seconds": 249.9573891919572,
+      "request_seconds": 275.8311909639742,
+      "environment": {
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "python": "3.12.13"
+      }
+    },
+    "acceptance_receipt": {
+      "schema_version": 1,
+      "metadata": [
+        {
+          "path": "request.json",
+          "sha256": "e4d852ca6197903a52d11f6181f0a278400bacc23f455f27f8d9b32b2f40a941"
+        },
+        {
+          "path": "provenance.json",
+          "sha256": "cf57b1b5c4f83f52f75574486188812e5185eaeaad54ae6c53e871e739fcfa93"
+        },
+        {
+          "path": "execution.json",
+          "sha256": "83b58049b2b650425edf3e3f82ac9f1a2fcb4fdef9a9410be40e606cef55f343"
+        },
+        {
+          "path": "supervisor.json",
+          "sha256": "ea1697fe5e66f2a2ab967564788c3139e24b1b56b188d3c5475897481f0a950e"
+        }
+      ],
+      "outputs": [
+        {
+          "path": "predictions.json",
+          "sha256": "d8a096ed52a43db226cb92647d533bae45845fc371c1938be13ed13592640121"
+        },
+        {
+          "path": "sample-0.npz",
+          "sha256": "e6ea97dc8a3e9b5df0eb924f51d440918658a2f50d957338f8be8da24d8c7709"
+        },
+        {
+          "path": "native/umem_L01000_462bb697ecdcce2f/seed_101/umem_L01000_462bb697ecdcce2f_seed_101_sample_1_model.cif",
+          "sha256": "5f845dad470aee78185625581de805ca6c2ff3fb9c063ea1985d339b2538c368"
+        }
+      ]
+    },
+    "acceptance_receipt_sha256": "31ef5d2071cfdccc9dfdbae5590930b99e79f3899511857e7d3781d41c21e103",
+    "collection": {
+      "series": {
+        "schema_version": 1,
+        "observations": [
+          {
+            "request": {
+              "schema_version": 1,
+              "run_id": "openfold3-n1000-deterministic-v1",
+              "workload": {
+                "model": "openfold3",
+                "model_name": "openbind-0",
+                "recycles": 3,
+                "diffusion_steps": 200,
+                "samples": 1,
+                "precision": "float32",
+                "deterministic": true
+              },
+              "backend": "native",
+              "seed": 101,
+              "hip_device": 7,
+              "source": {
+                "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+                "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+              },
+              "checkpoints": {
+                "model": {
+                  "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+                  "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+                }
+              },
+              "resources": {},
+              "input": {
+                "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01000_462bb697ecdcce2f.json",
+                "sha256": "2715542db697dbd2dd5021063173f6e91a405ac0f46a46a69b748c815826ae5b"
+              },
+              "output_dir": "/media/IntelSSD/fireprot/outputs/openfold3-n1000-deterministic-v1"
+            },
+            "scope": "model",
+            "cache_state": "Weights hashed before request; filesystem warm; fresh model; no MSA or template search",
+            "environment": {
+              "launch": "{\"arguments\":[\"-m\",\"fireprot_workers\"],\"environment\":{\"HIP_VISIBLE_DEVICES\":\"7\",\"HOME\":\"/home/pc\",\"LANG\":\"zh_CN.UTF-8\",\"LC_ALL\":\"C.UTF-8\",\"LOGNAME\":\"pc\",\"OPENFOLD_CACHE\":\"/media/PM982/engramfold/folding_e2e_20260921/cache/openfold3\",\"PATH\":\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin\",\"PYTHONHASHSEED\":\"101\",\"PYTHONNOUSERSITE\":\"1\",\"PYTHONPATH\":\"/media/IntelSSD/fireprot/python:/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3/src:/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3:/media/IntelSSD/fireprot\",\"USER\":\"pc\"},\"environment_policy\":\"explicit-v1\",\"inputs\":[{\"canonical_path\":\"/media/IntelSSD/fireprot/kernels/amd/fireprot_amd_ops.cpp\",\"name\":\"amd-kernels/fireprot_amd_ops.cpp\",\"sha256\":\"1c7fc9f4c770752375fed47abfe08d33cda76e40d11c740d7f8294e132cd3d43\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/kernels/amd/fireprot_amd_ops.cu\",\"name\":\"amd-kernels/fireprot_amd_ops.cu\",\"sha256\":\"748c11e089cbb5a3101912954b439179557b2b966aac340c76c538960063f949\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/kernels/amd/fireprot_ck_attention.cpp\",\"name\":\"amd-kernels/fireprot_ck_attention.cpp\",\"sha256\":\"d50865b27a66956b391a331cc0daf9e33962c1fd1c0d93b3243fab9d25af016c\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/kernels/amd/fireprot_ck_ops.cpp\",\"name\":\"amd-kernels/fireprot_ck_ops.cpp\",\"sha256\":\"f82f123bf12b6f9a5bea05acaac11dc2c646e126c6553dbdf24e9c81747829f0\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/kernels/amd/fireprot_lt_bmm.cpp\",\"name\":\"amd-kernels/fireprot_lt_bmm.cpp\",\"sha256\":\"cc876b221fc91e0bf10f991ca8a641a395eab5a157779f525966ea73ae8491b9\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/kernels/amd/fireprot_mask_bias.cu\",\"name\":\"amd-kernels/fireprot_mask_bias.cu\",\"sha256\":\"0aff4c687fce58b491a40000b423de040c5f4695c42718e448b2127156a62cc3\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/kernels/amd/fireprot_pair_fusions.cpp\",\"name\":\"amd-kernels/fireprot_pair_fusions.cpp\",\"sha256\":\"0a21f6cf760a91427b95e4a9bdc6d4d7ff181e187d806f97fb73e00ee4ebf0d9\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/kernels/amd/fireprot_pair_qkv.cu\",\"name\":\"amd-kernels/fireprot_pair_qkv.cu\",\"sha256\":\"53881fc24c4f4d9e183234bc9b312e6837d51d7afa68a937bfdb94e676197b4e\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/kernels/amd/fireprot_pair_softmax.cu\",\"name\":\"amd-kernels/fireprot_pair_softmax.cu\",\"sha256\":\"45298f0edeb18ec3aa26411fdc2f75f57a70062b251687fa4b62a1256a90bdc9\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/kernels/amd/fireprot_pair_transpose.cu\",\"name\":\"amd-kernels/fireprot_pair_transpose.cu\",\"sha256\":\"bc0779458326662c088c7cad564a0bb1c7ce5dcf7f03630c140e306665f00b9f\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/kernels/amd/tools/hip_device_probe.cpp\",\"name\":\"amd-kernels/tools/hip_device_probe.cpp\",\"sha256\":\"b4e0d82420f8afcfd8caaebec185ff96bfc7cfaeec7acc62bf8a95f459c8c18b\"},{\"canonical_path\":\"/opt/rocm/core-10.0/libexec/amdsmi_cli/amdsmi_cli.py\",\"name\":\"amd-smi\",\"sha256\":\"fed9e6cd65b4ecbc64e8453331ebaa288870c60178a5e714a153156d774a9613\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/runtime/fireprot-hip-probe\",\"name\":\"hip-probe\",\"sha256\":\"c7a9b10591cb4e1840b07a7c2f96e9e59f3842b6f1aec74d1c240ab5fec3d476\"},{\"canonical_path\":\"/media/PM982/engramfold/folding_e2e_20260921/venvs/openfold3-amd/pyvenv.cfg\",\"name\":\"python-venv\",\"sha256\":\"6044640a58f387579478092e01ea25d4aaf160a6fb260e6463d941d178b36927\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/fireprot/__init__.py\",\"name\":\"root-import-shim\",\"sha256\":\"5b7873ed933ddca405717e111da8a8142f5df877f028e08d2b5aadcc46b433b2\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/target/release/fireprot\",\"name\":\"supervisor\",\"sha256\":\"cdd7a71ee0f7efe5851d6c85a52d7a5effbae405589f94f9667af24c8a54abcd\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/_paths.py\",\"name\":\"tensor-boundary/_paths.py\",\"sha256\":\"f40eca4224217a461ed948b05e67f94a4ae9d6275de60a0d16443fe360aa05f7\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/adapters/atlasfold/runtime.py\",\"name\":\"tensor-boundary/adapters/atlasfold/runtime.py\",\"sha256\":\"4fd73e13371805e86a9e910c236fd48b22a37c8ca4c7b3f03a254072b08249ea\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/adapters/protenix/construction.py\",\"name\":\"tensor-boundary/adapters/protenix/construction.py\",\"sha256\":\"d735bb27a32b199e9476983eb7a71415a31169290a4d19d2a63d1d96f5a5d6ac\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/adapters/protenix/features.py\",\"name\":\"tensor-boundary/adapters/protenix/features.py\",\"sha256\":\"0db0713aeb7b9865bd730f71e812c07bdfe63285ea7ec3a76dbf4f5a7c3f4433\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/adapters/protenix/hooks.py\",\"name\":\"tensor-boundary/adapters/protenix/hooks.py\",\"sha256\":\"237d6bc0e6f9971361675ddb06a00e425d055b2add4647e5640b17bfe0e49b2b\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/adapters/protenix/runtime.py\",\"name\":\"tensor-boundary/adapters/protenix/runtime.py\",\"sha256\":\"caf6233c43cde8ec2b651808a0a3e51b88c318064b8bbcfc33fb2fa5c6cea5f9\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/backends/amd/_compile_native.py\",\"name\":\"tensor-boundary/backends/amd/_compile_native.py\",\"sha256\":\"b94e4d9b3d4f81e111accf0251f2f3bd464e5938335ebae0fbddb7a9cfc4083c\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/backends/amd/_native_build.py\",\"name\":\"tensor-boundary/backends/amd/_native_build.py\",\"sha256\":\"fa4909f6bbd1ad6f5b246c9cf335e01991bfec4f18ff8677dc94cf8168672d7d\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/backends/amd/_native_hip.py\",\"name\":\"tensor-boundary/backends/amd/_native_hip.py\",\"sha256\":\"60052815e80450203762c425a78d97d92583a9ae3297bc410a70d22aaed92dbd\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/backends/amd/_published.py\",\"name\":\"tensor-boundary/backends/amd/_published.py\",\"sha256\":\"abf0ddd8eeacf9ca1e9e72742d357490b107940f8acdf88878019142d9b6fd8b\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/backends/amd/attention_gate.py\",\"name\":\"tensor-boundary/backends/amd/attention_gate.py\",\"sha256\":\"d306a6ea7f762930f89cd6f4572ac95207a691135d3401c3ea1d7fdaebf45c5e\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/backends/amd/blas.py\",\"name\":\"tensor-boundary/backends/amd/blas.py\",\"sha256\":\"173f12ed8f15e88bc9ce3e784739f82b8044b2927f52bcdf3d52c749a38f7aba\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/backends/amd/ck_attention.py\",\"name\":\"tensor-boundary/backends/amd/ck_attention.py\",\"sha256\":\"f747f9a8a1b961e2d82d479c32f76ee5bc2e902f9059e89b4549d090b58621ed\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/backends/amd/ck_extension.py\",\"name\":\"tensor-boundary/backends/amd/ck_extension.py\",\"sha256\":\"285e2d73a28d64e0788a184d8219c5d80f77595a69e61520f3e75fa1d58f167d\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/backends/amd/ck_gemm.py\",\"name\":\"tensor-boundary/backends/amd/ck_gemm.py\",\"sha256\":\"b907a2ce9d79830c4ed029ee3e18e6727e9058b7094fd38f79d93b6729575272\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/backends/amd/extension.py\",\"name\":\"tensor-boundary/backends/amd/extension.py\",\"sha256\":\"c90efeb110a341d6b57497dc9eb336f0dada6fa8767cdc189ff8eef1a536fc8c\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/backends/amd/lt_bmm.py\",\"name\":\"tensor-boundary/backends/amd/lt_bmm.py\",\"sha256\":\"80a6a56462896f83109309469e147be8c562638ceac6d94da8c42e363834ae38\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/backends/amd/mask_bias.py\",\"name\":\"tensor-boundary/backends/amd/mask_bias.py\",\"sha256\":\"3afebb7d3c42d553a7ef65f6d0b788595de5fb8e044e4ae608dc92655d0331b6\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/backends/amd/pair_fusions.py\",\"name\":\"tensor-boundary/backends/amd/pair_fusions.py\",\"sha256\":\"05b539bff71eca6c37920c87ff390aab62a28ede3eb92a80abd1299ca8d9303c\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/backends/amd/pair_layout.py\",\"name\":\"tensor-boundary/backends/amd/pair_layout.py\",\"sha256\":\"6fe404093e96adcda22a5479036aa5f027e691b094bbfa4a71dc35c66c8fc49d\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/backends/amd/qkv_projection.py\",\"name\":\"tensor-boundary/backends/amd/qkv_projection.py\",\"sha256\":\"6f6ad521b169df46c2e0ec3030195267decda3a7a1bbddac40a9f25b23b6fc02\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/backends/amd/recycle.py\",\"name\":\"tensor-boundary/backends/amd/recycle.py\",\"sha256\":\"ea6cd04d3b69ba8999cd3781d94d7d4736ff2b205be5d542153494f7923aefe5\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/backends/amd/transition_projection.py\",\"name\":\"tensor-boundary/backends/amd/transition_projection.py\",\"sha256\":\"df749eaf3ab49a21f709f60a939b1c30294e2102546f7c03ffcac3ba8756614d\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/backends/amd/triangle_attention.py\",\"name\":\"tensor-boundary/backends/amd/triangle_attention.py\",\"sha256\":\"30627afc9ea995230c9b1a971b44122dd72c96801a2faa93c6ae09e783e57c8c\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/backends/amd/triangle_multiplication.py\",\"name\":\"tensor-boundary/backends/amd/triangle_multiplication.py\",\"sha256\":\"40effd005b978f70869e2cbd582a82501b069ca58555b84422b961b44cfda02a\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/backends/amd/two_gcd_attention.py\",\"name\":\"tensor-boundary/backends/amd/two_gcd_attention.py\",\"sha256\":\"695db35251ba84a5d0ccc632c5c1cfcf970e4616fe442b42b7df5ee769a8da05\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/ops/_bridge.py\",\"name\":\"tensor-boundary/ops/_bridge.py\",\"sha256\":\"679d22330ca64b05c89a9c0a1da34e352731985ef1a12f458b1da7e03ceaa1c5\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/ops/registry.py\",\"name\":\"tensor-boundary/ops/registry.py\",\"sha256\":\"82cdb1cb2892d7571b765bde564651dcb92650c8350675e757e8359927419c8f\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot/validation/protenix.py\",\"name\":\"tensor-boundary/validation/protenix.py\",\"sha256\":\"cdf3279f708b147ec014af3ec5970e3c7920d325533763fb7cbf01faa3f1d61b\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot_workers/__main__.py\",\"name\":\"worker-entry\",\"sha256\":\"c80a0587aab2ec8df15a10c5a39152707a5c063433de74c90582df470acf65a5\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot_workers/__init__.py\",\"name\":\"workers/__init__.py\",\"sha256\":\"4d3f99912815c2e067831f2217be7ce1128bf9316c223589247ff752a4030bfd\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot_workers/__main__.py\",\"name\":\"workers/__main__.py\",\"sha256\":\"c80a0587aab2ec8df15a10c5a39152707a5c063433de74c90582df470acf65a5\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot_workers/atlasfold.py\",\"name\":\"workers/atlasfold.py\",\"sha256\":\"131373ce2cd802d4ebdc6fb31b1bc62e90b989e93c3db78026d8c59ee1302cd7\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot_workers/openfold3.py\",\"name\":\"workers/openfold3.py\",\"sha256\":\"c276babdbb9b6fb938d4e6ab9e58dd6dd80004e1a189faf8158a7c93b8092f32\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot_workers/protenix.py\",\"name\":\"workers/protenix.py\",\"sha256\":\"e190929c4409e0683b596ca7713eeab8b90f76d2cb6abdc98d372b6870173151\"},{\"canonical_path\":\"/media/IntelSSD/fireprot/python/fireprot_workers/transport.py\",\"name\":\"workers/transport.py\",\"sha256\":\"773e63de6b79f8f451ddda8b43b58f2ac9e27fd3ba79bbec7a47cb7b6e1fd8f2\"}],\"invocation_path\":\"/media/PM982/engramfold/folding_e2e_20260921/venvs/openfold3-amd/bin/python\",\"program\":{\"canonical_path\":\"/home/pc/anaconda3/envs/BIO/bin/python3.12\",\"name\":\"worker-executable\",\"sha256\":\"a92b1d68dea38b2dea63a3dad60ec31b59b6fe05323c90d5f315cd8ba6539611\"},\"schema_version\":1,\"working_directory\":\"/media/IntelSSD/fireprot/python\"}",
+              "physical_device": "{\"architecture\":\"gfx90a\",\"hip_device\":7,\"pci_address\":\"0000:93:00.0\",\"smi_device\":5}",
+              "provenance_sha256": "cf57b1b5c4f83f52f75574486188812e5185eaeaad54ae6c53e871e739fcfa93",
+              "worker": "{\"hip\":\"7.14.60850\",\"python\":\"3.12.13\",\"torch\":\"2.12.0a0+git78258b9\"}"
+            },
+            "seconds": 249.9573891919572
+          }
+        ]
+      },
+      "summary": {
+        "count": 1,
+        "min": 249.9573891919572,
+        "median": 249.9573891919572,
+        "p95": 249.9573891919572,
+        "max": 249.9573891919572,
+        "mean": 249.9573891919572
+      },
+      "receipts": [
+        {
+          "path": "/media/IntelSSD/fireprot/outputs/openfold3-n1000-deterministic-v1/accepted.json",
+          "sha256": "31ef5d2071cfdccc9dfdbae5590930b99e79f3899511857e7d3781d41c21e103"
+        }
+      ]
+    }
+  },
+  "changed_source_sha256": {
+    "crates/fireprot-core/src/request.rs": "cafee592f7629a0b7157013c46296ac08a114e8d92741beefb35144321f09588",
+    "python/fireprot_workers/openfold3.py": "c276babdbb9b6fb938d4e6ab9e58dd6dd80004e1a189faf8158a7c93b8092f32"
+  }
+}

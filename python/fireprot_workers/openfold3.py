@@ -32,6 +32,8 @@ def predict(request, channel):
                 'no_full_rollout_steps': workload['diffusion_steps'],
                 'no_full_rollout_samples': workload['samples']}}}}}}
     config_path = output / 'runner.json'
+    if workload.get('deterministic') is not None:
+        config['pl_trainer_args']['deterministic'] = workload['deterministic']
     # JSON is a YAML subset accepted by the upstream runner-yaml loader.
     config_path.write_text(json.dumps(config, indent=2))
     original_forward, original_predict = OpenFold3.forward, OpenFold3AllAtom.predict_step
@@ -39,6 +41,7 @@ def predict(request, channel):
 
     def forward(model, *args, **kwargs):
         nonlocal calls, model_seconds
+        check_determinism(torch, workload)
         shared = model.config.architecture.shared
         if shared.num_recycles != workload['recycles'] or shared.diffusion.no_full_rollout_steps != workload['diffusion_steps']:
             raise RuntimeError('Upstream model did not apply the requested inference workload')
@@ -96,3 +99,14 @@ def predict(request, channel):
     return dict(schema_version=1, run_id=request['run_id'], seed=request['seed'], workload=workload,
                 predictions=predictions, model_seconds=model_seconds,
                 request_seconds=time.perf_counter() - started)
+
+
+def check_determinism(torch, workload):
+    """Confirm the upstream trainer applied the explicit request before arithmetic."""
+    requested = workload.get('deterministic')
+    if requested is None:
+        return
+    if torch.are_deterministic_algorithms_enabled() != requested:
+        raise RuntimeError('Upstream did not apply the requested deterministic policy')
+    if requested and torch.is_deterministic_algorithms_warn_only_enabled():
+        raise RuntimeError('Deterministic execution must fail on unsupported operations')

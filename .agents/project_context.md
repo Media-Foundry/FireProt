@@ -8,8 +8,10 @@ Rebuild the maintained framework in Rust before resuming OpenFold3 optimization.
 `docs/rust-migration.md` and `docs/architecture.md` describe current ownership;
 the older measurements below are historical context, not current defaults.
 Native AtlasFold plus AtlasLM-3B and OpenFold3 execute under Rust supervision.
-AtlasFold N1000 exact parity passes; OpenFold3 numerical migration parity remains
-unpassed because repeated native runs also vary. Preserve all existing gates.
+AtlasFold N1000 exact parity passes. OpenFold3 N1000 with explicit strict deterministic
+execution and PYTHONHASHSEED=101 now passes exact native parity; legacy default-mode
+comparisons remain unpassed because native repeats vary. See
+`docs/openfold3-determinism.md`. Preserve all existing gates.
 The shared Python operator API now requires the Rust bridge build described in
 `docs/rust-operators.md`. Protenix Mini-default native/FireProt workers are also
 connected: N1000 and N1536 pass existing coordinate/summary gates under Rust PCI

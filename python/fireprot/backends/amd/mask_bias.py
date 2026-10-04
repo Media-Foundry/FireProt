@@ -5,6 +5,8 @@ rounds to BF16 independently, matching native in-place Torch arithmetic.
 """
 from __future__ import annotations
 
+from fireprot._paths import KERNEL_ROOT
+
 import os
 from pathlib import Path
 import threading
@@ -38,7 +40,7 @@ def load():
                 _name = _extension.__name__
                 return _extension
             from ._native_build import load as rust_load
-            source = Path(__file__).with_name('csrc')/'fireprot_mask_bias.cu'
+            source = KERNEL_ROOT/'fireprot_mask_bias.cu'
             _extension, _build = rust_load('fireprot_mask_bias', [source])
             _name = _extension.__name__
         except Exception as error:

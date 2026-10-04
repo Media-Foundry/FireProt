@@ -9,6 +9,7 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+from fireprot._paths import REPOSITORY_ROOT
 import shutil
 import subprocess
 import sys
@@ -25,8 +26,8 @@ def load(package, sources, *, cxx_flags=('-O3',),
     torch_root = Path(torch.__file__).resolve().parent
     helper = Path(__file__).with_name('_compile_native.py')
     guard = Path(os.environ.get('FIREPROT_BUILD_GUARD',
-        str(Path(__file__).resolve().parents[3]/'target/release/fireprot-compiler-guard')))
-    paths = [guard, *sources, __file__, helper, cpp_extension.__file__, sys.executable,
+        str(REPOSITORY_ROOT/'target/release/fireprot-compiler-guard')))
+    paths = [guard, *sources, __file__, REPOSITORY_ROOT/'python/fireprot/_paths.py', helper, cpp_extension.__file__, sys.executable,
              shutil.which(cpp_extension.get_cxx_compiler()), shutil.which('ninja'),
              rocm/'bin/hipcc', rocm/'llvm/bin/clang++', rocm/'llvm/bin/ld.lld',
              rocm/'lib/libamdhip64.so']
@@ -70,7 +71,7 @@ def load(package, sources, *, cxx_flags=('-O3',),
             torch=str(torch.__version__), hip=str(torch.version.hip),
             python=sys.version, soabi=str(sysconfig.get_config_var('SOABI'))))
     cache = Path(os.environ.get('FIREPROT_EXTENSION_CACHE',
-        str(Path(__file__).resolve().parents[3]/'runtime/torch_extensions')))/'rust-v1'
+        str(REPOSITORY_ROOT/'runtime/torch_extensions')))/'rust-v1'
 
     process_spec = dict(build=spec, python=str(Path(sys.executable).absolute()),
                         helper=str(helper.absolute()), guard=str(guard.absolute()),

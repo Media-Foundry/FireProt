@@ -5,6 +5,7 @@ import ctypes
 import json
 import os
 from pathlib import Path
+from fireprot._paths import REPOSITORY_ROOT
 import shutil
 
 
@@ -15,12 +16,12 @@ def load(package, source, root, *, link_flags=(), libraries=(), extra_files=(), 
     root = Path(root).absolute()
     source = Path(source).absolute()
     guard = Path(os.environ.get('FIREPROT_BUILD_GUARD',
-        str(Path(__file__).resolve().parents[3]/'target/release/fireprot-compiler-guard'))).absolute()
+        str(REPOSITORY_ROOT/'target/release/fireprot-compiler-guard'))).absolute()
     compiler = root/'bin/hipcc'
     tools = [compiler, root/'llvm/bin/clang++', root/'llvm/bin/ld.lld', guard,
              root/'lib/libamdhip64.so', Path('/bin/sh'), Path('/bin/bash')]
     libraries = [Path(p).absolute() for p in libraries]
-    paths = [source, Path(__file__).absolute(), *tools, *libraries,
+    paths = [source, Path(__file__).absolute(), REPOSITORY_ROOT/'python/fireprot/_paths.py', *tools, *libraries,
              *(Path(p).absolute() for p in extra_files)]
     inspector = shutil.which('ldd')
     if inspector is None:
@@ -44,7 +45,7 @@ def load(package, source, root, *, link_flags=(), libraries=(), extra_files=(), 
         compiler=str(compiler),guard=str(guard),sources=[str(source)],
         timeout_ms=600_000,lock_timeout_ms=600_000)
     cache=Path(os.environ.get('FIREPROT_EXTENSION_CACHE',
-        str(Path(__file__).resolve().parents[3]/'runtime/torch_extensions')))/'rust-v1'
+        str(REPOSITORY_ROOT/'runtime/torch_extensions')))/'rust-v1'
     result=json.loads(bridge.build_hip(json.dumps(spec),cache))
     artifacts=result['receipt']['artifacts']
     if len(artifacts)!=1:

@@ -107,7 +107,7 @@ def main():
     report=dict(launch_bounds=args.launch_bounds,full_triangle=args.full_triangle,padding=args.padding,padding_scope='output channel stride only; logical protein length unchanged',dtype='float32',tf32=False,seed=1009,parameters='random inputs and normal(0,0.1) weights',
                 warmups=5,repetitions=20,cache_state='warm; allocations included; compilation excluded',
                 compiler=compiler,torch=torch.__version__,hip=torch.version.hip,builds=builds,
-                source_sha256={str(p.relative_to(REPO_ROOT)):_sha256(p) for p in (source,pathlib.Path(__file__),REPO_ROOT/'fireprot/backends/amd/csrc/fireprot_amd_ops.cu')},
+                source_sha256={str(p.relative_to(REPO_ROOT)):_sha256(p) for p in (source,pathlib.Path(__file__),REPO_ROOT/'kernels/amd/fireprot_amd_ops.cu')},
                 preflight=preflight,sibling_preflight=extra,records=[])
     try:
         ext=load_amd_extension();assert ext is not None

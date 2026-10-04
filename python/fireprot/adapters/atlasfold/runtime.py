@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import math
 from pathlib import Path
+from fireprot._paths import KERNEL_ROOT
 import types
 
 from fireprot.ops.registry import OperationRegistry, signature_from_tensor
@@ -110,10 +111,10 @@ class AtlasFoldRuntime:
         self.normalization_type = LayerNorm
         self.linear_type = LinearNoBias
         backend_root = Path(__file__).resolve().parents[2]/'backends/amd'
-        sources = (backend_root/'pair_fusions.py', backend_root/'csrc/fireprot_pair_fusions.cpp',
-                   backend_root/'csrc/fireprot_pair_softmax.cu', backend_root/'csrc/fireprot_pair_transpose.cu',
-                   backend_root/'csrc/fireprot_pair_qkv.cu') if backend == 'hip-fused' else (
-                       backend_root/'mask_bias.py', backend_root/'csrc/fireprot_mask_bias.cu')
+        sources = (backend_root/'pair_fusions.py', KERNEL_ROOT/'fireprot_pair_fusions.cpp',
+                   KERNEL_ROOT/'fireprot_pair_softmax.cu', KERNEL_ROOT/'fireprot_pair_transpose.cu',
+                   KERNEL_ROOT/'fireprot_pair_qkv.cu') if backend == 'hip-fused' else (
+                       backend_root/'mask_bias.py', KERNEL_ROOT/'fireprot_mask_bias.cu')
         self.implementation_hashes = {
             str(path.name): hashlib.sha256(path.read_bytes()).hexdigest()
             for path in (Path(__file__), *sources)}

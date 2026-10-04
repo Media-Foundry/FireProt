@@ -43,9 +43,9 @@ def main() -> int:
         monitor.start()
     source = REPO_ROOT / "benchmarks/protenix/csrc/qkv_sigmoid_probe.cpp"
     source_paths = [source, pathlib.Path(__file__),
-                    REPO_ROOT / "fireprot/backends/amd/qkv_projection.py",
-                    REPO_ROOT / "fireprot/backends/amd/csrc/fireprot_amd_ops.cpp",
-                    REPO_ROOT / "fireprot/backends/amd/csrc/fireprot_amd_ops.cu",
+                    REPO_ROOT / "python/fireprot/backends/amd/qkv_projection.py",
+                    REPO_ROOT / "kernels/amd/fireprot_amd_ops.cpp",
+                    REPO_ROOT / "kernels/amd/fireprot_amd_ops.cu",
                     REPO_ROOT / "Protenix/protenix/model/triangular/layers.py"]
     report = dict(scope=args.scope, status="running", seed=1027, dtype="float32", tf32=False,
                   warmups=5, repetitions=20, model="Protenix Attention shape replay; random weights",

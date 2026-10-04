@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import ctypes
+from fireprot._paths import KERNEL_ROOT
+
 import os
 import pathlib
 import threading
@@ -30,7 +32,7 @@ def load_extension() -> Any:
             else:
                 root = pathlib.Path(os.environ.get("FIREPROT_ROCM_HOME", "/opt/rocm"))
                 from ._native_hip import load as build_native
-                source = pathlib.Path(__file__).parent / "csrc/fireprot_lt_bmm.cpp"
+                source = KERNEL_ROOT / "fireprot_lt_bmm.cpp"
                 _library, _build = build_native('fireprot_lt_bmm', source, root,
                     link_flags=[f"-L{root / 'lib'}", f"-Wl,-rpath,{root / 'lib'}", "-lhipblaslt"],
                     libraries=[root / 'lib/libhipblaslt.so'], extra_files=[__file__], versions={'c_abi': 'lt-packed-bmm-v1'})

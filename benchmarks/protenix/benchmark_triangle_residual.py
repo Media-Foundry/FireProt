@@ -43,7 +43,7 @@ def main():
                   cache_state='warm; compilation excluded; source reset outside timed interval',
                   preflight=preflight,sibling_preflight=extra,records=[],command=command,
                   source_sha256={str(p.relative_to(REPO_ROOT)):_sha256(p) for p in
-                                 (source,pathlib.Path(__file__),REPO_ROOT/'fireprot/backends/amd/triangle_multiplication.py')},
+                                 (source,pathlib.Path(__file__),REPO_ROOT/'python/fireprot/backends/amd/triangle_multiplication.py')},
                   library_sha256=_sha256(lib))
     try:
         os.environ['LAYERNORM_TYPE']='torch'

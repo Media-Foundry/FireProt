@@ -25,7 +25,7 @@ def main():
     report=dict(preflight=preflight,sibling_preflight=extra,seed=937,dtype='float32',tf32=False,
                 warmup_groups=5,measured_groups=20,group_size=8,cache_state='warm; compilation excluded',
                 command=command,source_sha256={str(p.relative_to(REPO_ROOT)):_sha256(p) for p in
-                    (source,pathlib.Path(__file__),REPO_ROOT/'fireprot/backends/amd/csrc/fireprot_amd_ops.cu')},
+                    (source,pathlib.Path(__file__),REPO_ROOT/'kernels/amd/fireprot_amd_ops.cu')},
                 library_sha256=_sha256(lib),records=[])
     try:
         from fireprot.backends.amd.extension import load_amd_extension

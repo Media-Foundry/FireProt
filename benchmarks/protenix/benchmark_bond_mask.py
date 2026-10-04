@@ -71,7 +71,7 @@ def main() -> int:
             else: h.update(json.dumps(v,sort_keys=True).encode())
         add(value); return h.hexdigest()
     report = dict(status='running',scope='CPU feature pipeline, no model/GPU inference',model='protenix_mini_default_v0.5.0',dtype='native feature dtypes; fp32 configuration',cycles_steps_samples='not applicable',seed=101,threads=1,cache_state='one unmeasured warmup per length; warm filesystem and process caches',torch=torch.__version__,numpy=np.__version__,native_method_sha256=hashlib.sha256(original.encode()).hexdigest(),candidate_source=replacement,fixture_cases=2,records=[])
-    report['source_sha256'] = {name: hashlib.sha256((root/name).read_bytes()).hexdigest() for name in ('benchmarks/protenix/benchmark_bond_mask.py','Protenix/protenix/data/core/featurizer.py','Protenix/protenix/data/inference/infer_dataloader.py','fireprot/adapters/protenix/features.py')}
+    report['source_sha256'] = {name: hashlib.sha256((root/name).read_bytes()).hexdigest() for name in ('benchmarks/protenix/benchmark_bond_mask.py','Protenix/protenix/data/core/featurizer.py','Protenix/protenix/data/inference/infer_dataloader.py','python/fireprot/adapters/protenix/features.py')}
     try:
         for n,key in ((1000,'umem_L01000_462bb697ecdcce2f'),(1536,'umem_L01536_6b140cc19f02d9b9')):
             path=root/'benchmarks/protenix/inputs'/f'{key}.json'

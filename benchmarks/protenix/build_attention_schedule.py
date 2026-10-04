@@ -36,7 +36,7 @@ def main() -> int:
     target = root / relative
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(header.replace(old, new))
-    source_path = REPO_ROOT / 'fireprot/backends/amd/csrc/fireprot_ck_attention.cpp'
+    source_path = REPO_ROOT / 'kernels/amd/fireprot_ck_attention.cpp'
     source = source_path.read_text()
     replacements = {
         'Kernel::GridSize(batch,4,n,32,false)':

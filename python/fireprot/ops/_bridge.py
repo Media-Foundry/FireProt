@@ -6,6 +6,7 @@ import hashlib
 import importlib.util
 import os
 from pathlib import Path
+from fireprot._paths import REPOSITORY_ROOT
 
 
 def _load():
@@ -13,7 +14,7 @@ def _load():
     path = (
         Path(configured)
         if configured
-        else Path(__file__).resolve().parents[2] / "target/release/lib_fireprot_bridge.so"
+        else REPOSITORY_ROOT / "target/release/lib_fireprot_bridge.so"
     ).resolve()
     if not path.is_file():
         raise ImportError(

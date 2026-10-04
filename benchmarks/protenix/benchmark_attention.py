@@ -115,9 +115,9 @@ def main() -> int:
                       "benchmarks/protenix/benchmark_attention.py",
                       "benchmarks/protenix/csrc/ck_attention_probe.cpp",
                       "patches/ck/attention-cache-q-fp32.patch",
-                      "fireprot/backends/amd/triangle_attention.py",
-                      "fireprot/backends/amd/ck_attention.py",
-                      "fireprot/backends/amd/csrc/fireprot_ck_attention.cpp",
+                      "python/fireprot/backends/amd/triangle_attention.py",
+                      "python/fireprot/backends/amd/ck_attention.py",
+                      "kernels/amd/fireprot_ck_attention.cpp",
                   )}, records=[])
     monitor = None
     try:

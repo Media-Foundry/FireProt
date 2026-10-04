@@ -26,7 +26,7 @@ def main():
     try:
         from fireprot.backends.amd.extension import load_amd_extension
         ext=load_amd_extension();assert ext is not None
-        report['production_source_sha256']=_sha256(REPO_ROOT/'fireprot/backends/amd/csrc/fireprot_amd_ops.cu')
+        report['production_source_sha256']=_sha256(REPO_ROOT/'kernels/amd/fireprot_amd_ops.cu')
         compiler=subprocess.check_output(['/opt/rocm/bin/hipcc','--version'],text=True)
         directory=REPO_ROOT/'runtime/transposed_norm_subgroup'/hashlib.sha256(source.read_bytes()+compiler.encode()).hexdigest()[:16]
         directory.mkdir(parents=True,exist_ok=True);lib=directory/'probe.so'

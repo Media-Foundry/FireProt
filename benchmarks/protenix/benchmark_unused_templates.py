@@ -26,7 +26,7 @@ def main() -> int:
                 scope='CPU features only; no model or GPU inference',cycles_steps_samples='Not applicable',
                 cache_state='One unmeasured native call per length; process and filesystem caches warm',
                 threads=1,torch=torch.__version__,numpy=np.__version__,records=[],source_sha256={})
-    for name in ('benchmarks/protenix/benchmark_unused_templates.py','fireprot/adapters/protenix/features.py',
+    for name in ('benchmarks/protenix/benchmark_unused_templates.py','python/fireprot/adapters/protenix/features.py',
                  'Protenix/protenix/data/inference/infer_dataloader.py','Protenix/protenix/model/modules/pairformer.py'):
         report['source_sha256'][name]=hashlib.sha256((root/name).read_bytes()).hexdigest()
     def seed():random.seed(101);np.random.seed(101);torch.manual_seed(101)

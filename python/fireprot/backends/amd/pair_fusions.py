@@ -5,6 +5,8 @@ Model-specific guards and native fallbacks belong to the adapter.
 """
 from __future__ import annotations
 
+from fireprot._paths import KERNEL_ROOT
+
 import os
 from pathlib import Path
 import threading
@@ -37,7 +39,7 @@ def load():
                 _name = _extension.__name__
                 return _extension
             from ._native_build import load as rust_load
-            sources = [Path(__file__).with_name('csrc')/name for name in (
+            sources = [KERNEL_ROOT/name for name in (
                 'fireprot_pair_fusions.cpp', 'fireprot_pair_softmax.cu', 'fireprot_pair_transpose.cu',
                 'fireprot_pair_qkv.cu')]
             _extension, _build = rust_load('fireprot_pair_fusions', sources)

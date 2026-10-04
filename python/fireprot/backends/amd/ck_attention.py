@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import ctypes
+from fireprot._paths import KERNEL_ROOT
+
 import os
 import pathlib
 import threading
@@ -55,7 +57,7 @@ def load_extension() -> Any:
                 if "8d1ae90eff7d022f26019ec55b2ec6a7674b3112" not in version:
                     raise RuntimeError("CK installation is outside the measured version")
                 from ._native_hip import load as build_native
-                source = pathlib.Path(__file__).parent / "csrc/fireprot_ck_attention.cpp"
+                source = KERNEL_ROOT / "fireprot_ck_attention.cpp"
                 if not (root / "include/ck_tile").is_dir():
                     raise RuntimeError("CK Tile headers are unavailable")
                 _library, _build = build_native('fireprot_ck_attention', source, root,

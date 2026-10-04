@@ -35,7 +35,7 @@ def main():
         os.environ['FIREPROT_ENABLE_TWO_GCD_ATTENTION']='1'
         torch.cuda.set_device(primary);torch.manual_seed(419);torch.backends.cuda.matmul.allow_tf32=False
         report.update(torch=torch.__version__,hip=torch.version.hip)
-        report['runtime_source_sha256']=_sha256(pathlib.Path(__file__).resolve().parents[2]/'fireprot/backends/amd/two_gcd_attention.py')
+        report['runtime_source_sha256']=_sha256(pathlib.Path(__file__).resolve().parents[2]/'python/fireprot/backends/amd/two_gcd_attention.py')
         def sync():
             torch.cuda.synchronize(0);torch.cuda.synchronize(1)
         with torch.inference_mode():

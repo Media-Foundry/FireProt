@@ -1,6 +1,6 @@
 // CK-derived probe: retain Q/K tail handling and widen aligned bias loads.
 // The included implementation and installed CK headers retain their licenses.
-#include "../../../fireprot/backends/amd/csrc/fireprot_ck_attention.cpp"
+#include "../../../kernels/amd/fireprot_ck_attention.cpp"
 #include <cstdint>
 
 struct VectorBiasPipeline : Pipeline {

@@ -15,7 +15,7 @@ cross-model API and packaged kernel builds are not complete.
 | In-process operator policy boundary | `fireprot-bridge` | CPython stable C ABI; metadata and callbacks only |
 | Model execution | `python/fireprot_workers` and independent upstream checkouts | Explicit PyTorch boundary; additional model variants pending |
 | Native build identity, dependency inventories and cache transactions | `fireprot-runtime` via `fireprot-bridge` | Maintained Torch and standalone HIP loaders use Rust |
-| AMD kernels and tensor glue | `fireprot/backends/amd` | Existing HIP/CK paths; build and layout migration pending |
+| AMD kernels and tensor glue | `kernels/amd`, `python/fireprot` | Rust build services and pinned artifact loaders; root Python imports use a small compatibility shim |
 
 AtlasFold N1000 native output migration passes exactly. Its chunked/HIP/fused HIP
 routes also pass exact public-output parity at N1000 and N1536. OpenFold3 N1000 executes
@@ -28,9 +28,9 @@ See [migration gates](rust-migration.md), [running](rust-running.md), and
 [operator bridge](rust-operators.md). Historical benchmark Python remains for
 reproduction; it is not the target owner of new framework policy.
 
-## Implementation snapshot
+## Historical operator implementation
 
-The current implementation provides a model-neutral operation registry under `fireprot/ops`, AMD backends under `fireprot/backends/amd`, a Protenix bootstrap under `fireprot/adapters/protenix`, numerical validation under `fireprot/validation`, and reproducible Protenix tooling under `benchmarks/protenix`. The independent Protenix checkout exposes `fireprot` choices for triangle multiplication and triangle attention while retaining its upstream torch defaults.
+The pre-migration implementation used `fireprot/ops`, `fireprot/backends/amd`, `fireprot/adapters/protenix` and `fireprot/validation`. Those Python boundaries now live under `python/fireprot`; Rust owns shared policy and maintained validation. Historical reproduction tools remain under `benchmarks/protenix`. The independent Protenix checkout exposes `fireprot` choices for triangle multiplication and triangle attention while retaining its upstream torch defaults.
 
 FP32 inference paths are promoted on gfx90a for measured 124-token, exact 1,000-token, and opt-in exact 1,536-token Mini workloads. Short triangle multiplication replaces the upstream chunked inference path with a direct update while preserving in-place aliasing. Long triangle multiplication normalizes once, uses HIP sigmoid-and-pack kernels to produce contiguous channel-first projections, contracts them with library BMM, and fuses unpacking with output LayerNorm. The previous chunked contraction and its fusion callbacks remain as a diagnostic fallback. Triangle attention uses PyTorch ROCm memory-efficient SDPA, makes the Protenix head-last triangle bias contiguous, limits its outer batch workspace to 64 rows, and omits an implicit all-ones pair mask. Handwritten HIP kernels specialize contiguous 128-wide pair LayerNorm, fuse channel-first layout conversion with pair LayerNorm, and fuse gated activation epilogues. The long capability set includes the measured 244,000-, 256,000-, and 1,000,000-row LayerNorm calls and the exact `[1000,1000,128]` gated transition. The measured comparisons select hipBLAS at process start. The registry and runtime hooks fall back to native behavior for every unmatched signature or unavailable extension build.
 
@@ -57,7 +57,7 @@ Packed output LayerNorm now uses vector global accesses and a subgroup reduction
 
 FireProt targets protein structure **inference on AMD GPUs**. It should reproduce upstream model semantics and reduce latency or resource use only where measurements support an optimization. Model adapters own model-specific scientific behavior. The framework owns configuration, resources, execution, observation, and validation. Optimized operators must be independently selectable, reversible, and testable.
 
-Compatibility is a capability matrix, not a promise that every model accepts the same inputs, weights, or accuracy metrics. Protenix, OpenFold, and ESMFold have different preprocessing and inference paths. AtlasFold's actual source API must be examined when its adapter is implemented; its name alone does not define a contract.
+Compatibility is a capability matrix, not a promise that every model accepts the same inputs, weights, or accuracy metrics. Protenix, OpenFold, and ESMFold have different preprocessing and inference paths. Each adapter pins and checks its actual upstream source; a model name alone does not define a contract.
 
 ## 2. Layers and dependency direction
 
@@ -93,17 +93,19 @@ crates/
   fireprot-cli/         # User commands and exit status
   fireprot-bridge/      # CPython metadata/callback ABI, no tensor ownership
 python/fireprot_workers/ # Pinned upstream invocation and tensor serialization
-fireprot/               # Existing adapter/tensor glue; relocation still pending
+python/fireprot/        # Upstream adapters, tensor glue, bridge loading
+kernels/amd/            # Maintained HIP/CK sources
+fireprot/__init__.py    # Import shim for upstream and historical entry points
 configs/                # Explicit requests and deployment profiles
 tests/                  # Contract, numerical, worker and GPU integration checks
 provenance/             # Versioned evidence; generated predictions stay excluded
 benchmarks/             # Historical reproduction tools during migration
 ```
 
-The remaining layout migration will place maintained tensor glue under `python/`
-and native sources under `kernels/amd/`, with compatibility shims for upstream
-patch imports and a checked path map for historical scripts. Those moves are not
-yet implemented. Rust core must remain independent of Torch and host process APIs;
+Maintained tensor glue now lives under `python/` and native sources under
+`kernels/amd/`. A root import shim preserves upstream imports; historical
+benchmark source paths are updated through an explicit relocation map. `provenance/layout_path_map.json` records every moved
+file and its before/after hash; see [layout](repository-layout.md). Rust core must remain independent of Torch and host process APIs;
 the runtime owns process/device/build policy, and the CLI composes those services.
 The bridge receives metadata and invokes local callbacks without copying tensors.
 

@@ -36,7 +36,7 @@ def main():
     extra=_additional_device_preflight([7 if visible=='6' else 6],policy)
     monitors=[_GpuProcessMonitor(d,os.getpid(),1.0) for d in (int(visible),7 if visible=='6' else 6)]
     for m in monitors:m.start()
-    report=dict(scope=__doc__,shape=[1000,4,1000,32],dtype='float32',tf32=False,seed=907,warmup_groups=5,measured_groups=20,cache_state='warm; compilation excluded',physical_device=int(visible),allocator=os.environ.get('PYTORCH_ALLOC_CONF'),builds=builds,preflight=preflight,sibling_preflight=extra,baseline_build=ck.extension_status(),source_sha256={str(p.relative_to(REPO_ROOT)):_sha256(p) for p in (source,REPO_ROOT/'fireprot/backends/amd/csrc/fireprot_ck_attention.cpp',pathlib.Path(__file__))},records=[])
+    report=dict(scope=__doc__,shape=[1000,4,1000,32],dtype='float32',tf32=False,seed=907,warmup_groups=5,measured_groups=20,cache_state='warm; compilation excluded',physical_device=int(visible),allocator=os.environ.get('PYTORCH_ALLOC_CONF'),builds=builds,preflight=preflight,sibling_preflight=extra,baseline_build=ck.extension_status(),source_sha256={str(p.relative_to(REPO_ROOT)):_sha256(p) for p in (source,REPO_ROOT/'kernels/amd/fireprot_ck_attention.cpp',pathlib.Path(__file__))},records=[])
     handles=[]
     try:
         if not torch.version.hip or torch.cuda.get_device_properties(0).gcnArchName.split(':')[0]!='gfx90a':raise RuntimeError('Requires gfx90a HIP')

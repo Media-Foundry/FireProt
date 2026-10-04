@@ -104,9 +104,9 @@ def main() -> int:
             source_commit=os.environ.get("FIREPROT_SOURCE_COMMIT") or _git_commit(REPO_ROOT),
             source_sha256={name: _sha256(REPO_ROOT / name) for name in (
                 "benchmarks/protenix/benchmark_triangle.py",
-                "fireprot/backends/amd/triangle_multiplication.py",
-                "fireprot/backends/amd/csrc/fireprot_amd_ops.cu",
-                "fireprot/backends/amd/csrc/fireprot_amd_ops.cpp",
+                "python/fireprot/backends/amd/triangle_multiplication.py",
+                "kernels/amd/fireprot_amd_ops.cu",
+                "kernels/amd/fireprot_amd_ops.cpp",
             )},
         )
     except Exception as error:

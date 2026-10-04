@@ -7,8 +7,9 @@ including the measured 1,000- and 1,536-residue workloads.
 **Status: Rust framework migration in progress.** Rust owns request contracts,
 operator selection, process supervision, GPU isolation, provenance preflight and
 output validation. Native build/cache services now own maintained Torch and standalone HIP loaders.
-All six maintained loaders support pinned Python/C ABI artifacts. Repository
-layout, packaging and some model parity gates are unfinished. Rust itself is not claimed to accelerate GPU kernels.
+All six maintained loaders support pinned Python/C ABI artifacts. Packaging,
+environment provenance and some model parity gates remain unfinished. Rust itself
+is not claimed to accelerate GPU kernels.
 
 ## Model coverage
 
@@ -71,7 +72,9 @@ all been replaced by the Rust CLI.
 | `crates/fireprot-cli` | Rust command entry point |
 | `crates/fireprot-bridge` | In-process CPython boundary for Rust policy and build services |
 | `python/fireprot_workers` | Explicit upstream model invocation and tensor serialization |
-| `fireprot/adapters`, `fireprot/backends/amd` | Current tensor glue and HIP/CK implementations; layout migration pending |
+| `python/fireprot` | Model adapters, tensor inspection/calls and Rust bridge loading |
+| `kernels/amd` | Maintained HIP/CK sources |
+| `fireprot/__init__.py` | Import shim for upstream and historical entry points |
 | `configs`, `tests`, `provenance` | Explicit workloads, validation and measured evidence |
 | `docs`, `.agents` | Architecture, guides, migration decisions and historical context |
 | `Protenix/` | Independent upstream Git checkout; never a top-level submodule |
@@ -91,6 +94,7 @@ structural accuracy.
 
 - [Rust migration acceptance and remaining work](docs/rust-migration.md)
 - [Current architecture and dependency boundaries](docs/architecture.md)
+- [Repository layout and historical path compatibility](docs/repository-layout.md)
 - [Operator policy and bridge deployment](docs/rust-operators.md)
 - [Published kernel artifacts](docs/kernel-artifacts.md)
 - [Torch extension loader ownership](docs/torch-loaders.md)

@@ -68,7 +68,7 @@ is active and the completion gates above remain in force.
 | OpenFold3 / OpenBind-0 | Native N1000 inference executes under Rust supervision | Numerical migration parity remains unpassed; unchanged native runs also vary |
 | Native builds | Rust dependency identities, directory inventories, cache locking/publication, guarded compiler lifecycle; all six maintained loaders connected | Complete model-environment/plugin inventories remain outside the build recipe |
 | Precompiled artifacts | Rust publication and pinned acceptance for Python and C ABI bundles; all six loaders have explicit selectors | Packaging and final deployment acceptance |
-| Repository layout | Root five-crate Cargo workspace and explicit model workers under `python/` | Move remaining tensor glue into `python/`, native sources into `kernels/amd`, checked historical path map |
+| Repository layout | Root five-crate Cargo workspace; workers/tensor glue under `python/`, native sources under `kernels/amd`, checked path map and a root import shim | Final packaging and maintained entry points |
 | Maintained entry points | Rust CLI covers current request profiles | Replace remaining maintained scripts after parity; CI and packaging |
 
 ### Verified model scope
@@ -109,5 +109,5 @@ PYTHONPATH=.:Protenix python -m pytest -q tests
 GPU tests are explicit. Full-model acceptance must be repeated after source-path
 changes and must record physical isolation, inputs, weights, precision, cycles,
 steps, samples, seed and cache state. Concurrent migration timings do not establish
-new E2E speedups. Finish layout, environment evidence, model parity, maintained
+new E2E speedups. Finish environment evidence, model parity, maintained
 entry points and packaging before declaring this rebuild complete.

@@ -26,8 +26,9 @@ is no longer a selector. Model/operator correctness gates remain unchanged.
 Standalone C ABI CK attention and hipBLASLt loaders now use Rust direct HIP
 builds, sharing process management with Torch. Typed C ABI publication/loading
 now complements the existing Python bundle path. All six maintained loaders have
-pinned artifact selectors. Model-environment provenance and repository layout
-still need work. Rust owns compiler staging,
+pinned artifact selectors. Maintained Python is under `python/fireprot`, native
+sources under `kernels/amd`, with a root import shim and an explicit historical source path map.
+Model-environment provenance and final packaging still need work. Rust owns compiler staging,
 subprocess environment, cancellable lock waits, timeout and cache publication.
 A separate Rust guard stops compiler descendants when the caller exits, including
 forced worker termination; see `docs/torch-loaders.md` and `docs/torch-build-process.md`.
@@ -61,10 +62,10 @@ The complete observed C4/S1 matrix contains 57 FP32 BLAS signatures and 3,132 ca
 
 | Path | Role |
 | --- | --- |
-| `fireprot/ops/` | Model-neutral operation registry and capability signatures |
-| `fireprot/backends/amd/` | BLAS policy and promoted AMD operator paths |
-| `fireprot/adapters/protenix/` | FireProt bootstrap for the independent Protenix checkout |
-| `fireprot/validation/` | Coordinate, confidence, and ground-truth validation |
+| `python/fireprot/ops/` | Model-neutral operation registry and capability signatures |
+| `python/fireprot/backends/amd/`, `kernels/amd/` | BLAS policy and promoted AMD operator paths |
+| `python/fireprot/adapters/protenix/` | FireProt bootstrap for the independent Protenix checkout |
+| `python/fireprot/validation/` | Coordinate, confidence, and ground-truth validation |
 | `benchmarks/protenix/` | Repeated inference, rocprof import, BLAS matrix, and output comparison |
 | `Protenix/` | Independent upstream repository with local FireProt integration commits |
 | `cases/` | Eight short single-chain development cases |

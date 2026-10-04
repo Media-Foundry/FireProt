@@ -1,5 +1,6 @@
 //! Model-independent numeric validation with explicit comparison policies.
 pub mod array;
+pub mod atlasfold;
 pub mod bundle;
 pub mod metrics;
 pub mod numpy;

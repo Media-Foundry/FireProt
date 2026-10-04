@@ -305,3 +305,36 @@ Neither numerical tolerances nor requested inference work have been reduced.
 
 Raw reports and probe sources:
 [`atlasfold_fused_pair_validation.json`](../provenance/atlasfold_fused_pair_validation.json).
+
+## Bias reuse and batched transpose trials
+
+The batched transpose follow-up now passes the N1536 seed101 full-model raw-byte
+comparison. A further softmax schedule groups eight outer rows that share bias
+values. It changes row execution order only; each row retains its original
+BF16 additions, wave64 reductions, exponential, and division.
+
+On the same SMI5 GCD, with stage events disabled, first request time improves
+from **214.815 s to 206.022 s (1.043x incremental)**; the latter prediction
+is 201.266 s. Coordinates, pLDDT, PAE, and pTM are byte-identical to the
+bounded native reference. The native seed101 reference used a different GCD,
+so this pair establishes only the incremental candidate ratio. Full requested
+LM/recycle/sampling work is unchanged. These are single process observations.
+
+Six row groups (1, 2, 4, 8, 16, 32) pass all 24 trained triangle operator
+comparisons. Groups 4/8 perform best at bucket1024, and group8 at N1536 in
+this screening. A separate eight-outer-row probability suite directly exercises group8 and
+passes all twelve checks covering mask boundaries, nonfinite inputs, and a
+non-default stream. Neither scheduling nor batched transpose is packaged yet.
+
+Rejected trials are retained: reciprocal reuse is only about 1–2% faster and
+fails probability/operator equality; removing the unused N1536 softmax slots
+passes but improves less than 0.5%. The numerical gate is unchanged.
+
+A second-seed N1536 reference, with stage events disabled, completes at
+551.360 s first request on SMI2. Its matching candidate completes at
+**206.753 s (2.667x)**, with all four output fields matching raw bytes and
+selected-device isolation passing. Prediction time is 546.508 to 201.898 s.
+This is a matched single process pair against bounded native arithmetic,
+not a repeated median or an unchunked upstream result.
+Evidence and exact probe sources:
+[`atlasfold_scheduling_trials.json`](../provenance/atlasfold_scheduling_trials.json).

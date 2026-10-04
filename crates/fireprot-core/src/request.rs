@@ -245,7 +245,7 @@ fn hex_digest(value: &str, length: usize) -> bool {
             .all(|c| c.is_ascii_digit() || (b'a'..=b'f').contains(&c))
 }
 
-fn validate_artifact(artifact: &ArtifactRef) -> Result<(), RequestError> {
+pub(crate) fn validate_artifact(artifact: &ArtifactRef) -> Result<(), RequestError> {
     if artifact.path.as_os_str().is_empty() {
         return Err(RequestError::EmptyField("artifact.path"));
     }

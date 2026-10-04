@@ -48,6 +48,34 @@ pub struct Selection {
     pub cache_hit: bool,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+pub struct RegisteredImplementation {
+    pub name: String,
+    pub priority: i32,
+    pub version: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+pub struct SelectionCount {
+    pub operation: String,
+    pub implementation: String,
+    pub count: u64,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+pub struct Decision {
+    pub signature: OperationSignature,
+    pub selected: String,
+    pub rejected: Vec<Rejection>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+pub struct Manifest {
+    pub implementations: BTreeMap<String, Vec<RegisteredImplementation>>,
+    pub selection_counts: Vec<SelectionCount>,
+    pub decisions: Vec<Decision>,
+}
+
 type Capability = Box<dyn Fn(&OperationSignature) -> Result<(), String> + Send + Sync>;
 struct Candidate {
     metadata: Implementation,
@@ -61,6 +89,7 @@ pub struct Registry {
     candidates: BTreeMap<String, Vec<Candidate>>,
     cache: BTreeMap<OperationSignature, Selection>,
     counts: BTreeMap<(String, String), u64>,
+    last_decisions: BTreeMap<OperationSignature, Selection>,
 }
 
 impl Registry {
@@ -112,6 +141,18 @@ impl Registry {
     }
 
     pub fn resolve(&mut self, signature: &OperationSignature) -> Selection {
+        self.resolve_checked(signature, || Ok::<(), std::convert::Infallible>(()))
+            .unwrap_or_else(|never| match never {})
+    }
+
+    /// A bridge may abort on process-control exceptions after a predicate.
+    /// Aborting must not cache a fallback or alter earlier audit history.
+    pub fn resolve_checked<E>(
+        &mut self,
+        signature: &OperationSignature,
+        check_continue: impl Fn() -> Result<(), E>,
+    ) -> Result<Selection, E> {
+        check_continue()?;
         let result = if let Some(cached) = self.cache.get(signature) {
             Selection {
                 cache_hit: true,
@@ -131,7 +172,9 @@ impl Registry {
             {
                 // An implementation predicate is an extension boundary. A panic
                 // rejects that candidate; it must never select unchecked code.
-                match catch_unwind(AssertUnwindSafe(|| (candidate.supports)(signature))) {
+                let capability = catch_unwind(AssertUnwindSafe(|| (candidate.supports)(signature)));
+                check_continue()?;
+                match capability {
                     Ok(Ok(())) => {
                         result.implementation = Some(candidate.metadata.clone());
                         break;
@@ -158,7 +201,9 @@ impl Registry {
             .entry((signature.operation.clone(), name.to_owned()))
             .or_default();
         *count = count.saturating_add(1);
-        result
+        self.last_decisions
+            .insert(signature.clone(), result.clone());
+        Ok(result)
     }
 
     pub fn count(&self, operation: &str, implementation: &str) -> u64 {
@@ -168,11 +213,57 @@ impl Registry {
             .unwrap_or(0)
     }
 
+    /// Stable, tensor-free policy history. Registration invalidates cached
+    /// choices but retains historical counts and decisions until explicit reset.
+    pub fn manifest(&self) -> Manifest {
+        Manifest {
+            implementations: self
+                .candidates
+                .iter()
+                .map(|(operation, candidates)| {
+                    (
+                        operation.clone(),
+                        candidates
+                            .iter()
+                            .map(|candidate| RegisteredImplementation {
+                                name: candidate.metadata.name.clone(),
+                                priority: candidate.metadata.priority,
+                                version: candidate.metadata.version.clone(),
+                            })
+                            .collect(),
+                    )
+                })
+                .collect(),
+            selection_counts: self
+                .counts
+                .iter()
+                .map(|((operation, implementation), count)| SelectionCount {
+                    operation: operation.clone(),
+                    implementation: implementation.clone(),
+                    count: *count,
+                })
+                .collect(),
+            decisions: self
+                .last_decisions
+                .iter()
+                .map(|(signature, selection)| Decision {
+                    signature: signature.clone(),
+                    selected: selection
+                        .implementation
+                        .as_ref()
+                        .map_or_else(|| "native".into(), |m| m.name.clone()),
+                    rejected: selection.rejected.clone(),
+                })
+                .collect(),
+        }
+    }
+
     /// Capability policy changes outside registration require explicit cache
     /// invalidation before the next resolution, matching process-start policies.
     pub fn clear_runtime_state(&mut self) {
         self.cache.clear();
         self.counts.clear();
+        self.last_decisions.clear();
     }
 }
 

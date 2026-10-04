@@ -1,5 +1,17 @@
 # Latest native-Torch versus FireProt single-request comparison
 
+## Isolation evidence correction (2026-10-04)
+
+The historical launcher below monitors SMI indices derived directly from HIP
+visibility ordinals. These are not interchangeable: the current DiamondHill
+mapping is HIP 7 / PCI `0000:93:00.0` / SMI 5. Historical monitor pass flags
+therefore do not independently establish isolation of the executing device.
+Retain the archived timings and numerical checks with this limitation; they are
+not a newly verified isolated performance comparison. Rust runtime monitoring
+maps by PCI and rechecks the mapping. The operator migration validation records
+an explicit PCI mapping and monitors the corresponding SMI index; see
+[Rust operator validation](rust-operators.md).
+
 ## Protocol and timing boundary
 
 Framework source `fa7cc555ccd8eb6cb09f3f9b30081878d5918688`, independent
@@ -7,8 +19,9 @@ Protenix `bb3be993b52713795796c72cf0a46ef8a7323442`. Mini-default v0.5.0,
 FP32, TF32 off, hipBLAS, C4/S1, one sample, seed 101, no MSA/RNA
 MSA/templates/ESM. Three pairs of fresh workers per length, one prediction
 per worker, zero warmups, alternating execution order. Physical GPU 7
-computes serially while GPU 6 is also continuously monitored. All isolation
-checks pass. Only those authorized GPUs are used.
+computes serially while the launcher also monitors index 6. The historical
+isolation flags pass subject to the mapping limitation above. Only the authorized
+HIP visibility ordinals are exposed.
 
 Both sides use the same checkout, including direct-int64 bond-mask
 construction. The reference is the native Torch route, not an unmodified

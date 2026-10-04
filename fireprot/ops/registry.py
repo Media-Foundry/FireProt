@@ -1,12 +1,14 @@
-"""Model-neutral operation registry with capability-gated native fallback."""
+"""Tensor-side API for the Rust capability registry and native fallback."""
 
 from __future__ import annotations
 
 import dataclasses
+import json
 import threading
-from collections import Counter
 from collections.abc import Callable, Mapping
 from typing import Any
+
+from ._bridge import bridge, identity
 
 
 Capability = Callable[["OperationSignature"], bool | tuple[bool, str]]
@@ -25,6 +27,7 @@ class OperationSignature:
     mask: str
     inplace: bool
     attributes: tuple[tuple[str, str], ...] = ()
+    strides: tuple[int, ...] = ()
 
     @classmethod
     def create(
@@ -40,6 +43,7 @@ class OperationSignature:
         mask: str = "none",
         inplace: bool = False,
         attributes: Mapping[str, Any] | None = None,
+        strides: tuple[int, ...] | list[int] = (),
     ) -> "OperationSignature":
         normalized = tuple(
             sorted((str(key), str(value)) for key, value in (attributes or {}).items())
@@ -55,11 +59,13 @@ class OperationSignature:
             mask=mask,
             inplace=bool(inplace),
             attributes=normalized,
+            strides=tuple(int(value) for value in strides),
         )
 
     def as_dict(self) -> dict[str, Any]:
         result = dataclasses.asdict(self)
         result["shape"] = list(self.shape)
+        result["strides"] = list(self.strides)
         result["attributes"] = dict(self.attributes)
         return result
 
@@ -85,10 +91,8 @@ class OperationRegistry:
     """Thread-safe registry whose missing match always means native fallback."""
 
     def __init__(self) -> None:
-        self._implementations: dict[str, list[OperationImplementation]] = {}
-        self._cache: dict[OperationSignature, Selection] = {}
-        self._selection_counts: Counter[tuple[str, str]] = Counter()
-        self._last_decisions: dict[OperationSignature, Selection] = {}
+        self._functions: dict[tuple[str, str], OperationImplementation] = {}
+        self._policy = bridge.OperatorRegistry()
         self._lock = threading.RLock()
 
     def register(
@@ -109,55 +113,40 @@ class OperationRegistry:
             priority=int(priority),
             version=str(version),
         )
+        if not callable(function) or not callable(supports):
+            raise TypeError("function and supports must be callable")
+
+        def capability(signature_json: str):
+            return supports(OperationSignature.create(**json.loads(signature_json)))
+
         with self._lock:
-            existing = self._implementations.setdefault(operation, [])
-            if any(item.name == name for item in existing):
-                raise ValueError(f"Implementation already registered: {operation}/{name}")
-            existing.append(implementation)
-            existing.sort(key=lambda item: (-item.priority, item.name, item.version))
-            self._cache.clear()
+            self._policy.register(json.dumps({
+                "operation": operation,
+                "name": name,
+                "priority": implementation.priority,
+                "version": implementation.version,
+            }), capability)
+            self._functions[(operation, name)] = implementation
         return implementation
 
     def unregister(self, operation: str, name: str) -> None:
         with self._lock:
-            existing = self._implementations.get(operation, [])
-            kept = [item for item in existing if item.name != name]
-            if len(kept) == len(existing):
-                raise KeyError(f"Unknown implementation: {operation}/{name}")
-            self._implementations[operation] = kept
-            self._cache.clear()
+            self._policy.unregister(operation, name)
+            del self._functions[(operation, name)]
 
     def resolve(self, signature: OperationSignature) -> Selection:
         with self._lock:
-            cached = self._cache.get(signature)
-            if cached is not None:
-                result = Selection(cached.implementation, cached.rejected, True)
-                self._record(signature, result)
-                return result
-            candidates = tuple(self._implementations.get(signature.operation, ()))
-
-        rejected: list[tuple[str, str]] = []
-        selected = None
-        for candidate in candidates:
-            try:
-                capability = candidate.supports(signature)
-                if isinstance(capability, tuple):
-                    supported, reason = capability
-                else:
-                    supported, reason = capability, "capability returned false"
-            except Exception as error:
-                supported = False
-                reason = f"capability error: {type(error).__name__}: {error}"
-            if supported:
-                selected = candidate
-                break
-            rejected.append((candidate.name, reason))
-
-        result = Selection(selected, tuple(rejected), False)
-        with self._lock:
-            self._cache[signature] = result
-            self._record(signature, result)
-        return result
+            selected = json.loads(self._policy.resolve(json.dumps(signature.as_dict())))
+            metadata = selected["implementation"]
+            implementation = (
+                self._functions[(metadata["operation"], metadata["name"])]
+                if metadata is not None else None
+            )
+            return Selection(
+                implementation,
+                tuple((item["implementation"], item["reason"]) for item in selected["rejected"]),
+                selected["cache_hit"],
+            )
 
     def dispatch(
         self,
@@ -174,61 +163,15 @@ class OperationRegistry:
         )
         return function(*args, **kwargs)
 
-    def _record(self, signature: OperationSignature, selection: Selection) -> None:
-        name = (
-            selection.implementation.name
-            if selection.implementation is not None
-            else "native"
-        )
-        self._selection_counts[(signature.operation, name)] += 1
-        self._last_decisions[signature] = selection
-
     def manifest(self) -> dict[str, Any]:
         with self._lock:
-            implementations = {
-                operation: [
-                    {
-                        "name": item.name,
-                        "priority": item.priority,
-                        "version": item.version,
-                    }
-                    for item in values
-                ]
-                for operation, values in sorted(self._implementations.items())
-            }
-            counts = [
-                {"operation": operation, "implementation": name, "count": count}
-                for (operation, name), count in sorted(self._selection_counts.items())
-            ]
-            decisions = [
-                {
-                    "signature": signature.as_dict(),
-                    "selected": (
-                        selection.implementation.name
-                        if selection.implementation is not None
-                        else "native"
-                    ),
-                    "rejected": [
-                        {"implementation": name, "reason": reason}
-                        for name, reason in selection.rejected
-                    ],
-                }
-                for signature, selection in sorted(
-                    self._last_decisions.items(),
-                    key=lambda item: repr(item[0]),
-                )
-            ]
-        return {
-            "implementations": implementations,
-            "selection_counts": counts,
-            "decisions": decisions,
-        }
+            result = json.loads(self._policy.manifest())
+        result["policy_engine"] = dict(identity)
+        return result
 
     def clear_runtime_state(self) -> None:
         with self._lock:
-            self._cache.clear()
-            self._selection_counts.clear()
-            self._last_decisions.clear()
+            self._policy.clear_runtime_state()
 
 
 registry = OperationRegistry()
@@ -251,6 +194,7 @@ def signature_from_tensor(
         architecture=architecture,
         dtype=str(tensor.dtype).removeprefix("torch."),
         shape=tuple(tensor.shape),
+        strides=tuple(tensor.stride()),
         layout=layout,
         mode=mode,
         mask=mask,

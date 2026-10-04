@@ -8,8 +8,11 @@ The experimental Rust CLI now owns request validation, source/weight preflight,
 process supervision, GPU isolation and output acceptance for native AtlasFold
 plus AtlasLM-3B and OpenFold3. AtlasFold N1000 output parity passes exactly.
 OpenFold3 executes successfully, but numerical migration parity remains unpassed
-after native-repeat variation was observed. Protenix integration, accelerated
-backend migration and the Rust operator bridge remain in progress. See
+after native-repeat variation was observed. The shared operator registry now
+uses Rust policy through an in-process bridge; build it before importing the
+Python operator API (`cargo build --release -p fireprot-bridge --locked`).
+Protenix worker integration and accelerated backend migration remain in progress. See
+[operator ownership and build](docs/rust-operators.md),
 [Rust commands and scope](docs/rust-running.md) and
 [migration gates](docs/rust-migration.md).
 
@@ -47,6 +50,10 @@ The N1000 result remains a single process pair. See [AtlasFold performance work]
 and [DiamondHill checkpoint locations](docs/diamondhill-checkpoints.md).
 
 ## Latest single-request E2E comparison
+
+Historical timings below retain their numerical checks, but the old launcher's
+HIP-to-SMI ordinal assumption does not independently establish GPU isolation.
+See the [isolation evidence correction](docs/protenix-native-requests.md#isolation-evidence-correction-2026-10-04).
 
 Fresh-process Mini-default FP32 C4/S1, seed 101, zero warmups, one prediction per worker, three pairs per length:
 

@@ -104,3 +104,27 @@ fn duplicate_registration_and_missing_removal_are_errors() {
     assert!(!r.resolve(&signature()).cache_hit);
     assert_eq!(r.count("triangle", "one"), 1);
 }
+
+#[test]
+fn manifest_retains_history_until_reset_and_keeps_registration() {
+    let mut r = Registry::default();
+    r.resolve(&signature());
+    r.register(implementation("fast", 1), |_| Ok(())).unwrap();
+    // Registration invalidates the cache, not the audit history.
+    assert_eq!(r.manifest().decisions[0].selected, "native");
+    r.resolve(&signature());
+    r.resolve(&signature());
+    let manifest = r.manifest();
+    assert_eq!(manifest.implementations["triangle"][0].name, "fast");
+    assert_eq!(manifest.selection_counts[0].implementation, "fast");
+    assert_eq!(manifest.selection_counts[0].count, 2);
+    assert_eq!(manifest.selection_counts[1].implementation, "native");
+    assert_eq!(manifest.selection_counts[1].count, 1);
+    assert_eq!(manifest.decisions.len(), 1);
+    assert_eq!(manifest.decisions[0].selected, "fast");
+    r.clear_runtime_state();
+    assert!(r.manifest().decisions.is_empty());
+    assert!(r.manifest().selection_counts.is_empty());
+    assert_eq!(r.manifest().implementations, manifest.implementations);
+    assert!(!r.resolve(&signature()).cache_hit);
+}

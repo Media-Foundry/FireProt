@@ -1,6 +1,28 @@
 # FireProt architecture
 
-Status: partially implemented, 2026-10-03. The Protenix measurement, validation, registry, runtime bootstrap, BLAS policy, short-sequence gfx90a operator paths, exact 1,000- and 1,536-token triangle, LayerNorm, and transition paths, and continuous benchmark isolation checks are implemented. The full cross-model adapter API and additional model adapters remain proposed interfaces.
+Status: Rust migration in progress, 2026-10-04. The existing AMD inference
+paths and historical measurements below remain model-specific. The full
+cross-model API and packaged kernel builds are not complete.
+
+## Maintained ownership during migration
+
+| Layer | Current owner | Integration status |
+| --- | --- | --- |
+| Typed requests, cycle semantics and operator selection | `fireprot-core` | Rust; shared Python dispatch uses the Rust registry |
+| Source/weight preflight, worker lifecycle and GPU isolation | `fireprot-runtime` | Rust; native AtlasFold and OpenFold3 workers connected |
+| Output acceptance and numerical comparison | `fireprot-validation` | Rust; output bundles, NPY/NPZ, alignment and confidence checks |
+| User entry point | `fireprot-cli` | Rust; native AtlasFold/OpenFold3 request execution |
+| In-process operator policy boundary | `fireprot-bridge` | CPython stable C ABI; metadata and callbacks only |
+| Model execution | `python/fireprot_workers` and independent upstream checkouts | Explicit PyTorch boundary; Protenix worker integration pending |
+| AMD kernels and tensor glue | `fireprot/backends/amd` | Existing HIP/CK paths; build and layout migration pending |
+
+AtlasFold N1000 native output migration passes exactly. OpenFold3 N1000 executes
+under Rust supervision, but numerical parity remains unpassed after variation
+was also observed between unchanged native runs. Operator bridge checks exercise
+the existing Protenix model glue separately from the pending Rust worker route.
+See [migration gates](rust-migration.md), [running](rust-running.md), and
+[operator bridge](rust-operators.md). Historical benchmark Python remains for
+reproduction; it is not the target owner of new framework policy.
 
 ## Implementation snapshot
 

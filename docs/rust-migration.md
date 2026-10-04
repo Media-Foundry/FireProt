@@ -65,7 +65,8 @@ compatibility; those belong to the pending runtime layer.
 Also implemented: versioned worker events, supervisor-owned lifecycle state, and
 a Rust operator registry with deterministic selection, exact signature caching,
 invalidation, rejection reasons and native fallback. These components are tested
-offline; production Python workers and dispatch still await bridge integration.
+offline. Shared Python operator dispatch now delegates policy to the Rust bridge;
+model worker integration remains partial.
 See [worker protocol](worker-protocol.md).
 
 Also implemented: Unix worker transport, bounded frames, timeout/cancellation,
@@ -86,7 +87,7 @@ native OpenFold3 worker are implemented; one N1000 request completed with 297 is
 failed, and a fresh unchanged native control also showed repeat variation.
 The numerical migration gate remains unpassed. See [Rust running](rust-running.md).
 
-Pending: adapter resource/environment provenance, Rust operator-policy bridge,
+Pending: adapter resource/environment provenance,
 CIF/statistics tooling, remaining model-worker integrations, kernel layout/build
 migration, GPU parity, and replacement of maintained Python entry points. The
 repository is in migration; the full framework is not yet rebuilt.
@@ -95,6 +96,7 @@ Local core checks:
 
 ```bash
 cargo test --workspace
+cargo build --release -p fireprot-bridge --locked
 cargo fmt --all --check
 cargo clippy --workspace --all-targets -- -D warnings
 ```
@@ -104,3 +106,9 @@ native request completed with 216 isolation samples and exact agreement for all
 four public output arrays against the stored native reference. Dual weights,
 recycles, sampling steps and native precision boundaries are retained. Accelerated
 AtlasFold routes and N1536 parity remain pending.
+
+The shared operator registry now routes candidate ordering, cache invalidation,
+fallback decisions and manifests through `fireprot-core` via a CPython stable-ABI
+bridge. Python retains tensor introspection, capability predicates and callable
+execution. Exact strides join the cache key; manifests identify the loaded Rust
+library. See [Rust operator policy](rust-operators.md) for deployment and validation.

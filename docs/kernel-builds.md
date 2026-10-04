@@ -3,9 +3,11 @@
 ## Migration status
 
 `fireprot-runtime::build` implements the shared build identity primitive in Rust.
-The existing Python loaders are not connected yet. Their historical cache names
+`fireprot-runtime::build_cache` adds transactional cache management on local Unix
+filesystems. The existing Python loaders are not connected yet. Their historical cache names
 and build behavior remain in use until each loader is migrated and GPU parity is
-verified. This primitive does not compile, lock, publish or load an extension.
+verified. The identity primitive does not compile or load an extension. The cache service
+serializes a supplied build callback and publishes its declared library artifacts.
 
 ## Contract
 
@@ -44,3 +46,34 @@ may remain a tensor ABI boundary; build policy and cache acceptance belong in Ru
 
 Next connect this contract to the bridge and migrate the HIP/CK loader recipes,
 then rerun their operator and long-model correctness gates before moving kernels.
+
+
+## Transactional cache service
+
+`get_or_build` holds an OS advisory lock for the full cache transaction. Lock
+files are persistent and never unlinked, so all waiters lock the same inode.
+Before reuse, Rust rehashes declared inputs, checks receipt identity, and hashes
+all declared artifacts. Corrupt or incomplete published entries return an error;
+the service never silently deletes or overwrites them.
+
+On a miss, the callback builds in a unique temporary directory under the cache
+root. It must finish its compiler children before returning and return flat
+library filenames. Empty/duplicate lists, missing files, symlink artifacts and
+paths outside that directory fail. Rust rechecks input identity, syncs artifacts
+and the receipt, then renames the directory atomically and syncs its parent.
+The callback must not embed temporary build paths as runtime dependencies.
+
+Errors drop the temporary directory. SIGKILL can leave an ignored staging
+directory, but the kernel releases the lock and no completed receipt is published
+at the final cache path. Tests kill a child while it holds the build lock and
+verify that a fresh build succeeds instead of reusing its partial output. Other
+tests cover concurrent callers, compiler failure, input changes during builds,
+corrupt outputs, missing receipts and invalid artifact paths.
+
+The cache assumes a user-owned local filesystem and cooperating writers. It is
+not a security boundary against another process modifying the same user's files.
+Before/after hashes detect persistent input changes, not changes restored while
+the compiler is reading. Immutable input snapshots and complete recipe inputs
+remain integration requirements. Loading is outside this service; only declared,
+verified artifacts may be loaded, and intermediates must not be reused for a
+future compilation. No HIP/CK loader uses this service yet.

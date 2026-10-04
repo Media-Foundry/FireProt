@@ -1,0 +1,1791 @@
+{
+  "manifest": {
+    "status": "complete",
+    "source_commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f",
+    "source": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+    "weight": {
+      "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+      "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4",
+      "bytes": 2287872989
+    },
+    "input_sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c",
+    "config_yaml": "experiment_settings:\n  seeds: [101]\n  use_msa_server: false\n  use_templates: false\npl_trainer_args:\n  devices: 1\n  num_nodes: 1\n  precision: 32-true\nmodel_update:\n  presets: [predict]\n  custom:\n    settings:\n      memory:\n        eval:\n          use_triton_triangle_kernels: false\n          use_deepspeed_evo_attention: false\n          use_cueq_triangle_kernels: false\n",
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850",
+    "stage_events": true,
+    "harness_sha256": "7b3c7b58a09001e421afc8f3a2309096edc6afbc3cb0716afc0f94fe34154bdb",
+    "model_calls": 1,
+    "cache": "Weights hashed before request; filesystem warm; fresh model; no MSA or template search",
+    "timing_scope": "Request excludes imports, weight hashing and device preflight; includes upstream setup/loading/features/prediction/writing and raw output capture. Stage times are inclusive.",
+    "device": {
+      "gpu": 2,
+      "bdf": "0000:32:00.0",
+      "uuid": "0e00740c-0000-1000-80cf-54daf70a58aa",
+      "kfd_id": 51627,
+      "node_id": 2,
+      "partition_id": 0
+    },
+    "model_config": {
+      "architecture": {
+        "diffusion_module": {
+          "atom_attn_dec": {
+            "blocks_per_ckpt": null,
+            "c_atom": 128,
+            "c_atom_pair": 16,
+            "c_hidden": 32,
+            "c_token": 768,
+            "inf": 1000000000.0,
+            "linear_init_params": {
+              "diffusion_transformer": {
+                "att_pair_bias": {
+                  "ada_ln": {
+                    "linear_g": {
+                      "bias": true,
+                      "init": "final"
+                    },
+                    "linear_s": {
+                      "bias": false,
+                      "init": "final"
+                    }
+                  },
+                  "linear_ada_out": {
+                    "bias": true,
+                    "init": "gating_ada_zero"
+                  },
+                  "linear_z": {
+                    "bias": false,
+                    "init": "default"
+                  },
+                  "mha": {
+                    "linear_g": {
+                      "bias": false,
+                      "init": "gating"
+                    },
+                    "linear_k": {
+                      "bias": false,
+                      "init": "default"
+                    },
+                    "linear_o": {
+                      "bias": false,
+                      "init": "default"
+                    },
+                    "linear_q": {
+                      "bias": true,
+                      "init": "default"
+                    },
+                    "linear_v": {
+                      "bias": false,
+                      "init": "default"
+                    }
+                  }
+                },
+                "cond_transition": {
+                  "ada_ln": {
+                    "linear_g": {
+                      "bias": true,
+                      "init": "final"
+                    },
+                    "linear_s": {
+                      "bias": false,
+                      "init": "final"
+                    }
+                  },
+                  "linear_g": {
+                    "bias": true,
+                    "init": "gating_ada_zero"
+                  },
+                  "linear_out": {
+                    "bias": false,
+                    "init": "default"
+                  },
+                  "swiglu": {
+                    "linear_a": {
+                      "bias": false,
+                      "init": "relu"
+                    },
+                    "linear_b": {
+                      "bias": false,
+                      "init": "relu"
+                    }
+                  }
+                }
+              },
+              "linear_q_in": {
+                "bias": false,
+                "init": "default"
+              },
+              "linear_q_out": {
+                "bias": false,
+                "init": "final"
+              }
+            },
+            "n_key": 128,
+            "n_query": 32,
+            "n_transition": 2,
+            "no_blocks": 3,
+            "no_heads": 4,
+            "use_reentrant": false
+          },
+          "atom_attn_enc": {
+            "blocks_per_ckpt": null,
+            "c_atom": 128,
+            "c_atom_pair": 16,
+            "c_atom_ref": {
+              "element": 119,
+              "name_chars": 256
+            },
+            "c_hidden": 32,
+            "c_s": 384,
+            "c_token": 768,
+            "c_z": 128,
+            "ckpt_intermediate_steps": false,
+            "inf": 1000000000.0,
+            "linear_init_params": {
+              "diffusion_transformer": {
+                "att_pair_bias": {
+                  "ada_ln": {
+                    "linear_g": {
+                      "bias": true,
+                      "init": "final"
+                    },
+                    "linear_s": {
+                      "bias": false,
+                      "init": "final"
+                    }
+                  },
+                  "linear_ada_out": {
+                    "bias": true,
+                    "init": "gating_ada_zero"
+                  },
+                  "linear_z": {
+                    "bias": false,
+                    "init": "default"
+                  },
+                  "mha": {
+                    "linear_g": {
+                      "bias": false,
+                      "init": "gating"
+                    },
+                    "linear_k": {
+                      "bias": false,
+                      "init": "default"
+                    },
+                    "linear_o": {
+                      "bias": false,
+                      "init": "default"
+                    },
+                    "linear_q": {
+                      "bias": true,
+                      "init": "default"
+                    },
+                    "linear_v": {
+                      "bias": false,
+                      "init": "default"
+                    }
+                  }
+                },
+                "cond_transition": {
+                  "ada_ln": {
+                    "linear_g": {
+                      "bias": true,
+                      "init": "final"
+                    },
+                    "linear_s": {
+                      "bias": false,
+                      "init": "final"
+                    }
+                  },
+                  "linear_g": {
+                    "bias": true,
+                    "init": "gating_ada_zero"
+                  },
+                  "linear_out": {
+                    "bias": false,
+                    "init": "default"
+                  },
+                  "swiglu": {
+                    "linear_a": {
+                      "bias": false,
+                      "init": "relu"
+                    },
+                    "linear_b": {
+                      "bias": false,
+                      "init": "relu"
+                    }
+                  }
+                }
+              },
+              "linear_l": {
+                "bias": false,
+                "init": "default"
+              },
+              "linear_m": {
+                "bias": false,
+                "init": "default"
+              },
+              "linear_q": {
+                "bias": false,
+                "init": "default"
+              },
+              "noisy_pos_emb": {
+                "linear_r": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "linear_s": {
+                  "bias": false,
+                  "init": "final"
+                },
+                "linear_z": {
+                  "bias": false,
+                  "init": "final"
+                }
+              },
+              "pair_mlp_1": {
+                "bias": false,
+                "init": "relu"
+              },
+              "pair_mlp_2": {
+                "bias": false,
+                "init": "relu"
+              },
+              "pair_mlp_3": {
+                "bias": false,
+                "init": "final"
+              },
+              "ref_atom_emb": {
+                "linear_feats": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "linear_inv_sq_dists": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "linear_ref_offset": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "linear_valid_mask": {
+                  "bias": false,
+                  "init": "default"
+                }
+              }
+            },
+            "n_key": 128,
+            "n_query": 32,
+            "n_transition": 2,
+            "no_blocks": 3,
+            "no_heads": 4,
+            "use_reentrant": false
+          },
+          "diffusion_conditioning": {
+            "c_fourier_emb": 256,
+            "c_s": 384,
+            "c_s_input": 449,
+            "c_z": 128,
+            "linear_init_params": {
+              "linear_n": {
+                "bias": false,
+                "init": "default"
+              },
+              "linear_s": {
+                "bias": false,
+                "init": "default"
+              },
+              "linear_z": {
+                "bias": false,
+                "init": "default"
+              },
+              "transition_s": {
+                "linear_out": {
+                  "bias": false,
+                  "init": "final"
+                },
+                "swiglu": {
+                  "linear_a": {
+                    "bias": false,
+                    "init": "relu"
+                  },
+                  "linear_b": {
+                    "bias": false,
+                    "init": "relu"
+                  }
+                }
+              },
+              "transition_z": {
+                "linear_out": {
+                  "bias": false,
+                  "init": "final"
+                },
+                "swiglu": {
+                  "linear_a": {
+                    "bias": false,
+                    "init": "relu"
+                  },
+                  "linear_b": {
+                    "bias": false,
+                    "init": "relu"
+                  }
+                }
+              }
+            },
+            "max_relative_chain": 2,
+            "max_relative_idx": 32,
+            "seed_fourier_emb": 42,
+            "sigma_data": 16,
+            "tune_chunk_size": true
+          },
+          "diffusion_module": {
+            "c_s": 384,
+            "c_token": 768,
+            "linear_init_params": {
+              "linear_s": {
+                "bias": false,
+                "init": "final"
+              }
+            },
+            "sigma_data": 16
+          },
+          "diffusion_transformer": {
+            "blocks_per_ckpt": null,
+            "c_a": 768,
+            "c_hidden": 48,
+            "c_s": 384,
+            "c_z": 128,
+            "inf": 1000000000.0,
+            "linear_init_params": {
+              "att_pair_bias": {
+                "ada_ln": {
+                  "linear_g": {
+                    "bias": true,
+                    "init": "final"
+                  },
+                  "linear_s": {
+                    "bias": false,
+                    "init": "final"
+                  }
+                },
+                "linear_ada_out": {
+                  "bias": true,
+                  "init": "gating_ada_zero"
+                },
+                "linear_z": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "mha": {
+                  "linear_g": {
+                    "bias": false,
+                    "init": "gating"
+                  },
+                  "linear_k": {
+                    "bias": false,
+                    "init": "default"
+                  },
+                  "linear_o": {
+                    "bias": false,
+                    "init": "default"
+                  },
+                  "linear_q": {
+                    "bias": true,
+                    "init": "default"
+                  },
+                  "linear_v": {
+                    "bias": false,
+                    "init": "default"
+                  }
+                }
+              },
+              "cond_transition": {
+                "ada_ln": {
+                  "linear_g": {
+                    "bias": true,
+                    "init": "final"
+                  },
+                  "linear_s": {
+                    "bias": false,
+                    "init": "final"
+                  }
+                },
+                "linear_g": {
+                  "bias": true,
+                  "init": "gating_ada_zero"
+                },
+                "linear_out": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "swiglu": {
+                  "linear_a": {
+                    "bias": false,
+                    "init": "relu"
+                  },
+                  "linear_b": {
+                    "bias": false,
+                    "init": "relu"
+                  }
+                }
+              }
+            },
+            "n_key": null,
+            "n_query": null,
+            "n_transition": 2,
+            "no_blocks": 24,
+            "no_heads": 16,
+            "use_reentrant": false
+          }
+        },
+        "heads": {
+          "distogram": {
+            "c_out": 64,
+            "c_z": 128,
+            "enabled": true,
+            "linear_init_params": {
+              "linear": {
+                "bias": false,
+                "init": "final"
+              }
+            }
+          },
+          "experimentally_resolved": {
+            "c_out": 2,
+            "c_s": 384,
+            "linear_init_params": {
+              "linear": {
+                "bias": false,
+                "init": "final"
+              }
+            },
+            "max_atoms_per_token": 23
+          },
+          "lddt": {
+            "c_out": 50,
+            "c_s": 384,
+            "linear_init_params": {
+              "linear": {
+                "bias": false,
+                "init": "final"
+              }
+            },
+            "max_atoms_per_token": 23
+          },
+          "max_atoms_per_token": 23,
+          "pae": {
+            "c_out": 64,
+            "c_z": 128,
+            "enabled": true,
+            "linear_init_params": {
+              "linear": {
+                "bias": false,
+                "init": "final"
+              }
+            }
+          },
+          "pairformer_embedding": {
+            "c_s_input": 449,
+            "c_z": 128,
+            "inf": 1000000000.0,
+            "linear_init_params": {
+              "linear_distance": {
+                "bias": false,
+                "init": "default"
+              },
+              "linear_i": {
+                "bias": false,
+                "init": "default"
+              },
+              "linear_j": {
+                "bias": false,
+                "init": "default"
+              }
+            },
+            "max_bin": 50.75,
+            "min_bin": 3.25,
+            "no_bin": 39,
+            "pairformer": {
+              "blocks_per_ckpt": null,
+              "c_hidden_mul": 128,
+              "c_hidden_pair_att": 32,
+              "c_hidden_pair_bias": 24,
+              "c_s": 384,
+              "c_z": 128,
+              "clear_cache_between_blocks": false,
+              "fuse_projection_weights": false,
+              "inf": 1000000000.0,
+              "linear_init_params": {
+                "att_pair_bias": {
+                  "layer_norm_z": {
+                    "create_offset": true
+                  },
+                  "linear_z": {
+                    "bias": false,
+                    "init": "default"
+                  },
+                  "mha": {
+                    "linear_g": {
+                      "bias": false,
+                      "init": "gating"
+                    },
+                    "linear_k": {
+                      "bias": false,
+                      "init": "default"
+                    },
+                    "linear_o": {
+                      "bias": false,
+                      "init": "final"
+                    },
+                    "linear_q": {
+                      "bias": true,
+                      "init": "default"
+                    },
+                    "linear_v": {
+                      "bias": false,
+                      "init": "default"
+                    }
+                  }
+                },
+                "pair_block": {
+                  "fused_tri_mul": {
+                    "linear_ab_g": {
+                      "bias": false,
+                      "init": "gating"
+                    },
+                    "linear_ab_p": {
+                      "bias": false,
+                      "init": "default"
+                    },
+                    "linear_g": {
+                      "bias": false,
+                      "init": "gating"
+                    },
+                    "linear_z": {
+                      "bias": false,
+                      "init": "final"
+                    }
+                  },
+                  "pair_transition": {
+                    "relu": {
+                      "layers": {
+                        "bias": true,
+                        "init": "relu"
+                      },
+                      "linear_out": {
+                        "bias": true,
+                        "init": "final"
+                      }
+                    },
+                    "swiglu": {
+                      "linear_out": {
+                        "bias": false,
+                        "init": "final"
+                      },
+                      "swiglu": {
+                        "linear_a": {
+                          "bias": false,
+                          "init": "relu"
+                        },
+                        "linear_b": {
+                          "bias": false,
+                          "init": "relu"
+                        }
+                      }
+                    }
+                  },
+                  "tri_att": {
+                    "linear_z": {
+                      "bias": false,
+                      "init": "default"
+                    },
+                    "mha": {
+                      "linear_g": {
+                        "bias": false,
+                        "init": "gating"
+                      },
+                      "linear_k": {
+                        "bias": false,
+                        "init": "default"
+                      },
+                      "linear_o": {
+                        "bias": false,
+                        "init": "final"
+                      },
+                      "linear_q": {
+                        "bias": false,
+                        "init": "default"
+                      },
+                      "linear_v": {
+                        "bias": false,
+                        "init": "default"
+                      }
+                    }
+                  },
+                  "tri_mul": {
+                    "linear_a_g": {
+                      "bias": false,
+                      "init": "gating"
+                    },
+                    "linear_a_p": {
+                      "bias": false,
+                      "init": "default"
+                    },
+                    "linear_b_g": {
+                      "bias": false,
+                      "init": "gating"
+                    },
+                    "linear_b_p": {
+                      "bias": false,
+                      "init": "default"
+                    },
+                    "linear_g": {
+                      "bias": false,
+                      "init": "gating"
+                    },
+                    "linear_z": {
+                      "bias": false,
+                      "init": "final"
+                    }
+                  }
+                },
+                "transition": {
+                  "linear_out": {
+                    "bias": false,
+                    "init": "final"
+                  },
+                  "swiglu": {
+                    "linear_a": {
+                      "bias": false,
+                      "init": "relu"
+                    },
+                    "linear_b": {
+                      "bias": false,
+                      "init": "relu"
+                    }
+                  }
+                }
+              },
+              "no_blocks": 4,
+              "no_heads_pair": 4,
+              "no_heads_pair_bias": 16,
+              "pair_dropout": 0.25,
+              "transition_n": 4,
+              "transition_type": "swiglu",
+              "tune_chunk_size": true,
+              "use_reentrant": false
+            }
+          },
+          "pde": {
+            "c_out": 64,
+            "c_z": 128,
+            "linear_init_params": {
+              "linear": {
+                "bias": false,
+                "init": "final"
+              }
+            }
+          },
+          "per_sample_token_cutoff": 750
+        },
+        "input_embedder": {
+          "atom_attn_enc": {
+            "blocks_per_ckpt": null,
+            "c_atom": 128,
+            "c_atom_pair": 16,
+            "c_atom_ref": {
+              "element": 119,
+              "name_chars": 256
+            },
+            "c_hidden": 32,
+            "c_s": 384,
+            "c_token": 384,
+            "c_z": 128,
+            "ckpt_intermediate_steps": false,
+            "inf": 1000000000.0,
+            "linear_init_params": {
+              "diffusion_transformer": {
+                "att_pair_bias": {
+                  "ada_ln": {
+                    "linear_g": {
+                      "bias": true,
+                      "init": "final"
+                    },
+                    "linear_s": {
+                      "bias": false,
+                      "init": "final"
+                    }
+                  },
+                  "linear_ada_out": {
+                    "bias": true,
+                    "init": "gating_ada_zero"
+                  },
+                  "linear_z": {
+                    "bias": false,
+                    "init": "default"
+                  },
+                  "mha": {
+                    "linear_g": {
+                      "bias": false,
+                      "init": "gating"
+                    },
+                    "linear_k": {
+                      "bias": false,
+                      "init": "default"
+                    },
+                    "linear_o": {
+                      "bias": false,
+                      "init": "default"
+                    },
+                    "linear_q": {
+                      "bias": true,
+                      "init": "default"
+                    },
+                    "linear_v": {
+                      "bias": false,
+                      "init": "default"
+                    }
+                  }
+                },
+                "cond_transition": {
+                  "ada_ln": {
+                    "linear_g": {
+                      "bias": true,
+                      "init": "final"
+                    },
+                    "linear_s": {
+                      "bias": false,
+                      "init": "final"
+                    }
+                  },
+                  "linear_g": {
+                    "bias": true,
+                    "init": "gating_ada_zero"
+                  },
+                  "linear_out": {
+                    "bias": false,
+                    "init": "default"
+                  },
+                  "swiglu": {
+                    "linear_a": {
+                      "bias": false,
+                      "init": "relu"
+                    },
+                    "linear_b": {
+                      "bias": false,
+                      "init": "relu"
+                    }
+                  }
+                }
+              },
+              "linear_l": {
+                "bias": false,
+                "init": "default"
+              },
+              "linear_m": {
+                "bias": false,
+                "init": "default"
+              },
+              "linear_q": {
+                "bias": false,
+                "init": "default"
+              },
+              "noisy_pos_emb": {
+                "linear_r": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "linear_s": {
+                  "bias": false,
+                  "init": "final"
+                },
+                "linear_z": {
+                  "bias": false,
+                  "init": "final"
+                }
+              },
+              "pair_mlp_1": {
+                "bias": false,
+                "init": "relu"
+              },
+              "pair_mlp_2": {
+                "bias": false,
+                "init": "relu"
+              },
+              "pair_mlp_3": {
+                "bias": false,
+                "init": "final"
+              },
+              "ref_atom_emb": {
+                "linear_feats": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "linear_inv_sq_dists": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "linear_ref_offset": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "linear_valid_mask": {
+                  "bias": false,
+                  "init": "default"
+                }
+              }
+            },
+            "n_key": 128,
+            "n_query": 32,
+            "n_transition": 2,
+            "no_blocks": 3,
+            "no_heads": 4,
+            "use_reentrant": false
+          },
+          "c_s": 384,
+          "c_s_input": 449,
+          "c_z": 128,
+          "linear_init_params": {
+            "linear_relpos": {
+              "bias": false,
+              "init": "default"
+            },
+            "linear_s": {
+              "bias": false,
+              "init": "default"
+            },
+            "linear_token_bonds": {
+              "bias": false,
+              "init": "default"
+            },
+            "linear_z_i": {
+              "bias": false,
+              "init": "default"
+            },
+            "linear_z_j": {
+              "bias": false,
+              "init": "default"
+            }
+          },
+          "max_relative_chain": 2,
+          "max_relative_idx": 32
+        },
+        "loss_module": {
+          "confidence": {
+            "eps": 1e-08,
+            "experimentally_resolved": {
+              "no_bins": 2
+            },
+            "inf": 1000000000.0,
+            "pae": {
+              "angle_threshold": 25.0,
+              "bin_max": 32.0,
+              "bin_min": 0.0,
+              "enabled": true,
+              "no_bins": 64
+            },
+            "pde": {
+              "bin_max": 32.0,
+              "bin_min": 0.0,
+              "no_bins": 64
+            },
+            "per_sample_atom_cutoff": 10000,
+            "plddt": {
+              "bin_max": 1.0,
+              "bin_min": 0.0,
+              "no_bins": 50
+            }
+          },
+          "confidence_loss_names": [
+            "plddt",
+            "pde",
+            "experimentally_resolved",
+            "pae"
+          ],
+          "diffusion": {
+            "chunk_size": null,
+            "dna_weight": 5.0,
+            "eps": 1e-08,
+            "ligand_weight": 10.0,
+            "rna_weight": 5.0,
+            "sigma_data": 16,
+            "use_sparse_loss": false
+          },
+          "diffusion_loss_names": [
+            "bond",
+            "smooth_lddt",
+            "mse"
+          ],
+          "distogram": {
+            "bin_max": 22.0,
+            "bin_min": 2.0,
+            "eps": 1e-08,
+            "no_bins": 64
+          },
+          "low_mem_validation": false,
+          "per_sample_atom_cutoff": 10000,
+          "train_confidence_only": false
+        },
+        "msa": {
+          "msa_module": {
+            "blocks_per_ckpt": null,
+            "c_hidden_msa_att": 8,
+            "c_hidden_mul": 128,
+            "c_hidden_opm": 32,
+            "c_hidden_pair_att": 32,
+            "c_m": 64,
+            "c_z": 128,
+            "clear_cache_between_blocks": false,
+            "eps": 1e-08,
+            "fuse_projection_weights": false,
+            "inf": 1000000000.0,
+            "linear_init_params": {
+              "msa_pair_avg": {
+                "linear_g": {
+                  "bias": false,
+                  "init": "gating"
+                },
+                "linear_o": {
+                  "bias": false,
+                  "init": "final"
+                },
+                "linear_v": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "linear_z": {
+                  "bias": false,
+                  "init": "default"
+                }
+              },
+              "msa_row_att": {
+                "linear_z": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "mha": {
+                  "linear_g": {
+                    "bias": false,
+                    "init": "gating"
+                  },
+                  "linear_k": {
+                    "bias": false,
+                    "init": "default"
+                  },
+                  "linear_o": {
+                    "bias": false,
+                    "init": "final"
+                  },
+                  "linear_q": {
+                    "bias": false,
+                    "init": "default"
+                  },
+                  "linear_v": {
+                    "bias": false,
+                    "init": "default"
+                  }
+                }
+              },
+              "msa_transition": {
+                "relu": {
+                  "layers": {
+                    "bias": true,
+                    "init": "relu"
+                  },
+                  "linear_out": {
+                    "bias": true,
+                    "init": "final"
+                  }
+                },
+                "swiglu": {
+                  "linear_out": {
+                    "bias": false,
+                    "init": "final"
+                  },
+                  "swiglu": {
+                    "linear_a": {
+                      "bias": false,
+                      "init": "relu"
+                    },
+                    "linear_b": {
+                      "bias": false,
+                      "init": "relu"
+                    }
+                  }
+                }
+              },
+              "opm": {
+                "linear_1": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "linear_2": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "linear_out": {
+                  "bias": true,
+                  "init": "final"
+                }
+              },
+              "pair_block": {
+                "fused_tri_mul": {
+                  "linear_ab_g": {
+                    "bias": false,
+                    "init": "gating"
+                  },
+                  "linear_ab_p": {
+                    "bias": false,
+                    "init": "default"
+                  },
+                  "linear_g": {
+                    "bias": false,
+                    "init": "gating"
+                  },
+                  "linear_z": {
+                    "bias": false,
+                    "init": "final"
+                  }
+                },
+                "pair_transition": {
+                  "relu": {
+                    "layers": {
+                      "bias": true,
+                      "init": "relu"
+                    },
+                    "linear_out": {
+                      "bias": true,
+                      "init": "final"
+                    }
+                  },
+                  "swiglu": {
+                    "linear_out": {
+                      "bias": false,
+                      "init": "final"
+                    },
+                    "swiglu": {
+                      "linear_a": {
+                        "bias": false,
+                        "init": "relu"
+                      },
+                      "linear_b": {
+                        "bias": false,
+                        "init": "relu"
+                      }
+                    }
+                  }
+                },
+                "tri_att": {
+                  "linear_z": {
+                    "bias": false,
+                    "init": "default"
+                  },
+                  "mha": {
+                    "linear_g": {
+                      "bias": false,
+                      "init": "gating"
+                    },
+                    "linear_k": {
+                      "bias": false,
+                      "init": "default"
+                    },
+                    "linear_o": {
+                      "bias": false,
+                      "init": "final"
+                    },
+                    "linear_q": {
+                      "bias": false,
+                      "init": "default"
+                    },
+                    "linear_v": {
+                      "bias": false,
+                      "init": "default"
+                    }
+                  }
+                },
+                "tri_mul": {
+                  "linear_a_g": {
+                    "bias": false,
+                    "init": "gating"
+                  },
+                  "linear_a_p": {
+                    "bias": false,
+                    "init": "default"
+                  },
+                  "linear_b_g": {
+                    "bias": false,
+                    "init": "gating"
+                  },
+                  "linear_b_p": {
+                    "bias": false,
+                    "init": "default"
+                  },
+                  "linear_g": {
+                    "bias": false,
+                    "init": "gating"
+                  },
+                  "linear_z": {
+                    "bias": false,
+                    "init": "final"
+                  }
+                }
+              }
+            },
+            "msa_dropout": 0.15,
+            "no_blocks": 4,
+            "no_heads_msa": 8,
+            "no_heads_pair": 4,
+            "opm_first": true,
+            "pair_dropout": 0.25,
+            "transition_n": 4,
+            "transition_type": "swiglu",
+            "tune_chunk_size": true,
+            "use_reentrant": false
+          },
+          "msa_module_embedder": {
+            "c_m": 64,
+            "c_m_feats": 34,
+            "c_s_input": 449,
+            "linear_init_params": {
+              "linear_m": {
+                "bias": false,
+                "init": "default"
+              },
+              "linear_s_input": {
+                "bias": false,
+                "init": "default"
+              }
+            },
+            "max_subsampled_all_msa": 1024,
+            "min_subsampled_all_msa": 1024,
+            "subsample_all_msa": true,
+            "subsample_main_msa": false
+          }
+        },
+        "noise_schedule": {
+          "p": 7,
+          "s_max": 160.0,
+          "s_min": 0.0004,
+          "sigma_data": 16
+        },
+        "pairformer": {
+          "blocks_per_ckpt": null,
+          "c_hidden_mul": 128,
+          "c_hidden_pair_att": 32,
+          "c_hidden_pair_bias": 24,
+          "c_s": 384,
+          "c_z": 128,
+          "clear_cache_between_blocks": false,
+          "fuse_projection_weights": false,
+          "inf": 1000000000.0,
+          "linear_init_params": {
+            "att_pair_bias": {
+              "layer_norm_z": {
+                "create_offset": true
+              },
+              "linear_z": {
+                "bias": false,
+                "init": "default"
+              },
+              "mha": {
+                "linear_g": {
+                  "bias": false,
+                  "init": "gating"
+                },
+                "linear_k": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "linear_o": {
+                  "bias": false,
+                  "init": "final"
+                },
+                "linear_q": {
+                  "bias": true,
+                  "init": "default"
+                },
+                "linear_v": {
+                  "bias": false,
+                  "init": "default"
+                }
+              }
+            },
+            "pair_block": {
+              "fused_tri_mul": {
+                "linear_ab_g": {
+                  "bias": false,
+                  "init": "gating"
+                },
+                "linear_ab_p": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "linear_g": {
+                  "bias": false,
+                  "init": "gating"
+                },
+                "linear_z": {
+                  "bias": false,
+                  "init": "final"
+                }
+              },
+              "pair_transition": {
+                "relu": {
+                  "layers": {
+                    "bias": true,
+                    "init": "relu"
+                  },
+                  "linear_out": {
+                    "bias": true,
+                    "init": "final"
+                  }
+                },
+                "swiglu": {
+                  "linear_out": {
+                    "bias": false,
+                    "init": "final"
+                  },
+                  "swiglu": {
+                    "linear_a": {
+                      "bias": false,
+                      "init": "relu"
+                    },
+                    "linear_b": {
+                      "bias": false,
+                      "init": "relu"
+                    }
+                  }
+                }
+              },
+              "tri_att": {
+                "linear_z": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "mha": {
+                  "linear_g": {
+                    "bias": false,
+                    "init": "gating"
+                  },
+                  "linear_k": {
+                    "bias": false,
+                    "init": "default"
+                  },
+                  "linear_o": {
+                    "bias": false,
+                    "init": "final"
+                  },
+                  "linear_q": {
+                    "bias": false,
+                    "init": "default"
+                  },
+                  "linear_v": {
+                    "bias": false,
+                    "init": "default"
+                  }
+                }
+              },
+              "tri_mul": {
+                "linear_a_g": {
+                  "bias": false,
+                  "init": "gating"
+                },
+                "linear_a_p": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "linear_b_g": {
+                  "bias": false,
+                  "init": "gating"
+                },
+                "linear_b_p": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "linear_g": {
+                  "bias": false,
+                  "init": "gating"
+                },
+                "linear_z": {
+                  "bias": false,
+                  "init": "final"
+                }
+              }
+            },
+            "transition": {
+              "linear_out": {
+                "bias": false,
+                "init": "final"
+              },
+              "swiglu": {
+                "linear_a": {
+                  "bias": false,
+                  "init": "relu"
+                },
+                "linear_b": {
+                  "bias": false,
+                  "init": "relu"
+                }
+              }
+            }
+          },
+          "no_blocks": 48,
+          "no_heads_pair": 4,
+          "no_heads_pair_bias": 16,
+          "pair_dropout": 0.25,
+          "transition_n": 4,
+          "transition_type": "swiglu",
+          "tune_chunk_size": true,
+          "use_reentrant": false
+        },
+        "sample_diffusion": {
+          "gamma_0": 0.8,
+          "gamma_min": 1.0,
+          "noise_scale": 1.003,
+          "step_scale": 1.5
+        },
+        "shared": {
+          "c_s": 384,
+          "c_s_input": 449,
+          "c_z": 128,
+          "diffusion": {
+            "no_full_rollout_samples": 1,
+            "no_full_rollout_steps": 200,
+            "no_mini_rollout_samples": 1,
+            "no_mini_rollout_steps": 20,
+            "no_samples": 48,
+            "sigma_data": 16,
+            "use_conditioning_prob": 1.0
+          },
+          "num_recycles": 3,
+          "sync_seed": 0,
+          "use_confidence_emb_prob": 1.0
+        },
+        "template": {
+          "c_t": 64,
+          "c_z": 128,
+          "linear_init_params": {
+            "linear_t": {
+              "bias": false,
+              "init": "default"
+            }
+          },
+          "template_pair_embedder": {
+            "c_aatype": 32,
+            "c_dgram": 39,
+            "c_in": 128,
+            "c_out": 64,
+            "linear_init_params": {
+              "linear_a": {
+                "bias": false,
+                "init": "default"
+              },
+              "linear_z": {
+                "bias": false,
+                "init": "relu"
+              }
+            }
+          },
+          "template_pair_stack": {
+            "blocks_per_ckpt": null,
+            "c_hidden_tri_att": 16,
+            "c_hidden_tri_mul": 64,
+            "c_t": 64,
+            "ckpt_per_template": false,
+            "clear_cache_between_blocks": false,
+            "dropout_rate": 0.25,
+            "fuse_projection_weights": false,
+            "inf": 1000000000.0,
+            "linear_init_params": {
+              "fused_tri_mul": {
+                "linear_ab_g": {
+                  "bias": false,
+                  "init": "gating"
+                },
+                "linear_ab_p": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "linear_g": {
+                  "bias": false,
+                  "init": "gating"
+                },
+                "linear_z": {
+                  "bias": false,
+                  "init": "final"
+                }
+              },
+              "pair_transition": {
+                "relu": {
+                  "layers": {
+                    "bias": true,
+                    "init": "relu"
+                  },
+                  "linear_out": {
+                    "bias": true,
+                    "init": "final"
+                  }
+                },
+                "swiglu": {
+                  "linear_out": {
+                    "bias": false,
+                    "init": "final"
+                  },
+                  "swiglu": {
+                    "linear_a": {
+                      "bias": false,
+                      "init": "relu"
+                    },
+                    "linear_b": {
+                      "bias": false,
+                      "init": "relu"
+                    }
+                  }
+                }
+              },
+              "tri_att": {
+                "linear_z": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "mha": {
+                  "linear_g": {
+                    "bias": false,
+                    "init": "gating"
+                  },
+                  "linear_k": {
+                    "bias": false,
+                    "init": "default"
+                  },
+                  "linear_o": {
+                    "bias": false,
+                    "init": "final"
+                  },
+                  "linear_q": {
+                    "bias": false,
+                    "init": "default"
+                  },
+                  "linear_v": {
+                    "bias": false,
+                    "init": "default"
+                  }
+                }
+              },
+              "tri_mul": {
+                "linear_a_g": {
+                  "bias": false,
+                  "init": "gating"
+                },
+                "linear_a_p": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "linear_b_g": {
+                  "bias": false,
+                  "init": "gating"
+                },
+                "linear_b_p": {
+                  "bias": false,
+                  "init": "default"
+                },
+                "linear_g": {
+                  "bias": false,
+                  "init": "gating"
+                },
+                "linear_z": {
+                  "bias": false,
+                  "init": "final"
+                }
+              }
+            },
+            "no_blocks": 2,
+            "no_heads": 4,
+            "pair_transition_n": 2,
+            "transition_type": "swiglu",
+            "tri_mul_first": true,
+            "tune_chunk_size": true,
+            "use_reentrant": false
+          }
+        }
+      },
+      "confidence": {
+        "clash": {
+          "clash_cutoff_num": 100,
+          "clash_cutoff_ratio": 0.5,
+          "min_distance": 1.1
+        },
+        "distogram": {
+          "bin_max": 22,
+          "bin_min": 2,
+          "no_bins": 64,
+          "return_contact_probs": false
+        },
+        "low_mem_validation": false,
+        "pae": {
+          "bin_max": 32,
+          "bin_min": 0,
+          "no_bins": 64,
+          "return_probs": false
+        },
+        "pde": {
+          "bin_max": 32,
+          "bin_min": 0,
+          "no_bins": 64,
+          "return_probs": false
+        },
+        "per_sample_atom_cutoff": 10000,
+        "plddt": {
+          "bin_max": 1,
+          "bin_min": 0,
+          "no_bins": 50
+        },
+        "ptm": {
+          "bin_max": 32,
+          "bin_min": 0,
+          "no_bins": 64
+        },
+        "rasa": {
+          "cutoff": 0.581
+        },
+        "sample_ranking": {
+          "chain_pair_iptm": {
+            "enabled": true
+          },
+          "chain_ptm": {
+            "enabled": true
+          },
+          "full_complex": {
+            "disorder_threshold": 0.581,
+            "disorder_weight": 0.5,
+            "has_clash_weight": 100.0,
+            "iptm_weight": 0.8,
+            "ptm_weight": 0.2
+          }
+        }
+      },
+      "settings": {
+        "blocks_per_ckpt": null,
+        "ckpt_intermediate_steps": false,
+        "clear_cache_between_steps": false,
+        "debug": {
+          "log_extra_grad_metrics": false,
+          "log_grad_norm": false,
+          "log_iteration_time": false,
+          "profile_grad_logging": false
+        },
+        "ema": {
+          "decay": 0.999,
+          "submodules_to_update": null
+        },
+        "gradient_clipping": {
+          "clip_val": 10.0,
+          "per_sample_clipping": true
+        },
+        "lr_scheduler": {
+          "base_lr": 0.0,
+          "decay_every_n_steps": 50000,
+          "decay_factor": 0.95,
+          "start_decay_after_n_steps": 50000,
+          "warmup_no_steps": 1000
+        },
+        "manual_optimization": {
+          "accumulate_grad_batches": 1,
+          "log_lr": false
+        },
+        "memory": {
+          "eval": {
+            "chunk_size": 1024,
+            "low_mem_validation": false,
+            "msa_module": {
+              "swiglu_chunk_token_cutoff": null,
+              "swiglu_seq_chunk_size": null
+            },
+            "offload_inference": {
+              "confidence_heads": true,
+              "msa_module": false,
+              "template_module": false,
+              "token_cutoff": 2800
+            },
+            "per_sample_atom_cutoff": 10000,
+            "per_sample_token_cutoff": 750,
+            "tune_chunk_size": true,
+            "use_cueq_triangle_kernels": false,
+            "use_deepspeed_evo_attention": false,
+            "use_lma": false,
+            "use_triton_triangle_kernels": false
+          },
+          "train": {
+            "chunk_size": null,
+            "msa_module": {
+              "swiglu_chunk_token_cutoff": null,
+              "swiglu_seq_chunk_size": null
+            },
+            "use_cueq_triangle_kernels": false,
+            "use_deepspeed_evo_attention": false,
+            "use_lma": false,
+            "use_triton_triangle_kernels": false
+          }
+        },
+        "model_selection_weight_scheme": "initial_training",
+        "optimizer": {
+          "beta1": 0.9,
+          "beta2": 0.95,
+          "eps": 1e-08,
+          "learning_rate": 0.0018
+        },
+        "train_confidence_only": false
+      }
+    },
+    "model_seconds": 838.4654903970077,
+    "recycles": 3,
+    "output_fields": {
+      "coordinates": {
+        "shape": [
+          1,
+          1,
+          12138,
+          3
+        ],
+        "dtype": "float32",
+        "finite": true
+      },
+      "confidence.plddt": {
+        "shape": [
+          1,
+          1,
+          12138
+        ],
+        "dtype": "float32",
+        "finite": true
+      },
+      "confidence.pde": {
+        "shape": [
+          1,
+          1,
+          1536,
+          1536
+        ],
+        "dtype": "float32",
+        "finite": true
+      },
+      "confidence.gpde": {
+        "shape": [
+          1,
+          1
+        ],
+        "dtype": "float32",
+        "finite": true
+      },
+      "confidence.pae": {
+        "shape": [
+          1,
+          1,
+          1536,
+          1536
+        ],
+        "dtype": "float32",
+        "finite": true
+      },
+      "confidence.iptm": {
+        "shape": [
+          1,
+          1
+        ],
+        "dtype": "float32",
+        "finite": true
+      },
+      "confidence.ptm": {
+        "shape": [
+          1,
+          1
+        ],
+        "dtype": "float32",
+        "finite": true
+      },
+      "confidence.disorder": {
+        "shape": [
+          1,
+          1
+        ],
+        "dtype": "float32",
+        "finite": true
+      },
+      "confidence.has_clash": {
+        "shape": [
+          1,
+          1
+        ],
+        "dtype": "float32",
+        "finite": true
+      },
+      "confidence.sample_ranking_score": {
+        "shape": [
+          1,
+          1
+        ],
+        "dtype": "float32",
+        "finite": true
+      },
+      "confidence.chain_ptm.1": {
+        "shape": [
+          1,
+          1
+        ],
+        "dtype": "float32",
+        "finite": true
+      }
+    },
+    "request_seconds": 874.0020567580359,
+    "stages": {
+      "input_embedder": {
+        "calls": 1,
+        "gpu_ms": 3451.107421875
+      },
+      "msa_module": {
+        "calls": 4,
+        "gpu_ms": 57774.599609375
+      },
+      "pairformer_stack": {
+        "calls": 4,
+        "gpu_ms": 550590.828125
+      },
+      "run_trunk": {
+        "calls": 1,
+        "gpu_ms": 736865.3125
+      },
+      "sample_diffusion": {
+        "calls": 1,
+        "gpu_ms": 80959.5625
+      },
+      "aux_heads": {
+        "calls": 1,
+        "gpu_ms": 20640.263671875
+      },
+      "_rollout": {
+        "calls": 1,
+        "gpu_ms": 101599.8671875
+      }
+    },
+    "peak_allocated_bytes": 51757716992,
+    "blas_preference": "_BlasBackend.Cublas",
+    "isolation": {
+      "available": true,
+      "command": [
+        "/usr/bin/amd-smi",
+        "process",
+        "--json"
+      ],
+      "physical_device_index": 2,
+      "interval_seconds": 1.0,
+      "samples": 667,
+      "allowed_pid": 1155192,
+      "external_pids": [],
+      "errors": [],
+      "passed": true
+    }
+  },
+  "limitations": [
+    "One instrumented fresh-process observation, not a repeated latency result.",
+    "All exported fields are finite; native repeat variation and candidate full-model agreement remain unmeasured.",
+    "Query-only MSA, no templates, one diffusion sample; development workload only."
+  ],
+  "next_priority": "The initial baseline/operator-screen cycle is closed. Rebuild the framework in Rust before resuming OpenFold3 optimization."
+}

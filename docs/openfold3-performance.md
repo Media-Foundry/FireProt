@@ -47,7 +47,7 @@ check original precision and configuration before claiming equality.
 The baseline explicitly disables Triton, DeepSpeed and cuEquivariance routes.
 Although the pinned source includes AMD Triton kernels, the current environment
 reports Triton unavailable. No Triton speedup or compatibility claim follows.
-The first native N1000 run completed; N1536 remains in progress.
+The first native N1000 and N1536 runs completed; see the observations below.
 
 ## Optimization sequence
 
@@ -105,3 +105,20 @@ An isolated import of the existing DS Triton3.7.1 package preserved the original
 Torch import but failed with zero active drivers. No Triton kernel ran and no
 shared environment was modified. Reports and exact probe sources are archived
 in `provenance/openfold3_initial_operator_screen.json`.
+
+
+## First N1536 observation and cycle closure
+
+The instrumented native N1536 request completes in 874.002 s, with 838.465 s
+inside the model and 51,757,716,992 bytes peak allocated memory. Inclusive GPU
+stages include 550.591 s across four Pairformer calls, 57.775 s across four MSA
+module calls, 80.960 s for diffusion, and 20.640 s for auxiliary heads.
+Configuration retains three recycles/four trunk passes and 200 diffusion steps,
+seed101 and one sample. Exported coordinates/confidence fields are finite and
+selected-device isolation passes. This single observation is not a repeated
+baseline or an optimized correctness result. Evidence:
+`provenance/openfold3_initial_n1536.json`.
+
+Both initial baselines and the first operator screen are now archived. No
+OpenFold3 candidate has been promoted. Per the user's updated priority,
+framework migration to Rust takes precedence over further optimization trials.

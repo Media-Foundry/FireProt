@@ -47,3 +47,30 @@ Python component needs a recorded role and an explicit migration decision.
 
 A detailed dependency and interface inventory will be written after the current
 OpenFold3 cycle finishes and before implementation begins.
+
+
+## Implementation progress
+
+The full implementation plan is
+[the Rust framework rebuild plan](plans/2026-10-04-gitnexus-plan-rust-framework-rebuild.md).
+The initial OpenFold3 cycle is closed with both long native baselines and the
+first attention screen recorded. No candidate was promoted.
+
+Implemented: root Cargo workspace and `fireprot-core` typed request contracts,
+model-specific cycle semantics, explicit precision/backend checks, checkpoint
+roles, source/artifact identity syntax checks, and an immutable validated-request
+boundary. These checks do not yet verify files, hardware, or executable model
+compatibility; those belong to the pending runtime layer.
+
+Pending: worker protocol and supervision, Rust operator-policy bridge, numerical
+comparison/artifact tooling, CLI, model-worker extraction, kernel layout/build
+migration, GPU parity, and replacement of maintained Python entry points. The
+repository is in migration; the full framework is not yet rebuilt.
+
+Local core checks:
+
+```bash
+cargo test --workspace
+cargo fmt --all --check
+cargo clippy --workspace --all-targets -- -D warnings
+```

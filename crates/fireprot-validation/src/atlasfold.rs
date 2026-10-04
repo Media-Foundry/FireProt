@@ -129,6 +129,64 @@ fn serialized_coordinate(value: f64) -> Result<f64> {
     Ok(result)
 }
 
+/// Parse the pinned worker's single-chain JSON or FASTA input from retained bytes.
+/// The caller chooses JSON using the original request path, not a worker field.
+pub fn input_sequence(bytes: &[u8], json: bool) -> Result<String> {
+    let invalid = || Error::Schema("invalid AtlasFold monomer input".into());
+    let text = std::str::from_utf8(bytes).map_err(|_| invalid())?;
+    let (name, sequence) = if json {
+        let value: serde_json::Value = serde_json::from_str(text).map_err(|_| invalid())?;
+        let records = value
+            .as_array()
+            .filter(|a| a.len() == 1)
+            .ok_or_else(invalid)?;
+        let chains = records[0]["sequences"]
+            .as_array()
+            .filter(|a| a.len() == 1)
+            .ok_or_else(invalid)?;
+        let chain = &chains[0]["proteinChain"];
+        if let Some(count) = chain.get("count") {
+            // Python compares True equal to 1; retain that existing parser behavior.
+            if count.as_f64() != Some(1.0) && count != &serde_json::Value::Bool(true) {
+                return Err(invalid());
+            }
+        }
+        (
+            records[0]["name"].as_str().ok_or_else(invalid)?.to_owned(),
+            chain["sequence"].as_str().ok_or_else(invalid)?.to_owned(),
+        )
+    } else {
+        // Match Python str.splitlines, including CR and Unicode line separators.
+        let lines: Vec<_> = text
+            .split([
+                '\n', '\r', '\u{b}', '\u{c}', '\u{1c}', '\u{1d}', '\u{1e}', '\u{85}', '\u{2028}',
+                '\u{2029}',
+            ])
+            .map(|line| {
+                line.trim_matches(|c: char| c.is_whitespace() || matches!(c, '\u{1c}'..='\u{1f}'))
+            })
+            .filter(|s| !s.is_empty())
+            .collect();
+        let name = lines
+            .first()
+            .and_then(|s| s.strip_prefix('>'))
+            .ok_or_else(invalid)?;
+        if lines.iter().filter(|s| s.starts_with('>')).count() != 1 {
+            return Err(invalid());
+        }
+        (name.to_owned(), lines[1..].concat())
+    };
+    if name.is_empty()
+        || sequence.is_empty()
+        || !sequence
+            .bytes()
+            .all(|a| b"ACDEFGHIKLMNPQRSTVWYX".contains(&a))
+    {
+        return Err(invalid());
+    }
+    Ok(sequence)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

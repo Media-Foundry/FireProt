@@ -27,6 +27,21 @@ def read_sequence(path):
     return name, sequence
 
 
+
+def snapshot_input(source, output):
+    """Retain exactly the bytes consumed by this worker for Rust acceptance."""
+    source = Path(source)
+    suffix = '.json' if source.suffix == '.json' else '.fasta'
+    destination = Path(output) / ('input-snapshot' + suffix)
+    with source.open('rb') as handle:
+        data = handle.read(16 * 1024 * 1024 + 1)
+    if len(data) > 16 * 1024 * 1024:
+        raise ValueError('AtlasFold input exceeds 16 MiB')
+    with destination.open('xb') as handle:
+        handle.write(data)
+    return destination
+
+
 def predict(request, channel):
     import numpy as np
     import torch
@@ -42,8 +57,9 @@ def predict(request, channel):
         raise RuntimeError('Imported AtlasFold does not match the verified source root')
     if workload['model_name'] != 'atlasfold-260703' or workload['precision'] != 'native':
         raise ValueError('Only AtlasFold 260703 with native mixed-precision boundaries is integrated')
-    name, sequence = read_sequence(request['input']['path'])
     output = Path(os.environ['FIREPROT_OUTPUT_DIR'])
+    input_snapshot = snapshot_input(request['input']['path'], output)
+    name, sequence = read_sequence(input_snapshot)
     torch.set_num_threads(8)
     torch.manual_seed(request['seed'])
     np.random.seed(request['seed'])
@@ -111,5 +127,5 @@ def predict(request, channel):
         trunk_passes=workload['recycles'] + 1, internal_tensor_dtypes=raw_dtypes), indent=2) + '\n')
     if runtime is not None:
         (output / 'operator-runtime.json').write_text(json.dumps(runtime.manifest(), indent=2, allow_nan=False) + '\n')
-    return dict(schema_version=2, run_id=request['run_id'], seed=request['seed'], workload=workload,
+    return dict(schema_version=3, input_snapshot=input_snapshot.name, run_id=request['run_id'], seed=request['seed'], workload=workload,
         predictions=predictions, model_seconds=model_seconds, request_seconds=time.perf_counter()-started)

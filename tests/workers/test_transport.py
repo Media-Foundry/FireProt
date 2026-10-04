@@ -23,3 +23,15 @@ def test_noncontiguous_values_keep_logical_shape_and_values(tmp_path):
         assert archive['scalar'].shape == ()
     assert descriptors['value']['shape'] == [4, 3]
     assert descriptors['value']['original_dtype'] == 'float32'
+
+
+def test_input_snapshot_is_announced_with_its_content_hash(tmp_path, monkeypatch):
+    import hashlib
+    from python.fireprot_workers.transport import announce_outputs
+    monkeypatch.setenv('FIREPROT_OUTPUT_DIR', str(tmp_path))
+    snapshot = tmp_path / 'input-snapshot.fasta'
+    snapshot.write_bytes(b'>fixture\nACDX\n')
+    events = []
+    channel = type('FixtureChannel', (), {'emit': lambda self, event: events.append(event)})()
+    announce_outputs(channel, dict(schema_version=3, predictions=[], input_snapshot=snapshot.name))
+    assert dict(path=snapshot.name, sha256=hashlib.sha256(snapshot.read_bytes()).hexdigest()) in events[0]['artifacts']

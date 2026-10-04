@@ -7,9 +7,11 @@ use crate::{
 };
 use fireprot_core::{ValidatedRequest, request::Workload};
 use serde::{Deserialize, Serialize};
+use sha2::{Digest, Sha256};
 use std::{
     collections::{BTreeMap, BTreeSet},
     fs,
+    io::Read,
     path::{Component, PathBuf},
 };
 #[derive(Debug, Serialize, Deserialize)]
@@ -37,6 +39,8 @@ pub struct Bundle {
     pub seed: u64,
     pub workload: Workload,
     pub predictions: Vec<Prediction>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub input_snapshot: Option<PathBuf>,
     pub model_seconds: f64,
     pub request_seconds: f64,
     pub environment: BTreeMap<String, String>,
@@ -56,7 +60,7 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
     }
     let bundle: Bundle =
         serde_json::from_slice(&fs::read(manifest)?).map_err(|e| Error::Schema(e.to_string()))?;
-    if !matches!(bundle.schema_version, 1 | 2)
+    if !matches!(bundle.schema_version, 1..=3)
         || bundle.run_id != r.run_id
         || bundle.seed != r.seed
         || bundle.workload != r.workload
@@ -83,6 +87,47 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
     if bundle.predictions.len() != samples as usize {
         return Err(schema("prediction sample count mismatch"));
     }
+    let sequence = if bundle.schema_version == 3 {
+        if !matches!(r.workload, Workload::Atlasfold { .. }) {
+            return Err(schema(
+                "bundle schema 3 is reserved for AtlasFold input binding",
+            ));
+        }
+        let relative = bundle
+            .input_snapshot
+            .as_ref()
+            .ok_or_else(|| schema("missing AtlasFold input snapshot"))?;
+        if relative.as_os_str().is_empty()
+            || !relative
+                .components()
+                .all(|c| matches!(c, Component::Normal(_)))
+        {
+            return Err(schema("invalid input snapshot path"));
+        }
+        let path = root.join(relative).canonicalize()?;
+        if !path.starts_with(&root) || !verified.contains(&path) {
+            return Err(schema("unverified input snapshot"));
+        }
+        let mut bytes = Vec::new();
+        fs::File::open(path)?
+            .take(16 * 1024 * 1024 + 1)
+            .read_to_end(&mut bytes)?;
+        if bytes.len() > 16 * 1024 * 1024 {
+            return Err(schema("AtlasFold input exceeds 16 MiB"));
+        }
+        if format!("{:x}", Sha256::digest(&bytes)) != r.input.sha256 {
+            return Err(schema("input snapshot differs from the request input pin"));
+        }
+        Some(crate::atlasfold::input_sequence(
+            &bytes,
+            r.input.path.extension().is_some_and(|e| e == "json"),
+        )?)
+    } else {
+        if bundle.input_snapshot.is_some() {
+            return Err(schema("input snapshot requires bundle schema 3"));
+        }
+        None
+    };
     let mut ids = BTreeSet::new();
     let mut archives = BTreeSet::new();
     let mut structures = BTreeSet::new();
@@ -123,7 +168,7 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
             arrays.insert(name, array);
         }
         validate_model(&r.workload, &arrays, prediction.confidence.as_ref())?;
-        if bundle.schema_version == 2 {
+        if bundle.schema_version >= 2 {
             let file = prediction
                 .structure
                 .as_ref()
@@ -154,7 +199,9 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
             let coords = &arrays["coordinates"];
             match &r.workload {
                 Workload::Atlasfold { .. } => {
-                    if structure.atoms.len() > coords.shape()[0] * 14 {
+                    if let Some(sequence) = &sequence {
+                        crate::atlasfold::validate_atom14(sequence, coords, &structure)?;
+                    } else if structure.atoms.len() > coords.shape()[0] * 14 {
                         return Err(schema("AtlasFold CIF atom count exceeds atom14 storage"));
                     }
                 }
@@ -166,7 +213,7 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
             }
         }
     }
-    if bundle.schema_version == 2
+    if bundle.schema_version >= 2
         && verified
             .iter()
             .filter(|p| p.extension().is_some_and(|e| e == "cif"))
@@ -178,12 +225,19 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
     Ok(bundle)
 }
 
-/// Current inference requires explicit sample/CIF associations. Schema 1 remains
-/// readable only for historical accepted-archive replay.
+/// AtlasFold requires schema 3 input-bound atom14/CIF correspondence. Other
+/// models require schema 2. Older schemas remain readable for archive replay.
 pub fn validate_current(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bundle> {
     let bundle = validate(request, verified)?;
-    if bundle.schema_version != 2 {
-        return Err(schema("current inference requires output bundle schema 2"));
+    let expected = if matches!(request.as_request().workload, Workload::Atlasfold { .. }) {
+        3
+    } else {
+        2
+    };
+    if bundle.schema_version != expected {
+        return Err(schema(&format!(
+            "current inference requires output bundle schema {expected}"
+        )));
     }
     Ok(bundle)
 }

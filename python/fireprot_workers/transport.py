@@ -64,6 +64,8 @@ def announce_outputs(channel, bundle):
     output = Path(os.environ['FIREPROT_OUTPUT_DIR'])
     (output / 'predictions.json').write_text(json.dumps(bundle, indent=2, allow_nan=False) + '\n')
     paths = [output / 'predictions.json'] + [output / p['archive'] for p in bundle['predictions']]
+    if bundle.get('input_snapshot') is not None:
+        paths.append(output / bundle['input_snapshot'])
     # Keep upstream structure files available and covered by the artifact hashes.
     paths += sorted((output / 'native').rglob('*.cif'))
     for diagnostic in ('operator-runtime.json', 'atlasfold-model.json'):

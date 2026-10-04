@@ -26,6 +26,9 @@ between unchanged native runs; see [deterministic validation](openfold3-determin
 FireProt workers now pass existing coordinate/summary gates at N1000 and N1536.
 Their full confidence arrays are retained and shape/finite-value checked; this
 does not imply bitwise native/accelerated array equality.
+AtlasFold schema 3 also binds retained input bytes to the request and verifies
+every sample's atom14/CIF correspondence in Rust, including relocated archive
+replay. See [structure acceptance](cif-validation.md).
 Launch records now bind the executable, declared worker inputs and effective
 environment; final reports retain independently verified physical device mapping.
 See [execution provenance](execution-provenance.md) for its remaining environment

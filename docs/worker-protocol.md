@@ -190,8 +190,10 @@ before authorizing Start. Final reports retain the worker's announced identity,
 ## Prediction content schema
 
 The transport protocol remains version 1. Current workers return prediction
-bundle schema 2: each original sample index binds an NPZ archive and a native
-CIF `structure` path. Rust validates these associations independently before
-accepting output. Historical accepted archives can still replay schema 1, but
-new inference requires schema 2. See [CIF validation](cif-validation.md) for the
-model-specific coordinate checks and AtlasFold atom14 limitation.
+bundle schema 3 for AtlasFold and schema 2 for Protenix/OpenFold3: each original
+sample index binds an NPZ archive and a native CIF `structure` path. AtlasFold
+also names an `input_snapshot` artifact containing the original consumed input
+bytes. Rust verifies its request-pinned digest, parses the sequence and checks
+every sample's atom14/CIF correspondence. Historical accepted archives retain
+schema 1/2 replay with their earlier guarantees; new inference requires the
+current model-specific schema. See [CIF validation](cif-validation.md).

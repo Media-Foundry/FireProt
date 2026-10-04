@@ -128,7 +128,7 @@ fix and passes afterward. Final environment acceptance remains outstanding.
 
 ## Prediction CIF acceptance (2026-10-05)
 
-Current inference requires prediction bundle schema 2 with explicit sample/CIF
+The initial CIF migration required prediction bundle schema 2 with explicit sample/CIF
 associations; archive replay preserves schema 1 compatibility. Rust parses native
 prediction CIFs and compares Protenix structures with the unchanged numerical
 gates. Four N1000 requests (AtlasFold, Protenix one/two samples, deterministic
@@ -204,3 +204,22 @@ two pairs correctly produce an insufficient-repeat timing trend. See
 `docs/paired-execution.md` and `provenance/rust_paired_execution_integration.json`.
 Full Rust tests pass 157; relevant Rust 1.85 tests pass 10. Avoid concurrent
 toolchain builds into the same target while identity-pinned CLI tests are active.
+
+## AtlasFold input-bound structure acceptance (2026-10-05)
+
+AtlasFold now requires bundle schema 3: the worker retains the exact input bytes
+it consumes; Rust checks their request-pinned hash, parses JSON/FASTA and validates
+every sample's full atom14/CIF correspondence. Old schemas retain historical
+replay guarantees. N1000 native, N1536 fused HIP and N1000 two-sample chunked/fused
+HIP pass current acceptance and replay. Single-sample references and both samples
+of the two-sample pair match exactly. Relocation without the original input passes;
+a separately resealed wrong-input snapshot is rejected. N1536 retains 100 steps;
+a mistaken 30-step comparison is explicitly excluded. Unchunked native N1000 with
+two samples ran out of memory; the existing bounded chunked reference passes with
+unchanged sample/step counts. See `docs/cif-validation.md` and
+`provenance/rust_atlasfold_input_binding.json`. Tests: 165 Rust workspace and 272 Python passed / 110 skipped; after a
+FASTA whitespace compatibility correction, final validation-crate runs pass 36
+on stable and Rust 1.85, and the additional Python regression passes. Final
+archive replay covers all four runs; Clippy/format pass. Remaining
+rebuild work: environment coverage/overhead, final packaging and cross-model
+acceptance, coverage audit, remote CI and push. Do not resume kernel tuning yet.

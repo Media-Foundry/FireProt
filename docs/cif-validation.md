@@ -17,7 +17,8 @@ historical Biotite FP32 values promoted to f64 for alignment.
 
 ## Current inference and archived bundles
 
-Current inference requires output bundle schema 2. Every prediction names a
+Current AtlasFold inference requires output bundle schema 3; Protenix and
+OpenFold3 require schema 2. Every prediction names a
 `structure` path, relative to the run directory, in addition to its NPZ `archive`.
 Rust requires the structure in the supervisor's hash-verified artifact list,
 rejects reused/escaping paths and unassociated CIF artifacts, and parses the file
@@ -28,15 +29,25 @@ before accepting the run. Prediction atom IDs must be consecutive from one.
   stored coordinates exactly.
 - OpenFold3: bind the upstream seed/sample filename to its original sample index;
   parsed coordinates must equal the stored sample exactly.
-- AtlasFold: the upstream writer omits unused atom14 slots and rounds coordinates
-  to three decimal places. Current validation checks the structural contract and
-  bounds the atom count by atom14 storage. It does **not** establish a full
-  CIF-to-atom14 coordinate/sequence mapping. Raw output parity remains a separate
-  array comparison.
+- AtlasFold schema 3: retain the consumed input bytes as an `input_snapshot`
+  artifact. Rust independently checks its SHA-256 against the request input pin,
+  parses the sequence, and checks every sample's exact atom14-to-CIF correspondence.
+  The original request path determines JSON versus FASTA parsing; its file is not
+  reopened during archive replay. Raw output parity remains a separate comparison.
+  Historical schema 2 only checks the structural contract and bounds the atom
+  count by atom14 storage.
 
-Historical archive replay continues to accept schema 1. Such archives do not gain
-schema 2 structure-validation guarantees retroactively. New inference cannot
-use schema 1 to bypass CIF acceptance.
+Historical archive replay continues to accept schema 1 and AtlasFold schema 2.
+They do not acquire stronger guarantees retroactively. New inference cannot use
+an old schema to bypass its model's current acceptance requirements. Schema 3 is
+currently reserved for AtlasFold; other model families retain schema 2.
+
+The input snapshot must be a contained, independently hash-verified artifact.
+Input parsing is bounded to 16 MiB and requires a nonempty named monomer with the
+worker's accepted residue alphabet. Every requested sample must match this same
+sequence. A missing snapshot, wrong digest, multimer, invalid residue, escaping
+path or mismatched CIF fails acceptance. A caller can relocate an intact accepted
+archive without restoring the old input path.
 
 ## Parser boundary
 
@@ -118,11 +129,44 @@ PREDICTION_CIF` passes saved N1000 and N1536 outputs, checking 7,978 and 12,138
 atoms respectively. See `provenance/rust_atlasfold_atom14_mapping.json` for file
 identities. These are offline mapping checks, not new model or timing results.
 
-**Integration remains pending.** The primitive's caller must authenticate the
-sequence against the request. Current schema 2 bundle acceptance still has the
-limited AtlasFold check documented above. The next integration must retain the
-original input bytes as a verified run artifact, compare their digest with the
-request input pin, derive the sequence in Rust, and call this primitive for every
-sample. Archive replay must use that retained artifact without opening the old
-input path. Older bundles must retain their historical guarantees explicitly;
-they must not acquire a stronger acceptance claim merely by being replayed.
+The primitive is now called by schema 3 bundle validation after authenticating and
+parsing the retained input bytes. Current inference rejects AtlasFold schema 2;
+archive replay retains the earlier checks. CPU regressions cover JSON/FASTA,
+multiple samples, wrong input pins, missing/unverified/escaping snapshots, changed
+sequences, a corrupted second sample, schema downgrade and archive relocation
+with the original input absent.
+
+### Schema 3 integration evidence
+
+Four requests (six predictions) pass current acceptance and independent archive
+replay on DiamondHill: N1000 native, N1536 fused HIP, and N1000 two-sample
+chunked/fused HIP. All use the original dual checkpoints, native precision,
+seed 102 and four additional recycles. N1000 uses 30 diffusion steps and N1536
+uses 100. Both samples of the chunked/fused pair match exactly across coordinates,
+pLDDT, PAE and pTM. Single-sample runs match their existing native references
+exactly. The two-sample inputs use FASTA; the single-sample inputs use JSON.
+
+A relocated real two-sample archive replays with its original input absent.
+A separate tampered copy fails even after resealing the snapshot's output hash
+and repinning the receipt: its bytes differ from the original request input pin.
+The successful relocated archive is preserved separately from this negative case.
+
+Two unsuccessful trials remain explicit in the evidence. A test-harness error
+compared a 30-step N1536 request against the 100-step reference; that comparison
+is excluded and the corrected 100-step request passes. Unchunked native N1000
+with two samples exhausted GCD memory and produced no accepted receipt. The
+existing chunked route supplies the bounded native-math two-sample reference;
+length, sample count, steps and seed were retained. Neither failure was handled
+by relaxing a numerical gate.
+
+A 165-test Rust workspace run and 272-test Python run pass (110 Python skips).
+A subsequent FASTA whitespace compatibility regression first failed in Rust and
+passed in Python, then passed after matching Python's strip semantics. Final
+validation-crate runs pass all 36 tests on stable and Rust 1.85; the additional
+Python regression passes separately. Workspace Clippy and format checks pass.
+The 101 checked Rust/worker source files match DiamondHill. Final-validator archive
+replay covers all four runs after the whitespace-only parser correction. Runs
+used HIP 6 / PCI 8e / SMI 4 and HIP 7 / PCI 93 / SMI 5 with continuous isolation.
+Some runs overlap on separate GCDs; this establishes acceptance, not a performance
+comparison. See `provenance/rust_atlasfold_input_binding.json` for exact requests,
+receipts, source hashes, comparisons and retained failure records.

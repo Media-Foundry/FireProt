@@ -181,8 +181,8 @@ target/release/fireprot compare-protenix-cif \
 This command preserves the existing 1e-3 Angstrom aligned-RMSD and 1e-3 numeric
 summary-confidence gates. It does not assert bitwise equality or compare raw
 confidence arrays that were absent from historical CIF/summary references.
-See [CIF validation](cif-validation.md) for supported structures and schema 2
-sample associations. The NPZ `compare_protenix` example remains available for
+See [CIF validation](cif-validation.md) for supported structures, sample associations
+and AtlasFold schema 3 input binding. The NPZ `compare_protenix` example remains available for
 saved array comparisons.
 
 ### Protenix migration evidence

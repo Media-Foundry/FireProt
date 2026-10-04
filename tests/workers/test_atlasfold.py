@@ -28,3 +28,26 @@ def test_multimer_case_is_not_silently_reduced(tmp_path):
         {'proteinChain': {'sequence': 'ACD', 'count': 2}}]}]))
     with pytest.raises(ValueError):
         read_sequence(path)
+
+
+def test_input_snapshot_keeps_consumed_bytes_when_source_changes(tmp_path):
+    from python.fireprot_workers.atlasfold import snapshot_input
+    source = tmp_path / 'original.json'
+    original = json.dumps([{'name': 'fixture', 'sequences': [
+        {'proteinChain': {'sequence': 'ACDX', 'count': 1}}]}]).encode()
+    source.write_bytes(original)
+    output = tmp_path / 'output'
+    output.mkdir()
+    snapshot = snapshot_input(source, output)
+    source.unlink()
+    assert snapshot.read_bytes() == original
+    assert read_sequence(snapshot) == ('fixture', 'ACDX')
+    source.write_bytes(original)
+    with pytest.raises(FileExistsError):
+        snapshot_input(source, output)
+
+
+def test_fasta_ascii_separator_whitespace_matches_upstream_strip(tmp_path):
+    path = tmp_path / 'input.fa'
+    path.write_bytes(b'\x1f>name\x1f\rACD\x1f\nEFX\x1f')
+    assert read_sequence(path) == ('name', 'ACDEFX')

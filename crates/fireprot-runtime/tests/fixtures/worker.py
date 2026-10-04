@@ -28,10 +28,14 @@ if mode == 'oversize':
 if mode == 'partial':
     sock.sendall(b'{')
     sys.exit(0)
+if mode == 'mutate-before-ready':
+    open(os.environ['MUTATE_INPUT'], 'w').write('changed')
 emit(0, {'event': 'ready', 'device': {'worker_pid': os.getpid(), 'logical_device': 0,
       'pci_address': '0000:93:00.0', 'architecture': 'gfx90a'}})
 assert json.loads(sock.makefile().readline())['command'] == 'start'
 print('model logs remain separate from protocol', flush=True)
+if mode == 'mutate-after-ready':
+    open(os.environ['MUTATE_INPUT'], 'w').write('changed')
 assert os.environ['HIP_VISIBLE_DEVICES'] == '7'
 assert 'ROCR_VISIBLE_DEVICES' not in os.environ
 if mode == 'failure':

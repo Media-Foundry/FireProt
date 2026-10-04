@@ -28,7 +28,9 @@ builds, sharing process management with Torch. Typed C ABI publication/loading
 now complements the existing Python bundle path. All six maintained loaders have
 pinned artifact selectors. Maintained Python is under `python/fireprot`, native
 sources under `kernels/amd`, with a root import shim and an explicit historical source path map.
-Model-environment provenance and final packaging still need work. Rust owns compiler staging,
+Rust now records explicit launch environments, interpreter/worker inputs and
+verified physical device mapping. Complete Python package/runtime provenance and
+final packaging still need work; see `docs/execution-provenance.md`. Rust owns compiler staging,
 subprocess environment, cancellable lock waits, timeout and cache publication.
 A separate Rust guard stops compiler descendants when the caller exits, including
 forced worker termination; see `docs/torch-loaders.md` and `docs/torch-build-process.md`.

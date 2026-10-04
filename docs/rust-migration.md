@@ -60,7 +60,7 @@ is active and the completion gates above remain in force.
 | --- | --- | --- |
 | Request and worker contracts | Typed Rust model workloads, precision/cycle rules, artifact roles, protocol and lifecycle states | Additional model variants |
 | Operator policy | Rust ordering, cache identity/invalidation, rejection reasons and fallback via the CPython bridge | Python tensor predicates and calls remain an explicit boundary |
-| Process and device control | Rust preflight, fresh output directories, worker supervision, timeouts/cancellation, process cleanup, HIP-to-PCI-to-SMI mapping and continuous isolation | Complete environment/worker identity evidence |
+| Process and device control | Rust preflight, explicit launch environments and input identities, worker supervision, timeouts/cancellation, process cleanup, persisted HIP-to-PCI-to-SMI mapping and continuous isolation | Complete model-environment and dynamic-library evidence |
 | Source and resource provenance | Rust streaming hashes, pinned Git/exported sources, checkpoints, inputs and Protenix CCD/data resources | Complete adapter environment/resource coverage |
 | Output validation | Rust sample/tensor acceptance, primitive NPY/NPZ, exact array comparison, alignment, confidence schemas/deltas and experimental coordinate masks | CIF/statistics workflow coverage |
 | Protenix | Native and accelerated Mini-default FP32 N1000/N1536 under Rust supervision | Other variants before retiring the old entry point |

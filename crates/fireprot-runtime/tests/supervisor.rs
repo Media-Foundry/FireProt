@@ -84,6 +84,11 @@ fn request(output: PathBuf) -> fireprot_runtime::preflight::PreparedRequest {
 }
 fn worker(mode: &str) -> WorkerCommand {
     WorkerCommand {
+        identity_files: vec![fireprot_runtime::build::BuildFile {
+            name: "worker-source".into(),
+            path: concat!(env!("CARGO_MANIFEST_DIR"), "/tests/fixtures/worker.py").into(),
+        }],
+        identity_trees: vec![],
         program: "python3".into(),
         args: vec![
             concat!(env!("CARGO_MANIFEST_DIR"), "/tests/fixtures/worker.py").into(),
@@ -122,6 +127,17 @@ fn success_requires_outputs_exit_monitor_and_content() {
     .unwrap();
     assert_eq!(report.phase, Phase::Succeeded);
     assert!(report.isolation_samples >= 2);
+    assert!(report.device_verified);
+    assert_eq!(
+        report.announced_device.as_ref().unwrap().pci_address,
+        "0000:93:00.0"
+    );
+    let launch: serde_json::Value =
+        serde_json::from_slice(&std::fs::read(output.join("execution.json")).unwrap()).unwrap();
+    assert_eq!(launch["sha256"], report.execution_sha256);
+    assert_eq!(launch["environment"]["HIP_VISIBLE_DEVICES"], "7");
+    assert!(launch["environment"].get("ROCR_VISIBLE_DEVICES").is_none());
+    assert_eq!(launch["inputs"][0]["name"], "worker-source");
     assert!(
         std::fs::read_to_string(output.join("stdout.log"))
             .unwrap()
@@ -206,6 +222,7 @@ fn device_and_monitor_failures_reject_run() {
         .unwrap();
         assert_eq!(r.phase, Phase::Failed);
         assert!(r.elapsed_seconds < 2.0);
+        assert_eq!(r.device_verified, failure != 0);
     }
 }
 #[test]
@@ -247,4 +264,38 @@ fn cancellation_stops_live_worker() {
         .unwrap();
         assert_eq!(r.failure.as_deref(), Some("run cancelled"));
     });
+}
+
+#[test]
+fn source_changes_before_start_or_after_predictions_fail_acceptance() {
+    for mode in ["mutate-before-ready", "mutate-after-ready"] {
+        let dir = tempfile::tempdir().unwrap();
+        let input = dir.path().join("declared.py");
+        std::fs::write(&input, "initial").unwrap();
+        let mut worker = worker(mode);
+        worker
+            .identity_files
+            .push(fireprot_runtime::build::BuildFile {
+                name: "mutable-input".into(),
+                path: input.clone(),
+            });
+        worker
+            .environment
+            .push(("MUTATE_INPUT".into(), input.into()));
+        let r = run(
+            &request(dir.path().join("run")),
+            &worker,
+            &mut monitor(),
+            &limits(),
+            &AtomicBool::new(false),
+            |_| Ok(()),
+        )
+        .unwrap();
+        assert_eq!(r.phase, Phase::Failed);
+        assert_eq!(
+            r.failure.as_deref(),
+            Some("worker launch inputs changed during execution")
+        );
+        assert_eq!(r.device_verified, mode == "mutate-after-ready");
+    }
 }

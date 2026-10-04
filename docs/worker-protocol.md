@@ -2,9 +2,8 @@
 
 Status: the Rust contracts and state machine are implemented in `fireprot-core`.
 The Unix process transport and artifact hashing are implemented in
-`fireprot-runtime`. The independent HIP/SMI device monitor is implemented. Model content validators
-and model-worker integration are still pending. Existing Python workflows do not yet use this
-protocol or the Rust operator registry.
+`fireprot-runtime`. The independent HIP/SMI device monitor is implemented. Rust content validation and Protenix, AtlasFold and native OpenFold3 workers are
+connected. Full migration acceptance remains incomplete; see [current status](rust-migration.md).
 
 ## Ownership
 
@@ -76,10 +75,10 @@ predicate panics reject that candidate. Registration/removal clears decision
 caches; explicit runtime-state clearing is required for external policy changes.
 
 The registry is single-owner and requires mutable access for mutation/selection.
-The forthcoming in-process bridge supplies synchronization and maps selected
-implementation IDs to model-process GPU calls. It must not spawn a subprocess
-or serialize tensors for each operator. Python registry replacement remains a
-separate, parity-gated integration step.
+The in-process Rust bridge supplies synchronization and maps selected
+implementation IDs to model-process GPU calls. It does not spawn a subprocess
+or serialize tensors for each operator. Python retains tensor inspection and
+callbacks; Rust owns shared selection policy.
 
 ## Unix transport and process supervision
 
@@ -106,7 +105,8 @@ output directories are never reused.
 
 This layer exposes an independent `DeviceMonitor` trait and an `AmdSmiMonitor`
 implementation. Source/input/checkpoint preflight is mandatory at the runtime entry point.
-Numerical validators and production workers remain integration work. CPU tests use a standard-library
+Production model workers and Rust output validators are connected; the full
+model acceptance matrix remains incomplete. CPU tests use a standard-library
 Python fixture as a real child process and an injected host monitor; they do not
 establish GPU isolation or full-model parity.
 
@@ -178,3 +178,11 @@ These checks observe filesystem contents, not an immutable snapshot: inputs,
 weights and source must remain unchanged between preparation and execution.
 Reprepare after any change. The exported mode never substitutes the remote
 checkout's older Git HEAD for the verified synchronized source identity.
+
+## Launch identity and persisted device mapping
+
+The supervisor records and rechecks declared execution inputs, creates the worker
+with a recorded explicit environment, and independently verifies `/proc/PID/exe`
+before authorizing Start. Final reports retain the worker's announced identity,
+`device_verified`, and AMD SMI's independent physical mapping. See
+[execution provenance](execution-provenance.md) for exact scope and limits.

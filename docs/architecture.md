@@ -24,7 +24,10 @@ was also observed between unchanged native runs. Protenix Mini-default native an
 FireProt workers now pass existing coordinate/summary gates at N1000 and N1536.
 Their full confidence arrays are retained and shape/finite-value checked; this
 does not imply bitwise native/accelerated array equality.
-See [migration gates](rust-migration.md), [running](rust-running.md), and
+Launch records now bind the executable, declared worker inputs and effective
+environment; final reports retain independently verified physical device mapping.
+See [execution provenance](execution-provenance.md) for its remaining environment
+coverage limits. See [migration gates](rust-migration.md), [running](rust-running.md), and
 [operator bridge](rust-operators.md). Historical benchmark Python remains for
 reproduction; it is not the target owner of new framework policy.
 

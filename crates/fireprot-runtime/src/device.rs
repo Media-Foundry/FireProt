@@ -134,6 +134,9 @@ impl AmdSmiMonitor {
     }
 }
 impl DeviceMonitor for AmdSmiMonitor {
+    fn physical_device(&self) -> Option<PhysicalDevice> {
+        self.selected.clone()
+    }
     fn verify_device(&mut self, hip_device: u32, device: &DeviceIdentity) -> Result<(), String> {
         self.selected = None;
         self.worker_pid = None;

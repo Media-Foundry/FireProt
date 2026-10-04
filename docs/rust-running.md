@@ -32,7 +32,10 @@ Execution configuration names the Python virtual environment, model-worker
 package, HIP identity probe, AMD SMI command and required environment paths.
 Python executable paths preserve virtual-environment symlinks: resolving them
 to the system interpreter would change the model dependencies. `PYTHONPATH` and
-GPU visibility are set by Rust. SIGINT/SIGTERM request supervised cancellation.
+GPU visibility are set by Rust. The supervisor clears other inherited settings;
+put backend/allocator/thread/cache options in the profile. See
+[launch and device provenance](execution-provenance.md). SIGINT/SIGTERM request
+supervised cancellation.
 
 `inspect` validates the request without opening weights or using a GPU.
 `export-source ROOT COMMIT` prints a pinned source manifest for deployments that
@@ -55,11 +58,12 @@ model/backend combinations fail clearly.
 Each run writes:
 
 - `request.json` and `provenance.json`: resolved request and verified identities;
+- `execution.json`: effective launch environment, executable and declared worker/source identities;
 - `stdout.log` and `stderr.log`: model logs, separate from control messages;
 - `predictions.json`: workload/seed, sample IDs, tensor descriptors and timing;
 - `sample-N.npz`: one sample's coordinates and confidence arrays;
 - `native/`: upstream output structures and associated files;
-- `supervisor.json`: Rust's terminal decision, elapsed time, sample count and errors.
+- `supervisor.json`: Rust's terminal decision, elapsed time, isolation count, device verification/mapping, execution digest and errors.
 
 The model output gate requires every requested sample exactly once, verified
 archive paths, matching descriptor names/shapes/storage dtypes, model-required

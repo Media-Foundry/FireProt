@@ -1,6 +1,9 @@
 use crate::artifacts::verify_outputs;
 use crate::command::ProcessGroup;
 use crate::preflight::PreparedRequest;
+use crate::{
+    build::BuildFile, build_tree::BuildTree, device::PhysicalDevice, execution::ExecutionRecord,
+};
 use fireprot_core::protocol::{CompletionChecks, DeviceIdentity, Envelope, Phase, Session};
 use serde::Serialize;
 use std::{
@@ -21,6 +24,9 @@ use std::{
 /// Independent host observations. Implementations must fail on missing or
 /// malformed device/process records and bound the duration of each probe.
 pub trait DeviceMonitor {
+    fn physical_device(&self) -> Option<PhysicalDevice> {
+        None
+    }
     fn verify_device(&mut self, hip_device: u32, device: &DeviceIdentity) -> Result<(), String>;
     /// Return unexpected PIDs on the verified physical device, excluding only
     /// the launched worker and explicitly verified descendants.
@@ -32,6 +38,8 @@ pub struct WorkerCommand {
     pub args: Vec<OsString>,
     pub working_directory: PathBuf,
     pub environment: Vec<(OsString, OsString)>,
+    pub identity_files: Vec<BuildFile>,
+    pub identity_trees: Vec<BuildTree>,
 }
 
 pub struct Limits {
@@ -59,6 +67,10 @@ pub struct RunReport {
     pub elapsed_seconds: f64,
     pub isolation_samples: usize,
     pub failure: Option<String>,
+    pub announced_device: Option<DeviceIdentity>,
+    pub device_verified: bool,
+    pub physical_device: Option<PhysicalDevice>,
+    pub execution_sha256: String,
 }
 
 /// Supervise one fresh output directory after mandatory provenance preflight.
@@ -94,18 +106,45 @@ pub fn run(
     let socket_path = channel.path().join("worker.sock");
     let listener = UnixListener::bind(&socket_path)?;
     listener.set_nonblocking(true)?;
-    let mut command = Command::new(&worker.program);
+    let mut environment = crate::execution::environment(std::env::vars_os(), &worker.environment)?;
+    for key in [
+        "ROCR_VISIBLE_DEVICES",
+        "CUDA_VISIBLE_DEVICES",
+        "GPU_DEVICE_ORDINAL",
+    ] {
+        environment.remove(key);
+    }
+    environment.insert("HIP_VISIBLE_DEVICES".into(), r.hip_device.to_string());
+    for (key, path) in [
+        ("FIREPROT_WORKER_SOCKET", &socket_path),
+        ("FIREPROT_REQUEST", &request_path),
+        ("FIREPROT_OUTPUT_DIR", &output),
+    ] {
+        environment.insert(
+            key.into(),
+            path.to_str()
+                .ok_or_else(|| io::Error::other("worker runtime paths must be UTF-8"))?
+                .into(),
+        );
+    }
+    let execution = ExecutionRecord::capture(
+        &worker.program,
+        &worker.args,
+        &worker.working_directory,
+        environment,
+        &worker.identity_files,
+        &worker.identity_trees,
+    )?;
+    fs::write(
+        output.join("execution.json"),
+        serde_json::to_vec_pretty(&execution)?,
+    )?;
+    let mut command = Command::new(&execution.invocation_path);
     command
         .args(&worker.args)
-        .current_dir(&worker.working_directory)
-        .envs(worker.environment.iter().cloned())
-        .env_remove("ROCR_VISIBLE_DEVICES")
-        .env_remove("CUDA_VISIBLE_DEVICES")
-        .env_remove("GPU_DEVICE_ORDINAL")
-        .env("HIP_VISIBLE_DEVICES", r.hip_device.to_string())
-        .env("FIREPROT_WORKER_SOCKET", &socket_path)
-        .env("FIREPROT_REQUEST", &request_path)
-        .env("FIREPROT_OUTPUT_DIR", &output)
+        .current_dir(&execution.working_directory)
+        .env_clear()
+        .envs(&execution.environment)
         .stdin(Stdio::null())
         .stdout(Stdio::from(File::create(output.join("stdout.log"))?))
         .stderr(Stdio::from(File::create(output.join("stderr.log"))?))
@@ -115,6 +154,7 @@ pub fn run(
     let pid = child.0.id();
     let mut session = Session::new(request, pid).map_err(io::Error::other)?;
     let mut samples = 0;
+    let mut device_verified = false;
     let outcome = drive(
         &mut child,
         &listener,
@@ -125,10 +165,16 @@ pub fn run(
         r.hip_device,
         started,
         &mut samples,
+        &execution,
+        worker,
+        &mut device_verified,
     );
     // Stop the whole group before inspecting output files on either path.
     child.stop();
     let verification = outcome.and_then(|exit_code| {
+        execution
+            .verify(&worker.identity_files, &worker.identity_trees)
+            .map_err(|e| e.to_string())?;
         if exit_code != Some(0) || session.phase() != Phase::AwaitingVerification {
             return Err("worker exited unsuccessfully or without predictions".into());
         }
@@ -156,6 +202,10 @@ pub fn run(
         elapsed_seconds: started.elapsed().as_secs_f64(),
         isolation_samples: samples,
         failure: session.failure().map(str::to_owned),
+        announced_device: session.device().cloned(),
+        device_verified,
+        physical_device: monitor.physical_device(),
+        execution_sha256: execution.sha256,
     };
     write_report(&output, &report)?;
     Ok(report)
@@ -178,6 +228,9 @@ fn drive(
     hip_device: u32,
     started: Instant,
     samples: &mut usize,
+    execution: &ExecutionRecord,
+    worker: &WorkerCommand,
+    device_verified: &mut bool,
 ) -> Result<Option<i32>, String> {
     let mut stream: Option<UnixStream> = None;
     let mut pending = Vec::new();
@@ -221,7 +274,14 @@ fn drive(
                     return Err(session.failure().unwrap_or("worker failed").into());
                 }
                 if session.phase() == Phase::AwaitingStart {
+                    execution
+                        .verify_process(child.0.id())
+                        .map_err(|e| e.to_string())?;
+                    execution
+                        .verify(&worker.identity_files, &worker.identity_trees)
+                        .map_err(|e| e.to_string())?;
                     monitor.verify_device(hip_device, session.device().unwrap())?;
+                    *device_verified = true;
                     sample(monitor, child.0.id(), samples)?;
                     last_sample = Instant::now();
                     session.authorize_start().map_err(|e| e.to_string())?;

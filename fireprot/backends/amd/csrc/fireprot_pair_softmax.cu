@@ -9,7 +9,10 @@
 template<int N,int W>
 __global__ void fused(const c10::BFloat16* s,const c10::BFloat16* bias,c10::BFloat16* out,int rows,int offset,int valid) {
  constexpr int K=N==1024?16:32;
- int row=blockIdx.x*W+threadIdx.y, lane=threadIdx.x;
+ // Nearby waves reuse one bias row across eight outer triangle rows.
+ // Preserve each row's arithmetic and use the original order for short tails.
+ int linear_row=blockIdx.x*W+threadIdx.y, lane=threadIdx.x;
+ int row=rows%(4*N*8)==0 ? (linear_row/(4*N*8))*(4*N*8)+(linear_row%8)*(4*N)+(linear_row/8)%(4*N) : linear_row;
  if(row>=rows)return;
  float values[K];int outer=row/(4*N)+offset;
  int64_t base=int64_t(row)*N,biasbase=int64_t(row%(4*N))*N;

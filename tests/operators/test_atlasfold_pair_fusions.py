@@ -23,19 +23,20 @@ def test_disabled_pair_extension(monkeypatch):
 @pytest.mark.parametrize('n', [1024, 1536])
 @pytest.mark.parametrize('valid_kind', ['none', 'prefix', 'all'])
 @pytest.mark.parametrize('last', [False, True])
-def test_softmax_rounding_nonfinite_and_stream(n, valid_kind, last):
+@pytest.mark.parametrize('outer', [2, 8, 16])
+def test_softmax_rounding_nonfinite_and_stream(n, valid_kind, last, outer):
     ext = pair_fusions.load()
     assert ext is not None, pair_fusions.manifest()
     valid = {'none': 0, 'prefix': 1000, 'all': n}[valid_kind]
-    offset = n-2 if last else 0
+    offset = n-outer if last else 0
     torch.manual_seed(1073)
     with torch.inference_mode():
-        x = torch.randn(1, 2, 4, n, n, device='cuda', dtype=torch.bfloat16)*8
+        x = torch.randn(1, outer, 4, n, n, device='cuda', dtype=torch.bfloat16)*8
         bias = torch.randn(1, 1, 4, n, n, device='cuda', dtype=torch.bfloat16)*3
         x[0, 0, 0, 0, 0] = float('inf')
         x[0, 0, 0, 1, 0] = float('nan')
         x[0, 0, 0, 2, :] = -float('inf')
-        mask = ((torch.arange(offset, offset+2, device='cuda')[:, None] < valid)
+        mask = ((torch.arange(offset, offset+outer, device='cuda')[:, None] < valid)
                 & (torch.arange(n, device='cuda')[None, :] < valid))
         ref = x.clone()
         ref += (-1e9)*(~mask[None, :, None, None, :]).to(x.dtype)
@@ -124,3 +125,21 @@ def test_unvalidated_torch_version_falls_back(monkeypatch):
     monkeypatch.setattr(torch, '__version__', 'unvalidated')
     assert pair_fusions.load() is None
     assert 'unvalidated' in pair_fusions.manifest()['error']
+
+
+@HIP
+@pytest.mark.parametrize('n', [1024, 1536])
+def test_batched_transpose_bits_stream_and_rejections(n):
+    ext = pair_fusions.load()
+    assert ext is not None, pair_fusions.manifest()
+    bits = torch.arange(128*n*n, device='cuda', dtype=torch.int32).to(torch.int16).reshape(128, n, n)
+    x = bits.view(torch.bfloat16)
+    stream = torch.cuda.Stream()
+    stream.wait_stream(torch.cuda.current_stream())
+    with torch.cuda.stream(stream):
+        y = ext.batched_transpose(x)
+    torch.cuda.current_stream().wait_stream(stream)
+    assert torch.equal(y.view(torch.int16), bits.mT.contiguous())
+    for invalid in (x.mT, x[:1], x[:, :32, :32].contiguous()):
+        with pytest.raises(RuntimeError):
+            ext.batched_transpose(invalid)

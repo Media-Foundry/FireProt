@@ -324,7 +324,7 @@ Six row groups (1, 2, 4, 8, 16, 32) pass all 24 trained triangle operator
 comparisons. Groups 4/8 perform best at bucket1024, and group8 at N1536 in
 this screening. A separate eight-outer-row probability suite directly exercises group8 and
 passes all twelve checks covering mask boundaries, nonfinite inputs, and a
-non-default stream. Neither scheduling nor batched transpose is packaged yet.
+non-default stream. Both are now packaged and validated as recorded below.
 
 Rejected trials are retained: reciprocal reuse is only about 1–2% faster and
 fails probability/operator equality; removing the unused N1536 softmax slots
@@ -338,3 +338,39 @@ This is a matched single process pair against bounded native arithmetic,
 not a repeated median or an unchunked upstream result.
 Evidence and exact probe sources:
 [`atlasfold_scheduling_trials.json`](../provenance/atlasfold_scheduling_trials.json).
+
+## Packaged bias reuse and batched transpose
+
+The existing explicit `--backend hip-fused` now includes group8 bias reuse
+and a tiled batched transpose that materializes the native physical BLAS
+operand layout. No public benchmark option or model setting changes.
+
+Same-device seed102 comparisons, fresh models, one sample, four recycles
+(five trunk passes), native AtlasLM-3B recomputation, BF16/FP32 boundaries,
+30/100 diffusion steps, stage events disabled, warm filesystem/extension caches:
+
+| Length | Native reference request | Packaged request | Request speedup |
+| --- | ---: | ---: | ---: |
+| 1000 | 184.581 s | 84.174 s | 2.193x |
+| 1536 | 551.360 s, chunked native math | 206.919 s | 2.665x |
+
+Prediction times are 78.800 s and 201.304 s. All coordinate, pLDDT, PAE,
+and pTM bytes match their respective references; all 528 attention and 528
+multiplication calls select HIP with zero fallbacks. Source hashes match the
+packaged files and selected-device isolation passes. These are single process
+pairs, not repeated medians. N1536 unchunked upstream OOMs. Request timing
+includes model loading, adapter setup, features, prediction, and serialization;
+imports, checkpoint hashing, and preflight are excluded.
+
+Regression validation: 58 GPU tests pass, including grouped probabilities at
+2/8/16 outer rows, nonfinite inputs, streams, bit-pattern transpose checks,
+invalid inputs, actual trained operators, fallback, and uninstall. Local suite:
+167 passed / 108 GPU tests skipped.
+
+The next layout experiment fuses BF16-to-FP32 conversion with the ending-node
+input transpose while retaining original Torch LayerNorm. It passes both
+trained ending-attention operator comparisons at 90.643 to 88.873 ms (N1024)
+and 254.724 to 250.274 ms (N1536). It is not integrated; full-model validation
+and repeated request measurements remain outstanding.
+
+Evidence: [`atlasfold_packaged_scheduling.json`](../provenance/atlasfold_packaged_scheduling.json).

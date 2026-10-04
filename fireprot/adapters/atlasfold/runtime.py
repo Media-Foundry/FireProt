@@ -72,8 +72,9 @@ def triangle_multiplication(module, z, mask, *, outgoing, extension):
     packed = extension.transpose_bf16(projections.reshape(n*n, 256)).reshape(1, 256, n, n)
     a, b = packed.chunk(2, dim=1)
     gate = module.linear_g_out(z).sigmoid()
-    # Removing these contiguous copies changes BLAS rounding and failed validation.
-    product = a @ b.mT.contiguous() if outgoing else a.mT.contiguous() @ b
+    # Materialize the transposed operand in the native physical BLAS layout.
+    product = (a @ extension.batched_transpose(b[0]).unsqueeze(0) if outgoing
+               else extension.batched_transpose(a[0]).unsqueeze(0) @ b)
     product = extension.transpose_bf16(product.reshape(128, n*n)).reshape(1, n, n, 128)
     return gate * module.linear_out(module.layernorm_out(product))
 

@@ -21,3 +21,21 @@ torch::Tensor transpose_bf16(torch::Tensor x){
  hipLaunchKernelGGL(transpose_kernel,dim3(int64_t((rows+31)/32)*tc),dim3(256),0,c10::hip::getCurrentHIPStream(),reinterpret_cast<const uint16_t*>(x.data_ptr()),reinterpret_cast<uint16_t*>(y.data_ptr()),rows,cols,tc);
  C10_HIP_CHECK(hipGetLastError());return y;
 }
+
+__global__ void batched_transpose_kernel(const uint16_t* in,uint16_t* out,int n,int tiles) {
+ __shared__ uint16_t tile[32][33];
+ int bx=blockIdx.x%tiles,by=blockIdx.x/tiles;
+ int64_t base=int64_t(blockIdx.y)*n*n;
+ #pragma unroll
+ for(int p=threadIdx.x;p<1024;p+=256){int r=by*32+p/32,c=bx*32+p%32;if(r<n&&c<n)tile[p/32][p%32]=in[base+int64_t(r)*n+c];}
+ __syncthreads();
+ #pragma unroll
+ for(int p=threadIdx.x;p<1024;p+=256){int r=by*32+p%32,c=bx*32+p/32;if(r<n&&c<n)out[base+int64_t(c)*n+r]=tile[p%32][p/32];}
+}
+torch::Tensor batched_transpose(torch::Tensor x){
+ TORCH_CHECK(x.is_cuda()&&x.scalar_type()==at::kBFloat16&&x.is_contiguous()&&x.dim()==3&&x.size(1)==x.size(2));
+ int n=x.size(1);TORCH_CHECK((n==1024||n==1536)&&x.size(0)==128);
+ c10::DeviceGuard guard(x.device());auto y=torch::empty_like(x);int tiles=(n+31)/32;
+ hipLaunchKernelGGL(batched_transpose_kernel,dim3(tiles*tiles,128),dim3(256),0,c10::hip::getCurrentHIPStream(),reinterpret_cast<const uint16_t*>(x.data_ptr()),reinterpret_cast<uint16_t*>(y.data_ptr()),n,tiles);
+ C10_HIP_CHECK(hipGetLastError());return y;
+}

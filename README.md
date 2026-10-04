@@ -16,7 +16,7 @@ is not claimed to accelerate GPU kernels.
 
 | Model | Connected workflow | Verified scope / limits |
 | --- | --- | --- |
-| Protenix | Mini-default and Mini-ESM FP32, native and FireProt CK/HIP paths | Mini-default N1000/N1536 and Mini-ESM N1000 pass established coordinate/summary gates. Mini-ESM includes pinned ESM2-3B weights and exact feature parity. Full confidence arrays are retained, without a bitwise equality claim. |
+| Protenix | Mini-default, Mini-ESM and Tiny-default FP32, native and FireProt paths | Mini-default N1000/N1536, Mini-ESM N1000 and Tiny L124 pass established coordinate/summary gates. Mini-ESM includes pinned ESM2-3B and exact feature parity. Full confidence arrays are retained, without a bitwise equality claim. |
 | AtlasFold + AtlasLM-3B | Monomer, original dual weights, native/chunked/HIP/fused HIP | N1000 native and N1000/N1536 accelerated routes pass exact public-output parity. N1536 reference uses bounded native math. |
 | OpenFold3 / OpenBind-0 | Native inference under Rust supervision | N1000 strict deterministic mode passes exact native parity. Legacy default-mode parity remains unpassed because native repeats vary. No accelerated route promoted. |
 | OpenFold2, ESMFold, other adapters | Planned | No verified integration claim. |
@@ -60,9 +60,10 @@ accepting continuously monitored inference. Failure or missing outputs cannot
 produce a successful run report.
 
 See [commands, output schemas and exact model scope](docs/rust-running.md) and
-[checkpoint locations](docs/diamondhill-checkpoints.md). Existing `scripts/infer.sh`
-and historical benchmark tools remain available during migration; they have not
-all been replaced by the Rust CLI.
+[checkpoint locations](docs/diamondhill-checkpoints.md). `scripts/infer.sh` calls
+Rust single-request inference; `scripts/smoke.sh` calls Rust batch inference.
+See [entry-point migration](docs/entrypoints.md) for arguments and archived commands.
+Historical benchmark tools remain explicit reproduction tools.
 
 ## Repository structure
 
@@ -97,6 +98,8 @@ structural accuracy.
 - [Rust migration acceptance and remaining work](docs/rust-migration.md)
 - [Prediction CIF validation and sample associations](docs/cif-validation.md)
 - [Mini-ESM assets and feature validation](docs/protenix-mini-esm.md)
+- [Pinned batch inference](docs/batch-inference.md)
+- [Maintained and historical entry points](docs/entrypoints.md)
 - [Current architecture and dependency boundaries](docs/architecture.md)
 - [Independent Linux installation](docs/installation.md)
 - [Repository layout and historical path compatibility](docs/repository-layout.md)

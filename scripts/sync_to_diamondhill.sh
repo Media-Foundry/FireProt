@@ -20,3 +20,10 @@ rsync -a -e 'ssh -o ConnectTimeout=15' \
   "$FIREPROT_ROOT/crates" "$FIREPROT_ROOT/python" "$FIREPROT_ROOT/kernels" \
   "$FIREPROT_ROOT/configs" "$FIREPROT_ROOT/provenance" \
   pc@10.120.16.9:/media/IntelSSD/fireprot/
+
+# Keep the explicitly archived entry points available for historical reproduction.
+rsync -a -e 'ssh -o ConnectTimeout=15' \
+  "${sync_options[@]}" \
+  "$FIREPROT_ROOT/.agents/legacy_protenix_infer.sh" \
+  "$FIREPROT_ROOT/.agents/legacy_smoke.py" \
+  pc@10.120.16.9:/media/IntelSSD/fireprot/.agents/

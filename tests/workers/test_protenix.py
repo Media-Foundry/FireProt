@@ -53,3 +53,15 @@ def test_external_or_ambiguous_input_not_silently_reduced(tmp_path, change):
 def test_distributed_environment_rejected(tmp_path, monkeypatch):
     monkeypatch.setenv('WORLD_SIZE', '2')
     with pytest.raises(ValueError, match='Distributed'): check_request(request(tmp_path))
+
+
+def test_tiny_default_uses_its_own_checkpoint_and_no_language_model(tmp_path):
+    r = request(tmp_path)
+    r['workload']['model_name'] = 'protenix_tiny_default_v0.5.0'
+    with pytest.raises(ValueError, match='Checkpoint filename'):
+        check_request(r)
+    r['checkpoints']['model']['path'] = str(tmp_path / 'protenix_tiny_default_v0.5.0.pt')
+    assert check_request(r)[1].name == 'protenix_tiny_default_v0.5.0.pt'
+    r['checkpoints']['language_model'] = {'path': 'unused.pt'}
+    with pytest.raises(ValueError, match='Unexpected Protenix checkpoint roles'):
+        check_request(r)

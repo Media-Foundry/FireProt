@@ -271,3 +271,14 @@ relative feature files scoped to one request. Mini-ESM uses that directory for
 its original ESM2-3B featurizer, while Rust requires all three checkpoint roles
 and validates retained FP32 language-model inputs. Model glue checks that actual
 features match the freshly generated tensors. See [Mini-ESM](protenix-mini-esm.md).
+
+## Ordered batch execution
+
+`fireprot-runtime::batch` owns pinned request/profile snapshots, duplicate-output
+checks, sequential job transitions, cancellation and a shared deadline. The CLI
+validates execution-profile schemas before starting the coordinator and supplies
+the existing supervised single-job service. Every successful job retains its own
+accepted archive. Failure, cancellation and timeout stop subsequent launches;
+remaining jobs are explicitly reported as skipped. This replaces the maintained
+Python smoke scheduler; historical scripts remain under `.agents/legacy_*` with
+recorded path/hash provenance. See [batch inference](batch-inference.md).

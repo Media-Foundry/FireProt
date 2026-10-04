@@ -185,3 +185,103 @@ fn upstream_relative_files_are_scoped_to_the_new_run_directory() {
             .unwrap()
     );
 }
+
+fn batch_fixture(
+    root: &Path,
+    bad_second_profile: bool,
+    fail_first_worker: bool,
+) -> std::process::Output {
+    let mut jobs = Vec::new();
+    for i in 0..2 {
+        let job_root = root.join(format!("job {i}"));
+        let (mut request, mut profile) = fixture(&job_root);
+        request["run_id"] = json!(format!("batch-job-{i}"));
+        if i == 0 && fail_first_worker {
+            profile["environment"]["FIREPROT_TEST_INVALID"] = "1".into();
+        }
+        if i == 1 && bad_second_profile {
+            profile["unknown_option"] = true.into();
+        }
+        let r = job_root.join("request.json");
+        let p = job_root.join("profile.json");
+        write(&r, &request);
+        write(&p, &profile);
+        jobs.push(json!({"request":{"path":r,"sha256":sha256(&r).unwrap()},"profile":{"path":p,"sha256":sha256(&p).unwrap()}}));
+    }
+    let manifest = root.join("batch.json");
+    write(
+        &manifest,
+        &json!({"schema_version":1,"timeout_seconds":600,"jobs":jobs}),
+    );
+    Command::new(env!("CARGO_BIN_EXE_fireprot"))
+        .arg("infer-batch")
+        .arg(manifest)
+        .output()
+        .unwrap()
+}
+
+#[test]
+fn batch_cli_runs_each_pinned_job_and_seals_individual_archives() {
+    let d = tempfile::tempdir().unwrap();
+    let output = batch_fixture(d.path(), false, false);
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let report: Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(report["phase"], "succeeded");
+    assert_eq!(report["jobs"].as_array().unwrap().len(), 2);
+    for i in 0..2 {
+        assert!(
+            d.path()
+                .join(format!("job {i}/run/accepted.json"))
+                .is_file()
+        );
+    }
+}
+
+#[test]
+fn batch_cli_validates_all_profiles_before_start_and_stops_after_worker_failure() {
+    let d = tempfile::tempdir().unwrap();
+    let output = batch_fixture(d.path(), true, false);
+    assert!(!output.status.success());
+    assert!(!d.path().join("job 0/run").exists());
+    assert!(!d.path().join("job 1/run").exists());
+    let d = tempfile::tempdir().unwrap();
+    let output = batch_fixture(d.path(), false, true);
+    assert!(!output.status.success());
+    let report: Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(report["phase"], "failed");
+    assert_eq!(report["jobs"][0]["phase"], "failed");
+    assert_eq!(report["jobs"][1]["phase"], "skipped");
+    assert!(!d.path().join("job 0/run/accepted.json").exists());
+    assert!(!d.path().join("job 1/run").exists());
+}
+
+#[test]
+fn maintained_shell_entrypoint_executes_the_validated_model_pipeline() {
+    let d = tempfile::tempdir().unwrap();
+    let root = d.path();
+    let (request, profile) = fixture(root);
+    write(&root.join("request.json"), &request);
+    write(&root.join("profile.json"), &profile);
+    let script = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../scripts/infer.sh");
+    let result = Command::new("bash")
+        .arg(script)
+        .args(["request.json", "profile.json"])
+        .current_dir(root)
+        .env("FIREPROT_BIN", env!("CARGO_BIN_EXE_fireprot"))
+        .output()
+        .unwrap();
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    assert_eq!(
+        serde_json::from_slice::<Value>(&result.stdout).unwrap()["phase"],
+        "succeeded"
+    );
+    assert!(root.join("run/accepted.json").is_file());
+}

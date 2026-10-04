@@ -19,8 +19,8 @@ def check_request(request):
     workload = request['workload']
     if request['source']['commit'] != 'bb3be993b52713795796c72cf0a46ef8a7323442':
         raise ValueError('Protenix source is outside the integrated compatibility pin')
-    if workload['model_name'] not in ('protenix_mini_default_v0.5.0', 'protenix_mini_esm_v0.5.0') or workload['precision'] != 'float32':
-        raise ValueError('This worker integrates Mini-default and Mini-ESM v0.5.0 FP32')
+    if workload['model_name'] not in ('protenix_mini_default_v0.5.0', 'protenix_mini_esm_v0.5.0', 'protenix_tiny_default_v0.5.0') or workload['precision'] != 'float32':
+        raise ValueError('This worker integrates Mini-default, Mini-ESM and Tiny-default v0.5.0 FP32')
     if set(request.get('resources', {})) != set(RESOURCE_NAMES):
         raise ValueError('Protenix requires exactly the four pinned CCD/data resources')
     checkpoint = Path(request['checkpoints']['model']['path'])

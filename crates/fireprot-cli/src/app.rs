@@ -66,6 +66,13 @@ fn execute(command: Command<'_>) -> Result<()> {
             print_json(&fireprot_runtime::installation::verify(directory, digest)?)?
         }
         Command::Inspect(path) => print_json(&read_request(path)?)?,
+        Command::InferBatch(path) => {
+            let report = inference::run_batch(path)?;
+            print_json(&report)?;
+            if report.phase != fireprot_runtime::batch::BatchPhase::Succeeded {
+                return Err("batch failed or cancelled; inspect per-job reports".into());
+            }
+        }
         Command::Infer { request, profile } => {
             let report = inference::run(request, profile)?;
             print_json(&report)?;

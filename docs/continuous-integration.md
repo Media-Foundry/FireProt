@@ -47,5 +47,6 @@ hardware-monitor integration test requires the documented ROCm probe/fixture;
 DiamondHill operator and complete-model checks remain separate acceptance gates.
 CI passing does not complete the Rust migration or resolve OpenFold3 parity.
 
-Deployment packaging and retirement of legacy model entry points remain pending.
+Independent Linux installation and Rust single/batch entry points are available.
+Final environment/performance acceptance and remote CI execution remain pending.
 The workflow does not publish binaries or claim portable model installation.

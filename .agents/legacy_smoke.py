@@ -7,7 +7,7 @@ start=time.time();processes=[]
 for model,gcd in zip(models,[0,2,4]):
  out=root/'outputs'/('smoke_'+model);out.mkdir(parents=True,exist_ok=False)
  log=(out/'run.log').open('w')
- args=[str(root/'scripts/infer.sh'),'--input',str(root/'cases/1izr_L124/input.json'),'--out_dir',str(out),'--model_name',model]
+ args=[str(root/'.agents/legacy_protenix_infer.sh'),'--input',str(root/'cases/1izr_L124/input.json'),'--out_dir',str(out),'--model_name',model]
  p=subprocess.Popen(args,env=dict(os.environ,HIP_VISIBLE_DEVICES=str(gcd),CUDA_VISIBLE_DEVICES=str(gcd)),stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
  processes.append((model,gcd,out,p,args))
 (root/'provenance/smoke_handles.json').write_text(json.dumps([dict(model=m,gcd=g,pid=p.pid,args=a) for m,g,o,p,a in processes],indent=2))

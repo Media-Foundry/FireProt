@@ -14,9 +14,10 @@ use serde::Deserialize;
 use std::{
     collections::BTreeMap,
     path::{Path, PathBuf},
+    sync::atomic::{AtomicBool, Ordering},
     time::Duration,
 };
-#[derive(Deserialize)]
+#[derive(Clone, Deserialize)]
 #[serde(deny_unknown_fields)]
 struct Execution {
     python: PathBuf,
@@ -33,11 +34,38 @@ struct Execution {
 pub fn run(request: &Path, profile: &Path) -> Result<RunReport> {
     let request = read_request(request)?;
     let execution: Execution = read_json(profile)?;
+    let cancelled = cancellation()?;
+    run_loaded(request, execution, &cancelled)
+}
+
+pub fn run_batch(path: &Path) -> Result<fireprot_runtime::batch::BatchReport> {
+    use fireprot_runtime::batch::{self, BatchPlan};
+    let cancelled = cancellation()?;
+    let plan = BatchPlan::load(batch::read_spec(path)?)?;
+    // Validate every profile before allowing the first model to start.
+    let profiles: Vec<Execution> = plan
+        .jobs()
+        .iter()
+        .map(|job| serde_json::from_slice(job.profile()))
+        .collect::<std::result::Result<_, _>>()?;
+    Ok(batch::execute(&plan, &cancelled, |index, job| {
+        run_loaded(job.request().clone(), profiles[index].clone(), &cancelled)
+            .map_err(|e| e.to_string())
+    }))
+}
+
+fn run_loaded(
+    request: fireprot_core::ValidatedRequest,
+    execution: Execution,
+    cancelled: &AtomicBool,
+) -> Result<RunReport> {
+    if cancelled.load(Ordering::Relaxed) {
+        return Err("inference cancelled".into());
+    }
     let origin = match execution.source_manifest {
         Some(manifest) => SourceOrigin::Exported { manifest },
         None => SourceOrigin::GitCheckout,
     };
-    let cancelled = cancellation()?;
     let prepared = prepare(request, origin)?;
     let workers = execution.workers.canonicalize()?;
     let root = prepared.request().as_request().source.root.clone();
@@ -152,7 +180,7 @@ pub fn run(request: &Path, profile: &Path) -> Result<RunReport> {
         &worker,
         &mut monitor,
         &Limits::default(),
-        &cancelled,
+        cancelled,
         |paths| {
             bundle::validate_current(prepared.request(), paths)
                 .map(|_| ())

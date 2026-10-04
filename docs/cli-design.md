@@ -80,3 +80,19 @@ presents results. See [deployment](installation.md).
 `capture-environment SPECIFICATION` delegates file/tree hashing to
 `fireprot-runtime::environment_inventory` and emits the content manifest as JSON.
 The execution profile references that manifest through a pinned artifact reference.
+
+## Batch composition and checkout wrappers
+
+`inference::run_batch` loads pinned control snapshots through
+`fireprot-runtime::batch`, parses every execution profile, registers cancellation
+once, and supplies the existing single-job implementation to the runtime's
+ordered coordinator. The runtime owns failure/skip states and the batch deadline.
+`run_loaded` is shared by `infer` and `infer-batch`; batch execution does not read
+request/profile files a second time after validation.
+
+`scripts/infer.sh` and `scripts/smoke.sh` only locate and exec the Rust CLI.
+Tests cover literal arguments, caller working directory, exit status, help,
+missing binaries, full synthetic inference and batch stop-on-failure. Help
+routing is checked for every command advertised by the CLI, including commands
+with a single file argument. See [entry points](entrypoints.md) and
+[batch contracts](batch-inference.md).

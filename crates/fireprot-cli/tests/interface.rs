@@ -109,3 +109,30 @@ fn non_utf8_argument_is_reported_without_panicking() {
         "fireprot: arguments must be UTF-8\n"
     );
 }
+
+#[test]
+fn every_advertised_command_routes_help_before_positional_file_arguments() {
+    let help = invoke(&["--help"]);
+    let text = String::from_utf8(help.stdout).unwrap();
+    let section = text
+        .split("Commands:\n")
+        .nth(1)
+        .unwrap()
+        .split("\nOptions:")
+        .next()
+        .unwrap();
+    for line in section.lines().filter(|line| !line.trim().is_empty()) {
+        let command = line.split_whitespace().next().unwrap();
+        let expected = invoke(&["help", command]);
+        assert!(expected.status.success(), "{command}");
+        for flag in ["--help", "-h"] {
+            let result = invoke(&[command, flag]);
+            assert!(
+                result.status.success(),
+                "{command} {flag}: {}",
+                String::from_utf8_lossy(&result.stderr)
+            );
+            assert_eq!(result.stdout, expected.stdout);
+        }
+    }
+}

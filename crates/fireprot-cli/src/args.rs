@@ -4,6 +4,7 @@ use std::path::Path;
 pub enum Command<'a> {
     Help(Option<&'a str>),
     Version,
+    InferBatch(&'a Path),
     InspectCif(&'a Path),
     CompareProtenixCif {
         reference: &'a Path,
@@ -55,6 +56,11 @@ pub enum Command<'a> {
 }
 
 const COMMANDS: &[(&str, &str, &str)] = &[
+    (
+        "infer-batch",
+        "MANIFEST",
+        "Run pinned requests sequentially, stopping on failure or cancellation.",
+    ),
     (
         "inspect-cif",
         "STRUCTURE",
@@ -163,6 +169,8 @@ pub fn parse(args: &[String]) -> Result<Command<'_>, String> {
     Ok(match words.as_slice() {
         ["--help" | "-h" | "help"] => Command::Help(None),
         ["--version" | "-V"] => Command::Version,
+        ["help", name] | [name, "--help" | "-h"] if known(name) => Command::Help(Some(*name)),
+        ["infer-batch", path] => Command::InferBatch(Path::new(*path)),
         ["inspect-cif", path] => Command::InspectCif(Path::new(*path)),
         ["compare-protenix-cif", r, rc, c, cc] => Command::CompareProtenixCif {
             reference: Path::new(*r),
@@ -179,7 +187,6 @@ pub fn parse(args: &[String]) -> Result<Command<'_>, String> {
             directory: Path::new(*directory),
             digest,
         },
-        ["help", name] | [name, "--help" | "-h"] if known(name) => Command::Help(Some(*name)),
         ["inspect", request] => Command::Inspect(Path::new(*request)),
         ["infer", request, profile] => Command::Infer {
             request: Path::new(*request),

@@ -64,13 +64,13 @@ is active and the completion gates above remain in force.
 | Source and resource provenance | Rust streaming hashes, pinned Git/exported sources, checkpoints, inputs, Protenix CCD/data resources and optional environment file/tree inventories | Complete adapter environment/resource coverage |
 | Output validation | Rust sample/tensor acceptance, NPY/NPZ, strict prediction CIF parsing and sample association, array comparison, alignment, confidence deltas and experimental masks | Broader structure workflows; AtlasFold CIF-to-atom14 mapping remains incomplete |
 | Timing collection | Rust descriptive statistics and pinned accepted-run archive collection, with content/device/condition checks | Paired performance verdicts and complete invocation timing |
-| Protenix | Native/accelerated Mini-default FP32 N1000/N1536 and Mini-ESM N1000, with pinned ESM2-3B and retained features | Remaining legacy variants/workflows before retiring the old entry point |
+| Protenix | Native/accelerated Mini-default FP32 N1000/N1536, Mini-ESM N1000 and Tiny-default L124; three-model smoke batch | Final cross-workflow acceptance; no long Tiny performance claim |
 | AtlasFold + AtlasLM-3B | Native/chunked/HIP/fused HIP with dual weights and model-specific semantics | Final acceptance after layout migration |
 | OpenFold3 / OpenBind-0 | Native N1000 strict deterministic inference passes exact parity under Rust supervision | Legacy default-mode parity remains unpassed; unchanged native runs also vary |
 | Native builds | Rust dependency identities, directory inventories, cache locking/publication, guarded compiler lifecycle; all six maintained loaders connected | Complete model-environment/plugin inventories remain outside the build recipe |
 | Precompiled artifacts | Rust publication and pinned acceptance for Python and C ABI bundles; all six loaders have explicit selectors | Linux installation verified for published routes; full environment acceptance remains |
 | Repository layout | Root five-crate Cargo workspace; workers/tensor glue under `python/`, native sources under `kernels/amd`, checked path map and a root import shim | Independent Linux installation available; remaining maintained entry points |
-| Maintained entry points | Rust CLI covers current request profiles; CPU CI configuration and local clean-checkout tests added | Replace remaining maintained scripts after parity; remote CI execution awaits workflow permission |
+| Maintained entry points | Rust single/batch CLI and infer/smoke shell wrappers; original launchers archived with hashes; CPU CI configured | Paired benchmark workflow and final acceptance; remote CI awaits workflow permission |
 
 ### Verified model scope
 

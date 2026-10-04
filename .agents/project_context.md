@@ -82,7 +82,7 @@ The complete observed C4/S1 matrix contains 57 FP32 BLAS signatures and 3,132 ca
 
 ## Runtime defaults
 
-`scripts/infer.sh` uses Mini-ESM, four cycles, one diffusion step, one sample, FP32, seed 101, no MSA/template search, TF32 disabled, and torch LayerNorm before FireProt hooks are installed. `FIREPROT_BACKEND=native` selects upstream torch paths. `FIREPROT_BACKEND=fireprot` installs the registry and runtime hooks. `FIREPROT_BLAS_BACKEND=hipblas` is the fixed policy in the 1,000-token comparison, but only the 124-token all-call matrix establishes it as the best measured process-wide option. `FIREPROT_DISABLE_LONG_TRIANGLE_PACKED=1` returns to the previous chunked gate path. `FIREPROT_DISABLE_LONG_TRIANGLE_GATES=1` disables both long multiplication paths. Other diagnostic switches are `FIREPROT_DISABLE_LONG_TRIANGLE_ATTENTION=1`, `FIREPROT_DISABLE_LONG_LAYERNORM=1`, and `FIREPROT_DISABLE_LONG_TRANSITION=1`. `FIREPROT_DISABLE_CHANNEL_FIRST_LAYERNORM=1` disables the short exact-stride kernel. Direct CK requires `FIREPROT_ENABLE_CK_OPS=1`.
+The archived `.agents/legacy_protenix_infer.sh` uses Mini-ESM, four cycles, one diffusion step, one sample, FP32, seed 101, no MSA/template search, TF32 disabled, and torch LayerNorm before FireProt hooks are installed. `FIREPROT_BACKEND=native` selects upstream torch paths. `FIREPROT_BACKEND=fireprot` installs the registry and runtime hooks. `FIREPROT_BLAS_BACKEND=hipblas` is the fixed policy in the 1,000-token comparison, but only the 124-token all-call matrix establishes it as the best measured process-wide option. `FIREPROT_DISABLE_LONG_TRIANGLE_PACKED=1` returns to the previous chunked gate path. `FIREPROT_DISABLE_LONG_TRIANGLE_GATES=1` disables both long multiplication paths. Other diagnostic switches are `FIREPROT_DISABLE_LONG_TRIANGLE_ATTENTION=1`, `FIREPROT_DISABLE_LONG_LAYERNORM=1`, and `FIREPROT_DISABLE_LONG_TRANSITION=1`. `FIREPROT_DISABLE_CHANNEL_FIRST_LAYERNORM=1` disables the short exact-stride kernel. Direct CK requires `FIREPROT_ENABLE_CK_OPS=1`.
 
 Recycle-cut measurements produced C1/C2/C3/C4 medians of 123.86, 189.20, 259.57, and 334.48 ms. C1/C2/C3 differed from C4 by 5.760, 2.691, and 4.221 Angstrom aligned RMSD. The result is not monotonic on the single development example, so C4 remains the default and lower cycle counts are explicit approximate requests.
 
@@ -145,5 +145,19 @@ features against an independent upstream invocation and pass established
 coordinate/summary gates. All CLI workers now use fresh per-run working
 directories. Mini-ESM recomputes embeddings per request and rejects upstream
 truncation above 4094 residues; that bound is not a tested capacity claim.
-See `docs/protenix-mini-esm.md`. The legacy shell entry point is still pending
-migration; this worker addition does not complete the framework rebuild.
+See `docs/protenix-mini-esm.md`. The maintained shell entry point now uses Rust;
+this worker addition does not complete the framework rebuild.
+
+
+## Rust batch and maintained entry points (2026-10-05)
+
+`infer-batch` executes pinned requests sequentially with a shared cancellation
+flag, explicit batch deadline and per-job accepted archives. The three-model
+L124 smoke uses a 600-second deadline and retains C4/step1/sample1/FP32/seed101.
+Tiny-default native and FireProt pass the existing coordinate/confidence gates
+against an independent upstream reference on that development case. No long
+Tiny performance claim is established. `scripts/infer.sh REQUEST PROFILE` and
+`scripts/smoke.sh [MANIFEST]` now exec Rust; original launchers are archived under
+`.agents/legacy_*` with `provenance/entrypoint_path_map.json`. See
+`docs/entrypoints.md`. Environment coverage, complete invocation timing, paired
+performance verdicts, final acceptance and remote CI/push remain outstanding.

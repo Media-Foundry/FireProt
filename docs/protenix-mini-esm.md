@@ -56,11 +56,12 @@ The language model executes during data preparation, so `model_seconds` covers
 the folding forward call; `request_seconds` also includes ESM loading/featurization.
 Neither field is complete invocation E2E, which also includes Rust preflight.
 
-## Remaining entry-point migration
+## Maintained entry point
 
-The historical `scripts/infer.sh` still accepts upstream CLI arguments. Its
-migration to the maintained Rust interface is separate from adding this model
-worker. Do not treat this addition as completion of all legacy workflow coverage.
+`scripts/infer.sh REQUEST PROFILE` now delegates to Rust. The original Python
+launcher is archived under `.agents/legacy_protenix_infer.sh`; see
+[entry-point migration](entrypoints.md). Complete framework acceptance still
+requires the remaining environment and performance gates.
 
 ## N1000 numerical checks
 

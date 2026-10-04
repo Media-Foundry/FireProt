@@ -136,3 +136,14 @@ OpenFold3) pass acceptance and archive replay. AtlasFold/OF3 arrays retain exact
 native parity; Protenix single-sample passes established gates. AtlasFold CIF
 rounding and omitted atom14 slots prevent claiming a complete CIF-to-tensor
 mapping. See `docs/cif-validation.md` and `provenance/rust_cif_integration.json`.
+
+## Mini-ESM migration (2026-10-05)
+
+Protenix Mini-ESM FP32 is connected with independently pinned folding, ESM2-3B
+and contact-regression weights. N1000 native/FireProt preserve exact input ESM
+features against an independent upstream invocation and pass established
+coordinate/summary gates. All CLI workers now use fresh per-run working
+directories. Mini-ESM recomputes embeddings per request and rejects upstream
+truncation above 4094 residues; that bound is not a tested capacity claim.
+See `docs/protenix-mini-esm.md`. The legacy shell entry point is still pending
+migration; this worker addition does not complete the framework rebuild.

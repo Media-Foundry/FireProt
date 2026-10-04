@@ -262,3 +262,12 @@ Rust acceptance checks those files after supervisor hash verification. The worke
 transport remains version 1; prediction content is schema 2. Historical schema 1
 archives remain readable with their original guarantees. See
 [CIF validation](cif-validation.md) for model-specific checks and limitations.
+
+## Run-local upstream scratch files
+
+The CLI selects the fresh output directory as every worker's working directory;
+the supervisor creates it before recording launch identity. This keeps upstream
+relative feature files scoped to one request. Mini-ESM uses that directory for
+its original ESM2-3B featurizer, while Rust requires all three checkpoint roles
+and validates retained FP32 language-model inputs. Model glue checks that actual
+features match the freshly generated tensors. See [Mini-ESM](protenix-mini-esm.md).

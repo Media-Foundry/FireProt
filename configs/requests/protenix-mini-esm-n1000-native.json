@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "run_id": "protenix-mini-esm-n1000-native",
+  "workload": {
+    "model": "protenix",
+    "model_name": "protenix_mini_esm_v0.5.0",
+    "cycles": 4,
+    "diffusion_steps": 1,
+    "samples": 1,
+    "precision": "float32"
+  },
+  "backend": "native",
+  "seed": 101,
+  "hip_device": 7,
+  "source": {
+    "root": "/media/IntelSSD/fireprot/Protenix",
+    "commit": "bb3be993b52713795796c72cf0a46ef8a7323442"
+  },
+  "checkpoints": {
+    "model": {
+      "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_esm_v0.5.0.pt",
+      "sha256": "1301bba9ad322518eace60fd244ded7904439f55317e90d402cc7a0c06026664"
+    },
+    "language_model": {
+      "path": "/media/IntelSSD/fireprot/runtime/checkpoint/esm2_t36_3B_UR50D.pt",
+      "sha256": "7de8b4082ba15891959ab368b77ce3886697af1efb16d3c9e9e7b0c5d3f07500"
+    },
+    "language_model_regression": {
+      "path": "/media/IntelSSD/fireprot/runtime/checkpoint/esm2_t36_3B_UR50D-contact-regression.pt",
+      "sha256": "4da500eab246481dc9c8c95bc7b1d02f2803d761c380b0e95186d4a07d0fc84e"
+    }
+  },
+  "resources": {
+    "ccd_components_file": {
+      "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+      "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5"
+    },
+    "ccd_components_rdkit_mol_file": {
+      "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+      "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35"
+    },
+    "pdb_cluster_file": {
+      "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+      "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c"
+    },
+    "obsolete_release_data_csv": {
+      "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+      "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33"
+    }
+  },
+  "input": {
+    "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+    "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+  },
+  "output_dir": "outputs/protenix-mini-esm-n1000-native"
+}

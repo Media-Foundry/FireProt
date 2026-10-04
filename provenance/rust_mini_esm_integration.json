@@ -1,0 +1,692 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-05",
+  "base_commit": "0e040083340361ac062dc71e55b0f66eb16e1ad2",
+  "scope": "Mini-ESM migration and run-local upstream scratch directories; no new GPU arithmetic or performance promotion",
+  "integration": {
+    "runs": [
+      {
+        "request": {
+          "schema_version": 1,
+          "run_id": "protenix-mini-esm-n1000-native",
+          "workload": {
+            "model": "protenix",
+            "model_name": "protenix_mini_esm_v0.5.0",
+            "cycles": 4,
+            "diffusion_steps": 1,
+            "samples": 1,
+            "precision": "float32"
+          },
+          "backend": "native",
+          "seed": 101,
+          "hip_device": 7,
+          "source": {
+            "root": "/media/IntelSSD/fireprot/Protenix",
+            "commit": "bb3be993b52713795796c72cf0a46ef8a7323442"
+          },
+          "checkpoints": {
+            "model": {
+              "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_esm_v0.5.0.pt",
+              "sha256": "1301bba9ad322518eace60fd244ded7904439f55317e90d402cc7a0c06026664"
+            },
+            "language_model": {
+              "path": "/media/IntelSSD/fireprot/runtime/checkpoint/esm2_t36_3B_UR50D.pt",
+              "sha256": "7de8b4082ba15891959ab368b77ce3886697af1efb16d3c9e9e7b0c5d3f07500"
+            },
+            "language_model_regression": {
+              "path": "/media/IntelSSD/fireprot/runtime/checkpoint/esm2_t36_3B_UR50D-contact-regression.pt",
+              "sha256": "4da500eab246481dc9c8c95bc7b1d02f2803d761c380b0e95186d4a07d0fc84e"
+            }
+          },
+          "resources": {
+            "ccd_components_file": {
+              "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+              "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5"
+            },
+            "ccd_components_rdkit_mol_file": {
+              "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+              "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35"
+            },
+            "obsolete_release_data_csv": {
+              "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+              "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33"
+            },
+            "pdb_cluster_file": {
+              "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+              "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c"
+            }
+          },
+          "input": {
+            "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+            "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+          },
+          "output_dir": "/media/IntelSSD/fireprot/outputs/protenix-mini-esm-n1000-native"
+        },
+        "supervisor": {
+          "run_id": "protenix-mini-esm-n1000-native",
+          "phase": "succeeded",
+          "worker_pid": 1394884,
+          "elapsed_seconds": 120.537577387,
+          "isolation_samples": 118,
+          "failure": null,
+          "announced_device": {
+            "worker_pid": 1394884,
+            "logical_device": 0,
+            "pci_address": "0000:93:00.0",
+            "architecture": "gfx90a"
+          },
+          "device_verified": true,
+          "physical_device": {
+            "hip_device": 7,
+            "smi_device": 5,
+            "pci_address": "0000:93:00.0",
+            "architecture": "gfx90a"
+          },
+          "execution_sha256": "64ce9dd38adc1837c01e7533f2981d4ee6048c99d08f004dcf8f690fc69b23d3"
+        },
+        "working_directory": "/media/IntelSSD/fireprot/outputs/protenix-mini-esm-n1000-native",
+        "model_seconds": 48.0222462459933,
+        "request_seconds": 113.4764826989267,
+        "environment": {
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850",
+          "python": "3.12.13"
+        },
+        "acceptance_sha256": "67fe30f35bf5a8f4758cb9e3be10237d3fc997ab8da8ac9f4ae750e23058dfd0",
+        "archive_revalidated": true
+      },
+      {
+        "request": {
+          "schema_version": 1,
+          "run_id": "protenix-mini-esm-n1000-fireprot",
+          "workload": {
+            "model": "protenix",
+            "model_name": "protenix_mini_esm_v0.5.0",
+            "cycles": 4,
+            "diffusion_steps": 1,
+            "samples": 1,
+            "precision": "float32"
+          },
+          "backend": "fireprot",
+          "seed": 101,
+          "hip_device": 6,
+          "source": {
+            "root": "/media/IntelSSD/fireprot/Protenix",
+            "commit": "bb3be993b52713795796c72cf0a46ef8a7323442"
+          },
+          "checkpoints": {
+            "model": {
+              "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_esm_v0.5.0.pt",
+              "sha256": "1301bba9ad322518eace60fd244ded7904439f55317e90d402cc7a0c06026664"
+            },
+            "language_model": {
+              "path": "/media/IntelSSD/fireprot/runtime/checkpoint/esm2_t36_3B_UR50D.pt",
+              "sha256": "7de8b4082ba15891959ab368b77ce3886697af1efb16d3c9e9e7b0c5d3f07500"
+            },
+            "language_model_regression": {
+              "path": "/media/IntelSSD/fireprot/runtime/checkpoint/esm2_t36_3B_UR50D-contact-regression.pt",
+              "sha256": "4da500eab246481dc9c8c95bc7b1d02f2803d761c380b0e95186d4a07d0fc84e"
+            }
+          },
+          "resources": {
+            "ccd_components_file": {
+              "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+              "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5"
+            },
+            "ccd_components_rdkit_mol_file": {
+              "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+              "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35"
+            },
+            "obsolete_release_data_csv": {
+              "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+              "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33"
+            },
+            "pdb_cluster_file": {
+              "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+              "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c"
+            }
+          },
+          "input": {
+            "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+            "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+          },
+          "output_dir": "/media/IntelSSD/fireprot/outputs/protenix-mini-esm-n1000-fireprot"
+        },
+        "supervisor": {
+          "run_id": "protenix-mini-esm-n1000-fireprot",
+          "phase": "succeeded",
+          "worker_pid": 1394886,
+          "elapsed_seconds": 93.827707646,
+          "isolation_samples": 91,
+          "failure": null,
+          "announced_device": {
+            "worker_pid": 1394886,
+            "logical_device": 0,
+            "pci_address": "0000:8e:00.0",
+            "architecture": "gfx90a"
+          },
+          "device_verified": true,
+          "physical_device": {
+            "hip_device": 6,
+            "smi_device": 4,
+            "pci_address": "0000:8e:00.0",
+            "architecture": "gfx90a"
+          },
+          "execution_sha256": "e3a4f6ea91e74bf5a4545ff96ec1a443442244359ddbcf17ec9cea944198f214"
+        },
+        "working_directory": "/media/IntelSSD/fireprot/outputs/protenix-mini-esm-n1000-fireprot",
+        "model_seconds": 22.115105887060054,
+        "request_seconds": 86.76305871794466,
+        "environment": {
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850",
+          "python": "3.12.13"
+        },
+        "acceptance_sha256": "a9a3a563954b8907b003f9f6e7a6b8480f1d2efa0ad508acc1453ebca145dd87",
+        "archive_revalidated": true
+      },
+      {
+        "request": {
+          "schema_version": 1,
+          "run_id": "protenix-n1000-run-cwd-v1",
+          "workload": {
+            "model": "protenix",
+            "model_name": "protenix_mini_default_v0.5.0",
+            "cycles": 4,
+            "diffusion_steps": 1,
+            "samples": 1,
+            "precision": "float32"
+          },
+          "backend": "fireprot",
+          "seed": 101,
+          "hip_device": 6,
+          "source": {
+            "root": "/media/IntelSSD/fireprot/Protenix",
+            "commit": "bb3be993b52713795796c72cf0a46ef8a7323442"
+          },
+          "checkpoints": {
+            "model": {
+              "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_default_v0.5.0.pt",
+              "sha256": "3803340c5d9958c038e799ddd2b53b532db21855f261592ad455a5f003791f81"
+            }
+          },
+          "resources": {
+            "ccd_components_file": {
+              "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+              "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5"
+            },
+            "ccd_components_rdkit_mol_file": {
+              "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+              "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35"
+            },
+            "obsolete_release_data_csv": {
+              "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+              "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33"
+            },
+            "pdb_cluster_file": {
+              "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+              "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c"
+            }
+          },
+          "input": {
+            "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+            "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+          },
+          "output_dir": "/media/IntelSSD/fireprot/outputs/protenix-n1000-run-cwd-v1"
+        },
+        "supervisor": {
+          "run_id": "protenix-n1000-run-cwd-v1",
+          "phase": "succeeded",
+          "worker_pid": 1396677,
+          "elapsed_seconds": 45.767496653,
+          "isolation_samples": 42,
+          "failure": null,
+          "announced_device": {
+            "worker_pid": 1396677,
+            "logical_device": 0,
+            "pci_address": "0000:8e:00.0",
+            "architecture": "gfx90a"
+          },
+          "device_verified": true,
+          "physical_device": {
+            "hip_device": 6,
+            "smi_device": 4,
+            "pci_address": "0000:8e:00.0",
+            "architecture": "gfx90a"
+          },
+          "execution_sha256": "91eb29a43e930444fae1e7a9fbb629c4a8007bbb188a42a8a5e832f8b4385dcd"
+        },
+        "working_directory": "/media/IntelSSD/fireprot/outputs/protenix-n1000-run-cwd-v1",
+        "model_seconds": 25.616943262983114,
+        "request_seconds": 37.46963808697183,
+        "environment": {
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850",
+          "python": "3.12.13"
+        },
+        "acceptance_sha256": "7e48d5d3212710be74aa05214033ab1461bd6f78615a67b76f804706132be7c8",
+        "archive_revalidated": true
+      },
+      {
+        "request": {
+          "schema_version": 1,
+          "run_id": "atlasfold-n1000-run-cwd-v1",
+          "workload": {
+            "model": "atlasfold",
+            "model_name": "atlasfold-260703",
+            "recycles": 4,
+            "diffusion_steps": 30,
+            "samples": 1,
+            "precision": "native"
+          },
+          "backend": "hip_fused",
+          "seed": 102,
+          "hip_device": 4,
+          "source": {
+            "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold",
+            "commit": "8ab3aca0e18c8b814d5ca6756b2617a07d72c68d"
+          },
+          "checkpoints": {
+            "model": {
+              "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlasfold/snapshot/weights/atlasfold-260703.pth",
+              "sha256": "cbadb227d40e801a3d268d6e884e6ed3c6b9fb89d558739fcf5970492732e5ea"
+            },
+            "language_model": {
+              "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlaslm3b/snapshot/weights/atlaslm_3b_base.pth",
+              "sha256": "8097cc4a234853f19ca97435844829d84fe7f13215c900e74659fa9682cc0ddb"
+            }
+          },
+          "resources": {},
+          "input": {
+            "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+            "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+          },
+          "output_dir": "/media/IntelSSD/fireprot/outputs/atlasfold-n1000-run-cwd-v1"
+        },
+        "supervisor": {
+          "run_id": "atlasfold-n1000-run-cwd-v1",
+          "phase": "succeeded",
+          "worker_pid": 1396764,
+          "elapsed_seconds": 95.482824785,
+          "isolation_samples": 90,
+          "failure": null,
+          "announced_device": {
+            "worker_pid": 1396764,
+            "logical_device": 0,
+            "pci_address": "0000:ae:00.0",
+            "architecture": "gfx90a"
+          },
+          "device_verified": true,
+          "physical_device": {
+            "hip_device": 4,
+            "smi_device": 6,
+            "pci_address": "0000:ae:00.0",
+            "architecture": "gfx90a"
+          },
+          "execution_sha256": "a20dd95d6d1d74e89a552353125fc8a33c38f093eaff7385224dbc177a9c25bd"
+        },
+        "working_directory": "/media/IntelSSD/fireprot/outputs/atlasfold-n1000-run-cwd-v1",
+        "model_seconds": 76.78703153808601,
+        "request_seconds": 88.25298958097119,
+        "environment": {
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850",
+          "python": "3.12.13"
+        },
+        "acceptance_sha256": "04b52cc340e86ccaaa329b41c8ee4e397ff2290f3f20f1f15a876cfd0d1ba17e",
+        "archive_revalidated": true
+      },
+      {
+        "request": {
+          "schema_version": 1,
+          "run_id": "openfold3-n1000-run-cwd-v1",
+          "workload": {
+            "model": "openfold3",
+            "model_name": "openbind-0",
+            "recycles": 3,
+            "diffusion_steps": 200,
+            "samples": 1,
+            "precision": "float32",
+            "deterministic": true
+          },
+          "backend": "native",
+          "seed": 101,
+          "hip_device": 7,
+          "source": {
+            "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+            "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+          },
+          "checkpoints": {
+            "model": {
+              "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+              "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+            }
+          },
+          "resources": {},
+          "input": {
+            "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01000_462bb697ecdcce2f.json",
+            "sha256": "2715542db697dbd2dd5021063173f6e91a405ac0f46a46a69b748c815826ae5b"
+          },
+          "output_dir": "/media/IntelSSD/fireprot/outputs/openfold3-n1000-run-cwd-v1"
+        },
+        "supervisor": {
+          "run_id": "openfold3-n1000-run-cwd-v1",
+          "phase": "succeeded",
+          "worker_pid": 1397437,
+          "elapsed_seconds": 278.746901815,
+          "isolation_samples": 277,
+          "failure": null,
+          "announced_device": {
+            "worker_pid": 1397437,
+            "logical_device": 0,
+            "pci_address": "0000:93:00.0",
+            "architecture": "gfx90a"
+          },
+          "device_verified": true,
+          "physical_device": {
+            "hip_device": 7,
+            "smi_device": 5,
+            "pci_address": "0000:93:00.0",
+            "architecture": "gfx90a"
+          },
+          "execution_sha256": "7bec601c50005b879d47b3007773fc829f35ba02653c687ee18b32e3a57653e3"
+        },
+        "working_directory": "/media/IntelSSD/fireprot/outputs/openfold3-n1000-run-cwd-v1",
+        "model_seconds": 242.87684240401722,
+        "request_seconds": 269.63509276800323,
+        "environment": {
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850",
+          "python": "3.12.13"
+        },
+        "acceptance_sha256": "377932b3ebd756277653a8aba61dc2aa0db5cd05a95ea048ee842d62de92ac64",
+        "archive_revalidated": true
+      }
+    ],
+    "deployed_source_sha256": {
+      "crates/fireprot-core/src/request.rs": "a77491c08f38431bc8c6226f54460d8da53d2c741b76ffc1e348b72ad1684ab8",
+      "crates/fireprot-cli/src/inference.rs": "d90393d237b4290cb3efe42fc7a43614b754063eae30da99136e90bbb520c437",
+      "crates/fireprot-validation/src/bundle.rs": "2279dd0da984c726163528f380b238d2d6b9ee65b4caf209888821165ecce60d",
+      "python/fireprot_workers/protenix.py": "9e76c2780daf1deeb3015def225f0542b6ada3af718196f53b571180494441b5",
+      "python/fireprot_workers/protenix_esm.py": "0597c899caeee94327e7a2e797330875abd816cc59f36b8eeb7e4fd46a617182"
+    },
+    "native_reference_script_sha256": "c177a7d428fe6ce010a12d061b4b2fda5e526a243457d3f61791d47876c30787"
+  },
+  "committed_source_sha256": {
+    "crates/fireprot-core/src/request.rs": "a77491c08f38431bc8c6226f54460d8da53d2c741b76ffc1e348b72ad1684ab8",
+    "crates/fireprot-cli/src/inference.rs": "d90393d237b4290cb3efe42fc7a43614b754063eae30da99136e90bbb520c437",
+    "crates/fireprot-validation/src/bundle.rs": "083f7102bf92afc7297547d4153d895b7c01850c15781827aea8959edcd503e5",
+    "python/fireprot_workers/protenix.py": "9e76c2780daf1deeb3015def225f0542b6ada3af718196f53b571180494441b5",
+    "python/fireprot_workers/protenix_esm.py": "0597c899caeee94327e7a2e797330875abd816cc59f36b8eeb7e4fd46a617182"
+  },
+  "deployment_difference": "Only an additional cfg(test) module was added to bundle.rs after the GPU build; production prefix before cfg(test) is byte-identical.",
+  "upstream_reference": {
+    "native": {
+      "coordinates": {
+        "atom_count": 7979,
+        "raw_rmsd_angstrom": 0.00017505275681709172,
+        "aligned_rmsd_angstrom": 0.00017098274394481805,
+        "max_abs_coordinate_delta_angstrom": 0.0009765625
+      },
+      "confidence": {
+        "numeric_leaf_count": 15,
+        "max_abs_delta": 1.1444091796875e-05,
+        "mean_abs_delta": 1.5785296758015951e-06,
+        "missing_from_candidate": [],
+        "extra_in_candidate": []
+      },
+      "coordinate_tolerance_angstrom": 0.001,
+      "confidence_tolerance": 0.001,
+      "passed": true,
+      "esm_feature_exact": true,
+      "esm_max_abs_delta": 0.0
+    },
+    "fireprot": {
+      "coordinates": {
+        "atom_count": 7979,
+        "raw_rmsd_angstrom": 0.00012622616543998827,
+        "aligned_rmsd_angstrom": 0.0001235549944580945,
+        "max_abs_coordinate_delta_angstrom": 0.0009765625
+      },
+      "confidence": {
+        "numeric_leaf_count": 15,
+        "max_abs_delta": 4.1961669921875e-05,
+        "mean_abs_delta": 3.3269325892056518e-06,
+        "missing_from_candidate": [],
+        "extra_in_candidate": []
+      },
+      "coordinate_tolerance_angstrom": 0.001,
+      "confidence_tolerance": 0.001,
+      "passed": true,
+      "esm_feature_exact": true,
+      "esm_max_abs_delta": 0.0
+    },
+    "reference": {
+      "device": {
+        "gpu": 7,
+        "bdf": "0000:b3:00.0",
+        "uuid": "ae00740c-0000-1000-809b-e6babc613a8d",
+        "kfd_id": 63755,
+        "node_id": 7,
+        "partition_id": 0
+      },
+      "request_seconds": 113.5731201460585,
+      "isolation": {
+        "available": true,
+        "command": [
+          "/usr/bin/amd-smi",
+          "process",
+          "--json"
+        ],
+        "physical_device_index": 7,
+        "interval_seconds": 1.0,
+        "samples": 80,
+        "allowed_pid": 1396242,
+        "external_pids": [],
+        "errors": [],
+        "passed": true
+      },
+      "source_request_configuration": {
+        "schema_version": 1,
+        "run_id": "protenix-mini-esm-n1000-native",
+        "workload": {
+          "model": "protenix",
+          "model_name": "protenix_mini_esm_v0.5.0",
+          "cycles": 4,
+          "diffusion_steps": 1,
+          "samples": 1,
+          "precision": "float32"
+        },
+        "backend": "native",
+        "seed": 101,
+        "hip_device": 7,
+        "source": {
+          "root": "/media/IntelSSD/fireprot/Protenix",
+          "commit": "bb3be993b52713795796c72cf0a46ef8a7323442"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_mini_esm_v0.5.0.pt",
+            "sha256": "1301bba9ad322518eace60fd244ded7904439f55317e90d402cc7a0c06026664"
+          },
+          "language_model": {
+            "path": "/media/IntelSSD/fireprot/runtime/checkpoint/esm2_t36_3B_UR50D.pt",
+            "sha256": "7de8b4082ba15891959ab368b77ce3886697af1efb16d3c9e9e7b0c5d3f07500"
+          },
+          "language_model_regression": {
+            "path": "/media/IntelSSD/fireprot/runtime/checkpoint/esm2_t36_3B_UR50D-contact-regression.pt",
+            "sha256": "4da500eab246481dc9c8c95bc7b1d02f2803d761c380b0e95186d4a07d0fc84e"
+          }
+        },
+        "resources": {
+          "ccd_components_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+            "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5"
+          },
+          "ccd_components_rdkit_mol_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+            "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35"
+          },
+          "pdb_cluster_file": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+            "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c"
+          },
+          "obsolete_release_data_csv": {
+            "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+            "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33"
+          }
+        },
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+        },
+        "output_dir": "outputs/protenix-mini-esm-n1000-native"
+      },
+      "actual_launch": {
+        "HIP_VISIBLE_DEVICES": "5",
+        "working_directory": "/media/IntelSSD/fireprot/outputs/protenix-mini-esm-n1000-upstream-v1",
+        "script": "/tmp/fireprot-mini-esm-reference.py",
+        "note": "Source request supplied scientific settings and assets; actual reference output directory and device differ from that template."
+      }
+    }
+  },
+  "upstream_reference_script": "\"\"\"One-off upstream API parity reference, no FireProt model worker or acceleration.\"\"\"\nimport json, os, time\nfrom pathlib import Path\nimport torch\nfrom benchmarks.atlasfold.profile_inference import resolve_physical_device\nfrom benchmarks.protenix.profile_inference import _GpuProcessMonitor\nroot=Path('/media/IntelSSD/fireprot')\nout=root/'outputs/protenix-mini-esm-n1000-upstream-v1'\nout.mkdir()\nos.chdir(out)\ntorch.cuda.init()\ndevice=resolve_physical_device()\nmonitor=_GpuProcessMonitor(device['gpu'],os.getpid(),1.0)\nmonitor.start()\ntry:\n    request=json.loads((root/'configs/requests/protenix-mini-esm-n1000-native.json').read_text())\n    from configs.configs_data import data_configs\n    from configs.configs_inference import inference_configs\n    for key,value in request['resources'].items():data_configs[key]=value['path']\n    inference_configs['load_checkpoint_dir']=str(root/'runtime/checkpoint')\n    from runner import batch_inference, inference\n    original=inference.InferenceRunner.predict\n    def capture(runner,data):\n        import numpy as np\n        np.save(out/'input-esm.npy',data['input_feature_dict']['esm_token_embedding'].numpy())\n        return original(runner,data)\n    inference.InferenceRunner.predict=capture\n    torch.set_num_threads(1)\n    torch.backends.cuda.preferred_blas_library('hipblas')\n    torch.backends.cuda.matmul.allow_tf32=False\n    torch.backends.cudnn.allow_tf32=False\n    start=time.perf_counter()\n    batch_inference.inference_jsons(json_file=request['input']['path'],out_dir=str(out/'native'),\n        seeds=[101],n_cycle=4,n_step=1,n_sample=1,dtype='fp32',model_name='protenix_mini_esm_v0.5.0',\n        trimul_kernel='torch',triatt_kernel='torch',enable_cache=True,enable_fusion=True,\n        enable_tf32=False,use_msa=False,use_template=False,use_rna_msa=False,\n        use_seeds_in_json=False,need_atom_confidence=False)\n    assert len(list((out/'native').rglob('*.cif')))==1\n    assert not list((out/'native/ERR').glob('*'))\n    report=dict(request=request,device=device,request_seconds=time.perf_counter()-start)\nfinally:\n    isolation=monitor.stop()\n(out/'reference.json').write_text(json.dumps(dict(**report,isolation=isolation),indent=2)+'\\n')\nassert isolation['passed'],isolation\n",
+  "native_vs_fireprot": {
+    "comparison": {
+      "coordinates": {
+        "atom_count": 7979,
+        "raw_rmsd_angstrom": 0.0001976037342451059,
+        "aligned_rmsd_angstrom": 0.0001917803702294005,
+        "max_abs_coordinate_delta_angstrom": 0.0009765625
+      },
+      "confidence": {
+        "numeric_leaf_count": 15,
+        "max_abs_delta": 3.0517578125e-05,
+        "mean_abs_delta": 3.337860107414474e-06,
+        "missing_from_candidate": [],
+        "extra_in_candidate": []
+      },
+      "coordinate_tolerance_angstrom": 0.001,
+      "confidence_tolerance": 0.001,
+      "passed": true
+    },
+    "esm_feature_exact": true,
+    "esm_max_abs_delta": 0.0
+  },
+  "working_directory_regressions": {
+    "atlasfold": {
+      "coordinates": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "pae": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "plddt": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "ptm": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      }
+    },
+    "protenix": {
+      "coordinates": {
+        "atom_count": 7979,
+        "raw_rmsd_angstrom": 8.502829115815553e-05,
+        "aligned_rmsd_angstrom": 8.459256309713666e-05,
+        "max_abs_coordinate_delta_angstrom": 0.0009765625
+      },
+      "confidence": {
+        "numeric_leaf_count": 15,
+        "max_abs_delta": 3.814697265625e-06,
+        "mean_abs_delta": 3.899137179093811e-07,
+        "missing_from_candidate": [],
+        "extra_in_candidate": []
+      },
+      "coordinate_tolerance_angstrom": 0.001,
+      "confidence_tolerance": 0.001,
+      "passed": true
+    },
+    "openfold3": {
+      "confidence.chain_ptm.1": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.disorder": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.gpde": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.has_clash": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.iptm": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.pae": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.pde": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.plddt": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.ptm": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "confidence.sample_ranking_score": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      },
+      "coordinates": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0.0,
+        "passed": true
+      }
+    }
+  },
+  "tests": {
+    "rust_passed": 125,
+    "python_passed": 269,
+    "python_skipped": 110,
+    "python_worker_passed": 44,
+    "msrv": "1.85.0",
+    "msrv_contracts_passed": 9,
+    "msrv_workspace_check": "passed",
+    "clippy": "passed",
+    "fmt": "passed"
+  },
+  "limits": [
+    "N1000 Mini-ESM monomer FP32 C4/step1/sample1/seed101 only; 4094 bound prevents upstream truncation but is not a tested capacity claim.",
+    "Full accelerated confidence arrays are retained, not asserted bitwise identical.",
+    "Concurrent runs and warmed checkpoint files do not establish controlled E2E speedups.",
+    "Legacy shell entry-point migration and remaining framework acceptance are unfinished."
+  ]
+}

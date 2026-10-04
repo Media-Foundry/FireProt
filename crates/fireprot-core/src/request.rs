@@ -30,6 +30,7 @@ pub enum Precision {
 pub enum CheckpointRole {
     Model,
     LanguageModel,
+    LanguageModelRegression,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -229,10 +230,18 @@ impl TryFrom<Request> for ValidatedRequest {
         }
         validate_artifact(&request.input)?;
         let roles: Vec<_> = request.checkpoints.keys().copied().collect();
-        let required = if matches!(request.workload, Workload::Atlasfold { .. }) {
-            vec![CheckpointRole::Model, CheckpointRole::LanguageModel]
-        } else {
-            vec![CheckpointRole::Model]
+        let required = match &request.workload {
+            Workload::Atlasfold { .. } => {
+                vec![CheckpointRole::Model, CheckpointRole::LanguageModel]
+            }
+            Workload::Protenix { model_name, .. } if model_name == "protenix_mini_esm_v0.5.0" => {
+                vec![
+                    CheckpointRole::Model,
+                    CheckpointRole::LanguageModel,
+                    CheckpointRole::LanguageModelRegression,
+                ]
+            }
+            _ => vec![CheckpointRole::Model],
         };
         if roles != required {
             return Err(RequestError::CheckpointRoles);
@@ -288,7 +297,7 @@ pub enum RequestError {
     #[error("artifact SHA-256 must be 64 lowercase hexadecimal characters")]
     ArtifactDigest,
     #[error(
-        "checkpoint roles do not match the model; AtlasFold requires both model and language_model"
+        "checkpoint roles do not match the model; AtlasFold requires language_model; Mini-ESM also requires language_model_regression"
     )]
     CheckpointRoles,
 }

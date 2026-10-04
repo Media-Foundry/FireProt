@@ -162,3 +162,26 @@ fn worker_content_failure_reaches_cli_status_and_never_creates_accepted_receipt(
     );
     assert!(!root.join("run/accepted.json").exists());
 }
+
+#[test]
+fn upstream_relative_files_are_scoped_to_the_new_run_directory() {
+    let dir = tempfile::tempdir().unwrap();
+    let (request, profile) = fixture(dir.path());
+    let result = infer(dir.path(), &request, &profile);
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    let execution: Value =
+        serde_json::from_slice(&fs::read(dir.path().join("run/execution.json")).unwrap()).unwrap();
+    assert_eq!(
+        execution["working_directory"],
+        dir.path()
+            .join("run")
+            .canonicalize()
+            .unwrap()
+            .to_str()
+            .unwrap()
+    );
+}

@@ -238,7 +238,9 @@ fn validate_model(
                 return Err(schema("OpenFold3 pair confidence shape mismatch"));
             }
         }
-        Workload::Protenix { cycles, .. } => {
+        Workload::Protenix {
+            cycles, model_name, ..
+        } => {
             let atoms = coords.coordinates()?.len();
             let summary = summary.ok_or_else(|| schema("missing Protenix confidence JSON"))?;
             confidence(summary, summary)?;
@@ -263,6 +265,13 @@ fn validate_model(
                 floating(arrays, key)?;
             }
             let pae = arrays["confidence.token_pair_pae"].shape();
+            if model_name == "protenix_mini_esm_v0.5.0" {
+                let esm = floating(arrays, "input.esm_token_embedding")?;
+                if pae.len() != 2 || esm.dtype() != DType::Float32 || esm.shape() != [pae[0], 2560]
+                {
+                    return Err(schema("Mini-ESM input embedding shape/dtype mismatch"));
+                }
+            }
             if arrays["confidence.atom_plddt"].shape() != [atoms]
                 || pae.len() != 2
                 || pae[0] != pae[1]
@@ -346,5 +355,60 @@ mod protenix_tests {
         assert!(validate_model(&workload, &arrays, Some(&summary)).is_ok());
         arrays.remove("confidence.token_pair_pae");
         assert!(validate_model(&workload, &arrays, Some(&summary)).is_err());
+    }
+}
+
+#[cfg(test)]
+mod mini_esm_tests {
+    use super::*;
+    use fireprot_core::request::Precision;
+    use serde_json::json;
+
+    #[test]
+    fn esm_model_cannot_be_accepted_without_complete_fp32_language_features() {
+        let workload = Workload::Protenix {
+            model_name: "protenix_mini_esm_v0.5.0".into(),
+            cycles: 4,
+            diffusion_steps: 1,
+            samples: 1,
+            precision: Precision::Float32,
+        };
+        let mut arrays = BTreeMap::new();
+        for (name, shape) in [
+            ("coordinates", vec![3, 3]),
+            ("confidence.atom_plddt", vec![3]),
+            ("confidence.token_pair_pae", vec![2, 2]),
+            ("confidence.token_pair_pde", vec![2, 2]),
+            ("confidence.contact_probs", vec![2, 2]),
+            ("confidence.atom_to_token_idx", vec![3]),
+            ("confidence.atom_is_polymer", vec![3]),
+            ("confidence.token_asym_id", vec![2]),
+            ("confidence.token_has_frame", vec![2]),
+        ] {
+            let bytes = vec![0; shape.iter().product::<usize>() * 4];
+            arrays.insert(
+                name.into(),
+                Array::new(DType::Float32, shape, bytes).unwrap(),
+            );
+        }
+        let summary =
+            json!({"plddt":80.,"gpde":1.,"ptm":0.9,"iptm":0.,"ranking_score":0.9,"num_recycles":4});
+        assert!(validate_model(&workload, &arrays, Some(&summary)).is_err());
+        for (dtype, shape, passes) in [
+            (DType::Float32, vec![2, 2560], true),
+            (DType::Float32, vec![1, 2560], false),
+            (DType::Float32, vec![2, 1280], false),
+            (DType::Bfloat16, vec![2, 2560], false),
+        ] {
+            let bytes = vec![0; shape.iter().product::<usize>() * dtype.width()];
+            arrays.insert(
+                "input.esm_token_embedding".into(),
+                Array::new(dtype, shape, bytes).unwrap(),
+            );
+            assert_eq!(
+                validate_model(&workload, &arrays, Some(&summary)).is_ok(),
+                passes
+            );
+        }
     }
 }

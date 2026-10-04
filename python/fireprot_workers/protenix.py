@@ -19,13 +19,15 @@ def check_request(request):
     workload = request['workload']
     if request['source']['commit'] != 'bb3be993b52713795796c72cf0a46ef8a7323442':
         raise ValueError('Protenix source is outside the integrated compatibility pin')
-    if workload['model_name'] != 'protenix_mini_default_v0.5.0' or workload['precision'] != 'float32':
-        raise ValueError('This worker currently integrates Mini-default v0.5.0 FP32')
+    if workload['model_name'] not in ('protenix_mini_default_v0.5.0', 'protenix_mini_esm_v0.5.0') or workload['precision'] != 'float32':
+        raise ValueError('This worker integrates Mini-default and Mini-ESM v0.5.0 FP32')
     if set(request.get('resources', {})) != set(RESOURCE_NAMES):
         raise ValueError('Protenix requires exactly the four pinned CCD/data resources')
     checkpoint = Path(request['checkpoints']['model']['path'])
     if checkpoint.name != workload['model_name'] + '.pt':
         raise ValueError('Checkpoint filename must match the requested Protenix model')
+    from .protenix_esm import check_checkpoints
+    check_checkpoints(request, checkpoint)
     records = json.loads(Path(request['input']['path']).read_text())
     if not isinstance(records, list) or len(records) != 1:
         raise ValueError('Protenix worker requires one input record')
@@ -44,6 +46,8 @@ def check_request(request):
         raise ValueError('Modified proteins, external features and multiple copies are not integrated')
     if not sequence or any(residue not in 'ACDEFGHIKLMNPQRSTVWYX' for residue in sequence):
         raise ValueError('Invalid protein sequence')
+    if workload['model_name'] == 'protenix_mini_esm_v0.5.0' and len(sequence) > 4094:
+        raise ValueError('Mini-ESM sequences above 4094 residues would be truncated upstream')
     if request['seed'] >= 2**32:
         raise ValueError('Protenix NumPy seeding requires a seed below 2**32')
     for key, expected in (('RANK', 0), ('LOCAL_RANK', 0), ('WORLD_SIZE', 1), ('LOCAL_WORLD_SIZE', 1)):
@@ -57,6 +61,9 @@ def predict(request, channel):
     name, checkpoint = check_request(request)
     workload = request['workload']
     output = Path(os.environ['FIREPROT_OUTPUT_DIR'])
+    esm_enabled = workload['model_name'] == 'protenix_mini_esm_v0.5.0'
+    if esm_enabled and (Path.cwd() != output or (output / 'esm_embeddings').exists()):
+        raise RuntimeError('Mini-ESM requires a fresh run-local embedding directory')
     os.environ['LAYERNORM_TYPE'] = 'torch'
     import torch
     import protenix
@@ -104,6 +111,12 @@ def predict(request, channel):
             raise RuntimeError('Protenix workload changed at the model boundary')
         if data['sample_name'] != name or calls != 0:
             raise RuntimeError('Unexpected Protenix query or repeated model call')
+        if bool(cfg.esm.enable) != esm_enabled:
+            raise RuntimeError('Protenix ESM configuration changed at the model boundary')
+        esm_features = None
+        if esm_enabled:
+            from .protenix_esm import validate_features
+            esm_features = validate_features(request, data, cfg.esm, output)
         calls += 1
         channel.emit(dict(event='progress', stage='model'))
         torch.cuda.synchronize()
@@ -118,6 +131,8 @@ def predict(request, channel):
         ranks = runner.dumper._get_ranker_indices(result)
         for sample in range(workload['samples']):
             arrays = {'coordinates': result['coordinate'][sample]}
+            if esm_features is not None:
+                arrays['input.esm_token_embedding'] = esm_features
             arrays.update({'confidence.' + key: value for key, value in result['full_data'][sample].items()
                            if key != 'atom_coordinate'})
             archive = f'sample-{sample}.npz'

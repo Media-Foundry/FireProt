@@ -259,3 +259,12 @@ for AtlasFold `hip` requests. Rust checks artifact integrity and compatibility;
 the loader does not enter a build path. N1000/N1536 public outputs pass exactly.
 See [publication, acceptance and deployment scope](kernel-artifacts.md). Direct
 build orchestration and other kernel recipes remain migration work.
+
+## Mini-ESM
+
+The native and FireProt `protenix-mini-esm-n1000-*.json` requests add the upstream
+ESM2-3B feature stage. They require three pinned checkpoints, including the
+contact-regression companion. See [Mini-ESM](protenix-mini-esm.md) for invocation,
+cache semantics, retained features and numerical evidence. The Rust CLI now
+starts all model workers in their fresh output directory; upstream relative
+scratch files do not share the framework package directory.

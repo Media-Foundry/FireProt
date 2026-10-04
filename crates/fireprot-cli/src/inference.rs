@@ -138,7 +138,9 @@ pub fn run(request: &Path, profile: &Path) -> Result<RunReport> {
     let worker = WorkerCommand {
         program,
         args: vec!["-m".into(), "fireprot_workers".into()],
-        working_directory: workers,
+        // The supervisor creates this fresh directory before resolving the
+        // execution identity. Upstream relative caches must be run-local.
+        working_directory: prepared.request().as_request().output_dir.clone(),
         environment: env,
         identity_files,
         identity_trees,

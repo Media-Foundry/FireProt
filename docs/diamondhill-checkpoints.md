@@ -61,3 +61,12 @@ Default sampling uses 30 diffusion steps for 1000 residues and 100 steps for
 1536 residues. Record sample count explicitly (runner default: five). Baselines
 must include all LM passes and preserve the requested recycle/step/sample
 counts. No AtlasFold speedup has been established yet.
+
+## Protenix Mini-ESM and ESM2-3B
+
+Full file hashes were recomputed on 2026-10-05 for the folding checkpoint,
+ESM2-3B checkpoint and contact-regression companion under
+`/media/IntelSSD/fireprot/runtime/checkpoint/`. Exact paths and hashes are in
+[Mini-ESM integration](protenix-mini-esm.md) and the checked-in requests.
+These files are separate from AtlasFold's AtlasLM checkpoint. All three are
+required by the Mini-ESM request contract.

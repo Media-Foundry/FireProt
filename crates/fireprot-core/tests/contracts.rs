@@ -198,3 +198,33 @@ fn openfold3_determinism_is_explicit_and_preserves_legacy_wire_identity() {
     invalid["workload"]["deterministic"] = "true".into();
     assert!(serde_json::from_value::<Request>(invalid).is_err());
 }
+
+#[test]
+fn mini_esm_requires_all_three_checkpoint_roles_without_changing_workload() {
+    let mut w = workloads()[0].clone();
+    if let Workload::Protenix { model_name, .. } = &mut w {
+        *model_name = "protenix_mini_esm_v0.5.0".into();
+    }
+    let mut r = request(w);
+    assert_eq!(
+        ValidatedRequest::try_from(r.clone()),
+        Err(RequestError::CheckpointRoles)
+    );
+    r.checkpoints
+        .insert(CheckpointRole::LanguageModel, artifact());
+    assert_eq!(
+        ValidatedRequest::try_from(r.clone()),
+        Err(RequestError::CheckpointRoles)
+    );
+    r.checkpoints
+        .insert(CheckpointRole::LanguageModelRegression, artifact());
+    let decoded: Request = serde_json::from_str(&serde_json::to_string(&r).unwrap()).unwrap();
+    let validated = ValidatedRequest::try_from(decoded).unwrap();
+    assert_eq!(validated.as_request(), &r);
+    assert_eq!(validated.as_request().workload.trunk_passes().unwrap(), 4);
+    r.workload = workloads()[0].clone();
+    assert_eq!(
+        ValidatedRequest::try_from(r),
+        Err(RequestError::CheckpointRoles)
+    );
+}

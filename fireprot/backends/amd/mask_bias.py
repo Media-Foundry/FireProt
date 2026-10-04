@@ -14,11 +14,12 @@ _lock = threading.RLock()
 _extension = None
 _error = None
 _name = None
+_build = None
 
 
 def load():
     """Return the isolated extension, or None so the adapter retains native math."""
-    global _extension, _error, _name
+    global _extension, _error, _name, _build
     with _lock:
         if _extension is not None or _error is not None:
             return _extension
@@ -30,6 +31,11 @@ def load():
                 raise RuntimeError('HIP is unavailable')
             from torch.utils.cpp_extension import load as compile_extension
             source = Path(__file__).with_name('csrc')/'fireprot_mask_bias.cu'
+            if os.environ.get('FIREPROT_RUST_BUILD') == '1':
+                from ._native_build import load as rust_load
+                _extension, _build = rust_load('fireprot_mask_bias', [source])
+                _name = _extension.__name__
+                return _extension
             digest = hashlib.sha256(source.read_bytes())
             digest.update(f'{torch.__version__}|{torch.version.hip}|gfx90a|-O3'.encode())
             _name = 'fireprot_mask_bias_' + digest.hexdigest()[:16]
@@ -48,4 +54,4 @@ def load():
 
 def manifest():
     with _lock:
-        return {'loaded': _extension is not None, 'name': _name, 'error': _error}
+        return {'loaded': _extension is not None, 'name': _name, 'error': _error, 'build': _build}

@@ -101,3 +101,41 @@ This additive API retains bridge ABI version 1. Rebuild the bridge before using
 it. Operator dispatch remains unchanged. No production HIP/CK recipe is migrated
 by merely exposing this interface: dependency enumeration, immutable inputs,
 Torch compilation/loading integration and fresh GPU parity are still required.
+
+## First HIP integration candidate
+
+`FIREPROT_RUST_BUILD=1` selects an experimental Rust cache recipe for AtlasFold's
+mask/bias extension only. It is not the default or a completed loader migration.
+The Python boundary discovers Torch/ROCm/Python header files, Torch shared
+libraries, hipify helpers and selected compiler executables, and passes their
+paths to Rust for content hashing. Rust owns cache acceptance and publication.
+The recipe fixes gfx90a, preserves the existing optimization flags and copies
+kernel sources into staging before compilation. A disposable Python process runs
+Torch's extension compiler. The model process loads only the library returned by
+the completed Rust transaction. Compilation failures retain native fallback.
+
+The manifest records the full receipt and a dependency-coverage statement. System
+compiler runtime/header dependencies and all compiler environment effects are
+not yet closed; directory discovery is still Python glue. The candidate must
+remain explicit until these gaps are resolved and long-model parity passes.
+It must not be described as hermetic, promoted, or fully migrated. Other HIP/CK
+loaders still use their preceding build paths.
+
+### Candidate validation
+
+DiamondHill compiled the gfx90a mask/bias extension through the Rust transaction
+with 14,559 declared input files. Eleven targeted GPU tests passed. Two subsequent
+fresh Rust-supervised AtlasFold requests hit that cache: N1000 (30 diffusion
+steps) and N1536 (100 steps), both with AtlasLM-3B, four additional recycles,
+one sample, seed 102 and native precision. All four public output arrays match
+their stored native/bounded-native references exactly in shape, dtype and bytes.
+Each request selected 528 HIP attention calls with zero unsupported-call fallback.
+Continuous PCI-mapped isolation passed with 152 and 401 samples respectively.
+
+The model checks ran concurrently on distinct GCDs. Their 138.150/356.267-second
+supervisor wall times exclude preflight and do not establish a new speedup.
+The generated library's ELF dynamic section contains no temporary build-directory
+RPATH/RUNPATH. Local Python validation passed 209 tests with 110 GPU cases skipped.
+Complete requests, comparisons, receipt/library identities and dependency limits
+are recorded in [candidate evidence](../provenance/rust_mask_build_candidate.json).
+Dependency-coverage gaps above still prevent promotion.

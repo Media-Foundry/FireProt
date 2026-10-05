@@ -89,6 +89,13 @@ syntax/patch checked only. The new worker overlay enables dispatch only with
 submitted-launch counter prevents confusing Rust selection with a HIP launch.
 The second experimental candidate has passed the benchmark anchor gate at
 695.721 s E2E / 600.051 s model; its baseline-1 is now running. No pair-1 ratio yet.
+Update: pair-1 is now accepted, including all 11 bitwise comparisons and CIF
+atom identity checks. E2E 957.824 -> 695.721 s (1.37673x), model
+861.974 -> 600.051 s (1.43650x); see
+`provenance/openfold3_hip_softmax_pair_001.json`. The same PID 1596375 is running
+baseline-2 for the last pair. Full three-pair aggregate remains pending. Latest
+prepared-runtime commit `7e82c13` passed remote CI; no GPU validation of that
+prepared route has run. A narrow deployment dry-run was reviewed but not applied.
 
 ## Historical implemented state
 

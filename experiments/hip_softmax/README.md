@@ -93,9 +93,15 @@ Never modify worker trees, inventories or bundles during the paired runs.
 The first N1536 pair passes all 11 arrays bitwise and CIF atom identity checks.
 Complete invocation time is 953.331 -> 694.973 seconds (1.37175x); model time is
 858.251 -> 599.567 seconds (1.43145x). Rust reports `insufficient_repeats`.
-The other two pairs are still running. The immutable first-pair report is pinned
+The immutable first-pair report is pinned
 in `provenance/openfold3_hip_softmax_pair_000.json`; no aggregate verdict or
 production promotion follows from this one pair.
+
+The second, reverse-order pair also passes all 11 arrays bitwise and CIF atom
+identity checks. Complete invocation is 957.824 -> 695.721 seconds (1.37673x);
+model time is 861.974 -> 600.051 seconds (1.43650x). Its report is pinned in
+`provenance/openfold3_hip_softmax_pair_001.json`. The final pair is running;
+these two pairs do not establish the required three-pair aggregate verdict.
 
 ## Maintained integration requirements
 

@@ -1,0 +1,27 @@
+--- a/experiments/mfma_qk/fused_qk_softmax.cpp
++++ b/experiments/mfma_qk/fused_qk_softmax.cpp
+@@ -63,11 +63,19 @@
+         acc4 accumulator = {0.0f, 0.0f, 0.0f, 0.0f};
+         const int key_base = band * 256 + wave * 16;
+         #pragma unroll
+-        for (int fragment = 0; fragment < 8; ++fragment) {
+-            const int k = (fragment / 2) * 8 + 2 * k_lane + (fragment % 2);
+-            const float a = key_transposed[input_base + uint64_t(k) * N + key_base + coordinate];
+-            accumulator = __builtin_amdgcn_mfma_f32_16x16x4f32(
+-                a, q_values[fragment], accumulator, 0, 0, 0);
++        for (int group = 0; group < 2; ++group) {
++            float prefetched[4];
++            #pragma unroll
++            for (int slot = 0; slot < 4; ++slot) {
++                const int fragment = group * 4 + slot;
++                const int k = (fragment / 2) * 8 + 2 * k_lane + (fragment % 2);
++                prefetched[slot] = key_transposed[input_base + uint64_t(k) * N + key_base + coordinate];
++            }
++            #pragma unroll
++            for (int slot = 0; slot < 4; ++slot) {
++                accumulator = __builtin_amdgcn_mfma_f32_16x16x4f32(
++                    prefetched[slot], q_values[group * 4 + slot], accumulator, 0, 0, 0);
++            }
+         }
+         // Physical low column bits are XOR-permuted by the query coordinate.
+         // Reorder registers to place four values in consecutive aligned dwords.

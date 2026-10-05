@@ -268,3 +268,25 @@ batch sizes; CPU coverage of other batches is not GPU acceptance. Local code
 uses62VGPR/33SGPR for softmax and51/20 for raw scores, with no spills and16KiB LDS.
 See `provenance/openfold3_qk_softmax_reuse_candidate.json` and
 `provenance/openfold3_qk_softmax_reuse_probe.json` for actual published resources.
+
+## Grouped key prefetch
+
+`key-prefetch.patch` applies after swizzle/vector/wave-scalar/bias-reuse and
+loads four key fragments into local values before their four MFMAs. The K
+order and accumulator chain remain unchanged. The selected variant11 contains
+no inline compiler barrier; the compiler owns final instruction scheduling.
+Local disassembly shows the first four MFMAs preceded by corresponding loads
+and interleaved `vmcnt(3)`, `vmcnt(2)`, `vmcnt(1)`, `vmcnt(0)` waits.
+
+Three rejected local compile alternatives are archived: four operands with an
+empty register barrier (variant8), adding a memory clobber (variant9), and two
+operands with a memory clobber (variant10). Their softmax VGPR counts are120,
+120 and112 respectively. None ran on GPU; no numerical or speed claim applies
+to them. Variant11 uses58VGPR/33SGPR locally and on DiamondHill, raw51/20, with
+no spills,16KiB LDS,48MFMA and11barriers per mode. The exact patch chain matches
+the selected source. B32 and B256 each pass21 packed numerical records.
+
+See `provenance/openfold3_qk_softmax_prefetch_candidate.json` for all local
+alternatives and `provenance/openfold3_qk_softmax_prefetch_probe.json` for the
+selected published artifact and GPU correctness evidence. Full-model acceptance
+remains outstanding; complete-attention timing determines promotion eligibility.

@@ -138,3 +138,40 @@ measurements establish the effect of the scheduling change, without proving
 actual cache hit rates or attributing all gains to cache reuse. It remains
 slower than split HIP, so it is not promoted. No model/E2E gain is established.
 Evidence: `provenance/openfold3_qk_attention_reuse_benchmark.json`.
+
+## Natural four-fragment key prefetch
+
+A fresh five-arm interleaved comparison retains native/split/wave/reuse and
+adds natural grouped key prefetch. All200 timed complete-attention calls match
+bitwise, with the same strict input/cache contract and both bias layouts.
+
+| Batch / bias | Split HIP (ms) | Bias reuse (ms) | Key prefetch (ms) |
+| --- | ---: | ---: | ---: |
+| 32 / contiguous | 5.523 | 6.621 | 6.209 |
+| 32 / transposed | 5.822 | 9.225 | 8.331 |
+| 256 / contiguous | 43.487 | 52.962 | 48.892 |
+| 256 / transposed | 43.800 | 73.407 | 65.693 |
+
+B256 time falls7.69% contiguous and10.51% transposed versus bias reuse. Both
+layouts remain slower than split HIP, so no model promotion/E2E claim follows.
+The tested candidate is variant11; the high-register compiler-barrier variants
+were not GPU tested or timed. Evidence:
+`provenance/openfold3_qk_attention_prefetch_benchmark.json`.
+
+### Updated kernel trace
+
+A separate B256 diagnostic profiles split/wave/reuse/prefetch, two layouts;
+all eight outputs are bitwise identical. Contiguous prefetch core27.522ms is
+below split QK9.942ms + softmax19.141ms, while PV remains about11.8–12.0ms.
+However, prefetch's `[256,4,1536,1536]` score allocation triggers an
+`aten::fill_` with NaN, correlated to eight GPU fill kernels totaling6.971ms.
+This allocation is absent from the native in-place score path. Q/K and PV
+packing each retain their own smaller copies/fills. Single profiled durations
+are diagnostic, not replacement latency statistics.
+
+Evidence: `provenance/openfold3_qk_attention_prefetch_profile.json`, including
+raw trace archive and fill correlation analysis. A future private workspace
+reuse experiment must retain strict determinism/filling settings, initialize
+storage normally, prove full overwrite and safe stream/lifetime ownership,
+and record retained-memory and warm/cold effects. No workspace reuse is
+implemented or accepted by this result.

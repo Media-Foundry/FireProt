@@ -1345,3 +1345,54 @@ completeattention against current splitHIP. Also possible later combine reuse
 with deferredadds ONLY after accepting layout-specific scheduling or explicit
 biascontiguous conversion; that conversion cost must stay inside timing.
 No plateau yet demonstrated; existing kernel alternatives remain below split.
+
+## Natural grouped key prefetch accepted at operator scope (2026-10-06)
+
+Previous turn made progress and pushed1ee7c68 (bias reuse scheduling).
+Local variants8/9 force four key operands through empty inlineasm register
+barrier (without/with memory clobber),120VGPR; variant10 forces two,112VGPR.
+All three rejected on static resource grounds beforeGPU, no numeric/performance
+claim. Their source/libs/ASM are archived with selectedvariant11: four local
+key operands followed by four MFMAs, NOcompilerbarrier. K-order unchanged.
+key-prefetch.patch applies AFTERswizzle/vector/wave/bias-reuse, NOdeferredadds.
+Patch chain exactlyverified. Local/remote softmax58VGPR33SGPR, raw51/20;
+16KiB LDS/no spills/48MFMA/11barriers. LocalfirstfourMFMAs show aheadloads and
+vmcnt3/2/1/0. Actual scheduler remainscompiler-owned. Evidence
+openfold3_qk_softmax_prefetch_candidate.json includes all4localvariants.
+
+Root /tmp/fireprot-qk-softmax-prefetch-v11, session69788 exits0, B32/B256each21
+exactrecords. Bundlemanifestb682ffbc845920ae2d3f675f793ab873b26a5d5b3ec80d50fcf076442d5372ce.
+Numericalarchive qk-softmax-prefetch-v11-results.tar.gz SHA
+ea59351e06102375e2c77720021a9b0eebbf26e6892b685543ccb326519e12fe.
+Evidence openfold3_qk_softmax_prefetch_probe.json. Otherbatches/modelgates pending.
+
+Root /tmp/fireprot-qk-attention-prefetch-v11, session73616 exits0, all200 timed
+outputs exact. B256contiguous reuse52.962->prefetch48.892ms,split43.487ms;
+transposed73.407->65.693ms,split43.800ms. B32contiguous6.621->6.209ms,
+transposed9.225->8.331ms. No promotion/E2Egain. Evidence
+openfold3_qk_attention_prefetch_benchmark.json pins fullarchive. No activeGPUjob.
+Next: updatedkerneltrace forprefetch tosplitremainingcore/packing/fill/PV costs;
+then test combining deferredadds with biascontiguous materialization inside
+completeattentiontiming, or deeper originalQKV-layout support ifpacking matters.
+Any bias conversion cost must be included, and all math/output gates retained.
+No plateau: this step stillgave7.69%/10.51% operatorincrement, but the existing
+splitHIP remainsfaster and modeldefaultmustnotchange.
+
+Updated prefetchetrace COMPLETED thisturn (supersedes preceding next-trace plan):
+root /tmp/fireprot-qk-attention-profile-prefetch-v11, session47358 exits0;
+8outputs exact. Contiguousprefetch core27.522ms vs splitQK9.942+softmax19.141ms.
+PV11.8–12.0ms. The gap is now largely extra allocationfilling: large
+[256,4,1536,1536] score aten::fill_ withNaN maps to8GPUkernels totaling6.970744ms,
+externalid1555 in contiguous-prefetch trace. Q/Kpacking not dominant; no need
+to assume layoutkernel rewrite will close the gap. Evidence
+openfold3_qk_attention_prefetch_profile.json retains fillcorrelationanalysis.
+Archive qk-attention-profile-prefetch-v11-results.tar.gz SHA
+aec16f406b054cec3b1ab1c7629846b92c05ce1938806253abeb81d5d0177ced.
+Local rawtrace /tmp/fireprot-prefetch-contiguous-trace.json hash verified.
+Nextpriority: bounded private initializedscore workspace reuse as an explicit
+experimental treatment, strictdet/fill flags unchanged. Must prove fullwrite,
+stream/lifetime safety, include firstallocation coldcost and retainedmemory,
+never expose or mutate a previouspublicresult. Needs tensor boundary/CPUreject
+and GPU repeated-distinct-input gates, then completeattentiontiming. Model
+memory/tuner/workspace lifecycle acceptance required beforeintegration. No
+workspace policy exists yet; do not claim equivalentcacheconditions or E2Egain.

@@ -134,4 +134,30 @@ baseline or an optimized correctness result. Evidence:
 
 Both initial baselines and the first operator screen are now archived. No
 OpenFold3 candidate has been promoted. Per the user's updated priority,
-framework migration to Rust takes precedence over further optimization trials.
+framework migration to Rust took precedence at that point; it has since passed
+the acceptance gates in `rust-acceptance.md`.
+
+## Exact FP32 HIP softmax: three-pair N1536 result
+
+The post-migration handwritten HIP experiment fuses mask addition, pair bias and
+native-order softmax while preserving upstream QK/PV arithmetic. N1000/N1536
+full-model checks pass all 11 arrays bitwise. Three sequential N1536 pairs retain
+FP32, three recycles/four trunk passes, 200 diffusion steps, one sample and seed101:
+
+| Scope | Native median | HIP median | Ratio |
+| --- | ---: | ---: | ---: |
+| Complete invocation | 956.112 s | 694.973 s | 1.37575x |
+| Model computation | 859.950 s | 599.567 s | 1.43429x |
+
+All three pairs pass exact array and CIF atom-identity checks. Runs use fresh
+processes, published kernels and strict environment inventories on HIP7/PCI93/
+SMI5, with filesystem cache unflushed. No other FireProt GPU job was launched
+during the sequence; other host jobs were not continuously audited. These results
+cover one fixed long input and an experimental worker, not a promoted maintained
+OpenFold3 backend or experimental-coordinate accuracy.
+
+See `provenance/openfold3_hip_softmax_e2e_n1536.json` and
+`experiments/hip_softmax/README.md` for raw-report pins and integration gates.
+An additional in-place operator screen passes 16 exact comparisons and saves
+4.5 GiB at N1536/B128, but gives no established latency gain. It remains outside
+model dispatch; see `experiments/hip_softmax/INPLACE.md`.

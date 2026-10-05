@@ -1,8 +1,8 @@
 # Pending experiment: owned score buffer reuse
 
-Status: source preparation only. No GPU numerical or timing result yet.
-The active three-pair N1536 experiment uses the original out-of-place boundary.
-Do not change its copied workers or immutable bundle.
+Status: GPU operator screen complete; no model/E2E validation or integration.
+The completed three-pair N1536 experiment uses the original out-of-place boundary.
+Keep its copied workers and immutable bundle intact.
 
 The current kernel loads each score row into lane-local values before any output
 store. Its wave64 reductions keep all row lanes participating. Independent rows
@@ -26,8 +26,24 @@ this size is a theoretical workspace saving, not a measured whole-model peak
 reduction. Score reads and probability writes still occur, so lower memory
 traffic or latency must not be assumed.
 
-After the current E2E experiment finishes, run this screen through the same
-pinned published loader environment on an explicitly selected idle GPU. A later
+The screen ran after the E2E experiment finished, through the same pinned
+published loader on HIP5/PCIb3/SMI7. All 16 comparisons pass bitwise. Five
+observations follow two warmups, with alternating variant order:
+
+| Shape/layout | Out-of-place median | In-place median | Saved extra allocation |
+| --- | ---: | ---: | ---: |
+| N1000/B256 starting | 10.970 ms | 11.095 ms | 4,096,000,000 bytes |
+| N1000/B256 ending | 10.964 ms | 11.071 ms | 4,096,000,000 bytes |
+| N1536/B128 starting | 9.882 ms | 9.863 ms | 4,831,838,208 bytes |
+| N1536/B128 ending | 10.268 ms | 10.256 ms | 4,831,838,208 bytes |
+
+These observations establish operator allocation savings, not a latency win.
+N1000 is about 1% slower; the N1536 differences are only 0.1-0.2%. Keep the
+out-of-place path for maintained integration. Full observations, source/library
+pins and limits are in `provenance/openfold3_hip_softmax_inplace_screen.json`.
+Isolation checks were point-in-time, not continuous monitoring.
+
+A later
 worker trial must ensure QK scores have no other consumers and reject aliases
 with mask/bias. Full-model validation must record effective chunk sizes: the
 memory reduction can alter upstream autotuning, GEMM shapes and numerical

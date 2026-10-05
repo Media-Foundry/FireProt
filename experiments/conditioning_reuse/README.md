@@ -1,7 +1,7 @@
 # OpenFold3 conditioning reuse diagnostic
 
-Status: implemented diagnostic, CPU-checked only. No model run, caching
-implementation or speedup is claimed. See
+Status: CPU-checked diagnostic; a first N1536 full-model run is in progress.
+No model validation result, caching implementation or speedup is claimed. See
 [`docs/openfold3-conditioning-reuse.md`](../../docs/openfold3-conditioning-reuse.md)
 for the source dependency audit and acceptance requirements.
 
@@ -33,14 +33,20 @@ upstream OpenFold3 compatibility, GPU arithmetic or whole-model correctness.
 
 ## Isolated worker preparation
 
-Wait for the active HIP softmax paired benchmark to finish before GPU execution.
+The original HIP softmax paired benchmark has completed successfully.
 Copy the maintained worker/shim/kernel tree to a fresh experiment directory,
 apply `worker-overlay.patch` with `git apply -p0`, and copy `probe.py` to
 `python/fireprot_workers/conditioning_probe.py` in that copy. Use a new Rust
 execution profile whose worker source identity covers all these files.
 The transport patch includes `conditioning-audit.json` in accepted artifacts.
 Use unchanged scientific requests and strict environment inventories. Do not
-patch the active benchmark's worker tree, CLI, bridge or environment.
+patch an active validation's worker tree, CLI, bridge or environment.
+
+The first diagnostic uses `/tmp/fireprot-conditioning-probe-v1`, request
+`conditioning-probe-v1-n1536`, HIP5/PCIb3/SMI7 and unchanged FP32/R3/D200/S1/
+seed101. It runs concurrently with prepared-runtime N1536 numerical validation
+on HIP7; neither run supplies a new E2E speedup claim. Its output and 11-array
+native comparison are still pending.
 
 Run first with the native backend and compare all 11 full model arrays against
 the strict native reference. Only accepted diagnostic runs can inform the

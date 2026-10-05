@@ -19,7 +19,7 @@ Rust itself is not claimed to accelerate GPU kernels.
 | --- | --- | --- |
 | Protenix | Mini-default, Mini-ESM and Tiny-default FP32, native and FireProt paths | Mini-default N1000/N1536, Mini-ESM N1000 and Tiny L124 pass established coordinate/summary gates. Mini-ESM includes pinned ESM2-3B and exact feature parity. Full confidence arrays are retained, without a bitwise equality claim. |
 | AtlasFold + AtlasLM-3B | Monomer, original dual weights, native/chunked/HIP/fused HIP | N1000 native and N1000/N1536 accelerated routes pass exact public-output parity. N1536 reference uses bounded native math. |
-| OpenFold3 / OpenBind-0 | Native inference under Rust supervision | N1000 strict deterministic mode passes exact native parity. Legacy default-mode parity remains unpassed because native repeats vary. No accelerated route promoted. |
+| OpenFold3 / OpenBind-0 | Native inference under Rust supervision | N1000/N1536 strict deterministic checks pass exact parity. Experimental N1536 HIP softmax measures 1.376x E2E; no accelerated request route promoted. Legacy default-mode parity remains unpassed because native repeats vary. |
 | OpenFold2, ESMFold, other adapters | Planned | No verified integration claim. |
 
 Protenix and OpenFold3 are separate implementations. Model adapters preserve each
@@ -117,6 +117,7 @@ structural accuracy.
 - [Direct HIP builds and C ABI loaders](docs/hip-builds.md)
 - [Native build/cache migration](docs/kernel-builds.md)
 - [AtlasFold performance and exact-output evidence](docs/atlasfold-performance.md)
+- [OpenFold3 experimental HIP speedup and exact-output evidence](docs/openfold3-performance.md)
 - [Protenix request performance and historical isolation correction](docs/protenix-native-requests.md)
 - [Historical README measurements](.agents/readme_history_2026-10-04.md)
 - [Original Protenix setup notes](.agents/protenix_baseline.md)

@@ -40,62 +40,87 @@ existing numerical gates. The post-migration zero-mask experiment passes all
 This is an experimental worker overlay, not a promoted production route. See
 `experiments/rocm_coverage/README.md` and its pinned evidence.
 
-The next handwritten FP32 HIP mask/bias/softmax candidate now passes 36 operator
-configurations and all 11 model arrays exactly at N1000 and N1536. It packs bias
-and uses wave64 row reuse; operator gains are not E2E gains. See
-`experiments/hip_softmax/README.md` and `provenance/openfold3_hip_softmax_firstpass.json`.
-Three sequential N1536 pairs are running under Rust at DiamondHill
-`/tmp/fireprot-hip-softmax-model-v2/paired-n1536`; inspect the live benchmark
-process and its order journal before taking further GPU actions. Do not launch
-other FireProt GPU jobs during this measurement, or mutate its worker trees,
-published bundle, environment inventory, CLI or bridge. The valid bundle is
+The handwritten FP32 HIP mask/bias/softmax experiment passes 36 operator
+configurations and all 11 model arrays exactly at N1000 and N1536. Three
+sequential N1536 AB/BA/AB pairs have now completed successfully under Rust:
+FP32/R3/D200/S1/seed101, HIP7/PCI93/SMI5, fresh processes, filesystem cache not
+flushed, published kernel and strict environment inventories. E2E medians are
+956.112 -> 694.973 s (1.37575x), model medians 859.950 -> 599.567 s (1.43429x).
+All 33 pair/sample array comparisons and CIF atom identity checks pass.
+Evidence: `provenance/openfold3_hip_softmax_e2e_n1536.json`. Individual pair
+records `openfold3_hip_softmax_pair_000.json` and `pair_001.json` are historical
+partial observations, superseded by that aggregate.
+
+The completed benchmark is at DiamondHill
+`/tmp/fireprot-hip-softmax-model-v2/paired-n1536`. Rust PID 1596375 and all six
+model workers have exited; all eight GCDs were observed idle before the next
+trial. Its old SSH transport session 48828 remained open after scientific
+completion; local SSH PID 1715960 was then terminated (transport exit 255).
+Do not restart the successful benchmark. Keep copied workers, inventories and
+published artifacts intact for reproduction. The valid bundle is
 `runtime/kernels/experimental-softmax-f32-v2`. The v1 bundle was accidentally
 rewritten by an ISA extraction command and is invalid; both initial model trials
 were rejected/cancelled and excluded. Always give objcopy a separate output ELF.
-The user supplied local `docs/isa/CDNA2.pdf`; its GPT-6-luna xhigh review is complete.
-Further work includes the paired E2E verdict, maintained integration if justified,
-and additional exact HIP/layout/conditioning optimizations. The goal is active.
+The user supplied local `docs/isa/CDNA2.pdf`; GPT-6-luna xhigh review is complete.
+The user PDF stays untracked. Further optimization remains an active goal.
+Control/source records and the valid v2 bundle are archived at
+`outputs/experiments/hip-softmax-20261005/experimental-control-records.tar.gz`
+on DiamondHill, SHA-256
+`a7aff023b313b12ccca2cdf2a4c7f40f8105d6449e96fd85f139ce408652b87c`.
+
+The owned-score in-place screen has now completed on HIP5/PCIb3/SMI7 at
+`/tmp/fireprot-hip-softmax-inplace-v1/results-001`: 16 bitwise checks pass.
+N1536/B128 saves 4.5 GiB of extra operator allocation, with only 0.1-0.2% latency
+changes; N1000 is about 1% slower. Evidence:
+`provenance/openfold3_hip_softmax_inplace_screen.json`. This establishes memory
+savings for this operator only, not model peak or E2E gains. Keep out-of-place
+execution for maintained integration; no in-place model route is enabled.
+
+Prepared (unconnected) maintained FP32 boundary:
+`python/fireprot/backends/amd/softmax_fp32.py`, with byte-identical kernel source
+copy `kernels/amd/fireprot_softmax_fp32.cpp`. The package/ABI
+`fireprot_softmax_fp32`/`softmax-fp32-v1` is now built and published at
+`runtime/kernels/softmax-fp32-v1`, manifest SHA-256
+`4914cb71a64c42bf54495f1c9ee0eeb27808f0571b6a50fed81e8067f56f01be`.
+`python/fireprot/adapters/openfold3/attention.py` adds source-pinned, context-
+scoped dispatch through the Rust registry. Sixteen CPU/meta checks pass across
+both components. No maintained OpenFold3 HIP request route has been enabled.
+
+Prepared validation entry points in `experiments/hip_softmax` are
+`build_runtime.py`, `screen_runtime.py`, and `worker-runtime-overlay.patch`.
+Thirty-two GPU operator checks pass: 28 submitted HIP calls and four native
+fallbacks, all bitwise exact. See `provenance/openfold3_softmax_runtime_operator.json`.
+The new worker overlay enables
+candidate dispatch only with `FIREPROT_RUNTIME_SOFTMAX=1`; both arms load the
+same new pinned bundle. A separate submitted-launch counter distinguishes Rust
+selection from immediate-success HIP launch submission. See that directory's
+README for the remaining model and E2E gates. The reviewed narrow source sync
+has been applied. New copied worker root `/tmp/fireprot-softmax-runtime-model-v1`
+has completed both full-model validations. N1000 HIP6
+passes all 11 arrays bitwise against the strict native reference, with 1,702
+submitted HIP calls; tool session 50267 exited 0. See
+`provenance/openfold3_softmax_runtime_models.json`. N1536 HIP7 also passes all 11
+arrays exactly, with 5,592 submitted HIP calls; session 49710 exited 0 and Rust
+PID 1657022 has exited. Six scientific request fields match each native reference.
+Output run IDs are `softmax-runtime-v1-n1000` and `softmax-runtime-v1-n1536`.
+Environment inventory SHA-256 is
+`70afed797c43f1f99f3742015f4106fac3dd030b56e38f0dc12a5ef2031dbf86`.
+Keep those copied workers for reproduction. The bridge/CLI, inventory and new
+published bundle must stay immutable for the still-running conditioning probe.
+Parallel model timings do not establish E2E gains. Maintained request admission
+and maintained-route paired timing remain to be done.
+Latest completed CI for the recorded experiment is `ecf9697` (success).
+
 The source audit in `docs/openfold3-conditioning-reuse.md` identifies timestep-
 independent pair conditioning and defines chunking, aliasing, lifetime and exact-
-output gates. It is a proposed experiment, not implemented or measured caching.
-`experiments/conditioning_reuse` now contains a diagnostic overlay for sampled
-pair equality, downstream mutation, RNG and chunk observations. Five CPU tests
-pass; no GPU/model validation has run. Deploy only to a fresh copied worker after
-the active softmax benchmark finishes. Diagnostic timings are not E2E results.
-An additional owned-score in-place softmax screen is prepared in
-`experiments/hip_softmax/screen_inplace.py`; see `INPLACE.md` there. It has only
-passed syntax compilation, not GPU checks. It uses the unchanged published
-kernel and leaves active copied workers untouched. Test after the paired run.
-The first N1536 softmax pair has passed all 11 arrays exactly: complete
-invocation 953.331 -> 694.973 s (1.37175x), model 858.251 -> 599.567 s
-(1.43145x). This is insufficient-repeat evidence only; two pairs remain.
-`provenance/openfold3_hip_softmax_pair_000.json` pins that immutable pair report.
-The same benchmark PID 1596375 has started candidate-1 (reverse-order pair).
-Prepared (unconnected) maintained FP32 softmax tensor boundary:
-`python/fireprot/backends/amd/softmax_fp32.py`, with byte-identical kernel source
-copy `kernels/amd/fireprot_softmax_fp32.cpp`. Twelve CPU/meta contract tests pass.
-It requires a new pinned package/ABI (`fireprot_softmax_fp32`/`softmax-fp32-v1`)
-that is not built/published/validated yet. No OpenFold3 HIP request route has been
-enabled. Follow the integration gates in `experiments/hip_softmax/README.md`.
-Prepared `python/fireprot/adapters/openfold3/attention.py` adds source-pinned,
-context-scoped dispatch through the Rust registry. Four CPU tests cover thread
-isolation, duplicate installation, exceptional cleanup, escaped contexts and
-native fallback (16 total with tensor-contract tests). Model workers still do
-not import it; selected GPU execution and full-model parity remain unverified.
-Prepared HIP runtime validation entry points now live beside the original screen:
-`build_runtime.py`, `screen_runtime.py`, `worker-runtime-overlay.patch`. They are
-syntax/patch checked only. The new worker overlay enables dispatch only with
-`FIREPROT_RUNTIME_SOFTMAX=1`; both arms load the new pinned bundle. A separate
-submitted-launch counter prevents confusing Rust selection with a HIP launch.
-The second experimental candidate has passed the benchmark anchor gate at
-695.721 s E2E / 600.051 s model; its baseline-1 is now running. No pair-1 ratio yet.
-Update: pair-1 is now accepted, including all 11 bitwise comparisons and CIF
-atom identity checks. E2E 957.824 -> 695.721 s (1.37673x), model
-861.974 -> 600.051 s (1.43650x); see
-`provenance/openfold3_hip_softmax_pair_001.json`. The same PID 1596375 is running
-baseline-2 for the last pair. Full three-pair aggregate remains pending. Latest
-prepared-runtime commit `7e82c13` passed remote CI; no GPU validation of that
-prepared route has run. A narrow deployment dry-run was reviewed but not applied.
+output gates. `experiments/conditioning_reuse` contains a diagnostic overlay for
+sampled pair equality, downstream mutation, RNG and chunk observations. Five CPU
+tests pass. The N1536 GPU diagnostic is now running on HIP5 from fresh copied
+worker `/tmp/fireprot-conditioning-probe-v1` (Rust PID 1668692, tool session
+91816), run ID `conditioning-probe-v1-n1536`. It uses the same immutable
+environment inventory as the prepared-runtime validation. Do not mutate either
+worker tree, the inventory, bridge/CLI or published bundle while they run.
+No caching implementation is enabled. Diagnostic timings are not E2E results.
 
 ## Historical implemented state
 

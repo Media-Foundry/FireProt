@@ -82,13 +82,30 @@ before that point can prevent the dispatch counters from summing to all entries.
 Evidence is in `provenance/openfold3_hip_softmax_firstpass.json`.
 The candidate flag is
 `FIREPROT_FUSED_SOFTMAX`; it is absent from maintained production profiles.
-Three sequential N1536 AB/BA/AB pairs are running on HIP7/PCI93/SMI5 with no
-other FireProt GPU job launched during the experiment. Those gates and E2E
-measurements remain required before promotion. Initial candidate validations
+Three sequential N1536 AB/BA/AB pairs have completed on HIP7/PCI93/SMI5 with no
+other FireProt GPU job launched during the experiment. Initial candidate validations
 ran concurrently on separate GCDs and do not establish E2E gains.
-Never modify worker trees, inventories or bundles during the paired runs.
+Keep those worker trees, inventories and bundles intact for reproduction.
 
-## Partial paired evidence
+## Completed paired evidence
+
+All three pairs pass all 11 arrays bitwise and CIF atom identity checks. The
+scientific workload remains FP32/R3/D200/S1/seed101. Fresh model processes use
+strict environment inventories and the same published library; filesystem cache
+is not flushed. Rust reports `faster_median_and_p95` for full invocation time.
+
+| Scope | Native median | HIP median | Speedup |
+| --- | ---: | ---: | ---: |
+| Complete invocation | 956.112 s | 694.973 s | 1.37575x |
+| Model computation | 859.950 s | 599.567 s | 1.43429x |
+
+Per-pair E2E ratios are 1.37175x, 1.37673x and 1.38226x. Full raw-report pins,
+request parameters, physical devices, acceptance records and route counts are
+in `provenance/openfold3_hip_softmax_e2e_n1536.json`. This is one fixed long input
+and an experimental worker; the prepared maintained route still needs its own
+GPU/model acceptance. Other host jobs were not continuously audited.
+
+### Historical partial observations
 
 The first N1536 pair passes all 11 arrays bitwise and CIF atom identity checks.
 Complete invocation time is 953.331 -> 694.973 seconds (1.37175x); model time is
@@ -100,8 +117,8 @@ production promotion follows from this one pair.
 The second, reverse-order pair also passes all 11 arrays bitwise and CIF atom
 identity checks. Complete invocation is 957.824 -> 695.721 seconds (1.37673x);
 model time is 861.974 -> 600.051 seconds (1.43650x). Its report is pinned in
-`provenance/openfold3_hip_softmax_pair_001.json`. The final pair is running;
-these two pairs do not establish the required three-pair aggregate verdict.
+`provenance/openfold3_hip_softmax_pair_001.json`. These records predate and are
+superseded by the complete aggregate above.
 
 ## Maintained integration requirements
 
@@ -133,10 +150,9 @@ Local integration preparation now includes
 `kernels/amd/fireprot_softmax_fp32.cpp`. Twelve CPU/meta tests cover tensor
 contracts, real bias strides, broadcast masks and rejected inputs. The loader
 requires a new pinned `fireprot_softmax_fp32` / `softmax-fp32-v1` publication,
-the measured Torch/HIP version and gfx90a; no such maintained publication has
-been validated yet. No model adapter imports this boundary, no new request
-backend is enabled, and source-copy identity is not a compiled-artifact or
-maintained-model acceptance result.
+the measured Torch/HIP version and gfx90a. That new publication has now passed
+the operator screen below. No maintained model worker imports this boundary and
+no new request backend is enabled; full-model acceptance remains pending.
 
 Prepared scoped dispatch is in `python/fireprot/adapters/openfold3/attention.py`.
 It verifies the attention source, routes only the active execution context,
@@ -146,12 +162,13 @@ Rust `OperationRegistry` owns selection, cache decisions and counters; the tenso
 predicate is reevaluated before every call. Registry selection counts precede
 QK execution and must not be reported as successful HIP launches. Four CPU tests
 cover scope/fallback behavior (16 together with the tensor boundary tests).
-The dispatcher remains unconnected to model workers and GPU-unvalidated.
+The dispatcher remains unconnected to maintained model workers. GPU operator
+acceptance now passes; copied experimental workers are undergoing model checks.
 
 ## Prepared runtime validation entry points
 
-These entry points have passed syntax/patch checks only and have not executed
-on DiamondHill. Wait for the current paired benchmark to finish before deployment.
+The build, publication and operator screen have now executed after the original
+paired benchmark completed. A fresh copied worker is undergoing model validation.
 
 - `build_runtime.py NEW_DIRECTORY`: describe the renamed source and ABI to the
   existing Rust HIP build service. Use the validated model environment and hide
@@ -174,3 +191,16 @@ on DiamondHill. Wait for the current paired benchmark to finish before deploymen
 registry selections. It is not proof of asynchronous GPU completion; full-model
 synchronization and acceptance must pass. Failed screens preserve their partial
 records, and full-model trials must retain all 11 arrays and the unchanged gates.
+
+The published bundle is `runtime/kernels/softmax-fp32-v1`, manifest SHA-256
+`4914cb71a64c42bf54495f1c9ee0eeb27808f0571b6a50fed81e8067f56f01be`.
+All 32 operator checks pass bitwise with 28 actual HIP submissions and four
+native fallbacks. Evidence: `provenance/openfold3_softmax_runtime_operator.json`.
+N1000 and N1536 full-model acceptance and all 11 bitwise native comparisons pass,
+with 1,702 and 5,592 submitted HIP calls respectively. These runs used
+`/tmp/fireprot-softmax-runtime-model-v1` and overlapped on
+separate GCDs, so their timings are diagnostic only. See
+`provenance/openfold3_softmax_runtime_models.json`.
+Keep the copied workers for reproduction. The library, inventory and bridge
+are also bound by the still-running conditioning diagnostic and must remain
+unchanged. Maintained request admission and its E2E result remain pending.

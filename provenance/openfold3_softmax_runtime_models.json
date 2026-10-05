@@ -1,0 +1,307 @@
+{
+  "schema_version": 1,
+  "status": "n1000_and_n1536_passed",
+  "scope": "Copied worker using prepared published runtime; not a maintained request route",
+  "limits": [
+    "Validation requests ran concurrently on separate GCDs; timings are not E2E speedup evidence.",
+    "All 11 NPZ arrays compared bitwise at each length; native agreement is not experimental-coordinate accuracy.",
+    "Maintained request admission and maintained-route paired timing remain pending."
+  ],
+  "n1000": {
+    "request": {
+      "schema_version": 1,
+      "run_id": "softmax-runtime-v1-n1000",
+      "workload": {
+        "model": "openfold3",
+        "model_name": "openbind-0",
+        "recycles": 3,
+        "diffusion_steps": 200,
+        "samples": 1,
+        "precision": "float32",
+        "deterministic": true
+      },
+      "backend": "native",
+      "seed": 101,
+      "hip_device": 6,
+      "source": {
+        "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+        "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+      },
+      "checkpoints": {
+        "model": {
+          "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+          "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+        }
+      },
+      "resources": {},
+      "input": {
+        "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01000_462bb697ecdcce2f.json",
+        "sha256": "2715542db697dbd2dd5021063173f6e91a405ac0f46a46a69b748c815826ae5b"
+      },
+      "output_dir": "/media/IntelSSD/fireprot/outputs/softmax-runtime-v1-n1000"
+    },
+    "scientific_request_fields_equal": {
+      "workload": true,
+      "seed": true,
+      "input": true,
+      "source": true,
+      "checkpoints": true,
+      "resources": true
+    },
+    "supervisor": {
+      "phase": "succeeded",
+      "worker_pid": 1657038,
+      "physical_device": {
+        "hip_device": 6,
+        "smi_device": 4,
+        "pci_address": "0000:8e:00.0",
+        "architecture": "gfx90a"
+      },
+      "device_verified": true,
+      "isolation_samples": 272
+    },
+    "accepted": {
+      "path": "/media/IntelSSD/fireprot/outputs/softmax-runtime-v1-n1000/accepted.json",
+      "sha256": "3078b522a20a88af210fbb015a1ef842f62e778563ac33d001475ed9ce6102d6"
+    },
+    "predictions": {
+      "path": "/media/IntelSSD/fireprot/outputs/softmax-runtime-v1-n1000/predictions.json",
+      "sha256": "7d8abd0589a3b42ed66d5d9e4ac16e9bfef977fb3fa7656538a4c53bd8855b2a"
+    },
+    "runtime": {
+      "path": "/media/IntelSSD/fireprot/outputs/softmax-runtime-v1-n1000/operator-runtime.json",
+      "sha256": "a51b2b7e2b3c9a92ec6e433badbd622f8da0d0a5fedd7acfb61d7b25d2dec459"
+    },
+    "launches_submitted": 1702,
+    "selection_counts": [
+      {
+        "operation": "attention",
+        "implementation": "hip_mask_bias_softmax_fp32",
+        "count": 1702
+      },
+      {
+        "operation": "attention",
+        "implementation": "native",
+        "count": 6465
+      }
+    ],
+    "comparison": {
+      "confidence.chain_ptm.1": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      },
+      "confidence.disorder": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      },
+      "confidence.gpde": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      },
+      "confidence.has_clash": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      },
+      "confidence.iptm": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      },
+      "confidence.pae": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      },
+      "confidence.pde": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      },
+      "confidence.plddt": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      },
+      "confidence.ptm": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      },
+      "confidence.sample_ranking_score": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      },
+      "coordinates": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      }
+    },
+    "comparison_record": {
+      "path": "/tmp/fireprot-softmax-runtime-model-v1/n1000-comparison.json",
+      "sha256": "809c4f117ab3ca16f32d3f50ad0c3f79d40fc05f0e1b1fd039a4a5ac2363355c"
+    },
+    "native_reference": {
+      "path": "/media/IntelSSD/fireprot/outputs/zero-mask-e2e-n1000-baseline-0/sample-0.npz",
+      "sha256": "e6ea97dc8a3e9b5df0eb924f51d440918658a2f50d957338f8be8da24d8c7709"
+    },
+    "diagnostic_model_seconds": 214.5268037909409,
+    "diagnostic_worker_seconds": 244.9071708089905
+  },
+  "n1536": {
+    "request": {
+      "schema_version": 1,
+      "run_id": "softmax-runtime-v1-n1536",
+      "workload": {
+        "model": "openfold3",
+        "model_name": "openbind-0",
+        "recycles": 3,
+        "diffusion_steps": 200,
+        "samples": 1,
+        "precision": "float32",
+        "deterministic": true
+      },
+      "backend": "native",
+      "seed": 101,
+      "hip_device": 7,
+      "source": {
+        "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+        "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+      },
+      "checkpoints": {
+        "model": {
+          "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+          "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+        }
+      },
+      "resources": {},
+      "input": {
+        "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+        "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+      },
+      "output_dir": "/media/IntelSSD/fireprot/outputs/softmax-runtime-v1-n1536"
+    },
+    "scientific_request_fields_equal": {
+      "workload": true,
+      "seed": true,
+      "input": true,
+      "source": true,
+      "checkpoints": true,
+      "resources": true
+    },
+    "supervisor": {
+      "phase": "succeeded",
+      "worker_pid": 1657039,
+      "physical_device": {
+        "hip_device": 7,
+        "smi_device": 5,
+        "pci_address": "0000:93:00.0",
+        "architecture": "gfx90a"
+      },
+      "device_verified": true,
+      "isolation_samples": 711
+    },
+    "accepted": {
+      "path": "/media/IntelSSD/fireprot/outputs/softmax-runtime-v1-n1536/accepted.json",
+      "sha256": "89d6c081c42d07925ab2bab6f8f5c19d51bb02869684b92b1a5a8a419e0c51f1"
+    },
+    "predictions": {
+      "path": "/media/IntelSSD/fireprot/outputs/softmax-runtime-v1-n1536/predictions.json",
+      "sha256": "cb0b535b639d881fe7f17b769ebd6e67d6ef3701d6e691d167d7971e0e583bba"
+    },
+    "runtime": {
+      "path": "/media/IntelSSD/fireprot/outputs/softmax-runtime-v1-n1536/operator-runtime.json",
+      "sha256": "a1e9ab14ef9e0f154d771a8703da04ea92d1c9a0358a21f6378de5d21a88c3ab"
+    },
+    "launches_submitted": 5592,
+    "selection_counts": [
+      {
+        "operation": "attention",
+        "implementation": "hip_mask_bias_softmax_fp32",
+        "count": 5596
+      },
+      {
+        "operation": "attention",
+        "implementation": "native",
+        "count": 7527
+      }
+    ],
+    "comparison": {
+      "confidence.chain_ptm.1": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      },
+      "confidence.disorder": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      },
+      "confidence.gpde": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      },
+      "confidence.has_clash": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      },
+      "confidence.iptm": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      },
+      "confidence.pae": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      },
+      "confidence.pde": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      },
+      "confidence.plddt": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      },
+      "confidence.ptm": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      },
+      "confidence.sample_ranking_score": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      },
+      "coordinates": {
+        "bitwise_equal": true,
+        "max_abs_delta": 0,
+        "passed": true
+      }
+    },
+    "comparison_record": {
+      "path": "/tmp/fireprot-softmax-runtime-model-v1/n1536-comparison.json",
+      "sha256": "809c4f117ab3ca16f32d3f50ad0c3f79d40fc05f0e1b1fd039a4a5ac2363355c"
+    },
+    "native_reference": {
+      "path": "/media/IntelSSD/fireprot/outputs/hip-softmax-e2e-n1536-baseline-0/sample-0.npz",
+      "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+    },
+    "diagnostic_model_seconds": 597.0777652880643,
+    "diagnostic_worker_seconds": 638.1817232260946
+  },
+  "persistent_control_archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/hip-softmax-20261005/runtime-control-records.tar.gz",
+    "sha256": "4ccd06b131849f2e022c856ed5d410cfa9620f00fa9c9e6fb9f6341cd2c32156",
+    "contents": "Build/publication records, operator screen, copied runtime workers and model comparison controls, and immutable softmax-fp32-v1 bundle. Model outputs remain in their durable outputs directories."
+  }
+}

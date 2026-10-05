@@ -111,3 +111,28 @@ scratch/spills. Evidence and local archive are pinned in
 `provenance/openfold3_qk_softmax_lds_candidate.json`. The base kernel and prepared
 v1 numerical package remain unchanged. Validate base fusion first, then build
 and validate this candidate separately before any comparative timing.
+
+## Separate vector LDS store candidate
+
+Apply `lds-vector-store.patch` after `lds-swizzle.patch` in a fresh source copy.
+This explicitly aligns the stage to16 bytes and permutes the four accumulator
+registers to match the low-two-bit column XOR, then writes an `acc4` vector.
+CPU checks exhaust all4096 element mappings and vector destination alignment.
+Sequential patch application reproduces the locally compiled source exactly.
+
+Two register-permutation spellings were compiled locally. A four-way switch
+produces12 static EXEC-zero branches and raises full-fusion VGPR usage to100.
+The retained patch uses two conditional permutations: no such branches,68VGPR
+and32SGPR for full fusion;53VGPR/16SGPR for raw scores. Both variants emit six
+`ds_write_b128` instructions per kernel instead of24 scalar stage writes,
+retain24 scalar reads,48 MFMA and11 barriers, and report no scratch/spills.
+See `provenance/openfold3_qk_softmax_vector_candidate.json` for both artifacts.
+These are static instruction counts, not executed instruction or latency claims.
+The switch version is deprioritized based on compiler resources; it has not
+failed a numerical or performance test. Neither vector variant has run on GPU.
+
+The read-only ISA review confirms the manual's32 four-byte LDS banks (PDF pages16
+and94, printed pages8 and86) and four consecutive dwords for DS_WRITE_B128 (PDF
+page188, printed page180). Lane-to-cycle arbitration is not specified precisely
+enough there to establish a measured conflict or throughput reduction. The local
+CDNA2 reference PDF remains external to the committed distribution.

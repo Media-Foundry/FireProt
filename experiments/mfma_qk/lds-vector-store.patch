@@ -1,0 +1,21 @@
+--- a/experiments/mfma_qk/fused_qk_softmax.cpp
++++ b/experiments/mfma_qk/fused_qk_softmax.cpp
+@@ -37,3 +37,3 @@
+     const int64_t bias_base = int64_t(matrix % 4) * bh + int64_t(row_query) * bq;
+-    __shared__ float stage[16 * 256];
++    __shared__ __align__(16) float stage[16 * 256];
+
+@@ -63,5 +63,10 @@
+         }
+-        #pragma unroll
+-        for (int element = 0; element < 4; ++element)
+-            stage[stage_index(coordinate, wave * 16 + k_lane * 4 + element)] = accumulator[element];
++        // Physical low column bits are XOR-permuted by the query coordinate.
++        // Reorder registers to place four values in consecutive aligned dwords.
++        const acc4 swapped_pairs = (coordinate & 1)
++            ? __builtin_shufflevector(accumulator, accumulator, 1, 0, 3, 2) : accumulator;
++        const acc4 packed = (coordinate & 2)
++            ? __builtin_shufflevector(swapped_pairs, swapped_pairs, 2, 3, 0, 1) : swapped_pairs;
++        const int destination = stage_index(coordinate, wave * 16 + k_lane * 4) & ~3;
++        *reinterpret_cast<acc4*>(&stage[destination]) = packed;
+         __syncthreads();

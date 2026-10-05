@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "status": "local_compile_only_gpu_untested",
+  "required_preceding_patch": {
+    "path": "/home/husrcf/Code/fireprot/experiments/mfma_qk/lds-swizzle.patch",
+    "sha256": "c0f617ff7b69e216ff36459a6c5e935a68c1d53df1aa8971d52f33c4b8a9b040"
+  },
+  "base_after_swizzle": {
+    "path": "/tmp/fireprot-fusion-lds-v2.cpp",
+    "sha256": "3df2ee4598f3f5ec233cdd7656f27651815a42d5eaa8de23e8615bc483d81a4f"
+  },
+  "patch": {
+    "path": "/home/husrcf/Code/fireprot/experiments/mfma_qk/lds-vector-store.patch",
+    "sha256": "f5354e1015a7e616686d7b9ca2c7f6764f6cbfa9025865bed2ee447fb4dd2c01"
+  },
+  "candidate_source": {
+    "path": "/tmp/fireprot-fusion-lds-v4.cpp",
+    "sha256": "976c12c08b451a418a914b43ed63020cb9d0d4b9deb83a903833278dc6dc9eea"
+  },
+  "archive": {
+    "path": "/home/husrcf/Code/fireprot/outputs/experiments/qk-softmax-local-20261006/lds-vector-v4.tar.gz",
+    "sha256": "a5b2cf8c645d58dcaa4c07b5afce2759748f1302ea56ff4752c01b8ac6eda35e"
+  },
+  "artifacts": [
+    {
+      "path": "/tmp/fireprot-fusion-lds-v3.cpp",
+      "sha256": "18ada0cd6474af92da5e8d5ec1eb0900bd8c519a9f39b4faa9b30099a87c69df"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-lds-v3.so",
+      "sha256": "514f201418a49064f288cf644142ab0c17f939f6d550daf7420d8c428350a8dc"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-lds-v3-build.log",
+      "sha256": "3dbc9d17b78a8b167305e6afa0aefd46db0f79cdd5055097b609186d8ebf79b1"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-lds-v3.fatbin",
+      "sha256": "954475f781861a51a45905447dbb28e1ba90ffef24cd3f1a1f89cfc03c94de2e"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-lds-v3.hsaco",
+      "sha256": "23a1f9cff18a844fb9479e00f9c1b8b10f1d8144ba619ed8389c3dbdee79c650"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-lds-v3.asm",
+      "sha256": "9987bf8ba0512190c75c0f79435bc28e8bd135dac9de98967070e58175d3f1d9"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-lds-v4.cpp",
+      "sha256": "976c12c08b451a418a914b43ed63020cb9d0d4b9deb83a903833278dc6dc9eea"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-lds-v4.so",
+      "sha256": "e6cc6bd7eb60ae5c806bfe2e1d0db8be5f5702e35645ac2161f9cfce2aa12176"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-lds-v4-build.log",
+      "sha256": "abb18decf18d53faec6fe11063a3f2175d9bd5e69f3a5def9a64c3448d8be1d4"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-lds-v4.fatbin",
+      "sha256": "77e8d7a1b56e3efcf077db926b6f95b53a2dc8177f6bb2ad6a0c90579cfe2e01"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-lds-v4.hsaco",
+      "sha256": "6c0a1bbacfae9e3c31d6ca9254ec140668ed968c6d01d616b9ecae3a01b7530e"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-lds-v4.asm",
+      "sha256": "012195db04db0475f8cf9557e6f13e2a01460b4a1caf5d7fbf9fb4af3b803ebb"
+    }
+  ],
+  "address_value_checks": {
+    "entries": 4096,
+    "scalar_mapping_preserved": true,
+    "all_vector_destinations_16byte_aligned": true
+  },
+  "static_instruction_counts": {
+    "3": {
+      "0000000000001d00 <_Z10qk_softmaxILb1EEvPKfS1_S1_S1_Pflllll>:": {
+        "ds_write_b128": 6,
+        "ds_write_b32": 0,
+        "ds_read_b32": 24,
+        "s_barrier": 11,
+        "v_mfma_f32_16x16x4f32": 48,
+        "s_cbranch_execz": 12
+      },
+      "0000000000004600 <_Z10qk_softmaxILb0EEvPKfS1_S1_S1_Pflllll>:": {
+        "ds_write_b128": 6,
+        "ds_write_b32": 0,
+        "ds_read_b32": 24,
+        "s_barrier": 11,
+        "v_mfma_f32_16x16x4f32": 48,
+        "s_cbranch_execz": 12
+      }
+    },
+    "4": {
+      "0000000000001d00 <_Z10qk_softmaxILb1EEvPKfS1_S1_S1_Pflllll>:": {
+        "ds_write_b128": 6,
+        "ds_write_b32": 0,
+        "ds_read_b32": 24,
+        "s_barrier": 11,
+        "v_mfma_f32_16x16x4f32": 48,
+        "s_cbranch_execz": 0
+      },
+      "0000000000004600 <_Z10qk_softmaxILb0EEvPKfS1_S1_S1_Pflllll>:": {
+        "ds_write_b128": 6,
+        "ds_write_b32": 0,
+        "ds_read_b32": 24,
+        "s_barrier": 11,
+        "v_mfma_f32_16x16x4f32": 48,
+        "s_cbranch_execz": 0
+      }
+    }
+  },
+  "resource_comparison": {
+    "v3_switch": {
+      "full_vgpr": 100,
+      "full_sgpr": 28,
+      "raw_vgpr": 47,
+      "raw_sgpr": 14
+    },
+    "v4_two_conditional_permutations": {
+      "full_vgpr": 68,
+      "full_sgpr": 32,
+      "raw_vgpr": 53,
+      "raw_sgpr": 16
+    }
+  },
+  "common_compiler_observations": {
+    "lds_bytes": 16384,
+    "scratch_bytes_per_lane": 0,
+    "spills": 0
+  },
+  "limits": [
+    "No GPU execution, numerical acceptance or timing for either variant.",
+    "Both variants compile successfully; switch variant is deprioritized by static resources, not rejected by measured performance.",
+    "Apply vector patch only after the separate swizzle patch in a fresh candidate copy.",
+    "Base fusion and active D16 timing remain unchanged."
+  ]
+}

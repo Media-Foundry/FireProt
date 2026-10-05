@@ -1092,3 +1092,20 @@ Validate base fusion first, then independent patched copy. Authorized ISA agent
 resumed read-only bank/address review; no remote/GPU work delegated.
 Latest D16 observation: controller1940816 live29:28; first3 invocations
 measured/verified; baseline1 (fourth invocation) running.
+
+ISA agent finished read-only fusion LDS review. Confirms scalar B32 base stores,
+barriers/waits and address-model reasoning; manual PDF p16/p94 gives32x4B banks,
+p188 DS_WRITE_B128 four consecutive dwords. Precise lane/cycle arbitration not
+established, so do not claim measured bank-conflict or throughput improvement.
+
+New separate lds-vector-store.patch applies AFTER lds-swizzle.patch, never to
+active source. Four-way switch prototype v3 compiles full100VGPR/28SGPR and12
+static EXEC-zero branches; two conditional permutations v4 compiles full68VGPR/
+32SGPR, raw53VGPR/16SGPR and zero such branches. Both have six static B128 stores,
+zero scalar stage writes,24 scalar reads,48MFMA,11barriers,16KiB LDS,zero spills.
+All4096 destination/value associations and16-byte alignments checked on CPU;
+sequential patch application exactly reproduces v4 compiled source.
+provenance/openfold3_qk_softmax_vector_candidate.json retains BOTH variants and
+localarchive. No GPU acceptance/performance; static-resource choice only.
+No modifications to frozen v1 package or D16 worker; remote GPU isolation still
+required until paired controller1940816 terminates and collection/archive finish.

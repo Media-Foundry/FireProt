@@ -1477,3 +1477,51 @@ Thenmodelmemory/lifecycle/chunktunerpolicy plan: existingD16comparisonmainchunks
 1024 andconfidence256. Avoidforcing256upstreamchunks withoutcomparison; internal
 microbatchingmightpreservetheouterAPI butmustbeproven. Actualmodelmemoryheadroom
 notyetread. Pairedhead16report model_residency=fresh_process_per_job, notmemory.
+
+## Large-batch microbatch gates and timing passed (2026-10-06)
+
+Previous turn made progress and pushed3453671 (combined workspace).
+New microbatch_attention.py owns one unchangedB256WorkspaceFusion, onlyouterB512/
+1024, normalizesbiasonce then slicesQKV/mask andconcatenatesPV. ChecksplainFP32,
+negative/conjugateviews, metadata/thread/stream/currentdevice/capture/strictflags.
+Referenceprobabilityargument is diagnostic: poisonsworkspacescoresperchunk and
+comparesallbits. Newbenchmark_microbatch.py usesfullbatchnativeQK/PV withaccepted
+OwnedScoreSoftmax reference. No freshout-of-placeTorchsoftmaxclaim.13CPUtests pass.
+
+Firstroot /tmp/fireprot-qk-microbatch-v1, session45106 exits1 BEFOREcandidate
+execution: trace_operations rejectedmissingfireprot.attention.full_reference
+annotation. Qualification/records empty;B1024neverstarted. Retainedfailurearchive
+qk-microbatch-v1-failed-trace.tar.gz pininsidefinalprovenance. Correctedannotation,
+newsourcepackageSHAa6d9cfa79b4ce1494873473c9aa1a21f7853369b4e6c93d2e8eb3e0d4ff960ea.
+No restartontransporttimeout; thiswasverifiedterminalharnesserror.
+
+Correctedroot /tmp/fireprot-qk-microbatch-v2, session36586 exits0; B512/B1024each
+6qualificationsseeds101/102/103×2layouts,broadcast/per-outermask,fullymaskedouter,
+ALLprobabilitybits/PVbits/outputstrides/priorresultimmutability pass. Fullshape
+QK/PVtracecaptured;bothkernelsymbolsmatchpriorB256splittrace.40timedcallseachpass.
+Microbatchfullcalls31,kernelcalls62/124,1allocation,9GiBretainedandfullyreleased.
+Reference32submittedcalls,0fallbacks. Memorypreflightpassed,free~63.86GiB vs
+estimated32/53GiB beforeinputs. NoactiveGPUjobs.
+
+B512contiguous87.054->77.389ms,transposed87.307->77.650ms; B1024contiguous
+173.873->154.510ms,transposed174.167->154.751ms. About11.1%warmoperatorsavings,
+biasconversion+concatincluded. Firstworkspacecalls84.58/161.59ms. Botharmsretain
+9GiBpool. B1024Torchpeak49.57GiBsplit vs13.57–13.61GiBmicrobatchunderthisbenchmark;
+notmodelmemory. Evidence openfold3_qk_microbatch_benchmark.json includesfailed
+attempt+kernelcomparison. Successfularchive qk-microbatch-v2-results.tar.gz SHA
+916accf6a4e6eaa34f4258671a267092753bfe1d188da07df2003343e31cd502.
+
+Important model evidence reread: provenance/openfold3_head16_e2e_n1536.json
+candidate aggregate ownedshapehist B2562892,B64192,B51212,B102412; D16400,D322708.
+Countsincludeautotuning, notsteadyfrequency. Maincachedchunks1024/confidence256.
+So B256dominatesactualattentioncalls; largebatchesincludetuning. Existing
+OwnedScoreSoftmax alreadyenforcesinference_mode, soacceptedmodelrunsprove that
+context, thoughbaseworker delegatesLightning. _eligible rejectsneg/conj and
+nonFP32etc. Upstreamattention path core/model/primitives/attention.py, pinned
+SOURCE_SHA25630fe5433982ee73e3d7ce5341fa6b510b1ea332dbde072d56129632cc53f0746.
+Next: modelintegrationplanwith bounded9GiBper-forwardworkspace; keepD16/N1000/
+B64andunmatchedfallback, coverB256directandB512/B1024microbatch. NeedRust-owned
+resourcepolicy/registryboundary andcallbacklifecycleverification, modelmemory/
+chunk-tunerobservation, all11arrays+CIFgates thenisolatedpairedE2E. Do notclaim
+modelgainfromoperators. Frozenacceptedhead16worker/profile at
+/tmp/fireprot-head16-paired-v1; actualmodelmemoryheadroomstillunmeasured.

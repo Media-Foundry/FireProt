@@ -108,3 +108,48 @@ normalization, slicing/assembly and workspace initialization inside their stated
 timing scopes. Adapter guards must retain existing rejection of lazy negative/
 conjugate views and unmatched layouts. Model memory, chunk tuner behavior,
 workspace teardown and full11-array/CIF checks are required separately.
+
+## B512/B1024 microbatch qualification
+
+`MicrobatchFusion` is a separate experimental wrapper accepting only B512 and
+B1024. It owns one B256 workspace, normalizes bias once per complete invocation,
+executes complete B256 QK/softmax/PV slices and concatenates their PV results.
+Strict settings remain enabled. Plain FP32 tensors, supported broadcasts/layouts,
+thread/device/stream ownership and rejection of lazy negative/conjugate views
+are checked. B1536 and unmatched batches remain unsupported.
+
+The reference retains full-batch native QK and PV and uses the already accepted
+in-place HIP softmax. It is not a fresh out-of-place Torch-softmax comparison;
+that reference would exceed the64GiB device at B1024. The captured full-shape
+QK/PV kernel symbols match the prior B256 split trace. Numerical checks remain
+the acceptance gate, independent of kernel names.
+
+Each batch passes six different-seed/layout qualifications, broadcast and
+per-outer masks, a fully masked item, all probability bits, all output bits,
+output strides and unchanged prior results. Old workspace scores are poisoned
+before each diagnostic microbatch. Forty alternating timed calls per batch
+(ten per arm/layout) also pass. The wrapper makes31 complete calls and62/124
+kernel calls, allocates once and releases exactly9GiB. Thirteen CPU rejection
+tests pass across workspace and microbatch modules.
+
+| Batch / bias | Full-batch split HIP (ms) | Microbatch (ms) |
+| --- | ---: | ---: |
+| 512 / contiguous | 87.054 | 77.389 |
+| 512 / transposed | 87.307 | 77.650 |
+| 1024 / contiguous | 173.873 | 154.510 |
+| 1024 / transposed | 174.167 | 154.751 |
+
+This is about11.1% less warm operator time, including bias conversion and result
+assembly. First workspace calls measure84.58ms/161.59ms for B512/B1024, with
+other operations already warm. Both timed arms retain the same9GiB workspace.
+B1024 median Torch peak allocation is49.57GiB for the full-reference arm and
+13.57–13.61GiB for microbatching under these conditions; these are not model
+memory or total device-memory measurements. There is still no model/E2E result.
+
+The first attempt stopped before candidate execution because its diagnostic
+script omitted the CPU annotation required by the trace extractor. It is retained
+as `qk-microbatch-v1-failed-trace.tar.gz`; the corrected attempt uses a new root.
+Evidence: `provenance/openfold3_qk_microbatch_benchmark.json`, with both archives,
+raw traces, full measurements and source pins. Successful archive
+`qk-microbatch-v2-results.tar.gz`, SHA256
+`916accf6a4e6eaa34f4258671a267092753bfe1d188da07df2003343e31cd502`.

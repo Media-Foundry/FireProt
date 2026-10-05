@@ -815,3 +815,44 @@ array differs. If a model fails, retain its files and diagnose; no gate relaxati
 GitNexus debugging was used to inspect the local scope boundary and source; the
 upstream tuner lives outside the graph and was read directly. Typed status showed
 605e3ff up to date despite stale MCP cache messages.
+
+## Exact all-scope reuse accepted; direct original-Torch E2E ACTIVE (2026-10-06)
+
+Both inplace-chunk-v1 models now pass all11 original-native arrays. N1536 records
+requested1024/bounded256/selected256 for confidence; N1000 remains1024 throughout.
+All softmax calls remain eligible for in-place execution; zero storage fallbacks,
+1702/5472 submissions. Pair and atom caches each record200 calls/199 hits/one miss.
+Sessions35017/10147 exited0; both model supervisors exited. Archived evidence:
+provenance/openfold3_inplace_chunk_models.json. Result archive SHA
+abaa06cc8331cc2ff7bd3f1890472c1a75c1420cb57038dab29f45d55803cde7.
+Collector /tmp/fireprot-collect-inplace-chunk.py and local capture
+/tmp/fireprot-inplace-chunk-models.json remain available.
+
+All74 paired preparation pins were verified and all eight GCDs were observed
+idle. The direct original-Torch versus combined optimization sequence is now
+RUNNING, Rust controller1868435, tool session2278:
+/tmp/fireprot-combined-native-paired-v2/paired-n1536.
+Its spec is /tmp/fireprot-combined-native-paired-v2/pairs-n1536.json;
+stdout/stderr go to that root's paired.log. order.jsonl records baseline pair0
+started (combined-native-v2-e2e-n1536-baseline-0). Poll the known controller and
+journal; never restart just because SSH observation times out. Current run is
+HIP7; do not launch ANY other FireProt GPU work, heavy DiamondHill builds or
+library scans until the sequence terminates. Freeze CLI/bridge, copied worker
+sources, published bundle and environment inventory. Source/launch pins updated
+in provenance/openfold3_combined_native_paired_v2_preparation.json.
+After completion require all three pairs/references/CIF identities, compare first
+native anchor to historical native NPZ, archive controls and only then report a
+direct combined E2E gain. No result/ratio is available yet.
+
+Local source-only next experiment: experiments/mfma_qk/ contains HIP packed QK
+probe, Rust-build boundary, pinned-bundle tensor probe and README. No HIP compile,
+GPU test, numerical equivalence or performance claim. Python syntax passes.
+Do not compile/run it on DiamondHill while E2E is active. The authorized ISA agent
+completed small read-only follow-up and is idle. Manual/ASM cannot establish the
+candidate lane mapping or full K order; single-instruction integer calibration
+must precede K32 random/cancellation/subnormal/signedzero/nonfinite comparisons.
+Repository dual_projection_kernel/project_qkv code suggests output query=lane%16,
+key=4*(lane/16)+register for A=key/B=query, replacing the initially proposed
+transposed mapping. This is still a hypothesis until the new calibration passes.
+Native QK K32 is one DepthU32 tile; PV K1536 is48 tiles. The new probe touches no
+maintained backend and does not fuse softmax or reduce global score traffic yet.

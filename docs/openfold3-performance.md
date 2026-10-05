@@ -133,7 +133,7 @@ baseline or an optimized correctness result. Evidence:
 `provenance/openfold3_initial_n1536.json`.
 
 Both initial baselines and the first operator screen are now archived. No
-OpenFold3 candidate has been promoted. Per the user's updated priority,
+OpenFold3 candidate had been promoted at that stage. Per the user's updated priority,
 framework migration to Rust took precedence at that point; it has since passed
 the acceptance gates in `rust-acceptance.md`.
 
@@ -158,9 +158,9 @@ OpenFold3 backend or experimental-coordinate accuracy.
 
 See `provenance/openfold3_hip_softmax_e2e_n1536.json` and
 `experiments/hip_softmax/README.md` for raw-report pins and integration gates.
-An additional in-place operator screen passes 16 exact comparisons and saves
-4.5 GiB at N1536/B128, but gives no established latency gain. It remains outside
-model dispatch; see `experiments/hip_softmax/INPLACE.md`.
+An early in-place screen without explicit strict-deterministic memory filling
+passes 16 exact comparisons and saves 4.5 GiB at N1536/B128, with negligible
+latency change. The strict-mode follow-up and model gates are recorded in `experiments/hip_softmax/INPLACE.md`.
 
 ## Maintained HIP request integration
 
@@ -195,3 +195,27 @@ See [conditions and limits](openfold3-conditioning-reuse.md) and
 and the earlier 1.37575x softmax ratio are separate measurements; their product
 is not a directly measured combined-versus-original-Torch result. The cache
 remains experimental, scoped to the verified immutable rollout.
+
+## Combined reuse candidate: exact models accepted, E2E pending
+
+The current experimental combination retains the maintained HIP kernel, reuses
+private QK score storage, caches static pair/atom conditioning within each rollout,
+and preserves the measured N1536 confidence chunk ceiling256. N1000 and N1536
+both pass all11 original-native arrays bitwise under FP32/strict deterministic,
+R3 (four trunk passes), D200, S1 and seed101. No cycles or diffusion steps are cut.
+Each conditioning cache has one native miss and199 hits; softmax has zero storage
+fallbacks. Source, full request and output pins:
+`provenance/openfold3_inplace_chunk_models.json`.
+
+An earlier all-in-place variant enlarged the N1536 confidence chunk from256 to512
+and failed five confidence arrays while coordinates matched. That variant remains
+rejected. Keeping the measured ceiling restores the full exact-array gate; this
+is not a license to change arbitrary numerical chunking without verification.
+See `experiments/hip_softmax/INPLACE.md` for both rejected and accepted evidence.
+
+A direct original-Torch versus combined AB/BA/AB N1536 E2E comparison has now
+started on HIP7 with the same scientific workload and a shared copied worker.
+Both pair/atom caches are disabled in the native arm. All other FireProt GPU
+work is stopped during the sequence. Results are pending; the earlier separate
+ratios are not a directly measured combined speedup. Launch/source/control pins:
+`provenance/openfold3_combined_native_paired_v2_preparation.json`.

@@ -202,3 +202,28 @@ GPU-idle checks pass. The old v1 E2E spec remains rejected. See
 `provenance/openfold3_inplace_chunk_preparation.json` and
 `provenance/openfold3_combined_native_paired_v2_preparation.json`.
 No controlled performance gain from atom reuse or in-place softmax is claimed yet.
+
+## Complete-model acceptance with the measured ceiling
+
+Both `inplace-chunk-v1` models now pass all 11 original-native arrays bitwise.
+The N1536 confidence tuner records requested1024/bounded256/selected256; N1000
+records requested1024/bounded1024/selected1024. All eligible calls retain in-place
+softmax, with zero storage fallbacks and 1,702/5,472 submitted launches. Both static
+conditioning caches record 200 calls, one miss, 199 hits and zero fallbacks.
+The requested work stays FP32, strict deterministic, R3 (four trunk passes), D200,
+S1, seed101. This is numerical acceptance, not an E2E timing result.
+
+Evidence and completed archive: `provenance/openfold3_inplace_chunk_models.json`.
+This experiment restores exact outputs while preserving the measured baseline
+confidence chunk ceiling. It does not establish arbitrary chunk sizes as bitwise
+interchangeable or identify the first internal floating-point operation that
+changed in the rejected512 run.
+
+The new direct original-Torch comparison is now LAUNCHED at
+`/tmp/fireprot-combined-native-paired-v2/paired-n1536`, using the Rust three-pair
+AB/BA/AB scheduler on HIP7. Both native caches are disabled; the candidate uses
+HIP softmax, private score reuse, the bounded confidence tuner and pair/atom
+conditioning caches in the same source tree. All74 preparation pins matched and
+all eight GCDs were observed idle before launch. No other FireProt GPU workload,
+compilation or heavy remote library scan is allowed during this sequence.
+Results remain pending; do not multiply earlier separate speedup ratios.

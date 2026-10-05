@@ -873,3 +873,12 @@ requires exact operand layouts plus one uniquely correlated GPU kernel. It
 reuses and fingerprints experiments/attention_trace/probe.py. Four existing
 CPU observer tests pass and Python syntax passes; HIP compilation, lane mapping,
 GPU correlation and score equality remain untested. No new performance claim.
+
+Local HIP compiler discovered and used without any GPU launch or DiamondHill
+build. qk_probe.cpp compiles with the intended O3/C++17/shared/gfx90a flags.
+Extracted code object has8 static16x16x4FP32 MFMA instructions,26VGPR/24SGPR,
+wave64, zero reported spills/LDS/private segment. Evidence and local archive:
+provenance/openfold3_mfma_qk_local_compile.json. This updates the earlier
+"uncompiled" status only; lane mapping, GPU score equality and performance are
+still untested. The direct local compiler diagnostic is not the Rust-published
+DiamondHill build, and must not be deployed as such. Active E2E remains isolated.

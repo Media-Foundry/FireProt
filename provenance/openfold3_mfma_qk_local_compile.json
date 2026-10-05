@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "phase": "local_compile_passed_gpu_untested",
+  "scope": "Local compiler and code-object inspection only; not the pinned DiamondHill Rust build or GPU acceptance",
+  "source": {
+    "path": "/home/husrcf/Code/fireprot/experiments/mfma_qk/qk_probe.cpp",
+    "sha256": "1b3c841dc52368fc7753399acdcfbbb3999cd34a257add50cb8afdeeb6924c49",
+    "size": 2648
+  },
+  "compiler_version": "HIP version: 7.14.60850-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 46fcb339fb61119b337f973c7ca9e710a319fdd0+PATCHED:440716f8b87be9d8e20ed910e10e5b6d14d57cf6)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-7.14/lib/llvm/bin\n",
+  "tools": {
+    "/opt/rocm/bin/hipcc": {
+      "path": "/opt/rocm/core-7.14/bin/hipcc",
+      "sha256": "d92839ed940e685fd15b8c60744d9f30efa65102e49e0babd655045219be371d",
+      "size": 644120
+    },
+    "/opt/rocm/llvm/bin/clang++": {
+      "path": "/opt/rocm/core-7.14/lib/llvm/bin/clang-23",
+      "sha256": "285156b3fa956dfc0c6b22f87d35ac27aab5a093190a85a0e0a71123654b9657",
+      "size": 201344
+    },
+    "/opt/rocm/llvm/bin/llvm-objdump": {
+      "path": "/opt/rocm/core-7.14/lib/llvm/bin/llvm-objdump",
+      "sha256": "3afb5ccaf108f329685f9c3b8aee79b5a79c414e9d3245e6e9aca4d9d9406fb0",
+      "size": 1138560
+    },
+    "/opt/rocm/llvm/bin/clang-offload-bundler": {
+      "path": "/opt/rocm/core-7.14/lib/llvm/bin/clang-offload-bundler",
+      "sha256": "2c6ad8b7cf6b8383214df42ad45e4c44b2bd1e770720b124a9f963199018e163",
+      "size": 72560
+    }
+  },
+  "command": [
+    "/opt/rocm/bin/hipcc",
+    "-O3",
+    "-std=c++17",
+    "-fPIC",
+    "-shared",
+    "--offload-arch=gfx90a",
+    "experiments/mfma_qk/qk_probe.cpp",
+    "-o",
+    "/tmp/fireprot-qk-mfma16-local-compile.so"
+  ],
+  "exit_code": 0,
+  "artifacts": [
+    {
+      "path": "/tmp/fireprot-qk-mfma16-local-compile.so",
+      "sha256": "1daf44a56b4a6d605648c98c0f26d4bf4ea924340e85b0abdc7b12663f8d2c26",
+      "size": 19960
+    },
+    {
+      "path": "/tmp/fireprot-qk-mfma16-local.fatbin",
+      "sha256": "062eaf6ec4963cefd327bc83b0ded4a3213a27bae0f1d107659581aa2fa74705",
+      "size": 9608
+    },
+    {
+      "path": "/tmp/fireprot-qk-mfma16-local.hsaco",
+      "sha256": "f2ffd98e36b55f83670da15f1608eb3924216f16ebcaaca20b5fb4309c4fc04e",
+      "size": 5512
+    },
+    {
+      "path": "/tmp/fireprot-qk-mfma16-local.asm",
+      "sha256": "d38683d2b97c63e98ad128857d76ea4fa44d5a7dff779b7004f06514770d70d0",
+      "size": 35886
+    },
+    {
+      "path": "/tmp/fireprot-qk-mfma16-local-metadata.txt",
+      "sha256": "434a918dd868446f3080ed54072f894d157ef2b97a4a391b61cf5917ec7bede3",
+      "size": 1397
+    }
+  ],
+  "target": "amdgcn-amd-amdhsa--gfx90a",
+  "metadata": {
+    "agpr_count": 0,
+    "group_segment_fixed_size": 0,
+    "private_segment_fixed_size": 0,
+    "sgpr_count": 24,
+    "sgpr_spill_count": 0,
+    "vgpr_count": 26,
+    "vgpr_spill_count": 0,
+    "wavefront_size": 64,
+    "max_flat_workgroup_size": 64
+  },
+  "mfma_opcode": "v_mfma_f32_16x16x4f32",
+  "static_mfma_instruction_count": 8,
+  "archive": {
+    "path": "/home/husrcf/Code/fireprot/outputs/experiments/mfma-qk-local-20261006/compile-v1.tar.gz",
+    "sha256": "86d941958f3c28390770eaa3a0605a764dc4d1517871cd7390a7c471f4d36ab3",
+    "size": 10419
+  },
+  "limits": [
+    "No GPU code was launched.",
+    "No lane-mapping, bitwise equality, occupancy measurement, or performance claim.",
+    "Static instruction count is not a dynamic execution count.",
+    "The local artifact is not published or integrated; DiamondHill must still build through Rust and pass all numerical gates."
+  ]
+}

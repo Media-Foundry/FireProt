@@ -1,9 +1,17 @@
 # Packed QK MFMA probe
 
-Status: source preparation only. The HIP source has not been compiled or executed.
+Status: local HIP compilation passed; GPU execution remains untested.
 No lane mapping, numerical equivalence, latency gain or model integration is claimed.
 Do not build or run this probe on DiamondHill while the sequential E2E benchmark
 is active. Python syntax checking is not a HIP compilation or GPU acceptance test.
+
+The local HIP 7.14 compiler produced a gfx90a shared library. Inspection of its
+extracted code object finds eight static `v_mfma_f32_16x16x4f32` instructions,
+wave64, 26 VGPRs, 24 SGPRs, no reported spills, and no fixed LDS/private segment.
+This is the one-wave diagnostic, not the proposed fused softmax kernel.
+The direct local compiler check is separate from the required Rust build and
+pinned runtime on DiamondHill; its artifact is not published or integrated.
+See [compiler evidence](../../provenance/openfold3_mfma_qk_local_compile.json).
 
 The accepted native B32/H4/N1536/D32 trace packs QK into row-major inputs
 `[128,1536,32]` / strides `[49152,32,1]` and `[128,32,1536]` / strides

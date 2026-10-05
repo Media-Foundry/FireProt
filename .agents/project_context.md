@@ -38,9 +38,23 @@ existing numerical gates. The post-migration zero-mask experiment passes all
 11 OpenFold3 arrays exactly at N1000/N1536. Shared-host E2E measurements show
 1.090x at N1000 (three pairs) and 1.083x at N1536 (one pair, insufficient repeats).
 This is an experimental worker overlay, not a promoted production route. See
-`experiments/rocm_coverage/README.md` and its pinned evidence. Next HIP candidates
-are bias/softmax fusion and pair layout/normalization fusion; neither is measured
-for OpenFold3 yet.
+`experiments/rocm_coverage/README.md` and its pinned evidence.
+
+The next handwritten FP32 HIP mask/bias/softmax candidate now passes 36 operator
+configurations and all 11 model arrays exactly at N1000 and N1536. It packs bias
+and uses wave64 row reuse; operator gains are not E2E gains. See
+`experiments/hip_softmax/README.md` and `provenance/openfold3_hip_softmax_firstpass.json`.
+Three sequential N1536 pairs are running under Rust at DiamondHill
+`/tmp/fireprot-hip-softmax-model-v2/paired-n1536`; inspect the live benchmark
+process and its order journal before taking further GPU actions. Do not launch
+other FireProt GPU jobs during this measurement, or mutate its worker trees,
+published bundle, environment inventory, CLI or bridge. The valid bundle is
+`runtime/kernels/experimental-softmax-f32-v2`. The v1 bundle was accidentally
+rewritten by an ISA extraction command and is invalid; both initial model trials
+were rejected/cancelled and excluded. Always give objcopy a separate output ELF.
+The user supplied local `docs/isa/CDNA2.pdf`; its GPT-6-luna xhigh review is complete.
+Further work includes the paired E2E verdict, maintained integration if justified,
+and additional exact HIP/layout/conditioning optimizations. The goal is active.
 
 ## Historical implemented state
 

@@ -91,3 +91,23 @@ This is an experimental harness, not a maintained model dispatch boundary.
 Local syntax, wrong-environment report generation and four malformed/non-GPU
 input rejection checks pass. No GPU numerical screen has run yet. Neither the
 harness nor local compilation establishes fused-kernel correctness or speed.
+
+## Separate LDS address candidate
+
+`lds-swizzle.patch` applies only to a separate copy of the base fusion source.
+It replaces the column XOR with `(query & 3) | ((query & 12) << 1)`, preserving
+all stage coordinates and arithmetic. The inspected base compiler output uses
+four scalar `ds_write_b32` instructions per band, not one vector store.
+
+CPU enumeration checks all4096 stage entries and producer/consumer coordinates.
+Under the explicit model `bank = FP32_word_address % 32`, the maximum number of
+distinct producer addresses per bank in each contiguous32-lane group changes
+from4 to1. Consumer groups stay at1. These are address-model results, not measured
+hardware servicing, latency or bank-conflict counters.
+
+The separate candidate compiles locally: full fusion remains70VGPR/28SGPR,
+raw mode changes56->57VGPR with16SGPR; both retain16KiB LDS and zero reported
+scratch/spills. Evidence and local archive are pinned in
+`provenance/openfold3_qk_softmax_lds_candidate.json`. The base kernel and prepared
+v1 numerical package remain unchanged. Validate base fusion first, then build
+and validate this candidate separately before any comparative timing.

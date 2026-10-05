@@ -1,0 +1,7 @@
+--- a/experiments/mfma_qk/fused_qk_softmax.cpp
++++ b/experiments/mfma_qk/fused_qk_softmax.cpp
+@@ -16,3 +16,3 @@
+     // A bijection within each 256-column row; both producer and consumer use it.
+-    return query * 256 + (column ^ ((query & 7) << 2));
++    return query * 256 + (column ^ ((query & 3) | ((query & 12) << 1)));
+ }

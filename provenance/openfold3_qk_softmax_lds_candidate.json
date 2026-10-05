@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "status": "local_compile_and_address_enumeration_only",
+  "base_source": {
+    "path": "/home/husrcf/Code/fireprot/experiments/mfma_qk/fused_qk_softmax.cpp",
+    "sha256": "9605b069c16fb53abff832991c6dc6eeb1018066d0c854c38b463fd2eae09a97"
+  },
+  "candidate_patch": {
+    "path": "/home/husrcf/Code/fireprot/experiments/mfma_qk/lds-swizzle.patch",
+    "sha256": "c0f617ff7b69e216ff36459a6c5e935a68c1d53df1aa8971d52f33c4b8a9b040"
+  },
+  "compile_command": "/opt/rocm/bin/hipcc -O3 -std=c++17 -fPIC -shared --offload-arch=gfx90a -Rpass-analysis=kernel-resource-usage /tmp/fireprot-fusion-lds-v2.cpp -o /tmp/fireprot-fusion-lds-v2.so",
+  "compile_exit_code": 0,
+  "archive": {
+    "path": "/home/husrcf/Code/fireprot/outputs/experiments/qk-softmax-local-20261006/lds-v2.tar.gz",
+    "sha256": "4d08dc7bf5f6bc19cb61d2e060d1d0fee690c85c8a993e30f3c4dc6ab9aeb078"
+  },
+  "files": [
+    {
+      "path": "/tmp/fireprot-fusion-lds-v2.cpp",
+      "sha256": "3df2ee4598f3f5ec233cdd7656f27651815a42d5eaa8de23e8615bc483d81a4f"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-lds-v2.so",
+      "sha256": "65dff1f7a6115e740650c15de2b5e1ef80ed3f6eb86f5dce1708476d2d5a4ceb"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-lds-v2-build.log",
+      "sha256": "fc49fdfc93561ae8f771d478874adc0982cafd827f60d91e37cb7a2fc8d6031f"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-lds-address-screen.json",
+      "sha256": "41497dd1267eafa4818f4bc6a115c42190d5de44398bdd3c19c3a022c386fb5b"
+    }
+  ],
+  "address_model": {
+    "scope": "CPU address enumeration only. Modulo32 models 32 four-byte banks; no measured hardware conflict or timing claim.",
+    "variants": {
+      "current": {
+        "stage_bijection": true,
+        "producer_consumer_coordinates_match": true,
+        "max_distinct_addresses_per_modulo32_bank_per_contiguous_lane_group": {
+          "16": 2,
+          "32": 4,
+          "64": 8
+        },
+        "consumer_same_metric": {
+          "16": 1,
+          "32": 1,
+          "64": 2
+        }
+      },
+      "candidate": {
+        "stage_bijection": true,
+        "producer_consumer_coordinates_match": true,
+        "max_distinct_addresses_per_modulo32_bank_per_contiguous_lane_group": {
+          "16": 1,
+          "32": 1,
+          "64": 2
+        },
+        "consumer_same_metric": {
+          "16": 1,
+          "32": 1,
+          "64": 2
+        }
+      }
+    }
+  },
+  "full_fusion": {
+    "vgpr": 70,
+    "sgpr": 28,
+    "lds_bytes": 16384,
+    "scratch_bytes_per_lane": 0,
+    "reported_spills": 0
+  },
+  "raw_mode": {
+    "vgpr": 57,
+    "sgpr": 16,
+    "lds_bytes": 16384,
+    "scratch_bytes_per_lane": 0,
+    "reported_spills": 0
+  },
+  "limits": [
+    "No GPU execution, numerical acceptance or measured bank-conflict/speedup result.",
+    "The modulo32 address model is distinct from measured hardware servicing.",
+    "Base fusion kernel remains unchanged; apply this patch only to a separate copied candidate after base numerical validation."
+  ]
+}

@@ -1068,3 +1068,27 @@ restrictions guard experimental pointer calls. Syntax, wrong-environment report
 and four invalid/non-GPU input rejection checks pass locally. No GPU run or
 remote deployment; current D16 paired controller1940816 remains live (24:49
 at latest observation, third invocation candidate1). No new performance claim.
+
+Pending fusion v1 package is now prepared locally (NOT deployed):
+/tmp/fireprot-qk-softmax-v1-prepared.tar.gz, SHA
+b378a0fb730d75c0b8ae3274a78865c4727a818021a6e0f138908887b8737cd7.
+Preparation receipt /tmp/fireprot-qk-softmax-v1-preparation.json; archive has
+sources.json and EXECUTION.md. Future remote root /tmp/fireprot-qk-softmax-v1.
+Require all21 numerical records (5 raw,16 softmax) at defaultouterB32; other
+batches independently gated. Finish/collect/archive D16 pairs first.
+Terminal-only collector prepared /tmp/fireprot-collect-head16-pairs.py, syntax
+checked but unexecuted; both arms hip_fused, expected D16counts0/400 and main
+chunks512/1024, same caches/owned storage. Never multiply its incremental ratio
+into the direct original-Torch1.499102x result.
+
+Separate local LDS alternative in experiments/mfma_qk/lds-swizzle.patch; base
+fusion source unchanged. Base ASM uses scalar ds_write_b32. Full address
+bijection and producer/consumer coordinates pass CPU enumeration. Modulo32
+address model lowers max producer addresses per bank for contiguous32-lane
+groups4->1, consumer remains1; no hardware/performance proof. Local compile
+passes (full70VGPR,raw57VGPR,zero spills/scratch,16KiB LDS).
+provenance/openfold3_qk_softmax_lds_candidate.json pins patch/base/localarchive.
+Validate base fusion first, then independent patched copy. Authorized ISA agent
+resumed read-only bank/address review; no remote/GPU work delegated.
+Latest D16 observation: controller1940816 live29:28; first3 invocations
+measured/verified; baseline1 (fourth invocation) running.

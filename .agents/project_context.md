@@ -761,3 +761,57 @@ Scope supervisors confirmed live: none-N1536 PID1835931, trunk-N1536
 PID1835934, trunk-N1000 PID1835940. All three have execution.json and live
 processes. Five CPU storage/scope tests pass, including return/exception cleanup
 and preexisting forward override restoration.
+
+## Scope localization complete; preserve measured confidence chunk (2026-10-06)
+
+All three scope trials now terminate successfully AND pass every original-native
+array: none-N1536, trunk-N1536, trunk-N1000. Sessions79673/9644/7459 exited0.
+provenance/openfold3_inplace_scope_models.json includes request/control pins and
+its completed archive. N1536 none/trunk confidence chunk is256, unlike the rejected
+all-in-place candidate's512. Other N1536 chunks match512 (conditioning1024).
+N1000 chunks remain1024. This supports the allocation/tuning hypothesis; not yet
+a controlled proof that chunk size alone explains the arithmetic difference.
+
+Additional strict HIP0 operator screen covered actual observed N1536 B256/B512
+calls: all16 synthetic checks pass. Session26417 exit0. It ran concurrently with
+model diagnostics, so its timings are NOT speedup evidence. Source/results pins
+are in provenance/openfold3_inplace_large_screen.json. The ordinary strict screen
+now has an explicit --large option. No source changes to maintained HIP/C ABI.
+
+New confidence_chunk.py keeps all eligible softmax calls in-place but caps the
+fresh native confidence tuner at the measured256 ceiling only for N1536 FP32.
+Native tuning still executes, smaller requests remain smaller, N1000 is unchanged.
+It verifies chunk_utils/pairformer source hashes and rejects already-used tuners.
+Three CPU tests pass shape/precision bounds, original callback execution,
+return/exception restoration, reused-tuner and source rejection.
+
+New frozen numerical controls /tmp/fireprot-inplace-chunk-v1:
+- n1000.json + profile.json, HIP5, supervisor1855501, session35017.
+- n1536.json + profile.json, HIP6, supervisor1855500, session10147.
+Both confirmed live with execution.json. Root n1000.log/n1536.log and run IDs
+inplace-chunk-v1-nNNNN. Do not mutate these workers or CLI/bridge/artifact/env.
+All GCDs were observed idle before these launches. Only these two model trials
+are now active; no E2E benchmark is running. Require all11 arrays against original
+native references and inspect confidence_chunk_policy in operator-runtime.json.
+Preparation: provenance/openfold3_inplace_chunk_preparation.json; archive SHA
+103a68a08a899c680044c5f463d0cc077776cd774445f85729ceeebd30d7d4f0.
+
+NEW original-Torch versus combined AB/BA/AB E2E control is PREPARED, NOT LAUNCHED:
+/tmp/fireprot-combined-native-paired-v2/pairs-n1536.json. It uses the new chunk-cap
+worker and NEW combined-native-v2-e2e-n1536-* output IDs on HIP7. Gate on BOTH
+inplace-chunk-v1 numerical trials passing and all diagnostic GPU jobs terminal /
+all GCDs idle. Then use Rust benchmark-pairs SPEC NEW_DESTINATION and launch no
+other FireProt GPU work during the sequence. Before publication compare its first
+native anchor against the historical native output too. V1 remains rejected;
+do not accidentally execute that old spec. V2 source/archive/spec pins are in
+provenance/openfold3_combined_native_paired_v2_preparation.json. No atom-cache /
+in-place / direct combined E2E speedup is established yet.
+
+Operational scope collector: /tmp/fireprot-collect-inplace-scope.py over SSH stdin;
+local results /tmp/fireprot-inplace-scope-models.json. For new chunk trials adapt
+/tmp/fireprot-collect-inplace-models.py to the new root/run IDs and include the
+confidence_chunk_policy record; do not lose numerical_rejected status if any
+array differs. If a model fails, retain its files and diagnose; no gate relaxation.
+GitNexus debugging was used to inspect the local scope boundary and source; the
+upstream tuner lives outside the graph and was read directly. Typed status showed
+605e3ff up to date despite stale MCP cache messages.

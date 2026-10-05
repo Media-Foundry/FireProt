@@ -3,6 +3,7 @@
 Private independent allocations only; not a maintained in-place API or E2E test.
 """
 import json
+import argparse
 import os
 from pathlib import Path
 import sys
@@ -14,7 +15,7 @@ from owned_scores import OwnedScoreSoftmax
 import torch.utils.deterministic
 
 
-def main(destination):
+def main(destination, *, large=False):
     destination = Path(destination)
     destination.mkdir(parents=True, exist_ok=False)
     torch.use_deterministic_algorithms(True, warn_only=False)
@@ -24,7 +25,9 @@ def main(destination):
     owned_kernel = OwnedScoreSoftmax()
     rows = []
     with torch.inference_mode():
-        for n, batch in ((1000, 32), (1000, 256), (1536, 32), (1536, 128)):
+        cases = ((1536, 256), (1536, 512)) if large else (
+            (1000, 32), (1000, 256), (1536, 32), (1536, 128))
+        for n, batch in cases:
             for ending in (False, True):
                 # Independent allocations guarantee no score/mask/bias overlap.
                 scores = torch.randn(batch, 4, n, n, device="cuda", dtype=torch.float32) * 0.5
@@ -109,4 +112,9 @@ def main(destination):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    parser = argparse.ArgumentParser()
+    parser.add_argument("destination")
+    parser.add_argument("--large", action="store_true",
+                        help="Screen observed N1536 B256/B512 calls (large GPU memory use)")
+    arguments = parser.parse_args()
+    main(arguments.destination, large=arguments.large)

@@ -148,3 +148,57 @@ localizes the failure before deciding whether to preserve confidence allocation
 or fix a more specific cause. Source/request/archive pins:
 `provenance/openfold3_inplace_scope_preparation.json`.
 No new model speedup or promotion is established.
+
+## Large submitted shapes
+
+The strict screen now accepts `--large` for N1536/B256 and B512. These sizes
+occurred in the rejected complete-model invocation but were absent from the
+initial B32/B128 screen. All 16 comparisons pass bitwise across both bias layouts
+and zero/partial/nonzero/special masks, with zero storage fallbacks. B512 uses an
+18 GiB score allocation. The screen ran on HIP0 concurrently with model numerical
+diagnostics; its timing samples are not performance evidence. See
+`provenance/openfold3_inplace_large_screen.json` and the archived sources/results.
+This closes these synthetic shape checks, not the full-model confidence gate.
+
+Source inspection confirms that the upstream Pairformer tuner probes cloned
+single/pair inputs, catches RuntimeError as an unsuccessful size trial, and sets
+non-flash attention chunks to `max(1, tuned_chunk_size // 4)`. The bounded trace
+and current recorded final sizes do not establish the earlier baseline's
+confidence chunk size. The live `none` diagnostic records that missing value.
+Audited source hashes: `core/utils/chunk_utils.py`
+`4c9ab484854868e3c3d9a28a0d2e8fe0f9b1c75a35dca4984e0631591489fac5`;
+`core/model/latent/pairformer.py`
+`cdb66c9553ef42b93835dec92f3e6dcf711dbf139a5a59aa1f2561216435af9f`.
+A possible next experiment is preserving the measured baseline's confidence
+chunk size while keeping in-place softmax; do not select a cap before the baseline
+measurement or claim this mechanism is established.
+
+## Confidence scope results and measured chunk ceiling
+
+All three scope diagnostics completed and pass every original-native output
+array: N1536 `none`, N1536 `trunk`, and N1000 `trunk`. N1536's out-of-place
+baseline and guarded candidate both select confidence chunk **256**, versus
+**512** in the rejected all-in-place model. All other N1536 final tuner sizes
+match (512, except diffusion conditioning 1024). N1000 tuners remain 1024.
+These are measured differences; a controlled chunk experiment is still needed
+to attribute the numerical change. Evidence and archive:
+`provenance/openfold3_inplace_scope_models.json`.
+
+`confidence_chunk.py` now prepares that experiment. It keeps in-place softmax
+for all eligible calls, including confidence, while bounding the fresh native
+confidence tuner to the observed 256 ceiling only for N1536 FP32 inputs. N1000
+and unmatched precision/length retain the original maximum. Native tuning still
+runs and may choose a smaller value; the helper records requested/bounded/selected
+sizes, verifies both upstream source hashes, rejects an already-used tuner and
+restores the original method on exit. Three CPU tests check shape/precision scope,
+native callback execution, cleanup, fresh-state and source rejection.
+
+Fresh complete-model checks are active under `/tmp/fireprot-inplace-chunk-v1`,
+N1000/HIP5 and N1536/HIP6, with unchanged R3/D200/S1/seed101/FP32 and the existing
+pair/atom caches. Require all 11 arrays before acceptance. A new direct native
+versus combined AB/BA/AB E2E spec is prepared at
+`/tmp/fireprot-combined-native-paired-v2` but MUST NOT run before those gates and
+GPU-idle checks pass. The old v1 E2E spec remains rejected. See
+`provenance/openfold3_inplace_chunk_preparation.json` and
+`provenance/openfold3_combined_native_paired_v2_preparation.json`.
+No controlled performance gain from atom reuse or in-place softmax is claimed yet.

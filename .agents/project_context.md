@@ -1153,3 +1153,38 @@ Next: deploy updated fusion package /tmp/fireprot-qk-softmax-v1-prepared-v2.tar.
 SHAfaa481c0c2d69c6184d2df707255d8ecdf4eee1ba9369f94fe72e89e7d54c37a
 to NEW remote /tmp/fireprot-qk-softmax-v1, verify pins, Rustbuild/publish, and
 ordinary B32 GPU numerical screen before any candidate or staged comparisons.
+
+## Fusion base GPU validation active (2026-10-06)
+
+Updated package deployed to NEW /tmp/fireprot-qk-softmax-v1,10 source/plan pins
+verified. Rustbuild76335 andpublish40881 exited0. Bundle manifest
+122d70650b679d09db2b61a8d815985f26a5c59fcf817f2edb04a5c3584cbc09;
+library219e6abfef41252901c77c39830604cb7a288d0c6175496ebff9a6eba788aaaf.
+Actual generated code-object inspection matches24scalar LDS writes/24reads/
+48MFMA/11barriers each mode, rootinspection/ contains artifacts. No production
+bundle changed. B32 full session9761 andstaged session30089 exit0,21/21 bitwise
+records each301989888 elements. Full/staged record coverage equal, nativeQK
+symbol matches earlier acceptedMFMA v2. Local captures
+/tmp/fireprot-qk-softmax-v1-probe-b32.json and*-probe-b32-staged.json.
+
+Larger sequential screen44862: B64/B128/B256 all21 exact. B512 fails with CUDA
+OOM at count_nonzero in raw comparison, requesting36GiB temp with22.04GiB free;
+zero comparison records, NOT numerical mismatch. Session44862 exited1; B1024
+not attempted. Preserve originalrootprobe-b512/ andlog. Fixed local probe now
+counts all bits in <=16 outer-batch slices, leaving native arithmetic/shapes
+unchanged. Eight CPU tests pass including actual reduction-size/tail assertions.
+Newremoteprobe /tmp/fireprot-qk-softmax-v1/probe_fusion_v2.py SHA
+fa104615e1cdf81dc9246209574d6b81746f592f95138e2b9ac871d83e2290c4.
+ACTIVE session23572 onHIP7: sequentialprobe-v2-b32,probe-v2-b32-staged,
+probe-v2-b512,probe-v2-b1024. Each gated on21 exactrecords; last usesreference32.
+Do not restart or overwrite. No performance test active, these are diagnostics.
+
+Local-only candidate archives (not deployed) /tmp/fireprot-qk-softmax-lds-v2-prepared.tar.gz
+SHAdfb319b5045367e668a90b20f26181a79152cb84ee8a0312c71e41076147f358 and
+/tmp/fireprot-qk-softmax-lds-v4-prepared.tar.gz
+SHA9b28694f239f88a3d158f8fd67064443bcb5d220c09b907e584dfff15261a573.
+These contain pre-count-fix harness; replace by freshly pinned preparation or
+add the corrected probe under a new verified path before testinglarge batches.
+Each candidate source was patched in temporarycopy and matches localcompiled
+v2/v4 source exactly. First finish/collect/archive basefusion results, then
+build/test swizzle andvector independently. Fullmodel/performance stillunproven.

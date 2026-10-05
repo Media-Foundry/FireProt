@@ -91,6 +91,20 @@ def operands(case, batch):
     return query, key
 
 
+def bitwise_mismatch_count(expected, actual, outer_batch=16):
+    """Count every differing FP32 bit pattern without a full-size reduction buffer."""
+    if (outer_batch < 1 or expected.shape != actual.shape
+            or expected.dtype != torch.float32 or actual.dtype != torch.float32):
+        raise ValueError('Invalid bounded bitwise comparison')
+    total = 0
+    for start in range(0, expected.shape[0], outer_batch):
+        stop = min(start + outer_batch, expected.shape[0])
+        total += int(torch.count_nonzero(
+            expected[start:stop].view(torch.int32)
+            != actual[start:stop].view(torch.int32)).item())
+    return total
+
+
 def staged_mismatches(scores, actual, reference_batch, mask=None, bias=None):
     """Keep full-shape native QK on CPU; compare all rows in bounded GPU batches.
 
@@ -107,8 +121,7 @@ def staged_mismatches(scores, actual, reference_batch, mask=None, bias=None):
             expected.add_(mask if mask.shape[0] == 1 else mask[start:stop])
             expected.add_(bias)
             expected = torch.softmax(expected, -1)
-        mismatches += int(torch.count_nonzero(
-            expected.view(torch.int32) != actual[start:stop].view(torch.int32)).item())
+        mismatches += bitwise_mismatch_count(expected, actual[start:stop])
         del expected
     return mismatches
 
@@ -118,6 +131,7 @@ def main(destination, batch, reference_batch=0):
     destination.mkdir(parents=True, exist_ok=False)
     report = dict(schema_version=1, completed=False, batch=batch, n=N, heads=4, k=32,
                   seed=101, dtype='float32', records=[], reference_batch=reference_batch,
+                  difference_count_outer_batch=16,
                   reference_method=('full_shape_qk_host_staged_outer_batch_softmax'
                       if reference_batch else 'full_shape_qk_and_softmax'),
                   scope='Synthetic packed operands only; no timing or model acceptance',
@@ -175,8 +189,7 @@ def main(destination, batch, reference_batch=0):
                 mismatches = staged_mismatches(expected, actual, reference_batch,
                     mask if mode == 'softmax' else None, bias if mode == 'softmax' else None)
             else:
-                mismatches = int(torch.count_nonzero(
-                    expected.view(torch.int32) != actual.view(torch.int32)).item())
+                mismatches = bitwise_mismatch_count(expected, actual)
             record = dict(case=case, mode=mode, layout=layout, passed=mismatches == 0,
                 elements=expected.numel(), bitwise_mismatches=mismatches,
                 mask_shape=list(mask.shape), mask_stride=list(mask.stride()),

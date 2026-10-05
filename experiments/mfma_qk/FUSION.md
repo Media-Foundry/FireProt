@@ -156,3 +156,24 @@ a timing benchmark. CPU checks pass for tail batches, per-outer masks, transpose
 bias, all-masked NaNs, signed-zero/NaN bit differences and exact mismatch counts.
 The earlier v1 prepared archive retains the original full-GPU harness; its bytes
 are immutable. Use a newly pinned package for the added host-reference mode.
+
+## First GPU observations and comparison-memory correction
+
+The separate Rust-built/published base fusion passes all21 records at outer
+B32, B64, B128 and B256; B32 with the staged reference also passes. The B32
+native QK symbol equals the previously accepted packed-QK observation. These
+are synthetic packed-operator checks, not model or performance acceptance.
+
+The first full-GPU B512 screen fails inside `torch.count_nonzero` before it can
+record the raw-score comparison: the reduction requests a36GiB temporary with
+only22.04GiB free. This is a validation-memory failure, not evidence of an
+arithmetic mismatch. Its report/log remain in the original remote directory.
+`bitwise_mismatch_count` now accumulates exact counts over at most16 outer
+batches per reduction; native reference QK and full-GPU softmax shapes stay
+unchanged. Eight CPU tests pass, including a regression that checks reduction
+batch bounds and differences across the final partial batch.
+
+The corrected probe is deployed as a new file, preserving the old script and
+failure. It must repeat both B32 reference modes before retrying B512 and the
+host-staged B1024 screen. No tolerance, input, arithmetic or kernel change is
+introduced by this count-buffer correction.

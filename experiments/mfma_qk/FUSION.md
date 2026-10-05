@@ -251,3 +251,20 @@ B32/B256 each pass21 packed numerical records. All200 complete-attention timed
 calls also match bitwise. However, the transposed-bias layout regresses strongly;
 this candidate is not promoted or selected generically. See `BENCHMARK.md` and
 `provenance/openfold3_qk_softmax_deferred_probe.json`.
+
+## Bias reuse through block scheduling
+
+`bias-reuse.patch` applies after swizzle/vector/wave-scalar, without deferred
+additions. For batches divisible by eight, consecutive blocks interleave eight
+outer matrices for the same head and16-query tile. Other batch sizes keep the
+original mapping. Arithmetic, synchronization and launch size are unchanged.
+CPU enumeration proves complete bijective coverage for batches1,7,8,9,32,64,
+128,256,512,1024,1536, including the original-mapping branch. Patch reconstruction
+exactly reproduces the tested source. Hardware scheduling/cache residency is
+not guaranteed by this mapping.
+
+B32 and B256 each pass all21 packed numerical records. These are the GPU-tested
+batch sizes; CPU coverage of other batches is not GPU acceptance. Local code
+uses62VGPR/33SGPR for softmax and51/20 for raw scores, with no spills and16KiB LDS.
+See `provenance/openfold3_qk_softmax_reuse_candidate.json` and
+`provenance/openfold3_qk_softmax_reuse_probe.json` for actual published resources.

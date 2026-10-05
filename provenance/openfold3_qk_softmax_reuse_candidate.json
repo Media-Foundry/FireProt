@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "status": "local_compile_and_remote_B32_B256_numerical_checks_passed",
+  "change": "Interleave eight outer matrices per head/query tile when batch divisible by eight, retaining original mapping otherwise. No arithmetic changes.",
+  "required_preceding_patches": [
+    "lds-swizzle.patch",
+    "lds-vector-store.patch",
+    "wave-scalar.patch"
+  ],
+  "flags": [
+    "-O3",
+    "-std=c++17",
+    "--offload-arch=gfx90a",
+    "-shared",
+    "-fPIC",
+    "-Rpass-analysis=kernel-resource-usage"
+  ],
+  "resources": {
+    "vgpr_count": [
+      62,
+      51
+    ],
+    "sgpr_count": [
+      33,
+      20
+    ],
+    "group_segment_fixed_size": [
+      16384,
+      16384
+    ],
+    "private_segment_fixed_size": [
+      0,
+      0
+    ],
+    "vgpr_spill_count": [
+      0,
+      0
+    ],
+    "sgpr_spill_count": [
+      0,
+      0
+    ]
+  },
+  "artifacts": [
+    {
+      "path": "/tmp/fireprot-fusion-reuse-v7.cpp",
+      "sha256": "ef9c55e54fb92c3a31431b75c1f2493f1005fe2f9fe5a95b1ce64cb546212383"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-reuse-v7.so",
+      "sha256": "dc60996670dc12d81a6e32737b2a5b2862f717d17924975d1df1076cdcfd8e72"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-reuse-v7-build.log",
+      "sha256": "ac556612f5a65d8b1d0275ec3b6b0e4f57c272b4fad2baced00c22e711aaf0ed"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-reuse-v7.fatbin",
+      "sha256": "2a379f0699c4334674ff6255e963066cc914f0c17053f19aed51845f899bae53"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-reuse-v7.hsaco",
+      "sha256": "8eeaf76c37fb992a946c5102a9eca010d03e808eeb79db84e6c0d3493e57a641"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-reuse-v7.asm",
+      "sha256": "dc0bcbbfce072732da4af35652402ad8de4b5dfcc043078358d9ab3930b4c70e"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-reuse-v7-metadata.txt",
+      "sha256": "1560a79dcce52f21e8e8f7b257be5cf8996560908397dc3360cc3157a10afbcb"
+    },
+    {
+      "path": "/home/husrcf/Code/fireprot/experiments/mfma_qk/bias-reuse.patch",
+      "sha256": "9fffaa40f9aea93b899f532f8af98d58b635b96b81a14685827de13df045e3eb"
+    },
+    {
+      "path": "/tmp/fireprot-reuse-mapping.json",
+      "sha256": "ab7e916169796bf1ca2165dd39d594eb8d01d318953981688773ec9f30b90488"
+    }
+  ],
+  "archive": {
+    "path": "/home/husrcf/Code/fireprot/outputs/experiments/qk-softmax-local-20261006/bias-reuse-v7.tar.gz",
+    "sha256": "5e40a061f32aadc33cd4bfab914eb0fe4f315985340566bed136cd68bfcbe4ef"
+  },
+  "mapping_checks": [
+    {
+      "batch": 1,
+      "blocks": 384,
+      "bijective": true
+    },
+    {
+      "batch": 7,
+      "blocks": 2688,
+      "bijective": true
+    },
+    {
+      "batch": 8,
+      "blocks": 3072,
+      "bijective": true
+    },
+    {
+      "batch": 9,
+      "blocks": 3456,
+      "bijective": true
+    },
+    {
+      "batch": 32,
+      "blocks": 12288,
+      "bijective": true
+    },
+    {
+      "batch": 64,
+      "blocks": 24576,
+      "bijective": true
+    },
+    {
+      "batch": 128,
+      "blocks": 49152,
+      "bijective": true
+    },
+    {
+      "batch": 256,
+      "blocks": 98304,
+      "bijective": true
+    },
+    {
+      "batch": 512,
+      "blocks": 196608,
+      "bijective": true
+    },
+    {
+      "batch": 1024,
+      "blocks": 393216,
+      "bijective": true
+    },
+    {
+      "batch": 1536,
+      "blocks": 589824,
+      "bijective": true
+    }
+  ],
+  "static_total_instruction_counts": {
+    "v_readfirstlane_b32": 2,
+    "v_mfma_f32_16x16x4f32": 96,
+    "s_barrier": 22,
+    "ds_write_b128": 12
+  },
+  "limits": [
+    "CPU bijection does not establish GPU timing or actual cache residency.",
+    "No full model or E2E acceptance."
+  ],
+  "remote_evidence": "provenance/openfold3_qk_softmax_reuse_probe.json"
+}

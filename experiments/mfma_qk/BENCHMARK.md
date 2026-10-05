@@ -118,3 +118,23 @@ wave scalar. Deferred additions are therefore not a generic improvement and
 remain experimental. Neither layout beats the existing split HIP path. No
 model/E2E gain is established. Evidence and archive pin:
 `provenance/openfold3_qk_attention_deferred_benchmark.json`.
+
+## Bias reuse scheduling experiment
+
+A fresh five-arm interleaved comparison retains native/split/vector/wave and
+adds bias reuse scheduling on wave scalar, without deferred additions. Same
+strict input/cache contract; all200 measured complete-attention outputs match
+bitwise across B32/B256 and both bias layouts.
+
+| Batch / bias | Split HIP (ms) | Wave scalar (ms) | Bias reuse (ms) |
+| --- | ---: | ---: | ---: |
+| 32 / contiguous | 5.523 | 6.862 | 6.630 |
+| 32 / transposed | 5.825 | 9.529 | 9.147 |
+| 256 / contiguous | 43.509 | 55.025 | 52.957 |
+| 256 / transposed | 43.782 | 75.276 | 73.217 |
+
+B256 time falls3.76% contiguous and2.73% transposed versus wave scalar. These
+measurements establish the effect of the scheduling change, without proving
+actual cache hit rates or attributing all gains to cache reuse. It remains
+slower than split HIP, so it is not promoted. No model/E2E gain is established.
+Evidence: `provenance/openfold3_qk_attention_reuse_benchmark.json`.

@@ -1318,3 +1318,30 @@ and complete coverage on CPU, then independent Rustbuild/numerical/timing gates.
 Not implemented yet; no cache-hit or speedup claim. This may address the bias
 layout sensitivity while keeping Q/K working sets of8matrices within nearby
 blocks. Do not assume scheduling order guarantees actual cache residency.
+
+## Bias reuse scheduling trial complete (2026-10-06)
+
+Previous turn made progress and pushedbedbf29 (deferred layout regression).
+New bias-reuse.patch applies to wave-v5 afterswizzle/vector/wave patches,
+WITHOUT deferred-adds. Interleaves8outer matrices perhead/querytile whenbatch
+is divisible8, originalmapping otherwise. CPUbijection verifiedB1,7,8,9,32,64,
+128,256,512,1024,1536; patchchain matches testedsource. Local62VGPR33SGPR,
+actualremote60/33,raw51/20,16KiB LDS/no spills/48MFMA/11barriers/6B128 stores.
+Root /tmp/fireprot-qk-softmax-reuse-v7, driver54506 exits0; B32/B256each21exact.
+Bundle manifestd1018508012824a7c8f7b7f325408e05401b9c05425e0dc68308df370085838a.
+Numericalarchive qk-softmax-reuse-v7-results.tar.gz SHA
+0ea7b2ee4d2467a352da4dd8dad0ee5d88c185a9bd6cb946bb9c42eaee0e6db1.
+Evidence openfold3_qk_softmax_reuse_candidate.json / *_reuse_probe.json.
+
+Fresh completeattention root /tmp/fireprot-qk-attention-reuse-v7, session56730
+exits0. All200calls exact. B256contiguous wave55.025->reuse52.957ms,
+split43.509ms; transposed75.276->73.217ms,split43.782ms. B32samepositivepattern.
+Actual cachehit rate unmeasured; not proof of causalcachebenefit. Not promoted;
+no fullmodel/E2E gain. Evidence openfold3_qk_attention_reuse_benchmark.json pins
+archive. No GPU job active. Next hypothesis: prefetch one/two future Kfragments
+while preserving exact MFMA K-order, on bestappropriate source. Compareactual
+registerresources (currently60VGPR,close64threshold), allnumericgates then
+completeattention against current splitHIP. Also possible later combine reuse
+with deferredadds ONLY after accepting layout-specific scheduling or explicit
+biascontiguous conversion; that conversion cost must stay inside timing.
+No plateau yet demonstrated; existing kernel alternatives remain below split.

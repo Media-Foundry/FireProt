@@ -1,0 +1,20 @@
+--- a/experiments/mfma_qk/fused_qk_softmax.cpp
++++ b/experiments/mfma_qk/fused_qk_softmax.cpp
+@@ -29,8 +29,15 @@
+     const int wave = __builtin_amdgcn_readfirstlane(threadIdx.x >> 6);
+     const int coordinate = lane & 15;
+     const int k_lane = lane >> 4;
+-    const int query_base = blockIdx.x * 16;
+-    const uint64_t matrix = blockIdx.y;
++    // Interleave eight outer matrices sharing each head/query bias tile.
++    // Non-multiple-of-eight batches retain the original block mapping.
++    const uint32_t linear = blockIdx.y * 96 + blockIdx.x;
++    const bool reuse = gridDim.y % 32 == 0;
++    const uint32_t head_query = (linear % 3072) / 8;
++    const int query_base = (reuse ? head_query % 96 : blockIdx.x) * 16;
++    const uint64_t matrix = reuse
++        ? ((linear / 3072) * 8 + linear % 8) * 4 + head_query / 96
++        : blockIdx.y;
+     const uint64_t input_base = matrix * N * 32;
+     const int row_query = query_base + wave;
+     const uint64_t row_base = (matrix * N + row_query) * N;

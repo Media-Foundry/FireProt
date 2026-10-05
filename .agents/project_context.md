@@ -485,3 +485,18 @@ Results and maintained-route incremental E2E are still pending.
 
 The live paired controller is Rust PID 1739049. The first journal entry confirms
 baseline pair 0 started (conditioning-e2e-n1536-baseline-0).
+
+## Read-only MFMA follow-up (2026-10-06)
+
+The authorized GPT-6-luna xhigh ISA reviewer completed its follow-up without GPU
+work or compilation. `docs/openfold3-mfma-investigation.md` records verified PDF
+pages, limitations on accumulation/lane-layout inference, and the next evidence
+gates. A SHA-verified read of the historical native N1536 trunk profiler yielded
+GEMM symbol names containing MI16x16x4x1 and MI32x32x2x1; extracted records are in
+`provenance/openfold3_historical_gemm_symbols.json`. Names suggest, but do not
+prove, actual MFMA instructions. Do not claim native lacks matrix instructions,
+map these aggregate symbols directly to QK/PV, or treat old diagnostic timings
+as current optimized bottlenecks. Heavy disassembly/library scans and all new
+GPU probes wait until the active paired benchmark terminates.
+After that sequence, also compare its first HIP baseline against the retained
+strict native N1536 reference before publishing the incremental result.

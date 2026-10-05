@@ -142,11 +142,13 @@ multiplied and presented as a new directly measured total speedup.
 
 ## Next diagnostic: static atom conditioning
 
-`verified_atom_reuse.py` passes four CPU tests. After the paired timing sequence
-terminated, separate N1000/HIP5 and N1536/HIP6 diagnostics were launched in
-`/tmp/fireprot-atom-reuse-v1`. GPU/model acceptance remains pending and these
-instrumented concurrent runs cannot establish performance. Preparation pins:
-`provenance/openfold3_followup_diagnostics_preparation.json`.
+`verified_atom_reuse.py` passes four CPU tests. Separate N1000/HIP5 and
+N1536/HIP6 diagnostics in `/tmp/fireprot-atom-reuse-v1` now pass all 200 per-call
+checks, unchanged RNG/consumers and all 11 original-native output arrays.
+Retained cl/plm logical sizes are 69,620,736 and 105,829,376 bytes; these are not
+whole-model peak memory changes. Instrumented concurrent runs cannot establish
+performance. Evidence: `provenance/openfold3_atom_conditioning_verified_models.json`.
+The next gate is an actual compute-skipping implementation and separate timing.
 
 The audited upstream `AtomAttentionEncoder.get_atom_reps` produces `ql`, `cl`
 and `plm`. Only `ql` contains the noisy-coordinate projection. Reference atom

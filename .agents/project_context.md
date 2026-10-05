@@ -580,3 +580,41 @@ Requests/source files/launch handles are in
 /media/IntelSSD/fireprot/outputs/experiments/conditioning-cache-20261006/followup-preparation.tar.gz
 SHA-256 dc0a2593ffbc955d0885dd2e28f970392ec0004b0605098b9c91c710c912073a.
 The local preparation capture also remains at /tmp/fireprot-followup-prepared.json.
+
+## Atom reuse accepted; attention observer corrected (2026-10-06)
+
+Both atom-reuse-check-v1 requests completed successfully (sessions 65529/64225
+exit 0). Every one of 200 ql/cl/plm, RNG and consumer checks passes; both final
+NPZs match all 11 original-native arrays. Retained cl/plm logical sizes are
+69,620,736 bytes (N1000) and 105,829,376 bytes (N1536). Evidence:
+`provenance/openfold3_atom_conditioning_verified_models.json`.
+Next: implement compute-skipping atom reuse with explicit rollout scope and
+dependency/immutability guards, then repeat both long-input exact-model checks.
+The current verifier still executes native atom computations every step.
+
+Attention trace v1 failed its required observation guard; session 22381 exited 1
+and supervisor 1782895 exited. Upstream logged "Incomplete QK/PV attention
+observation" and the outer supervisor reported "Upstream returned no prediction".
+Nested TorchDispatchMode gives no ATen observations under inference_mode; this
+was reproduced locally. The raw Kineto trace does contain input shapes/strides,
+external IDs and launch correlations. The corrected probe extracts those records
+without changing inference mode, rejecting ambiguous/duplicate correlations.
+Four CPU tests pass, now including inference tensors and duplicate correlations.
+The original raw trace also exercises extraction, but v1 has no accepted model
+result and must not be reported as passing or as performance evidence.
+
+Only the new attention-trace-v2-n1536 diagnostic is currently active:
+HIP7, supervisor 1801868, tool session 40942,
+/tmp/fireprot-attention-trace-v2/n1536.json and profile.json, root n1536.log.
+Its copied worker is immutable. Evidence/preparation:
+`provenance/openfold3_attention_trace_v2_preparation.json`.
+Require complete correlated QK/PV records and all 11 native arrays before accepting.
+
+Completed follow-up archive:
+/media/IntelSSD/fireprot/outputs/experiments/conditioning-cache-20261006/followup-v1-results.tar.gz
+SHA-256 5f16797930de0f4f7362512775226f9bc71f54a30904952d6904a567242a0b7e.
+V2 preparation archive in the same directory: attention-trace-v2-preparation.tar.gz,
+SHA-256 adc3797bef6a9dca75bf5cd33245956d902b7c0e8b61511f748bcf68dbfbd280.
+Local result/preparation captures: /tmp/fireprot-atom-verified-models.json,
+/tmp/fireprot-attention-trace-v2-prepared.json and
+/tmp/fireprot-attention-v1-exclusion.json.

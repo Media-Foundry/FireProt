@@ -9,7 +9,6 @@ from pathlib import Path
 
 import torch
 from torch.overrides import TorchFunctionMode
-from torch.utils._python_dispatch import TorchDispatchMode
 
 
 def tensor_metadata(value):
@@ -20,27 +19,62 @@ def tensor_metadata(value):
                 storage_offset=value.storage_offset())
 
 
-class _LayoutObserver(TorchDispatchMode):
-    def __init__(self, records, label):
-        super().__init__()
-        self.records = records
-        self.label = label
+def trace_operations(data, path):
+    """Extract CPU ancestry and explicit CPU-launch/GPU correlation from Kineto.
 
-    def __torch_dispatch__(self, func, types, args=(), kwargs=None):
-        name = str(func)
-        selected = name in {
-            'aten.bmm.default', 'aten.mm.default', 'aten.clone.default',
-            'aten.copy_.default', 'aten._unsafe_view.default', 'aten.view.default',
-        }
-        record = None
-        if selected:
-            record = dict(label=self.label, operation=name,
-                          inputs=[tensor_metadata(v) for v in args], completed=False)
-            self.records.append(record)
-        result = func(*args, **(kwargs or {}))
-        if record is not None:
-            record.update(output=tensor_metadata(result), completed=True)
-        return result
+    Nested TorchDispatchMode does not observe the audited inference_mode path.
+    Never change inference mode to make an observer work.
+    """
+    events = json.loads(Path(path).read_text())['traceEvents']
+    selected = {'aten::bmm', 'aten::mm', 'aten::clone', 'aten::copy_',
+                'aten::_unsafe_view', 'aten::view'}
+    for record in data['einsums']:
+        ranges = [e for e in events if e.get('cat') == 'user_annotation'
+                  and e.get('name') == 'fireprot.attention.' + record['label']
+                  and e.get('ph') == 'X']
+        if len(ranges) != 1:
+            raise RuntimeError('Ambiguous attention CPU range')
+        region = ranges[0]
+        operations = []
+        for event in events:
+            if (event.get('cat') != 'cpu_op' or event.get('name') not in selected
+                    or (event.get('pid'), event.get('tid')) != (region['pid'], region['tid'])
+                    or event['ts'] < region['ts']
+                    or event['ts'] + event.get('dur', 0) > region['ts'] + region['dur'] + 0.001):
+                continue
+            args = event.get('args', {})
+            dims, strides = args.get('Input Dims', []), args.get('Input Strides', [])
+            inputs = [dict(shape=shape, strides=strides[i] if i < len(strides) else None)
+                      for i, shape in enumerate(dims)]
+            external_id = args.get('External id')
+            kernels = []
+            seen = set()
+            if external_id is not None:
+                for kernel in events:
+                    ka = kernel.get('args', {})
+                    if kernel.get('cat') != 'kernel' or ka.get('External id') != external_id:
+                        continue
+                    correlation = ka.get('correlation')
+                    launches = [e for e in events if e.get('cat') == 'cuda_runtime'
+                                and e.get('args', {}).get('correlation') == correlation
+                                and e.get('args', {}).get('External id') == external_id]
+                    if correlation is None or len(launches) != 1:
+                        raise RuntimeError('Ambiguous GPU launch correlation')
+                    launch = launches[0]
+                    identity = (ka.get('device'), ka.get('stream'), correlation)
+                    if (identity in seen
+                            or (launch.get('pid'), launch.get('tid')) != (event['pid'], event['tid'])
+                            or launch['ts'] < event['ts']
+                            or launch['ts'] + launch.get('dur', 0) > event['ts'] + event['dur'] + 0.001):
+                        raise RuntimeError('Duplicate or unrelated GPU launch correlation')
+                    seen.add(identity)
+                    kernels.append(dict(name=kernel['name'], correlation=correlation,
+                                        device=ka.get('device'), stream=ka.get('stream'),
+                                        launch=launches[0]['name']))
+            operations.append(dict(operation=event['name'], inputs=inputs,
+                                   external_id=external_id, kernels=kernels, completed=True,
+                                   metadata_source='kineto_trace'))
+        record['operations'] = operations
 
 
 class _EinsumObserver(TorchFunctionMode):
@@ -59,8 +93,7 @@ class _EinsumObserver(TorchFunctionMode):
                       operations=[], completed=False)
         self.records.append(record)
         with torch.profiler.record_function('fireprot.attention.' + label):
-            with _LayoutObserver(record['operations'], label):
-                result = func(*args, **kwargs)
+            result = func(*args, **kwargs)
         record.update(output=tensor_metadata(result), completed=True)
         return result
 
@@ -93,7 +126,10 @@ class AttentionTrace:
         if (not data['completed'] or not (self.output / data.get('trace', '')).is_file()
                 or [r['label'] for r in data['einsums']] != ['QK', 'PV']
                 or any(not r['completed'] for r in data['einsums'])
-                or any(not any(op['operation'] == 'aten.bmm.default' and op['completed']
+                or any(not any(op['operation'] == 'aten::bmm' and op['completed']
+                               and len(op['inputs']) == 2
+                               and all(v['shape'] and v['strides'] is not None for v in op['inputs'])
+                               and (self.cpu_only or op['kernels'])
                                for op in r['operations']) for r in data['einsums'])):
             raise RuntimeError('Incomplete QK/PV attention observation')
 
@@ -139,5 +175,6 @@ class AttentionTrace:
                 if profile is not None:
                     profile.export_chrome_trace(str(trace))
                     data['trace'] = trace.name
+                    trace_operations(data, trace)
             finally:
                 metadata.write_text(json.dumps(data, indent=2, allow_nan=False) + '\n')

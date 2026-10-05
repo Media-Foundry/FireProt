@@ -1,0 +1,384 @@
+{
+  "status": "launched",
+  "request": {
+    "schema_version": 1,
+    "run_id": "attention-trace-v2-n1536",
+    "workload": {
+      "model": "openfold3",
+      "model_name": "openbind-0",
+      "recycles": 3,
+      "diffusion_steps": 200,
+      "samples": 1,
+      "precision": "float32",
+      "deterministic": true
+    },
+    "backend": "hip_fused",
+    "seed": 101,
+    "hip_device": 7,
+    "source": {
+      "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+      "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+    },
+    "checkpoints": {
+      "model": {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+        "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+      }
+    },
+    "resources": {},
+    "input": {
+      "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+      "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+    },
+    "output_dir": "/media/IntelSSD/fireprot/outputs/attention-trace-v2-n1536"
+  },
+  "profile": {
+    "python": "/media/PM982/engramfold/folding_e2e_20260921/venvs/openfold3-amd/bin/python",
+    "workers": "/tmp/fireprot-attention-trace-v2/python",
+    "hip_probe": "/media/IntelSSD/fireprot/runtime/fireprot-hip-probe",
+    "amd_smi": "/usr/bin/amd-smi",
+    "source_manifest": null,
+    "environment": {
+      "OPENFOLD_CACHE": "/media/PM982/engramfold/folding_e2e_20260921/cache/openfold3",
+      "PYTHONHASHSEED": "101",
+      "FIREPROT_BRIDGE_LIBRARY": "/media/IntelSSD/fireprot/target/release/lib_fireprot_bridge.so",
+      "FIREPROT_SOFTMAX_FP32_BUNDLE": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1",
+      "FIREPROT_SOFTMAX_FP32_BUNDLE_SHA256": "4914cb71a64c42bf54495f1c9ee0eeb27808f0571b6a50fed81e8067f56f01be",
+      "FIREPROT_CONDITIONING_CACHE": "1"
+    },
+    "environment_inventory": {
+      "path": "/media/IntelSSD/fireprot/runtime/environments/openfold3-softmax-fp32-v1.json",
+      "sha256": "70afed797c43f1f99f3742015f4106fac3dd030b56e38f0dc12a5ef2031dbf86"
+    }
+  },
+  "source_files": [
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/LICENSE",
+      "sha256": "9039d57c6faddb1cebe92f7d26c6f73bce7cdd5aec125a2530ae40a0fa62f9dc"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/THIRD_PARTY.md",
+      "sha256": "bd0be5831d36339fc53bd727ae65f3ff41b14df8ff3ddcc5f1961d9da7bfabc9"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/fireprot/__init__.py",
+      "sha256": "5b7873ed933ddca405717e111da8a8142f5df877f028e08d2b5aadcc46b433b2"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/kernels/amd/README.md",
+      "sha256": "38378f78849000bf686bd342a19302cc42af68df0bdc9a7f89725a76099ebad5"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/kernels/amd/fireprot_amd_ops.cpp",
+      "sha256": "1c7fc9f4c770752375fed47abfe08d33cda76e40d11c740d7f8294e132cd3d43"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/kernels/amd/fireprot_amd_ops.cu",
+      "sha256": "748c11e089cbb5a3101912954b439179557b2b966aac340c76c538960063f949"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/kernels/amd/fireprot_ck_attention.cpp",
+      "sha256": "d50865b27a66956b391a331cc0daf9e33962c1fd1c0d93b3243fab9d25af016c"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/kernels/amd/fireprot_ck_ops.cpp",
+      "sha256": "f82f123bf12b6f9a5bea05acaac11dc2c646e126c6553dbdf24e9c81747829f0"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/kernels/amd/fireprot_lt_bmm.cpp",
+      "sha256": "cc876b221fc91e0bf10f991ca8a641a395eab5a157779f525966ea73ae8491b9"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/kernels/amd/fireprot_mask_bias.cu",
+      "sha256": "0aff4c687fce58b491a40000b423de040c5f4695c42718e448b2127156a62cc3"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/kernels/amd/fireprot_pair_fusions.cpp",
+      "sha256": "0a21f6cf760a91427b95e4a9bdc6d4d7ff181e187d806f97fb73e00ee4ebf0d9"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/kernels/amd/fireprot_pair_qkv.cu",
+      "sha256": "53881fc24c4f4d9e183234bc9b312e6837d51d7afa68a937bfdb94e676197b4e"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/kernels/amd/fireprot_pair_softmax.cu",
+      "sha256": "45298f0edeb18ec3aa26411fdc2f75f57a70062b251687fa4b62a1256a90bdc9"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/kernels/amd/fireprot_pair_transpose.cu",
+      "sha256": "bc0779458326662c088c7cad564a0bb1c7ce5dcf7f03630c140e306665f00b9f"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/kernels/amd/fireprot_softmax_fp32.cpp",
+      "sha256": "baca481263c9ddf0726a94a85fdb6bf70df46d5f558f8064781dc7230d675599"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/kernels/amd/tools/hip_device_probe.cpp",
+      "sha256": "b4e0d82420f8afcfd8caaebec185ff96bfc7cfaeec7acc62bf8a95f459c8c18b"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/licenses/Apache-2.0.txt",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/licenses/CK-MIT.txt",
+      "sha256": "20f3b83dfda01bd18d285e0edbb9d044be6dde04cdf76a1ec18d9fc7127936bf"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/licenses/PyTorch-BSD.txt",
+      "sha256": "bd018feef8825e88181c84eb7e3aa4eafb8f08a20d9fd6ef948569610c4a3e43"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/n1536.json",
+      "sha256": "9055e1f48abfcfdedd3874b6030706612beb6460090ffd9a69f56086af8075ca"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/profile.json",
+      "sha256": "4583bc25ac47d1ec72db79af940890426794056f94302da72c5dcb36ab8c824b"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/README.md",
+      "sha256": "43ddfeaabfdf5d1d6a0be532f2e8cb66888782b00fad556ed60d94bacd5725c5"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/_paths.py",
+      "sha256": "f40eca4224217a461ed948b05e67f94a4ae9d6275de60a0d16443fe360aa05f7"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/adapters/atlasfold/runtime.py",
+      "sha256": "4fd73e13371805e86a9e910c236fd48b22a37c8ca4c7b3f03a254072b08249ea"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/adapters/openfold3/__init__.py",
+      "sha256": "599f351fda9fe6c70fd69380417181dfe8d6bdf4fed4e61c4a28e06212aa3294"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/adapters/openfold3/attention.py",
+      "sha256": "d8a884b9c018c436904a1e6774139e75915fae8c11189190425865a5780b9bd3"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/adapters/protenix/construction.py",
+      "sha256": "d735bb27a32b199e9476983eb7a71415a31169290a4d19d2a63d1d96f5a5d6ac"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/adapters/protenix/features.py",
+      "sha256": "0db0713aeb7b9865bd730f71e812c07bdfe63285ea7ec3a76dbf4f5a7c3f4433"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/adapters/protenix/hooks.py",
+      "sha256": "237d6bc0e6f9971361675ddb06a00e425d055b2add4647e5640b17bfe0e49b2b"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/adapters/protenix/runtime.py",
+      "sha256": "caf6233c43cde8ec2b651808a0a3e51b88c318064b8bbcfc33fb2fa5c6cea5f9"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/backends/amd/_compile_native.py",
+      "sha256": "b94e4d9b3d4f81e111accf0251f2f3bd464e5938335ebae0fbddb7a9cfc4083c"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/backends/amd/_native_build.py",
+      "sha256": "fa4909f6bbd1ad6f5b246c9cf335e01991bfec4f18ff8677dc94cf8168672d7d"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/backends/amd/_native_hip.py",
+      "sha256": "60052815e80450203762c425a78d97d92583a9ae3297bc410a70d22aaed92dbd"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/backends/amd/_published.py",
+      "sha256": "abf0ddd8eeacf9ca1e9e72742d357490b107940f8acdf88878019142d9b6fd8b"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/backends/amd/attention_gate.py",
+      "sha256": "d306a6ea7f762930f89cd6f4572ac95207a691135d3401c3ea1d7fdaebf45c5e"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/backends/amd/blas.py",
+      "sha256": "173f12ed8f15e88bc9ce3e784739f82b8044b2927f52bcdf3d52c749a38f7aba"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/backends/amd/ck_attention.py",
+      "sha256": "f747f9a8a1b961e2d82d479c32f76ee5bc2e902f9059e89b4549d090b58621ed"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/backends/amd/ck_extension.py",
+      "sha256": "285e2d73a28d64e0788a184d8219c5d80f77595a69e61520f3e75fa1d58f167d"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/backends/amd/ck_gemm.py",
+      "sha256": "b907a2ce9d79830c4ed029ee3e18e6727e9058b7094fd38f79d93b6729575272"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/backends/amd/extension.py",
+      "sha256": "c90efeb110a341d6b57497dc9eb336f0dada6fa8767cdc189ff8eef1a536fc8c"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/backends/amd/lt_bmm.py",
+      "sha256": "80a6a56462896f83109309469e147be8c562638ceac6d94da8c42e363834ae38"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/backends/amd/mask_bias.py",
+      "sha256": "3afebb7d3c42d553a7ef65f6d0b788595de5fb8e044e4ae608dc92655d0331b6"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/backends/amd/pair_fusions.py",
+      "sha256": "05b539bff71eca6c37920c87ff390aab62a28ede3eb92a80abd1299ca8d9303c"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/backends/amd/pair_layout.py",
+      "sha256": "6fe404093e96adcda22a5479036aa5f027e691b094bbfa4a71dc35c66c8fc49d"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/backends/amd/qkv_projection.py",
+      "sha256": "6f6ad521b169df46c2e0ec3030195267decda3a7a1bbddac40a9f25b23b6fc02"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/backends/amd/recycle.py",
+      "sha256": "ea6cd04d3b69ba8999cd3781d94d7d4736ff2b205be5d542153494f7923aefe5"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/backends/amd/softmax_fp32.py",
+      "sha256": "52d1b222750b5f41f80f09865f619c76c8501d103dd3e5bd82537ae67c048e35"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/backends/amd/transition_projection.py",
+      "sha256": "df749eaf3ab49a21f709f60a939b1c30294e2102546f7c03ffcac3ba8756614d"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/backends/amd/triangle_attention.py",
+      "sha256": "30627afc9ea995230c9b1a971b44122dd72c96801a2faa93c6ae09e783e57c8c"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/backends/amd/triangle_multiplication.py",
+      "sha256": "40effd005b978f70869e2cbd582a82501b069ca58555b84422b961b44cfda02a"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/backends/amd/two_gcd_attention.py",
+      "sha256": "695db35251ba84a5d0ccc632c5c1cfcf970e4616fe442b42b7df5ee769a8da05"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/ops/_bridge.py",
+      "sha256": "679d22330ca64b05c89a9c0a1da34e352731985ef1a12f458b1da7e03ceaa1c5"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/ops/registry.py",
+      "sha256": "82cdb1cb2892d7571b765bde564651dcb92650c8350675e757e8359927419c8f"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot/validation/protenix.py",
+      "sha256": "cdf3279f708b147ec014af3ec5970e3c7920d325533763fb7cbf01faa3f1d61b"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot_workers/__init__.py",
+      "sha256": "4d3f99912815c2e067831f2217be7ce1128bf9316c223589247ff752a4030bfd"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot_workers/__main__.py",
+      "sha256": "509e4c8813b89bd9539ee6e383be61131cf03a28047c5beed2c5435f9166a00a"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot_workers/atlasfold.py",
+      "sha256": "c7f80e58043de8986f4a42519d058f27f0b2054de82bcd7ebdc1893130e030d5"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot_workers/attention_trace.py",
+      "sha256": "531d168ce84f7954b4e28f939ad4ab1efd47abd485ad8b20a5c713cbfcdc0c3b"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot_workers/openfold3.py",
+      "sha256": "9fa584c902ff0f388f3a58e1c86a1437c03a563c2e533da6426ec59a9c6f2abd"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot_workers/pair_cache.py",
+      "sha256": "ced2ccebc025521a541b6131325e693b630f79f943938ced0720b826b9d70f92"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot_workers/protenix.py",
+      "sha256": "cf299d117df8ab6e40ea803a6fc131677cfe4d18a0546c0d24179d23451b69a1"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot_workers/protenix_esm.py",
+      "sha256": "0597c899caeee94327e7a2e797330875abd816cc59f36b8eeb7e4fd46a617182"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot_workers/transport.py",
+      "sha256": "e0801cc74d34070ff9f4e0bc80e93825511d476012a17b2014947134cd5503d7"
+    },
+    {
+      "path": "/tmp/fireprot-attention-trace-v2/python/fireprot_workers/verified_reuse.py",
+      "sha256": "bc6985b7dbe2bf63d71ef17d573022f151fcf9214f1ca5f5f8ca85e644e7f5e3"
+    }
+  ],
+  "supervisor_pid": 1801868,
+  "tool_session": 40942,
+  "persistent_control_archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/conditioning-cache-20261006/attention-trace-v2-preparation.tar.gz",
+    "sha256": "adc3797bef6a9dca75bf5cd33245956d902b7c0e8b61511f748bcf68dbfbd280",
+    "size": 94088
+  },
+  "excluded_v1": {
+    "schema_version": 1,
+    "status": "excluded",
+    "reason": "Required ATen observations absent under inference_mode; diagnostic guard rejected the result",
+    "supervisor": {
+      "run_id": "attention-trace-v1-n1536",
+      "phase": "failed",
+      "worker_pid": 1782919,
+      "elapsed_seconds": 628.827671029,
+      "isolation_samples": 657,
+      "failure": "RuntimeError: Upstream returned no prediction",
+      "announced_device": {
+        "worker_pid": 1782919,
+        "logical_device": 0,
+        "pci_address": "0000:93:00.0",
+        "architecture": "gfx90a"
+      },
+      "device_verified": true,
+      "physical_device": {
+        "hip_device": 7,
+        "smi_device": 5,
+        "pci_address": "0000:93:00.0",
+        "architecture": "gfx90a"
+      },
+      "execution_sha256": "9b9b2c5523eab30148058ddca8ba118765573a27e88c0868e3586ce92e5405ac"
+    },
+    "artifacts": [
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/attention-trace-v1-n1536/supervisor.json",
+        "sha256": "a5a4ee461475a2773a4c8494c89ebb7b2856f42074de1998e4794ba66abd76ca"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/attention-trace-v1-n1536/stderr.log",
+        "sha256": "4381ab7c732f678ab61cd6604b580f384b874777d6699c6ae2fc99b2d39714ee"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/attention-trace-v1-n1536/attention-trace.json",
+        "sha256": "c8adae259b7086d34ef72bc399a97952f7c870e9ba7e549df108b58dca221ccd"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/attention-trace-v1-n1536/attention-trace.chrome.json",
+        "sha256": "4e0b59be42f1dabcac45254dc3a7b23b7be84f0baa17692d3c4bbeb6bb600501"
+      }
+    ],
+    "accepted_archive_exists": false,
+    "limits": [
+      "No accepted full-model parity or performance claim for this failed diagnostic.",
+      "Raw trace assisted the observer fix; fresh full-model validation is required."
+    ],
+    "persistent_control_archive": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/conditioning-cache-20261006/followup-v1-results.tar.gz",
+      "sha256": "5f16797930de0f4f7362512775226f9bc71f54a30904952d6904a567242a0b7e",
+      "size": 23946223
+    }
+  },
+  "cpu_tests": {
+    "count": 4,
+    "passed": true,
+    "inference_mode_covered": true,
+    "duplicate_launch_and_kernel_correlations_rejected": true
+  },
+  "limits": [
+    "No accepted GPU/model result or speedup at launch.",
+    "The raw trace parser does not change inference mode or replace tensor arithmetic."
+  ]
+}

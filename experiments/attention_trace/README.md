@@ -1,15 +1,21 @@
 # Bounded OpenFold 3 attention observation
 
-Status: three CPU observer tests pass. The N1536/HIP7 diagnostic is launched
-after successful completion of the conditioning-cache paired benchmark, in
-`/tmp/fireprot-attention-trace-v1`. No accepted GPU trace, complete-model parity,
-kernel correlation or speedup is established yet. Source/request/archive pins
-are in `provenance/openfold3_followup_diagnostics_preparation.json`.
+Status: four CPU tests pass, including inference mode and rejection of duplicate
+CPU/GPU correlations. The first N1536 diagnostic was rejected because its
+nested Python dispatch observer recorded no ATen operations under inference mode.
+Its complete-model result was not accepted. The corrected v2 diagnostic is now
+running in `/tmp/fireprot-attention-trace-v2` on HIP7. GPU/model acceptance remains
+pending; see `provenance/openfold3_attention_trace_v2_preparation.json` for the
+excluded first trial, corrected source pins and archives.
 
 `probe.py` wraps the existing `AttentionDispatcher` within its existing
 source-pinned `attention_scope`. It delegates the original operations unchanged,
 labels QK/PV einsums, records ATen GEMM/packing tensor shapes and strides, and
-exports a raw Chrome trace for CPU/GPU correlation. It retains no tensor values.
+exports a raw Chrome trace for CPU/GPU correlation. ATen input layouts come from
+the trace's CPU events inside each same-thread QK/PV range. GPU kernels require
+matching external IDs and a unique runtime launch correlation inside the CPU
+operation. Duplicate or unrelated correlations are rejected. Inference mode is
+never disabled to make instrumentation work. It retains no tensor values.
 The small Python boundary is required to observe upstream Torch calls; Rust
 continues to own process launch, isolation, artifact sealing and acceptance.
 
@@ -60,6 +66,8 @@ evidence needed before an isolated HIP/CK-style GEMM experiment.
 python -m unittest experiments.attention_trace.test_probe -v
 ```
 
-The tests use head-interleaved inputs and check exact results, unchanged RNG,
-QK/PV labels with observed BMMs, one selected attempt, exception recording and
-unmatched-call pass-through. They do not validate ROCm profiler behavior.
+The tests use head-interleaved inference tensors and check exact results,
+unchanged RNG, QK/PV labels with observed BMM layouts, one selected attempt,
+exception recording and unmatched-call pass-through. Synthetic trace checks
+reject duplicate launch/kernel correlations. They do not establish GPU model
+parity; the raw first-trial ROCm trace was used separately to exercise extraction.

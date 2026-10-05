@@ -6,7 +6,7 @@ import unittest
 
 import torch
 
-from experiments.attention_trace.probe import AttentionTrace
+from experiments.attention_trace.probe import AttentionTrace, trace_operations
 
 
 def native(query, key, value, biases, use_high_precision=False):
@@ -21,6 +21,31 @@ def dispatch(function, *args, **kwargs):
 
 
 class TraceTest(unittest.TestCase):
+    def test_kernel_correlation_rejects_duplicate_launches(self):
+        events = [
+            dict(cat='user_annotation', ph='X', name='fireprot.attention.QK',
+                 pid=1, tid=1, ts=0, dur=10),
+            dict(cat='cpu_op', name='aten::bmm', pid=1, tid=1, ts=2, dur=3,
+                 args={'External id': 9, 'Input Dims': [[2, 3, 4], [2, 4, 3]],
+                       'Input Strides': [[12, 4, 1], [12, 3, 1]]}),
+            dict(cat='cuda_runtime', name='hipExtModuleLaunchKernel',
+                 pid=1, tid=1, ts=3, dur=1, args={'External id': 9, 'correlation': 6}),
+            dict(cat='kernel', name='fixture_gemm', ts=100, dur=10,
+                 args={'External id': 9, 'correlation': 6, 'device': 0, 'stream': 1}),
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory, 'trace.json')
+            data = {'einsums': [{'label': 'QK'}]}
+            path.write_text(json.dumps({'traceEvents': events}))
+            trace_operations(data, path)
+            self.assertEqual(data['einsums'][0]['operations'][0]['kernels'][0]['name'],
+                             'fixture_gemm')
+            for duplicate in (events[2], events[3]):
+                path.write_text(json.dumps({'traceEvents': events + [duplicate]}))
+                with self.assertRaisesRegex(RuntimeError, 'correlation'):
+                    trace_operations(data, path)
+
+    @torch.inference_mode()
     def test_layout_correlation_and_exact_result(self):
         generator = torch.Generator().manual_seed(101)
         # Head-interleaved input exercises the einsum packing path.
@@ -44,7 +69,7 @@ class TraceTest(unittest.TestCase):
             self.assertEqual([r['label'] for r in data['einsums']], ['QK', 'PV'])
             for r in data['einsums']:
                 self.assertTrue(r['completed'])
-                self.assertTrue(any(op['operation'] == 'aten.bmm.default'
+                self.assertTrue(any(op['operation'] == 'aten::bmm'
                                     for op in r['operations']))
             self.assertEqual(data['query']['strides'], list(q.stride()))
             events = json.loads(Path(directory, data['trace']).read_text())['traceEvents']

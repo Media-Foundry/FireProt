@@ -19,6 +19,8 @@ def predict(request, channel):
     from .transport import save_arrays
 
     workload = request['workload']
+    if request['backend'] == 'hip_fused' and workload.get('deterministic') is not True:
+        raise ValueError('OpenFold3 hip_fused requires deterministic=true')
     if workload['model_name'] != 'openbind-0' or workload['precision'] != 'float32':
         raise ValueError('Only OpenBind-0 with native FP32 policy is integrated')
     output = Path(os.environ['FIREPROT_OUTPUT_DIR'])
@@ -49,7 +51,8 @@ def predict(request, channel):
         channel.emit(dict(event='progress', stage='model'))
         torch.cuda.synchronize()
         started = time.perf_counter()
-        result = original_forward(model, *args, **kwargs)
+        result = forward_with_backend(model, original_forward, args, kwargs,
+                                      backend=request['backend'], output=output)
         torch.cuda.synchronize()
         model_seconds += time.perf_counter() - started
         return result
@@ -108,6 +111,23 @@ def predict(request, channel):
     return dict(schema_version=2, run_id=request['run_id'], seed=request['seed'], workload=workload,
                 predictions=predictions, model_seconds=model_seconds,
                 request_seconds=time.perf_counter() - started)
+
+
+def forward_with_backend(model, forward, args, kwargs, *, backend, output):
+    """Preserve native invocation or enter the validated scoped tensor adapter."""
+    if backend == 'native':
+        return forward(model, *args, **kwargs)
+    if backend != 'hip_fused':
+        raise ValueError('Unsupported OpenFold3 worker backend')
+    from fireprot.backends.amd.softmax_fp32 import SoftmaxFP32
+    from fireprot.adapters.openfold3.attention import AttentionDispatcher, attention_scope
+    dispatcher = AttentionDispatcher(SoftmaxFP32())
+    try:
+        with attention_scope(dispatcher):
+            return forward(model, *args, **kwargs)
+    finally:
+        (output / 'operator-runtime.json').write_text(
+            json.dumps(dispatcher.manifest(), indent=2) + '\n')
 
 
 def check_determinism(torch, workload):

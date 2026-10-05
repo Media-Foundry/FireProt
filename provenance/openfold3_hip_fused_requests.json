@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "scope": "Maintained OpenFold3 hip_fused typed requests; exact numerical acceptance only",
+  "limits": [
+    "Concurrent validations are not E2E speedup evidence.",
+    "Native agreement on two fixed long inputs is not independent structural accuracy.",
+    "Maintained-route paired E2E remains pending.",
+    "DiamondHill SSH timed out during N1536 collection; no model task was cancelled or restarted."
+  ],
+  "cli_sha256": "dfbbe3038421fc5f68dcaba80f4ad95aa8ad93960f29580ee990f5e68b69c817",
+  "build": "Local cargo build --release -p fireprot-cli --locked --offline; remote Cargo index download failed before compilation; bridge unchanged",
+  "runs": {
+    "n1000": {
+      "request": {
+        "schema_version": 1,
+        "run_id": "openfold3-n1000-hip-fused-v1",
+        "workload": {
+          "model": "openfold3",
+          "model_name": "openbind-0",
+          "recycles": 3,
+          "diffusion_steps": 200,
+          "samples": 1,
+          "precision": "float32",
+          "deterministic": true
+        },
+        "backend": "hip_fused",
+        "seed": 101,
+        "hip_device": 6,
+        "source": {
+          "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+          "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+            "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+          }
+        },
+        "resources": {},
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "sha256": "2715542db697dbd2dd5021063173f6e91a405ac0f46a46a69b748c815826ae5b"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/openfold3-n1000-hip-fused-v1"
+      },
+      "reference": "/media/IntelSSD/fireprot/outputs/zero-mask-e2e-n1000-baseline-0",
+      "scientific_request_fields_equal": {
+        "workload": true,
+        "seed": true,
+        "source": true,
+        "input": true,
+        "checkpoints": true,
+        "resources": true
+      },
+      "supervisor": {
+        "run_id": "openfold3-n1000-hip-fused-v1",
+        "phase": "succeeded",
+        "worker_pid": 1682123,
+        "elapsed_seconds": 255.365610042,
+        "isolation_samples": 243,
+        "failure": null,
+        "announced_device": {
+          "worker_pid": 1682123,
+          "logical_device": 0,
+          "pci_address": "0000:8e:00.0",
+          "architecture": "gfx90a"
+        },
+        "device_verified": true,
+        "physical_device": {
+          "hip_device": 6,
+          "smi_device": 4,
+          "pci_address": "0000:8e:00.0",
+          "architecture": "gfx90a"
+        },
+        "execution_sha256": "4d1bd396adeafb10f65a388ebe6b249dbfb617135c69ac6a82009bb7605f8e06"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-n1000-hip-fused-v1/accepted.json",
+        "sha256": "ff2e89a7c50e6dbbdaa51f0405fbaf89b4f439aba7daf173a2ef9e6b35850716"
+      },
+      "execution": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-n1000-hip-fused-v1/execution.json",
+        "sha256": "5469d0826eb787283fac915aa08d0f352e0fc458c087177a805669d5f1c0657a"
+      },
+      "runtime": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-n1000-hip-fused-v1/operator-runtime.json",
+        "sha256": "a51b2b7e2b3c9a92ec6e433badbd622f8da0d0a5fedd7acfb61d7b25d2dec459"
+      },
+      "launches_submitted": 1702,
+      "selection_counts": [
+        {
+          "operation": "attention",
+          "implementation": "hip_mask_bias_softmax_fp32",
+          "count": 1702
+        },
+        {
+          "operation": "attention",
+          "implementation": "native",
+          "count": 6465
+        }
+      ],
+      "comparison": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      }
+    }
+  },
+  "status": "n1000_passed_n1536_process_exited_zero_array_comparison_pending"
+}

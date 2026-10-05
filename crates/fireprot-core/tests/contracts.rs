@@ -122,7 +122,7 @@ fn unrecognized_schema_and_fields_are_rejected() {
 #[test]
 fn family_specific_backend_and_precision_are_enforced() {
     let mut r = request(workloads()[2].clone());
-    r.backend = Backend::HipFused;
+    r.backend = Backend::Fireprot;
     assert_eq!(
         ValidatedRequest::try_from(r),
         Err(RequestError::UnsupportedBackend)
@@ -197,6 +197,26 @@ fn openfold3_determinism_is_explicit_and_preserves_legacy_wire_identity() {
     let mut invalid = old;
     invalid["workload"]["deterministic"] = "true".into();
     assert!(serde_json::from_value::<Request>(invalid).is_err());
+}
+
+#[test]
+fn openfold3_hip_fused_requires_explicit_strict_determinism() {
+    for flag in [None, Some(false), Some(true)] {
+        let mut r = request(workloads()[2].clone());
+        if let Workload::Openfold3 { deterministic, .. } = &mut r.workload {
+            *deterministic = flag;
+        }
+        r.backend = Backend::HipFused;
+        if flag == Some(true) {
+            let accepted = ValidatedRequest::try_from(r.clone()).unwrap();
+            assert_eq!(accepted.as_request(), &r);
+        } else {
+            assert_eq!(
+                ValidatedRequest::try_from(r),
+                Err(RequestError::StrictDeterminismRequired)
+            );
+        }
+    }
 }
 
 #[test]

@@ -76,7 +76,7 @@ changes; N1000 is about 1% slower. Evidence:
 savings for this operator only, not model peak or E2E gains. Keep out-of-place
 execution for maintained integration; no in-place model route is enabled.
 
-Prepared (unconnected) maintained FP32 boundary:
+Maintained FP32 boundary (formal request validation now running):
 `python/fireprot/backends/amd/softmax_fp32.py`, with byte-identical kernel source
 copy `kernels/amd/fireprot_softmax_fp32.cpp`. The package/ABI
 `fireprot_softmax_fp32`/`softmax-fp32-v1` is now built and published at
@@ -84,7 +84,8 @@ copy `kernels/amd/fireprot_softmax_fp32.cpp`. The package/ABI
 `4914cb71a64c42bf54495f1c9ee0eeb27808f0571b6a50fed81e8067f56f01be`.
 `python/fireprot/adapters/openfold3/attention.py` adds source-pinned, context-
 scoped dispatch through the Rust registry. Sixteen CPU/meta checks pass across
-both components. No maintained OpenFold3 HIP request route has been enabled.
+both components. Strict deterministic FP32 OpenFold3 `hip_fused` request admission
+is implemented; full maintained-route validation is running.
 
 Prepared validation entry points in `experiments/hip_softmax` are
 `build_runtime.py`, `screen_runtime.py`, and `worker-runtime-overlay.patch`.
@@ -106,21 +107,41 @@ Output run IDs are `softmax-runtime-v1-n1000` and `softmax-runtime-v1-n1536`.
 Environment inventory SHA-256 is
 `70afed797c43f1f99f3742015f4106fac3dd030b56e38f0dc12a5ef2031dbf86`.
 Keep those copied workers for reproduction. The bridge/CLI, inventory and new
-published bundle must stay immutable for the still-running conditioning probe.
-Parallel model timings do not establish E2E gains. Maintained request admission
-and maintained-route paired timing remain to be done.
-Latest completed CI for the recorded experiment is `ecf9697` (success).
+published bundle are retained for reproduction.
+Parallel model timings do not establish E2E gains. Maintained-route model acceptance and paired timing remain to be done.
+Latest completed CI for the recorded experiment is `7b70465` (success).
 
 The source audit in `docs/openfold3-conditioning-reuse.md` identifies timestep-
 independent pair conditioning and defines chunking, aliasing, lifetime and exact-
 output gates. `experiments/conditioning_reuse` contains a diagnostic overlay for
 sampled pair equality, downstream mutation, RNG and chunk observations. Five CPU
-tests pass. The N1536 GPU diagnostic is now running on HIP5 from fresh copied
-worker `/tmp/fireprot-conditioning-probe-v1` (Rust PID 1668692, tool session
-91816), run ID `conditioning-probe-v1-n1536`. It uses the same immutable
-environment inventory as the prepared-runtime validation. Do not mutate either
-worker tree, the inventory, bridge/CLI or published bundle while they run.
-No caching implementation is enabled. Diagnostic timings are not E2E results.
+tests pass. The N1536 GPU diagnostic completed successfully from copied worker
+`/tmp/fireprot-conditioning-probe-v1`, run `conditioning-probe-v1-n1536`, HIP5.
+All 11 arrays match native bitwise. One scope contains 200 conditioning calls;
+first actual chunk sequence is [1024,1024], all later calls [1024]. Calls
+0/1/99/199 have identical pair bytes, unchanged CPU/GPU RNG and no observed
+consumer mutation. Actual pair shape is [1,1,1536,1536,128]. Only four calls were
+sampled; input immutability is not proven. Evidence and durable control archive
+are pinned in `provenance/openfold3_conditioning_observation.json`.
+The original observation enables no cache. Diagnostic timings are not E2E results.
+
+Formal request admission now accepts OpenFold3 `hip_fused` only with FP32 and
+`deterministic=true`. Native invocation does not load HIP assets. Worker scope
+restoration and manifest writing also cover exceptions. Rust workspace tests,
+Clippy and 29 focused Python tests pass. The formal N1000 request
+`openfold3-n1000-hip-fused-v1` (HIP6, session 80558 exited 0) passed all 11 arrays
+bitwise, with 1,702 submitted HIP calls. The formal N1536 process exited 0;
+its final array comparison still needs to be collected:
+`openfold3-n1536-hip-fused-v1` (HIP7, Rust PID 1682017, session 92978 exited 0).
+Do not mutate deployed python/, CLI, bridge, environment or kernel bundle while
+these run. Parallel acceptance timing is not a speedup measurement.
+Remote Cargo failed downloading crates.io config after retries. The CLI was
+built locally with `--release --locked --offline` and deployed after the remote
+build exited; both request inspections and remote version checks pass.
+Current CLI SHA-256: dfbbe3038421fc5f68dcaba80f4ad95aa8ad93960f29580ee990f5e68b69c817.
+Old CLI is preserved under runtime/framework-snapshots; the bridge is unchanged.
+Historical worker-overlay patches target the pre-admission worker source; pin
+that source or update the patch explicitly when preparing new experiments.
 
 ## Historical implemented state
 
@@ -310,3 +331,29 @@ manifests remain byte-identical. AtlasFold capture medians improve 15.855 to
 library audit identifies system dependencies outside the current roots; the
 full environment coverage audit remains open. Do not equate scan deduplication
 with complete environment provenance or resume kernel tuning yet.
+
+## Active conditioning verification (2026-10-05)
+
+`experiments/conditioning_reuse/verified_reuse.py` implements experimental final-
+pair reuse scoped to `_sample_rollout`, with mandatory native recomputation on
+EVERY call and consumer-mutation/RNG checks. There is no unchecked reuse mode.
+Twelve CPU diagnostic/lifecycle tests pass. The pinned upstream GPU module with
+randomized nonzero parameters passes 12 N1000/N1536 scenarios (48 calls), covering
+all-valid/partial/zero masks and conditioning enabled/disabled. Evidence:
+`provenance/openfold3_conditioning_reuse_screen.json`; timings are not performance.
+Two full-model diagnostics now run from fresh immutable copied workers under
+`/tmp/fireprot-conditioning-reuse-model-v1`:
+- N1000: HIP5, `conditioning-reuse-v1-n1000`, Rust PID 1695703, session 68574.
+- N1536: HIP6, `conditioning-reuse-v1-n1536`, Rust PID 1695808, session 65044.
+Keep CLI/bridge, inventory and copied worker tree fixed while running. Poll these
+owned jobs and compare every model array before considering an unchecked cache.
+The source copy predates a comment-only Apache attribution addition to the local
+helper; source bytes used by the screen are pinned in its durable archive.
+
+SSH access to DiamondHill began timing out during result collection. Do not
+restart existing model tasks based on this observation failure. Formal N1536
+session 92978 has returned exit 0, but its native array comparison is pending.
+Read-only collector `/tmp/fireprot-record-formal-hip.py` saved the verified N1000
+record in `provenance/openfold3_hip_fused_requests.json` and exited 0 (session
+20994) after its stalled read-only SSH child PID 1862479 was terminated. No model
+process was signalled. Read-only status session 28159 still awaits SSH.

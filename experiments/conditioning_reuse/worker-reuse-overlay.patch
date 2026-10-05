@@ -1,0 +1,26 @@
+--- python/fireprot_workers/openfold3.py
++++ python/fireprot_workers/openfold3.py
+@@ -51,8 +51,10 @@
+         channel.emit(dict(event='progress', stage='model'))
+         torch.cuda.synchronize()
+         started = time.perf_counter()
+-        result = forward_with_backend(model, original_forward, args, kwargs,
+-                                      backend=request['backend'], output=output)
++        from .conditioning_reuse import verified_reuse
++        with verified_reuse(model.sample_diffusion, output):
++            result = forward_with_backend(model, original_forward, args, kwargs,
++                                          backend=request['backend'], output=output)
+         torch.cuda.synchronize()
+         model_seconds += time.perf_counter() - started
+         return result
+--- python/fireprot_workers/transport.py
++++ python/fireprot_workers/transport.py
+@@ -68,7 +68,7 @@
+         paths.append(output / bundle['input_snapshot'])
+     # Keep upstream structure files available and covered by the artifact hashes.
+     paths += sorted((output / 'native').rglob('*.cif'))
+-    for diagnostic in ('operator-runtime.json', 'atlasfold-model.json'):
++    for diagnostic in ('operator-runtime.json', 'atlasfold-model.json', 'conditioning-reuse.json'):
+         if (output / diagnostic).is_file():
+             paths.append(output / diagnostic)
+     artifacts = []

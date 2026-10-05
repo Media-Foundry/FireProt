@@ -161,3 +161,23 @@ See `provenance/openfold3_hip_softmax_e2e_n1536.json` and
 An additional in-place operator screen passes 16 exact comparisons and saves
 4.5 GiB at N1536/B128, but gives no established latency gain. It remains outside
 model dispatch; see `experiments/hip_softmax/INPLACE.md`.
+
+## Maintained HIP request integration
+
+OpenFold3 now admits opt-in `hip_fused` with FP32 and explicit strict determinism.
+The worker loads the published `softmax-fp32-v1` bundle and scopes dispatch to one
+model invocation, preserving native QK/PV and falling back on unsupported tensor
+signatures. Native requests do not load HIP assets. The N1000 maintained request
+passes all 11 arrays bitwise and submits 1,702 HIP calls; N1536 exits successfully,
+but final array collection is pending after an SSH outage. See
+`provenance/openfold3_hip_fused_requests.json` for pinned N1000 acceptance.
+
+```bash
+target/release/fireprot infer configs/requests/openfold3-n1000-hip-fused.json \
+  configs/diamondhill/openfold3-hip-fused.json
+```
+
+Use fresh run IDs/output directories. The checked-in profile pins DiamondHill's
+published kernel and environment inventory. These concurrent integration checks
+do not establish maintained-route E2E speedup; the 1.37575x result above remains
+attributed to the experimental worker used for those three measured pairs.

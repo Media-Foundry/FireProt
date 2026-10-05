@@ -141,7 +141,7 @@ impl Workload {
                 *diffusion_steps,
                 *samples,
                 *precision,
-                &[Backend::Native, Backend::Triton][..],
+                &[Backend::Native, Backend::HipFused, Backend::Triton][..],
             ),
         };
         if steps == 0 {
@@ -160,6 +160,11 @@ impl Workload {
         };
         if !valid_precision {
             return Err(RequestError::UnsupportedPrecision);
+        }
+        if matches!(self, Self::Openfold3 { deterministic, .. }
+            if backend == Backend::HipFused && *deterministic != Some(true))
+        {
+            return Err(RequestError::StrictDeterminismRequired);
         }
         Ok(())
     }
@@ -292,6 +297,8 @@ pub enum RequestError {
     UnsupportedBackend,
     #[error("precision is unsupported for this model family")]
     UnsupportedPrecision,
+    #[error("OpenFold3 hip_fused requires deterministic=true")]
+    StrictDeterminismRequired,
     #[error("source commit must be 40 lowercase hexadecimal characters")]
     SourceCommit,
     #[error("artifact SHA-256 must be 64 lowercase hexadecimal characters")]

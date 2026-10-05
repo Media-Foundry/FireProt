@@ -1,7 +1,9 @@
 # OpenFold3 diffusion conditioning reuse investigation
 
-Status: source audit only, 2026-10-05. No caching implementation or measured
-speedup is claimed. The active N1536 HIP softmax paired experiment is unchanged.
+Status: source audit and sampled native observation completed, 2026-10-05.
+The native observation passes all 11 full-model arrays bitwise at N1536.
+A subsequent experimental reuse diagnostic is implemented with mandatory native
+recomputation; no unchecked cache or measured conditioning speedup is claimed.
 
 ## Audited source and scope
 
@@ -103,3 +105,26 @@ Conditioning is only part of diffusion. Trunk attention and pair operations
 therefore remain the main optimization workstream while this reuse candidate is
 investigated. No 200x model gain follows from a potential 200-to-1 computation
 count reduction in one invariant branch.
+
+## Accepted native observation
+
+`provenance/openfold3_conditioning_observation.json` records one complete sampling
+scope with 200 conditioning calls. The first call uses `_forward` twice with
+chunk 1024 (tuning and execution); later calls use it once with the same chunk.
+The final pair has shape `[1,1,1536,1536,128]`, contiguous FP32 storage.
+Calls 0, 1, 99 and 199 have identical pair bytes despite different noise levels;
+CPU/device RNG is unchanged within those sampled conditioning calls, and pair
+bytes are unchanged after their consumers return. This is sampled evidence, not
+an exhaustive proof of input immutability or equality across all 200 calls.
+The unchanged full-model output passes all 11 native array comparisons. This
+instrumented run has no performance interpretation. Its control archive is
+pinned in the evidence record. The next gate is a scoped cache experiment with
+native recomputation checks before timing.
+
+The synthetic upstream GPU screen now passes all 12 scenarios covering both
+lengths, three masks and conditioning enabled/disabled. The diagnostic checks
+all four calls in each scope, including pair reuse and an independently evaluated
+single branch. See `provenance/openfold3_conditioning_reuse_screen.json`.
+N1000/N1536 full-model diagnostics are running with recomputation on every call;
+those results remain pending. Retaining pair values and doing redundant native
+work changes memory/timing, so these runs cannot supply performance evidence.

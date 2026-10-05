@@ -65,3 +65,43 @@ effective chunk sizes. Reusing the private score buffer could avoid this output
 allocation and fill; no latency gain is yet established. Do not disable global
 determinism or its fill policy to improve a benchmark. The actual settings and
 the allocation being eliminated must be recorded explicitly.
+
+## Completed strict operator screen and model candidate
+
+`screen_inplace_strict.py` now uses the maintained `SoftmaxFP32` loader and
+`owned_scores.py`, under `inference_mode`, strict deterministic algorithms,
+`warn_only=False`, and `fill_uninitialized_memory=True`. All 32 native bitwise
+comparisons pass across N1000/N1536, B32 and B256/B128, both bias layouts and
+four mask/special-value cases. A repeat using the shared model-candidate helper
+confirms the initial independent screen. Both versions are archived.
+
+| Shape/layout | Out-of-place median | In-place median | Ratio |
+| --- | ---: | ---: | ---: |
+| N1000/B256 starting | 14.017 ms | 11.144 ms | 1.258x |
+| N1000/B256 ending | 14.110 ms | 11.132 ms | 1.268x |
+| N1536/B128 starting | 13.418 ms | 9.918 ms | 1.353x |
+| N1536/B128 ending | 13.793 ms | 10.291 ms | 1.340x |
+
+These are GPU-event operator timings, including output allocation and bias
+packing but excluding score reset/QK/PV. Two warmups precede five alternating
+observations; the allocator cache stays warm. All GCDs were observed idle before
+the screens, but isolation was not continuously monitored. Peak extra allocation
+falls by exactly the score storage size. This is not a whole-model peak or E2E
+claim. Evidence: `provenance/openfold3_hip_softmax_inplace_strict_screen.json`.
+Global determinism and memory filling remain enabled.
+
+The helper requires strict inference, full-score storage and disjoint bias
+storage, falling back to the maintained allocation for unsafe storage. The caller
+must guarantee private score ownership; these checks alone cannot prove it.
+The audited attention adapter creates QK scores locally and consumes them only
+through softmax/PV. Three CPU tests reject partial storage and aliases.
+
+Complete-model numerical checks are active in a new frozen copied worker at
+`/tmp/fireprot-inplace-model-v2`, over the already validated atom/pair caches.
+The candidate records actual submitted softmax shapes, storage fallbacks and
+final module chunk-tuner values without overriding upstream tuning. The first
+v1 control failed execution preflight before worker creation because its copy
+omitted the root import shim and native source tree; its failed run IDs remain
+reserved. Source/archive pins and the exclusion are recorded in
+`provenance/openfold3_inplace_model_preparation.json`.
+No maintained dispatch changes or new E2E result are claimed yet.

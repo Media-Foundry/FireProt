@@ -664,3 +664,33 @@ Both actual atom-cache trials are now archived and accepted in
 `provenance/openfold3_atom_cache_models.json`. Archive atom-cache-v1-results.tar.gz
 SHA-256 8e3f3758d8d0b977f4e226756257eaf5fd5adfaf3e4e131ba818fd21e56ecde7.
 No controlled atom-cache speedup is claimed.
+
+## Strict in-place softmax screen and live complete-model checks (2026-10-06)
+
+Atom-cache and accepted attention-trace work committed/pushed as 2acd294.
+The strict operator follow-up shows a real difference from the old no-grad-only
+screen: with inference_mode, strict deterministic algorithms and memory filling,
+N1536/B128 out-of-place medians 13.418/13.793 ms become 9.918/10.291 ms.
+All 32 checks pass bitwise; the shared owned_scores.py helper repeats the gain.
+Evidence: provenance/openfold3_hip_softmax_inplace_strict_screen.json.
+These are operator observations, not E2E/whole-model memory results.
+
+Full-model v1 failed before worker creation (missing root import shim/native
+source tree). Sessions 89239/26918 exited 1; no model/GPU trial occurred. Preserve
+these failed output directories. Fresh v2 includes complete support trees and
+current notices. Both supervisors are confirmed live:
+- inplace-model-v2-n1000, HIP5, PID1823626, session38895, worker1823643.
+- inplace-model-v2-n1536, HIP6, PID1823629, session58513, worker1823644.
+Controls: /tmp/fireprot-inplace-model-v2/{n1000,n1536,profile}.json.
+Logs: that root's n1000.log/n1536.log and each output's stdout.log/stderr.log.
+Do not mutate copied worker trees, CLI/bridge, environment or published bundle.
+These are concurrent numerical checks, not E2E timing. Poll known handles;
+require all 11 original-native arrays and inspect final chunk_tuners and
+experimental_owned_scores in operator-runtime.json before any benchmark.
+Preparation/exclusion pins: provenance/openfold3_inplace_model_preparation.json.
+No paired atom-cache or combined-original-Torch performance comparison yet.
+
+Authorized ISA agent is finishing a read-only report with exact native symbols,
+full hashes and descriptor evidence. Actual selected QK/PV use 16x16x4 FP32 MFMA;
+A/B runtime pointer identity remains inferred, not traced. No new GPU kernel
+implementation or speedup is established from this disassembly.

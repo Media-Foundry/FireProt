@@ -212,12 +212,236 @@
       }
     },
     "n1536": {
-      "status": "not_terminal"
+      "status": "passed",
+      "request": {
+        "schema_version": 1,
+        "run_id": "head16-model-v1-n1536",
+        "workload": {
+          "model": "openfold3",
+          "model_name": "openbind-0",
+          "recycles": 3,
+          "diffusion_steps": 200,
+          "samples": 1,
+          "precision": "float32",
+          "deterministic": true
+        },
+        "backend": "hip_fused",
+        "seed": 101,
+        "hip_device": 6,
+        "source": {
+          "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+          "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+            "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+          }
+        },
+        "resources": {},
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/head16-model-v1-n1536"
+      },
+      "supervisor": {
+        "run_id": "head16-model-v1-n1536",
+        "phase": "succeeded",
+        "worker_pid": 1923483,
+        "elapsed_seconds": 528.013908292,
+        "isolation_samples": 551,
+        "failure": null,
+        "announced_device": {
+          "worker_pid": 1923483,
+          "logical_device": 0,
+          "pci_address": "0000:8e:00.0",
+          "architecture": "gfx90a"
+        },
+        "device_verified": true,
+        "physical_device": {
+          "hip_device": 6,
+          "smi_device": 4,
+          "pci_address": "0000:8e:00.0",
+          "architecture": "gfx90a"
+        },
+        "execution_sha256": "88771b19a14d1dc28d99dd3b72753d2fd5210a5d69b81256a8844eda9c5f3591"
+      },
+      "comparison": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "comparison_pin": {
+        "path": "/tmp/fireprot-head16-model-v1/n1536-comparison.json",
+        "sha256": "809c4f117ab3ca16f32d3f50ad0c3f79d40fc05f0e1b1fd039a4a5ac2363355c"
+      },
+      "original_reference": "/media/IntelSSD/fireprot/outputs/hip-softmax-e2e-n1536-baseline-0",
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/head16-model-v1-n1536/accepted.json",
+        "sha256": "d4b9c1504caf2ae4e1a949ae82fb130fe43c50a30dde6e6ee3aaa4bf987730bb"
+      },
+      "operator_runtime": {
+        "path": "/media/IntelSSD/fireprot/outputs/head16-model-v1-n1536/operator-runtime.json",
+        "sha256": "52d809f646a98a18751daea539e9024cf30f3a71d527c987353cf222513ff57f"
+      },
+      "launches_submitted": 3108,
+      "experimental_owned_scores": {
+        "mode": "owned_scores_strict",
+        "submitted_shapes": {
+          "B1024_N1536": 12,
+          "B512_N1536": 12,
+          "B256_N1536": 2892,
+          "B64_N1536": 192
+        },
+        "storage_fallbacks": 0,
+        "limits": [
+          "Shape counts include tuning; not steady-state frequency.",
+          "Private-score ownership requires the audited adapter."
+        ]
+      },
+      "chunk_tuners": {
+        "template_embedder.template_pair_stack": 1024,
+        "msa_module": 1024,
+        "pairformer_stack": 1024,
+        "diffusion_module.diffusion_conditioning": 1024,
+        "aux_heads.pairformer_embedding.pairformer_stack": 256
+      },
+      "confidence_chunk_policy": {
+        "mode": "measured_native_confidence_ceiling",
+        "calls": [
+          {
+            "requested_max": 1024,
+            "bounded_max": 256,
+            "selected": 256,
+            "n": 1536
+          }
+        ]
+      },
+      "experimental_head_dimensions": {
+        "allowed": [
+          16,
+          32
+        ],
+        "submitted_launches": {
+          "16": 400,
+          "32": 2708
+        }
+      },
+      "atom_cache": {
+        "schema_version": 1,
+        "mode": "experimental_atom_cache",
+        "scopes": [
+          {
+            "calls": 200,
+            "hits": 199,
+            "misses": 1,
+            "fallbacks": 0,
+            "completed": true,
+            "retained_bytes": 105829376
+          }
+        ],
+        "limits": [
+          "Audited immutable rollout only; no in-place mutation detection.",
+          "Retained bytes describe tensors, not whole-model peak memory."
+        ]
+      },
+      "pair_cache": {
+        "schema_version": 1,
+        "mode": "experimental_pair_cache",
+        "scopes": [
+          {
+            "calls": 200,
+            "hits": 199,
+            "misses": 1,
+            "fallbacks": 0,
+            "completed": true,
+            "effective_chunks": [
+              1024
+            ],
+            "retained_pair_bytes": 1207959552
+          }
+        ],
+        "limits": [
+          "Source-pinned immutable inference inputs are required.",
+          "Identity checks do not detect in-place input/parameter changes."
+        ]
+      }
     }
   },
   "limits": [
     "Concurrent numerical runs cannot establish E2E speedup.",
     "Submitted shape counts include tuner attempts, not only steady-state calls.",
     "Model output bitwise equality is native agreement, not experimental structure accuracy."
-  ]
+  ],
+  "archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/conditioning-cache-20261006/head16-model-v1-results.tar.gz",
+    "sha256": "d9bc3225a7bf940c826688a43cf6c8f278a6be9fd07a1bc398f4c0b9a7bb6ece",
+    "size": 69212262
+  },
+  "termination": {
+    "sessions": {
+      "n1000": {
+        "id": 19996,
+        "exit_code": 0
+      },
+      "n1536": {
+        "id": 44303,
+        "exit_code": 0
+      }
+    },
+    "both_supervisors_and_workers_exited": true
+  }
 }

@@ -1,6 +1,6 @@
 # Pending head-dimension 16 softmax coverage
 
-Status: source preparation only; no GPU/model acceptance or speedup claim.
+Status: N1000/N1536 complete-model bitwise gates pass; no controlled speedup claim.
 Do not deploy or run this trial during the active combined N1536 E2E sequence.
 
 The accepted N1536 runtime records native attention selections for FP32
@@ -49,5 +49,13 @@ existing copyright and license notices.
 N1000 completes and matches all11 original-native arrays bitwise. Its runtime
 records264 actual D16 softmax submissions plus1702 D32 submissions, zero storage
 fallbacks, and all module chunk tuners remain1024. Both conditioning caches
-retain one miss and199 hits. N1536 remains running; no paired performance result
-or promotion is established. See `provenance/openfold3_head16_models.json`.
+retain one miss and199 hits.
+
+N1536 also completes and matches all11 original-native arrays bitwise. It records
+400 D16 and2708 D32 submitted launches, zero storage fallback, and the same
+conditioning-cache counts. Template/MSA/pairformer chunk tuners now select1024
+(the dimension-32 combination selected512), while confidence remains256 and
+diffusion conditioning1024. This specific change preserves exact outputs; it
+does not establish arbitrary chunk sizes as interchangeable. Both completed
+runs are archived in `provenance/openfold3_head16_models.json`. No paired
+performance result or promotion is established yet.

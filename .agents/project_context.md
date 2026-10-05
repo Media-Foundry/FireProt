@@ -969,3 +969,19 @@ analyzing native K32 fragment/input order read-only using local ASM and these
 new findings; no GPU work or source changes delegated. Next possible diagnostic:
 test K4-fragment permutations against a small tile sliced from the full native
 reference, then require full K32 equality before any fusion. Cause not yet proven.
+
+D16 N1536 now completes too, session44303 exit0, all11 arrays exact. It records
+400 D16/2708 D32 submissions, zero storage fallback, main template/MSA/pairformer
+chunks1024 (previous32-only512), conditioning1024 and confidence256. Both caches
+still200calls/199hits/1miss/0fallback. Completed evidence/archived outputs are now
+in provenance/openfold3_head16_models.json; preparation status updated terminal.
+All launched FireProt model/probe jobs are terminal; no paired timing is active.
+Next: prepare a fresh same-source
+incremental D16 on/off N1536 comparison over the accepted combined backend.
+Do not multiply that future ratio into the independently measured1.499102x.
+Before starting another long isolated timing window, a short MFMA diagnostic
+could compare sparse-K and dense-random16x16 candidate tiles to slices of the
+full native B128/N1536 output, retaining native GEMM shape and backend. Sparse
+exact inputs can check K indexing, while random ULP/absolute-error summaries
+can distinguish indexing-sized errors from rounding-sized ones without accepting
+either. The authorized ISA agent is still tracing LDS/global K mapping.

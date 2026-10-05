@@ -1,11 +1,25 @@
+# Copyright 2026 AlQuraishi Laboratory
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Modified for FireProt: extracted single conditioning and scoped reuse verification.
+# This entire file, including these modifications, is Apache-2.0.
+
 """Experimental conditioning reuse with mandatory native recomputation.
 
 This is a correctness diagnostic, never a performance implementation. Every
 conditioning call still executes upstream and verifies the proposed return values.
 """
-# The single-branch arithmetic follows OpenFold3 DiffusionConditioning:
-# Copyright 2026 AlQuraishi Laboratory, licensed under Apache-2.0.
-# https://www.apache.org/licenses/LICENSE-2.0
 from contextlib import contextmanager
 import inspect
 import json

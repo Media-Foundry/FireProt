@@ -125,3 +125,22 @@ structural accuracy.
 OpenFold3 optimization proceeds through the Rust framework and the same correctness
 gates. Existing validated GPU arithmetic remains available through capability
 checks and native fallback.
+
+## License
+
+FireProt is a multi-license distribution. Original FireProt material is
+**GPL-2.0-only with a limited OpenFold 3 exception**. OpenFold 3-derived files
+identified in [THIRD_PARTY.md](THIRD_PARTY.md) remain **Apache-2.0**. The exception
+permits combination and distribution with OpenFold 3; it is not a general
+exception for Apache-2.0 code.
+
+**Advanced Micro Devices, Inc. and its directly or indirectly controlled
+subsidiaries** also receive an Apache-2.0 option for original FireProt material.
+This grants no new rights over third-party code or model assets. Apache-2.0
+downstream redistribution rights apply to copies lawfully distributed under
+that option. Earlier Apache-2.0 grants are not revoked.
+
+See [LICENSE](LICENSE) for the exact grants and complete license texts, and
+[CONTRIBUTING.md](CONTRIBUTING.md) for contribution terms. Cargo uses `license-file`
+because this custom arrangement is not a standard SPDX exception; the repository
+does not declare an unrestricted `GPL-2.0-only OR Apache-2.0` choice.

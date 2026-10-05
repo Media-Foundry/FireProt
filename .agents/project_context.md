@@ -417,3 +417,21 @@ original FireProt material only. Both scope choices were explicitly confirmed.
 Do not introduce a generic Apache-2.0 combination exception. License preparation
 is at /tmp/fireprot-license-draft; no effective license change has yet been made.
 License work must preserve immutable remote model workers and binaries.
+
+## License policy (2026-10-06)
+
+At the user's explicit direction, original FireProt material is GPL-2.0-only
+with a combination exception LIMITED TO OPENFOLD 3. The root LICENSE contains
+the precise exception, AMD alternative and complete unchanged GPLv2/Apache2 texts.
+AMD means Advanced Micro Devices, Inc. plus directly/indirectly controlled
+subsidiaries; that group has an additional Apache-2.0 option only for original
+FireProt material. Standard downstream Apache permissions and earlier releases'
+existing grants are preserved. There is no blanket Apache-dependency exception.
+OpenFold3-derived attention adapter, experimental attention overlay and verified
+conditioning helper remain Apache-2.0 as whole files, with original copyrights
+and modification notices. THIRD_PARTY.md is the component inventory.
+Cargo now inherits license-file=LICENSE; no unrestricted dual-license expression
+is used. Installer copies the license inventory/texts into share/fireprot.
+Three installation tests, Cargo metadata for all five crates, exact LICENSE
+inclusion in a packaged core crate, format and Python syntax checks pass.
+Remote active model workers/binaries have not been modified by this license change.

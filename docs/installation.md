@@ -157,3 +157,11 @@ supervisor reports. Point-in-time maps do not prove complete transient-load
 coverage; device mappings and mutable filesystem behavior retain their documented
 limits. See `provenance/rust_installation_v2_integration.json` for the installation,
 input pins, seven acceptance receipts, comparisons, replay hashes and library audit.
+
+## License payload
+
+New installations include the project LICENSE, component licensing inventory,
+and Apache-2.0/CK-MIT/PyTorch-BSD notices under `share/fireprot/`. Their bytes are
+covered by the installation manifest and remain available after the source tree
+is removed. The historical installation counts above predate these additional
+files. Existing installed prefixes are not silently rewritten.

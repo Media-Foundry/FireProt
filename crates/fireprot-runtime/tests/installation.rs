@@ -19,6 +19,11 @@ fn fixture(root: &Path) -> InstallSpec {
         "README.md",
         "Cargo.toml",
         "Cargo.lock",
+        "LICENSE",
+        "THIRD_PARTY.md",
+        "licenses/Apache-2.0.txt",
+        "licenses/CK-MIT.txt",
+        "licenses/PyTorch-BSD.txt",
     ] {
         let p = root.join(name);
         fs::create_dir_all(p.parent().unwrap()).unwrap();
@@ -78,6 +83,18 @@ fn independent_installation_retains_profile_and_excludes_runtime() {
         dst.join("bin/fireprot-compiler-guard").to_str().unwrap()
     );
     fs::remove_dir_all(source).unwrap();
+    for notice in [
+        "LICENSE",
+        "THIRD_PARTY.md",
+        "licenses/Apache-2.0.txt",
+        "licenses/CK-MIT.txt",
+        "licenses/PyTorch-BSD.txt",
+    ] {
+        assert_eq!(
+            fs::read_to_string(dst.join("share/fireprot").join(notice)).unwrap(),
+            notice
+        );
+    }
     verify(&dst, &result.manifest_sha256).unwrap();
     assert!(install(&spec, &dst).is_err());
     fs::write(

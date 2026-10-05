@@ -227,7 +227,16 @@ pub fn install(spec: &InstallSpec, destination: &Path) -> io::Result<Installatio
         &framework.join("fireprot/__init__.py"),
         false,
     )?;
-    for name in ["README.md", "Cargo.lock", "Cargo.toml"] {
+    for name in [
+        "README.md",
+        "Cargo.lock",
+        "Cargo.toml",
+        "LICENSE",
+        "THIRD_PARTY.md",
+        "licenses/Apache-2.0.txt",
+        "licenses/CK-MIT.txt",
+        "licenses/PyTorch-BSD.txt",
+    ] {
         copy_file(
             &spec.source_root.join(name),
             &root.join("share/fireprot").join(name),

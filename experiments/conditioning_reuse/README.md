@@ -109,7 +109,29 @@ entered. Preserve native backend for the first isolated full-model trial and
 require all 11 arrays bitwise before any paired timing or combination with HIP
 softmax. Keep the completed diagnostic workers and their evidence immutable.
 
-The combined HIP-softmax/cache numerical trials are now active under
+The completed combined HIP-softmax/cache numerical trials are retained under
 `/tmp/fireprot-conditioning-combined-v1` on DiamondHill (N1000 HIP5, N1536 HIP7).
 They reuse the immutable cache-v1 copied worker with backend `hip_fused`.
-Combination correctness remains a separate gate before paired E2E timing.
+Both have now passed all 11 arrays; each records 199 cache hits and N1000/N1536
+submit 1,702/5,592 HIP calls. See
+`provenance/openfold3_conditioning_combined_models.json`.
+
+## Prepared incremental E2E comparison
+
+`worker-paired-overlay.patch` makes both benchmark arms use identical source.
+`FIREPROT_CONDITIONING_CACHE=0` leaves the conditioning calls native; `1` enables
+per-rollout caching. Both requests use the same maintained `hip_fused` attention
+backend and published kernel. Other values are rejected. The patch applies to
+the maintained worker; both helper modules must be copied into its package.
+
+DiamondHill controls are prepared at `/tmp/fireprot-conditioning-paired-v1`.
+`pairs-n1536.json` schedules AB/BA/AB on HIP7 with FP32/R3/D200/S1/seed101,
+fresh model processes, unflushed filesystem cache and the same strict environment
+inventory. Profile hashes and the single cache flag are the only declared
+comparison changes. No additional FireProt GPU job may be launched during this
+sequential measurement. Both combined numerical gates passed and the three-pair benchmark is now active
+at `paired-n1536` under that root. Results remain pending.
+
+This measures the cache increment over HIP softmax. It does not directly measure
+the combined path against original Torch, and historical ratios must not be
+multiplied and presented as a new directly measured total speedup.

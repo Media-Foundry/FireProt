@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "status": "launched_results_pending",
+  "specification": {
+    "path": "/tmp/fireprot-conditioning-paired-v1/pairs-n1536.json",
+    "sha256": "20e833b9de7e801f07aaa7699bbfd2007f08c0e0da2148f2fd579957d1bf1656",
+    "content": {
+      "schema_version": 1,
+      "execution": {
+        "schema_version": 1,
+        "timeout_seconds": 7200,
+        "invocation_timeout_seconds": 1800,
+        "pairs": [
+          {
+            "first": "baseline",
+            "baseline": {
+              "request": {
+                "path": "/tmp/fireprot-conditioning-paired-v1/conditioning-e2e-n1536-baseline-0.json",
+                "sha256": "d62af04ecf9f03c336fb3e45f3240b1660d3ab825138e77677ca8006d7d01730"
+              },
+              "profile": {
+                "path": "/tmp/fireprot-conditioning-paired-v1/baseline-profile.json",
+                "sha256": "1ee02dd46d5566b68d44fcc96eee46a63508537b6f060c764135ee5a7832aec0"
+              }
+            },
+            "candidate": {
+              "request": {
+                "path": "/tmp/fireprot-conditioning-paired-v1/conditioning-e2e-n1536-candidate-0.json",
+                "sha256": "222e021f62306dcec06fd70f3302df5cd7ee6507c26311e363e41c468f8f4a14"
+              },
+              "profile": {
+                "path": "/tmp/fireprot-conditioning-paired-v1/candidate-profile.json",
+                "sha256": "5c86195c3e784a856a2c6d36a5b6dfec4445a1f932f4f66440055c4418d849ec"
+              }
+            }
+          },
+          {
+            "first": "candidate",
+            "baseline": {
+              "request": {
+                "path": "/tmp/fireprot-conditioning-paired-v1/conditioning-e2e-n1536-baseline-1.json",
+                "sha256": "208b9baf0aeda6d899eff337d16188281cbda4b8d21f521d618905aae877dcb3"
+              },
+              "profile": {
+                "path": "/tmp/fireprot-conditioning-paired-v1/baseline-profile.json",
+                "sha256": "1ee02dd46d5566b68d44fcc96eee46a63508537b6f060c764135ee5a7832aec0"
+              }
+            },
+            "candidate": {
+              "request": {
+                "path": "/tmp/fireprot-conditioning-paired-v1/conditioning-e2e-n1536-candidate-1.json",
+                "sha256": "cdbedfc90ff6252980cec69bc0fbfa3ba8d3012b27f5017b07bdf14a00f1c303"
+              },
+              "profile": {
+                "path": "/tmp/fireprot-conditioning-paired-v1/candidate-profile.json",
+                "sha256": "5c86195c3e784a856a2c6d36a5b6dfec4445a1f932f4f66440055c4418d849ec"
+              }
+            }
+          },
+          {
+            "first": "baseline",
+            "baseline": {
+              "request": {
+                "path": "/tmp/fireprot-conditioning-paired-v1/conditioning-e2e-n1536-baseline-2.json",
+                "sha256": "0fc8e2afacaf84cce74e3e2607739190cc08de590c21298c6d5abfd977412bee"
+              },
+              "profile": {
+                "path": "/tmp/fireprot-conditioning-paired-v1/baseline-profile.json",
+                "sha256": "1ee02dd46d5566b68d44fcc96eee46a63508537b6f060c764135ee5a7832aec0"
+              }
+            },
+            "candidate": {
+              "request": {
+                "path": "/tmp/fireprot-conditioning-paired-v1/conditioning-e2e-n1536-candidate-2.json",
+                "sha256": "2852f0a8008d0886f8e81b7565b8b0f7b0240e19a43658c9d2a7c36398768967"
+              },
+              "profile": {
+                "path": "/tmp/fireprot-conditioning-paired-v1/candidate-profile.json",
+                "sha256": "5c86195c3e784a856a2c6d36a5b6dfec4445a1f932f4f66440055c4418d849ec"
+              }
+            }
+          }
+        ]
+      },
+      "comparison": {
+        "scope": "end_to_end",
+        "cache_state": "fresh model processes; filesystem cache not flushed; published HIP softmax kernel and strict environment inventory; no other FireProt GPU job will be launched during this sequential experiment; HIP7/PCI93 continuously monitored; other host jobs not continuously audited",
+        "treatment_description": "HIP mask+bias+softmax versus the same HIP backend plus per-rollout pair-conditioning reuse; FP32 R3 D200 S1 seed101 unchanged",
+        "expected_changes": {
+          "launch.environment.FIREPROT_CONDITIONING_CACHE": {
+            "baseline": "0",
+            "candidate": "1"
+          },
+          "invocation.profile_sha256": {
+            "baseline": "1ee02dd46d5566b68d44fcc96eee46a63508537b6f060c764135ee5a7832aec0",
+            "candidate": "5c86195c3e784a856a2c6d36a5b6dfec4445a1f932f4f66440055c4418d849ec"
+          }
+        }
+      }
+    }
+  },
+  "source_files": {
+    "LICENSE": "9039d57c6faddb1cebe92f7d26c6f73bce7cdd5aec125a2530ae40a0fa62f9dc",
+    "THIRD_PARTY.md": "5ad2b94cc20e839d944c47c375ce8cd34171e15fe63b908f45d90f37da3ea66a",
+    "baseline-profile.json": "1ee02dd46d5566b68d44fcc96eee46a63508537b6f060c764135ee5a7832aec0",
+    "candidate-profile.json": "5c86195c3e784a856a2c6d36a5b6dfec4445a1f932f4f66440055c4418d849ec",
+    "conditioning-e2e-n1536-baseline-0.json": "d62af04ecf9f03c336fb3e45f3240b1660d3ab825138e77677ca8006d7d01730",
+    "conditioning-e2e-n1536-baseline-1.json": "208b9baf0aeda6d899eff337d16188281cbda4b8d21f521d618905aae877dcb3",
+    "conditioning-e2e-n1536-baseline-2.json": "0fc8e2afacaf84cce74e3e2607739190cc08de590c21298c6d5abfd977412bee",
+    "conditioning-e2e-n1536-candidate-0.json": "222e021f62306dcec06fd70f3302df5cd7ee6507c26311e363e41c468f8f4a14",
+    "conditioning-e2e-n1536-candidate-1.json": "cdbedfc90ff6252980cec69bc0fbfa3ba8d3012b27f5017b07bdf14a00f1c303",
+    "conditioning-e2e-n1536-candidate-2.json": "2852f0a8008d0886f8e81b7565b8b0f7b0240e19a43658c9d2a7c36398768967",
+    "fireprot/__init__.py": "5b7873ed933ddca405717e111da8a8142f5df877f028e08d2b5aadcc46b433b2",
+    "kernels/amd/README.md": "38378f78849000bf686bd342a19302cc42af68df0bdc9a7f89725a76099ebad5",
+    "kernels/amd/fireprot_amd_ops.cpp": "1c7fc9f4c770752375fed47abfe08d33cda76e40d11c740d7f8294e132cd3d43",
+    "kernels/amd/fireprot_amd_ops.cu": "748c11e089cbb5a3101912954b439179557b2b966aac340c76c538960063f949",
+    "kernels/amd/fireprot_ck_attention.cpp": "d50865b27a66956b391a331cc0daf9e33962c1fd1c0d93b3243fab9d25af016c",
+    "kernels/amd/fireprot_ck_ops.cpp": "f82f123bf12b6f9a5bea05acaac11dc2c646e126c6553dbdf24e9c81747829f0",
+    "kernels/amd/fireprot_lt_bmm.cpp": "cc876b221fc91e0bf10f991ca8a641a395eab5a157779f525966ea73ae8491b9",
+    "kernels/amd/fireprot_mask_bias.cu": "0aff4c687fce58b491a40000b423de040c5f4695c42718e448b2127156a62cc3",
+    "kernels/amd/fireprot_pair_fusions.cpp": "0a21f6cf760a91427b95e4a9bdc6d4d7ff181e187d806f97fb73e00ee4ebf0d9",
+    "kernels/amd/fireprot_pair_qkv.cu": "53881fc24c4f4d9e183234bc9b312e6837d51d7afa68a937bfdb94e676197b4e",
+    "kernels/amd/fireprot_pair_softmax.cu": "45298f0edeb18ec3aa26411fdc2f75f57a70062b251687fa4b62a1256a90bdc9",
+    "kernels/amd/fireprot_pair_transpose.cu": "bc0779458326662c088c7cad564a0bb1c7ce5dcf7f03630c140e306665f00b9f",
+    "kernels/amd/fireprot_softmax_fp32.cpp": "baca481263c9ddf0726a94a85fdb6bf70df46d5f558f8064781dc7230d675599",
+    "kernels/amd/tools/hip_device_probe.cpp": "b4e0d82420f8afcfd8caaebec185ff96bfc7cfaeec7acc62bf8a95f459c8c18b",
+    "licenses/Apache-2.0.txt": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "licenses/CK-MIT.txt": "20f3b83dfda01bd18d285e0edbb9d044be6dde04cdf76a1ec18d9fc7127936bf",
+    "licenses/PyTorch-BSD.txt": "bd018feef8825e88181c84eb7e3aa4eafb8f08a20d9fd6ef948569610c4a3e43",
+    "pair_cache.py": "ced2ccebc025521a541b6131325e693b630f79f943938ced0720b826b9d70f92",
+    "pairs-n1536.json": "20e833b9de7e801f07aaa7699bbfd2007f08c0e0da2148f2fd579957d1bf1656",
+    "python/README.md": "43ddfeaabfdf5d1d6a0be532f2e8cb66888782b00fad556ed60d94bacd5725c5",
+    "python/fireprot/_paths.py": "f40eca4224217a461ed948b05e67f94a4ae9d6275de60a0d16443fe360aa05f7",
+    "python/fireprot/adapters/atlasfold/runtime.py": "4fd73e13371805e86a9e910c236fd48b22a37c8ca4c7b3f03a254072b08249ea",
+    "python/fireprot/adapters/openfold3/__init__.py": "599f351fda9fe6c70fd69380417181dfe8d6bdf4fed4e61c4a28e06212aa3294",
+    "python/fireprot/adapters/openfold3/attention.py": "d8a884b9c018c436904a1e6774139e75915fae8c11189190425865a5780b9bd3",
+    "python/fireprot/adapters/protenix/construction.py": "d735bb27a32b199e9476983eb7a71415a31169290a4d19d2a63d1d96f5a5d6ac",
+    "python/fireprot/adapters/protenix/features.py": "0db0713aeb7b9865bd730f71e812c07bdfe63285ea7ec3a76dbf4f5a7c3f4433",
+    "python/fireprot/adapters/protenix/hooks.py": "237d6bc0e6f9971361675ddb06a00e425d055b2add4647e5640b17bfe0e49b2b",
+    "python/fireprot/adapters/protenix/runtime.py": "caf6233c43cde8ec2b651808a0a3e51b88c318064b8bbcfc33fb2fa5c6cea5f9",
+    "python/fireprot/backends/amd/_compile_native.py": "b94e4d9b3d4f81e111accf0251f2f3bd464e5938335ebae0fbddb7a9cfc4083c",
+    "python/fireprot/backends/amd/_native_build.py": "fa4909f6bbd1ad6f5b246c9cf335e01991bfec4f18ff8677dc94cf8168672d7d",
+    "python/fireprot/backends/amd/_native_hip.py": "60052815e80450203762c425a78d97d92583a9ae3297bc410a70d22aaed92dbd",
+    "python/fireprot/backends/amd/_published.py": "abf0ddd8eeacf9ca1e9e72742d357490b107940f8acdf88878019142d9b6fd8b",
+    "python/fireprot/backends/amd/attention_gate.py": "d306a6ea7f762930f89cd6f4572ac95207a691135d3401c3ea1d7fdaebf45c5e",
+    "python/fireprot/backends/amd/blas.py": "173f12ed8f15e88bc9ce3e784739f82b8044b2927f52bcdf3d52c749a38f7aba",
+    "python/fireprot/backends/amd/ck_attention.py": "f747f9a8a1b961e2d82d479c32f76ee5bc2e902f9059e89b4549d090b58621ed",
+    "python/fireprot/backends/amd/ck_extension.py": "285e2d73a28d64e0788a184d8219c5d80f77595a69e61520f3e75fa1d58f167d",
+    "python/fireprot/backends/amd/ck_gemm.py": "b907a2ce9d79830c4ed029ee3e18e6727e9058b7094fd38f79d93b6729575272",
+    "python/fireprot/backends/amd/extension.py": "c90efeb110a341d6b57497dc9eb336f0dada6fa8767cdc189ff8eef1a536fc8c",
+    "python/fireprot/backends/amd/lt_bmm.py": "80a6a56462896f83109309469e147be8c562638ceac6d94da8c42e363834ae38",
+    "python/fireprot/backends/amd/mask_bias.py": "3afebb7d3c42d553a7ef65f6d0b788595de5fb8e044e4ae608dc92655d0331b6",
+    "python/fireprot/backends/amd/pair_fusions.py": "05b539bff71eca6c37920c87ff390aab62a28ede3eb92a80abd1299ca8d9303c",
+    "python/fireprot/backends/amd/pair_layout.py": "6fe404093e96adcda22a5479036aa5f027e691b094bbfa4a71dc35c66c8fc49d",
+    "python/fireprot/backends/amd/qkv_projection.py": "6f6ad521b169df46c2e0ec3030195267decda3a7a1bbddac40a9f25b23b6fc02",
+    "python/fireprot/backends/amd/recycle.py": "ea6cd04d3b69ba8999cd3781d94d7d4736ff2b205be5d542153494f7923aefe5",
+    "python/fireprot/backends/amd/softmax_fp32.py": "52d1b222750b5f41f80f09865f619c76c8501d103dd3e5bd82537ae67c048e35",
+    "python/fireprot/backends/amd/transition_projection.py": "df749eaf3ab49a21f709f60a939b1c30294e2102546f7c03ffcac3ba8756614d",
+    "python/fireprot/backends/amd/triangle_attention.py": "30627afc9ea995230c9b1a971b44122dd72c96801a2faa93c6ae09e783e57c8c",
+    "python/fireprot/backends/amd/triangle_multiplication.py": "40effd005b978f70869e2cbd582a82501b069ca58555b84422b961b44cfda02a",
+    "python/fireprot/backends/amd/two_gcd_attention.py": "695db35251ba84a5d0ccc632c5c1cfcf970e4616fe442b42b7df5ee769a8da05",
+    "python/fireprot/ops/_bridge.py": "679d22330ca64b05c89a9c0a1da34e352731985ef1a12f458b1da7e03ceaa1c5",
+    "python/fireprot/ops/registry.py": "82cdb1cb2892d7571b765bde564651dcb92650c8350675e757e8359927419c8f",
+    "python/fireprot/validation/protenix.py": "cdf3279f708b147ec014af3ec5970e3c7920d325533763fb7cbf01faa3f1d61b",
+    "python/fireprot_workers/__init__.py": "4d3f99912815c2e067831f2217be7ce1128bf9316c223589247ff752a4030bfd",
+    "python/fireprot_workers/__main__.py": "509e4c8813b89bd9539ee6e383be61131cf03a28047c5beed2c5435f9166a00a",
+    "python/fireprot_workers/atlasfold.py": "c7f80e58043de8986f4a42519d058f27f0b2054de82bcd7ebdc1893130e030d5",
+    "python/fireprot_workers/openfold3.py": "d4cd6df737acdab84025c82c31cdcc4813b32efc7fc78934e76b4e218e569335",
+    "python/fireprot_workers/pair_cache.py": "ced2ccebc025521a541b6131325e693b630f79f943938ced0720b826b9d70f92",
+    "python/fireprot_workers/protenix.py": "cf299d117df8ab6e40ea803a6fc131677cfe4d18a0546c0d24179d23451b69a1",
+    "python/fireprot_workers/protenix_esm.py": "0597c899caeee94327e7a2e797330875abd816cc59f36b8eeb7e4fd46a617182",
+    "python/fireprot_workers/transport.py": "7d85480316422bf6b62713f637918080d9ead0d4f5cf6c87bd78d48966e7da2d",
+    "python/fireprot_workers/verified_reuse.py": "bc6985b7dbe2bf63d71ef17d573022f151fcf9214f1ca5f5f8ca85e644e7f5e3",
+    "verified_reuse.py": "bc6985b7dbe2bf63d71ef17d573022f151fcf9214f1ca5f5f8ca85e644e7f5e3",
+    "worker-paired-overlay.patch": "f1c5e27dfd627156a8c42fc241dd2a7f875a68ed53f55a98b05646562511871e"
+  },
+  "control_archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/conditioning-cache-20261006/paired-preparation.tar.gz",
+    "sha256": "b732fbfa935de9712a51f8578ecabe90454decbbad7b5d0d66114556e379d7c0"
+  },
+  "benchmark_destination": "/tmp/fireprot-conditioning-paired-v1/paired-n1536",
+  "prelaunch": "Both combined numerical gates passed; both model supervisor PIDs exited and AMD SMI reported all eight GCDs without running processes immediately before launch."
+}

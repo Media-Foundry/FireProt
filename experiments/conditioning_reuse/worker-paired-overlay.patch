@@ -1,0 +1,31 @@
+--- python/fireprot_workers/openfold3.py
++++ python/fireprot_workers/openfold3.py
+@@ -51,8 +51,15 @@
+         channel.emit(dict(event='progress', stage='model'))
+         torch.cuda.synchronize()
+         started = time.perf_counter()
+-        result = forward_with_backend(model, original_forward, args, kwargs,
+-                                      backend=request['backend'], output=output)
++        from contextlib import nullcontext
++        from .pair_cache import pair_cache
++        cache_mode = os.environ['FIREPROT_CONDITIONING_CACHE']
++        if cache_mode not in ('0', '1'):
++            raise ValueError('FIREPROT_CONDITIONING_CACHE must be 0 or 1')
++        scope = pair_cache(model.sample_diffusion, output) if cache_mode == '1' else nullcontext()
++        with scope:
++            result = forward_with_backend(model, original_forward, args, kwargs,
++                                          backend=request['backend'], output=output)
+         torch.cuda.synchronize()
+         model_seconds += time.perf_counter() - started
+         return result
+--- python/fireprot_workers/transport.py
++++ python/fireprot_workers/transport.py
+@@ -68,7 +68,7 @@
+         paths.append(output / bundle['input_snapshot'])
+     # Keep upstream structure files available and covered by the artifact hashes.
+     paths += sorted((output / 'native').rglob('*.cif'))
+-    for diagnostic in ('operator-runtime.json', 'atlasfold-model.json'):
++    for diagnostic in ('operator-runtime.json', 'atlasfold-model.json', 'conditioning-cache.json'):
+         if (output / diagnostic).is_file():
+             paths.append(output / diagnostic)
+     artifacts = []

@@ -76,7 +76,7 @@ changes; N1000 is about 1% slower. Evidence:
 savings for this operator only, not model peak or E2E gains. Keep out-of-place
 execution for maintained integration; no in-place model route is enabled.
 
-Maintained FP32 boundary (formal request validation now running):
+Maintained FP32 boundary (formal request validation passed):
 `python/fireprot/backends/amd/softmax_fp32.py`, with byte-identical kernel source
 copy `kernels/amd/fireprot_softmax_fp32.cpp`. The package/ABI
 `fireprot_softmax_fp32`/`softmax-fp32-v1` is now built and published at
@@ -85,7 +85,7 @@ copy `kernels/amd/fireprot_softmax_fp32.cpp`. The package/ABI
 `python/fireprot/adapters/openfold3/attention.py` adds source-pinned, context-
 scoped dispatch through the Rust registry. Sixteen CPU/meta checks pass across
 both components. Strict deterministic FP32 OpenFold3 `hip_fused` request admission
-is implemented; full maintained-route validation is running.
+is implemented; both maintained-route long-input validations pass.
 
 Prepared validation entry points in `experiments/hip_softmax` are
 `build_runtime.py`, `screen_runtime.py`, and `worker-runtime-overlay.patch`.
@@ -453,3 +453,35 @@ Remote CLI remains dfbbe3038421fc5f68dcaba80f4ad95aa8ad93960f29580ee990f5e68b69c
 license/installer changes are local only so far. After exact combined checks,
 prepare sequential same-source baseline/candidate paired E2E, with all scientific
 settings unchanged. License commit e6ac271 follows optimization commit d3e0a86.
+
+## Incremental cache E2E preparation (2026-10-06)
+
+N1000 combined HIP+cache passes all 11 arrays; N1536 combined remains active
+(PID 1727353, session 17465). Session 59510 completed successfully.
+CI b7ece06 passed (run 37338832565). A fresh same-source benchmark worker is
+prepared at /tmp/fireprot-conditioning-paired-v1, using current license notices.
+worker-paired-overlay.patch explicitly switches only FIREPROT_CONDITIONING_CACHE
+(0 baseline / 1 candidate); both arms use hip_fused. Three N1536 AB/BA/AB pairs
+are pinned in pairs-n1536.json, SHA-256
+20e833b9de7e801f07aaa7699bbfd2007f08c0e0da2148f2fd579957d1bf1656.
+Do not launch the benchmark before N1536 combined output comparison passes.
+This experiment measures the cache increment over HIP softmax, not a new direct
+comparison to original Torch. Do not multiply historical ratios and label them
+as directly measured total E2E. During the sequential benchmark, launch no
+other FireProt GPU workloads; perform only CPU/source work and monitoring.
+
+Both combined checks have now passed all 11 native arrays, with 199 cache hits
+per model and 1,702/5,592 submitted HIP calls. See
+`provenance/openfold3_conditioning_combined_models.json`. Both supervisor PIDs
+exited and all eight GCDs had no running processes at the pre-benchmark snapshot.
+The N1536 AB/BA/AB benchmark has now been LAUNCHED, tool session 29158:
+/tmp/fireprot-conditioning-paired-v1/paired-n1536. Preparation/source pins and
+its persistent archive are in
+`provenance/openfold3_conditioning_paired_preparation.json`.
+Keep that worker/source tree, remote CLI/bridge, bundle and environment fixed.
+Launch no other FireProt GPU tasks until this sequence terminates. Poll its
+specific live controller/journal; do not restart on transport observation timeout.
+Results and maintained-route incremental E2E are still pending.
+
+The live paired controller is Rust PID 1739049. The first journal entry confirms
+baseline pair 0 started (conditioning-e2e-n1536-baseline-0).

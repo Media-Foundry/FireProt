@@ -500,3 +500,23 @@ as current optimized bottlenecks. Heavy disassembly/library scans and all new
 GPU probes wait until the active paired benchmark terminates.
 After that sequence, also compare its first HIP baseline against the retained
 strict native N1536 reference before publishing the incremental result.
+
+## Bounded attention diagnostic preparation (2026-10-06)
+
+The first incremental cache pair passed all 11 arrays and CIF identity checks:
+HIP baseline 690.574494673 s, HIP+cache 656.044704742 s, one-pair ratio
+1.0526332880692626. This is explicitly insufficient repeats, not the final
+three-pair result or a direct comparison to original Torch. The controller
+1739049 remains live; pair 1 candidate started at journal offset 1352.604365844.
+CI for 68f5cba completed successfully.
+
+`experiments/attention_trace/` prepares a one-call QK/PV layout/correlation
+observer for the next diagnostic. Its three CPU tests pass exact output/RNG,
+labels/BMM metadata, scope, exception and unmatched-call checks. It is not
+deployed and has no GPU or model validation. Follow its README only after the
+paired benchmark terminates; use a fresh worker/profile, retain the cache/HIP
+path, seal both diagnostics, and require the full native output comparison.
+The observed N1536 dispatcher signatures include 32/64/128/256/512/1024 rows,
+H4/D32 with strides [196608,32,128,1]. Selection includes tuning attempts and
+does not prove submission or steady-state frequency. The initial trace selector
+uses 32 rows conservatively and must not be extrapolated to other chunks.

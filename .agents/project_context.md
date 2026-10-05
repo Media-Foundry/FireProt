@@ -539,3 +539,44 @@ HIP/cache worker, and require 200 checked calls plus all 11 final native arrays.
 The second candidate (measurement 002) has now completed and passed the first
 baseline reference. Controller 1739049 is running measurement 003, pair 1's
 baseline. Final three-pair performance is still pending.
+
+## Completed incremental E2E and live follow-ups (2026-10-06)
+
+The three-pair sequence completed successfully; session 29158 exited 0,
+controller 1739049 and all six workers exited. All eight GCDs were observed idle
+after completion. Final E2E medians: HIP 692.372833244 s, HIP+cache
+656.659018284 s, ratio 1.0543871537062393. Model medians: 597.6835733929183 s
+and 562.3623078720411 s, ratio 1.0628087356254932. Every pair and reference check
+passes all 11 arrays and CIF identity; a separate Rust compare-npz also confirms
+the first HIP anchor matches the original strict native N1536 output exactly.
+All candidates record 199 hits, one miss, no fallback and 5,592 HIP submissions.
+See `provenance/openfold3_conditioning_cache_e2e_n1536.json`. Do not multiply
+this incremental ratio by the earlier softmax ratio and call it measured E2E.
+
+Durable paired controls:
+/media/IntelSSD/fireprot/outputs/experiments/conditioning-cache-20261006/paired-controls.tar.gz
+SHA-256 cdf4dc86e18cf3ef98b2a3e59a53d61cebcc236755b38d64d2c2240449a38536.
+Local operational collector: /tmp/fireprot-collect-cache-pairs.py; collected
+JSON: /tmp/fireprot-cache-paired-results.json. Both follow-up commits 6b13b04
+and e454d96 have successful CI.
+
+Three independent diagnostics were prepared, archived, inspected by Rust and
+launched only AFTER the timing sequence and original-anchor comparison passed:
+- attention-trace-v1-n1536, HIP7, supervisor 1782895, tool session 22381;
+  /tmp/fireprot-attention-trace-v1/n1536.json and profile.json.
+- atom-reuse-check-v1-n1000, HIP5, supervisor 1782902, tool session 65529;
+  /tmp/fireprot-atom-reuse-v1/n1000.json and profile.json.
+- atom-reuse-check-v1-n1536, HIP6, supervisor 1782896, tool session 64225;
+  /tmp/fireprot-atom-reuse-v1/n1536.json and profile.json.
+
+Their root n1000.log/n1536.log files capture supervisor output. Model outputs
+remain under /media/IntelSSD/fireprot/outputs/<run_id>. Freeze these copied
+worker trees, published bundle, environment and remote CLI/bridge until terminal.
+These concurrent instrumented runs are NOT performance evidence. Require the
+full original-native array comparison, all 200 atom checks and consumer/RNG
+checks, or valid raw QK/PV trace correlations as applicable. No result claimed yet.
+Requests/source files/launch handles are in
+`provenance/openfold3_followup_diagnostics_preparation.json`. Its archive is
+/media/IntelSSD/fireprot/outputs/experiments/conditioning-cache-20261006/followup-preparation.tar.gz
+SHA-256 dc0a2593ffbc955d0885dd2e28f970392ec0004b0605098b9c91c710c912073a.
+The local preparation capture also remains at /tmp/fireprot-followup-prepared.json.

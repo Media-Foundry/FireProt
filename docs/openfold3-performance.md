@@ -181,3 +181,17 @@ Use fresh run IDs/output directories. The checked-in profile pins DiamondHill's
 published kernel and environment inventory. These concurrent integration checks
 do not establish maintained-route E2E speedup; the 1.37575x result above remains
 attributed to the experimental worker used for those three measured pairs.
+
+## Additional pair-conditioning reuse
+
+The maintained HIP worker now has a separate three-pair N1536 comparison with
+an experimental rollout-local pair cache. E2E medians are 692.373 s (HIP) and
+656.659 s (HIP plus cache), or 1.05439x. Model medians are 597.684 s and 562.362 s,
+or 1.06281x. All three pairs pass all 11 arrays and CIF identity; the first HIP
+anchor also matches the retained strict native reference exactly.
+
+See [conditions and limits](openfold3-conditioning-reuse.md) and
+`provenance/openfold3_conditioning_cache_e2e_n1536.json`. This incremental ratio
+and the earlier 1.37575x softmax ratio are separate measurements; their product
+is not a directly measured combined-versus-original-Torch result. The cache
+remains experimental, scoped to the verified immutable rollout.

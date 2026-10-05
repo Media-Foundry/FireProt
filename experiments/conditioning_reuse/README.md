@@ -129,8 +129,12 @@ DiamondHill controls are prepared at `/tmp/fireprot-conditioning-paired-v1`.
 fresh model processes, unflushed filesystem cache and the same strict environment
 inventory. Profile hashes and the single cache flag are the only declared
 comparison changes. No additional FireProt GPU job may be launched during this
-sequential measurement. Both combined numerical gates passed and the three-pair benchmark is now active
-at `paired-n1536` under that root. Results remain pending.
+sequential measurement. Both combined numerical gates passed. The three-pair
+benchmark at `paired-n1536` has now completed successfully: E2E medians
+692.373 s versus 656.659 s (1.05439x), model medians 597.684 s versus 562.362 s
+(1.06281x). Every pair passes all 11 arrays and CIF identities. Its first HIP
+anchor also matches the original strict Torch reference. Raw-report pins and
+archive: `provenance/openfold3_conditioning_cache_e2e_n1536.json`.
 
 This measures the cache increment over HIP softmax. It does not directly measure
 the combined path against original Torch, and historical ratios must not be
@@ -138,9 +142,11 @@ multiplied and presented as a new directly measured total speedup.
 
 ## Next diagnostic: static atom conditioning
 
-`verified_atom_reuse.py` is prepared locally only. Its four CPU tests pass;
-no GPU/model validation or performance result exists yet. Do not launch it
-until the paired timing sequence above terminates.
+`verified_atom_reuse.py` passes four CPU tests. After the paired timing sequence
+terminated, separate N1000/HIP5 and N1536/HIP6 diagnostics were launched in
+`/tmp/fireprot-atom-reuse-v1`. GPU/model acceptance remains pending and these
+instrumented concurrent runs cannot establish performance. Preparation pins:
+`provenance/openfold3_followup_diagnostics_preparation.json`.
 
 The audited upstream `AtomAttentionEncoder.get_atom_reps` produces `ql`, `cl`
 and `plm`. Only `ql` contains the noisy-coordinate projection. Reference atom

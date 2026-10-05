@@ -1,9 +1,8 @@
 # OpenFold3 diffusion conditioning reuse investigation
 
-Status: source audit and sampled native observation completed, 2026-10-05.
-The native observation passes all 11 full-model arrays bitwise at N1536.
-A subsequent experimental reuse diagnostic is implemented with mandatory native
-recomputation; no unchecked cache or measured conditioning speedup is claimed.
+Status: N1000/N1536 exact-model acceptance and three-pair N1536 incremental E2E
+completed, 2026-10-06. Experimental pair caching over maintained HIP softmax
+measures 1.05439x E2E. The cache remains in an isolated experimental worker.
 
 ## Audited source and scope
 
@@ -138,4 +137,36 @@ native conditioning call, 199 cache hits, no fallbacks and effective chunk 1024.
 The retained pair occupies 512,000,000 / 1,207,959,552 bytes respectively; these
 are retained tensor sizes, not measured changes in whole-model peak memory.
 Evidence: `provenance/openfold3_conditioning_cache_models.json`.
-Combined HIP-softmax/cache trials are active; paired E2E timing remains pending.
+Combined HIP-softmax/cache trials pass all 11 native arrays at both lengths;
+see `provenance/openfold3_conditioning_combined_models.json`.
+
+## Three-pair N1536 incremental E2E
+
+Three sequential AB/BA/AB pairs compare the same maintained HIP worker with
+`FIREPROT_CONDITIONING_CACHE=0` and `=1`. All scientific settings, worker bytes,
+published kernel and strict environment inventory are identical. Profiles differ
+only in the cache flag; their hashes are the other declared comparison change.
+
+| Scope | HIP baseline median | HIP plus pair cache median | Ratio |
+| --- | ---: | ---: | ---: |
+| Complete invocation | 692.373 s | 656.659 s | 1.05439x |
+| Model computation | 597.684 s | 562.362 s | 1.06281x |
+
+Individual E2E ratios are 1.05263x, 1.05811x and 1.05325x. Every run passes
+comparison to the first HIP anchor; all three pairs pass all 11 arrays and CIF
+atom identities. The first HIP anchor also passes all 11 arrays against the
+retained original strict Torch reference. Every candidate records 200 calls,
+199 hits, one miss, zero fallbacks and 5,592 submitted HIP softmax calls.
+
+Measurements use FP32/R3/D200/S1/seed101, fresh processes, unflushed filesystem
+cache and HIP7/PCI93/SMI5. No other FireProt GPU task was launched during the
+sequence; other host jobs were not continuously audited. Six workers and the
+controller exited successfully before follow-up diagnostics started.
+`provenance/openfold3_conditioning_cache_e2e_n1536.json` pins raw reports,
+comparisons, requests and the durable control archive.
+
+This is a 5.2% reduction in complete invocation time over the HIP baseline.
+It is not a directly measured combined-versus-original-Torch result; do not
+multiply it by the historical softmax ratio and label that product measured E2E.
+Original-reference equality establishes numerical continuity, not comparable
+timing across separate experiments.

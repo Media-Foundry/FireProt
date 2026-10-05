@@ -1,8 +1,10 @@
 # Bounded OpenFold 3 attention observation
 
-Status: local CPU observer tests only. No GPU trace, complete-model parity,
-kernel correlation or speedup is established by this experiment yet.
-Do not run it until the active N1536 conditioning-cache benchmark terminates.
+Status: three CPU observer tests pass. The N1536/HIP7 diagnostic is launched
+after successful completion of the conditioning-cache paired benchmark, in
+`/tmp/fireprot-attention-trace-v1`. No accepted GPU trace, complete-model parity,
+kernel correlation or speedup is established yet. Source/request/archive pins
+are in `provenance/openfold3_followup_diagnostics_preparation.json`.
 
 `probe.py` wraps the existing `AttentionDispatcher` within its existing
 source-pinned `attention_scope`. It delegates the original operations unchanged,

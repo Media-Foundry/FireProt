@@ -2,8 +2,9 @@
 
 Status: read-only ISA and historical-profile review, 2026-10-06. No new GEMM
 implementation, disassembly result, numerical equivalence or speedup is claimed.
-The active conditioning-cache paired benchmark must finish before another GPU
-experiment or fresh profiler is started.
+The conditioning-cache paired benchmark has now completed successfully. A
+bounded QK/PV observation is launched in a separate copied worker; its GPU trace,
+kernel correlations and full-model parity remain pending.
 
 ## Source and verified ISA facts
 

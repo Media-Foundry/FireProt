@@ -82,9 +82,14 @@ def main(controls_path, destination, batch):
         with torch.inference_mode():
             split = OwnedScoreSoftmax()
             fresh = PackedFusion(kernel, batch)
-            pools = {name: workspace_attention.WorkspaceFusion(kernel, batch,
+            pool_specs = [('workspace', kernel, False), ('workspace_contiguous_bias', kernel, True)]
+            if 'workspace_reference' in control:
+                pool_specs[0] = ('workspace_reference', control['workspace_reference'], True)
+            pools = {name: workspace_attention.WorkspaceFusion(selected, batch,
                 max_bytes=9 * 2**30, contiguous_bias=normalize)
-                for name, normalize in [('workspace', False), ('workspace_contiguous_bias', True)]}
+                for name, selected, normalize in pool_specs}
+            report['workspace_receipts'] = {name: dict(kernel=p.receipt,
+                contiguous_bias=p.contiguous_bias) for name, p in pools.items()}
             report['kernel_receipt'] = fresh.receipt
             # Different seeds/layouts and poisoned previous scores exercise full overwrite.
             previous = {}

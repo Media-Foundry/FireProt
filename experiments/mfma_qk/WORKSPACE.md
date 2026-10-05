@@ -75,3 +75,36 @@ chunk tuning, lifecycle and E2E benefit are untested, so no model path is change
 Evidence: `provenance/openfold3_qk_workspace_benchmark.json`. Remote archive
 `qk-workspace-v1-results.tar.gz`, SHA256
 `1ee16f1fb30c8afb315d2920b988dc1ea3b9e32b6299b379c7f4b22034100d54`.
+
+## Combined kernel comparison
+
+Controls may provide `workspace_reference` with an independently pinned kernel
+and its successful numerical screen. In that mode both retained arms normalize
+bias inside the call, and the report captures both kernel receipts. This allows
+same-run comparison of prefetch-v11 against combined-v12 under the same workspace
+policy. Native, split HIP and fresh combined fusion remain the other three arms.
+
+Both batches again pass all full-score/output/previous-result and ownership
+checks,100 timed calls each, and one-allocation/30-call/release accounting.
+
+| Batch / bias | Split HIP (ms) | Prefetch workspace (ms) | Combined workspace (ms) |
+| --- | ---: | ---: | ---: |
+| 32 / contiguous | 5.529 | 5.358 | 4.918 |
+| 32 / transposed | 5.830 | 5.662 | 5.229 |
+| 256 / contiguous | 43.481 | 41.863 | 38.500 |
+| 256 / transposed | 43.793 | 42.173 | 38.792 |
+
+B256 time falls8.03%/8.02% versus prefetch workspace and11.46%/11.42% versus
+split HIP (contiguous/transposed). The9GiB retained-per-instance cost remains.
+No model/E2E acceptance is implied. Evidence:
+`provenance/openfold3_qk_workspace_combined_benchmark.json`; archive
+`qk-workspace-combined-v12-results.tar.gz`, SHA256
+`fcc56b9e5efd0b3683766fb46a129035e597709b5c82c61cc8d336dd23a67a5b`.
+
+Before model integration, compare larger outer batches against full-batch
+reference QK/PV while reusing a bounded B256 workspace. Changing the outer
+batch can change BLAS selection, so output equivalence must be measured. Keep
+normalization, slicing/assembly and workspace initialization inside their stated
+timing scopes. Adapter guards must retain existing rejection of lazy negative/
+conjugate views and unmatched layouts. Model memory, chunk tuner behavior,
+workspace teardown and full11-array/CIF checks are required separately.

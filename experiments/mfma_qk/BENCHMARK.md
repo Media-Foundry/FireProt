@@ -187,3 +187,9 @@ costs9GiB retained per instance and has no model/E2E acceptance yet. First-call
 allocation costs and the two-workspace benchmark memory conditions are explicit
 in the workspace document and provenance; do not compare these as identical
 allocation/cache policies.
+
+The subsequent combined-v12 workspace comparison reduces B256 complete-attention
+time to38.500/38.792ms versus split43.481/43.793ms, an11.46%/11.42% time reduction
+for contiguous/transposed bias. This includes bias conversion and unchanged
+strict settings. See [workspace comparison](WORKSPACE.md#combined-kernel-comparison)
+for retained-memory costs, correctness gates and outstanding model validation.

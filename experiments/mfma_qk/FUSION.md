@@ -290,3 +290,17 @@ See `provenance/openfold3_qk_softmax_prefetch_candidate.json` for all local
 alternatives and `provenance/openfold3_qk_softmax_prefetch_probe.json` for the
 selected published artifact and GPU correctness evidence. Full-model acceptance
 remains outstanding; complete-attention timing determines promotion eligibility.
+
+## Combined prefetch and deferred additions
+
+The existing `deferred-adds.patch` applies cleanly after `key-prefetch.patch`.
+The full order is swizzle, vector store, wave scalar, bias reuse, key prefetch,
+deferred additions. Reconstruction exactly matches combined-v12. Local and
+published code use62VGPR/34SGPR for softmax and51/20 for raw scores, without
+spills, with16KiB LDS,48MFMA and11barriers per mode. B32/B256 each pass all21
+packed numerical checks. Bias normalization remains a separate tensor operation
+and its cost must be included when evaluating the transposed layout.
+
+See `provenance/openfold3_qk_softmax_combined_candidate.json` and
+`provenance/openfold3_qk_softmax_combined_probe.json`. The workspace comparison
+in `WORKSPACE.md` directly measures this combination against prefetch-v11.

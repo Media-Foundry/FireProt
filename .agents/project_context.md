@@ -1433,3 +1433,47 @@ deferredadds under normalizedbias andsameprivateworkspace, withfreshnumeric
 screens beforetiming, toseeklargeroperatorgain. Thenmodelmemory/lifecycle/chunk
 policy needsexplicitdesignandverification (Rust ownsframeworkresourcepolicy).
 Do not blindlyretain36GiB B1024buffers or forceB256chunkswithoutcomparison.
+
+## Combined kernel with normalized workspace: 11.4% operator time reduction (2026-10-06)
+
+Previous turn made progress and pushed8d61243 (initialized workspace).
+Existingdeferred-adds.patch appliescleanly AFTERprefetch-v11, fullchain
+swizzle/vector/wave/reuse/prefetch/deferred exactlymatchescombined-v12.
+Local/remote62VGPR34SGPR softmax,raw51/20,16KiB LDS/nospills/48MFMA/11barriers.
+Root /tmp/fireprot-qk-softmax-combined-v12, session71986 exits0, B32/B256each21exact.
+Bundlemanifest1f04b110c79520749dc2a9a483b77f35330b559f5c043dfcdd13c72947ec5122.
+Numericalarchive qk-softmax-combined-v12-results.tar.gz SHA
+1e26d539271aa80de04a95030053ee9a000fb9ee0c78a9f021acf326e72c2424.
+Evidence openfold3_qk_softmax_combined_candidate.json / *_combined_probe.json.
+
+benchmark_workspace.py nowaccepts optionalworkspace_reference. Bothretainedarms
+normalizebias withseparatepinnedkernels; receiptsrecordactualnormalizationflags.
+Nochange toworkspace_attention.py.6CPUtests pass. Newroot
+/tmp/fireprot-qk-workspace-combined-v12, session87864 exits0; B32/B256each12full
+score+PVqualifications,10priorresultimmutabilitychecks,thread/streamguards,
+100timedoutputs exact,1allocation30calls/exactreleasedbytes perpool.
+B256prefetch41.863/42.173->combined38.500/38.792ms; split43.481/43.793ms.
+About8%incrementvspriorworkspace,11.46%/11.42%less timevssplit. B32combined
+4.918/5.229ms vs split5.529/5.830ms. Cold/retainedmemorytreatmentunchanged;
+oneB256pool9GiB,twoduringbenchmark18GiB. No model/E2Eclaim.
+Evidence openfold3_qk_workspace_combined_benchmark.json; fullarchive
+qk-workspace-combined-v12-results.tar.gz SHA
+fcc56b9e5efd0b3683766fb46a129035e597709b5c82c61cc8d336dd23a67a5b.
+Alljobs terminal; noGPUjobactive. Benchmarksourcepackage SHA
+353eda484902dc35da3fb57db22249198b90f953d22322b025095c30788f8734.
+
+Nextpriority: B512/B1024 full-batch nativeQK + acceptedOwnedScoreSoftmax + nativePV
+reference, compared to B256workspace microchunks (includingassembly andbiascopy),
+withfullprobabilitybitchecks. FullTorchout-of-place referenceB1024exceeds64GiB;
+acceptedin-placeHIPbaseline is already11-arrayexact inmodel. Fullscore36GiB plus
+9GiBworkspace plusQKV shouldbe budgeted; checkactualfree memorybeforelaunch.
+Do NOTassumemicrochunkPV selectsidenticalmath: thisisthegate. Start512then1024.
+Keepmodelouterbatchcapabilitieslimitedtomeasuredsizes; B1536referenceworkspaceneeds
+separatehoststagingorcarefulallocation. Currentworkspaceclassonly32/256; usean
+explicitexperimentalwrapper forlargerbatch, notanunverifiedbroadening.
+Adaptereligiblecurrentlyrejects is_neg/is_conj, nonFP32, mismatcheddevices, etc;
+retainthese whenextending (standaloneworkspacequalificationusesplainrandnviews).
+Thenmodelmemory/lifecycle/chunktunerpolicy plan: existingD16comparisonmainchunks
+1024 andconfidence256. Avoidforcing256upstreamchunks withoutcomparison; internal
+microbatchingmightpreservetheouterAPI butmustbeproven. Actualmodelmemoryheadroom
+notyetread. Pairedhead16report model_residency=fresh_process_per_job, notmemory.

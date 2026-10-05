@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "status": "local_compile_and_remote_B32_B256_numerical_checks_passed",
+  "required_preceding_patches": [
+    "lds-swizzle.patch",
+    "lds-vector-store.patch"
+  ],
+  "change": "Read wave index with amdgcn_readfirstlane under the fixed 1024x1x1 wave64 launch; retain all arithmetic ordering.",
+  "flags": [
+    "-O3",
+    "-std=c++17",
+    "--offload-arch=gfx90a",
+    "-shared",
+    "-fPIC",
+    "-Rpass-analysis=kernel-resource-usage"
+  ],
+  "resources": {
+    "vgpr_count": [
+      62,
+      51
+    ],
+    "sgpr_count": [
+      35,
+      17
+    ],
+    "group_segment_fixed_size": [
+      16384,
+      16384
+    ],
+    "private_segment_fixed_size": [
+      0,
+      0
+    ],
+    "vgpr_spill_count": [
+      0,
+      0
+    ],
+    "sgpr_spill_count": [
+      0,
+      0
+    ]
+  },
+  "artifacts": [
+    {
+      "path": "/tmp/fireprot-fusion-wave-v5.cpp",
+      "sha256": "729d86cf4c118c9ea758908fc8bcede8c39a472ed76f853f6c99beb1888ea705"
+    },
+    {
+      "path": "/home/husrcf/Code/fireprot/experiments/mfma_qk/wave-scalar.patch",
+      "sha256": "61045d82053fdfbd7a6f8322ed4b7e3882ef1139959667ab8617cf6570219698"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-wave-v5-default.so",
+      "sha256": "a3416ad467ce1afc948a2f816da3a64dacf5165f37e2b9c3849e8077cc590c9f"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-wave-v5-default-build.log",
+      "sha256": "2b88e9f125eb1db9cca14e158c213612e8448153f8abb2b48aeba69f06d60423"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-wave-v5-default.fatbin",
+      "sha256": "750baf5fdc58b474793a63508add4fb5dd2810bbda662e19c9b4685f6eddecfe"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-wave-v5-default.hsaco",
+      "sha256": "d123b9b1b784a162b5600010268eeb7a9084997b167ef4ab67b172efac6e4ebf"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-wave-v5-default.asm",
+      "sha256": "ff35fc48e0d09d5cb3104d2569820314c62f7bdbed6dc788558cda6e6e1427f7"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-wave-v5-default-metadata.txt",
+      "sha256": "4ab528be7a37304f3a3443439cc1afc4c470aed3d327cebac3979ec9a7af01ac"
+    }
+  ],
+  "archive": {
+    "path": "/home/husrcf/Code/fireprot/outputs/experiments/qk-softmax-local-20261006/wave-scalar-v5.tar.gz",
+    "sha256": "a62ce3d1c91ef63ed2c12a7e2c8935b89c33ad9b7f35fbe6c2f6553819ff27df"
+  },
+  "limits": [
+    "Local compiler resource counts do not establish remote allocation, residency or speedup.",
+    "An earlier local diagnostic used -ffp-contract=off; the archived default-flags compile matches the maintained build recipe.",
+    "No model or E2E acceptance."
+  ],
+  "remote_evidence": "provenance/openfold3_qk_softmax_wave_probe.json"
+}

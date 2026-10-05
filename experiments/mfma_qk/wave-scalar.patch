@@ -1,0 +1,12 @@
+--- a/experiments/mfma_qk/fused_qk_softmax.cpp
++++ b/experiments/mfma_qk/fused_qk_softmax.cpp
+@@ -25,7 +25,8 @@
+ #if defined(__gfx90a__)
+     constexpr int N = 1536;
+     const int lane = threadIdx.x & 63;
+-    const int wave = threadIdx.x >> 6;
++    // Fixed 1024x1x1 launch and wave64 make this index wave-uniform.
++    const int wave = __builtin_amdgcn_readfirstlane(threadIdx.x >> 6);
+     const int coordinate = lane & 15;
+     const int k_lane = lane >> 4;
+     const int query_base = blockIdx.x * 16;

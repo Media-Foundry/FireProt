@@ -79,3 +79,23 @@ Torch peak allocation increments are9.375GiB for split and9.750GiB for fusion;
 this excludes memory outside the Torch allocator. The evidence points to the
 fused core as the first optimization target. It does not establish LDS bank
 conflicts as the cause. See `provenance/openfold3_qk_attention_profile.json`.
+
+## Wave scalar address experiment
+
+A fresh five-arm interleaved benchmark replaces the base fusion arm with the
+explicit wave-scalar candidate, retaining native, split HIP, swizzle and vector.
+B32 and B256 complete all200 measured calls with bitwise agreement, under the
+same strict execution/input/cache contract described above.
+
+| Batch / bias | Split HIP (ms) | Vector fusion (ms) | Wave scalar fusion (ms) |
+| --- | ---: | ---: | ---: |
+| 32 / contiguous | 5.528 | 9.140 | 6.899 |
+| 32 / transposed | 5.819 | 11.015 | 9.532 |
+| 256 / contiguous | 43.491 | 71.970 | 54.934 |
+| 256 / transposed | 43.770 | 87.037 | 75.259 |
+
+B256 contiguous complete-attention time falls23.67% versus vector fusion,
+but remains26.31% above split HIP. This candidate is not promoted to model
+execution. Actual compiled VGPR count falls66->60; actual hardware occupancy
+has not been measured, so occupancy is not established as the cause.
+Evidence: `provenance/openfold3_qk_attention_wave_benchmark.json`.

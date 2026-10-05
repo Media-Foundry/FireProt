@@ -1258,3 +1258,33 @@ __builtin_amdgcn_readfirstlane(threadIdx.x >> 6) is valid only for current fixed
 can test this address-only change without reordering MFMA arithmetic. Partial
 key-load overlap exists; future fragment prefetch is another untested option.
 All new variants require independent full numerical gates before timing.
+
+## Wave scalar candidate: exact and faster, still below split HIP (2026-10-06)
+
+Previous goal turn was progress: complete attention and GPU traces archived,
+committed/pushed34b992d. New wave-scalar.patch applies AFTER lds-swizzle.patch
+and lds-vector-store.patch. Explicit readfirstlane(threadIdx.x>>6) under fixed
+1024x1x1/wave64 retains all arithmetic order. Local default-flags62VGPR/35SGPR,
+raw51/17; actual DiamondHill60/35,raw51/17. No spills,16KiB LDS,48MFMA,
+11barriers,6B128 stores per mode. Local accidental -ffp-contract=off diagnostic
+was superseded by retained default-flags compilation; remote uses Rust standard
+recipe. Local evidence openfold3_qk_softmax_wave_candidate.json.
+
+Root /tmp/fireprot-qk-softmax-wave-v5; driver83047 exits0. B32/B256 each21 exact
+packed records. Bundle manifest f4cca2c8fde0a458b9bc30c6c889cee60da774f3b1cb727ced83baa2567995af.
+Numerical archive qk-softmax-wave-v5-results.tar.gz SHA
+a1b67804b9d142bb86278331819d47a76b24b062f8d1d1b9c99e7c7f21826cf0.
+Evidence openfold3_qk_softmax_wave_probe.json. No other batches/fullmodel gate.
+
+Fresh root /tmp/fireprot-qk-attention-wave-v5; driver72942 exits0. All200calls
+bitwise acrossB32/B256/two biaslayouts/fivearms. B256contiguous vector71.970ms
+->wave54.934ms (23.67%less), split43.491ms; transposed87.037->75.259ms,
+split43.770ms. B32contiguous9.140->6.899ms, split5.528ms. No model promotion.
+Evidence openfold3_qk_attention_wave_benchmark.json; archive
+qk-attention-wave-v5-results.tar.gz SHA
+27fca07553628c58771a2e46e07c9e46f8b359c84cea394c643784076a2a02ac.
+All diagnostics/timing terminal; no GPU job active. Next hypothesis: defer
+mask/bias loads until after the six QK/LDS bands, keeping per-element ordered
+adds and every MFMA/softmax operation unchanged; reduce load waits between
+barriers. Not implemented or tested yet. Wave scalar alone does not establish
+actual occupancy as cause, and no new E2E result follows.

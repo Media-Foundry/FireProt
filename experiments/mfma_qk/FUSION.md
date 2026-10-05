@@ -216,3 +216,22 @@ Evidence: `provenance/openfold3_qk_softmax_lds_probes.json`; its archive retains
 both variants, actual resources, all screens and the stopped/resumed driver logs.
 Complete attention/PV checks and latency measurement use the separate
 [BENCHMARK.md](BENCHMARK.md) workflow; no model or E2E acceptance follows here.
+
+## Explicit wave-uniform address candidate
+
+`wave-scalar.patch` applies after the LDS swizzle and vector-store patches.
+It changes only the wave-index expression to
+`__builtin_amdgcn_readfirstlane(threadIdx.x >> 6)`. The fixed1D1024-thread
+launch and wave64 make that value identical for every lane of each wave;
+this reasoning must be revisited if the launch shape changes. All MFMA,
+mask/bias, softmax and output arithmetic ordering is retained.
+
+Local compilation with the maintained default flags yields62VGPR/35SGPR
+for softmax and51VGPR/17SGPR for raw scores, with no spills. The independently
+published DiamondHill softmax code uses60VGPR/35SGPR (previous vector66/32).
+Both modes retain16KiB LDS,48MFMA instructions,11 barriers, and six vector
+LDS stores. Register counts do not prove residency or speedup.
+
+B32 and B256 each pass all21 packed numerical records. Other batch sizes and
+full-model acceptance remain outstanding. Complete-attention timing against
+the existing split HIP route is required before considering promotion.

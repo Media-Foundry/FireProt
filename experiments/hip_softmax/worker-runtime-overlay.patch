@@ -1,0 +1,21 @@
+--- python/fireprot_workers/openfold3.py
++++ python/fireprot_workers/openfold3.py
+@@ -49,7 +49,17 @@
+         channel.emit(dict(event='progress', stage='model'))
+         torch.cuda.synchronize()
+         started = time.perf_counter()
+-        result = original_forward(model, *args, **kwargs)
++        from fireprot.backends.amd.softmax_fp32 import SoftmaxFP32
++        from fireprot.adapters.openfold3.attention import AttentionDispatcher, attention_scope
++        kernel = SoftmaxFP32()
++        dispatcher = AttentionDispatcher(
++            kernel if os.environ.get('FIREPROT_RUNTIME_SOFTMAX') == '1' else None)
++        try:
++            with attention_scope(dispatcher):
++                result = original_forward(model, *args, **kwargs)
++        finally:
++            (output / 'operator-runtime.json').write_text(
++                json.dumps(dispatcher.manifest(), indent=2) + '\n')
+         torch.cuda.synchronize()
+         model_seconds += time.perf_counter() - started
+         return result

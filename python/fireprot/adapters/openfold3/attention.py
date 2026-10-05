@@ -129,4 +129,6 @@ class AttentionDispatcher:
     def manifest(self):
         return dict(registry=self.registry.manifest(),
                     kernel=None if self.kernel is None else self.kernel.receipt,
-                    limits=["Registry selection counts precede QK and do not prove a HIP launch."])
+                    launches_submitted=0 if self.kernel is None else self.kernel.launches_submitted,
+                    limits=["Registry selection counts precede QK and do not prove a HIP launch.",
+                            "Submitted launches passed the immediate HIP status check; asynchronous completion requires the model acceptance gate."])

@@ -82,6 +82,13 @@ context-scoped dispatch through the Rust registry. Four CPU tests cover thread
 isolation, duplicate installation, exceptional cleanup, escaped contexts and
 native fallback (16 total with tensor-contract tests). Model workers still do
 not import it; selected GPU execution and full-model parity remain unverified.
+Prepared HIP runtime validation entry points now live beside the original screen:
+`build_runtime.py`, `screen_runtime.py`, `worker-runtime-overlay.patch`. They are
+syntax/patch checked only. The new worker overlay enables dispatch only with
+`FIREPROT_RUNTIME_SOFTMAX=1`; both arms load the new pinned bundle. A separate
+submitted-launch counter prevents confusing Rust selection with a HIP launch.
+The second experimental candidate has passed the benchmark anchor gate at
+695.721 s E2E / 600.051 s model; its baseline-1 is now running. No pair-1 ratio yet.
 
 ## Historical implemented state
 

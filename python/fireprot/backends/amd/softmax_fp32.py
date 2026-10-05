@@ -55,6 +55,7 @@ class SoftmaxFP32:
             raise RuntimeError("An explicitly pinned FP32 softmax bundle is required")
         self.library, self.receipt = selected
         self.device = device
+        self.launches_submitted = 0
         self.entry = self.library.fireprot_softmax_f32
         self.entry.argtypes = ([ctypes.c_void_p] * 4 + [ctypes.c_int] * 2
                               + [ctypes.c_int64] * 5 + [ctypes.c_int] * 2
@@ -79,4 +80,5 @@ class SoftmaxFP32:
                 *bias.stride()[-3:], 2, 1, torch.cuda.current_stream().cuda_stream)
         if status:
             raise RuntimeError(f"FP32 softmax HIP launch failed: {status}")
+        self.launches_submitted += 1
         return output

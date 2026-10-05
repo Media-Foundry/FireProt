@@ -141,3 +141,30 @@ predicate is reevaluated before every call. Registry selection counts precede
 QK execution and must not be reported as successful HIP launches. Four CPU tests
 cover scope/fallback behavior (16 together with the tensor boundary tests).
 The dispatcher remains unconnected to model workers and GPU-unvalidated.
+
+## Prepared runtime validation entry points
+
+These entry points have passed syntax/patch checks only and have not executed
+on DiamondHill. Wait for the current paired benchmark to finish before deployment.
+
+- `build_runtime.py NEW_DIRECTORY`: describe the renamed source and ABI to the
+  existing Rust HIP build service. Use the validated model environment and hide
+  GPUs during this build. Retain `build.json`, then publish using the documented
+  Rust C ABI artifact workflow and a new immutable bundle directory.
+- `screen_runtime.py NEW_DIRECTORY`: use `FIREPROT_SOFTMAX_FP32_BUNDLE` and its
+  `_SHA256` pin to test the new loader and scoped dispatcher. It compares full
+  attention outputs bitwise at both target lengths, both bias layouts and both
+  precision flags, including masks, >4 GB scores and an unmatched-length native
+  fallback. Each supported call must increment the submitted-HIP-launch counter;
+  bitwise equality alone would allow an accidental all-native run to pass.
+- `worker-runtime-overlay.patch`: apply with `git apply -p0` to a fresh copy of
+  the maintained worker tree. Both arms load the same new bundle; only
+  `FIREPROT_RUNTIME_SOFTMAX=1` enables the candidate. The native arm uses the Rust
+  registry's native fallback. Existing transport seals `operator-runtime.json`.
+  Both arms still use experimental `backend: native` requests, not a promoted
+  OpenFold3 HIP request route.
+
+`launches_submitted` counts immediate-success C ABI returns separately from Rust
+registry selections. It is not proof of asynchronous GPU completion; full-model
+synchronization and acceptance must pass. Failed screens preserve their partial
+records, and full-model trials must retain all 11 arrays and the unchanged gates.

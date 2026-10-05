@@ -520,3 +520,22 @@ The observed N1536 dispatcher signatures include 32/64/128/256/512/1024 rows,
 H4/D32 with strides [196608,32,128,1]. Selection includes tuning attempts and
 does not prove submission or steady-state frequency. The initial trace selector
 uses 32 rows conservatively and must not be extrapolated to other chunks.
+
+## Further diffusion reuse preparation (2026-10-06)
+
+Read-only upstream inspection identifies static atom conditioning as another
+candidate: `get_atom_reps` returns cl/plm independent of noisy rl in the pinned
+source, while ql adds `noisy_position_embedder.linear_r(rl)`. Actual rollout
+invariance and consumer mutation still require measurement.
+`experiments/conditioning_reuse/verified_atom_reuse.py` prepares mandatory native
+recomputation, exact ql/cl/plm checks, RNG and post-diffusion consumer checks.
+Four CPU tests pass, including injected signed-zero/RNG/mutation failures,
+restoration, source rejection, inference gating and distinct-rollout reset.
+The helper retains Apache-2.0 because it extracts the upstream noisy-coordinate
+expression; THIRD_PARTY.md records it. No remote deployment or GPU validation.
+Run this diagnostic only after the current paired sequence, in a fresh combined
+HIP/cache worker, and require 200 checked calls plus all 11 final native arrays.
+
+The second candidate (measurement 002) has now completed and passed the first
+baseline reference. Controller 1739049 is running measurement 003, pair 1's
+baseline. Final three-pair performance is still pending.

@@ -135,3 +135,49 @@ at `paired-n1536` under that root. Results remain pending.
 This measures the cache increment over HIP softmax. It does not directly measure
 the combined path against original Torch, and historical ratios must not be
 multiplied and presented as a new directly measured total speedup.
+
+## Next diagnostic: static atom conditioning
+
+`verified_atom_reuse.py` is prepared locally only. Its four CPU tests pass;
+no GPU/model validation or performance result exists yet. Do not launch it
+until the paired timing sequence above terminates.
+
+The audited upstream `AtomAttentionEncoder.get_atom_reps` produces `ql`, `cl`
+and `plm`. Only `ql` contains the noisy-coordinate projection. Reference atom
+embedding, trunk feature broadcasts, the pair MLP and masks feed `cl`/`plm`
+without reading the current noisy coordinates. This makes their reuse a
+candidate, not an established invariant for every model/input. In particular,
+the trunk pair supplied to this encoder is the conditioned pair `zij`, whose
+constancy must continue to hold. Cached tensors must survive both atom encoder
+and decoder consumers unchanged.
+
+The verifier source-pins `structure/diffusion_module.py` and
+`layers/sequence_local_atom_attention.py` (SHA-256
+`3757d143e74153f1543fd4ec53891ff4a6c4d57d95ca5b7c22c4714ecc6890be`). It still
+executes the complete native atom representation on every call. It retains
+the first `cl`/`plm`, recomputes the original noisy-coordinate expression,
+compares all three results bytewise, checks CPU/device RNG and checks retained
+values after each diffusion consumer. No compute-skipping mode exists.
+
+After timing finishes, prepare a separate combined HIP/cache worker and add
+`verified_atom_reuse(sample, output)` around the rollout. Copy this module and
+`verified_reuse.py` into the worker package; seal `atom-reuse-check.json` in the
+copied transport. Keep the N1000/N1536 FP32/R3/D200/S1/seed101 requests and strict
+source/environment pins. Require one completed scope with 200 completed checks,
+unchanged consumers/RNG, recorded retained bytes, and all 11 final arrays exact
+against the strict native reference. Instrumented latency cannot be used as
+speedup evidence. Only then implement a bounded cache and measure it separately.
+
+Another source-level candidate is the token diffusion transformer's pair
+LayerNorm and each block's `linear_z` bias projection. They read the same pair
+representation, but caching all projected biases can require substantial memory.
+The actual block/head counts, peak memory, invariance and runtime cost remain
+unmeasured. They must not be inferred from the trunk H4/D32 attention signature.
+
+```bash
+python -m unittest experiments.conditioning_reuse.test_verified_atom_reuse -v
+```
+
+These CPU checks include signed-zero changes in supposedly static data, RNG
+consumption, consumer mutation, exception cleanup, source rejection, training
+rejection and reset between distinct rollouts.

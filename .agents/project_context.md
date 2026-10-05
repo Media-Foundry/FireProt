@@ -77,6 +77,11 @@ copy `kernels/amd/fireprot_softmax_fp32.cpp`. Twelve CPU/meta contract tests pas
 It requires a new pinned package/ABI (`fireprot_softmax_fp32`/`softmax-fp32-v1`)
 that is not built/published/validated yet. No OpenFold3 HIP request route has been
 enabled. Follow the integration gates in `experiments/hip_softmax/README.md`.
+Prepared `python/fireprot/adapters/openfold3/attention.py` adds source-pinned,
+context-scoped dispatch through the Rust registry. Four CPU tests cover thread
+isolation, duplicate installation, exceptional cleanup, escaped contexts and
+native fallback (16 total with tensor-contract tests). Model workers still do
+not import it; selected GPU execution and full-model parity remain unverified.
 
 ## Historical implemented state
 

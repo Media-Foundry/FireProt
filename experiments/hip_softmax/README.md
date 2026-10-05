@@ -131,3 +131,13 @@ the measured Torch/HIP version and gfx90a; no such maintained publication has
 been validated yet. No model adapter imports this boundary, no new request
 backend is enabled, and source-copy identity is not a compiled-artifact or
 maintained-model acceptance result.
+
+Prepared scoped dispatch is in `python/fireprot/adapters/openfold3/attention.py`.
+It verifies the attention source, routes only the active execution context,
+restores the captured original on exit, and rejects simultaneous installations.
+Other threads and retained wrapper references after scope exit use native calls.
+Rust `OperationRegistry` owns selection, cache decisions and counters; the tensor
+predicate is reevaluated before every call. Registry selection counts precede
+QK execution and must not be reported as successful HIP launches. Four CPU tests
+cover scope/fallback behavior (16 together with the tensor boundary tests).
+The dispatcher remains unconnected to model workers and GPU-unvalidated.

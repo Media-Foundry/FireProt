@@ -1,0 +1,45 @@
+# SPDX-License-Identifier: Apache-2.0
+# Experimental patch to the Apache-2.0 OpenFold 3-derived FireProt adapter.
+# Preserve all copyright and license notices in the target file.
+# Base SHA-256: d8a884b9c018c436904a1e6774139e75915fae8c11189190425865a5780b9bd3
+--- a/python/fireprot/adapters/openfold3/attention.py
++++ b/python/fireprot/adapters/openfold3/attention.py
+@@ -88,6 +88,7 @@
+     """Supply a verified SoftmaxFP32 instance, or None for native-only dispatch."""
+     def __init__(self, kernel):
+         self.kernel = kernel
++        self._experimental_head_launches = {16: 0, 32: 0}
+         self.registry = OperationRegistry()
+         self.registry.register(
+             operation="attention", name="hip_mask_bias_softmax_fp32",
+@@ -110,7 +111,7 @@
+         if (query.device.index != self.kernel.device or query.ndim != 4
+                 or query.shape != key.shape or query.shape != value.shape
+                 or not 0 < query.shape[0] <= 1536 or query.shape[1] != 4
+-                or query.shape[2] not in (1000, 1536) or query.shape[3] != 32):
++                or query.shape[2] not in (1000, 1536) or query.shape[3] not in (16, 32)):
+             return False
+         mask, bias = biases
+         n = query.shape[2]
+@@ -138,7 +139,10 @@
+         with torch.amp.autocast("cuda", dtype=torch.float32):
+             scores = torch.einsum("...qc, ...kc->...qk", query, key)
+             if self.kernel.supports(scores, biases):
++                before = self.kernel.launches_submitted
+                 scores = self.kernel(scores, biases)
++                self._experimental_head_launches[int(query.shape[-1])] += (
++                    self.kernel.launches_submitted - before)
+             else:
+                 # QK has already executed; preserve it for unmatched output layout.
+                 for bias in biases:
+@@ -148,7 +152,9 @@
+         return result.to(dtype=query.dtype)
+
+     def manifest(self):
+-        return dict(registry=self.registry.manifest(),
++        return dict(experimental_head_dimensions=dict(allowed=[16, 32],
++                        submitted_launches=self._experimental_head_launches),
++                    registry=self.registry.manifest(),
+                     kernel=None if self.kernel is None else self.kernel.receipt,
+                     launches_submitted=0 if self.kernel is None else self.kernel.launches_submitted,
+                     limits=["Registry selection counts precede QK and do not prove a HIP launch.",

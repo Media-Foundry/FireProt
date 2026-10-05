@@ -882,3 +882,20 @@ provenance/openfold3_mfma_qk_local_compile.json. This updates the earlier
 "uncompiled" status only; lane mapping, GPU score equality and performance are
 still untested. The direct local compiler diagnostic is not the Rust-published
 DiamondHill build, and must not be deployed as such. Active E2E remains isolated.
+
+Next independent candidate: experiments/hip_softmax/head16-adapter.patch widens
+only an isolated adapter copy to head dimensions16/32 and records actual launches
+by dimension. Runtime decisions show D16 long-input native fallbacks; the current
+adapter explicitly accepts only32 while the softmax C ABI is score-only. Remaining
+mask/layout guards may still reject calls; no frequency/performance claim yet.
+Patch base SHA and gates are in HEAD16.md; git apply --check and patched-source
+compilation pass locally. No maintained source or remote worker changed. Run both
+N1000/N1536 strict exact-model gates only after current E2E finishes. Inspect tuner
+changes if parity fails. The patch is Apache-2.0 and listed in THIRD_PARTY.md.
+
+MFMA next-run archive prepared LOCALLY only:
+/tmp/fireprot-mfma-qk-v1-prepared.tar.gz, SHA
+13d46dc20bf6729e23b5f68dd81868b036cdda53eb9bc64da2388848bb456744.
+It contains build/probe/kernel/trace-helper sources, notices, source hashes and
+EXECUTION.md. Not deployed. Target future root /tmp/fireprot-mfma-qk-v1, fresh
+cache/build/bundle/probe subdirectories; finish paired collection/archive first.

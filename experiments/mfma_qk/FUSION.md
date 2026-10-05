@@ -197,3 +197,22 @@ actual code-object inspection, trace observations and all success/failure logs.
 This accepts only packed QK/softmax synthetic checks for the base scalar-LDS
 kernel. It does not accept the swizzle/vector variants, original QKV packing,
 PV output, full models, other sequences/seeds, or any speedup claim.
+
+## LDS candidate GPU acceptance
+
+Both separately built variants now pass all21 packed checks at each of
+B32/64/128/256/512/1024; B1024 retains the host-staged reference scope above.
+Actual remote code objects use66VGPR/28SGPR for full swizzle-only fusion and
+66VGPR/32SGPR for full vector-store fusion. Raw modes use57/53VGPR respectively.
+Both have16KiB LDS, zero scratch/spills and the expected48MFMA/11barriers.
+Scalar/vector stage stores match the intended24 B32 versus6 B128 instructions.
+
+The initial driver stopped before GPU execution because it incorrectly treated
+local register estimates as fixed acceptance counts. Source hashes matched;
+actual instructions and launch resources were inspected before resuming. The
+local/remote register-allocation difference was recorded, not independently
+attributed to a particular compiler dependency. Numerical gates were unchanged.
+Evidence: `provenance/openfold3_qk_softmax_lds_probes.json`; its archive retains
+both variants, actual resources, all screens and the stopped/resumed driver logs.
+Complete attention/PV checks and latency measurement use the separate
+[BENCHMARK.md](BENCHMARK.md) workflow; no model or E2E acceptance follows here.

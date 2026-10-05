@@ -1201,3 +1201,60 @@ Rustcache/build/bundle/inspection. Only packedsyntheticbasekernel accepted; no
 PV/originalstrides/fullmodel/performance or LDSvariant GPU acceptance yet.
 Next build/test independent LDSv2/v4 with corrected probe; earlier localprepared
 variant archives need updated probe addition/pinning before large screens.
+
+## LDS variants accepted; complete attention timing ACTIVE (2026-10-06)
+
+Fresh corrected-probe preparations forlds-v2/v4 deployed from *prepared-v2.tar.gz.
+Hashesac54c1d10fc3db0d203570559294ab42d160c1975a7a5ae9ddd0f5fcdcccf4a1 /
+278a8d7d9e872be6d0e649937a283bcf82388f5110daa9fb44bf050382201593.
+Initialdriver84670 stopped beforeGPU at local-vs-remoteVGPR assertion. Source
+hashes match; remoteactual swizzlefull66VGPR(notlocal70),vectorfull66(not68),
+raw57/53; zero spills/scratch16KiB LDS. Resumeddriver25047 exits0: BOTHvariants
+all sixbatch sizes32,64,128,256,512,1024 each21 bitwise records. No arithmetic
+or tolerance relaxation; local register estimates are not numerical contracts.
+Actualcodeobjects retain48MFMA/11barriers,24B32vs6B128 stage stores.
+Bundles /tmp/fireprot-qk-softmax-lds-v2/bundle manifest
+3be6b6256d852f0ac64e81e7bc3aff704281ccc4215ce7b39091b82999b4edea;
+/tmp/fireprot-qk-softmax-lds-v4/bundle manifest
+44443e24b183e48b86b9fa9daf043fdd00df8249264efdd8826dbb085788d492.
+Evidence provenance/openfold3_qk_softmax_lds_probes.json; full localcapture
+/tmp/fireprot-qk-softmax-lds-results.json includes durablearchivepin. All diagnostics
+terminated before new timing; archive completed; all8GCDs observedidle.
+
+NEW benchmark root /tmp/fireprot-qk-attention-bench-v1, sourcearchive SHA
+75c40e86e4304b6a4d59f2747f1326b4efc9c05f527cd3719099cafeac9072da.
+Controls controls-b32.json/controls-b256.json pin all3 fusion bundles and exact
+batch screens plus maintainedsoftmax. Sequential driver session30943 is ACTIVE
+onHIP7: b32/ then b256/, logs b32.log/b256.log; localdriverlog
+/tmp/fireprot-qk-attention-bench-v1-driver.log. NO other GPU jobs/heavy remote
+builds/libraryscans until it terminates. Script experiments/mfma_qk/benchmark_attention.py
+includes real head-lastQ/KTpacking, allocations/filling, bias conversion where
+used, andnativePV. Fivearms native/splitHIP/base/swizzle/vector;2biaslayouts;
+10rotated/reversedrounds,100 measuredcalls perbatch; everyoutput exact aftertiming.
+B32/B256 goldscreen is mandatory; no performance/model/E2E acceptance yet.
+CPUsyntax/orderbalance/smallhead-lastpacking correspondence checks pass.
+
+## Complete attention fusion rejected for promotion; GPU trace complete (2026-10-06)
+
+Benchmark30943 exited0; all200 measured outputs exact across B32/B256, two bias
+layouts, five arms,10 samples per arm/layout. B256 contiguous split43.482ms,
+fusion base72.036/swizzle71.852/vector71.989ms; transposed split43.785ms,
+fusion86.363/86.107/87.079ms. No meaningful LDS gain established. Fusion is NOT
+promoted and no model/E2E claim follows. Evidence openfold3_qk_attention_benchmark.json.
+Archive qk-attention-bench-v1-results.tar.gz SHA
+86a6c3be25ec0c55f4de7521be62662f4d534dc84cd62a284ab7a20f8737d428.
+
+New diagnostic root /tmp/fireprot-qk-attention-profile-v1, session24466 exits0;
+all8 profiled outputs exact. B256 fused core50.47–50.70ms contiguous vs nativeQK
+9.95ms+splitsoftmax19.17ms; nativePV11.80–11.96ms. Transposed fused64.85–65.48ms.
+Torch peak increments split9.375GiB/fusion9.750GiB. Single warmed profiled calls,
+not statistical latency/E2E; Torch memory only. Evidence openfold3_qk_attention_profile.json
+pins full traces/archive. No GPU job remains active; no benchmark lock.
+
+Authorized ISA agent finished read-only review. Actualremotev4 has66VGPR and
+wave index/address bases remain VGPR; no readfirstlane in ASM. Candidate explicit
+__builtin_amdgcn_readfirstlane(threadIdx.x >> 6) is valid only for current fixed
+1024x1x1/wave64 launch; resource/performance benefit UNPROVEN. Next local compile
+can test this address-only change without reordering MFMA arithmetic. Partial
+key-load overlap exists; future fragment prefetch is another untested option.
+All new variants require independent full numerical gates before timing.

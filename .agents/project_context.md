@@ -55,6 +55,13 @@ were rejected/cancelled and excluded. Always give objcopy a separate output ELF.
 The user supplied local `docs/isa/CDNA2.pdf`; its GPT-6-luna xhigh review is complete.
 Further work includes the paired E2E verdict, maintained integration if justified,
 and additional exact HIP/layout/conditioning optimizations. The goal is active.
+The source audit in `docs/openfold3-conditioning-reuse.md` identifies timestep-
+independent pair conditioning and defines chunking, aliasing, lifetime and exact-
+output gates. It is a proposed experiment, not implemented or measured caching.
+`experiments/conditioning_reuse` now contains a diagnostic overlay for sampled
+pair equality, downstream mutation, RNG and chunk observations. Five CPU tests
+pass; no GPU/model validation has run. Deploy only to a fresh copied worker after
+the active softmax benchmark finishes. Diagnostic timings are not E2E results.
 
 ## Historical implemented state
 

@@ -241,3 +241,35 @@ are retained but are not independently measured startup phases.
 Evidence: `provenance/openfold3_combined_native_e2e_n1536.json`.
 Launch/source/control pins:
 `provenance/openfold3_combined_native_paired_v2_preparation.json`.
+
+## D16 coverage: incremental N1536 E2E result
+
+Three additional same-source AB/BA/AB pairs compare the preceding combined
+backend with D16 softmax disabled/enabled. Both arms retain pair/atom reuse,
+private score storage and confidence ceiling256. Only the head-dimension flag
+and corresponding profile digest differ as declared treatment settings.
+
+| Timing scope | D32-only combination median | D16+D32 combination median | Ratio |
+| --- | ---: | ---: | ---: |
+| Complete invocation | 628.689 s | 540.848 s | 1.16241x |
+| Model forward | 534.758 s | 446.844 s | 1.19674x |
+
+E2E time decreases by13.97%; individual pair ratios are1.16186x,1.16305x and
+1.16305x. All three pairs, repeated-reference checks and CIF identities pass.
+The first baseline separately matches all11 arrays of the historical original
+Torch output. Model, checkpoint, input, FP32 strict determinism with memory
+filling, R3/four trunk passes, D200, S1, seed101 and HIP7/PCI93 remain fixed.
+Fresh processes and unflushed filesystem caches apply as in the preceding test;
+no other FireProt GPU work or heavy remote build runs during the sequence.
+
+D32-only records5472 D32 launches; D16-enabled records400 D16 and2708 D32
+launches. Both have zero storage fallbacks and both caches record200 calls,
+199 hits and one miss. Native main-stack tuners select512 versus1024;
+confidence stays256 and diffusion conditioning1024. The result includes that
+observed tuning change; it does not isolate a fixed-chunk D16 kernel effect.
+
+This is an incremental comparison over the combined backend, not a new direct
+original-Torch speedup. Do not multiply it by the separate1.49910x measurement.
+D16 remains experimental. Evidence:
+`provenance/openfold3_head16_e2e_n1536.json`; controls:
+`provenance/openfold3_head16_paired_preparation.json`.

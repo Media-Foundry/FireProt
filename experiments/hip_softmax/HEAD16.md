@@ -57,8 +57,7 @@ conditioning-cache counts. Template/MSA/pairformer chunk tuners now select1024
 (the dimension-32 combination selected512), while confidence remains256 and
 diffusion conditioning1024. This specific change preserves exact outputs; it
 does not establish arbitrary chunk sizes as interchangeable. Both completed
-runs are archived in `provenance/openfold3_head16_models.json`. No paired
-performance result or promotion is established yet.
+runs are archived in `provenance/openfold3_head16_models.json`. The subsequent paired result is below; no maintained-route promotion is established.
 
 For a same-source incremental comparison, `head16-control.patch` applies after
 the adapter patch. It adds `FIREPROT_SOFTMAX_HEAD16=0/1`, rejecting other values;
@@ -67,3 +66,19 @@ bytes, kernel, caches and confidence ceiling. The comparison must declare the
 flag and profile digest changes and inspect actual launch counts/tuner choices.
 The paired control is prepared separately; this patch is not a maintained
 production setting or a measured improvement by itself.
+
+
+## Incremental paired result
+
+Three N1536 same-source pairs pass all11 arrays, CIF identities and repeated
+reference checks; the first baseline also matches the historical original
+Torch output. E2E medians628.689->540.848s (1.16241x,13.97% less time); model
+medians534.758->446.844s (1.19674x). FP32/strict fill/R3/D200/S1/seed101,
+fresh processes, unflushed filesystem caches, isolated sequentialHIP7.
+Every baseline records D16=0/D32=5472 and main chunks512; every candidate
+D16=400/D32=2708 and main chunks1024. Confidence256, both caches200/199/1/0,
+zero storage fallbacks. This measures the flag's total effect including native
+tuner choices, not D16 at fixed chunking. It is incremental over the accepted
+combination and must not be multiplied into the separate1.49910x original-Torch
+result. See provenance/openfold3_head16_e2e_n1536.json and
+[performance details](../../docs/openfold3-performance.md).

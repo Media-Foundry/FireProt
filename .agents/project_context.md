@@ -1128,3 +1128,28 @@ SHA faa481c0c2d69c6184d2df707255d8ecdf4eee1ba9369f94fe72e89e7d54c37a; receipt /t
 Supersedes earlier prepared archive for future execution; fresh remote root stays
 /tmp/fireprot-qk-softmax-v1. Require ordinary B32 screen then stagedB32 cross-check
 before large staged screens. All21 records each; full-model gates still required.
+
+## D16 incremental E2E complete and archived (2026-10-06)
+
+All six invocations/three pairs succeed. E2E medians628.688752332->540.848062898s,
+1.162412876x,13.972% less time; model534.757986001->446.844362775s,1.196743275x.
+All11 arrays and CIF identities/repeats pass, plus firstbaseline historical
+original-native anchor. Every baselineD16=0/D32=5472/mainchunks512; candidate
+D16=400/D32=2708/mainchunks1024. Confidence256, conditioning1024, zero storage
+fallbacks, both caches200calls/199hits/1miss/0fallback. Incremental over combined
+backend; NOT direct original-Torch speedup and do not multiply into1.499102x.
+provenance/openfold3_head16_e2e_n1536.json records full results/limits.
+Durable archive head16-paired-v1-results.tar.gz SHA
+b079ac5dfc8b48548bd0e7d8b18f151246fa14a182e46762bfda846111642915,
+444200847bytes, contains controls and all6 outputs. Rootcontrolcollected.json
+also retains collector output. Local /tmp/fireprot-head16-paired-results.json,
+/tmp/fireprot-head16-paired-archive.json and collector/archive scripts retained.
+
+Controller1940816 and workers1940927,1948184,1955148,1962388,1970020,1977908
+confirmed absent; all8GCDs observed idle. Lingering localSSH2239518 closed only
+after independent terminal checks; session4919 exit255 is transport cleanup,
+not a benchmark failure (benchmark.json=succeeded). No timing window is active.
+Next: deploy updated fusion package /tmp/fireprot-qk-softmax-v1-prepared-v2.tar.gz
+SHAfaa481c0c2d69c6184d2df707255d8ecdf4eee1ba9369f94fe72e89e7d54c37a
+to NEW remote /tmp/fireprot-qk-softmax-v1, verify pins, Rustbuild/publish, and
+ordinary B32 GPU numerical screen before any candidate or staged comparisons.

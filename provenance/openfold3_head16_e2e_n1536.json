@@ -1,0 +1,1382 @@
+{
+  "schema_version": 1,
+  "phase": "succeeded",
+  "scope": "Three sequential N1536 pairs: D16 softmax disabled versus enabled over the accepted combined HIP/cache backend",
+  "benchmark": {
+    "path": "/tmp/fireprot-head16-paired-v1/paired-n1536/benchmark.json",
+    "sha256": "08592c11691d2776ea76ba1aed3b6eccc1f4dc98cffca72d01c6bc4193e39f65"
+  },
+  "comparison": {
+    "path": "/tmp/fireprot-head16-paired-v1/paired-n1536/comparison.json",
+    "sha256": "c9207ce8e52b9730e10f42cc8596a360e6b9994adf6fae561c5c0d3cc50e26c1"
+  },
+  "specification": {
+    "path": "/tmp/fireprot-head16-paired-v1/pairs-n1536.json",
+    "sha256": "e88712bf53ecfe33576ad5eadf15b8cbd5e75d57f04bb5693d2abc2630fefdcf"
+  },
+  "journal": {
+    "path": "/tmp/fireprot-head16-paired-v1/paired-n1536/order.jsonl",
+    "sha256": "74094822fa1b3caecbfb91e0680a302f2eecec7747168bf5da12c7ba75b80555"
+  },
+  "correctness_passed": true,
+  "pairs": [
+    {
+      "baseline_run_id": "head16-e2e-n1536-baseline-0",
+      "candidate_run_id": "head16-e2e-n1536-candidate-0",
+      "samples": [
+        {
+          "sample": 0,
+          "policy": "all-arrays-exact-v1",
+          "coordinates": null,
+          "confidence": null,
+          "exact_arrays": {
+            "confidence.chain_ptm.1": true,
+            "confidence.disorder": true,
+            "confidence.gpde": true,
+            "confidence.has_clash": true,
+            "confidence.iptm": true,
+            "confidence.pae": true,
+            "confidence.pde": true,
+            "confidence.plddt": true,
+            "confidence.ptm": true,
+            "confidence.sample_ranking_score": true,
+            "coordinates": true
+          },
+          "floating_confidence_diagnostics": {},
+          "passed": true
+        }
+      ],
+      "cif_atom_identities_checked": true
+    },
+    {
+      "baseline_run_id": "head16-e2e-n1536-baseline-1",
+      "candidate_run_id": "head16-e2e-n1536-candidate-1",
+      "samples": [
+        {
+          "sample": 0,
+          "policy": "all-arrays-exact-v1",
+          "coordinates": null,
+          "confidence": null,
+          "exact_arrays": {
+            "confidence.chain_ptm.1": true,
+            "confidence.disorder": true,
+            "confidence.gpde": true,
+            "confidence.has_clash": true,
+            "confidence.iptm": true,
+            "confidence.pae": true,
+            "confidence.pde": true,
+            "confidence.plddt": true,
+            "confidence.ptm": true,
+            "confidence.sample_ranking_score": true,
+            "coordinates": true
+          },
+          "floating_confidence_diagnostics": {},
+          "passed": true
+        }
+      ],
+      "cif_atom_identities_checked": true
+    },
+    {
+      "baseline_run_id": "head16-e2e-n1536-baseline-2",
+      "candidate_run_id": "head16-e2e-n1536-candidate-2",
+      "samples": [
+        {
+          "sample": 0,
+          "policy": "all-arrays-exact-v1",
+          "coordinates": null,
+          "confidence": null,
+          "exact_arrays": {
+            "confidence.chain_ptm.1": true,
+            "confidence.disorder": true,
+            "confidence.gpde": true,
+            "confidence.has_clash": true,
+            "confidence.iptm": true,
+            "confidence.pae": true,
+            "confidence.pde": true,
+            "confidence.plddt": true,
+            "confidence.ptm": true,
+            "confidence.sample_ranking_score": true,
+            "coordinates": true
+          },
+          "floating_confidence_diagnostics": {},
+          "passed": true
+        }
+      ],
+      "cif_atom_identities_checked": true
+    }
+  ],
+  "performance": {
+    "baseline": {
+      "count": 3,
+      "min": 628.387443808,
+      "median": 628.688752332,
+      "p95": 630.237673294,
+      "max": 630.237673294,
+      "mean": 629.1046231446667
+    },
+    "candidate": {
+      "count": 3,
+      "min": 540.553309593,
+      "median": 540.848062898,
+      "p95": 541.885475219,
+      "max": 541.885475219,
+      "mean": 541.0956159033334
+    },
+    "median_speedup": 1.1624128761103951,
+    "p95_speedup": 1.1630458872131477,
+    "paired_speedups": [
+      1.1618557722864753,
+      1.1630467174557864,
+      1.1630458872131477
+    ],
+    "paired_summary": {
+      "count": 3,
+      "min": 1.1618557722864753,
+      "median": 1.1630458872131477,
+      "p95": 1.1630467174557864,
+      "max": 1.1630467174557864,
+      "mean": 1.1626494589851366
+    },
+    "observed_trend": "faster_median_and_p95",
+    "changes": {
+      "invocation.profile_sha256": {
+        "baseline": "de7d280cd924b95e7448e9026bb2dcaf9129091128059ba3aa238ae40eeda27f",
+        "candidate": "f9258aa277d5561a4964154e8d80793de634480f01d76a9996af0962284c22f0"
+      },
+      "launch.environment.FIREPROT_SOFTMAX_HEAD16": {
+        "baseline": "0",
+        "candidate": "1"
+      }
+    }
+  },
+  "runs": [
+    {
+      "arm": "baseline",
+      "pair": 0,
+      "request": {
+        "schema_version": 1,
+        "run_id": "head16-e2e-n1536-baseline-0",
+        "workload": {
+          "model": "openfold3",
+          "model_name": "openbind-0",
+          "recycles": 3,
+          "diffusion_steps": 200,
+          "samples": 1,
+          "precision": "float32",
+          "deterministic": true
+        },
+        "backend": "hip_fused",
+        "seed": 101,
+        "hip_device": 7,
+        "source": {
+          "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+          "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+            "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+          }
+        },
+        "resources": {},
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-baseline-0"
+      },
+      "e2e_seconds": 628.387443808,
+      "model_seconds": 534.3636805179995,
+      "worker_request_seconds": 570.7167931110598,
+      "supervisor": {
+        "run_id": "head16-e2e-n1536-baseline-0",
+        "phase": "succeeded",
+        "worker_pid": 1940927,
+        "elapsed_seconds": 610.672242899,
+        "isolation_samples": 656,
+        "failure": null,
+        "announced_device": {
+          "worker_pid": 1940927,
+          "logical_device": 0,
+          "pci_address": "0000:93:00.0",
+          "architecture": "gfx90a"
+        },
+        "device_verified": true,
+        "physical_device": {
+          "hip_device": 7,
+          "smi_device": 5,
+          "pci_address": "0000:93:00.0",
+          "architecture": "gfx90a"
+        },
+        "execution_sha256": "df64239adde2a1e793c295bf2d29f5de215a31abcc25c5321924f3fd7696079a"
+      },
+      "invocation": {
+        "path": "/tmp/fireprot-head16-paired-v1/paired-n1536/measurement-000/invocation.json",
+        "sha256": "fc9887a241c681aea1c5b804ffdcfed74c0af335ededa21611028583e29dd30b"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-baseline-0/accepted.json",
+        "sha256": "a54e149d0167621be80bcf1aaee45683b61d4b5b59db6a807903421e4f8c4f1f"
+      },
+      "predictions": {
+        "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-baseline-0/predictions.json",
+        "sha256": "f1bb3ebf0863df378fe3224c75d3f976369dcbf84dc18f49f5a2d4eaa0ae6df8"
+      },
+      "operator_runtime": {
+        "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-baseline-0/operator-runtime.json",
+        "sha256": "ffc739de3c6614d020b52dd3f0f06a3dda650e15bb7a26084baf1351df559efb"
+      },
+      "head_dimensions": {
+        "allowed": [
+          32
+        ],
+        "submitted_launches": {
+          "16": 0,
+          "32": 5472
+        }
+      },
+      "launches_submitted": 5472,
+      "owned_scores": {
+        "mode": "owned_scores_strict",
+        "submitted_shapes": {
+          "B32_N1536": 192,
+          "B128_N1536": 5040,
+          "B256_N1536": 36,
+          "B512_N1536": 12,
+          "B64_N1536": 192
+        },
+        "storage_fallbacks": 0,
+        "limits": [
+          "Shape counts include tuning; not steady-state frequency.",
+          "Private-score ownership requires the audited adapter."
+        ]
+      },
+      "confidence_chunk_policy": {
+        "mode": "measured_native_confidence_ceiling",
+        "calls": [
+          {
+            "requested_max": 1024,
+            "bounded_max": 256,
+            "selected": 256,
+            "n": 1536
+          }
+        ]
+      },
+      "chunk_tuners": {
+        "template_embedder.template_pair_stack": 512,
+        "msa_module": 512,
+        "pairformer_stack": 512,
+        "diffusion_module.diffusion_conditioning": 1024,
+        "aux_heads.pairformer_embedding.pairformer_stack": 256
+      },
+      "conditioning-cache": {
+        "contents": {
+          "schema_version": 1,
+          "mode": "experimental_pair_cache",
+          "scopes": [
+            {
+              "calls": 200,
+              "hits": 199,
+              "misses": 1,
+              "fallbacks": 0,
+              "completed": true,
+              "effective_chunks": [
+                1024
+              ],
+              "retained_pair_bytes": 1207959552
+            }
+          ],
+          "limits": [
+            "Source-pinned immutable inference inputs are required.",
+            "Identity checks do not detect in-place input/parameter changes."
+          ]
+        },
+        "pin": {
+          "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-baseline-0/conditioning-cache.json",
+          "sha256": "f204a40971039c2f9e8e34e810fea196184ba3df85e2c8626ca5e6c88f78f458"
+        }
+      },
+      "atom-cache": {
+        "contents": {
+          "schema_version": 1,
+          "mode": "experimental_atom_cache",
+          "scopes": [
+            {
+              "calls": 200,
+              "hits": 199,
+              "misses": 1,
+              "fallbacks": 0,
+              "completed": true,
+              "retained_bytes": 105829376
+            }
+          ],
+          "limits": [
+            "Audited immutable rollout only; no in-place mutation detection.",
+            "Retained bytes describe tensors, not whole-model peak memory."
+          ]
+        },
+        "pin": {
+          "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-baseline-0/atom-cache.json",
+          "sha256": "0318fa484bd91d697856eca829bcd064a6bace91948795ae7285c98282c2c433"
+        }
+      },
+      "timing_boundary_differences_seconds": {
+        "complete_minus_model": 94.02376329000049,
+        "complete_minus_supervised": 17.71520090899992,
+        "supervised_minus_worker_request": 39.95544978794021,
+        "worker_request_minus_model": 36.35311259306036
+      }
+    },
+    {
+      "arm": "candidate",
+      "pair": 0,
+      "request": {
+        "schema_version": 1,
+        "run_id": "head16-e2e-n1536-candidate-0",
+        "workload": {
+          "model": "openfold3",
+          "model_name": "openbind-0",
+          "recycles": 3,
+          "diffusion_steps": 200,
+          "samples": 1,
+          "precision": "float32",
+          "deterministic": true
+        },
+        "backend": "hip_fused",
+        "seed": 101,
+        "hip_device": 7,
+        "source": {
+          "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+          "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+            "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+          }
+        },
+        "resources": {},
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-candidate-0"
+      },
+      "e2e_seconds": 540.848062898,
+      "model_seconds": 446.84436277498025,
+      "worker_request_seconds": 483.5740835099714,
+      "supervisor": {
+        "run_id": "head16-e2e-n1536-candidate-0",
+        "phase": "succeeded",
+        "worker_pid": 1948184,
+        "elapsed_seconds": 523.201392632,
+        "isolation_samples": 558,
+        "failure": null,
+        "announced_device": {
+          "worker_pid": 1948184,
+          "logical_device": 0,
+          "pci_address": "0000:93:00.0",
+          "architecture": "gfx90a"
+        },
+        "device_verified": true,
+        "physical_device": {
+          "hip_device": 7,
+          "smi_device": 5,
+          "pci_address": "0000:93:00.0",
+          "architecture": "gfx90a"
+        },
+        "execution_sha256": "7e48992f8b512efec6091e63999c7f6b644a964fcd3cbdb95c512c283827d2fd"
+      },
+      "invocation": {
+        "path": "/tmp/fireprot-head16-paired-v1/paired-n1536/measurement-001/invocation.json",
+        "sha256": "c7f9db306c4d8df14afc83c79c4364e31254fefaf160a5768db82658d160839e"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-candidate-0/accepted.json",
+        "sha256": "f4a911757f5eb1e2f5a5230ffe23c3858c20483ffa11a83486153314e5a378bc"
+      },
+      "predictions": {
+        "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-candidate-0/predictions.json",
+        "sha256": "e10fc7fdb67d2d4fc6473dc892fe03dbdcbd29f3ba9e0ca128398dfc62464469"
+      },
+      "operator_runtime": {
+        "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-candidate-0/operator-runtime.json",
+        "sha256": "52d809f646a98a18751daea539e9024cf30f3a71d527c987353cf222513ff57f"
+      },
+      "head_dimensions": {
+        "allowed": [
+          16,
+          32
+        ],
+        "submitted_launches": {
+          "16": 400,
+          "32": 2708
+        }
+      },
+      "launches_submitted": 3108,
+      "owned_scores": {
+        "mode": "owned_scores_strict",
+        "submitted_shapes": {
+          "B1024_N1536": 12,
+          "B512_N1536": 12,
+          "B256_N1536": 2892,
+          "B64_N1536": 192
+        },
+        "storage_fallbacks": 0,
+        "limits": [
+          "Shape counts include tuning; not steady-state frequency.",
+          "Private-score ownership requires the audited adapter."
+        ]
+      },
+      "confidence_chunk_policy": {
+        "mode": "measured_native_confidence_ceiling",
+        "calls": [
+          {
+            "requested_max": 1024,
+            "bounded_max": 256,
+            "selected": 256,
+            "n": 1536
+          }
+        ]
+      },
+      "chunk_tuners": {
+        "template_embedder.template_pair_stack": 1024,
+        "msa_module": 1024,
+        "pairformer_stack": 1024,
+        "diffusion_module.diffusion_conditioning": 1024,
+        "aux_heads.pairformer_embedding.pairformer_stack": 256
+      },
+      "conditioning-cache": {
+        "contents": {
+          "schema_version": 1,
+          "mode": "experimental_pair_cache",
+          "scopes": [
+            {
+              "calls": 200,
+              "hits": 199,
+              "misses": 1,
+              "fallbacks": 0,
+              "completed": true,
+              "effective_chunks": [
+                1024
+              ],
+              "retained_pair_bytes": 1207959552
+            }
+          ],
+          "limits": [
+            "Source-pinned immutable inference inputs are required.",
+            "Identity checks do not detect in-place input/parameter changes."
+          ]
+        },
+        "pin": {
+          "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-candidate-0/conditioning-cache.json",
+          "sha256": "f204a40971039c2f9e8e34e810fea196184ba3df85e2c8626ca5e6c88f78f458"
+        }
+      },
+      "atom-cache": {
+        "contents": {
+          "schema_version": 1,
+          "mode": "experimental_atom_cache",
+          "scopes": [
+            {
+              "calls": 200,
+              "hits": 199,
+              "misses": 1,
+              "fallbacks": 0,
+              "completed": true,
+              "retained_bytes": 105829376
+            }
+          ],
+          "limits": [
+            "Audited immutable rollout only; no in-place mutation detection.",
+            "Retained bytes describe tensors, not whole-model peak memory."
+          ]
+        },
+        "pin": {
+          "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-candidate-0/atom-cache.json",
+          "sha256": "0318fa484bd91d697856eca829bcd064a6bace91948795ae7285c98282c2c433"
+        }
+      },
+      "timing_boundary_differences_seconds": {
+        "complete_minus_model": 94.00370012301971,
+        "complete_minus_supervised": 17.646670266,
+        "supervised_minus_worker_request": 39.62730912202858,
+        "worker_request_minus_model": 36.72972073499113
+      }
+    },
+    {
+      "arm": "candidate",
+      "pair": 1,
+      "request": {
+        "schema_version": 1,
+        "run_id": "head16-e2e-n1536-candidate-1",
+        "workload": {
+          "model": "openfold3",
+          "model_name": "openbind-0",
+          "recycles": 3,
+          "diffusion_steps": 200,
+          "samples": 1,
+          "precision": "float32",
+          "deterministic": true
+        },
+        "backend": "hip_fused",
+        "seed": 101,
+        "hip_device": 7,
+        "source": {
+          "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+          "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+            "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+          }
+        },
+        "resources": {},
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-candidate-1"
+      },
+      "e2e_seconds": 540.553309593,
+      "model_seconds": 446.5892313600052,
+      "worker_request_seconds": 483.415402105893,
+      "supervisor": {
+        "run_id": "head16-e2e-n1536-candidate-1",
+        "phase": "succeeded",
+        "worker_pid": 1955148,
+        "elapsed_seconds": 522.901609652,
+        "isolation_samples": 558,
+        "failure": null,
+        "announced_device": {
+          "worker_pid": 1955148,
+          "logical_device": 0,
+          "pci_address": "0000:93:00.0",
+          "architecture": "gfx90a"
+        },
+        "device_verified": true,
+        "physical_device": {
+          "hip_device": 7,
+          "smi_device": 5,
+          "pci_address": "0000:93:00.0",
+          "architecture": "gfx90a"
+        },
+        "execution_sha256": "f9319c7a2a5da2202dd8c5d81ad402d5ad191602f6f7ab609c1ede53d7fecc2c"
+      },
+      "invocation": {
+        "path": "/tmp/fireprot-head16-paired-v1/paired-n1536/measurement-002/invocation.json",
+        "sha256": "287e6883263dad9b82cfee0dfae52741de560e66a29ab1f3bfc24aea28fcd122"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-candidate-1/accepted.json",
+        "sha256": "98ad170c345d9fa9a0b7dcd8171cfb4a9dbb5af1eaf21d97d7325e37ea6c312f"
+      },
+      "predictions": {
+        "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-candidate-1/predictions.json",
+        "sha256": "2ae1bdb40c35f0b3525da646013c538bffb9831f636ef29b4f07eb1197afee3c"
+      },
+      "operator_runtime": {
+        "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-candidate-1/operator-runtime.json",
+        "sha256": "52d809f646a98a18751daea539e9024cf30f3a71d527c987353cf222513ff57f"
+      },
+      "head_dimensions": {
+        "allowed": [
+          16,
+          32
+        ],
+        "submitted_launches": {
+          "16": 400,
+          "32": 2708
+        }
+      },
+      "launches_submitted": 3108,
+      "owned_scores": {
+        "mode": "owned_scores_strict",
+        "submitted_shapes": {
+          "B1024_N1536": 12,
+          "B512_N1536": 12,
+          "B256_N1536": 2892,
+          "B64_N1536": 192
+        },
+        "storage_fallbacks": 0,
+        "limits": [
+          "Shape counts include tuning; not steady-state frequency.",
+          "Private-score ownership requires the audited adapter."
+        ]
+      },
+      "confidence_chunk_policy": {
+        "mode": "measured_native_confidence_ceiling",
+        "calls": [
+          {
+            "requested_max": 1024,
+            "bounded_max": 256,
+            "selected": 256,
+            "n": 1536
+          }
+        ]
+      },
+      "chunk_tuners": {
+        "template_embedder.template_pair_stack": 1024,
+        "msa_module": 1024,
+        "pairformer_stack": 1024,
+        "diffusion_module.diffusion_conditioning": 1024,
+        "aux_heads.pairformer_embedding.pairformer_stack": 256
+      },
+      "conditioning-cache": {
+        "contents": {
+          "schema_version": 1,
+          "mode": "experimental_pair_cache",
+          "scopes": [
+            {
+              "calls": 200,
+              "hits": 199,
+              "misses": 1,
+              "fallbacks": 0,
+              "completed": true,
+              "effective_chunks": [
+                1024
+              ],
+              "retained_pair_bytes": 1207959552
+            }
+          ],
+          "limits": [
+            "Source-pinned immutable inference inputs are required.",
+            "Identity checks do not detect in-place input/parameter changes."
+          ]
+        },
+        "pin": {
+          "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-candidate-1/conditioning-cache.json",
+          "sha256": "f204a40971039c2f9e8e34e810fea196184ba3df85e2c8626ca5e6c88f78f458"
+        }
+      },
+      "atom-cache": {
+        "contents": {
+          "schema_version": 1,
+          "mode": "experimental_atom_cache",
+          "scopes": [
+            {
+              "calls": 200,
+              "hits": 199,
+              "misses": 1,
+              "fallbacks": 0,
+              "completed": true,
+              "retained_bytes": 105829376
+            }
+          ],
+          "limits": [
+            "Audited immutable rollout only; no in-place mutation detection.",
+            "Retained bytes describe tensors, not whole-model peak memory."
+          ]
+        },
+        "pin": {
+          "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-candidate-1/atom-cache.json",
+          "sha256": "0318fa484bd91d697856eca829bcd064a6bace91948795ae7285c98282c2c433"
+        }
+      },
+      "timing_boundary_differences_seconds": {
+        "complete_minus_model": 93.96407823299478,
+        "complete_minus_supervised": 17.651699940999947,
+        "supervised_minus_worker_request": 39.48620754610704,
+        "worker_request_minus_model": 36.826170745887794
+      }
+    },
+    {
+      "arm": "baseline",
+      "pair": 1,
+      "request": {
+        "schema_version": 1,
+        "run_id": "head16-e2e-n1536-baseline-1",
+        "workload": {
+          "model": "openfold3",
+          "model_name": "openbind-0",
+          "recycles": 3,
+          "diffusion_steps": 200,
+          "samples": 1,
+          "precision": "float32",
+          "deterministic": true
+        },
+        "backend": "hip_fused",
+        "seed": 101,
+        "hip_device": 7,
+        "source": {
+          "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+          "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+            "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+          }
+        },
+        "resources": {},
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-baseline-1"
+      },
+      "e2e_seconds": 628.688752332,
+      "model_seconds": 534.7579860009719,
+      "worker_request_seconds": 571.5047873649746,
+      "supervisor": {
+        "run_id": "head16-e2e-n1536-baseline-1",
+        "phase": "succeeded",
+        "worker_pid": 1962388,
+        "elapsed_seconds": 611.016420455,
+        "isolation_samples": 659,
+        "failure": null,
+        "announced_device": {
+          "worker_pid": 1962388,
+          "logical_device": 0,
+          "pci_address": "0000:93:00.0",
+          "architecture": "gfx90a"
+        },
+        "device_verified": true,
+        "physical_device": {
+          "hip_device": 7,
+          "smi_device": 5,
+          "pci_address": "0000:93:00.0",
+          "architecture": "gfx90a"
+        },
+        "execution_sha256": "eae1f451d7727fa3d471cfeb3ab121a92e659bd4ae00b18b55954f765c83b1e7"
+      },
+      "invocation": {
+        "path": "/tmp/fireprot-head16-paired-v1/paired-n1536/measurement-003/invocation.json",
+        "sha256": "e7d9b130e399c8986dbb04d6b9c6891b31271d493a020da75ed7b74e87d83499"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-baseline-1/accepted.json",
+        "sha256": "ad280817ed260a491190916a241c418362d873b6502312c571137ad7ab4876a3"
+      },
+      "predictions": {
+        "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-baseline-1/predictions.json",
+        "sha256": "ec454877dcf261a035271ab86dda6b0e8867840f20c841fa7518989d84d56cc0"
+      },
+      "operator_runtime": {
+        "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-baseline-1/operator-runtime.json",
+        "sha256": "ffc739de3c6614d020b52dd3f0f06a3dda650e15bb7a26084baf1351df559efb"
+      },
+      "head_dimensions": {
+        "allowed": [
+          32
+        ],
+        "submitted_launches": {
+          "16": 0,
+          "32": 5472
+        }
+      },
+      "launches_submitted": 5472,
+      "owned_scores": {
+        "mode": "owned_scores_strict",
+        "submitted_shapes": {
+          "B32_N1536": 192,
+          "B128_N1536": 5040,
+          "B256_N1536": 36,
+          "B512_N1536": 12,
+          "B64_N1536": 192
+        },
+        "storage_fallbacks": 0,
+        "limits": [
+          "Shape counts include tuning; not steady-state frequency.",
+          "Private-score ownership requires the audited adapter."
+        ]
+      },
+      "confidence_chunk_policy": {
+        "mode": "measured_native_confidence_ceiling",
+        "calls": [
+          {
+            "requested_max": 1024,
+            "bounded_max": 256,
+            "selected": 256,
+            "n": 1536
+          }
+        ]
+      },
+      "chunk_tuners": {
+        "template_embedder.template_pair_stack": 512,
+        "msa_module": 512,
+        "pairformer_stack": 512,
+        "diffusion_module.diffusion_conditioning": 1024,
+        "aux_heads.pairformer_embedding.pairformer_stack": 256
+      },
+      "conditioning-cache": {
+        "contents": {
+          "schema_version": 1,
+          "mode": "experimental_pair_cache",
+          "scopes": [
+            {
+              "calls": 200,
+              "hits": 199,
+              "misses": 1,
+              "fallbacks": 0,
+              "completed": true,
+              "effective_chunks": [
+                1024
+              ],
+              "retained_pair_bytes": 1207959552
+            }
+          ],
+          "limits": [
+            "Source-pinned immutable inference inputs are required.",
+            "Identity checks do not detect in-place input/parameter changes."
+          ]
+        },
+        "pin": {
+          "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-baseline-1/conditioning-cache.json",
+          "sha256": "f204a40971039c2f9e8e34e810fea196184ba3df85e2c8626ca5e6c88f78f458"
+        }
+      },
+      "atom-cache": {
+        "contents": {
+          "schema_version": 1,
+          "mode": "experimental_atom_cache",
+          "scopes": [
+            {
+              "calls": 200,
+              "hits": 199,
+              "misses": 1,
+              "fallbacks": 0,
+              "completed": true,
+              "retained_bytes": 105829376
+            }
+          ],
+          "limits": [
+            "Audited immutable rollout only; no in-place mutation detection.",
+            "Retained bytes describe tensors, not whole-model peak memory."
+          ]
+        },
+        "pin": {
+          "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-baseline-1/atom-cache.json",
+          "sha256": "0318fa484bd91d697856eca829bcd064a6bace91948795ae7285c98282c2c433"
+        }
+      },
+      "timing_boundary_differences_seconds": {
+        "complete_minus_model": 93.93076633102817,
+        "complete_minus_supervised": 17.672331877000033,
+        "supervised_minus_worker_request": 39.511633090025384,
+        "worker_request_minus_model": 36.74680136400275
+      }
+    },
+    {
+      "arm": "baseline",
+      "pair": 2,
+      "request": {
+        "schema_version": 1,
+        "run_id": "head16-e2e-n1536-baseline-2",
+        "workload": {
+          "model": "openfold3",
+          "model_name": "openbind-0",
+          "recycles": 3,
+          "diffusion_steps": 200,
+          "samples": 1,
+          "precision": "float32",
+          "deterministic": true
+        },
+        "backend": "hip_fused",
+        "seed": 101,
+        "hip_device": 7,
+        "source": {
+          "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+          "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+            "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+          }
+        },
+        "resources": {},
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-baseline-2"
+      },
+      "e2e_seconds": 630.237673294,
+      "model_seconds": 535.8369530579075,
+      "worker_request_seconds": 572.5460700979456,
+      "supervisor": {
+        "run_id": "head16-e2e-n1536-baseline-2",
+        "phase": "succeeded",
+        "worker_pid": 1970020,
+        "elapsed_seconds": 612.568385124,
+        "isolation_samples": 661,
+        "failure": null,
+        "announced_device": {
+          "worker_pid": 1970020,
+          "logical_device": 0,
+          "pci_address": "0000:93:00.0",
+          "architecture": "gfx90a"
+        },
+        "device_verified": true,
+        "physical_device": {
+          "hip_device": 7,
+          "smi_device": 5,
+          "pci_address": "0000:93:00.0",
+          "architecture": "gfx90a"
+        },
+        "execution_sha256": "3e55eb519825879c49944abff0f2be11d11ea4ea69bb956a44d14a732b7abe8a"
+      },
+      "invocation": {
+        "path": "/tmp/fireprot-head16-paired-v1/paired-n1536/measurement-004/invocation.json",
+        "sha256": "58c1e248ae14b36f51a8060365ab3dca66e28df6ff7fc96e4dafc9ea7571e9d2"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-baseline-2/accepted.json",
+        "sha256": "8b2ebfa8cbd306c27eac7f66333abb7991368f8ba30a658d698b2b56cbdfedce"
+      },
+      "predictions": {
+        "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-baseline-2/predictions.json",
+        "sha256": "5f4be7fda15a20e4ba2badee0f1e6eb1fd6f025ed282c72a74a70861f8567851"
+      },
+      "operator_runtime": {
+        "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-baseline-2/operator-runtime.json",
+        "sha256": "ffc739de3c6614d020b52dd3f0f06a3dda650e15bb7a26084baf1351df559efb"
+      },
+      "head_dimensions": {
+        "allowed": [
+          32
+        ],
+        "submitted_launches": {
+          "16": 0,
+          "32": 5472
+        }
+      },
+      "launches_submitted": 5472,
+      "owned_scores": {
+        "mode": "owned_scores_strict",
+        "submitted_shapes": {
+          "B32_N1536": 192,
+          "B128_N1536": 5040,
+          "B256_N1536": 36,
+          "B512_N1536": 12,
+          "B64_N1536": 192
+        },
+        "storage_fallbacks": 0,
+        "limits": [
+          "Shape counts include tuning; not steady-state frequency.",
+          "Private-score ownership requires the audited adapter."
+        ]
+      },
+      "confidence_chunk_policy": {
+        "mode": "measured_native_confidence_ceiling",
+        "calls": [
+          {
+            "requested_max": 1024,
+            "bounded_max": 256,
+            "selected": 256,
+            "n": 1536
+          }
+        ]
+      },
+      "chunk_tuners": {
+        "template_embedder.template_pair_stack": 512,
+        "msa_module": 512,
+        "pairformer_stack": 512,
+        "diffusion_module.diffusion_conditioning": 1024,
+        "aux_heads.pairformer_embedding.pairformer_stack": 256
+      },
+      "conditioning-cache": {
+        "contents": {
+          "schema_version": 1,
+          "mode": "experimental_pair_cache",
+          "scopes": [
+            {
+              "calls": 200,
+              "hits": 199,
+              "misses": 1,
+              "fallbacks": 0,
+              "completed": true,
+              "effective_chunks": [
+                1024
+              ],
+              "retained_pair_bytes": 1207959552
+            }
+          ],
+          "limits": [
+            "Source-pinned immutable inference inputs are required.",
+            "Identity checks do not detect in-place input/parameter changes."
+          ]
+        },
+        "pin": {
+          "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-baseline-2/conditioning-cache.json",
+          "sha256": "f204a40971039c2f9e8e34e810fea196184ba3df85e2c8626ca5e6c88f78f458"
+        }
+      },
+      "atom-cache": {
+        "contents": {
+          "schema_version": 1,
+          "mode": "experimental_atom_cache",
+          "scopes": [
+            {
+              "calls": 200,
+              "hits": 199,
+              "misses": 1,
+              "fallbacks": 0,
+              "completed": true,
+              "retained_bytes": 105829376
+            }
+          ],
+          "limits": [
+            "Audited immutable rollout only; no in-place mutation detection.",
+            "Retained bytes describe tensors, not whole-model peak memory."
+          ]
+        },
+        "pin": {
+          "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-baseline-2/atom-cache.json",
+          "sha256": "0318fa484bd91d697856eca829bcd064a6bace91948795ae7285c98282c2c433"
+        }
+      },
+      "timing_boundary_differences_seconds": {
+        "complete_minus_model": 94.40072023609252,
+        "complete_minus_supervised": 17.669288170000073,
+        "supervised_minus_worker_request": 40.02231502605434,
+        "worker_request_minus_model": 36.70911704003811
+      }
+    },
+    {
+      "arm": "candidate",
+      "pair": 2,
+      "request": {
+        "schema_version": 1,
+        "run_id": "head16-e2e-n1536-candidate-2",
+        "workload": {
+          "model": "openfold3",
+          "model_name": "openbind-0",
+          "recycles": 3,
+          "diffusion_steps": 200,
+          "samples": 1,
+          "precision": "float32",
+          "deterministic": true
+        },
+        "backend": "hip_fused",
+        "seed": 101,
+        "hip_device": 7,
+        "source": {
+          "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+          "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+            "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+          }
+        },
+        "resources": {},
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-candidate-2"
+      },
+      "e2e_seconds": 541.885475219,
+      "model_seconds": 447.79463344893884,
+      "worker_request_seconds": 484.24581910308916,
+      "supervisor": {
+        "run_id": "head16-e2e-n1536-candidate-2",
+        "phase": "succeeded",
+        "worker_pid": 1977908,
+        "elapsed_seconds": 524.189240357,
+        "isolation_samples": 560,
+        "failure": null,
+        "announced_device": {
+          "worker_pid": 1977908,
+          "logical_device": 0,
+          "pci_address": "0000:93:00.0",
+          "architecture": "gfx90a"
+        },
+        "device_verified": true,
+        "physical_device": {
+          "hip_device": 7,
+          "smi_device": 5,
+          "pci_address": "0000:93:00.0",
+          "architecture": "gfx90a"
+        },
+        "execution_sha256": "287b49406668a5ae5e179efabd034743d243f36d3e0a62327639fe6afb4a5ef1"
+      },
+      "invocation": {
+        "path": "/tmp/fireprot-head16-paired-v1/paired-n1536/measurement-005/invocation.json",
+        "sha256": "30db82a13b34ac2d87178d24ed178a0d79e15df6fb769dd77fe4f488d463cc01"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-candidate-2/accepted.json",
+        "sha256": "c02fe9131636b67c12b88ed8d08444804032cf9faae486fdce88545f5195214c"
+      },
+      "predictions": {
+        "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-candidate-2/predictions.json",
+        "sha256": "ac7e0f78ee6012ca083f74e3eb5fcf7e5bd40819aa1c5b3ad8188ced50814068"
+      },
+      "operator_runtime": {
+        "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-candidate-2/operator-runtime.json",
+        "sha256": "52d809f646a98a18751daea539e9024cf30f3a71d527c987353cf222513ff57f"
+      },
+      "head_dimensions": {
+        "allowed": [
+          16,
+          32
+        ],
+        "submitted_launches": {
+          "16": 400,
+          "32": 2708
+        }
+      },
+      "launches_submitted": 3108,
+      "owned_scores": {
+        "mode": "owned_scores_strict",
+        "submitted_shapes": {
+          "B1024_N1536": 12,
+          "B512_N1536": 12,
+          "B256_N1536": 2892,
+          "B64_N1536": 192
+        },
+        "storage_fallbacks": 0,
+        "limits": [
+          "Shape counts include tuning; not steady-state frequency.",
+          "Private-score ownership requires the audited adapter."
+        ]
+      },
+      "confidence_chunk_policy": {
+        "mode": "measured_native_confidence_ceiling",
+        "calls": [
+          {
+            "requested_max": 1024,
+            "bounded_max": 256,
+            "selected": 256,
+            "n": 1536
+          }
+        ]
+      },
+      "chunk_tuners": {
+        "template_embedder.template_pair_stack": 1024,
+        "msa_module": 1024,
+        "pairformer_stack": 1024,
+        "diffusion_module.diffusion_conditioning": 1024,
+        "aux_heads.pairformer_embedding.pairformer_stack": 256
+      },
+      "conditioning-cache": {
+        "contents": {
+          "schema_version": 1,
+          "mode": "experimental_pair_cache",
+          "scopes": [
+            {
+              "calls": 200,
+              "hits": 199,
+              "misses": 1,
+              "fallbacks": 0,
+              "completed": true,
+              "effective_chunks": [
+                1024
+              ],
+              "retained_pair_bytes": 1207959552
+            }
+          ],
+          "limits": [
+            "Source-pinned immutable inference inputs are required.",
+            "Identity checks do not detect in-place input/parameter changes."
+          ]
+        },
+        "pin": {
+          "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-candidate-2/conditioning-cache.json",
+          "sha256": "f204a40971039c2f9e8e34e810fea196184ba3df85e2c8626ca5e6c88f78f458"
+        }
+      },
+      "atom-cache": {
+        "contents": {
+          "schema_version": 1,
+          "mode": "experimental_atom_cache",
+          "scopes": [
+            {
+              "calls": 200,
+              "hits": 199,
+              "misses": 1,
+              "fallbacks": 0,
+              "completed": true,
+              "retained_bytes": 105829376
+            }
+          ],
+          "limits": [
+            "Audited immutable rollout only; no in-place mutation detection.",
+            "Retained bytes describe tensors, not whole-model peak memory."
+          ]
+        },
+        "pin": {
+          "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-candidate-2/atom-cache.json",
+          "sha256": "0318fa484bd91d697856eca829bcd064a6bace91948795ae7285c98282c2c433"
+        }
+      },
+      "timing_boundary_differences_seconds": {
+        "complete_minus_model": 94.09084177006116,
+        "complete_minus_supervised": 17.696234861999983,
+        "supervised_minus_worker_request": 39.943421253910856,
+        "worker_request_minus_model": 36.45118565415032
+      }
+    }
+  ],
+  "model_seconds": {
+    "baseline": [
+      534.3636805179995,
+      534.7579860009719,
+      535.8369530579075
+    ],
+    "candidate": [
+      446.84436277498025,
+      446.5892313600052,
+      447.79463344893884
+    ]
+  },
+  "model_medians": {
+    "baseline": 534.7579860009719,
+    "candidate": 446.84436277498025
+  },
+  "model_median_speedup": 1.1967432747277662,
+  "original_native_reference": "/media/IntelSSD/fireprot/outputs/hip-softmax-e2e-n1536-baseline-0",
+  "native_anchor_comparison": {
+    "path": "/tmp/fireprot-head16-paired-v1/native-anchor-comparison.json",
+    "sha256": "809c4f117ab3ca16f32d3f50ad0c3f79d40fc05f0e1b1fd039a4a5ac2363355c"
+  },
+  "native_anchor_arrays": {
+    "confidence.chain_ptm.1": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.disorder": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.gpde": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.has_clash": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.iptm": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.pae": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.pde": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.plddt": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.ptm": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.sample_ranking_score": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "coordinates": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    }
+  },
+  "model_residency": "fresh_process_per_job",
+  "reference_policy": "first_baseline_anchor",
+  "limits": [
+    "Incremental D16 comparison over the combined backend; not a direct original-Torch speedup. Do not multiply independent benchmark ratios.",
+    "FP32/R3/D200/S1/seed101; fixed source, checkpoint, input and strict environment.",
+    "Native tuning remains active: main chunk512 versus1024 is part of the observed treatment outcome.",
+    "Fresh model processes; filesystem cache not flushed; published HIP bundle.",
+    "No other FireProt GPU workload launched during this sequential timing window.",
+    "Selected HIP7/PCI93 continuously monitored; other host jobs not continuously audited.",
+    "Timing boundary differences are not independently instrumented phase durations."
+  ],
+  "archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/conditioning-cache-20261006/head16-paired-v1-results.tar.gz",
+    "sha256": "b079ac5dfc8b48548bd0e7d8b18f151246fa14a182e46762bfda846111642915",
+    "size": 444200847
+  },
+  "terminal_observations": {
+    "controller_pid": 1940816,
+    "controller_and_six_worker_pids_absent": true,
+    "amd_smi_processes": [
+      {
+        "gpu": 0,
+        "process_list": [
+          {
+            "process_info": "No running processes detected"
+          }
+        ]
+      },
+      {
+        "gpu": 1,
+        "process_list": [
+          {
+            "process_info": "No running processes detected"
+          }
+        ]
+      },
+      {
+        "gpu": 2,
+        "process_list": [
+          {
+            "process_info": "No running processes detected"
+          }
+        ]
+      },
+      {
+        "gpu": 3,
+        "process_list": [
+          {
+            "process_info": "No running processes detected"
+          }
+        ]
+      },
+      {
+        "gpu": 4,
+        "process_list": [
+          {
+            "process_info": "No running processes detected"
+          }
+        ]
+      },
+      {
+        "gpu": 5,
+        "process_list": [
+          {
+            "process_info": "No running processes detected"
+          }
+        ]
+      },
+      {
+        "gpu": 6,
+        "process_list": [
+          {
+            "process_info": "No running processes detected"
+          }
+        ]
+      },
+      {
+        "gpu": 7,
+        "process_list": [
+          {
+            "process_info": "No running processes detected"
+          }
+        ]
+      }
+    ],
+    "transport_cleanup": "The completed benchmark left local SSH transport2239518 open. After independent remote PID/report checks it was closed explicitly; session4919 exit255 is transport cleanup, not benchmark failure. benchmark.json records succeeded."
+  }
+}

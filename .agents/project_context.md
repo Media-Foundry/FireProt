@@ -1031,3 +1031,30 @@ Local preparation script /tmp/fireprot-prepare-head16-pairs.py and capture
 reference / CIF gates and original-native anchor, archive, then report incremental
 gain over the accepted combination. Do not multiply it into the1.499102x direct
 original-Torch result. No plateau or serious blocker established.
+
+## Local fusion prototype while D16 timing runs (2026-10-06)
+
+experiments/mfma_qk/fused_qk_softmax.cpp and build_fusion.py implement a separate
+packed N1536/K32 QK-plus-softmax prototype. No remote build or GPU run. Mode0
+writes raw scores after a block/LDS transpose; mode1 includes native-order
+mask/bias additions and the maintained32-slot wave softmax. Six256-column bands,
+16 query rows,16 wave64 waves/1024 threads,16KiB LDS with a column XOR swizzle.
+Compute/transpose each band immediately instead of retaining all six old tiles
+alongside row values. QK uses the validated even/odd K8 order; PV remains native.
+Pointer storage/nonalias conditions need a future tensor boundary and test harness.
+FUSION.md records exact API, outstanding operator/model gates and layout limits.
+
+Local HIP7.14 compilation passes. Softmax mode:70VGPR/28SGPR; raw score mode:
+56VGPR/16SGPR. Both have zero reported spills/scratch,48 static MFMA instructions,
+11 static barriers,16KiB LDS and max workgroup1024. Compiler occupancy remarks
+estimate7/8waves per SIMD respectively; this is NOT measured residency or proof
+of launch feasibility. Evidence provenance/openfold3_qk_softmax_local_compile.json;
+local archive outputs/experiments/qk-softmax-local-20261006/compile-v1.tar.gz SHA
+d208bfceaae9d1f0f7e0444e76365e1f6882c7bcc905b46e04c716a5d3f879b5.
+No fusion numerical/performance acceptance or model integration. Next local work
+can prepare the operator harness; do not run it remotely until timing finishes.
+
+D16 controller1940816/session4919 is still live at elapsed17:04. Baseline0
+measured/verified; candidate0 running. All earlier source/artifact freeze and
+no-other-GPU/heavy-remote-build restrictions remain in force. Do not infer a
+speedup from journal offsets or publish an aggregate before three pairs complete.

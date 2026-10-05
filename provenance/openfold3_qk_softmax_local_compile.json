@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "phase": "local_compile_passed_gpu_untested",
+  "source": {
+    "path": "/home/husrcf/Code/fireprot/experiments/mfma_qk/fused_qk_softmax.cpp",
+    "sha256": "9605b069c16fb53abff832991c6dc6eeb1018066d0c854c38b463fd2eae09a97",
+    "size": 5195
+  },
+  "compiler_version": "HIP version: 7.14.60850-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 46fcb339fb61119b337f973c7ca9e710a319fdd0+PATCHED:440716f8b87be9d8e20ed910e10e5b6d14d57cf6)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-7.14/lib/llvm/bin\n",
+  "compiler": {
+    "path": "/opt/rocm/core-7.14/lib/llvm/bin/clang-23",
+    "sha256": "285156b3fa956dfc0c6b22f87d35ac27aab5a093190a85a0e0a71123654b9657",
+    "size": 201344
+  },
+  "flags": [
+    "-O3",
+    "-std=c++17",
+    "-fPIC",
+    "-shared",
+    "--offload-arch=gfx90a"
+  ],
+  "additional_diagnostic_flags": [
+    "-Rpass-analysis=kernel-resource-usage"
+  ],
+  "successful_compilation_count": 2,
+  "kernels": [
+    {
+      "name": "_Z10qk_softmaxILb1EEvPKfS1_S1_S1_Pflllll",
+      "mode": "softmax",
+      "metadata": {
+        "agpr_count": 0,
+        "vgpr_count": 70,
+        "sgpr_count": 28,
+        "group_segment_fixed_size": 16384,
+        "private_segment_fixed_size": 0,
+        "vgpr_spill_count": 0,
+        "sgpr_spill_count": 0,
+        "wavefront_size": 64,
+        "max_flat_workgroup_size": 1024
+      },
+      "static_mfma_count": 48,
+      "static_barrier_count": 11
+    },
+    {
+      "name": "_Z10qk_softmaxILb0EEvPKfS1_S1_S1_Pflllll",
+      "mode": "scores",
+      "metadata": {
+        "agpr_count": 0,
+        "vgpr_count": 56,
+        "sgpr_count": 16,
+        "group_segment_fixed_size": 16384,
+        "private_segment_fixed_size": 0,
+        "vgpr_spill_count": 0,
+        "sgpr_spill_count": 0,
+        "wavefront_size": 64,
+        "max_flat_workgroup_size": 1024
+      },
+      "static_mfma_count": 48,
+      "static_barrier_count": 11
+    }
+  ],
+  "compiler_occupancy_estimates_waves_per_simd": {
+    "softmax": 7,
+    "scores": 8
+  },
+  "artifacts": [
+    {
+      "path": "/tmp/fireprot-qk-softmax-local-v1.so",
+      "sha256": "4a6b774a8cadfa365bc0f16fdda47ab3ffe09dd893e5a4a3d2d292fa6acdd9ab",
+      "size": 33272
+    },
+    {
+      "path": "/tmp/fireprot-qk-softmax-local-v1.fatbin",
+      "sha256": "0fdc077f19a079de7b77174d998f51cc5652ff36c021a0a8921c3cf16c90d9d1",
+      "size": 21752
+    },
+    {
+      "path": "/tmp/fireprot-qk-softmax-local-v1.hsaco",
+      "sha256": "5d48cbbc9ced2c1d4439a1a8018428dcec6f47c5c193ba473f6b29c1ee7e1b5d",
+      "size": 17656
+    },
+    {
+      "path": "/tmp/fireprot-qk-softmax-local-v1.asm",
+      "sha256": "fe5f485333cdcc7f061999f9ca973693a53b3184d98f35dd51acc84b1854a604",
+      "size": 187381
+    },
+    {
+      "path": "/tmp/fireprot-qk-softmax-local-v1-metadata.txt",
+      "sha256": "3be7fe114105fa99bb29b4d6d84dc6ac099874770a9e9f4e3f6109cabef62dd4",
+      "size": 3645
+    },
+    {
+      "path": "/tmp/fireprot-qk-softmax-local-v1-resource.so",
+      "sha256": "d188db3cfac4917846617588d30b4b2cb6e98f26fbba84094b424edc71c51c47",
+      "size": 33272
+    },
+    {
+      "path": "/tmp/fireprot-qk-softmax-local-v1-resource.log",
+      "sha256": "9d961ce6ca75bedbaf609bb6478f2e3c1cb206a8d67622314122a2b8c7ee0b3e",
+      "size": 2518
+    }
+  ],
+  "archive": {
+    "path": "/home/husrcf/Code/fireprot/outputs/experiments/qk-softmax-local-20261006/compile-v1.tar.gz",
+    "sha256": "d208bfceaae9d1f0f7e0444e76365e1f6882c7bcc905b46e04c716a5d3f879b5",
+    "size": 48807
+  },
+  "limits": [
+    "No GPU execution or runtime launch feasibility established.",
+    "Compiler occupancy estimates are not measured residency.",
+    "Static instruction counts are not runtime profiler counts.",
+    "Local direct compiler artifacts are not Rust-published DiamondHill artifacts.",
+    "No operator, original-stride, model or performance acceptance."
+  ]
+}

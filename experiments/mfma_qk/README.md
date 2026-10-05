@@ -119,23 +119,24 @@ The probe is not tuned and no speedup is claimed.
    trial. That still requires operator and complete-model tests before E2E.
 
 The one-wave diagnostic is not tuned. It retains a full global score output and
-offers no memory-traffic saving by itself. QK-plus-softmax fusion remains future
-work, with explicit LDS/register/occupancy and arithmetic-order constraints.
+offers no memory-traffic saving by itself. A separate QK-plus-softmax prototype
+now compiles locally; its GPU correctness and performance remain untested.
 
-## Candidate fusion layout after score acceptance
+## Fusion prototype after score acceptance
 
-A layout worth testing retains 16 query rows across 16 waves (1,024 threads).
-Each wave computes six 16-key tiles at N1536, retaining 24 scores per thread.
-The complete 16-by-1536 score tile is 96 KiB, distributed over registers rather
-than allocated as one LDS array. Six staged transposes can use a 16-by-256 FP32
-LDS tile (16 KiB before any padding/swizzle). After each transpose, each wave
+The [local prototype](FUSION.md) covers16 query rows across16 waves (1024 threads).
+Each wave computes six16-key tiles at N1536, transposing each band immediately
+before computing the next. This avoids retaining24 old MFMA accumulator values
+alongside24 final softmax values per thread. The complete row values occupy
+96 KiB across registers. Six staged transposes use a16-by-256 FP32 LDS tile
+(16 KiB) with a column XOR swizzle. After each transpose, each wave
 owns one query row; lane `l` receives columns `l + 64*j`, matching the existing
 softmax's row layout and local evaluation order. No online-softmax rescaling is
 introduced. The block would write probabilities for the original native PV.
 
-This is a design hypothesis, not implemented code. It avoids intentionally
-discarding most columns of a 16-wide MFMA fragment, but large-block register
+This implementation remains GPU-untested. It avoids intentionally
+discarding most columns of a16-wide MFMA fragment, but large-block register
 pressure, accumulator lifetime, LDS bank conflicts, barriers, spills and
-residency still need disassembly and measurement. The transpose must preserve
+residency still need runtime validation and measurement. The transpose must preserve
 every FP32 bit. Output allocation/filling, original QKV packing, model chunk
 selection and the native PV cost must remain included when comparing paths.

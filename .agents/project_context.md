@@ -62,6 +62,10 @@ output gates. It is a proposed experiment, not implemented or measured caching.
 pair equality, downstream mutation, RNG and chunk observations. Five CPU tests
 pass; no GPU/model validation has run. Deploy only to a fresh copied worker after
 the active softmax benchmark finishes. Diagnostic timings are not E2E results.
+An additional owned-score in-place softmax screen is prepared in
+`experiments/hip_softmax/screen_inplace.py`; see `INPLACE.md` there. It has only
+passed syntax compilation, not GPU checks. It uses the unchanged published
+kernel and leaves active copied workers untouched. Test after the paired run.
 
 ## Historical implemented state
 

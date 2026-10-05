@@ -69,3 +69,25 @@ This prototype does not yet eliminate Q/K packing or the probability tensor
 written for native PV. Its block order does not implement the maintained
 softmax's outer-batch bias-reuse schedule. Both costs remain optimization
 questions, not established bottlenecks or promised gains for this kernel.
+
+## Pending numerical screen
+
+`probe_fusion.py DESTINATION --batch 32` loads only an explicitly pinned bundle
+through `FIREPROT_QK_SOFTMAX`. Each invocation uses a fresh destination. The
+optional outer batches128/256/512 must each be validated independently;32 means
+128 packed head matrices. Larger screens require enough free device memory for
+multiple full score tensors and are correctness runs, not timing measurements.
+
+The screen first checks raw scores after LDS transposition for random,
+adjacent cancellation, subnormal, negative-zero and nonfinite inputs. It then
+checks native-order additions and Torch softmax, using contiguous/transposed
+bias and zero, per-outer partial, additive and entirely masked rows. It records
+actual native QK kernel correlation for the random case at the full GEMM shape.
+Every comparison uses integer views of all FP32 outputs, including NaN payloads.
+An error writes an incomplete report and exits without accepting later cases.
+Fresh output allocation and restricted dense input layouts bound the pointer ABI.
+This is an experimental harness, not a maintained model dispatch boundary.
+
+Local syntax, wrong-environment report generation and four malformed/non-GPU
+input rejection checks pass. No GPU numerical screen has run yet. Neither the
+harness nor local compilation establishes fused-kernel correctness or speed.

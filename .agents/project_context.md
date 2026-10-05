@@ -1058,3 +1058,13 @@ D16 controller1940816/session4919 is still live at elapsed17:04. Baseline0
 measured/verified; candidate0 running. All earlier source/artifact freeze and
 no-other-GPU/heavy-remote-build restrictions remain in force. Do not infer a
 speedup from journal offsets or publish an aggregate before three pairs complete.
+
+Fusion numerical harness prepared locally: experiments/mfma_qk/probe_fusion.py.
+Default outerB32/BH128/N1536/K32, optional independentB128/256/512 screens.
+Raw QK/LDS then ordered-add/softmax checks, all output bits, both bias layouts,
+broadcast/per-outer/fully-masked/additive masks and adversarial inputs. Captures
+actual native full-shape QK correlation. Fresh output storage and dense-input
+restrictions guard experimental pointer calls. Syntax, wrong-environment report
+and four invalid/non-GPU input rejection checks pass locally. No GPU run or
+remote deployment; current D16 paired controller1940816 remains live (24:49
+at latest observation, third invocation candidate1). No new performance claim.

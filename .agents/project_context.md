@@ -694,3 +694,70 @@ Authorized ISA agent is finishing a read-only report with exact native symbols,
 full hashes and descriptor evidence. Actual selected QK/PV use 16x16x4 FP32 MFMA;
 A/B runtime pointer identity remains inferred, not traced. No new GPU kernel
 implementation or speedup is established from this disassembly.
+
+N1000 inplace-model-v2 completed; session38895 exited0. Supervisor succeeded,
+all 11 original-native arrays are bitwise equal, 1,702 submitted in-place calls,
+zero storage fallbacks; final module chunk tuners all1024. N1536 PID1823629 and
+worker1823644 remain live; session58513. Current evidence is
+provenance/openfold3_inplace_models.json; collector is
+/tmp/fireprot-collect-inplace-models.py (run over SSH stdin), local capture
+/tmp/fireprot-inplace-models.json. It compares a terminal successful N1536 run
+against the original strict native NPZ before declaring acceptance.
+
+The direct original-Torch versus combined optimization AB/BA/AB N1536 sequence
+is PREPARED, NOT LAUNCHED. Control /tmp/fireprot-combined-native-paired-v1,
+spec pairs-n1536.json SHA e1793fc125ba6841d9a018ab6c0b84d013fefcf7cae770ff5e258b0d2b72d826.
+Worker has explicit pair/atom cache flags; baseline native/0/0, candidate
+hip_fused/1/1 with the same source tree and owned score helper. Expected changes
+include backend, both flags, profile hash and candidate bridge input. All run
+IDs/outputs are new; HIP7. Once BOTH inplace model gates pass, all diagnostics
+terminate and all GCDs are observed idle, run Rust benchmark-pairs with this spec
+and a NEW destination under that control. Launch no other FireProt GPU work
+throughout the sequence. Compare its native anchor to the historical native NPZ
+as well before publishing. Current CLI/bridge/bundle/environment must stay fixed.
+Preparation: provenance/openfold3_combined_native_paired_preparation.json.
+Archive combined-native-paired-v1-preparation.tar.gz SHA
+1b37119613a1ffc164491819d7ee53d37a771e3605f918f74084b18677c7e5ba.
+
+Authorized ISA reviewer is finished/idle. Primary review corrected its shortened
+symbol strings and mistaken PV reduction dimension: QK K=32, PV K=1536. Actual
+ELF64 descriptor entry offsets and LDS sizes independently match both selected
+preloaded bodies. Full corrected report: provenance/openfold3_native_mfma_review.json.
+Archive native-mfma-review-v2.tar.gz SHA
+ecffe69c8447537ed43ddcb875dadf621454d730657b8ac3f3f8df8948fdbfd2.
+A/B runtime pointers and full K accumulation sequence remain unproven. Both
+2acd294 and163d007 CI runs completed successfully. No plateau established.
+
+## N1536 confidence mismatch; E2E candidate rejected (2026-10-06)
+
+IMPORTANT: inplace-model-v2 N1536 is now terminal, session58513 exit0, but the
+separate exact-array comparison fails. Coordinates match bitwise; five confidence
+arrays differ (max1.90735e-5). Keep the bitwise gate unchanged. Evidence now records
+numerical_rejected and the durable results archive. Runtime succeeded/accepted
+only establishes finite output, not parity. Final tuner sizes512 except diffusion
+conditioning1024; 5502 in-place submissions vs5592 earlier baseline. This difference
+includes tuning and does not yet explain the confidence changes.
+DO NOT LAUNCH /tmp/fireprot-combined-native-paired-v1: its candidate is rejected.
+Its preparation evidence now marks not_launched_candidate_rejected.
+
+New bounded diagnostic scope_softmax.py observes native aux_heads.forward and
+can preserve out-of-place HIP there. Mode none = out-of-place everywhere; mode
+trunk = in-place outside confidence. No arithmetic/cycle changes; still pair+atom
+cache and strict inference. Scope return/exception restoration checked locally.
+Fresh copied controls /tmp/fireprot-inplace-scope-v1, immutable while live:
+- none-n1536.json + none-profile.json, HIP5, session79673.
+- trunk-n1536.json + trunk-profile.json, HIP6, session9644.
+- trunk-n1000.json + trunk-profile.json, HIP7, session7459.
+Root logs have the same mode-nNNNN stem. Run IDs inplace-scope-v1-MODE-nNNNN.
+All GCDs were observed idle before launch. No E2E benchmark is active. Require all
+11 original-native arrays, final chunk_tuners and per-scope counters. If a guarded
+candidate passes, investigate the confidence allocation/tuning difference and
+prepare a NEW same-source E2E control; never reuse the rejected candidate spec.
+Scope preparation: provenance/openfold3_inplace_scope_preparation.json, archive
+inplace-scope-v1-preparation.tar.gz SHA
+8e97a3dc5fa42148ec86ccccbf25ef403ab5b20ad5aac7becdebbfbcad56555d.
+
+Scope supervisors confirmed live: none-N1536 PID1835931, trunk-N1536
+PID1835934, trunk-N1000 PID1835940. All three have execution.json and live
+processes. Five CPU storage/scope tests pass, including return/exception cleanup
+and preexisting forward override restoration.

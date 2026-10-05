@@ -105,3 +105,46 @@ omitted the root import shim and native source tree; its failed run IDs remain
 reserved. Source/archive pins and the exclusion are recorded in
 `provenance/openfold3_inplace_model_preparation.json`.
 No maintained dispatch changes or new E2E result are claimed yet.
+
+N1000 has now completed and matches all 11 original-native arrays. It submitted
+1,702 in-place calls with zero storage fallbacks; final recorded module chunk
+tuners are all 1024. N1536 remains active. See
+`provenance/openfold3_inplace_models.json` for the current gate state.
+
+A separate same-source AB/BA/AB N1536 comparison against original Torch is
+prepared, **not launched**, at `/tmp/fireprot-combined-native-paired-v1`.
+The native arm disables pair/atom caches and calls upstream attention; the
+candidate enables both and uses the owned-score HIP softmax. The worker delta
+from the accepted atom-cache control is `worker-owned-scores-overlay.patch`;
+copy `owned_scores.py` into the worker package too. Profiles explicitly bind the
+cache flags, backend difference and Rust bridge identity. All scientific settings
+stay FP32/R3/D200/S1/seed101. Evidence and archive:
+`provenance/openfold3_combined_native_paired_preparation.json`.
+Launch only after both in-place model gates pass and all diagnostic GPU jobs
+terminate. Keep all other FireProt GPU workloads stopped during that sequential
+benchmark. Do not multiply earlier speedup ratios to predict its result.
+
+## N1536 rejection and confidence-stage diagnostic
+
+The all-scope N1536 model completed but **fails the required bitwise gate**.
+Six of eleven arrays, including coordinates, match. Five confidence arrays differ:
+chain_ptm/ptm up to 1.49e-8, PAE up to 1.7166e-5, PDE up to 1.3352e-5 and
+pLDDT up to 1.9073e-5. This is rejected regardless of the small deltas.
+The runtime's finite-output acceptance is not an exact-parity pass.
+Final recorded chunk tuners are 512 except diffusion conditioning at 1024;
+5,502 in-place launches have zero storage fallbacks. The earlier baseline
+submitted 5,592 HIP launches, but that alone cannot distinguish tuning attempts
+from steady-state changes. Allocation/tuning is a hypothesis, not a proven cause.
+Completed outputs, controls and comparisons are archived in the model evidence.
+**Do not launch the prepared combined-native benchmark with this candidate.**
+
+`scope_softmax.py` prepares a diagnostic boundary around the native `aux_heads`
+forward. Mode `none` preserves out-of-place HIP everywhere; mode `trunk` uses
+in-place HIP only outside that confidence scope. Both retain atom/pair caches,
+unchanged arithmetic and upstream tuning. The scope restores on return/error.
+Fresh concurrent trials: N1536/none on HIP5, N1536/trunk on HIP6, N1000/trunk on
+HIP7. They record final tuner values and per-scope submitted shapes. This
+localizes the failure before deciding whether to preserve confidence allocation
+or fix a more specific cause. Source/request/archive pins:
+`provenance/openfold3_inplace_scope_preparation.json`.
+No new model speedup or promotion is established.

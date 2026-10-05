@@ -1,0 +1,160 @@
+{
+  "scope": "Read-only host-side inspection; no GPU execution, compilation, repository edit, or source ELF modification.",
+  "target": {
+    "gpu": "gfx90a / MI250",
+    "run": "OpenFold3 N1536, B=32, H=4, D=32, float32",
+    "trace_status": "11 output arrays bitwise equal"
+  },
+  "artifact_provenance": {
+    "rocblas_library_resolved": "/opt/rocm/core-10.0/lib/librocblas.so.5.6",
+    "rocblas_library_sha256": "d05939967b5f1bd184a4b8c1c77509c87a0abae3f0b3d079ba9d68ed1ddc50a5",
+    "source_co": "/opt/rocm/core-10.0/lib/rocblas/library/gfx90a/TensileLibrary_Type_SS_Contraction_l_Ailk_Bljk_Cijk_Dijk_gfx90a.co",
+    "source_co_sha256": "d2d31b876c31076f1892c538b1be3e975d98ac27fdcac66ad4f94bc12f4ddeff",
+    "analysis_copy_co": "/tmp/fireprot-mfma-review-v2/rocblas-ss-ailk-bljk-gfx90a.co",
+    "analysis_copy_co_sha256": "d2d31b876c31076f1892c538b1be3e975d98ac27fdcac66ad4f94bc12f4ddeff",
+    "source_dat": "/opt/rocm/core-10.0/lib/rocblas/library/gfx90a/TensileLibrary_Type_SS_Contraction_l_Ailk_Bljk_Cijk_Dijk_gfx90a.dat",
+    "source_dat_sha256": "19490886313bad8565732373e54655fa5587a82f44d85c71fa51386dc1b3c039",
+    "analysis_copy_dat": "/tmp/fireprot-mfma-review-v2/rocblas-ss-ailk-bljk-gfx90a.dat",
+    "analysis_copy_dat_sha256": "19490886313bad8565732373e54655fa5587a82f44d85c71fa51386dc1b3c039",
+    "extracted_hsaco": "/tmp/fireprot-mfma-review-v2/rocblas-ss-ailk-bljk-gfx90a.hsaco",
+    "extracted_hsaco_sha256": "5e6d46f532c5144ef787add46673fa4825e51833b1eb0601df7e0595f1855b99",
+    "trace": "/media/IntelSSD/fireprot/outputs/attention-trace-v2-n1536/attention-trace.chrome.json",
+    "trace_sha256": "041e6adefee71e80ca782853bca0768d0444ee1afb247c93501a0cbea233fd10",
+    "version_note": "Torch reports HIP 7.14.60850; the resolved library is under core-10.0. A directory name alone does not establish a runtime version mismatch."
+  },
+  "qk": {
+    "trace_kernel": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+    "kernel_descriptor_address": "0x1d29c0 (.rodata)",
+    "text_symbol_address": "0x414f00 (.text)",
+    "disassembly_excerpt": "/tmp/fireprot-mfma-review-v2/qk-0-414f00.asm",
+    "static_body_end_exclusive": "0x416c00",
+    "static_mfma_count": 80,
+    "mfma_opcode": "v_mfma_f32_16x16x4f32",
+    "metadata": {
+      "macro_tile": [
+        64,
+        32,
+        1
+      ],
+      "work_group": [
+        32,
+        8,
+        1
+      ],
+      "depth_u": 32,
+      "global_split_u": 1,
+      "stream_k": 0,
+      "global_accumulation": 0,
+      "wavefront_size": 64,
+      "block_threads": 256,
+      "lds_bytes": 12800,
+      "vgpr_count": 88,
+      "sgpr_count": 63,
+      "spill_count": 0
+    },
+    "actual_inputs_from_trace": {
+      "Q_shape": [
+        128,
+        1536,
+        32
+      ],
+      "Q_strides": [
+        49152,
+        32,
+        1
+      ],
+      "K_shape": [
+        128,
+        32,
+        1536
+      ],
+      "K_strides": [
+        49152,
+        1536,
+        1
+      ]
+    },
+    "accumulator_observation": "Code uses a[0:3] and a[4:7] as MFMA accumulators with LDS staging, s_waitcnt and s_barrier. Disassembly has prologue/open/tail control flow; exact per-output runtime K sequence is not established from the symbol/static count alone.",
+    "text_symbol": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5_preloaded",
+    "disassembly_sha256": "eb879f85164361cd81750fbcdfbc2efef34956545e912c640a90cc72de93a11d"
+  },
+  "pv": {
+    "trace_kernel": "Cijk_Ailk_Bljk_SB_MT32x64x32_MI16x16x4x1_SE_1LDSB0_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS0_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA2_GLVWB2_GRPM1_GRVW2_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB2_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS0_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS0_SU0_SUM0_SUS0_SCIUI1_SPO0_SRVW2_SSO0_SVW4_SNLL0_TSGRA0_TSGRB0_TT1_32_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW1_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM15.kd",
+    "kernel_descriptor_address": "0x1d3180 (.rodata)",
+    "text_symbol_address": "0x44f200 (.text)",
+    "disassembly_excerpt": "/tmp/fireprot-mfma-review-v2/pv-0-44f200.asm",
+    "static_body_end_exclusive": "0x451400",
+    "static_mfma_count": 80,
+    "mfma_opcode": "v_mfma_f32_16x16x4f32",
+    "metadata": {
+      "macro_tile": [
+        32,
+        64,
+        1
+      ],
+      "work_group": [
+        32,
+        8,
+        1
+      ],
+      "depth_u": 32,
+      "global_split_u": 1,
+      "stream_k": 0,
+      "global_accumulation": 0,
+      "wavefront_size": 64,
+      "block_threads": 256,
+      "lds_bytes": 29184,
+      "vgpr_count": 248,
+      "sgpr_count": 58,
+      "spill_count": 0
+    },
+    "variant_disambiguation": {
+      "not_selected": "A second PV variant at 0x499f00 has GLVWA1/GRVW1 and 64 static MFMA instructions; it does not match the trace name.",
+      "alternate_disassembly_excerpt": "/tmp/fireprot-mfma-review-v2/pv-1-499f00.asm"
+    },
+    "text_symbol": "Cijk_Ailk_Bljk_SB_MT32x64x32_MI16x16x4x1_SE_1LDSB0_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS0_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA2_GLVWB2_GRPM1_GRVW2_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB2_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS0_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS0_SU0_SUM0_SUS0_SCIUI1_SPO0_SRVW2_SSO0_SVW4_SNLL0_TSGRA0_TSGRB0_TT1_32_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW1_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM15_preloaded",
+    "disassembly_sha256": "56a7e45810f90ba70cd7cdb6d5fe73ded8894da1764d1af75079fe70cf722726"
+  },
+  "split_k_conclusion": "Selected batched Tensile rows have DepthU=32, GSU=1, StreamK=0 and GlobalAccumulation=0, with no split-K/Stream-K cross-CTA accumulation. QK has reduction K=32 (one DepthU tile); PV has reduction K=1536 (48 DepthU tiles). Static instruction counts do not determine executed counts or scalar accumulation order.",
+  "ab_mapping": {
+    "inference": "Kernel contract Cijk_Ailk_Bljk means A(i,l)*B(l,j). Given row-major torch Q[M,K] and K[K,N], standard row-major-to-column-major GEMM adaptation swaps pointers, so expected runtime mapping is kernel A=key and B=query; query rows then lie along output C columns/the MFMA N axis.",
+    "confidence": "Inference, not directly proven by current artifacts: Chrome trace records kernel name/grid/correlation but not kernarg pointer values; AMD metadata names AddressA/AddressB but cannot bind them to Q/K at runtime. Do not claim the disassembly alone proves pointer identity."
+  },
+  "fusion_assessment": {
+    "candidate": "A QK+softmax probe that keeps 4 or 8 query columns (logical query rows) across all 1536 key positions, then executes the exact validated wave64 softmax order and writes probabilities for the existing native PV.",
+    "lds_score_storage": {
+      "four_queries_bytes": 24576,
+      "eight_queries_bytes": 49152
+    },
+    "constraints": [
+      "MFMA N=16 means 4/8 active query columns waste 75%/50% of N width.",
+      "Score LDS may overlay QK input staging after the final MFMA/barrier; simultaneous staging plus score allocation is not required if lifetime is proven.",
+      "Need to derive AccVGPR-to-LDS key-contiguous/query-column layout from epilogue and preserve exact K accumulation, post-GEMM bias add, local exp/add/reduction order, and masked -inf slots.",
+      "48 KiB score storage leaves at most one CTA by 64 KiB LDS capacity; actual residency depends on allocation granularity and VGPR use, so no occupancy/performance claim."
+    ],
+    "first_check": "Score-only exact probe against native QK before integrating softmax; compare score tensor bitwise. No performance expectation."
+  },
+  "safe_commands": [
+    "llvm-objdump --syms/-d (read-only)",
+    "llvm-readobj --notes (read-only)",
+    "readelf (read-only)",
+    "sha256sum"
+  ],
+  "pdf_cross_reference": {
+    "cdna2_manual": "/home/husrcf/Code/fireprot/docs/isa/CDNA2.pdf",
+    "mfma_accvgpr_and_encoding": "PDF pp. 53-57 (printed pp. 45-49) and PDF p. 156 (printed p. 148)."
+  },
+  "schema_version": 1,
+  "review_notes": [
+    "Primary agent matched full disassembly symbol names to accepted trace; corrected truncated names in the reviewer summary.",
+    "Primary agent independently decoded both ELF64 kernel descriptors: entry addresses 0x414f00/0x44f200 and fixed LDS sizes 12800/29184 match the excerpts.",
+    "Both excerpts contain 80 static 16x16x4 FP32 MFMA and zero 32x32x2.",
+    "Corrected reviewer summary: PV reduction dimension is 1536, not 32.",
+    "A/B pointer binding remains an inference; no runtime kernarg capture exists."
+  ],
+  "persistent_control_archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/conditioning-cache-20261006/native-mfma-review-v2.tar.gz",
+    "sha256": "ecffe69c8447537ed43ddcb875dadf621454d730657b8ac3f3f8df8948fdbfd2",
+    "size": 2005455
+  }
+}

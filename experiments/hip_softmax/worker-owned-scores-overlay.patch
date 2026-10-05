@@ -1,0 +1,33 @@
+--- python/fireprot_workers/openfold3.py
++++ python/fireprot_workers/openfold3.py
+@@ -58,7 +58,11 @@
+             raise ValueError('FIREPROT_CONDITIONING_CACHE must be 0 or 1')
+         scope = pair_cache(model.sample_diffusion, output) if cache_mode == '1' else nullcontext()
+         from .atom_cache import atom_cache
+-        with scope, atom_cache(model.sample_diffusion, output):
++        atom_mode = os.environ['FIREPROT_ATOM_CACHE']
++        if atom_mode not in ('0', '1'):
++            raise ValueError('FIREPROT_ATOM_CACHE must be 0 or 1')
++        atom_scope = atom_cache(model.sample_diffusion, output) if atom_mode == '1' else nullcontext()
++        with scope, atom_scope:
+             result = forward_with_backend(model, original_forward, args, kwargs,
+                                           backend=request['backend'], output=output)
+         torch.cuda.synchronize()
+@@ -127,7 +131,7 @@
+         return forward(model, *args, **kwargs)
+     if backend != 'hip_fused':
+         raise ValueError('Unsupported OpenFold3 worker backend')
+-    from fireprot.backends.amd.softmax_fp32 import SoftmaxFP32
++    from .owned_scores import OwnedScoreSoftmax as SoftmaxFP32
+     from fireprot.adapters.openfold3.attention import AttentionDispatcher, attention_scope
+     dispatcher = AttentionDispatcher(SoftmaxFP32())
+     try:
+@@ -135,7 +139,7 @@
+             return forward(model, *args, **kwargs)
+     finally:
+         (output / 'operator-runtime.json').write_text(
+-            json.dumps(dispatcher.manifest(), indent=2) + '\n')
++            json.dumps(dict(**dispatcher.manifest(), experimental_owned_scores=dispatcher.kernel.experiment_manifest(), chunk_tuners={name: module.chunk_size_tuner.cached_chunk_size for name, module in model.named_modules() if getattr(module, 'chunk_size_tuner', None) is not None}), indent=2) + '\n')
+ 
+ 
+ def check_determinism(torch, workload):

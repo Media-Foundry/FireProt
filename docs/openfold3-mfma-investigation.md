@@ -1,10 +1,10 @@
 # OpenFold 3 FP32 MFMA investigation
 
-Status: read-only ISA and historical-profile review, 2026-10-06. No new GEMM
-implementation, disassembly result, numerical equivalence or speedup is claimed.
-The conditioning-cache paired benchmark has now completed successfully. A
-bounded QK/PV observation in a separate copied worker now passes all 11 model
-arrays exactly and records CPU/GPU correlations. Disassembled ISA remains pending.
+Status: bounded native QK/PV observation and matched code-object review complete,
+2026-10-06. Both selected native kernels contain FP32 16x16x4 MFMA instructions.
+No replacement GEMM, exact reproduction of its accumulation order or GEMM speedup
+is established. The bounded observation preserves all 11 model arrays; the
+read-only disassembly and remaining fusion gates are recorded below.
 
 ## Source and verified ISA facts
 
@@ -79,13 +79,49 @@ symbols and raw-trace hashes are preserved in the evidence. This closes the
 shape/correlation gap for this selected call, but does not prove the named ISA
 instructions, accumulation sequence or kernel choice at other chunk sizes.
 
+## Matched native code objects
+
+The selected trace symbols now match the installed rocBLAS gfx90a code object,
+AMD metadata and descriptor entries. A read-only review worked on SHA-verified
+copies. The primary agent independently matched the full disassembly symbols,
+counted MFMA opcodes and decoded each ELF64 kernel descriptor's entry offset and
+LDS size. Evidence and archived code objects/excerpts:
+`provenance/openfold3_native_mfma_review.json`.
+
+| Stage | Descriptor / entry | Actual opcode | LDS bytes | VGPR / SGPR |
+| --- | --- | --- | ---: | ---: |
+| QK | `0x1d29c0` / `0x414f00` | `v_mfma_f32_16x16x4f32` | 12,800 | 88 / 63 |
+| PV | `0x1d3180` / `0x44f200` | `v_mfma_f32_16x16x4f32` | 29,184 | 248 / 58 |
+
+Each selected static function body contains 80 of these instructions and no
+32x32x2 FP32 MFMA. Static counts are not executed counts. Both selected solutions
+use DepthU=32, GSU=1, StreamK=0 and no global accumulation. **QK reduces K=32;
+PV reduces K=1536**, respectively one and 48 DepthU tiles. The review summary
+initially conflated these dimensions; the checked-in evidence corrects that.
+There is no split-K/Stream-K cross-CTA accumulation in either selected solution.
+Neither exact scalar accumulation order nor occupancy follows from these facts.
+
+A second PV body with GLVWA1/GRVW1 is excluded: the trace selects GLVWA2/GRVW2.
+The complete symbol names retain all tokens, including LBSPPB128/LPA0/WSGRB1.
+Torch's reported HIP version and the resolved `core-10.0` install directory are
+recorded separately; the directory name alone establishes no version conflict.
+
+The row-major-to-column-major adapter suggests kernel A=key and B=query for QK,
+so query rows would occupy the MFMA N axis. This is an inference: the trace does
+not record runtime kernarg pointer identities. A score-only probe must resolve
+this and prove bitwise equality before fusing softmax. Four/eight query rows
+across 1536 keys need 24/48 KiB of score LDS, but waste 75%/50% of the MFMA N=16
+fragment. Reusing staging LDS requires proven lifetimes/barriers; resource fit
+alone does not establish a speedup.
+
 ## Next evidence gates
 
-1. After the current paired sequence, capture actual QK/PV tensor shapes,
+1. Completed for the bounded B32/N1536 call: capture actual QK/PV tensor shapes,
    strides, dtypes and kernel correlations on the retained long-input workloads.
    Separate attention GEMMs from projections and triangle multiplication. Check
    that this diagnostic preserves all 11 model output arrays.
-2. Locate only the corresponding installed library code objects. Work on copies;
+2. Matched code objects are now archived; remaining work is exact runtime K/lane
+   mapping. Locate only corresponding library code objects and work on copies;
    never pass a published input ELF to an extraction command that can rewrite it.
    Record source/copy hashes and inspect opcode choice, operand/accumulator
    layout, K-fragment ordering, split-K, output conversion, floating-point modes

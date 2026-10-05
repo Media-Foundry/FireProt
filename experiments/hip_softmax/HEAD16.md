@@ -59,3 +59,11 @@ diffusion conditioning1024. This specific change preserves exact outputs; it
 does not establish arbitrary chunk sizes as interchangeable. Both completed
 runs are archived in `provenance/openfold3_head16_models.json`. No paired
 performance result or promotion is established yet.
+
+For a same-source incremental comparison, `head16-control.patch` applies after
+the adapter patch. It adds `FIREPROT_SOFTMAX_HEAD16=0/1`, rejecting other values;
+the default1 preserves the tested D16 behavior. Both arms use the same adapter
+bytes, kernel, caches and confidence ceiling. The comparison must declare the
+flag and profile digest changes and inspect actual launch counts/tuner choices.
+The paired control is prepared separately; this patch is not a maintained
+production setting or a measured improvement by itself.

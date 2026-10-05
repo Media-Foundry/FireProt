@@ -1,0 +1,42 @@
+# SPDX-License-Identifier: Apache-2.0
+# Experimental on/off control over head16-adapter.patch; retain target notices.
+# Base SHA-256: 070541b29e76d9d4fb51a5ae73116cb0ef74fd002706b47e6cc2c9ec02789bdf
+--- a/python/fireprot/adapters/openfold3/attention.py
++++ b/python/fireprot/adapters/openfold3/attention.py
+@@ -27,6 +27,7 @@
+ from contextlib import contextmanager
+ from contextvars import ContextVar
+ import hashlib
++import os
+ from pathlib import Path
+ import threading
+
+@@ -88,6 +89,10 @@
+     """Supply a verified SoftmaxFP32 instance, or None for native-only dispatch."""
+     def __init__(self, kernel):
+         self.kernel = kernel
++        head16 = os.environ.get('FIREPROT_SOFTMAX_HEAD16', '1')
++        if head16 not in ('0', '1'):
++            raise ValueError('FIREPROT_SOFTMAX_HEAD16 must be 0 or 1')
++        self._experimental_head_dimensions = (16, 32) if head16 == '1' else (32,)
+         self._experimental_head_launches = {16: 0, 32: 0}
+         self.registry = OperationRegistry()
+         self.registry.register(
+@@ -111,7 +116,7 @@
+         if (query.device.index != self.kernel.device or query.ndim != 4
+                 or query.shape != key.shape or query.shape != value.shape
+                 or not 0 < query.shape[0] <= 1536 or query.shape[1] != 4
+-                or query.shape[2] not in (1000, 1536) or query.shape[3] not in (16, 32)):
++                or query.shape[2] not in (1000, 1536) or query.shape[3] not in self._experimental_head_dimensions):
+             return False
+         mask, bias = biases
+         n = query.shape[2]
+@@ -152,7 +157,7 @@
+         return result.to(dtype=query.dtype)
+
+     def manifest(self):
+-        return dict(experimental_head_dimensions=dict(allowed=[16, 32],
++        return dict(experimental_head_dimensions=dict(allowed=list(self._experimental_head_dimensions),
+                         submitted_launches=self._experimental_head_launches),
+                     registry=self.registry.manifest(),
+                     kernel=None if self.kernel is None else self.kernel.receipt,

@@ -985,3 +985,49 @@ full native B128/N1536 output, retaining native GEMM shape and backend. Sparse
 exact inputs can check K indexing, while random ULP/absolute-error summaries
 can distinguish indexing-sized errors from rounding-sized ones without accepting
 either. The authorized ISA agent is still tracing LDS/global K mapping.
+
+## MFMA K grouping corrected; D16 incremental E2E ACTIVE (2026-10-06)
+
+Diagnostic scripts experiments/mfma_qk/diagnose.py and reorder_screen.py run on
+HIP7, sessions1288/99096 both exit0. Full native GEMM stays B128/N1536/K32; small
+candidate tiles use retained reference slices. Single-K covers all32 positions
+and passes. Dense tile333/512 differs (max abs2.98e-8); first-K4 tile128/512;
+adjacent cancellation native2/candidate1, absolute error1.0 (not1ULP). Testing
+four K-order hypotheses on all five tile cases finds only even_odd_k8 exact.
+The authorized ISA agent independently narrowed register/LDS issue order and
+suggested this grouping, while explicitly not proving every lane/wave address.
+Agent is finished/idle. Avoid the corrected earlier mistaken "1 ULP" wording.
+
+qk_probe.cpp now uses k=(fragment/2)*8+2*k_lane+(fragment%2) for full K32;
+raw integer calibration retains contiguous k_lane. Fresh source root
+/tmp/fireprot-mfma-qk-v2, no modifications to v1. Rust build84096 and publish65686
+exit0. New manifest a42b8b1150ccde3c3041e190b82baac6ecf071c1df8a9ee991b0bc0179dc3bf6,
+bundle /tmp/fireprot-mfma-qk-v2/bundle; library
+882621cd8a9d3ec004520f11b454eab279e6c060d15e8d8a6c6c182cc84f76d1.
+Full probe1420 exits0: lane calibration plus ALL five packed B128/N1536/K32
+cases pass bitwise (301,989,888 scores each). Actual native GEMM name exactly
+matches the model trace. Evidence provenance/openfold3_mfma_qk_v2_probe.json;
+local capture /tmp/fireprot-mfma-qk-v2-results.json. Durable archive
+mfma-qk-v2-results.tar.gz SHA
+087f3e3d3afb38856b797fba53194dd587ff68d24f8df382f9e14e795ad1fb48.
+Archive includes diagnosis/order screen, build/bundle, sources and full probe.
+No performance/attention/model acceptance; original strides and other batch
+sizes need gates. Next local work may implement QK/softmax fusion, but no remote
+build or GPU diagnostic while the new benchmark below is active.
+
+Head16 same-source control prepared using experiments/hip_softmax/head16-control.patch
+after the accepted adapter patch. FIREPROT_SOFTMAX_HEAD16=0/1 selects32-only vs16/32;
+both arms retain all caches, in-place softmax, confidence ceiling and native tuners.
+All76 preparation pins checked and all eight GCDs idle before launch.
+ACTIVE /tmp/fireprot-head16-paired-v1/paired-n1536, controller1940816, session4919.
+Spec root pairs-n1536.json, root paired.log; first baseline started. Requests use
+head16-e2e-n1536-{baseline,candidate}-{0,1,2}, HIP7/PCI93, AB/BA/AB. Freeze worker,
+CLI/bridge, bundle and environment. No other FireProt GPU work or heavy remote
+build/library scan until terminal. Evidence:
+provenance/openfold3_head16_paired_preparation.json; preparation archive SHA
+215494dd2749f7e5332289f9d456fe61adda910eb5967c0926f81bf54d797b71.
+Local preparation script /tmp/fireprot-prepare-head16-pairs.py and capture
+/tmp/fireprot-head16-paired-prepared.json. After completion collect all paired /
+reference / CIF gates and original-native anchor, archive, then report incremental
+gain over the accepted combination. Do not multiply it into the1.499102x direct
+original-Torch result. No plateau or serious blocker established.

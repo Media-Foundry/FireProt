@@ -23,11 +23,14 @@ void qk_probe(const float* query, const float* key_transposed, float* output,
     acc4 accumulator = {0.0f, 0.0f, 0.0f, 0.0f};
 
     // raw_tile executes ONE K4 instruction for integer lane calibration.
-    // The full probe hypothesizes ascending K4 fragments for native K32.
+    // The K32 trial follows the native candidate order supported by the LDS
+    // review and retained-tile screen: even K entries, then odd, within each K8.
+    // Keep raw calibration independent of this full-reduction address policy.
     const int fragments = raw_tile ? 1 : 8;
     #pragma unroll
     for (int fragment = 0; fragment < fragments; ++fragment) {
-        const int k = fragment * 4 + k_lane;
+        const int k = raw_tile ? k_lane
+                              : (fragment / 2) * 8 + 2 * k_lane + (fragment % 2);
         const float a = key_transposed[input_base + uint64_t(k) * n
                                         + key_base + coordinate];
         const float b = query[input_base + uint64_t(query_base + coordinate) * 32 + k];

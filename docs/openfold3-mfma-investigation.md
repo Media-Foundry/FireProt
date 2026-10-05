@@ -114,6 +114,29 @@ across 1536 keys need 24/48 KiB of score LDS, but waste 75%/50% of the MFMA N=16
 fragment. Reusing staging LDS requires proven lifetimes/barriers; resource fit
 alone does not establish a speedup.
 
+## Packed QK reduction reproduced for the traced shape
+
+The initial contiguous-K4 prototype passes integer lane calibration but fails
+full random scores. Sparse-K and cancellation diagnostics isolate an ordering
+issue: adjacent cancellation gives native2.0 versus candidate1.0, while single-K
+coverage passes. The authorized ISA review narrows the native K32 path to eight
+MFMA issues per accumulator chain, with LDS/register patterns suggesting even
+then odd K entries within each K8. Static offsets alone do not prove all lanes.
+
+An input-order screen confirms that hypothesis on retained16x16 native-reference
+tiles. The corrected HIP prototype implements
+`k=(fragment/2)*8+2*k_lane+(fragment%2)` and passes all packed
+`[128,1536,32] @ [128,32,1536]` scores bitwise for random, cancellation, subnormal,
+signed-zero and nonfinite inputs. Its native reference selects exactly the
+previously traced QK kernel. Source, traces, rejected attempts and the corrected
+artifact are retained in `provenance/openfold3_mfma_qk_v2_probe.json` and the
+[probe notes](../experiments/mfma_qk/README.md).
+
+This is not model integration, original-stride handling, proof for other chunk
+sizes or a speedup. The one-wave probe still materializes scores globally.
+The next fusion must preserve this validated K grouping and the existing softmax
+evaluation order while including packing/allocation costs in comparisons.
+
 ## Next evidence gates
 
 1. Completed for the bounded B32/N1536 call: capture actual QK/PV tensor shapes,

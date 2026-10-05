@@ -1,12 +1,13 @@
 # Packed QK MFMA probe
 
-Status: HIP build and integer lane calibration pass; full K32 random scores fail
-bitwise comparison. The candidate is rejected for model integration. No latency
-gain or complete numerical equivalence is claimed.
+Status: the corrected K8 even/odd grouping passes integer lane calibration and
+all five packed B128/N1536/K32 score cases bitwise. Full attention/model integration
+and performance remain untested. The earlier contiguous-K4 candidate is rejected.
 Do not build or run this probe on DiamondHill while the sequential E2E benchmark
 is active. Python syntax checking is not a HIP compilation or GPU acceptance test.
 
-The local HIP 7.14 compiler produced a gfx90a shared library. Inspection of its
+For the earlier candidate, the local HIP 7.14 compiler produced a gfx90a library.
+Inspection of its
 extracted code object finds eight static `v_mfma_f32_16x16x4f32` instructions,
 wave64, 26 VGPRs, 24 SGPRs, no reported spills, and no fixed LDS/private segment.
 This is the one-wave diagnostic, not the proposed fused softmax kernel.
@@ -19,17 +20,19 @@ The accepted native B32/H4/N1536/D32 trace packs QK into row-major inputs
 `[49152,1536,1]`. Its selected native code object uses FP32 16x16x4 MFMA.
 See `docs/openfold3-mfma-investigation.md` and the pinned disassembly evidence.
 
-`qk_probe.cpp` tests a single-wave 16x16 output tile. It hypothesizes kernel
-A=packed key, B=query, lane coordinates `lane%16` and `lane/16`, and eight
-ascending K4 fragments. The CDNA2 manual does not establish these lane mappings,
-and the native LDS swizzle/control flow does not by itself prove this K order.
+`qk_probe.cpp` tests a single-wave 16x16 output tile with A=packed key, B=query,
+lane coordinates `lane%16` and `lane/16`. Full K32 uses
+`k=(fragment/2)*8+2*k_lane+(fragment%2)`: even entries then odd entries within
+each K8 group. Raw lane calibration uses contiguous K0..3 independently.
+The CDNA2 manual does not establish these lane mappings; acceptance comes from
+the bounded GPU comparisons, supported by the native LDS/issue-order review.
 The native QK has K32; native PV has K1536 and is outside this probe.
 
 The output hypothesis is query=`lane%16`, key=`4*(lane/16)+register` within
 each tile. This follows the operand/output orientation used by the repository's
 existing `dual_projection_kernel` and `qkv_detail::project_qkv` MFMA code. It
-replaces an initially proposed transpose of that mapping; neither proposal has
-been executed in this new probe. The raw integer calibration remains mandatory.
+replaces an initially proposed transpose. The chosen mapping passes the raw
+integer calibration, which remains mandatory and does not alone prove K32 order.
 
 The first GPU gate executes one K4 instruction with exact small-integer encoding
 and writes each lane's four raw accumulator values. `probe.py` rejects the
@@ -49,7 +52,7 @@ experiment. Compare its actual symbol with the accepted model trace before
 attributing any score agreement to reproduction of that particular native kernel.
 Profiler timings are not performance evidence.
 
-## First GPU results
+## First GPU results: rejected contiguous-K4 candidate
 
 The Rust-built experimental DiamondHill artifact passes the single-instruction
 integer lane calibration. The first probe then fails its native-kernel observation
@@ -68,6 +71,31 @@ before any softmax fusion or model integration; do not loosen the bitwise gate.
 Both attempts, source/build/publication pins and the result archive are recorded
 in [GPU evidence](../../provenance/openfold3_mfma_qk_probe.json). These are
 concurrent numerical diagnostics, not timing measurements.
+
+## K grouping correction and full score acceptance
+
+`diagnose.py` retains the full native B128/N1536 GEMM shape, then compares slices
+with candidate16x16 tiles. Single-K checks cover all32 K positions and pass.
+Dense random tiles differ by up to2.98e-8. Adjacent cancellation produces native
+2.0 versus candidate1.0 (absolute error1.0, not one ULP), exposing a reduction
+ordering difference without changing the exact gate.
+
+`reorder_screen.py` checks explicit input-order hypotheses against those pinned
+reference tiles. Only even/odd grouping within each K8 passes all five tile
+cases; contiguous K4, middle-K4 swap and stride8 still fail. The ISA review's
+LDS/source-register order supports that mapping, but is not an independent proof
+of every lane/wave mapping or internal floating-point addition sequence.
+
+The corrected source implements that grouping directly in its K address, without
+runtime input reordering. A fresh Rust-built/published artifact then passes all
+301,989,888 scores in each of random, cancellation, subnormal, signed-zero and
+nonfinite cases, plus raw lane calibration. The observed native GEMM name exactly
+matches the accepted model QK trace. Evidence and archived diagnostics:
+[v2 score acceptance](../../provenance/openfold3_mfma_qk_v2_probe.json).
+
+This establishes these five packed B128/N1536/K32 comparisons, not other batch
+sizes, original QKV strides, arbitrary inputs, complete attention or model parity.
+The probe is not tuned and no speedup is claimed.
 
 ## Experiment gates
 

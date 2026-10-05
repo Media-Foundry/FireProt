@@ -87,3 +87,37 @@ other FireProt GPU job launched during the experiment. Those gates and E2E
 measurements remain required before promotion. Initial candidate validations
 ran concurrently on separate GCDs and do not establish E2E gains.
 Never modify worker trees, inventories or bundles during the paired runs.
+
+## Partial paired evidence
+
+The first N1536 pair passes all 11 arrays bitwise and CIF atom identity checks.
+Complete invocation time is 953.331 -> 694.973 seconds (1.37175x); model time is
+858.251 -> 599.567 seconds (1.43145x). Rust reports `insufficient_repeats`.
+The other two pairs are still running. The immutable first-pair report is pinned
+in `provenance/openfold3_hip_softmax_pair_000.json`; no aggregate verdict or
+production promotion follows from this one pair.
+
+## Maintained integration requirements
+
+Read-only inspection confirms that the installed upstream
+`openfold3/core/model/primitives/attention.py` (SHA-256
+`30fe5433982ee73e3d7ce5341fa6b510b1ea332dbde072d56129632cc53f0746`)
+calls the module-level `_attention` function from multiple attention classes.
+The experimental global function replacement must not become an unrestricted
+public hook. A maintained integration must scope dispatch to the active model
+invocation, preserve unrelated callers, restore hooks on failure, and reject
+conflicting/nested installations it cannot safely support.
+
+Rust request validation currently admits native/Triton OpenFold3 requests, while
+the worker only executes native OpenFold3. Enabling a HIP route requires explicit
+changes at both boundaries. The existing `HipFused` enum value can be reused, but
+schema admission alone is not integration. Rust's `OperationRegistry` must own
+selection and counts, with tensor eligibility recomputed before every call and
+included in cache keys. Pin the observed Torch/HIP and gfx90a compatibility,
+upstream arithmetic source, and published library manifest. Unsupported tensors
+must use the unchanged native path; kernel failures after launch must surface.
+
+Before rollout, validate the maintained route's own N1000/N1536 outputs and
+paired performance: the experimental worker results do not automatically cover
+different dispatch overhead, artifact names, hook lifetimes or fallback behavior.
+In-place storage reuse and diffusion caching remain separate experiments.

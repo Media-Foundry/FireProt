@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "status": "partial_one_of_three_pairs",
+  "report": {
+    "path": "/tmp/fireprot-hip-softmax-model-v2/paired-n1536/pair-check-000.json",
+    "sha256": "970d284b9889ce070c98bea21f354e587a35fe35ce4099c2be4df50f2aaf33b1"
+  },
+  "treatment": "Native attention versus exact FP32 HIP mask+bias+softmax with packed bias; native QK/PV and FP32 R3 D200 S1 seed101 retained",
+  "correctness_passed": true,
+  "pairs": [
+    {
+      "baseline_run_id": "hip-softmax-e2e-n1536-baseline-0",
+      "candidate_run_id": "hip-softmax-e2e-n1536-candidate-0",
+      "samples": [
+        {
+          "sample": 0,
+          "policy": "all-arrays-exact-v1",
+          "coordinates": null,
+          "confidence": null,
+          "exact_arrays": {
+            "confidence.chain_ptm.1": true,
+            "confidence.disorder": true,
+            "confidence.gpde": true,
+            "confidence.has_clash": true,
+            "confidence.iptm": true,
+            "confidence.pae": true,
+            "confidence.pde": true,
+            "confidence.plddt": true,
+            "confidence.ptm": true,
+            "confidence.sample_ranking_score": true,
+            "coordinates": true
+          },
+          "floating_confidence_diagnostics": {},
+          "passed": true
+        }
+      ],
+      "cif_atom_identities_checked": true
+    }
+  ],
+  "performance": {
+    "baseline": {
+      "count": 1,
+      "min": 953.331123525,
+      "median": 953.331123525,
+      "p95": 953.331123525,
+      "max": 953.331123525,
+      "mean": 953.331123525
+    },
+    "candidate": {
+      "count": 1,
+      "min": 694.972973977,
+      "median": 694.972973977,
+      "p95": 694.972973977,
+      "max": 694.972973977,
+      "mean": 694.972973977
+    },
+    "median_speedup": 1.3717528007881212,
+    "p95_speedup": 1.3717528007881212,
+    "paired_speedups": [
+      1.3717528007881212
+    ],
+    "paired_summary": {
+      "count": 1,
+      "min": 1.3717528007881212,
+      "median": 1.3717528007881212,
+      "p95": 1.3717528007881212,
+      "max": 1.3717528007881212,
+      "mean": 1.3717528007881212
+    },
+    "observed_trend": "insufficient_repeats",
+    "changes": {
+      "invocation.profile_sha256": {
+        "baseline": "3aeb5690c669715f94d948b3dae74c573b0352e94274b2b994a567e62b75dfb2",
+        "candidate": "6e8ee69609ae3d200d36120c8e40c94180b86fd83380343a1bdd732511ae7166"
+      },
+      "launch.environment.FIREPROT_FUSED_SOFTMAX": {
+        "baseline": "0",
+        "candidate": "1"
+      }
+    }
+  },
+  "model": {
+    "baseline": {
+      "model_seconds": 858.2505658420268,
+      "worker_request_seconds": 894.1636989060789,
+      "path": "/media/IntelSSD/fireprot/outputs/hip-softmax-e2e-n1536-baseline-0/predictions.json",
+      "sha256": "848c07bec2ba9837eab1bc5a0027d9ace43da02fd18b9b6f192e54d6b162308c",
+      "phase": "succeeded",
+      "physical_device": {
+        "hip_device": 7,
+        "smi_device": 5,
+        "pci_address": "0000:93:00.0",
+        "architecture": "gfx90a"
+      }
+    },
+    "candidate": {
+      "model_seconds": 599.5666002110811,
+      "worker_request_seconds": 636.1759979480412,
+      "path": "/media/IntelSSD/fireprot/outputs/hip-softmax-e2e-n1536-candidate-0/predictions.json",
+      "sha256": "3d4ce3fcb6f60e04dbee22444538165ecd8e0acdd8056b2e9361ce93463d90e6",
+      "phase": "succeeded",
+      "physical_device": {
+        "hip_device": 7,
+        "smi_device": 5,
+        "pci_address": "0000:93:00.0",
+        "architecture": "gfx90a"
+      }
+    }
+  },
+  "limits": [
+    "One pair only; Rust reports insufficient_repeats.",
+    "Remaining two pairs are running; no aggregate conclusion or production promotion.",
+    "Environment and physical-device checks are retained in the pinned full report."
+  ],
+  "model_speedup": 1.4314515944348376
+}

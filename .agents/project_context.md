@@ -66,6 +66,11 @@ An additional owned-score in-place softmax screen is prepared in
 `experiments/hip_softmax/screen_inplace.py`; see `INPLACE.md` there. It has only
 passed syntax compilation, not GPU checks. It uses the unchanged published
 kernel and leaves active copied workers untouched. Test after the paired run.
+The first N1536 softmax pair has passed all 11 arrays exactly: complete
+invocation 953.331 -> 694.973 s (1.37175x), model 858.251 -> 599.567 s
+(1.43145x). This is insufficient-repeat evidence only; two pairs remain.
+`provenance/openfold3_hip_softmax_pair_000.json` pins that immutable pair report.
+The same benchmark PID 1596375 has started candidate-1 (reverse-order pair).
 
 ## Historical implemented state
 

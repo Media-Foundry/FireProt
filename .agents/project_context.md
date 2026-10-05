@@ -32,6 +32,16 @@ Next work is OpenFold3 optimization through the Rust framework, preserving
 baseline correctness after every trial. OpenFold2/ESMFold integration, distributed
 execution and approximation policies remain separate future work.
 
+The user explicitly directs optimization toward handwritten HIP and CK-style
+operators; do not pursue Triton enablement. Keep Rust orchestration and the
+existing numerical gates. The post-migration zero-mask experiment passes all
+11 OpenFold3 arrays exactly at N1000/N1536. Shared-host E2E measurements show
+1.090x at N1000 (three pairs) and 1.083x at N1536 (one pair, insufficient repeats).
+This is an experimental worker overlay, not a promoted production route. See
+`experiments/rocm_coverage/README.md` and its pinned evidence. Next HIP candidates
+are bias/softmax fusion and pair layout/normalization fusion; neither is measured
+for OpenFold3 yet.
+
 ## Historical implemented state
 
 Latest default: CK Tile FP32 attention for exact `[1000,4,1000,32]` QKV with head-last storage on gfx90a. Candidate `af43d8e`, promotion `8fbdddc`. The controlled reverse-order model comparison improves 13.120 to 12.580 seconds (1.043x), attention 6.712 to 6.183 seconds, with unchanged model peak allocation. The native-agreement gate passes over 7,979 atoms (aligned RMSD 9.37e-5 A, confidence delta 3.81e-6). `FIREPROT_DISABLE_CK_ATTENTION=1` returns to direct SDPA; the older long-direct disable also disables CK and restores chunking. The generic CK attention header patch remains a separate unregistered experiment. See `docs/protenix-ck-tile.md`.

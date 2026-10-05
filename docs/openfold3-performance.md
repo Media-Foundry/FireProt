@@ -1,5 +1,18 @@
 # OpenFold3 / OpenBind-0 AMD performance work
 
+## Post-migration experiment (2026-10-05)
+
+Rust migration acceptance is complete. The subsequent
+[ROCm coverage and zero-mask experiment](../experiments/rocm_coverage/README.md)
+preserves strict FP32/R3/D200/S1/seed101 and passes all 11 output arrays exactly
+at N1000 and N1536. Verified-zero-mask elimination improves three-pair N1000
+E2E arm medians from 332.802 to 305.387 seconds (1.090x). The single N1536 pair
+improves 952.871 to 880.036 seconds (1.083x), with insufficient repeats.
+These shared-host measurements use an experimental worker overlay; no accelerated
+OpenFold3 production route is promoted. Detailed controls and limitations are in
+`provenance/openfold3_zero_mask_experiment.json`. The sections below retain the
+historical pre-migration baseline and first operator screen.
+
 ## Scope and current status
 
 OpenFold3 is a separate implementation from Protenix. Existing FireProt

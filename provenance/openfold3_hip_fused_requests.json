@@ -4,13 +4,13 @@
   "limits": [
     "Concurrent validations are not E2E speedup evidence.",
     "Native agreement on two fixed long inputs is not independent structural accuracy.",
-    "Maintained-route paired E2E remains pending.",
-    "DiamondHill SSH timed out during N1536 collection; no model task was cancelled or restarted."
+    "Maintained-route paired E2E remains pending."
   ],
   "cli_sha256": "dfbbe3038421fc5f68dcaba80f4ad95aa8ad93960f29580ee990f5e68b69c817",
   "build": "Local cargo build --release -p fireprot-cli --locked --offline; remote Cargo index download failed before compilation; bridge unchanged",
   "runs": {
     "n1000": {
+      "status": "passed",
       "request": {
         "schema_version": 1,
         "run_id": "openfold3-n1000-hip-fused-v1",
@@ -74,31 +74,6 @@
         },
         "execution_sha256": "4d1bd396adeafb10f65a388ebe6b249dbfb617135c69ac6a82009bb7605f8e06"
       },
-      "accepted": {
-        "path": "/media/IntelSSD/fireprot/outputs/openfold3-n1000-hip-fused-v1/accepted.json",
-        "sha256": "ff2e89a7c50e6dbbdaa51f0405fbaf89b4f439aba7daf173a2ef9e6b35850716"
-      },
-      "execution": {
-        "path": "/media/IntelSSD/fireprot/outputs/openfold3-n1000-hip-fused-v1/execution.json",
-        "sha256": "5469d0826eb787283fac915aa08d0f352e0fc458c087177a805669d5f1c0657a"
-      },
-      "runtime": {
-        "path": "/media/IntelSSD/fireprot/outputs/openfold3-n1000-hip-fused-v1/operator-runtime.json",
-        "sha256": "a51b2b7e2b3c9a92ec6e433badbd622f8da0d0a5fedd7acfb61d7b25d2dec459"
-      },
-      "launches_submitted": 1702,
-      "selection_counts": [
-        {
-          "operation": "attention",
-          "implementation": "hip_mask_bias_softmax_fp32",
-          "count": 1702
-        },
-        {
-          "operation": "attention",
-          "implementation": "native",
-          "count": 6465
-        }
-      ],
       "comparison": {
         "confidence.chain_ptm.1": {
           "bitwise_equal": true,
@@ -155,8 +130,185 @@
           "max_abs_delta": 0.0,
           "passed": true
         }
-      }
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-n1000-hip-fused-v1/accepted.json",
+        "sha256": "ff2e89a7c50e6dbbdaa51f0405fbaf89b4f439aba7daf173a2ef9e6b35850716"
+      },
+      "execution": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-n1000-hip-fused-v1/execution.json",
+        "sha256": "5469d0826eb787283fac915aa08d0f352e0fc458c087177a805669d5f1c0657a"
+      },
+      "runtime": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-n1000-hip-fused-v1/operator-runtime.json",
+        "sha256": "a51b2b7e2b3c9a92ec6e433badbd622f8da0d0a5fedd7acfb61d7b25d2dec459"
+      },
+      "launches_submitted": 1702,
+      "selection_counts": [
+        {
+          "operation": "attention",
+          "implementation": "hip_mask_bias_softmax_fp32",
+          "count": 1702
+        },
+        {
+          "operation": "attention",
+          "implementation": "native",
+          "count": 6465
+        }
+      ]
+    },
+    "n1536": {
+      "status": "passed",
+      "request": {
+        "schema_version": 1,
+        "run_id": "openfold3-n1536-hip-fused-v1",
+        "workload": {
+          "model": "openfold3",
+          "model_name": "openbind-0",
+          "recycles": 3,
+          "diffusion_steps": 200,
+          "samples": 1,
+          "precision": "float32",
+          "deterministic": true
+        },
+        "backend": "hip_fused",
+        "seed": 101,
+        "hip_device": 7,
+        "source": {
+          "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+          "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+            "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+          }
+        },
+        "resources": {},
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/openfold3-n1536-hip-fused-v1"
+      },
+      "reference": "/media/IntelSSD/fireprot/outputs/hip-softmax-e2e-n1536-baseline-0",
+      "scientific_request_fields_equal": {
+        "workload": true,
+        "seed": true,
+        "source": true,
+        "input": true,
+        "checkpoints": true,
+        "resources": true
+      },
+      "supervisor": {
+        "run_id": "openfold3-n1536-hip-fused-v1",
+        "phase": "succeeded",
+        "worker_pid": 1682283,
+        "elapsed_seconds": 679.752597306,
+        "isolation_samples": 708,
+        "failure": null,
+        "announced_device": {
+          "worker_pid": 1682283,
+          "logical_device": 0,
+          "pci_address": "0000:93:00.0",
+          "architecture": "gfx90a"
+        },
+        "device_verified": true,
+        "physical_device": {
+          "hip_device": 7,
+          "smi_device": 5,
+          "pci_address": "0000:93:00.0",
+          "architecture": "gfx90a"
+        },
+        "execution_sha256": "b1140335449a6929d8599ac6fea8608c41444e588fe13847c7aaed347d4d4cfc"
+      },
+      "comparison": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-n1536-hip-fused-v1/accepted.json",
+        "sha256": "8abc9d992c3471c10113e5db9ba67cdf2da1fa8a78bab9d227d97c5edf987107"
+      },
+      "execution": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-n1536-hip-fused-v1/execution.json",
+        "sha256": "a8b303e471ec817cf54c21319a09396d0b8199b0c3968d625e4ca5e5d6941949"
+      },
+      "runtime": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-n1536-hip-fused-v1/operator-runtime.json",
+        "sha256": "a1e9ab14ef9e0f154d771a8703da04ea92d1c9a0358a21f6378de5d21a88c3ab"
+      },
+      "launches_submitted": 5592,
+      "selection_counts": [
+        {
+          "operation": "attention",
+          "implementation": "hip_mask_bias_softmax_fp32",
+          "count": 5596
+        },
+        {
+          "operation": "attention",
+          "implementation": "native",
+          "count": 7527
+        }
+      ]
     }
   },
-  "status": "n1000_passed_n1536_process_exited_zero_array_comparison_pending"
+  "status": "n1000_and_n1536_passed",
+  "control_archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/hip-softmax-20261005/formal-request-controls.tar.gz",
+    "sha256": "99703ef52932e3cddd7bcf9ec9caa0b230a2397c1cf18efd25a95893d907c60e"
+  }
 }

@@ -79,4 +79,32 @@ Apply it to a fresh worker copy and place `verified_reuse.py` at
 `python/fireprot_workers/conditioning_reuse.py`. Keep backend `native` for this
 first independent cache check. The copied controls at
 `/tmp/fireprot-conditioning-reuse-model-v1` run N1000 on HIP5 and N1536 on HIP6;
-results are pending. Do not modify those files while the jobs run.
+both runs passed all 11 output arrays and every one of their 200 call checks.
+See `provenance/openfold3_conditioning_verified_models.json`. Keep these copied
+workers unchanged for reproduction.
+
+## Experimental cache candidate
+
+`pair_cache.py` prepares the next experiment. It pins both upstream source files,
+requires strict deterministic inference, preserves the first native conditioning
+call and its actual tuned chunk, then reuses the final pair while recomputing the
+single branch. Scope ends at each `_sample_rollout` return or exception. Tensor
+identity/layout and feature replacements invalidate the entry; unsupported shapes
+use native execution. The initial candidate admits only conditioned FP32
+N1000/N1536 single-sample pairs with requested chunk 1024.
+
+Identity checks do not prove immutability: the source-pinned rollout must keep
+features, parameters and pair consumers unchanged. Retained memory may change
+other modules' chunk tuning. Therefore a fresh full-model exact-array check is
+required even after the preceding diagnostic passes. No speedup is claimed.
+Six CPU checks cover lifecycle, replacement invalidation, fallback, exceptions,
+source guards and strict determinism. N1000 full-model acceptance now passes all 11 arrays with one miss and 199 hits;
+N1536 validation is active. See `provenance/openfold3_conditioning_cache_models.json`.
+This candidate is not connected to maintained requests; no paired timing exists.
+
+`worker-cache-overlay.patch` prepares a fresh copied worker. Copy both
+`pair_cache.py` and `verified_reuse.py` into its `python/fireprot_workers/` package.
+The latter supplies single-branch arithmetic; its diagnostic context is not
+entered. Preserve native backend for the first isolated full-model trial and
+require all 11 arrays bitwise before any paired timing or combination with HIP
+softmax. Keep the completed diagnostic workers and their evidence immutable.

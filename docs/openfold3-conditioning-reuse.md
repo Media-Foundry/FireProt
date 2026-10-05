@@ -125,6 +125,7 @@ The synthetic upstream GPU screen now passes all 12 scenarios covering both
 lengths, three masks and conditioning enabled/disabled. The diagnostic checks
 all four calls in each scope, including pair reuse and an independently evaluated
 single branch. See `provenance/openfold3_conditioning_reuse_screen.json`.
-N1000/N1536 full-model diagnostics are running with recomputation on every call;
-those results remain pending. Retaining pair values and doing redundant native
+N1000/N1536 full-model diagnostics pass every one of their 200 call checks and
+all 11 output arrays with recomputation on every call; see
+`provenance/openfold3_conditioning_verified_models.json`. Retaining pair values and doing redundant native
 work changes memory/timing, so these runs cannot supply performance evidence.

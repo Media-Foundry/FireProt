@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "scope": "Experimental pair cache; full-model numerical gate, no paired timing yet",
+  "runs": {
+    "n1000": {
+      "status": "passed",
+      "request": {
+        "schema_version": 1,
+        "run_id": "conditioning-cache-v1-n1000",
+        "workload": {
+          "model": "openfold3",
+          "model_name": "openbind-0",
+          "recycles": 3,
+          "diffusion_steps": 200,
+          "samples": 1,
+          "precision": "float32",
+          "deterministic": true
+        },
+        "backend": "native",
+        "seed": 101,
+        "hip_device": 5,
+        "source": {
+          "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+          "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+            "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+          }
+        },
+        "resources": {},
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "sha256": "2715542db697dbd2dd5021063173f6e91a405ac0f46a46a69b748c815826ae5b"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/conditioning-cache-v1-n1000"
+      },
+      "reference": "/media/IntelSSD/fireprot/outputs/zero-mask-e2e-n1000-baseline-0",
+      "scientific_request_fields_equal": {
+        "workload": true,
+        "seed": true,
+        "source": true,
+        "input": true,
+        "checkpoints": true,
+        "resources": true
+      },
+      "supervisor": {
+        "run_id": "conditioning-cache-v1-n1000",
+        "phase": "succeeded",
+        "worker_pid": 1712321,
+        "elapsed_seconds": 295.778639966,
+        "isolation_samples": 292,
+        "failure": null,
+        "announced_device": {
+          "worker_pid": 1712321,
+          "logical_device": 0,
+          "pci_address": "0000:b3:00.0",
+          "architecture": "gfx90a"
+        },
+        "device_verified": true,
+        "physical_device": {
+          "hip_device": 5,
+          "smi_device": 7,
+          "pci_address": "0000:b3:00.0",
+          "architecture": "gfx90a"
+        },
+        "execution_sha256": "c3ba043f1d1fb0b507a927add1b5da656f28daeb786c1e076576917cdee1a094"
+      },
+      "comparison": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/conditioning-cache-v1-n1000/accepted.json",
+        "sha256": "3f03fb41d7c2ce3cf9d814d8aa2538150596c66e9bf1d35d2a22db254d5fa27b"
+      },
+      "execution": {
+        "path": "/media/IntelSSD/fireprot/outputs/conditioning-cache-v1-n1000/execution.json",
+        "sha256": "f2b146e6b19df885739e0e66b1bf48fed223b9dc642de2a98af4fe57be2b21b2"
+      },
+      "cache": {
+        "schema_version": 1,
+        "mode": "experimental_pair_cache",
+        "scopes": [
+          {
+            "calls": 200,
+            "hits": 199,
+            "misses": 1,
+            "fallbacks": 0,
+            "completed": true,
+            "effective_chunks": [
+              1024
+            ],
+            "retained_pair_bytes": 512000000
+          }
+        ],
+        "limits": [
+          "Source-pinned immutable inference inputs are required.",
+          "Identity checks do not detect in-place input/parameter changes."
+        ]
+      },
+      "cache_pin": {
+        "path": "/media/IntelSSD/fireprot/outputs/conditioning-cache-v1-n1000/conditioning-cache.json",
+        "sha256": "495f6b88d2514e66af85097fda244a17eea41297dd644672b9ba99f4abb25cd2"
+      }
+    },
+    "n1536": {
+      "status": "not_terminal",
+      "run_id": "conditioning-cache-v1-n1536"
+    }
+  },
+  "limits": [
+    "Concurrent model trials do not establish E2E gains.",
+    "Input and parameter immutability depend on the pinned upstream rollout; identity checks alone are insufficient."
+  ]
+}

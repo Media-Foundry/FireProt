@@ -12,7 +12,7 @@ measurements below remain model-specific.
 | Typed requests, cycle semantics and operator selection | `fireprot-core` | Rust; shared Python dispatch uses the Rust registry |
 | Source/weight/resource preflight, worker lifecycle and GPU isolation | `fireprot-runtime` | Rust; Protenix, AtlasFold and OpenFold3 workers connected |
 | Output acceptance and numerical comparison | `fireprot-validation` | Rust; output bundles, NPY/NPZ, alignment and confidence checks |
-| User entry point | `fireprot-cli` | Rust; Protenix native/FireProt, AtlasFold native/chunked/HIP/fused HIP, native and opt-in strict-FP32 HIP OpenFold3 (N1536 route acceptance pending) |
+| User entry point | `fireprot-cli` | Rust; Protenix native/FireProt, AtlasFold native/chunked/HIP/fused HIP, native and opt-in strict-FP32 HIP OpenFold3 (N1000/N1536 exact-array acceptance passed) |
 | Timing and paired comparison | Rust runtime/validation composed by `fireprot-cli` | Complete invocation measurement, archive collection, paired scheduling, declared treatment checks and model-specific numerical gates; validated installed workflows; timing scopes remain explicit |
 | In-process operator policy boundary | `fireprot-bridge` | CPython stable C ABI; metadata and callbacks only |
 | Model execution | `python/fireprot_workers` and independent upstream checkouts | Explicit PyTorch boundary; supported variants listed in README |

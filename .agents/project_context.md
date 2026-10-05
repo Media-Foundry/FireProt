@@ -357,3 +357,63 @@ Read-only collector `/tmp/fireprot-record-formal-hip.py` saved the verified N100
 record in `provenance/openfold3_hip_fused_requests.json` and exited 0 (session
 20994) after its stalled read-only SSH child PID 1862479 was terminated. No model
 process was signalled. Read-only status session 28159 still awaits SSH.
+
+## Cache preparation and intermittent SSH (2026-10-05)
+
+Commit b89eff3's CI passed in run 37334622947. The duplicate run 37334623276
+was cancelled by concurrency scheduling, not by a failing test.
+SSH briefly recovered: formal N1536 supervisor phase is succeeded, physical
+HIP7/PCI93/SMI5, and Rust compare-npz against native baseline passed (comparison
+saved at /tmp/fireprot-formal-hip-n1536-comparison.json). N1000 verified-reuse
+supervisor also succeeded, HIP5/PCIb3/SMI7, and its audit shows 200 calls/199 reuse
+comparisons, all checks true. Rust final 11-array comparison passed and is saved
+at /tmp/fireprot-conditioning-reuse-model-v1/n1000-comparison.json.
+N1536 verified-reuse PID 1695808 was confirmed live at elapsed 501 seconds;
+keep tool session 65044 and poll it. Subsequent SSH connections timed out again.
+The compact evidence files still require fresh collection/pins; the checked-in
+formal report conservatively retains its prior pending-N1536 status.
+
+`pair_cache.py` and `worker-cache-overlay.patch` prepare actual compute skipping,
+with first-native-call/tuner preservation, per-rollout teardown, dependency
+replacement invalidation and source/strict-determinism guards. Six CPU tests
+pass. No GPU trial or performance claim yet; do not confuse this candidate with
+the earlier mandatory-recomputation diagnostic. Do not deploy over active trees.
+The next step is collect existing results, then fresh copied-worker N1000/N1536
+cache validation, then sequential paired timing only after exact output gates.
+
+The stalled multi-SSH read collectors were terminated locally without signalling
+remote model processes. Sessions 8175 and 89965 are terminal (8175 connection
+failure; 89965 owned read-only collector stopped). A one-connection remote
+collector is prepared locally at /tmp/fireprot-collect-current.py; invoke it with
+ssh python3 on stdin and accept its JSON only after successful exit. Last output
+/tmp/fireprot-collected-current.json is empty due to connection failure.
+
+SSH subsequently recovered through a persistent multiplexed connection:
+`ssh -o ControlPath=/tmp/fireprot-diamondhill-control pc@10.120.16.9 ...`.
+For a new master use ConnectTimeout=8, ControlMaster=auto, ControlPersist=120.
+The one-connection collector succeeded. Both formal HIP requests now pass all
+11 arrays, pinned in `provenance/openfold3_hip_fused_requests.json`.
+N1000 mandatory-recomputation validation is pinned in
+`provenance/openfold3_conditioning_verified_models.json`; N1536 remains live.
+Actual compute-skipping cache is deployed only in a fresh copied worker at
+`/tmp/fireprot-conditioning-cache-v1`. N1000 HIP5 run
+`conditioning-cache-v1-n1000` is active in tool session 66219. N1536 request is
+prepared there but NOT launched; first finish its preceding diagnostic.
+The original helper/CPU tests are unchanged after copying. No GPU cache
+correctness or speedup is established yet. Keep all active source/binary trees fixed.
+
+Both mandatory-recomputation full-model validations now pass all 11 arrays;
+each records 200 calls, 199 reused pairs, unchanged RNG and no consumer mutation.
+Actual cache N1000 also passes all 11 arrays: one miss, 199 hits, no fallbacks,
+chunk 1024, 512,000,000 retained bytes. Evidence is now in
+`provenance/openfold3_conditioning_cache_models.json`. N1536 actual cache is active
+on HIP7, Rust PID 1716475, tool session 97740. N1000 session 66219 exited 0.
+
+After this optimization change, the user requests GPL-2.0-only with an exception
+LIMITED TO OPENFOLD 3. OpenFold 3-derived files stay Apache-2.0; the distribution
+is explicitly multi-license. AMD (Advanced Micro Devices, Inc.) and its directly/
+indirectly controlled subsidiaries receive an additional Apache-2.0 option for
+original FireProt material only. Both scope choices were explicitly confirmed.
+Do not introduce a generic Apache-2.0 combination exception. License preparation
+is at /tmp/fireprot-license-draft; no effective license change has yet been made.
+License work must preserve immutable remote model workers and binaries.

@@ -1,0 +1,310 @@
+{
+  "schema_version": 1,
+  "scope": "Mandatory native recomputation on every call; no speedup or memory-peak claim",
+  "runs": {
+    "n1000": {
+      "status": "passed",
+      "request": {
+        "schema_version": 1,
+        "run_id": "conditioning-reuse-v1-n1000",
+        "workload": {
+          "model": "openfold3",
+          "model_name": "openbind-0",
+          "recycles": 3,
+          "diffusion_steps": 200,
+          "samples": 1,
+          "precision": "float32",
+          "deterministic": true
+        },
+        "backend": "native",
+        "seed": 101,
+        "hip_device": 5,
+        "source": {
+          "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+          "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+            "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+          }
+        },
+        "resources": {},
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "sha256": "2715542db697dbd2dd5021063173f6e91a405ac0f46a46a69b748c815826ae5b"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/conditioning-reuse-v1-n1000"
+      },
+      "reference": "/media/IntelSSD/fireprot/outputs/zero-mask-e2e-n1000-baseline-0",
+      "scientific_request_fields_equal": {
+        "workload": true,
+        "seed": true,
+        "source": true,
+        "input": true,
+        "checkpoints": true,
+        "resources": true
+      },
+      "supervisor": {
+        "run_id": "conditioning-reuse-v1-n1000",
+        "phase": "succeeded",
+        "worker_pid": 1695895,
+        "elapsed_seconds": 313.505550408,
+        "isolation_samples": 297,
+        "failure": null,
+        "announced_device": {
+          "worker_pid": 1695895,
+          "logical_device": 0,
+          "pci_address": "0000:b3:00.0",
+          "architecture": "gfx90a"
+        },
+        "device_verified": true,
+        "physical_device": {
+          "hip_device": 5,
+          "smi_device": 7,
+          "pci_address": "0000:b3:00.0",
+          "architecture": "gfx90a"
+        },
+        "execution_sha256": "03b9dea2e23c475e6cc8b563c35e6020dae28aa4ffccbec3d04b9a89b0e3016d"
+      },
+      "comparison": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/conditioning-reuse-v1-n1000/accepted.json",
+        "sha256": "0e97cbe39aa8b7225f9f9d1c5542e6fb3cc6928b0f784c360af816cf6d7b664f"
+      },
+      "execution": {
+        "path": "/media/IntelSSD/fireprot/outputs/conditioning-reuse-v1-n1000/execution.json",
+        "sha256": "e8a4b4d6b0a579b08750acf2d8dd58ccf49b34e8e7630baab28a2d789ac47a01"
+      },
+      "audit": {
+        "path": "/media/IntelSSD/fireprot/outputs/conditioning-reuse-v1-n1000/conditioning-reuse.json",
+        "sha256": "2e00810a7b26042df1fd9797e1923b613d42d9937bdd6a8d596484e2ed2d3020"
+      },
+      "scopes": [
+        {
+          "completed": true,
+          "calls": 200,
+          "reuses": 199,
+          "all_checks_passed": true,
+          "retained_pair_bytes": 512000000,
+          "chunk_patterns": {
+            "[1024, 1024]": 1,
+            "[1024]": 199
+          }
+        }
+      ]
+    },
+    "n1536": {
+      "status": "passed",
+      "request": {
+        "schema_version": 1,
+        "run_id": "conditioning-reuse-v1-n1536",
+        "workload": {
+          "model": "openfold3",
+          "model_name": "openbind-0",
+          "recycles": 3,
+          "diffusion_steps": 200,
+          "samples": 1,
+          "precision": "float32",
+          "deterministic": true
+        },
+        "backend": "native",
+        "seed": 101,
+        "hip_device": 6,
+        "source": {
+          "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+          "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+            "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+          }
+        },
+        "resources": {},
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/conditioning-reuse-v1-n1536"
+      },
+      "reference": "/media/IntelSSD/fireprot/outputs/hip-softmax-e2e-n1536-baseline-0",
+      "scientific_request_fields_equal": {
+        "workload": true,
+        "seed": true,
+        "source": true,
+        "input": true,
+        "checkpoints": true,
+        "resources": true
+      },
+      "supervisor": {
+        "run_id": "conditioning-reuse-v1-n1536",
+        "phase": "succeeded",
+        "worker_pid": 1696091,
+        "elapsed_seconds": 937.272701229,
+        "isolation_samples": 1004,
+        "failure": null,
+        "announced_device": {
+          "worker_pid": 1696091,
+          "logical_device": 0,
+          "pci_address": "0000:8e:00.0",
+          "architecture": "gfx90a"
+        },
+        "device_verified": true,
+        "physical_device": {
+          "hip_device": 6,
+          "smi_device": 4,
+          "pci_address": "0000:8e:00.0",
+          "architecture": "gfx90a"
+        },
+        "execution_sha256": "84c5386a5915b5b9fab627975691fe4f46e46ec4eb377cea462b98c90e63cf7c"
+      },
+      "comparison": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/conditioning-reuse-v1-n1536/accepted.json",
+        "sha256": "22c0e7411fd625034951d33a00cbab8fdf77e9c94503b63b78f2d26f6d069611"
+      },
+      "execution": {
+        "path": "/media/IntelSSD/fireprot/outputs/conditioning-reuse-v1-n1536/execution.json",
+        "sha256": "f16d0b45243a538bb0118072dea75d3ec15de8391850756f3d4ec232af3c2b6f"
+      },
+      "audit": {
+        "path": "/media/IntelSSD/fireprot/outputs/conditioning-reuse-v1-n1536/conditioning-reuse.json",
+        "sha256": "cf3fe7ba5a1dc8fb240f4063426d85e63d002014ce89c7d1b5f42a5403e284b5"
+      },
+      "scopes": [
+        {
+          "completed": true,
+          "calls": 200,
+          "reuses": 199,
+          "all_checks_passed": true,
+          "retained_pair_bytes": 1207959552,
+          "chunk_patterns": {
+            "[1024, 1024]": 1,
+            "[1024]": 199
+          }
+        }
+      ]
+    }
+  },
+  "limits": [
+    "Concurrent diagnostics do not establish E2E speedup.",
+    "Original scientific work is retained; all output arrays use the exact native gate."
+  ],
+  "control_archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/hip-softmax-20261005/conditioning-verified-model-controls.tar.gz",
+    "sha256": "8ed7a5bfde3b48372c368a6fe1c2c331c87b555bb4267b17cd1711601bf32418"
+  }
+}

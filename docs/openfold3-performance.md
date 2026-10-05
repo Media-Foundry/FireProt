@@ -168,9 +168,9 @@ OpenFold3 now admits opt-in `hip_fused` with FP32 and explicit strict determinis
 The worker loads the published `softmax-fp32-v1` bundle and scopes dispatch to one
 model invocation, preserving native QK/PV and falling back on unsupported tensor
 signatures. Native requests do not load HIP assets. The N1000 maintained request
-passes all 11 arrays bitwise and submits 1,702 HIP calls; N1536 exits successfully,
-but final array collection is pending after an SSH outage. See
-`provenance/openfold3_hip_fused_requests.json` for pinned N1000 acceptance.
+passes all 11 arrays bitwise and submits 1,702 HIP calls. N1536 also passes all
+11 arrays bitwise; submitted-launch and selection counts are retained separately.
+See `provenance/openfold3_hip_fused_requests.json` for both pinned acceptances.
 
 ```bash
 target/release/fireprot infer configs/requests/openfold3-n1000-hip-fused.json \

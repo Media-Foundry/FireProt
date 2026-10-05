@@ -175,3 +175,15 @@ reuse experiment must retain strict determinism/filling settings, initialize
 storage normally, prove full overwrite and safe stream/lifetime ownership,
 and record retained-memory and warm/cold effects. No workspace reuse is
 implemented or accepted by this result.
+
+## Initialized score workspace reuse
+
+The separate [workspace experiment](WORKSPACE.md) retains strict settings and
+initial NaN fill, then reuses a private, fully overwritten score tensor on one
+thread/device/stream. At B256, normalized workspace attention measures
+42.093/42.384ms (contiguous/transposed) versus split43.469/43.774ms. All full
+probability/output and prior-result checks pass. This3.2% warm operator gain
+costs9GiB retained per instance and has no model/E2E acceptance yet. First-call
+allocation costs and the two-workspace benchmark memory conditions are explicit
+in the workspace document and provenance; do not compare these as identical
+allocation/cache policies.

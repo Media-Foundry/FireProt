@@ -1396,3 +1396,40 @@ never expose or mutate a previouspublicresult. Needs tensor boundary/CPUreject
 and GPU repeated-distinct-input gates, then completeattentiontiming. Model
 memory/tuner/workspace lifecycle acceptance required beforeintegration. No
 workspace policy exists yet; do not claim equivalentcacheconditions or E2Egain.
+
+## Initialized private workspace experiment passes (2026-10-06)
+
+Previous turn made progress and pushed3520c63 (prefetch plus fill trace).
+New workspace_attention.py subclasses unchangedPackedFusion only for artifact
+loading; owns bounded B32/B256 fixedshape scores (1.125/9GiB), explicitbytebudget,
+constructor-thread/nonblockinglock/firststream+device binding, no graphcapture,
+strictinfer/determinism/fill enforced. Ordinarytorch.empty/NaNfill on firstuse;
+full HIPoverwrite thereafter, nativePV resultcannotaliasscores. QueuedPV and
+nextoverwrite orderedonsamestream. Submissionerrors closeinstance; close
+synchronizes and releases tensor. No framework/model integration. Biascontiguous
+option materializesinsidecall. Six CPUrejectiontests pass.
+
+New benchmark_workspace.py gates3seeds101/102/103×2layouts×2cachedarms perbatch,
+includingfullymaskedouter0 andprior-scoreNaN/finitepoison; compares ALLprobability
+bits plusPVoutput.10priorpublicresultimmutabilitychecks perbatch. Cross-thread/
+stream attempts rejectwithoutsubmission/reallocation. Firstallocationcalls
+recorded separately; two poolsremainresidentduringALLtimingarms. Fivearmsnative/
+split/freshfusion/workspace/workspace+biascontiguous;100timedcalls eachbatch,
+allbits exact. Everypool1allocation30calls andexactreleasedbytes. Flagsunchanged.
+
+Root /tmp/fireprot-qk-workspace-v1, session66086 exits0; sourcearchiveSHA
+680e79e634fe5325cd69e9320682cef421d1a4ff72c8c6721fdc552fa859197b.
+B256 split43.469/43.774ms, fresh48.942/65.783ms, workspace41.914/58.702ms,
+normalizedworkspace42.093/42.384ms (contiguous/transposed). About3.2%warmgain
+versussplit withnormalizedbias. B32normalized5.360/5.663 vs split5.528/5.827ms.
+FirstB256workspacecalls49.13/49.19ms (singleobservations,otherTorchalreadywarm).
+Two poolsretain18GiB duringbenchmark; deployedonewouldretain9GiB. This is an
+explicitcache/allocationtreatment, NOTidenticalcachepolicy or modelmemorybenefit.
+Evidence openfold3_qk_workspace_benchmark.json; fullarchive
+qk-workspace-v1-results.tar.gz SHA
+1ee16f1fb30c8afb315d2920b988dc1ea3b9e32b6299b379c7f4b22034100d54.
+No activeGPUjob, no model/E2Eacceptance. Next: combineacceptedprefetch/reuse with
+deferredadds under normalizedbias andsameprivateworkspace, withfreshnumeric
+screens beforetiming, toseeklargeroperatorgain. Thenmodelmemory/lifecycle/chunk
+policy needsexplicitdesignandverification (Rust ownsframeworkresourcepolicy).
+Do not blindlyretain36GiB B1024buffers or forceB256chunkswithoutcomparison.

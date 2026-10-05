@@ -1109,3 +1109,22 @@ provenance/openfold3_qk_softmax_vector_candidate.json retains BOTH variants and
 localarchive. No GPU acceptance/performance; static-resource choice only.
 No modifications to frozen v1 package or D16 worker; remote GPU isolation still
 required until paired controller1940816 terminates and collection/archive finish.
+
+Fusion harness now additionally acceptsouterB64 and explicit B1024 host reference.
+--reference-batch32 preserves full nativeQK shape, moves native scores to CPU,
+launches full candidate, then compares all bits with bounded complete-row Torch
+softmax references. Report distinguishes this from full-shape native softmax;
+require B32 cross-check first and full-model gates later. SingleB1024 score36GiB;
+default multi-full-GPU mode rejectsB>512. Host available memory preflight added.
+CPU checks pass tail chunks/mask/transpose/NaNs/signedzero/one-bit mismatch counts;
+no GPU validation. Earlier preparedv1 archive remains immutable and contains old
+full-GPU-only probe; updated host mode needs a freshly pinned package.
+Latest paired controller1940816 live41:46, fifth invocationbaseline2 running;
+firstfour measured/verified. ISA agent finished/idle. No other GPU work launched.
+
+Seven CPU staged-reference regression tests pass in tests/operators/test_openfold3_fusion_reference.py.
+UPDATED local package (NOT deployed): /tmp/fireprot-qk-softmax-v1-prepared-v2.tar.gz
+SHA faa481c0c2d69c6184d2df707255d8ecdf4eee1ba9369f94fe72e89e7d54c37a; receipt /tmp/fireprot-qk-softmax-v1-preparation-v2.json.
+Supersedes earlier prepared archive for future execution; fresh remote root stays
+/tmp/fireprot-qk-softmax-v1. Require ordinary B32 screen then stagedB32 cross-check
+before large staged screens. All21 records each; full-model gates still required.

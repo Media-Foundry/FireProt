@@ -91,17 +91,50 @@ def operands(case, batch):
     return query, key
 
 
-def main(destination, batch):
+def staged_mismatches(scores, actual, reference_batch, mask=None, bias=None):
+    """Keep full-shape native QK on CPU; compare all rows in bounded GPU batches.
+
+    Optional softmax uses Torch on complete rows, partitioning outer batch only.
+    This does not establish native full-batch softmax kernel selection parity.
+    """
+    if reference_batch < 1 or scores.shape != actual.shape:
+        raise ValueError('Invalid staged comparison shape or reference batch')
+    mismatches = 0
+    for start in range(0, scores.shape[0], reference_batch):
+        stop = min(start + reference_batch, scores.shape[0])
+        expected = scores[start:stop].to(actual.device, copy=True)
+        if mask is not None:
+            expected.add_(mask if mask.shape[0] == 1 else mask[start:stop])
+            expected.add_(bias)
+            expected = torch.softmax(expected, -1)
+        mismatches += int(torch.count_nonzero(
+            expected.view(torch.int32) != actual[start:stop].view(torch.int32)).item())
+        del expected
+    return mismatches
+
+
+def main(destination, batch, reference_batch=0):
     destination = Path(destination)
     destination.mkdir(parents=True, exist_ok=False)
     report = dict(schema_version=1, completed=False, batch=batch, n=N, heads=4, k=32,
-                  seed=101, dtype='float32', records=[],
+                  seed=101, dtype='float32', records=[], reference_batch=reference_batch,
+                  reference_method=('full_shape_qk_host_staged_outer_batch_softmax'
+                      if reference_batch else 'full_shape_qk_and_softmax'),
                   scope='Synthetic packed operands only; no timing or model acceptance',
                   torch=str(torch.__version__), hip=str(torch.version.hip),
                   visible_device=os.environ.get('HIP_VISIBLE_DEVICES'),
                   source_sha256={str(p): hashlib.sha256(p.read_bytes()).hexdigest()
                       for p in (Path(__file__), Path(trace_probe.__file__))})
     try:
+        if reference_batch < 0 or (batch > 512 and not reference_batch):
+            raise ValueError('Batch above512 requires explicit host-staged reference')
+        if reference_batch:
+            available = next(int(line.split()[1]) * 1024
+                for line in Path('/proc/meminfo').read_text().splitlines()
+                if line.startswith('MemAvailable:'))
+            required = (batch + 3 * reference_batch) * 4 * N * N * 4
+            if available < required:
+                raise MemoryError(f'Host reference requires at least {required} available bytes')
         if (str(torch.__version__) != softmax_fp32.TORCH_VERSION
                 or torch.version.hip != softmax_fp32.HIP_VERSION):
             raise RuntimeError('Use the validated OpenFold3 Torch/HIP environment')
@@ -138,8 +171,12 @@ def main(destination, batch):
             return output
 
         def compare(expected, actual, case, mode, mask, bias, layout):
-            mismatches = int(torch.count_nonzero(
-                expected.view(torch.int32) != actual.view(torch.int32)).item())
+            if reference_batch:
+                mismatches = staged_mismatches(expected, actual, reference_batch,
+                    mask if mode == 'softmax' else None, bias if mode == 'softmax' else None)
+            else:
+                mismatches = int(torch.count_nonzero(
+                    expected.view(torch.int32) != actual.view(torch.int32)).item())
             record = dict(case=case, mode=mode, layout=layout, passed=mismatches == 0,
                 elements=expected.numel(), bitwise_mismatches=mismatches,
                 mask_shape=list(mask.shape), mask_stride=list(mask.stride()),
@@ -153,6 +190,9 @@ def main(destination, batch):
             for case in ('random', 'cancellation', 'subnormal', 'signed_zero', 'nonfinite'):
                 query, key = operands(case, batch)
                 scores = native_scores(query, key, destination, report, case).view(batch, 4, N, N)
+                if reference_batch:
+                    scores = scores.cpu()
+                    torch.cuda.empty_cache()
                 mask = torch.zeros(1, 1, 1, N, device='cuda', dtype=torch.float32)
                 bias = torch.zeros(1, 4, N, N, device='cuda', dtype=torch.float32)
                 actual = launch(query, key, mask, bias, 0)
@@ -175,11 +215,14 @@ def main(destination, batch):
                         base_bias.zero_()
                     for layout in ('contiguous', 'transposed'):
                         bias = base_bias if layout == 'contiguous' else base_bias.transpose(-1, -2)
-                        biased = scores.clone()
-                        biased.add_(mask)
-                        biased.add_(bias)
-                        expected = torch.softmax(biased, -1)
-                        del biased
+                        if reference_batch:
+                            expected = scores
+                        else:
+                            biased = scores.clone()
+                            biased.add_(mask)
+                            biased.add_(bias)
+                            expected = torch.softmax(biased, -1)
+                            del biased
                         actual = launch(query, key, mask, bias, 1)
                         compare(expected, actual, f'{case}/{variant}', 'softmax', mask, bias, layout)
                         del expected, actual
@@ -195,6 +238,8 @@ def main(destination, batch):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('destination')
-    parser.add_argument('--batch', type=int, choices=(32, 128, 256, 512), default=32)
+    parser.add_argument('--batch', type=int, choices=(32, 64, 128, 256, 512, 1024), default=32)
+    parser.add_argument('--reference-batch', type=int, default=0,
+        help='Stage full QK on CPU; use this many outer batches per reference softmax (0: full GPU)')
     args = parser.parse_args()
-    main(args.destination, args.batch)
+    main(args.destination, args.batch, args.reference_batch)

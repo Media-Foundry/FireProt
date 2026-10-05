@@ -74,7 +74,7 @@ questions, not established bottlenecks or promised gains for this kernel.
 
 `probe_fusion.py DESTINATION --batch 32` loads only an explicitly pinned bundle
 through `FIREPROT_QK_SOFTMAX`. Each invocation uses a fresh destination. The
-optional outer batches128/256/512 must each be validated independently;32 means
+optional outer batches64/128/256/512/1024 must each be validated independently;32 means
 128 packed head matrices. Larger screens require enough free device memory for
 multiple full score tensors and are correctness runs, not timing measurements.
 
@@ -136,3 +136,23 @@ and94, printed pages8 and86) and four consecutive dwords for DS_WRITE_B128 (PDF
 page188, printed page180). Lane-to-cycle arbitration is not specified precisely
 enough there to establish a measured conflict or throughput reduction. The local
 CDNA2 reference PDF remains external to the committed distribution.
+
+## Large-batch reference storage
+
+A single B1024/H4/N1536 FP32 score tensor occupies36GiB. Use the explicit
+`--reference-batch 32` option for this case; the default full-GPU reference mode
+rejects batches above512. Native QK still runs once at its entire declared GEMM
+shape and its output moves to CPU. The candidate runs at full shape. Comparison
+then moves bounded outer-batch slices back to GPU, applies mask then bias and
+Torch softmax on complete rows, and counts every differing FP32 bit. The report
+labels this reference method and batch bound. It is not a claim that native
+full-batch and partitioned softmax select identical GPU kernels. It cannot
+replace full-model acceptance. Check this reference mode at B32 against the
+ordinary full-GPU screen before using it for B1024; neither has run on GPU yet.
+
+The host mode checks available CPU memory before allocation and releases the
+cached full score allocation after staging. It is a numerical diagnostic, never
+a timing benchmark. CPU checks pass for tail batches, per-outer masks, transposed
+bias, all-masked NaNs, signed-zero/NaN bit differences and exact mismatch counts.
+The earlier v1 prepared archive retains the original full-GPU harness; its bytes
+are immutable. Use a newly pinned package for the added host-reference mode.

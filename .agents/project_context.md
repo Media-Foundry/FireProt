@@ -71,6 +71,12 @@ invocation 953.331 -> 694.973 s (1.37175x), model 858.251 -> 599.567 s
 (1.43145x). This is insufficient-repeat evidence only; two pairs remain.
 `provenance/openfold3_hip_softmax_pair_000.json` pins that immutable pair report.
 The same benchmark PID 1596375 has started candidate-1 (reverse-order pair).
+Prepared (unconnected) maintained FP32 softmax tensor boundary:
+`python/fireprot/backends/amd/softmax_fp32.py`, with byte-identical kernel source
+copy `kernels/amd/fireprot_softmax_fp32.cpp`. Twelve CPU/meta contract tests pass.
+It requires a new pinned package/ABI (`fireprot_softmax_fp32`/`softmax-fp32-v1`)
+that is not built/published/validated yet. No OpenFold3 HIP request route has been
+enabled. Follow the integration gates in `experiments/hip_softmax/README.md`.
 
 ## Historical implemented state
 

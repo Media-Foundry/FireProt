@@ -121,3 +121,13 @@ Before rollout, validate the maintained route's own N1000/N1536 outputs and
 paired performance: the experimental worker results do not automatically cover
 different dispatch overhead, artifact names, hook lifetimes or fallback behavior.
 In-place storage reuse and diffusion caching remain separate experiments.
+
+Local integration preparation now includes
+`python/fireprot/backends/amd/softmax_fp32.py` and an exact source copy at
+`kernels/amd/fireprot_softmax_fp32.cpp`. Twelve CPU/meta tests cover tensor
+contracts, real bias strides, broadcast masks and rejected inputs. The loader
+requires a new pinned `fireprot_softmax_fp32` / `softmax-fp32-v1` publication,
+the measured Torch/HIP version and gfx90a; no such maintained publication has
+been validated yet. No model adapter imports this boundary, no new request
+backend is enabled, and source-copy identity is not a compiled-artifact or
+maintained-model acceptance result.

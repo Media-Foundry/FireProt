@@ -1,0 +1,26 @@
+--- a/experiments/mfma_qk/fused_qk_softmax.cpp
++++ b/experiments/mfma_qk/fused_qk_softmax.cpp
+@@ -76,8 +76,6 @@
+             const int key = band * 256 + lane + j * 64;
+             float value = stage[stage_index(wave, lane + j * 64)];
+             if constexpr (ApplySoftmax) {
+-                value = value + mask[mask_base + int64_t(key) * mk];
+-                value = value + bias[bias_base + int64_t(key) * bk];
+                 values[band * 4 + j] = value;
+             } else {
+                 output[row_base + key] = value;
+@@ -86,6 +84,14 @@
+         if (band != 5) __syncthreads();
+     }
+     if constexpr (ApplySoftmax) {
++        // Delay input additions until all shared-memory exchange is complete.
++        // Each element still evaluates score + mask, then + bias, before max.
++        #pragma unroll
++        for (int t = 0; t < 24; ++t) {
++            const int key = lane + t * 64;
++            values[t] = values[t] + mask[mask_base + int64_t(key) * mk];
++            values[t] = values[t] + bias[bias_base + int64_t(key) * bk];
++        }
+         float maximum = values[0];
+         #pragma unroll
+         for (int t = 0; t < 32; ++t)

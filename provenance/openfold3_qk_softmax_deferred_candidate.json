@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "status": "local_compile_and_remote_B32_B256_numerical_checks_passed",
+  "change": "Defer per-element score+mask then +bias until all six QK/LDS bands finish; arithmetic order within every element unchanged.",
+  "required_preceding_patches": [
+    "lds-swizzle.patch",
+    "lds-vector-store.patch",
+    "wave-scalar.patch"
+  ],
+  "flags": [
+    "-O3",
+    "-std=c++17",
+    "--offload-arch=gfx90a",
+    "-shared",
+    "-fPIC",
+    "-Rpass-analysis=kernel-resource-usage"
+  ],
+  "resources": {
+    "vgpr_count": [
+      60,
+      51
+    ],
+    "sgpr_count": [
+      34,
+      17
+    ],
+    "group_segment_fixed_size": [
+      16384,
+      16384
+    ],
+    "private_segment_fixed_size": [
+      0,
+      0
+    ],
+    "vgpr_spill_count": [
+      0,
+      0
+    ],
+    "sgpr_spill_count": [
+      0,
+      0
+    ]
+  },
+  "artifacts": [
+    {
+      "path": "/tmp/fireprot-fusion-deferred-v6.cpp",
+      "sha256": "1f6b58198bf366b7b3c33d999a3c57eea8e00cf5e9d3f8a8888ea9d57baa0b5d"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-deferred-v6.so",
+      "sha256": "0b3d14f3c68e3e1ca2554828000182b05dad6da617912fc2aac251e46d7ffb04"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-deferred-v6-build.log",
+      "sha256": "2d60f72df051ac8e5f875fdc413a84e94853fca0dc4ed8046888335b9caec1cd"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-deferred-v6.fatbin",
+      "sha256": "a956d4b3fd7a1cb8f01843f032f6d5684efe4865c4a7f115a4cda340d86125f0"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-deferred-v6.hsaco",
+      "sha256": "6cd4207a911343a7b92d818fcaa5f5f4027379c2f8815a4dd9ba2b6aaaa747b1"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-deferred-v6.asm",
+      "sha256": "52c8c3253cfe1109e67778452169878b8704f12089de81512d63d38f8c84cc56"
+    },
+    {
+      "path": "/tmp/fireprot-fusion-deferred-v6-metadata.txt",
+      "sha256": "246ab4ba3f2b80effa6be44229913fe3187709d035e7f1c2fd5582c0d850efa0"
+    },
+    {
+      "path": "/home/husrcf/Code/fireprot/experiments/mfma_qk/deferred-adds.patch",
+      "sha256": "fe899be57d0c57b0a285ff1403cc4fc3a66da5eab8e915355087590f1b6fcee1"
+    }
+  ],
+  "archive": {
+    "path": "/home/husrcf/Code/fireprot/outputs/experiments/qk-softmax-local-20261006/deferred-adds-v6.tar.gz",
+    "sha256": "d5f4c9e00681f6bd1f8534062818e6f590d774e69c91830315e69fa4fcbee11f"
+  },
+  "static_total_instruction_counts": {
+    "v_readfirstlane_b32": 2,
+    "v_mfma_f32_16x16x4f32": 96,
+    "s_barrier": 22,
+    "ds_write_b128": 12
+  },
+  "limits": [
+    "Local compilation does not establish remote resources, performance or model acceptance."
+  ],
+  "remote_evidence": "provenance/openfold3_qk_softmax_deferred_probe.json"
+}

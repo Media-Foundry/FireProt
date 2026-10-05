@@ -1288,3 +1288,33 @@ mask/bias loads until after the six QK/LDS bands, keeping per-element ordered
 adds and every MFMA/softmax operation unchanged; reduce load waits between
 barriers. Not implemented or tested yet. Wave scalar alone does not establish
 actual occupancy as cause, and no new E2E result follows.
+
+## Deferred additions trial complete: layout-specific regression (2026-10-06)
+
+Previous turn made progress and pushed53d32eb (wave scalar improvement).
+New deferred-adds.patch applies after swizzle/vector/wave patches, moves
+score+mask then +bias from each QK/LDS band to a24-slot loop after all bands.
+Per-element math/padding/reduction order unchanged. Patch chain exactly verified.
+Local/remote60VGPR34SGPR softmax,raw51/17,16KiB LDS/no spills/48MFMA/11barriers.
+Root /tmp/fireprot-qk-softmax-deferred-v6, driver89370 exits0, B32/B256 each21
+exact records. Bundle manifest06db6244adf915813bba79bec85b98ff03cfd42c4924231f8f2bb6583d717ebb.
+Numerical archive qk-softmax-deferred-v6-results.tar.gz SHA
+c73edc9e17d28b0a03d4f20711229c7d7cd4a6b930db81eb7f49b226a2ee5977.
+Evidence openfold3_qk_softmax_deferred_candidate.json / *_deferred_probe.json.
+
+Complete-attention root /tmp/fireprot-qk-attention-deferred-v6, session1264
+exits0. All200 measured calls exact. B256contiguous wave55.057->deferred52.187ms,
+split43.498ms; transposed75.260->117.302ms,split43.791ms. B32samepattern.
+Not promoted; no fullmodel/E2E result. Evidence
+openfold3_qk_attention_deferred_benchmark.json pins fullarchive. Alljobs terminal.
+
+Next hypothesis: bias-cache reuse through block scheduling on wave-v5 (without
+deferred adds). Original x=querytile96,y=outer*4+head. Flatten block index and
+interleave8outer batches for each head/querytile, mirroring maintainedsoftmax
+reuse policy. For linear index within group8*4*96, outer=group*8+linear%8,
+head_query=(linear%3072)/8, head=head_query/96, querytile=head_query%96.
+Only when batch divisible8; otherwise preserve original mapping. Prove bijection
+and complete coverage on CPU, then independent Rustbuild/numerical/timing gates.
+Not implemented yet; no cache-hit or speedup claim. This may address the bias
+layout sensitivity while keeping Q/K working sets of8matrices within nearby
+blocks. Do not assume scheduling order guarantees actual cache residency.

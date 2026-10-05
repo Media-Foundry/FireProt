@@ -235,3 +235,19 @@ LDS stores. Register counts do not prove residency or speedup.
 B32 and B256 each pass all21 packed numerical records. Other batch sizes and
 full-model acceptance remain outstanding. Complete-attention timing against
 the existing split HIP route is required before considering promotion.
+
+## Deferred mask/bias additions
+
+`deferred-adds.patch` applies after the wave-scalar patch. It stores raw QK
+values through all six LDS bands, then evaluates score+mask followed by +bias
+for each of the24 valid slots before the unchanged maximum/exp/sum/division.
+Padding slots remain untouched. This moves input loads outside the sequence of
+barriers without changing per-element arithmetic. Patch-chain reconstruction
+matches the compiled/tested source exactly.
+
+Local and DiamondHill code objects use60VGPR/34SGPR for softmax and51/17 for
+raw scores; both retain16KiB LDS, no spills,48MFMA,11barriers and sixB128 stores.
+B32/B256 each pass21 packed numerical records. All200 complete-attention timed
+calls also match bitwise. However, the transposed-bias layout regresses strongly;
+this candidate is not promoted or selected generically. See `BENCHMARK.md` and
+`provenance/openfold3_qk_softmax_deferred_probe.json`.

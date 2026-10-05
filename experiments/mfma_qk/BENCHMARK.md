@@ -99,3 +99,22 @@ but remains26.31% above split HIP. This candidate is not promoted to model
 execution. Actual compiled VGPR count falls66->60; actual hardware occupancy
 has not been measured, so occupancy is not established as the cause.
 Evidence: `provenance/openfold3_qk_attention_wave_benchmark.json`.
+
+## Deferred additions experiment
+
+A new five-arm interleaved comparison retains native/split/vector/wave and adds
+the deferred mask/bias candidate. Same shapes, seed, strict execution, cache
+conditions and exact-output gates; all200 measured calls pass bitwise.
+
+| Batch / bias | Split HIP (ms) | Wave scalar (ms) | Deferred additions (ms) |
+| --- | ---: | ---: | ---: |
+| 32 / contiguous | 5.525 | 6.989 | 6.637 |
+| 32 / transposed | 5.822 | 9.535 | 14.105 |
+| 256 / contiguous | 43.498 | 55.057 | 52.187 |
+| 256 / transposed | 43.791 | 75.260 | 117.302 |
+
+B256 contiguous time improves5.21%, but transposed time increases55.86% versus
+wave scalar. Deferred additions are therefore not a generic improvement and
+remain experimental. Neither layout beats the existing split HIP path. No
+model/E2E gain is established. Evidence and archive pin:
+`provenance/openfold3_qk_attention_deferred_benchmark.json`.

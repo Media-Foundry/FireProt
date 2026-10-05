@@ -49,3 +49,19 @@ with mask/bias. Full-model validation must record effective chunk sizes: the
 memory reduction can alter upstream autotuning, GEMM shapes and numerical
 results. Require all 11 arrays bitwise equal at both lengths before any paired
 E2E or default-dispatch change. This script adds no maintained in-place API.
+
+## Strict-mode follow-up candidate
+
+The accepted bounded N1536 attention trace records `aten::empty_like` followed
+by `aten::fill_` on the `[32,4,1536,1536]` softmax output allocation. The maintained
+loader creates that allocation in `SoftmaxFP32.__call__`. The earlier in-place
+screen above uses `no_grad` and does not explicitly enable strict deterministic
+algorithms or deterministic uninitialized-memory filling. Its latency result
+therefore does not close the question for the current strict model requests.
+
+A follow-up should repeat the operator screen under the actual strict settings,
+retain all numerical and alias guards, then validate both full-model lengths and
+effective chunk sizes. Reusing the private score buffer could avoid this output
+allocation and fill; no latency gain is yet established. Do not disable global
+determinism or its fill policy to improve a benchmark. The actual settings and
+the allocation being eliminated must be recorded explicitly.

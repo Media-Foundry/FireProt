@@ -20,6 +20,7 @@ entirety, including FireProt modifications, under
 | `experiments/hip_softmax/worker_overlay.py` | `primitives/attention.py` |
 | `experiments/conditioning_reuse/verified_reuse.py` | `layers/diffusion_conditioning.py` |
 | `experiments/conditioning_reuse/verified_atom_reuse.py` | `layers/sequence_local_atom_attention.py` |
+| `experiments/conditioning_reuse/atom_cache.py` | `layers/sequence_local_atom_attention.py` |
 
 The file headers retain the applicable upstream copyright holders and describe
 the modifications. The OpenFold 3 exception permits combination with original

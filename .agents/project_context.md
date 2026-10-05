@@ -618,3 +618,49 @@ SHA-256 adc3797bef6a9dca75bf5cd33245956d902b7c0e8b61511f748bcf68dbfbd280.
 Local result/preparation captures: /tmp/fireprot-atom-verified-models.json,
 /tmp/fireprot-attention-trace-v2-prepared.json and
 /tmp/fireprot-attention-v1-exclusion.json.
+
+## Accepted QK/PV trace and active atom-cache trials (2026-10-06)
+
+attention-trace-v2-n1536 completed, session 40942 exit 0. All 11 original-native
+arrays match. Both QK/PV contain real BMM shapes/strides and one unique runtime
+launch/GPU kernel correlation. Evidence: `provenance/openfold3_attention_trace_n1536.json`.
+This is one B32/H4/N1536/D32 call, potentially tuning; no clean latency/ranking
+or disassembled-ISA claim. The previously user-authorized cdna2_isa_review agent
+is following up on the actual symbols, read-only on library copies, no GPU or
+repository modifications. Never let objcopy rewrite an installed/published ELF.
+Trace result archive: attention-trace-v2-results.tar.gz in the existing durable
+conditioning-cache-20261006 directory, SHA-256
+546ef9ddc32f36f21157fc1bc27863ac42036ad89bedd0abf13194d812d91142.
+
+`experiments/conditioning_reuse/atom_cache.py` now implements actual static atom
+reuse, preserving the first native call and recalculating only the rl-dependent
+projection. Four CPU lifecycle tests pass. This helper is Apache-2.0 and listed
+in THIRD_PARTY.md. Immutable source-pinned inputs/parameters/consumers remain a
+prerequisite; there is no in-place mutation detection. Dependency owners are
+retained through the rollout. Whole-model tests use the same HIP plus pair-cache
+worker in a new frozen copy at /tmp/fireprot-atom-cache-v1.
+
+- atom-cache-v1-n1000, HIP5, supervisor 1809047, session 88452: terminal success,
+  199 hits/one miss/no fallback and all 11 original-native arrays exact.
+- atom-cache-v1-n1536, HIP6, supervisor 1809044, session 19548: terminal success,
+  199 hits/one miss/no fallback and all 11 original-native arrays exact.
+
+Requests n1000.json/n1536.json and profile.json are under that control root.
+Preparation/source pins: `provenance/openfold3_atom_cache_preparation.json`.
+Archive atom-cache-v1-preparation.tar.gz SHA-256
+834821a454fd3530c5688248cdcfa8ca220f40d15b1385d46dafe88a065ac309.
+Local partial collection: /tmp/fireprot-atom-cache-models.json. Refresh N1536
+when terminal, archive both completed trials and record acceptance before timing.
+Current timings are concurrent numerical trials, not E2E performance evidence.
+
+Another evidence-based follow-up: the accepted trace records empty_like/fill_
+on the full softmax output. The old screen_inplace.py does not explicitly enable
+strict deterministic algorithms/fill policy, so its tiny timing difference does
+not close this strict-mode question. See experiments/hip_softmax/INPLACE.md.
+Repeat under actual settings before deciding; never disable global determinism
+or memory filling merely to improve reported performance.
+
+Both actual atom-cache trials are now archived and accepted in
+`provenance/openfold3_atom_cache_models.json`. Archive atom-cache-v1-results.tar.gz
+SHA-256 8e3f3758d8d0b977f4e226756257eaf5fd5adfaf3e4e131ba818fd21e56ecde7.
+No controlled atom-cache speedup is claimed.

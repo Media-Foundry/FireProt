@@ -3,8 +3,8 @@
 Status: read-only ISA and historical-profile review, 2026-10-06. No new GEMM
 implementation, disassembly result, numerical equivalence or speedup is claimed.
 The conditioning-cache paired benchmark has now completed successfully. A
-bounded QK/PV observation is launched in a separate copied worker; its GPU trace,
-kernel correlations and full-model parity remain pending.
+bounded QK/PV observation in a separate copied worker now passes all 11 model
+arrays exactly and records CPU/GPU correlations. Disassembled ISA remains pending.
 
 ## Source and verified ISA facts
 
@@ -58,6 +58,26 @@ implementation a plausible hypothesis. They do not prove the actual opcodes.
 The next experiment must therefore test a specific reduction in work or data
 movement; merely replacing a library call with an MFMA intrinsic is not an
 established optimization.
+
+## Accepted bounded N1536 observation
+
+`provenance/openfold3_attention_trace_n1536.json` records the corrected profiler
+with all 11 original-native arrays exact. It observes one B32/H4/N1536/D32 call,
+which can belong to chunk tuning. It is not a whole-model ranking or clean
+latency measurement. The first observer failed under inference mode and was
+excluded; that failed trial was not silently accepted or used for speedup.
+
+| Stage | Actual BMM input shapes | Input strides | Correlated library prefix |
+| --- | --- | --- | --- |
+| QK | `[128,1536,32]`, `[128,32,1536]` | `[49152,32,1]`, `[49152,1536,1]` | `Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN` |
+| PV | `[128,1536,1536]`, `[128,1536,32]` | `[2359296,1536,1]`, `[49152,32,1]` | `Cijk_Ailk_Bljk_SB_MT32x64x32_MI16x16x4x1_SE` |
+
+Original query/key/value strides are `[196608,32,128,1]`; the trace records
+cloning/copying into the BMM layouts. Each BMM links through an external ID to
+one unique `hipExtModuleLaunchKernel` correlation and its GPU kernel. Complete
+symbols and raw-trace hashes are preserved in the evidence. This closes the
+shape/correlation gap for this selected call, but does not prove the named ISA
+instructions, accumulation sequence or kernel choice at other chunk sizes.
 
 ## Next evidence gates
 

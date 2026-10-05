@@ -3,10 +3,11 @@
 Status: four CPU tests pass, including inference mode and rejection of duplicate
 CPU/GPU correlations. The first N1536 diagnostic was rejected because its
 nested Python dispatch observer recorded no ATen operations under inference mode.
-Its complete-model result was not accepted. The corrected v2 diagnostic is now
-running in `/tmp/fireprot-attention-trace-v2` on HIP7. GPU/model acceptance remains
-pending; see `provenance/openfold3_attention_trace_v2_preparation.json` for the
-excluded first trial, corrected source pins and archives.
+Its complete-model result was not accepted. The corrected v2 diagnostic in
+`/tmp/fireprot-attention-trace-v2` on HIP7 now passes all 11 native output arrays
+and records uniquely correlated BMMs for both QK and PV. Accepted observation:
+`provenance/openfold3_attention_trace_n1536.json`. Preparation/excluded first trial:
+`provenance/openfold3_attention_trace_v2_preparation.json`.
 
 `probe.py` wraps the existing `AttentionDispatcher` within its existing
 source-pinned `attention_scope`. It delegates the original operations unchanged,

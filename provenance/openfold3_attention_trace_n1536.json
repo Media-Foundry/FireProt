@@ -1,0 +1,915 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "request": {
+    "schema_version": 1,
+    "run_id": "attention-trace-v2-n1536",
+    "workload": {
+      "model": "openfold3",
+      "model_name": "openbind-0",
+      "recycles": 3,
+      "diffusion_steps": 200,
+      "samples": 1,
+      "precision": "float32",
+      "deterministic": true
+    },
+    "backend": "hip_fused",
+    "seed": 101,
+    "hip_device": 7,
+    "source": {
+      "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+      "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+    },
+    "checkpoints": {
+      "model": {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+        "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+      }
+    },
+    "resources": {},
+    "input": {
+      "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+      "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+    },
+    "output_dir": "/media/IntelSSD/fireprot/outputs/attention-trace-v2-n1536"
+  },
+  "supervisor": {
+    "run_id": "attention-trace-v2-n1536",
+    "phase": "succeeded",
+    "worker_pid": 1801877,
+    "elapsed_seconds": 642.557267561,
+    "isolation_samples": 694,
+    "failure": null,
+    "announced_device": {
+      "worker_pid": 1801877,
+      "logical_device": 0,
+      "pci_address": "0000:93:00.0",
+      "architecture": "gfx90a"
+    },
+    "device_verified": true,
+    "physical_device": {
+      "hip_device": 7,
+      "smi_device": 5,
+      "pci_address": "0000:93:00.0",
+      "architecture": "gfx90a"
+    },
+    "execution_sha256": "cf8fbf160b71b6c0d8e4c4959460229901aadb54e3ca7e6ed9cacce07983af4e"
+  },
+  "comparison": {
+    "confidence.chain_ptm.1": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.disorder": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.gpde": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.has_clash": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.iptm": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.pae": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.pde": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.plddt": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.ptm": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.sample_ranking_score": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "coordinates": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    }
+  },
+  "comparison_pin": {
+    "path": "/tmp/fireprot-attention-trace-v2/n1536-comparison.json",
+    "sha256": "809c4f117ab3ca16f32d3f50ad0c3f79d40fc05f0e1b1fd039a4a5ac2363355c"
+  },
+  "accepted": {
+    "path": "/media/IntelSSD/fireprot/outputs/attention-trace-v2-n1536/accepted.json",
+    "sha256": "fb4af534a403a9c42b6b6401daf04dd6c1e63262865f610f5e3c71e3de4fae4d"
+  },
+  "observation": {
+    "schema_version": 1,
+    "completed": true,
+    "occurrence": 1,
+    "cpu_only": false,
+    "query": {
+      "shape": [
+        32,
+        4,
+        1536,
+        32
+      ],
+      "strides": [
+        196608,
+        32,
+        128,
+        1
+      ],
+      "dtype": "torch.float32",
+      "device": "cuda:0",
+      "storage_offset": 0
+    },
+    "key": {
+      "shape": [
+        32,
+        4,
+        1536,
+        32
+      ],
+      "strides": [
+        196608,
+        32,
+        128,
+        1
+      ],
+      "dtype": "torch.float32",
+      "device": "cuda:0",
+      "storage_offset": 0
+    },
+    "value": {
+      "shape": [
+        32,
+        4,
+        1536,
+        32
+      ],
+      "strides": [
+        196608,
+        32,
+        128,
+        1
+      ],
+      "dtype": "torch.float32",
+      "device": "cuda:0",
+      "storage_offset": 0
+    },
+    "biases": [
+      {
+        "shape": [
+          32,
+          1,
+          1,
+          1536
+        ],
+        "strides": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "dtype": "torch.float32",
+        "device": "cuda:0",
+        "storage_offset": 0
+      },
+      {
+        "shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "strides": [
+          4,
+          1,
+          6144,
+          4
+        ],
+        "dtype": "torch.float32",
+        "device": "cuda:0",
+        "storage_offset": 0
+      }
+    ],
+    "einsums": [
+      {
+        "label": "QK",
+        "equation": "...qc, ...kc->...qk",
+        "inputs": [
+          {
+            "shape": [
+              32,
+              4,
+              1536,
+              32
+            ],
+            "strides": [
+              196608,
+              32,
+              128,
+              1
+            ],
+            "dtype": "torch.float32",
+            "device": "cuda:0",
+            "storage_offset": 0
+          },
+          {
+            "shape": [
+              32,
+              4,
+              1536,
+              32
+            ],
+            "strides": [
+              196608,
+              32,
+              128,
+              1
+            ],
+            "dtype": "torch.float32",
+            "device": "cuda:0",
+            "storage_offset": 0
+          }
+        ],
+        "operations": [
+          {
+            "operation": "aten::clone",
+            "inputs": [
+              {
+                "shape": [
+                  32,
+                  4,
+                  1536,
+                  32,
+                  1
+                ],
+                "strides": [
+                  196608,
+                  32,
+                  128,
+                  1,
+                  1
+                ]
+              },
+              {
+                "shape": [],
+                "strides": []
+              }
+            ],
+            "external_id": 15,
+            "kernels": [],
+            "completed": true,
+            "metadata_source": "kineto_trace"
+          },
+          {
+            "operation": "aten::copy_",
+            "inputs": [
+              {
+                "shape": [
+                  32,
+                  4,
+                  1536,
+                  32,
+                  1
+                ],
+                "strides": [
+                  196608,
+                  49152,
+                  32,
+                  1,
+                  1
+                ]
+              },
+              {
+                "shape": [
+                  32,
+                  4,
+                  1536,
+                  32,
+                  1
+                ],
+                "strides": [
+                  196608,
+                  32,
+                  128,
+                  1,
+                  1
+                ]
+              },
+              {
+                "shape": [],
+                "strides": []
+              }
+            ],
+            "external_id": 19,
+            "kernels": [
+              {
+                "name": "void at::native::elementwise_kernel_manual_unroll<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}) [clone .kd]",
+                "correlation": 2,
+                "device": 7,
+                "stream": 1,
+                "launch": "hipLaunchKernel"
+              }
+            ],
+            "completed": true,
+            "metadata_source": "kineto_trace"
+          },
+          {
+            "operation": "aten::_unsafe_view",
+            "inputs": [
+              {
+                "shape": [
+                  32,
+                  4,
+                  1536,
+                  32,
+                  1
+                ],
+                "strides": [
+                  196608,
+                  49152,
+                  32,
+                  1,
+                  1
+                ]
+              },
+              {
+                "shape": [],
+                "strides": []
+              }
+            ],
+            "external_id": 20,
+            "kernels": [],
+            "completed": true,
+            "metadata_source": "kineto_trace"
+          },
+          {
+            "operation": "aten::clone",
+            "inputs": [
+              {
+                "shape": [
+                  32,
+                  4,
+                  32,
+                  1536,
+                  1
+                ],
+                "strides": [
+                  196608,
+                  32,
+                  1,
+                  128,
+                  1
+                ]
+              },
+              {
+                "shape": [],
+                "strides": []
+              }
+            ],
+            "external_id": 24,
+            "kernels": [],
+            "completed": true,
+            "metadata_source": "kineto_trace"
+          },
+          {
+            "operation": "aten::copy_",
+            "inputs": [
+              {
+                "shape": [
+                  32,
+                  4,
+                  32,
+                  1536,
+                  1
+                ],
+                "strides": [
+                  196608,
+                  49152,
+                  1536,
+                  1,
+                  1
+                ]
+              },
+              {
+                "shape": [
+                  32,
+                  4,
+                  32,
+                  1536,
+                  1
+                ],
+                "strides": [
+                  196608,
+                  32,
+                  1,
+                  128,
+                  1
+                ]
+              },
+              {
+                "shape": [],
+                "strides": []
+              }
+            ],
+            "external_id": 28,
+            "kernels": [
+              {
+                "name": "void at::native::elementwise_kernel_manual_unroll<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}) [clone .kd]",
+                "correlation": 4,
+                "device": 7,
+                "stream": 1,
+                "launch": "hipLaunchKernel"
+              }
+            ],
+            "completed": true,
+            "metadata_source": "kineto_trace"
+          },
+          {
+            "operation": "aten::_unsafe_view",
+            "inputs": [
+              {
+                "shape": [
+                  32,
+                  4,
+                  32,
+                  1536,
+                  1
+                ],
+                "strides": [
+                  196608,
+                  49152,
+                  1536,
+                  1,
+                  1
+                ]
+              },
+              {
+                "shape": [],
+                "strides": []
+              }
+            ],
+            "external_id": 29,
+            "kernels": [],
+            "completed": true,
+            "metadata_source": "kineto_trace"
+          },
+          {
+            "operation": "aten::bmm",
+            "inputs": [
+              {
+                "shape": [
+                  128,
+                  1536,
+                  32
+                ],
+                "strides": [
+                  49152,
+                  32,
+                  1
+                ]
+              },
+              {
+                "shape": [
+                  128,
+                  32,
+                  1536
+                ],
+                "strides": [
+                  49152,
+                  1536,
+                  1
+                ]
+              }
+            ],
+            "external_id": 30,
+            "kernels": [
+              {
+                "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+                "correlation": 6,
+                "device": 7,
+                "stream": 1,
+                "launch": "hipExtModuleLaunchKernel"
+              }
+            ],
+            "completed": true,
+            "metadata_source": "kineto_trace"
+          },
+          {
+            "operation": "aten::view",
+            "inputs": [
+              {
+                "shape": [
+                  128,
+                  1536,
+                  1536
+                ],
+                "strides": [
+                  2359296,
+                  1536,
+                  1
+                ]
+              },
+              {
+                "shape": [],
+                "strides": []
+              }
+            ],
+            "external_id": 31,
+            "kernels": [],
+            "completed": true,
+            "metadata_source": "kineto_trace"
+          },
+          {
+            "operation": "aten::view",
+            "inputs": [
+              {
+                "shape": [
+                  32,
+                  4,
+                  1536,
+                  1536,
+                  1
+                ],
+                "strides": [
+                  9437184,
+                  2359296,
+                  1536,
+                  1,
+                  1536
+                ]
+              },
+              {
+                "shape": [],
+                "strides": []
+              }
+            ],
+            "external_id": 34,
+            "kernels": [],
+            "completed": true,
+            "metadata_source": "kineto_trace"
+          }
+        ],
+        "completed": true,
+        "output": {
+          "shape": [
+            32,
+            4,
+            1536,
+            1536
+          ],
+          "strides": [
+            9437184,
+            2359296,
+            1536,
+            1
+          ],
+          "dtype": "torch.float32",
+          "device": "cuda:0",
+          "storage_offset": 0
+        }
+      },
+      {
+        "label": "PV",
+        "equation": "...qk, ...kc->...qc",
+        "inputs": [
+          {
+            "shape": [
+              32,
+              4,
+              1536,
+              1536
+            ],
+            "strides": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ],
+            "dtype": "torch.float32",
+            "device": "cuda:0",
+            "storage_offset": 0
+          },
+          {
+            "shape": [
+              32,
+              4,
+              1536,
+              32
+            ],
+            "strides": [
+              196608,
+              32,
+              128,
+              1
+            ],
+            "dtype": "torch.float32",
+            "device": "cuda:0",
+            "storage_offset": 0
+          }
+        ],
+        "operations": [
+          {
+            "operation": "aten::view",
+            "inputs": [
+              {
+                "shape": [
+                  32,
+                  4,
+                  1536,
+                  1536,
+                  1
+                ],
+                "strides": [
+                  9437184,
+                  2359296,
+                  1536,
+                  1,
+                  1
+                ]
+              },
+              {
+                "shape": [],
+                "strides": []
+              }
+            ],
+            "external_id": 58,
+            "kernels": [],
+            "completed": true,
+            "metadata_source": "kineto_trace"
+          },
+          {
+            "operation": "aten::clone",
+            "inputs": [
+              {
+                "shape": [
+                  32,
+                  4,
+                  1536,
+                  32,
+                  1
+                ],
+                "strides": [
+                  196608,
+                  32,
+                  128,
+                  1,
+                  1
+                ]
+              },
+              {
+                "shape": [],
+                "strides": []
+              }
+            ],
+            "external_id": 62,
+            "kernels": [],
+            "completed": true,
+            "metadata_source": "kineto_trace"
+          },
+          {
+            "operation": "aten::copy_",
+            "inputs": [
+              {
+                "shape": [
+                  32,
+                  4,
+                  1536,
+                  32,
+                  1
+                ],
+                "strides": [
+                  196608,
+                  49152,
+                  32,
+                  1,
+                  1
+                ]
+              },
+              {
+                "shape": [
+                  32,
+                  4,
+                  1536,
+                  32,
+                  1
+                ],
+                "strides": [
+                  196608,
+                  32,
+                  128,
+                  1,
+                  1
+                ]
+              },
+              {
+                "shape": [],
+                "strides": []
+              }
+            ],
+            "external_id": 66,
+            "kernels": [
+              {
+                "name": "void at::native::elementwise_kernel_manual_unroll<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}) [clone .kd]",
+                "correlation": 12,
+                "device": 7,
+                "stream": 1,
+                "launch": "hipLaunchKernel"
+              }
+            ],
+            "completed": true,
+            "metadata_source": "kineto_trace"
+          },
+          {
+            "operation": "aten::_unsafe_view",
+            "inputs": [
+              {
+                "shape": [
+                  32,
+                  4,
+                  1536,
+                  32,
+                  1
+                ],
+                "strides": [
+                  196608,
+                  49152,
+                  32,
+                  1,
+                  1
+                ]
+              },
+              {
+                "shape": [],
+                "strides": []
+              }
+            ],
+            "external_id": 67,
+            "kernels": [],
+            "completed": true,
+            "metadata_source": "kineto_trace"
+          },
+          {
+            "operation": "aten::bmm",
+            "inputs": [
+              {
+                "shape": [
+                  128,
+                  1536,
+                  1536
+                ],
+                "strides": [
+                  2359296,
+                  1536,
+                  1
+                ]
+              },
+              {
+                "shape": [
+                  128,
+                  1536,
+                  32
+                ],
+                "strides": [
+                  49152,
+                  32,
+                  1
+                ]
+              }
+            ],
+            "external_id": 68,
+            "kernels": [
+              {
+                "name": "Cijk_Ailk_Bljk_SB_MT32x64x32_MI16x16x4x1_SE_1LDSB0_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS0_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA2_GLVWB2_GRPM1_GRVW2_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB2_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS0_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS0_SU0_SUM0_SUS0_SCIUI1_SPO0_SRVW2_SSO0_SVW4_SNLL0_TSGRA0_TSGRB0_TT1_32_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW1_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM15.kd",
+                "correlation": 14,
+                "device": 7,
+                "stream": 1,
+                "launch": "hipExtModuleLaunchKernel"
+              }
+            ],
+            "completed": true,
+            "metadata_source": "kineto_trace"
+          },
+          {
+            "operation": "aten::view",
+            "inputs": [
+              {
+                "shape": [
+                  128,
+                  1536,
+                  32
+                ],
+                "strides": [
+                  49152,
+                  32,
+                  1
+                ]
+              },
+              {
+                "shape": [],
+                "strides": []
+              }
+            ],
+            "external_id": 69,
+            "kernels": [],
+            "completed": true,
+            "metadata_source": "kineto_trace"
+          },
+          {
+            "operation": "aten::view",
+            "inputs": [
+              {
+                "shape": [
+                  32,
+                  4,
+                  1536,
+                  32,
+                  1
+                ],
+                "strides": [
+                  196608,
+                  49152,
+                  32,
+                  1,
+                  32
+                ]
+              },
+              {
+                "shape": [],
+                "strides": []
+              }
+            ],
+            "external_id": 72,
+            "kernels": [],
+            "completed": true,
+            "metadata_source": "kineto_trace"
+          }
+        ],
+        "completed": true,
+        "output": {
+          "shape": [
+            32,
+            4,
+            1536,
+            32
+          ],
+          "strides": [
+            196608,
+            49152,
+            32,
+            1
+          ],
+          "dtype": "torch.float32",
+          "device": "cuda:0",
+          "storage_offset": 0
+        }
+      }
+    ],
+    "limits": [
+      "One selected call; may belong to chunk tuning.",
+      "Instrumentation changes timing; no E2E claim.",
+      "Kernel correlation requires the raw trace, not aggregate names.",
+      "Model output parity must be checked separately."
+    ],
+    "trace": "attention-trace.chrome.json"
+  },
+  "observation_pin": {
+    "path": "/media/IntelSSD/fireprot/outputs/attention-trace-v2-n1536/attention-trace.json",
+    "sha256": "4f3da1b9aaf86094d0e14e962692fc054cac6ba7b88f98dcecc342bdf63ecc26"
+  },
+  "raw_trace": {
+    "path": "/media/IntelSSD/fireprot/outputs/attention-trace-v2-n1536/attention-trace.chrome.json",
+    "sha256": "041e6adefee71e80ca782853bca0768d0444ee1afb247c93501a0cbea233fd10"
+  },
+  "limits": [
+    "One B32/H4/N1536/D32 call; may be chunk tuning.",
+    "Correlations identify kernel symbols, not disassembled ISA.",
+    "Concurrent instrumented observation is not clean kernel timing or E2E evidence."
+  ],
+  "persistent_control_archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/conditioning-cache-20261006/attention-trace-v2-results.tar.gz",
+    "sha256": "546ef9ddc32f36f21157fc1bc27863ac42036ad89bedd0abf13194d812d91142",
+    "size": 8018594
+  }
+}

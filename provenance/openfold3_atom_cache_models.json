@@ -1,0 +1,356 @@
+{
+  "schema_version": 1,
+  "scope": "Compute-skipping atom cache over HIP softmax and pair-conditioning reuse; numerical acceptance only",
+  "runs": {
+    "n1000": {
+      "status": "passed",
+      "request": {
+        "schema_version": 1,
+        "run_id": "atom-cache-v1-n1000",
+        "workload": {
+          "model": "openfold3",
+          "model_name": "openbind-0",
+          "recycles": 3,
+          "diffusion_steps": 200,
+          "samples": 1,
+          "precision": "float32",
+          "deterministic": true
+        },
+        "backend": "hip_fused",
+        "seed": 101,
+        "hip_device": 5,
+        "source": {
+          "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+          "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+            "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+          }
+        },
+        "resources": {},
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "sha256": "2715542db697dbd2dd5021063173f6e91a405ac0f46a46a69b748c815826ae5b"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/atom-cache-v1-n1000"
+      },
+      "supervisor": {
+        "run_id": "atom-cache-v1-n1000",
+        "phase": "succeeded",
+        "worker_pid": 1809061,
+        "elapsed_seconds": 240.61917218,
+        "isolation_samples": 226,
+        "failure": null,
+        "announced_device": {
+          "worker_pid": 1809061,
+          "logical_device": 0,
+          "pci_address": "0000:b3:00.0",
+          "architecture": "gfx90a"
+        },
+        "device_verified": true,
+        "physical_device": {
+          "hip_device": 5,
+          "smi_device": 7,
+          "pci_address": "0000:b3:00.0",
+          "architecture": "gfx90a"
+        },
+        "execution_sha256": "e3050d085211550fc52afc4e040b663cb871d9d0940e58cf2252df4ea8d52865"
+      },
+      "comparison": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "comparison_pin": {
+        "path": "/tmp/fireprot-atom-cache-v1/n1000-comparison.json",
+        "sha256": "809c4f117ab3ca16f32d3f50ad0c3f79d40fc05f0e1b1fd039a4a5ac2363355c"
+      },
+      "cache": {
+        "schema_version": 1,
+        "mode": "experimental_atom_cache",
+        "scopes": [
+          {
+            "calls": 200,
+            "hits": 199,
+            "misses": 1,
+            "fallbacks": 0,
+            "completed": true,
+            "retained_bytes": 69620736
+          }
+        ],
+        "limits": [
+          "Audited immutable rollout only; no in-place mutation detection.",
+          "Retained bytes describe tensors, not whole-model peak memory."
+        ]
+      },
+      "cache_pin": {
+        "path": "/media/IntelSSD/fireprot/outputs/atom-cache-v1-n1000/atom-cache.json",
+        "sha256": "f2cc6a9d8465c7cffe415d27defda0ac0c80f79f342f869714617a4fdf2756d7"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/atom-cache-v1-n1000/accepted.json",
+        "sha256": "84db2d11e44b41b3e30006bada04b278d1be94950d4398c4687decb584e7bddd"
+      },
+      "pair_cache": {
+        "schema_version": 1,
+        "mode": "experimental_pair_cache",
+        "scopes": [
+          {
+            "calls": 200,
+            "hits": 199,
+            "misses": 1,
+            "fallbacks": 0,
+            "completed": true,
+            "effective_chunks": [
+              1024
+            ],
+            "retained_pair_bytes": 512000000
+          }
+        ],
+        "limits": [
+          "Source-pinned immutable inference inputs are required.",
+          "Identity checks do not detect in-place input/parameter changes."
+        ]
+      },
+      "operator_runtime": {
+        "path": "/media/IntelSSD/fireprot/outputs/atom-cache-v1-n1000/operator-runtime.json",
+        "sha256": "a51b2b7e2b3c9a92ec6e433badbd622f8da0d0a5fedd7acfb61d7b25d2dec459"
+      },
+      "original_reference": "/media/IntelSSD/fireprot/outputs/zero-mask-e2e-n1000-baseline-0"
+    },
+    "n1536": {
+      "status": "passed",
+      "request": {
+        "schema_version": 1,
+        "run_id": "atom-cache-v1-n1536",
+        "workload": {
+          "model": "openfold3",
+          "model_name": "openbind-0",
+          "recycles": 3,
+          "diffusion_steps": 200,
+          "samples": 1,
+          "precision": "float32",
+          "deterministic": true
+        },
+        "backend": "hip_fused",
+        "seed": 101,
+        "hip_device": 6,
+        "source": {
+          "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+          "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+            "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+          }
+        },
+        "resources": {},
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/atom-cache-v1-n1536"
+      },
+      "supervisor": {
+        "run_id": "atom-cache-v1-n1536",
+        "phase": "succeeded",
+        "worker_pid": 1809060,
+        "elapsed_seconds": 637.684530559,
+        "isolation_samples": 678,
+        "failure": null,
+        "announced_device": {
+          "worker_pid": 1809060,
+          "logical_device": 0,
+          "pci_address": "0000:8e:00.0",
+          "architecture": "gfx90a"
+        },
+        "device_verified": true,
+        "physical_device": {
+          "hip_device": 6,
+          "smi_device": 4,
+          "pci_address": "0000:8e:00.0",
+          "architecture": "gfx90a"
+        },
+        "execution_sha256": "fbac36c5c352c0867af5968ad1830d8b3e0469ad9f88189a0590f291618cb978"
+      },
+      "comparison": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "comparison_pin": {
+        "path": "/tmp/fireprot-atom-cache-v1/n1536-comparison.json",
+        "sha256": "809c4f117ab3ca16f32d3f50ad0c3f79d40fc05f0e1b1fd039a4a5ac2363355c"
+      },
+      "cache": {
+        "schema_version": 1,
+        "mode": "experimental_atom_cache",
+        "scopes": [
+          {
+            "calls": 200,
+            "hits": 199,
+            "misses": 1,
+            "fallbacks": 0,
+            "completed": true,
+            "retained_bytes": 105829376
+          }
+        ],
+        "limits": [
+          "Audited immutable rollout only; no in-place mutation detection.",
+          "Retained bytes describe tensors, not whole-model peak memory."
+        ]
+      },
+      "cache_pin": {
+        "path": "/media/IntelSSD/fireprot/outputs/atom-cache-v1-n1536/atom-cache.json",
+        "sha256": "0318fa484bd91d697856eca829bcd064a6bace91948795ae7285c98282c2c433"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/atom-cache-v1-n1536/accepted.json",
+        "sha256": "d46b5c63881609507932cd01f0834d2a2d5218e5ccefcb9146fd4f446d555abd"
+      },
+      "pair_cache": {
+        "schema_version": 1,
+        "mode": "experimental_pair_cache",
+        "scopes": [
+          {
+            "calls": 200,
+            "hits": 199,
+            "misses": 1,
+            "fallbacks": 0,
+            "completed": true,
+            "effective_chunks": [
+              1024
+            ],
+            "retained_pair_bytes": 1207959552
+          }
+        ],
+        "limits": [
+          "Source-pinned immutable inference inputs are required.",
+          "Identity checks do not detect in-place input/parameter changes."
+        ]
+      },
+      "operator_runtime": {
+        "path": "/media/IntelSSD/fireprot/outputs/atom-cache-v1-n1536/operator-runtime.json",
+        "sha256": "a1e9ab14ef9e0f154d771a8703da04ea92d1c9a0358a21f6378de5d21a88c3ab"
+      },
+      "original_reference": "/media/IntelSSD/fireprot/outputs/hip-softmax-e2e-n1536-baseline-0"
+    }
+  },
+  "limits": [
+    "Concurrent acceptance runs are not a controlled E2E comparison.",
+    "Immutable source-pinned inference only; identity guards do not detect in-place parameter/input mutation."
+  ],
+  "persistent_control_archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/conditioning-cache-20261006/atom-cache-v1-results.tar.gz",
+    "sha256": "8e3f3758d8d0b977f4e226756257eaf5fd5adfaf3e4e131ba818fd21e56ecde7",
+    "size": 15929143
+  },
+  "performance_evidence": false
+}

@@ -165,7 +165,7 @@ The verifier source-pins `structure/diffusion_module.py` and
 executes the complete native atom representation on every call. It retains
 the first `cl`/`plm`, recomputes the original noisy-coordinate expression,
 compares all three results bytewise, checks CPU/device RNG and checks retained
-values after each diffusion consumer. No compute-skipping mode exists.
+values after each diffusion consumer. This verifier does not skip computation; the separately gated cache is described below.
 
 After timing finishes, prepare a separate combined HIP/cache worker and add
 `verified_atom_reuse(sample, output)` around the rollout. Copy this module and
@@ -189,3 +189,28 @@ python -m unittest experiments.conditioning_reuse.test_verified_atom_reuse -v
 These CPU checks include signed-zero changes in supposedly static data, RNG
 consumption, consumer mutation, exception cleanup, source rejection, training
 rejection and reset between distinct rollouts.
+
+## Actual atom cache trial
+
+`atom_cache.py` skips the static atom representation after the first native call
+and recomputes only `cl + linear_r(rl)`. It scopes ownership to one rollout,
+requires the audited source and strict FP32 inference, and invalidates on
+dependency identity/layout changes or unsupported inputs. It retains dependency
+owners and releases them with cl/plm at scope exit. It does not detect in-place
+changes to inference tensors, batch contents or parameters; immutable inputs and
+the previously verified consumers are required. This is not a general memoization
+API or support claim for arbitrary OpenFold3 inputs.
+
+Four CPU tests check actual native call counts, distinct-rollout reset,
+dependency changes, fallback and exception restoration. The initial test counter
+used a mock without the native signature; the fixture was corrected to preserve
+that signature. N1000/HIP5 and N1536/HIP6 candidates completed from a fresh copied
+worker at `/tmp/fireprot-atom-cache-v1`; source/request/archive pins are in
+`provenance/openfold3_atom_cache_preparation.json`. Both pass all 11 original-native arrays bitwise, with 199 hits, one miss and
+zero fallbacks across 200 calls. Completed evidence and archive pins are in
+`provenance/openfold3_atom_cache_models.json`. These concurrent numerical trials
+do not measure E2E speedup; controlled timing and promotion remain pending.
+
+```bash
+python -m unittest experiments.conditioning_reuse.test_atom_cache -v
+```

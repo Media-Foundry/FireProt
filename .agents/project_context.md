@@ -856,3 +856,20 @@ key=4*(lane/16)+register for A=key/B=query, replacing the initially proposed
 transposed mapping. This is still a hypothesis until the new calibration passes.
 Native QK K32 is one DepthU32 tile; PV K1536 is48 tiles. The new probe touches no
 maintained backend and does not fuse softmax or reduce global score traffic yet.
+
+Paired follow-up: controller1868435 remains live at elapsed43:09. Baseline0,
+candidate0 and candidate1 are measured/verified; baseline1 is running. Both
+completed candidates have5472 in-place submissions, zero storage fallbacks,
+confidence256, and pair/atom caches each200calls/199hits/1miss/0fallback.
+Do not publish a three-pair aggregate before the remaining runs finish.
+Terminal-only collector prepared locally at
+/tmp/fireprot-collect-combined-pairs-v2.py; syntax checked, not yet executed.
+It checks all pairs, original-native anchor, caches and chunk policy before
+emitting direct original-versus-combined evidence. Preserve the no-other-GPU /
+no-heavy-remote-build rule while this controller is active.
+
+The next MFMA probe now records the first native packed QK BMM with Kineto and
+requires exact operand layouts plus one uniquely correlated GPU kernel. It
+reuses and fingerprints experiments/attention_trace/probe.py. Four existing
+CPU observer tests pass and Python syntax passes; HIP compilation, lane mapping,
+GPU correlation and score equality remain untested. No new performance claim.

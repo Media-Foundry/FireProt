@@ -30,6 +30,12 @@ subnormal, signed-zero and nonfinite inputs under strict FP32 inference. It
 stops on the first mismatch and records failure; no tolerance or fallback hides
 it. Packing and model attention are not replaced. This packed score experiment
 does not establish behavior for original strided QKV or other GEMM signatures.
+The random reference call retains a Kineto trace and requires one BMM with the
+expected packed layouts and one uniquely correlated GPU kernel. It reuses
+`experiments/attention_trace/probe.py`; include that source when copying this
+experiment. Compare its actual symbol with the accepted model trace before
+attributing any score agreement to reproduction of that particular native kernel.
+Profiler timings are not performance evidence.
 
 ## Future execution gates
 

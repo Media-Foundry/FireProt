@@ -11,6 +11,7 @@ import torch.utils.deterministic
 
 from fireprot.backends.amd import softmax_fp32
 from fireprot.backends.amd._published import select_c
+from experiments.attention_trace import probe as trace_probe
 
 
 def main(destination):
@@ -20,6 +21,8 @@ def main(destination):
                   scope='Unvalidated MFMA lane/K-order probe, not model or performance evidence',
                   torch=str(torch.__version__), hip=str(torch.version.hip),
                   visible_device=os.environ.get('HIP_VISIBLE_DEVICES'),
+                  trace_helper_sha256=hashlib.sha256(
+                      Path(trace_probe.__file__).read_bytes()).hexdigest(),
                   script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
     try:
         if (str(torch.__version__) != softmax_fp32.TORCH_VERSION
@@ -100,7 +103,31 @@ def main(destination):
                     query[:, 0, 0] = float('nan')
                     query[:, 1, 0] = float('inf')
                     key[:, 0, 0] = 0
-                expected = torch.bmm(query, key)
+                if case == 'random':
+                    trace_path = destination / 'native-qk-trace.json'
+                    with torch.profiler.profile(
+                            activities=[torch.profiler.ProfilerActivity.CPU,
+                                        torch.profiler.ProfilerActivity.CUDA],
+                            record_shapes=True) as profiler:
+                        with torch.profiler.record_function('fireprot.attention.QK'):
+                            expected = torch.bmm(query, key)
+                        torch.cuda.synchronize()
+                    profiler.export_chrome_trace(str(trace_path))
+                    observation = dict(einsums=[dict(label='QK')])
+                    trace_probe.trace_operations(observation, trace_path)
+                    report['native_qk_observation'] = observation
+                    report['native_trace'] = dict(path=str(trace_path), sha256=
+                        hashlib.sha256(trace_path.read_bytes()).hexdigest())
+                    operations = observation['einsums'][0]['operations']
+                    bmms = [op for op in operations if op['operation'] == 'aten::bmm']
+                    if (len(bmms) != 1 or len(bmms[0]['kernels']) != 1
+                            or bmms[0]['inputs'] != [
+                                dict(shape=list(query.shape), strides=list(query.stride())),
+                                dict(shape=list(key.shape), strides=list(key.stride()))]):
+                        raise RuntimeError('Native QK kernel/layout observation is incomplete')
+                    # This trace is diagnostic only; no latency is reported from it.
+                else:
+                    expected = torch.bmm(query, key)
                 actual = launch(query, key)
                 mismatches = int(torch.count_nonzero(
                     expected.view(torch.int32) != actual.view(torch.int32)).item())

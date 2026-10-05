@@ -435,3 +435,21 @@ is used. Installer copies the license inventory/texts into share/fireprot.
 Three installation tests, Cargo metadata for all five crates, exact LICENSE
 inclusion in a packaged core crate, format and Python syntax checks pass.
 Remote active model workers/binaries have not been modified by this license change.
+
+## Completed cache gate and next trials (2026-10-06)
+
+Actual N1000/N1536 conditioning cache now passes all 11 output arrays bitwise.
+Both scopes have 200 calls, one native miss, 199 hits, no fallbacks, chunk 1024.
+N1536 supervisor succeeded; session 97740 may still need its final transport poll.
+The evidence and durable control archive are pinned in
+`provenance/openfold3_conditioning_cache_models.json`. No paired speedup yet.
+Fresh combined controls `/tmp/fireprot-conditioning-combined-v1` use the same
+immutable `/tmp/fireprot-conditioning-cache-v1/python` worker and switch the
+request backend to hip_fused. Active combined numerical checks:
+- N1000 HIP5: conditioning-combined-v1-n1000, tool session 59510.
+- N1536 HIP7: conditioning-combined-v1-n1536, tool session 17465.
+Do not replace their worker tree, remote CLI/bridge, inventory or published bundle.
+Remote CLI remains dfbbe3038421fc5f68dcaba80f4ad95aa8ad93960f29580ee990f5e68b69c817;
+license/installer changes are local only so far. After exact combined checks,
+prepare sequential same-source baseline/candidate paired E2E, with all scientific
+settings unchanged. License commit e6ac271 follows optimization commit d3e0a86.

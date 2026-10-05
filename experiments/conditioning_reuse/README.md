@@ -98,8 +98,8 @@ features, parameters and pair consumers unchanged. Retained memory may change
 other modules' chunk tuning. Therefore a fresh full-model exact-array check is
 required even after the preceding diagnostic passes. No speedup is claimed.
 Six CPU checks cover lifecycle, replacement invalidation, fallback, exceptions,
-source guards and strict determinism. N1000 full-model acceptance now passes all 11 arrays with one miss and 199 hits;
-N1536 validation is active. See `provenance/openfold3_conditioning_cache_models.json`.
+source guards and strict determinism. N1000 and N1536 full-model acceptance now pass all 11 arrays with one miss
+and 199 hits per model. See `provenance/openfold3_conditioning_cache_models.json`.
 This candidate is not connected to maintained requests; no paired timing exists.
 
 `worker-cache-overlay.patch` prepares a fresh copied worker. Copy both
@@ -108,3 +108,8 @@ The latter supplies single-branch arithmetic; its diagnostic context is not
 entered. Preserve native backend for the first isolated full-model trial and
 require all 11 arrays bitwise before any paired timing or combination with HIP
 softmax. Keep the completed diagnostic workers and their evidence immutable.
+
+The combined HIP-softmax/cache numerical trials are now active under
+`/tmp/fireprot-conditioning-combined-v1` on DiamondHill (N1000 HIP5, N1536 HIP7).
+They reuse the immutable cache-v1 copied worker with backend `hip_fused`.
+Combination correctness remains a separate gate before paired E2E timing.

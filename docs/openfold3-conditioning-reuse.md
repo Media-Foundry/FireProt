@@ -129,3 +129,13 @@ N1000/N1536 full-model diagnostics pass every one of their 200 call checks and
 all 11 output arrays with recomputation on every call; see
 `provenance/openfold3_conditioning_verified_models.json`. Retaining pair values and doing redundant native
 work changes memory/timing, so these runs cannot supply performance evidence.
+
+## Actual pair cache validation
+
+The experimental compute-skipping cache now passes all 11 output arrays bitwise
+at both N1000 and N1536, retaining FP32/R3/D200/S1/seed101. Each run records one
+native conditioning call, 199 cache hits, no fallbacks and effective chunk 1024.
+The retained pair occupies 512,000,000 / 1,207,959,552 bytes respectively; these
+are retained tensor sizes, not measured changes in whole-model peak memory.
+Evidence: `provenance/openfold3_conditioning_cache_models.json`.
+Combined HIP-softmax/cache trials are active; paired E2E timing remains pending.

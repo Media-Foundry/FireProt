@@ -1188,3 +1188,16 @@ add the corrected probe under a new verified path before testinglarge batches.
 Each candidate source was patched in temporarycopy and matches localcompiled
 v2/v4 source exactly. First finish/collect/archive basefusion results, then
 build/test swizzle andvector independently. Fullmodel/performance stillunproven.
+
+Fusion base sequence23572 now exits0: correctedB32/full+staged, B512/full and
+B1024/staged32 each21 exactrecords. All sixouterbatch sizes32,64,128,256,512,1024
+are covered;9 successful invocations including B32 repeats. No active GPU jobs.
+Complete evidence provenance/openfold3_qk_softmax_probe.json; collector
+/tmp/fireprot-collect-qk-softmax-v1.py andcapture/tmp/fireprot-qk-softmax-v1-results.json.
+Durable archive qk-softmax-v1-results.tar.gz SHA
+63aa4db76ccc423f828fb890240400ed555d8b9c83fcc35f2413a9829c79e417, size1567299 bytes.
+Includes both probes, retainedB512countOOM, allsuccesses, native traces, sources,
+Rustcache/build/bundle/inspection. Only packedsyntheticbasekernel accepted; no
+PV/originalstrides/fullmodel/performance or LDSvariant GPU acceptance yet.
+Next build/test independent LDSv2/v4 with corrected probe; earlier localprepared
+variant archives need updated probe addition/pinning before large screens.

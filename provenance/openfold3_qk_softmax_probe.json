@@ -1,0 +1,7389 @@
+{
+  "schema_version": 1,
+  "phase": "packed_operator_screens_passed",
+  "scope": "Packed N1536/K32/four-head synthetic score and softmax validation; no PV, full-model or performance acceptance",
+  "bundle": {
+    "path": "/tmp/fireprot-qk-softmax-v1/bundle/kernel.json",
+    "sha256": "122d70650b679d09db2b61a8d815985f26a5c59fcf817f2edb04a5c3584cbc09"
+  },
+  "library": {
+    "path": "/tmp/fireprot-qk-softmax-v1/bundle/fireprot_experimental_qk_softmax_049b6bf0baf5894f73e58341437e5a600e83a98acbc6d77d140b2adc1037c9c3.so",
+    "sha256": "219e6abfef41252901c77c39830604cb7a288d0c6175496ebff9a6eba788aaaf"
+  },
+  "build": {
+    "path": "/tmp/fireprot-qk-softmax-v1/build/build.json",
+    "sha256": "84558d00c3c73c83970cd079f24027ac4258a87d0d63ce0bd990db3ae338a8bc"
+  },
+  "inspection": {
+    "0000000000001d00 <_Z10qk_softmaxILb1EEvPKfS1_S1_S1_Pflllll>:": {
+      "ds_write_b32": 24,
+      "ds_read_b32": 24,
+      "s_barrier": 11,
+      "v_mfma_f32_16x16x4f32": 48
+    },
+    "0000000000004400 <_Z10qk_softmaxILb0EEvPKfS1_S1_S1_Pflllll>:": {
+      "ds_write_b32": 24,
+      "ds_read_b32": 24,
+      "s_barrier": 11,
+      "v_mfma_f32_16x16x4f32": 48
+    }
+  },
+  "screens": {
+    "probe-b32": {
+      "pin": {
+        "path": "/tmp/fireprot-qk-softmax-v1/probe-b32/probe.json",
+        "sha256": "04d5a0fe77f4f729416079ce499565fd6715bf0c2969c6a38fbd54fc3fe864a5"
+      },
+      "report": {
+        "schema_version": 1,
+        "completed": true,
+        "batch": 32,
+        "n": 1536,
+        "heads": 4,
+        "k": 32,
+        "seed": 101,
+        "dtype": "float32",
+        "records": [
+          {
+            "case": "random",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/partial_outer",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              32,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/partial_outer",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              32,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/additive",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/additive",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/all_masked",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/all_masked",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "cancellation",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "cancellation/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "cancellation/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "subnormal",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "subnormal/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "subnormal/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "signed_zero",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "signed_zero/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "signed_zero/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "nonfinite",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "nonfinite/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "nonfinite/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          }
+        ],
+        "reference_batch": 0,
+        "reference_method": "full_shape_qk_and_softmax",
+        "scope": "Synthetic packed operands only; no timing or model acceptance",
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "visible_device": "7",
+        "source_sha256": {
+          "/tmp/fireprot-qk-softmax-v1/experiments/mfma_qk/probe_fusion.py": "c2b43bb745bf332b235e8f8529ecf84d3be0baaf907c6ebf30a54d42dd5b36af",
+          "/tmp/fireprot-qk-softmax-v1/experiments/attention_trace/probe.py": "531d168ce84f7954b4e28f939ad4ab1efd47abd485ad8b20a5c713cbfcdc0c3b"
+        },
+        "settings": {
+          "strict_deterministic": true,
+          "warn_only": false,
+          "fill_uninitialized_memory": true,
+          "allow_tf32": false,
+          "preferred_blas_library": "_BlasBackend.Cublas"
+        },
+        "kernel": {
+          "mode": "published",
+          "kernel": {
+            "directory": "/tmp/fireprot-qk-softmax-v1/bundle",
+            "library": "/tmp/fireprot-qk-softmax-v1/bundle/fireprot_experimental_qk_softmax_049b6bf0baf5894f73e58341437e5a600e83a98acbc6d77d140b2adc1037c9c3.so",
+            "manifest_sha256": "122d70650b679d09db2b61a8d815985f26a5c59fcf817f2edb04a5c3584cbc09",
+            "build_identity_sha256": "049b6bf0baf5894f73e58341437e5a600e83a98acbc6d77d140b2adc1037c9c3",
+            "compatibility": {
+              "package": "fireprot_experimental_qk_softmax",
+              "target": "gfx90a",
+              "torch": "2.12.0a0+git78258b9",
+              "hip": "7.14.60850",
+              "c_abi": "experimental-qk-softmax-n1536-f32-v1"
+            }
+          }
+        },
+        "native_qk_observation": {
+          "einsums": [
+            {
+              "label": "QK",
+              "operations": [
+                {
+                  "operation": "aten::bmm",
+                  "inputs": [
+                    {
+                      "shape": [
+                        128,
+                        1536,
+                        32
+                      ],
+                      "strides": [
+                        49152,
+                        32,
+                        1
+                      ]
+                    },
+                    {
+                      "shape": [
+                        128,
+                        32,
+                        1536
+                      ],
+                      "strides": [
+                        49152,
+                        1536,
+                        1
+                      ]
+                    }
+                  ],
+                  "external_id": 2,
+                  "kernels": [
+                    {
+                      "name": "__amd_rocclr_fillBufferUnAligned.kd",
+                      "correlation": 4,
+                      "device": 7,
+                      "stream": 1,
+                      "launch": "hipMemset"
+                    },
+                    {
+                      "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+                      "correlation": 20,
+                      "device": 7,
+                      "stream": 1,
+                      "launch": "hipExtModuleLaunchKernel"
+                    }
+                  ],
+                  "completed": true,
+                  "metadata_source": "kineto_trace"
+                }
+              ]
+            }
+          ]
+        },
+        "native_trace": {
+          "path": "/tmp/fireprot-qk-softmax-v1/probe-b32/native-qk-trace.json",
+          "sha256": "373d7f521bc775c42ccf5e4d2da4a95cf90b361770771635c432e2ff4f6954cf"
+        },
+        "native_qk_gemm": {
+          "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+          "correlation": 20,
+          "device": 7,
+          "stream": 1,
+          "launch": "hipExtModuleLaunchKernel"
+        },
+        "native_qk_initialization": [
+          {
+            "name": "__amd_rocclr_fillBufferUnAligned.kd",
+            "correlation": 4,
+            "device": 7,
+            "stream": 1,
+            "launch": "hipMemset"
+          }
+        ]
+      }
+    },
+    "probe-b32-staged": {
+      "pin": {
+        "path": "/tmp/fireprot-qk-softmax-v1/probe-b32-staged/probe.json",
+        "sha256": "a28446a3b46b6d392efd405346d5d425d05f6fe9e79c248f6fc4285bd5963ee6"
+      },
+      "report": {
+        "schema_version": 1,
+        "completed": true,
+        "batch": 32,
+        "n": 1536,
+        "heads": 4,
+        "k": 32,
+        "seed": 101,
+        "dtype": "float32",
+        "records": [
+          {
+            "case": "random",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/partial_outer",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              32,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/partial_outer",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              32,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/additive",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/additive",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/all_masked",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/all_masked",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "cancellation",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "cancellation/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "cancellation/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "subnormal",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "subnormal/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "subnormal/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "signed_zero",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "signed_zero/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "signed_zero/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "nonfinite",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "nonfinite/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "nonfinite/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          }
+        ],
+        "reference_batch": 16,
+        "reference_method": "full_shape_qk_host_staged_outer_batch_softmax",
+        "scope": "Synthetic packed operands only; no timing or model acceptance",
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "visible_device": "7",
+        "source_sha256": {
+          "/tmp/fireprot-qk-softmax-v1/experiments/mfma_qk/probe_fusion.py": "c2b43bb745bf332b235e8f8529ecf84d3be0baaf907c6ebf30a54d42dd5b36af",
+          "/tmp/fireprot-qk-softmax-v1/experiments/attention_trace/probe.py": "531d168ce84f7954b4e28f939ad4ab1efd47abd485ad8b20a5c713cbfcdc0c3b"
+        },
+        "settings": {
+          "strict_deterministic": true,
+          "warn_only": false,
+          "fill_uninitialized_memory": true,
+          "allow_tf32": false,
+          "preferred_blas_library": "_BlasBackend.Cublas"
+        },
+        "kernel": {
+          "mode": "published",
+          "kernel": {
+            "directory": "/tmp/fireprot-qk-softmax-v1/bundle",
+            "library": "/tmp/fireprot-qk-softmax-v1/bundle/fireprot_experimental_qk_softmax_049b6bf0baf5894f73e58341437e5a600e83a98acbc6d77d140b2adc1037c9c3.so",
+            "manifest_sha256": "122d70650b679d09db2b61a8d815985f26a5c59fcf817f2edb04a5c3584cbc09",
+            "build_identity_sha256": "049b6bf0baf5894f73e58341437e5a600e83a98acbc6d77d140b2adc1037c9c3",
+            "compatibility": {
+              "package": "fireprot_experimental_qk_softmax",
+              "target": "gfx90a",
+              "torch": "2.12.0a0+git78258b9",
+              "hip": "7.14.60850",
+              "c_abi": "experimental-qk-softmax-n1536-f32-v1"
+            }
+          }
+        },
+        "native_qk_observation": {
+          "einsums": [
+            {
+              "label": "QK",
+              "operations": [
+                {
+                  "operation": "aten::bmm",
+                  "inputs": [
+                    {
+                      "shape": [
+                        128,
+                        1536,
+                        32
+                      ],
+                      "strides": [
+                        49152,
+                        32,
+                        1
+                      ]
+                    },
+                    {
+                      "shape": [
+                        128,
+                        32,
+                        1536
+                      ],
+                      "strides": [
+                        49152,
+                        1536,
+                        1
+                      ]
+                    }
+                  ],
+                  "external_id": 2,
+                  "kernels": [
+                    {
+                      "name": "__amd_rocclr_fillBufferUnAligned.kd",
+                      "correlation": 4,
+                      "device": 7,
+                      "stream": 1,
+                      "launch": "hipMemset"
+                    },
+                    {
+                      "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+                      "correlation": 20,
+                      "device": 7,
+                      "stream": 1,
+                      "launch": "hipExtModuleLaunchKernel"
+                    }
+                  ],
+                  "completed": true,
+                  "metadata_source": "kineto_trace"
+                }
+              ]
+            }
+          ]
+        },
+        "native_trace": {
+          "path": "/tmp/fireprot-qk-softmax-v1/probe-b32-staged/native-qk-trace.json",
+          "sha256": "8058e17c464f5d42e65455fea1f446ecc1536f3f6cb2680eef7721281f536d33"
+        },
+        "native_qk_gemm": {
+          "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+          "correlation": 20,
+          "device": 7,
+          "stream": 1,
+          "launch": "hipExtModuleLaunchKernel"
+        },
+        "native_qk_initialization": [
+          {
+            "name": "__amd_rocclr_fillBufferUnAligned.kd",
+            "correlation": 4,
+            "device": 7,
+            "stream": 1,
+            "launch": "hipMemset"
+          }
+        ]
+      }
+    },
+    "probe-b64": {
+      "pin": {
+        "path": "/tmp/fireprot-qk-softmax-v1/probe-b64/probe.json",
+        "sha256": "f658d3df599dd4a109696f1798eaac0c902fa559341d8ca467f621228bc5bcc2"
+      },
+      "report": {
+        "schema_version": 1,
+        "completed": true,
+        "batch": 64,
+        "n": 1536,
+        "heads": 4,
+        "k": 32,
+        "seed": 101,
+        "dtype": "float32",
+        "records": [
+          {
+            "case": "random",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 603979776,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 603979776,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 603979776,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/partial_outer",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 603979776,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              64,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/partial_outer",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 603979776,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              64,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/additive",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 603979776,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/additive",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 603979776,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/all_masked",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 603979776,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/all_masked",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 603979776,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "cancellation",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 603979776,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "cancellation/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 603979776,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "cancellation/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 603979776,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "subnormal",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 603979776,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "subnormal/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 603979776,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "subnormal/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 603979776,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "signed_zero",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 603979776,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "signed_zero/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 603979776,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "signed_zero/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 603979776,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "nonfinite",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 603979776,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "nonfinite/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 603979776,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "nonfinite/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 603979776,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          }
+        ],
+        "reference_batch": 0,
+        "reference_method": "full_shape_qk_and_softmax",
+        "scope": "Synthetic packed operands only; no timing or model acceptance",
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "visible_device": "7",
+        "source_sha256": {
+          "/tmp/fireprot-qk-softmax-v1/experiments/mfma_qk/probe_fusion.py": "c2b43bb745bf332b235e8f8529ecf84d3be0baaf907c6ebf30a54d42dd5b36af",
+          "/tmp/fireprot-qk-softmax-v1/experiments/attention_trace/probe.py": "531d168ce84f7954b4e28f939ad4ab1efd47abd485ad8b20a5c713cbfcdc0c3b"
+        },
+        "settings": {
+          "strict_deterministic": true,
+          "warn_only": false,
+          "fill_uninitialized_memory": true,
+          "allow_tf32": false,
+          "preferred_blas_library": "_BlasBackend.Cublas"
+        },
+        "kernel": {
+          "mode": "published",
+          "kernel": {
+            "directory": "/tmp/fireprot-qk-softmax-v1/bundle",
+            "library": "/tmp/fireprot-qk-softmax-v1/bundle/fireprot_experimental_qk_softmax_049b6bf0baf5894f73e58341437e5a600e83a98acbc6d77d140b2adc1037c9c3.so",
+            "manifest_sha256": "122d70650b679d09db2b61a8d815985f26a5c59fcf817f2edb04a5c3584cbc09",
+            "build_identity_sha256": "049b6bf0baf5894f73e58341437e5a600e83a98acbc6d77d140b2adc1037c9c3",
+            "compatibility": {
+              "package": "fireprot_experimental_qk_softmax",
+              "target": "gfx90a",
+              "torch": "2.12.0a0+git78258b9",
+              "hip": "7.14.60850",
+              "c_abi": "experimental-qk-softmax-n1536-f32-v1"
+            }
+          }
+        },
+        "native_qk_observation": {
+          "einsums": [
+            {
+              "label": "QK",
+              "operations": [
+                {
+                  "operation": "aten::bmm",
+                  "inputs": [
+                    {
+                      "shape": [
+                        256,
+                        1536,
+                        32
+                      ],
+                      "strides": [
+                        49152,
+                        32,
+                        1
+                      ]
+                    },
+                    {
+                      "shape": [
+                        256,
+                        32,
+                        1536
+                      ],
+                      "strides": [
+                        49152,
+                        1536,
+                        1
+                      ]
+                    }
+                  ],
+                  "external_id": 2,
+                  "kernels": [
+                    {
+                      "name": "__amd_rocclr_fillBufferUnAligned.kd",
+                      "correlation": 4,
+                      "device": 7,
+                      "stream": 1,
+                      "launch": "hipMemset"
+                    },
+                    {
+                      "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+                      "correlation": 18,
+                      "device": 7,
+                      "stream": 1,
+                      "launch": "hipExtModuleLaunchKernel"
+                    }
+                  ],
+                  "completed": true,
+                  "metadata_source": "kineto_trace"
+                }
+              ]
+            }
+          ]
+        },
+        "native_trace": {
+          "path": "/tmp/fireprot-qk-softmax-v1/probe-b64/native-qk-trace.json",
+          "sha256": "fb2929d67e0921cb939f686967ac34741bbbd7cb0d05805388ddfef2fd5c99fc"
+        },
+        "native_qk_gemm": {
+          "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+          "correlation": 18,
+          "device": 7,
+          "stream": 1,
+          "launch": "hipExtModuleLaunchKernel"
+        },
+        "native_qk_initialization": [
+          {
+            "name": "__amd_rocclr_fillBufferUnAligned.kd",
+            "correlation": 4,
+            "device": 7,
+            "stream": 1,
+            "launch": "hipMemset"
+          }
+        ]
+      }
+    },
+    "probe-b128": {
+      "pin": {
+        "path": "/tmp/fireprot-qk-softmax-v1/probe-b128/probe.json",
+        "sha256": "bbc5c319e79529410a1c8716bc4ce89b314bbdb2a036f9a06ecd7a2ea7356d74"
+      },
+      "report": {
+        "schema_version": 1,
+        "completed": true,
+        "batch": 128,
+        "n": 1536,
+        "heads": 4,
+        "k": 32,
+        "seed": 101,
+        "dtype": "float32",
+        "records": [
+          {
+            "case": "random",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 1207959552,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 1207959552,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 1207959552,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/partial_outer",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 1207959552,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              128,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/partial_outer",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 1207959552,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              128,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/additive",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 1207959552,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/additive",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 1207959552,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/all_masked",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 1207959552,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/all_masked",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 1207959552,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "cancellation",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 1207959552,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "cancellation/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 1207959552,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "cancellation/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 1207959552,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "subnormal",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 1207959552,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "subnormal/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 1207959552,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "subnormal/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 1207959552,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "signed_zero",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 1207959552,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "signed_zero/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 1207959552,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "signed_zero/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 1207959552,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "nonfinite",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 1207959552,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "nonfinite/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 1207959552,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "nonfinite/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 1207959552,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          }
+        ],
+        "reference_batch": 0,
+        "reference_method": "full_shape_qk_and_softmax",
+        "scope": "Synthetic packed operands only; no timing or model acceptance",
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "visible_device": "7",
+        "source_sha256": {
+          "/tmp/fireprot-qk-softmax-v1/experiments/mfma_qk/probe_fusion.py": "c2b43bb745bf332b235e8f8529ecf84d3be0baaf907c6ebf30a54d42dd5b36af",
+          "/tmp/fireprot-qk-softmax-v1/experiments/attention_trace/probe.py": "531d168ce84f7954b4e28f939ad4ab1efd47abd485ad8b20a5c713cbfcdc0c3b"
+        },
+        "settings": {
+          "strict_deterministic": true,
+          "warn_only": false,
+          "fill_uninitialized_memory": true,
+          "allow_tf32": false,
+          "preferred_blas_library": "_BlasBackend.Cublas"
+        },
+        "kernel": {
+          "mode": "published",
+          "kernel": {
+            "directory": "/tmp/fireprot-qk-softmax-v1/bundle",
+            "library": "/tmp/fireprot-qk-softmax-v1/bundle/fireprot_experimental_qk_softmax_049b6bf0baf5894f73e58341437e5a600e83a98acbc6d77d140b2adc1037c9c3.so",
+            "manifest_sha256": "122d70650b679d09db2b61a8d815985f26a5c59fcf817f2edb04a5c3584cbc09",
+            "build_identity_sha256": "049b6bf0baf5894f73e58341437e5a600e83a98acbc6d77d140b2adc1037c9c3",
+            "compatibility": {
+              "package": "fireprot_experimental_qk_softmax",
+              "target": "gfx90a",
+              "torch": "2.12.0a0+git78258b9",
+              "hip": "7.14.60850",
+              "c_abi": "experimental-qk-softmax-n1536-f32-v1"
+            }
+          }
+        },
+        "native_qk_observation": {
+          "einsums": [
+            {
+              "label": "QK",
+              "operations": [
+                {
+                  "operation": "aten::bmm",
+                  "inputs": [
+                    {
+                      "shape": [
+                        512,
+                        1536,
+                        32
+                      ],
+                      "strides": [
+                        49152,
+                        32,
+                        1
+                      ]
+                    },
+                    {
+                      "shape": [
+                        512,
+                        32,
+                        1536
+                      ],
+                      "strides": [
+                        49152,
+                        1536,
+                        1
+                      ]
+                    }
+                  ],
+                  "external_id": 2,
+                  "kernels": [
+                    {
+                      "name": "__amd_rocclr_fillBufferUnAligned.kd",
+                      "correlation": 4,
+                      "device": 7,
+                      "stream": 1,
+                      "launch": "hipMemset"
+                    },
+                    {
+                      "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+                      "correlation": 18,
+                      "device": 7,
+                      "stream": 1,
+                      "launch": "hipExtModuleLaunchKernel"
+                    }
+                  ],
+                  "completed": true,
+                  "metadata_source": "kineto_trace"
+                }
+              ]
+            }
+          ]
+        },
+        "native_trace": {
+          "path": "/tmp/fireprot-qk-softmax-v1/probe-b128/native-qk-trace.json",
+          "sha256": "9c8220f0fcb6223ab1e7e0eefc86ca54ccc18dbd94c3dd76c50e0a5c5ef22cbe"
+        },
+        "native_qk_gemm": {
+          "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+          "correlation": 18,
+          "device": 7,
+          "stream": 1,
+          "launch": "hipExtModuleLaunchKernel"
+        },
+        "native_qk_initialization": [
+          {
+            "name": "__amd_rocclr_fillBufferUnAligned.kd",
+            "correlation": 4,
+            "device": 7,
+            "stream": 1,
+            "launch": "hipMemset"
+          }
+        ]
+      }
+    },
+    "probe-b256": {
+      "pin": {
+        "path": "/tmp/fireprot-qk-softmax-v1/probe-b256/probe.json",
+        "sha256": "b6c13c375c4b536ae46bf82b1df4321d1be7a9380f5c34ae4462fae5b147b30e"
+      },
+      "report": {
+        "schema_version": 1,
+        "completed": true,
+        "batch": 256,
+        "n": 1536,
+        "heads": 4,
+        "k": 32,
+        "seed": 101,
+        "dtype": "float32",
+        "records": [
+          {
+            "case": "random",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 2415919104,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 2415919104,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 2415919104,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/partial_outer",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 2415919104,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              256,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/partial_outer",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 2415919104,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              256,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/additive",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 2415919104,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/additive",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 2415919104,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/all_masked",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 2415919104,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/all_masked",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 2415919104,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "cancellation",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 2415919104,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "cancellation/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 2415919104,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "cancellation/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 2415919104,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "subnormal",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 2415919104,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "subnormal/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 2415919104,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "subnormal/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 2415919104,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "signed_zero",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 2415919104,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "signed_zero/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 2415919104,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "signed_zero/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 2415919104,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "nonfinite",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 2415919104,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "nonfinite/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 2415919104,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "nonfinite/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 2415919104,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          }
+        ],
+        "reference_batch": 0,
+        "reference_method": "full_shape_qk_and_softmax",
+        "scope": "Synthetic packed operands only; no timing or model acceptance",
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "visible_device": "7",
+        "source_sha256": {
+          "/tmp/fireprot-qk-softmax-v1/experiments/mfma_qk/probe_fusion.py": "c2b43bb745bf332b235e8f8529ecf84d3be0baaf907c6ebf30a54d42dd5b36af",
+          "/tmp/fireprot-qk-softmax-v1/experiments/attention_trace/probe.py": "531d168ce84f7954b4e28f939ad4ab1efd47abd485ad8b20a5c713cbfcdc0c3b"
+        },
+        "settings": {
+          "strict_deterministic": true,
+          "warn_only": false,
+          "fill_uninitialized_memory": true,
+          "allow_tf32": false,
+          "preferred_blas_library": "_BlasBackend.Cublas"
+        },
+        "kernel": {
+          "mode": "published",
+          "kernel": {
+            "directory": "/tmp/fireprot-qk-softmax-v1/bundle",
+            "library": "/tmp/fireprot-qk-softmax-v1/bundle/fireprot_experimental_qk_softmax_049b6bf0baf5894f73e58341437e5a600e83a98acbc6d77d140b2adc1037c9c3.so",
+            "manifest_sha256": "122d70650b679d09db2b61a8d815985f26a5c59fcf817f2edb04a5c3584cbc09",
+            "build_identity_sha256": "049b6bf0baf5894f73e58341437e5a600e83a98acbc6d77d140b2adc1037c9c3",
+            "compatibility": {
+              "package": "fireprot_experimental_qk_softmax",
+              "target": "gfx90a",
+              "torch": "2.12.0a0+git78258b9",
+              "hip": "7.14.60850",
+              "c_abi": "experimental-qk-softmax-n1536-f32-v1"
+            }
+          }
+        },
+        "native_qk_observation": {
+          "einsums": [
+            {
+              "label": "QK",
+              "operations": [
+                {
+                  "operation": "aten::bmm",
+                  "inputs": [
+                    {
+                      "shape": [
+                        1024,
+                        1536,
+                        32
+                      ],
+                      "strides": [
+                        49152,
+                        32,
+                        1
+                      ]
+                    },
+                    {
+                      "shape": [
+                        1024,
+                        32,
+                        1536
+                      ],
+                      "strides": [
+                        49152,
+                        1536,
+                        1
+                      ]
+                    }
+                  ],
+                  "external_id": 2,
+                  "kernels": [
+                    {
+                      "name": "__amd_rocclr_fillBufferUnAligned.kd",
+                      "correlation": 4,
+                      "device": 7,
+                      "stream": 1,
+                      "launch": "hipMemset"
+                    },
+                    {
+                      "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+                      "correlation": 18,
+                      "device": 7,
+                      "stream": 1,
+                      "launch": "hipExtModuleLaunchKernel"
+                    }
+                  ],
+                  "completed": true,
+                  "metadata_source": "kineto_trace"
+                }
+              ]
+            }
+          ]
+        },
+        "native_trace": {
+          "path": "/tmp/fireprot-qk-softmax-v1/probe-b256/native-qk-trace.json",
+          "sha256": "3912f31799abfe54ae604fc42f65665cbdd21ca6a886418ff8be5877f09b53ab"
+        },
+        "native_qk_gemm": {
+          "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+          "correlation": 18,
+          "device": 7,
+          "stream": 1,
+          "launch": "hipExtModuleLaunchKernel"
+        },
+        "native_qk_initialization": [
+          {
+            "name": "__amd_rocclr_fillBufferUnAligned.kd",
+            "correlation": 4,
+            "device": 7,
+            "stream": 1,
+            "launch": "hipMemset"
+          }
+        ]
+      }
+    },
+    "probe-v2-b32": {
+      "pin": {
+        "path": "/tmp/fireprot-qk-softmax-v1/probe-v2-b32/probe.json",
+        "sha256": "cc9246bf3e9e4ddb78db689a04aae4ea19a9db7c3e0071db747d9f25f374c603"
+      },
+      "report": {
+        "schema_version": 1,
+        "completed": true,
+        "batch": 32,
+        "n": 1536,
+        "heads": 4,
+        "k": 32,
+        "seed": 101,
+        "dtype": "float32",
+        "records": [
+          {
+            "case": "random",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/partial_outer",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              32,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/partial_outer",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              32,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/additive",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/additive",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/all_masked",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/all_masked",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "cancellation",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "cancellation/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "cancellation/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "subnormal",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "subnormal/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "subnormal/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "signed_zero",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "signed_zero/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "signed_zero/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "nonfinite",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "nonfinite/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "nonfinite/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          }
+        ],
+        "reference_batch": 0,
+        "difference_count_outer_batch": 16,
+        "reference_method": "full_shape_qk_and_softmax",
+        "scope": "Synthetic packed operands only; no timing or model acceptance",
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "visible_device": "7",
+        "source_sha256": {
+          "/tmp/fireprot-qk-softmax-v1/probe_fusion_v2.py": "fa104615e1cdf81dc9246209574d6b81746f592f95138e2b9ac871d83e2290c4",
+          "/tmp/fireprot-qk-softmax-v1/experiments/attention_trace/probe.py": "531d168ce84f7954b4e28f939ad4ab1efd47abd485ad8b20a5c713cbfcdc0c3b"
+        },
+        "settings": {
+          "strict_deterministic": true,
+          "warn_only": false,
+          "fill_uninitialized_memory": true,
+          "allow_tf32": false,
+          "preferred_blas_library": "_BlasBackend.Cublas"
+        },
+        "kernel": {
+          "mode": "published",
+          "kernel": {
+            "directory": "/tmp/fireprot-qk-softmax-v1/bundle",
+            "library": "/tmp/fireprot-qk-softmax-v1/bundle/fireprot_experimental_qk_softmax_049b6bf0baf5894f73e58341437e5a600e83a98acbc6d77d140b2adc1037c9c3.so",
+            "manifest_sha256": "122d70650b679d09db2b61a8d815985f26a5c59fcf817f2edb04a5c3584cbc09",
+            "build_identity_sha256": "049b6bf0baf5894f73e58341437e5a600e83a98acbc6d77d140b2adc1037c9c3",
+            "compatibility": {
+              "package": "fireprot_experimental_qk_softmax",
+              "target": "gfx90a",
+              "torch": "2.12.0a0+git78258b9",
+              "hip": "7.14.60850",
+              "c_abi": "experimental-qk-softmax-n1536-f32-v1"
+            }
+          }
+        },
+        "native_qk_observation": {
+          "einsums": [
+            {
+              "label": "QK",
+              "operations": [
+                {
+                  "operation": "aten::bmm",
+                  "inputs": [
+                    {
+                      "shape": [
+                        128,
+                        1536,
+                        32
+                      ],
+                      "strides": [
+                        49152,
+                        32,
+                        1
+                      ]
+                    },
+                    {
+                      "shape": [
+                        128,
+                        32,
+                        1536
+                      ],
+                      "strides": [
+                        49152,
+                        1536,
+                        1
+                      ]
+                    }
+                  ],
+                  "external_id": 2,
+                  "kernels": [
+                    {
+                      "name": "__amd_rocclr_fillBufferUnAligned.kd",
+                      "correlation": 4,
+                      "device": 7,
+                      "stream": 1,
+                      "launch": "hipMemset"
+                    },
+                    {
+                      "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+                      "correlation": 20,
+                      "device": 7,
+                      "stream": 1,
+                      "launch": "hipExtModuleLaunchKernel"
+                    }
+                  ],
+                  "completed": true,
+                  "metadata_source": "kineto_trace"
+                }
+              ]
+            }
+          ]
+        },
+        "native_trace": {
+          "path": "/tmp/fireprot-qk-softmax-v1/probe-v2-b32/native-qk-trace.json",
+          "sha256": "528ff7c010a1208887822aac064fbdfb08e0dd55d503e1a64bd5c9c4d28f89e6"
+        },
+        "native_qk_gemm": {
+          "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+          "correlation": 20,
+          "device": 7,
+          "stream": 1,
+          "launch": "hipExtModuleLaunchKernel"
+        },
+        "native_qk_initialization": [
+          {
+            "name": "__amd_rocclr_fillBufferUnAligned.kd",
+            "correlation": 4,
+            "device": 7,
+            "stream": 1,
+            "launch": "hipMemset"
+          }
+        ]
+      }
+    },
+    "probe-v2-b32-staged": {
+      "pin": {
+        "path": "/tmp/fireprot-qk-softmax-v1/probe-v2-b32-staged/probe.json",
+        "sha256": "aa9a0c0afd170a332a514b7c549a43b14644cbbc15aeff7fb128c23339126047"
+      },
+      "report": {
+        "schema_version": 1,
+        "completed": true,
+        "batch": 32,
+        "n": 1536,
+        "heads": 4,
+        "k": 32,
+        "seed": 101,
+        "dtype": "float32",
+        "records": [
+          {
+            "case": "random",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/partial_outer",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              32,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/partial_outer",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              32,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/additive",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/additive",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/all_masked",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/all_masked",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "cancellation",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "cancellation/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "cancellation/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "subnormal",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "subnormal/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "subnormal/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "signed_zero",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "signed_zero/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "signed_zero/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "nonfinite",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "nonfinite/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "nonfinite/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 301989888,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          }
+        ],
+        "reference_batch": 16,
+        "difference_count_outer_batch": 16,
+        "reference_method": "full_shape_qk_host_staged_outer_batch_softmax",
+        "scope": "Synthetic packed operands only; no timing or model acceptance",
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "visible_device": "7",
+        "source_sha256": {
+          "/tmp/fireprot-qk-softmax-v1/probe_fusion_v2.py": "fa104615e1cdf81dc9246209574d6b81746f592f95138e2b9ac871d83e2290c4",
+          "/tmp/fireprot-qk-softmax-v1/experiments/attention_trace/probe.py": "531d168ce84f7954b4e28f939ad4ab1efd47abd485ad8b20a5c713cbfcdc0c3b"
+        },
+        "settings": {
+          "strict_deterministic": true,
+          "warn_only": false,
+          "fill_uninitialized_memory": true,
+          "allow_tf32": false,
+          "preferred_blas_library": "_BlasBackend.Cublas"
+        },
+        "kernel": {
+          "mode": "published",
+          "kernel": {
+            "directory": "/tmp/fireprot-qk-softmax-v1/bundle",
+            "library": "/tmp/fireprot-qk-softmax-v1/bundle/fireprot_experimental_qk_softmax_049b6bf0baf5894f73e58341437e5a600e83a98acbc6d77d140b2adc1037c9c3.so",
+            "manifest_sha256": "122d70650b679d09db2b61a8d815985f26a5c59fcf817f2edb04a5c3584cbc09",
+            "build_identity_sha256": "049b6bf0baf5894f73e58341437e5a600e83a98acbc6d77d140b2adc1037c9c3",
+            "compatibility": {
+              "package": "fireprot_experimental_qk_softmax",
+              "target": "gfx90a",
+              "torch": "2.12.0a0+git78258b9",
+              "hip": "7.14.60850",
+              "c_abi": "experimental-qk-softmax-n1536-f32-v1"
+            }
+          }
+        },
+        "native_qk_observation": {
+          "einsums": [
+            {
+              "label": "QK",
+              "operations": [
+                {
+                  "operation": "aten::bmm",
+                  "inputs": [
+                    {
+                      "shape": [
+                        128,
+                        1536,
+                        32
+                      ],
+                      "strides": [
+                        49152,
+                        32,
+                        1
+                      ]
+                    },
+                    {
+                      "shape": [
+                        128,
+                        32,
+                        1536
+                      ],
+                      "strides": [
+                        49152,
+                        1536,
+                        1
+                      ]
+                    }
+                  ],
+                  "external_id": 2,
+                  "kernels": [
+                    {
+                      "name": "__amd_rocclr_fillBufferUnAligned.kd",
+                      "correlation": 4,
+                      "device": 7,
+                      "stream": 1,
+                      "launch": "hipMemset"
+                    },
+                    {
+                      "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+                      "correlation": 20,
+                      "device": 7,
+                      "stream": 1,
+                      "launch": "hipExtModuleLaunchKernel"
+                    }
+                  ],
+                  "completed": true,
+                  "metadata_source": "kineto_trace"
+                }
+              ]
+            }
+          ]
+        },
+        "native_trace": {
+          "path": "/tmp/fireprot-qk-softmax-v1/probe-v2-b32-staged/native-qk-trace.json",
+          "sha256": "fb09020e5cedf04e98d276255b0d2a9ff6271a543a8f1d393cfab877eedda2a1"
+        },
+        "native_qk_gemm": {
+          "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+          "correlation": 20,
+          "device": 7,
+          "stream": 1,
+          "launch": "hipExtModuleLaunchKernel"
+        },
+        "native_qk_initialization": [
+          {
+            "name": "__amd_rocclr_fillBufferUnAligned.kd",
+            "correlation": 4,
+            "device": 7,
+            "stream": 1,
+            "launch": "hipMemset"
+          }
+        ]
+      }
+    },
+    "probe-v2-b512": {
+      "pin": {
+        "path": "/tmp/fireprot-qk-softmax-v1/probe-v2-b512/probe.json",
+        "sha256": "078652f3c5d608985abf35d51818f7753201b81699ac9403383c54f5c4a0e333"
+      },
+      "report": {
+        "schema_version": 1,
+        "completed": true,
+        "batch": 512,
+        "n": 1536,
+        "heads": 4,
+        "k": 32,
+        "seed": 101,
+        "dtype": "float32",
+        "records": [
+          {
+            "case": "random",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 4831838208,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 4831838208,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 4831838208,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/partial_outer",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 4831838208,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              512,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/partial_outer",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 4831838208,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              512,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/additive",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 4831838208,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/additive",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 4831838208,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/all_masked",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 4831838208,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/all_masked",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 4831838208,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "cancellation",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 4831838208,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "cancellation/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 4831838208,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "cancellation/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 4831838208,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "subnormal",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 4831838208,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "subnormal/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 4831838208,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "subnormal/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 4831838208,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "signed_zero",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 4831838208,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "signed_zero/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 4831838208,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "signed_zero/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 4831838208,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "nonfinite",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 4831838208,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "nonfinite/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 4831838208,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "nonfinite/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 4831838208,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          }
+        ],
+        "reference_batch": 0,
+        "difference_count_outer_batch": 16,
+        "reference_method": "full_shape_qk_and_softmax",
+        "scope": "Synthetic packed operands only; no timing or model acceptance",
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "visible_device": "7",
+        "source_sha256": {
+          "/tmp/fireprot-qk-softmax-v1/probe_fusion_v2.py": "fa104615e1cdf81dc9246209574d6b81746f592f95138e2b9ac871d83e2290c4",
+          "/tmp/fireprot-qk-softmax-v1/experiments/attention_trace/probe.py": "531d168ce84f7954b4e28f939ad4ab1efd47abd485ad8b20a5c713cbfcdc0c3b"
+        },
+        "settings": {
+          "strict_deterministic": true,
+          "warn_only": false,
+          "fill_uninitialized_memory": true,
+          "allow_tf32": false,
+          "preferred_blas_library": "_BlasBackend.Cublas"
+        },
+        "kernel": {
+          "mode": "published",
+          "kernel": {
+            "directory": "/tmp/fireprot-qk-softmax-v1/bundle",
+            "library": "/tmp/fireprot-qk-softmax-v1/bundle/fireprot_experimental_qk_softmax_049b6bf0baf5894f73e58341437e5a600e83a98acbc6d77d140b2adc1037c9c3.so",
+            "manifest_sha256": "122d70650b679d09db2b61a8d815985f26a5c59fcf817f2edb04a5c3584cbc09",
+            "build_identity_sha256": "049b6bf0baf5894f73e58341437e5a600e83a98acbc6d77d140b2adc1037c9c3",
+            "compatibility": {
+              "package": "fireprot_experimental_qk_softmax",
+              "target": "gfx90a",
+              "torch": "2.12.0a0+git78258b9",
+              "hip": "7.14.60850",
+              "c_abi": "experimental-qk-softmax-n1536-f32-v1"
+            }
+          }
+        },
+        "native_qk_observation": {
+          "einsums": [
+            {
+              "label": "QK",
+              "operations": [
+                {
+                  "operation": "aten::bmm",
+                  "inputs": [
+                    {
+                      "shape": [
+                        2048,
+                        1536,
+                        32
+                      ],
+                      "strides": [
+                        49152,
+                        32,
+                        1
+                      ]
+                    },
+                    {
+                      "shape": [
+                        2048,
+                        32,
+                        1536
+                      ],
+                      "strides": [
+                        49152,
+                        1536,
+                        1
+                      ]
+                    }
+                  ],
+                  "external_id": 2,
+                  "kernels": [
+                    {
+                      "name": "__amd_rocclr_fillBufferUnAligned.kd",
+                      "correlation": 4,
+                      "device": 7,
+                      "stream": 1,
+                      "launch": "hipMemset"
+                    },
+                    {
+                      "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+                      "correlation": 18,
+                      "device": 7,
+                      "stream": 1,
+                      "launch": "hipExtModuleLaunchKernel"
+                    }
+                  ],
+                  "completed": true,
+                  "metadata_source": "kineto_trace"
+                }
+              ]
+            }
+          ]
+        },
+        "native_trace": {
+          "path": "/tmp/fireprot-qk-softmax-v1/probe-v2-b512/native-qk-trace.json",
+          "sha256": "e58147cb30cf8028642aeb1269c49a59de27b8710ac4e68076262b692ebd6f50"
+        },
+        "native_qk_gemm": {
+          "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+          "correlation": 18,
+          "device": 7,
+          "stream": 1,
+          "launch": "hipExtModuleLaunchKernel"
+        },
+        "native_qk_initialization": [
+          {
+            "name": "__amd_rocclr_fillBufferUnAligned.kd",
+            "correlation": 4,
+            "device": 7,
+            "stream": 1,
+            "launch": "hipMemset"
+          }
+        ]
+      }
+    },
+    "probe-v2-b1024": {
+      "pin": {
+        "path": "/tmp/fireprot-qk-softmax-v1/probe-v2-b1024/probe.json",
+        "sha256": "32c4278d7b1c1b379b9b0f829d286d40a1058fac08484c59ce39515232aa04e9"
+      },
+      "report": {
+        "schema_version": 1,
+        "completed": true,
+        "batch": 1024,
+        "n": 1536,
+        "heads": 4,
+        "k": 32,
+        "seed": 101,
+        "dtype": "float32",
+        "records": [
+          {
+            "case": "random",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 9663676416,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 9663676416,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 9663676416,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/partial_outer",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 9663676416,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1024,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/partial_outer",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 9663676416,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1024,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/additive",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 9663676416,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/additive",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 9663676416,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "random/all_masked",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 9663676416,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "random/all_masked",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 9663676416,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "cancellation",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 9663676416,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "cancellation/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 9663676416,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "cancellation/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 9663676416,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "subnormal",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 9663676416,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "subnormal/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 9663676416,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "subnormal/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 9663676416,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "signed_zero",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 9663676416,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "signed_zero/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 9663676416,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "signed_zero/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 9663676416,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          },
+          {
+            "case": "nonfinite",
+            "mode": "raw_after_lds",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 9663676416,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "nonfinite/zero",
+            "mode": "softmax",
+            "layout": "contiguous",
+            "passed": true,
+            "elements": 9663676416,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1536,
+              1
+            ]
+          },
+          {
+            "case": "nonfinite/zero",
+            "mode": "softmax",
+            "layout": "transposed",
+            "passed": true,
+            "elements": 9663676416,
+            "bitwise_mismatches": 0,
+            "mask_shape": [
+              1,
+              1,
+              1,
+              1536
+            ],
+            "mask_stride": [
+              1536,
+              1536,
+              1536,
+              1
+            ],
+            "bias_shape": [
+              1,
+              4,
+              1536,
+              1536
+            ],
+            "bias_stride": [
+              9437184,
+              2359296,
+              1,
+              1536
+            ]
+          }
+        ],
+        "reference_batch": 32,
+        "difference_count_outer_batch": 16,
+        "reference_method": "full_shape_qk_host_staged_outer_batch_softmax",
+        "scope": "Synthetic packed operands only; no timing or model acceptance",
+        "torch": "2.12.0a0+git78258b9",
+        "hip": "7.14.60850",
+        "visible_device": "7",
+        "source_sha256": {
+          "/tmp/fireprot-qk-softmax-v1/probe_fusion_v2.py": "fa104615e1cdf81dc9246209574d6b81746f592f95138e2b9ac871d83e2290c4",
+          "/tmp/fireprot-qk-softmax-v1/experiments/attention_trace/probe.py": "531d168ce84f7954b4e28f939ad4ab1efd47abd485ad8b20a5c713cbfcdc0c3b"
+        },
+        "settings": {
+          "strict_deterministic": true,
+          "warn_only": false,
+          "fill_uninitialized_memory": true,
+          "allow_tf32": false,
+          "preferred_blas_library": "_BlasBackend.Cublas"
+        },
+        "kernel": {
+          "mode": "published",
+          "kernel": {
+            "directory": "/tmp/fireprot-qk-softmax-v1/bundle",
+            "library": "/tmp/fireprot-qk-softmax-v1/bundle/fireprot_experimental_qk_softmax_049b6bf0baf5894f73e58341437e5a600e83a98acbc6d77d140b2adc1037c9c3.so",
+            "manifest_sha256": "122d70650b679d09db2b61a8d815985f26a5c59fcf817f2edb04a5c3584cbc09",
+            "build_identity_sha256": "049b6bf0baf5894f73e58341437e5a600e83a98acbc6d77d140b2adc1037c9c3",
+            "compatibility": {
+              "package": "fireprot_experimental_qk_softmax",
+              "target": "gfx90a",
+              "torch": "2.12.0a0+git78258b9",
+              "hip": "7.14.60850",
+              "c_abi": "experimental-qk-softmax-n1536-f32-v1"
+            }
+          }
+        },
+        "native_qk_observation": {
+          "einsums": [
+            {
+              "label": "QK",
+              "operations": [
+                {
+                  "operation": "aten::bmm",
+                  "inputs": [
+                    {
+                      "shape": [
+                        4096,
+                        1536,
+                        32
+                      ],
+                      "strides": [
+                        49152,
+                        32,
+                        1
+                      ]
+                    },
+                    {
+                      "shape": [
+                        4096,
+                        32,
+                        1536
+                      ],
+                      "strides": [
+                        49152,
+                        1536,
+                        1
+                      ]
+                    }
+                  ],
+                  "external_id": 2,
+                  "kernels": [
+                    {
+                      "name": "__amd_rocclr_fillBufferUnAligned.kd",
+                      "correlation": 4,
+                      "device": 7,
+                      "stream": 1,
+                      "launch": "hipMemset"
+                    },
+                    {
+                      "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+                      "correlation": 18,
+                      "device": 7,
+                      "stream": 1,
+                      "launch": "hipExtModuleLaunchKernel"
+                    }
+                  ],
+                  "completed": true,
+                  "metadata_source": "kineto_trace"
+                }
+              ]
+            }
+          ]
+        },
+        "native_trace": {
+          "path": "/tmp/fireprot-qk-softmax-v1/probe-v2-b1024/native-qk-trace.json",
+          "sha256": "183d23b4e38af86e1e3c3870c020f6a04e59fe641a736c17ea510cea940b0455"
+        },
+        "native_qk_gemm": {
+          "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+          "correlation": 18,
+          "device": 7,
+          "stream": 1,
+          "launch": "hipExtModuleLaunchKernel"
+        },
+        "native_qk_initialization": [
+          {
+            "name": "__amd_rocclr_fillBufferUnAligned.kd",
+            "correlation": 4,
+            "device": 7,
+            "stream": 1,
+            "launch": "hipMemset"
+          }
+        ]
+      }
+    }
+  },
+  "retained_failed_attempt": {
+    "pin": {
+      "path": "/tmp/fireprot-qk-softmax-v1/probe-b512/probe.json",
+      "sha256": "7e0e3ef1d95d1cc2b2ef72f34c58a0cb0f2f3ae88ea1c6db4de22a4cbe0bbbce"
+    },
+    "report": {
+      "schema_version": 1,
+      "completed": false,
+      "batch": 512,
+      "n": 1536,
+      "heads": 4,
+      "k": 32,
+      "seed": 101,
+      "dtype": "float32",
+      "records": [],
+      "reference_batch": 0,
+      "reference_method": "full_shape_qk_and_softmax",
+      "scope": "Synthetic packed operands only; no timing or model acceptance",
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "visible_device": "7",
+      "source_sha256": {
+        "/tmp/fireprot-qk-softmax-v1/experiments/mfma_qk/probe_fusion.py": "c2b43bb745bf332b235e8f8529ecf84d3be0baaf907c6ebf30a54d42dd5b36af",
+        "/tmp/fireprot-qk-softmax-v1/experiments/attention_trace/probe.py": "531d168ce84f7954b4e28f939ad4ab1efd47abd485ad8b20a5c713cbfcdc0c3b"
+      },
+      "settings": {
+        "strict_deterministic": true,
+        "warn_only": false,
+        "fill_uninitialized_memory": true,
+        "allow_tf32": false,
+        "preferred_blas_library": "_BlasBackend.Cublas"
+      },
+      "kernel": {
+        "mode": "published",
+        "kernel": {
+          "directory": "/tmp/fireprot-qk-softmax-v1/bundle",
+          "library": "/tmp/fireprot-qk-softmax-v1/bundle/fireprot_experimental_qk_softmax_049b6bf0baf5894f73e58341437e5a600e83a98acbc6d77d140b2adc1037c9c3.so",
+          "manifest_sha256": "122d70650b679d09db2b61a8d815985f26a5c59fcf817f2edb04a5c3584cbc09",
+          "build_identity_sha256": "049b6bf0baf5894f73e58341437e5a600e83a98acbc6d77d140b2adc1037c9c3",
+          "compatibility": {
+            "package": "fireprot_experimental_qk_softmax",
+            "target": "gfx90a",
+            "torch": "2.12.0a0+git78258b9",
+            "hip": "7.14.60850",
+            "c_abi": "experimental-qk-softmax-n1536-f32-v1"
+          }
+        }
+      },
+      "native_qk_observation": {
+        "einsums": [
+          {
+            "label": "QK",
+            "operations": [
+              {
+                "operation": "aten::bmm",
+                "inputs": [
+                  {
+                    "shape": [
+                      2048,
+                      1536,
+                      32
+                    ],
+                    "strides": [
+                      49152,
+                      32,
+                      1
+                    ]
+                  },
+                  {
+                    "shape": [
+                      2048,
+                      32,
+                      1536
+                    ],
+                    "strides": [
+                      49152,
+                      1536,
+                      1
+                    ]
+                  }
+                ],
+                "external_id": 2,
+                "kernels": [
+                  {
+                    "name": "__amd_rocclr_fillBufferUnAligned.kd",
+                    "correlation": 4,
+                    "device": 7,
+                    "stream": 1,
+                    "launch": "hipMemset"
+                  },
+                  {
+                    "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+                    "correlation": 18,
+                    "device": 7,
+                    "stream": 1,
+                    "launch": "hipExtModuleLaunchKernel"
+                  }
+                ],
+                "completed": true,
+                "metadata_source": "kineto_trace"
+              }
+            ]
+          }
+        ]
+      },
+      "native_trace": {
+        "path": "/tmp/fireprot-qk-softmax-v1/probe-b512/native-qk-trace.json",
+        "sha256": "b2bd2d06fed41a12bc6cc1d5793e68030bb1ac72877946a38e6284d2a254b3b9"
+      },
+      "native_qk_gemm": {
+        "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+        "correlation": 18,
+        "device": 7,
+        "stream": 1,
+        "launch": "hipExtModuleLaunchKernel"
+      },
+      "native_qk_initialization": [
+        {
+          "name": "__amd_rocclr_fillBufferUnAligned.kd",
+          "correlation": 4,
+          "device": 7,
+          "stream": 1,
+          "launch": "hipMemset"
+        }
+      ],
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 36.00 GiB. GPU 0 has a total capacity of 63.98 GiB of which 22.04 GiB is free. Of the allocated memory 41.32 GiB is allocated by PyTorch, and 317.99 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)"
+    },
+    "classification": "Validation reduction memory exhaustion before comparison; not an arithmetic mismatch"
+  },
+  "full_gpu_reference_batches": [
+    32,
+    64,
+    128,
+    256,
+    512
+  ],
+  "host_staged_reference_batches": [
+    32,
+    1024
+  ],
+  "archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/conditioning-cache-20261006/qk-softmax-v1-results.tar.gz",
+    "sha256": "63aa4db76ccc423f828fb890240400ed555d8b9c83fcc35f2413a9829c79e417",
+    "size": 1567299
+  },
+  "limits": [
+    "Seed101, FP32, strict determinism with memory filling; cublas/hipBLAS preference.",
+    "B1024 reference retains full native QK but computes complete-row softmax in outer-batch32 slices; does not claim full-batch softmax kernel selection identity.",
+    "Packed Q/KT only; original QKV storage/packing, native PV, model gates and timing remain untested.",
+    "Base scalar-LDS fusion only. Separate LDS swizzle/vector candidates have not run on GPU.",
+    "Earlier B512 count_nonzero OOM retained; corrected exact-count slicing changes no arithmetic or tolerance."
+  ]
+}

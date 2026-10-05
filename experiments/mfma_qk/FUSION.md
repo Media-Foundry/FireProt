@@ -1,8 +1,9 @@
 # Packed QK/softmax fusion prototype
 
-Status: local HIP compilation and static resource inspection only. No GPU
-execution, numerical acceptance, timing result or model integration yet.
-Do not build or run on DiamondHill while the D16 paired benchmark is active.
+Status: the base scalar-LDS fusion passes packed synthetic GPU checks at N1536,
+K32 and outer batches32/64/128/256/512/1024. B1024 uses a host-staged reference;
+see the acceptance scope below. No operator timing or full-model integration yet.
+The preceding D16 paired benchmark has completed and is archived.
 
 `fused_qk_softmax.cpp` combines the experimentally validated K8 even/odd MFMA
 grouping with the maintained FP32 softmax evaluation order. It accepts packed
@@ -89,8 +90,8 @@ Fresh output allocation and restricted dense input layouts bound the pointer ABI
 This is an experimental harness, not a maintained model dispatch boundary.
 
 Local syntax, wrong-environment report generation and four malformed/non-GPU
-input rejection checks pass. No GPU numerical screen has run yet. Neither the
-harness nor local compilation establishes fused-kernel correctness or speed.
+input rejection checks pass. Those local checks alone establish neither GPU correctness nor speed;
+the subsequent base GPU acceptance is recorded below.
 
 ## Separate LDS address candidate
 
@@ -148,7 +149,8 @@ Torch softmax on complete rows, and counts every differing FP32 bit. The report
 labels this reference method and batch bound. It is not a claim that native
 full-batch and partitioned softmax select identical GPU kernels. It cannot
 replace full-model acceptance. Check this reference mode at B32 against the
-ordinary full-GPU screen before using it for B1024; neither has run on GPU yet.
+ordinary full-GPU screen before using it for B1024. Both B32 modes and B1024
+subsequently pass, as recorded below.
 
 The host mode checks available CPU memory before allocation and releases the
 cached full score allocation after staging. It is a numerical diagnostic, never
@@ -177,3 +179,21 @@ The corrected probe is deployed as a new file, preserving the old script and
 failure. It must repeat both B32 reference modes before retrying B512 and the
 host-staged B1024 screen. No tolerance, input, arithmetic or kernel change is
 introduced by this count-buffer correction.
+
+
+## Completed base packed-operator screen
+
+The corrected count-buffer probe passes B32 in both reference modes, B512 with
+full GPU reference, and B1024 with host-staged native scores plus outer-batch32
+reference softmax. Together with the earlier B64/B128/B256 screens, all six
+outer batch sizes pass21 comparisons each. Nine successful screen invocations
+are retained, including repeated B32 checks. The original B512 validator OOM is
+also retained. Every comparison counts all FP32 bit patterns; no tolerance or
+scientific-work reduction is introduced.
+
+Evidence: `provenance/openfold3_qk_softmax_probe.json`. The archive includes
+sources, original/corrected probes, Rust build/cache receipt, published bundle,
+actual code-object inspection, trace observations and all success/failure logs.
+This accepts only packed QK/softmax synthetic checks for the base scalar-LDS
+kernel. It does not accept the swizzle/vector variants, original QKV packing,
+PV output, full models, other sequences/seeds, or any speedup claim.

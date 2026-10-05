@@ -219,11 +219,16 @@ confidence chunk ceiling. It does not establish arbitrary chunk sizes as bitwise
 interchangeable or identify the first internal floating-point operation that
 changed in the rejected512 run.
 
-The new direct original-Torch comparison is now LAUNCHED at
+The direct original-Torch comparison has completed at
 `/tmp/fireprot-combined-native-paired-v2/paired-n1536`, using the Rust three-pair
 AB/BA/AB scheduler on HIP7. Both native caches are disabled; the candidate uses
 HIP softmax, private score reuse, the bounded confidence tuner and pair/atom
 conditioning caches in the same source tree. All74 preparation pins matched and
-all eight GCDs were observed idle before launch. No other FireProt GPU workload,
-compilation or heavy remote library scan is allowed during this sequence.
-Results remain pending; do not multiply earlier separate speedup ratios.
+all eight GCDs were observed idle before launch and after completion. No other
+FireProt GPU workload, compilation or heavy remote library scan ran during the
+sequence. Three-pair E2E medians are949.999 s native and633.712 s combined
+(1.49910x); model medians are854.616 s and538.416 s (1.58728x). All11 arrays and
+CIF identities pass across the pairs/repeats; the first native anchor separately
+matches the historical native output. These are direct measurements of the full
+combination, not isolated attribution to storage reuse or a product of old ratios.
+See provenance/openfold3_combined_native_e2e_n1536.json for conditions and evidence.

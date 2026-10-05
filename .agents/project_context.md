@@ -899,3 +899,73 @@ MFMA next-run archive prepared LOCALLY only:
 It contains build/probe/kernel/trace-helper sources, notices, source hashes and
 EXECUTION.md. Not deployed. Target future root /tmp/fireprot-mfma-qk-v1, fresh
 cache/build/bundle/probe subdirectories; finish paired collection/archive first.
+
+## Direct combined E2E complete; D16/MFMA numerical work active (2026-10-06)
+
+combined-native-paired-v2 completed all six invocations and three comparisons.
+E2E medians949.998639->633.711698 s,1.499102x (33.2934% less time); model medians
+854.615744->538.416213 s,1.587277x. All11 arrays, repeated-anchor comparisons,
+CIF identities and the historical-native anchor check pass. Every candidate has
+5472 in-place launches, zero storage fallback, confidence256 and both caches
+200calls/199hits/1miss/0fallback. Evidence:
+provenance/openfold3_combined_native_e2e_n1536.json. This is a direct measurement,
+not a product of previous ratios and not attribution to individual optimizations.
+Archive combined-native-paired-v2-results.tar.gz in the durable conditioning-cache
+directory includes controls and all six output directories; SHA
+96f3d23db99c175f1eefa4a75175d0c3e4468a9f27982181d5b665fb5cd0bd77.
+All six workers and controller1868435 exited; all eight GCDs observed idle.
+The local SSH transport lingered after remote completion and was explicitly
+closed (session2278 exit255). This is transport cleanup, not a model failure;
+benchmark.json authoritatively records succeeded. Collector/results/archive:
+/tmp/fireprot-collect-combined-pairs-v2.py,
+/tmp/fireprot-combined-native-paired-v2-results.json,
+/tmp/fireprot-combined-native-paired-v2-archive.json.
+
+New D16 numerical controls /tmp/fireprot-head16-model-v1, fresh copied worker,
+69 source/control pins. N1000 HIP5 PID1922873/session19996; N1536 HIP6
+PID1922872/session44303. Both supervisors confirmed live. Root n1000.log/n1536.log,
+request n1000.json/n1536.json, profile.json; run IDs head16-model-v1-nNNNN.
+Preparation: provenance/openfold3_head16_model_preparation.json, durable archive
+head16-model-v1-preparation.tar.gz SHA
+b3ada9b202e1f11146ea6a6112ebec6017eda16b6ef1ff5e048d9c2981c54159.
+Collector /tmp/fireprot-collect-head16-models.py; require D16 submissions and all11
+original-native arrays at both lengths. All production artifacts stay unchanged.
+
+MFMA archive deployed with all source hashes verified to /tmp/fireprot-mfma-qk-v1.
+Rust build and publication succeed; build session4655 and publish53375 exited0.
+Bundle /tmp/fireprot-mfma-qk-v1/bundle, manifest
+e2c86aa1434b7371070e528a55d7a601151fc3064e31cbbb93477d1c9e102f38;
+library SHA e68e3a765f8d1bb31965a1e3261d77498dd0052b5664bfdc1c2ffb23a64ae27d.
+Actual remote code-object inspection matches local counts (8 static MFMA,
+26VGPR/24SGPR, wave64, zero reported spills/LDS/private segment). Numeric probe
+launched on HIP7, session31330; root probe.log and probe/probe.json. Do not rerun
+into existing directories. Integer lane calibration must precede full K32 checks.
+These parallel jobs are numerical diagnostics, not E2E/performance measurements.
+
+D16 N1000 completes, session19996 exit0; all11 original-native arrays exact.
+264 D16 plus1702 D32 submitted launches, zero storage fallback, all chunks1024.
+N1536 PID1922872/session44303 remains live at elapsed7:03. Partial evidence:
+provenance/openfold3_head16_models.json; local /tmp/fireprot-head16-models.json.
+Refresh using /tmp/fireprot-collect-head16-models.py over SSH stdin once terminal,
+then archive both outcomes. No D16 E2E result yet.
+
+MFMA initial probe31330 exits1: integer lane calibration passes, but standalone
+Torch default hipBLASLt differs from OpenFold3's explicit cublas/hipBLAS preference.
+Its first BMM also includes a uniquely correlated runtime initialization memset,
+so the initial one-total-kernel observation gate fails before score comparison.
+Upstream policy is openfold3/entry_points/import_utils.py::_configure_torch_backend.
+Corrected local probe.py sets that same BLAS preference and separately retains
+the observed initialization memset; unknown/ambiguous kernels still fail. Deployed
+as NEW /tmp/fireprot-mfma-qk-v1/probe-v2.py, output probe-v2/, log probe-v2.log.
+Original source/results remain immutable. Session32847 exits1: lane calibration
+passes and actual native QK name exactly matches the accepted model trace, but
+random K32 scores differ at193,776,224 of301,989,888 elements. Later synthetic
+cases are unexecuted; this candidate is numerically rejected, never integrated.
+Evidence: provenance/openfold3_mfma_qk_probe.json, archive mfma-qk-v1-results.tar.gz
+SHA f7012b71961f6e8ec664ca59d12e4b69f91c7010d4362675c766284928b1ed36.
+Local full captures /tmp/fireprot-mfma-qk-results.json and
+/tmp/fireprot-mfma-qk-probe-v2.json. Authorized cdna2_isa_review agent is now
+analyzing native K32 fragment/input order read-only using local ASM and these
+new findings; no GPU work or source changes delegated. Next possible diagnostic:
+test K4-fragment permutations against a small tile sliced from the full native
+reference, then require full K32 equality before any fusion. Cause not yet proven.

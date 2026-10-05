@@ -196,7 +196,7 @@ and the earlier 1.37575x softmax ratio are separate measurements; their product
 is not a directly measured combined-versus-original-Torch result. The cache
 remains experimental, scoped to the verified immutable rollout.
 
-## Combined reuse candidate: exact models accepted, E2E pending
+## Combined reuse: direct original-Torch N1536 E2E result
 
 The current experimental combination retains the maintained HIP kernel, reuses
 private QK score storage, caches static pair/atom conditioning within each rollout,
@@ -213,9 +213,31 @@ rejected. Keeping the measured ceiling restores the full exact-array gate; this
 is not a license to change arbitrary numerical chunking without verification.
 See `experiments/hip_softmax/INPLACE.md` for both rejected and accepted evidence.
 
-A direct original-Torch versus combined AB/BA/AB N1536 E2E comparison has now
-started on HIP7 with the same scientific workload and a shared copied worker.
-Both pair/atom caches are disabled in the native arm. All other FireProt GPU
-work is stopped during the sequence. Results are pending; the earlier separate
-ratios are not a directly measured combined speedup. Launch/source/control pins:
+A direct original-Torch versus combined AB/BA/AB N1536 comparison is complete:
+
+| Timing scope | Original strict Torch median | Combined median | Ratio |
+| --- | ---: | ---: | ---: |
+| Complete invocation | 949.999 s | 633.712 s | 1.49910x |
+| Model forward | 854.616 s | 538.416 s | 1.58728x |
+
+Complete-invocation time decreases by 33.29%. The three individual E2E pair
+ratios are 1.46939x, 1.51339x and 1.50073x. All three pairs pass all11 arrays
+bitwise and CIF atom identities. Repeated outputs agree with the first native
+anchor, which separately matches all11 arrays of the historical native reference.
+Each candidate records5472 in-place launches, zero storage fallbacks, confidence
+chunk256, and pair/atom caches each with200 calls/199 hits/one miss/no fallback.
+
+Both arms use a shared frozen worker on HIP7/PCI93, FP32, strict determinism with
+memory filling, R3/four trunk passes, D200, S1 and seed101. Native bypasses HIP and
+both caches. Every invocation starts a fresh model process; filesystem caches are
+not flushed. No other FireProt GPU work runs during the sequential measurement.
+Selected-device isolation is continuously monitored; unrelated host jobs are not
+continuously audited. All eight GCDs are observed idle after completion.
+
+This is a directly measured combination, not a product of earlier ratios. It
+does not isolate the contribution of each optimization and does not establish
+performance at other lengths, seeds or workloads. Timing-boundary differences
+are retained but are not independently measured startup phases.
+Evidence: `provenance/openfold3_combined_native_e2e_n1536.json`.
+Launch/source/control pins:
 `provenance/openfold3_combined_native_paired_v2_preparation.json`.

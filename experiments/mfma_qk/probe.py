@@ -31,11 +31,15 @@ def main(destination):
         torch.use_deterministic_algorithms(True, warn_only=False)
         torch.utils.deterministic.fill_uninitialized_memory = True
         torch.backends.cuda.matmul.allow_tf32 = False
+        # Match pinned OpenFold3 entry_points/import_utils.py::_configure_torch_backend.
+        # On ROCm this Torch API spelling selects hipBLAS rather than hipBLASLt.
+        torch.backends.cuda.preferred_blas_library('cublas')
         torch.manual_seed(101)
         report['settings'] = dict(strict_deterministic=torch.are_deterministic_algorithms_enabled(),
             warn_only=torch.is_deterministic_algorithms_warn_only_enabled(),
             fill_uninitialized_memory=torch.utils.deterministic.fill_uninitialized_memory,
-            allow_tf32=torch.backends.cuda.matmul.allow_tf32)
+            allow_tf32=torch.backends.cuda.matmul.allow_tf32,
+            preferred_blas_library=str(torch.backends.cuda.preferred_blas_library()))
         selected = select_c('fireprot_experimental_qk_mfma16', 'FIREPROT_QK_MFMA16',
                             'experimental-qk-mfma16-f32-v1')
         if selected is None:
@@ -120,11 +124,23 @@ def main(destination):
                         hashlib.sha256(trace_path.read_bytes()).hexdigest())
                     operations = observation['einsums'][0]['operations']
                     bmms = [op for op in operations if op['operation'] == 'aten::bmm']
-                    if (len(bmms) != 1 or len(bmms[0]['kernels']) != 1
+                    if (len(bmms) != 1
                             or bmms[0]['inputs'] != [
                                 dict(shape=list(query.shape), strides=list(query.stride())),
                                 dict(shape=list(key.shape), strides=list(key.stride()))]):
                         raise RuntimeError('Native QK kernel/layout observation is incomplete')
+                    # The first BLAS call can include a uniquely correlated runtime
+                    # initialization memset. Preserve it; do not confuse it with GEMM.
+                    gemms = [k for k in bmms[0]['kernels'] if k['launch'] in (
+                        'hipExtModuleLaunchKernel', 'hipModuleLaunchKernel')]
+                    initialization = [k for k in bmms[0]['kernels'] if (
+                        k['launch'] == 'hipMemset'
+                        and k['name'] == '__amd_rocclr_fillBufferUnAligned.kd')]
+                    if (len(gemms) != 1
+                            or len(gemms) + len(initialization) != len(bmms[0]['kernels'])):
+                        raise RuntimeError('Native QK contains ambiguous or unexplained kernels')
+                    report['native_qk_gemm'] = gemms[0]
+                    report['native_qk_initialization'] = initialization
                     # This trace is diagnostic only; no latency is reported from it.
                 else:
                     expected = torch.bmm(query, key)

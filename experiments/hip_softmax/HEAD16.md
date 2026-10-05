@@ -43,3 +43,11 @@ Local preparation checks: the patch applies to the pinned base and the patched
 Python source compiles. These checks do not establish numerical equivalence.
 The patch adapts an Apache-2.0 file and remains Apache-2.0; retain the target's
 existing copyright and license notices.
+
+## First complete-model observation
+
+N1000 completes and matches all11 original-native arrays bitwise. Its runtime
+records264 actual D16 softmax submissions plus1702 D32 submissions, zero storage
+fallbacks, and all module chunk tuners remain1024. Both conditioning caches
+retain one miss and199 hits. N1536 remains running; no paired performance result
+or promotion is established. See `provenance/openfold3_head16_models.json`.

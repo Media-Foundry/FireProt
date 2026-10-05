@@ -1,7 +1,8 @@
 # Packed QK MFMA probe
 
-Status: local HIP compilation passed; GPU execution remains untested.
-No lane mapping, numerical equivalence, latency gain or model integration is claimed.
+Status: HIP build and integer lane calibration pass; full K32 random scores fail
+bitwise comparison. The candidate is rejected for model integration. No latency
+gain or complete numerical equivalence is claimed.
 Do not build or run this probe on DiamondHill while the sequential E2E benchmark
 is active. Python syntax checking is not a HIP compilation or GPU acceptance test.
 
@@ -39,16 +40,40 @@ stops on the first mismatch and records failure; no tolerance or fallback hides
 it. Packing and model attention are not replaced. This packed score experiment
 does not establish behavior for original strided QKV or other GEMM signatures.
 The random reference call retains a Kineto trace and requires one BMM with the
-expected packed layouts and one uniquely correlated GPU kernel. It reuses
+expected packed layouts and one uniquely correlated GEMM kernel. A first-use
+runtime initialization memset is retained separately; unknown additional kernels
+are rejected. The probe explicitly selects Torch's `cublas` preference on ROCm
+(hipBLAS), matching the pinned OpenFold3 entry-point configuration. It reuses
 `experiments/attention_trace/probe.py`; include that source when copying this
 experiment. Compare its actual symbol with the accepted model trace before
 attributing any score agreement to reproduction of that particular native kernel.
 Profiler timings are not performance evidence.
 
-## Future execution gates
+## First GPU results
 
-1. Finish the active E2E sequence and verify it is terminal before any new GPU
-   probe or heavy DiamondHill build/inventory work.
+The Rust-built experimental DiamondHill artifact passes the single-instruction
+integer lane calibration. The first probe then fails its native-kernel observation
+gate: standalone Torch defaults to hipBLASLt, unlike the model entry point's
+explicit hipBLAS preference, and the trace also includes an initialization memset.
+That failed run remains retained and is not a numerical acceptance result.
+
+The corrected probe selects hipBLAS and records initialization separately from
+one correlated GEMM. Its full native kernel name exactly matches the accepted
+model QK trace. Random K32 inputs differ in193,776,224 of301,989,888 score elements.
+The probe stops; cancellation, subnormal, signed-zero and nonfinite cases have
+not run. Lane calibration alone does not prove the full reduction order or
+arithmetic equivalence. Investigate fragment order and instruction semantics
+before any softmax fusion or model integration; do not loosen the bitwise gate.
+
+Both attempts, source/build/publication pins and the result archive are recorded
+in [GPU evidence](../../provenance/openfold3_mfma_qk_probe.json). These are
+concurrent numerical diagnostics, not timing measurements.
+
+## Experiment gates
+
+1. Require any active E2E sequence to be terminal before new GPU diagnostics or
+   heavy DiamondHill build/inventory work. The first three-pair combined sequence
+   completed and was archived before these probes started.
 2. Build `qk_probe.cpp` via `build.py`, which uses the existing Rust HIP build/cache
    service. Use the pinned OpenFold3 environment and an isolated cache. Retain
    the full compiler command, source/header receipts and diagnostics; inspect

@@ -1552,3 +1552,58 @@ Torch boundaryownstensorallocationandGPUcalls. PreserveD16/N1000/B64/native
 fallback andfrozenacceptedhead16baseline. Needoperatorcoverage/peak/tunercounters,
 11arrays+CIFmodelchecks, thenisolatedpairedE2E. GitNexusplan skillread; planning
 willpinthisacceptedlayoutstate andexistingRustregistry/bridgeextension patterns.
+
+## Shared model workspace policy implemented (2026-10-06)
+
+Previous turn pushed a2bfe6b, the complete model-integration plan at
+docs/plans/2026-10-06-gitnexus-plan-openfold3-workspace-model-integration.md.
+Current execution branch is openfold3-workspace-model-integration, forked from
+a2bfe6b. gitnexus-work skill active; safe read-plan receipt and provenance drift
+comparison in /tmp/fireprot-workspace-execution.json. All12 cited paths match;
+only plan commit moved HEAD. Untracked docs/isa/CDNA2.pdf remains excluded from Git.
+
+Step1 committed ee406a0: core WorkspaceLease checked shape/budget, actual Rust
+thread ownership, bound device/stream, New/Reserved/Ready/Busy/Failed/Draining/
+Released states. Reservation rollback only before allocation commitment.
+charged_bytes conservatively tracks reserved/potential storage; committed_bytes
+requires allocation acknowledgment. Failed drain cannot release. No GPU calls.
+Step2 committed7d5ec05: additive bridge.WorkspaceLease; existing ABI_VERSION1 and
+OperatorRegistry semantics preserved. Rebuilt release CLI/bridge locally:
+fireprot SHA6e81349891a472b92bc29ff43825628a3d0352e56996784a20594e6c7c2b4fce;
+bridge SHAe021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a.
+Remote accepted binaries have NOT been overwritten; both future comparison arms
+need the newly pinned build. Exact current source includes subsequent Python-only
+model owner (step3), with no additional Rust binary change.
+
+ModelWorkspaceFusion in experiments/mfma_qk/model_workspace.py creates one
+WorkspaceFusion(B256) and one Rust lease; supports outer256/512/1024, N1536/D32.
+Explicit ordinary strict torch.empty preinitializes the existing pool's private
+scores before first launch. One bias conversion, B256 kernel/nativePV per slice,
+independent outputs and one shared lifetime. Does not modify old wrappers.
+Every invocation rechecks strict settings/current device/stream/capture/owner;
+eligibility is immutable tensor metadata only. BaseException poisons after work
+starts; close drains/drops before release acknowledgment; context manager preserves
+original errors if cleanup also fails. manifest separates successful kernel calls,
+complete outer-call histogram, allocations, charge/commit bytes and release.
+No model hook/worker overlay is installed yet. No mixed-batch GPU run yet.
+
+All180 cargo test --workspace --locked tests pass;47 targeted Python tests pass
+(13 new model owner,5 bridge,10 registry,19 old workspace/microbatch/layout).
+Seven new Rust core tests included in180. Core/bridge Clippy with -D warnings
+passed. Initial test harness failures were invalid SimpleNamespace __class__
+assignment and patching Torch's fill property via import strings; corrected
+without changing implementation or weakening assertions. CPU fault injection
+uses allocation/device doubles, never claims GPU parity.
+
+Remote read-only revalidation: accepted /tmp/fireprot-head16-paired-v1 exists.
+Combined bundle /tmp/fireprot-qk-softmax-combined-v12/bundle/kernel.json matches
+1f04b110c79520749dc2a9a483b77f35330b559f5c043dfcdd13c72947ec5122.
+Usable controls /tmp/fireprot-qk-headlast-v1/controls-b256.json fusion section,
+numerical_screen /tmp/fireprot-qk-softmax-combined-v12/probe-b256/probe.json SHA
+e139e51ce1e7c14646ac54c1bcd415b0b0526aec422296eb87c8316d4e76ae39.
+No new remote process launched this turn. Next: qualify mixed B256/512/1024 on
+HIP7 with one owner, full nativeQK+accepted in-place softmax+nativePV reference,
+full probability/output bits and old-output independence,1allocation9GiB and
+release receipts. Stage a new source root and new bridge, preserve existing
+reference artifacts; then overlay frozen accepted D16 worker, model gates and
+isolated three-pair timing. Keep goal active; no workspace model/E2E gain yet.

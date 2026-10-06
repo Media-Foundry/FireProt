@@ -186,3 +186,32 @@ layout checks do not establish model memory or E2E benefit. Evidence:
 `provenance/openfold3_qk_headlast_benchmark.json`; successful archive
 `qk-headlast-v1-results.tar.gz`, SHA256
 `2722f1a18d94292209c52f91a5bf5565b2fe64b0558c2a554798fa36b3c9210b`.
+
+## Rust policy and shared model owner (2026-10-06)
+
+The opt-in model owner is implemented in `model_workspace.py`, but is not yet
+installed into model dispatch or GPU-qualified as a mixed-batch lifetime.
+`fireprot-core::workspace::WorkspaceLease` owns checked size/budget accounting,
+thread/device/stream binding and allocation/use/drain/release transitions. The
+additive CPython bridge exposes acknowledgments; it neither holds a tensor nor
+independently verifies GPU completion.
+
+`ModelWorkspaceFusion` owns one B256 pool for outer B256/B512/B1024. It allocates
+through ordinary `torch.empty` under strict filling, normalizes bias once per
+complete call, and queues each kernel/native-PV pair on the bound stream.
+Existing fixed-batch benchmark wrappers remain unchanged. D16, N1000, B64 and
+unmeasured metadata are ineligible for this experimental path.
+
+Cleanup drains the pool before acknowledging release. An interrupted or failed
+allocation retains a conservative charge until cleanup; committed bytes are
+reported separately. Failed submission poisons the owner. A failed drain does
+not clear its charge, and context cleanup preserves an existing forward error.
+Released live tensor bytes do not imply that Torch returned cached allocation
+to the device allocator.
+
+Validation: all180 Rust workspace tests and47 related Python tests pass,
+including7 new core tests,5 bridge tests and13 model-owner cases. The CPU
+model-owner tests use explicit allocation/device test doubles around the real
+Rust lease; they are not numerical or GPU memory evidence. Core/bridge Clippy
+checks pass with warnings denied. Next gates are mixed-batch GPU score/PV
+bitwise comparison, N1536/N1000 model arrays/CIF, then isolated paired E2E.

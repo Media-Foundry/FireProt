@@ -2386,3 +2386,60 @@ historicalHIP/SMImapping isolationlimitation,worker-timeboundary excludesparent
 preflight/startup,andsamecheckoutnativebaseline (notunmodifiedupstream). Do not
 silentlypromotehistoricalmeasurements tonewRustisolatedE2E. Ongoingtaskstillboth
 OpenFold3triangleoptimizations,notreplacedbyrecap.
+
+## User sequencing update: finish this cycle, one more, then README (2026-10-06)
+
+User explicitly requests: finish the current combined triangle-memory cycle;
+perform ONE additional optimization cycle; then improve the main README with
+clear entry-point usage and E2E speedup ratios. Preserve correctness checks each
+trial. Do not jump to README before the second cycle's evidence exists. Final
+README must distinguish direct original-implementation comparison from incremental
+ratios, model timing from complete-request timing, model scientific contracts,
+experimental versus maintained paths, and historical isolation limitations.
+Repository prose remains English; responses Chinese. This narrows the formerly
+open-ended optimization sequence to these two cycles followed by documentation.
+Current cycle is controlled by2235527 /tmp/fireprot-triangle-e2e-v1; no competing
+GPU work or heavy builds while its benchmark runs. Next cycle should target the
+remaining major measured cost (attention QK+softmax/PV), not just small key packing;
+new arithmetic/kernel scope requires a focused new/deepened implementation plan.
+
+## Combined model and N1000 gates pass; six-run E2E now active (2026-10-06)
+
+Combinedmodel2229872/Rust2229881 TERMINAL SUCCESS: all11/fullCIF against3anchors,
+430multiplication calls,7740copies,5064keypacks. N1000 controllerfallback completed
+all11/fullCIF against zero-masknative; acceptedmul0,copies0,keycalls0,nativefallback
+positive. Evidence provenance/openfold3_triangle_combined_model_v1.json includes
+both gates. No E2E acceptance until allpairs finish.
+
+ACTIVE controller2235527 now stage=benchmark, Rustscheduler2242825 under
+/tmp/fireprot-triangle-e2e-v1. paired-n1536/order.jsonl begins baseline0, same
+frozen sharedworker and expectedmemoryflag/profilechanges. Do not mutate frozen
+worker,run additionalGPUjobs or heavyremotebuilds untilterminal. Rootstatus,
+benchmark.stdout/stderr,paired-n1536/benchmark.json,order.jsonl authoritative.
+
+NEXT-cycle GitNexus plan PUBLISHED but execution not yet started:
+docs/plans/2026-10-06-gitnexus-plan-openfold3-attention-final-cycle.md.
+CurrentHEAD9aab0cd,typedcurrent schema4index,strictrefresh1. Planning receipts
+/tmp/fireprot-attention-cycle2-{provenance,read-plan,status}.json;read-plan digest
+must be retained on execution. Raw v12 source locally
+/tmp/fireprot-fusion-combined-v12.cpp plus asm/metadata. Read all6patches and
+FUSION.md; retainaccumulationorder. Alternatives: nativebmm(out=retainedscores)+
+existingOwnedScoreSoftmax; or two16KiBLDS buffers removingonly5reusebarriers,
+retaining6producerbarriers. QK+softmax144ms vsPV71ms/call actualprofile.
+No new GPU experiment launched. Plan supports exactlyoneadditionalcycle before
+README, notindefiniteoptimization. Source-aware queriescontextWorkspaceFusion,
+PDGcontrols10of114 edges (explicitlypartial); owner/lock/drain constraintssource
+verified. ExistingWorkspaceFusion remainsunchangedoutsideexperimentalscopes.
+
+README preparation read-only findings: docs/rust-running.md still has obsolete
+intro 'accelerated OpenFold3 pending' and migrationremaining-gates text despite
+acceptedroutes. Repair relevantlinkedusage documentation when finalREADMEdone.
+Actual target/release/fireprot --help confirms inspect/infer/infer-batch,
+measure-inference/benchmark-pairs/compare-runs,build/install commands. Build all
+CLI/runtime/bridge viaCargo--locked; scripts/infer.sh isexecRustinfer,smoke.sh is
+Rustinfer-batch. Requests requirefresh run_id/output_dir; RustsetsGPUvisibility
+fromrequest,so don'tsuggestbareHIP_VISIBLE_DEVICES overridesprofiles.
+Atlasfoldfinal docs: N1536chunked-native553.359->203.910s2.714x,sequentialsets,
+uncutnativeOOM; excludesimports/hash/preflight,seed102R4/fivepassesD100S1native
+precision withAtlasLMpreserved. Earlierpaired2.671x isdifferentcandidate. Need
+clearlylabel allmodels'timingboundaries andbench versions in READMEtable.

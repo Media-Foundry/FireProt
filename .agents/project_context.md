@@ -2484,3 +2484,21 @@ and5reusebarriers. Potentialtwo-buffer transformation doublesstage, adds
 MFMA/add/reductionorder. NeedcompilerISA/resourceproof andGPUstressbeforerelying.
 Nativebmmout prototype stillneeds selectedkernel/hiddenallocation inspection
 beforepromotion even ifbitwise/replaypass. UserISA PDF untracked; nevercommit.
+
+## Next model supplied by user: Protenix Base-default v0.5.0 (2026-10-06)
+
+User's NEXT target checkpoint on DiamondHill:
+/media/IntelSSD/fireprot/runtime/checkpoint/protenix_base_default_v0.5.0.pt.
+Remote stat/readlink verified file exists,1474265486bytes,resolvedpathidentical,
+mtime2026-10-06 21:34:54+0800. No fullhash or torchload yet; deferweightI/O until
+currentbenchmarkterminal. Inventory appended docs/diamondhill-checkpoints.md.
+This extends the queue AFTER currentOpenFold3cycle +oneadditionalcycle +README,
+not an instruction to interrupt those. Long1000/1536workloads remain priority.
+
+Source read Protenix/configs/configs_model_type.py:70-76 Basev0.5 defaultN_cycle10,
+N_step200; Mini:153-180 C4,D5 andsmallerblocks. Resolveactualpinnedconfig before
+baseline; do notuseMini's work/speedupratios as Base evidence. Maintainedworker
+python/fireprot_workers/protenix.py:18-24 explicitlyrejectsBase now; requires
+explicitintegration,source/weightpins,capabilityaudit,strictload andnativeagreement
+before optimization claims. No source/modelexecution change made inthisturn.
+Current E2E2235527/2242825 and queuedfinalcycle2250000 unchanged,stillactive.

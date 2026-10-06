@@ -70,3 +70,27 @@ ESM2-3B checkpoint and contact-regression companion under
 [Mini-ESM integration](protenix-mini-esm.md) and the checked-in requests.
 These files are separate from AtlasFold's AtlasLM checkpoint. All three are
 required by the Mini-ESM request contract.
+
+## Protenix Base-default v0.5.0: next target
+
+User-supplied checkpoint, remote metadata verified on 2026-10-06:
+
+- Path: `/media/IntelSSD/fireprot/runtime/checkpoint/protenix_base_default_v0.5.0.pt`
+- Size: **1,474,265,486 bytes**.
+- The resolved path is identical to the supplied path.
+- Full SHA-256, checkpoint contents and model loading have not yet been verified.
+  Perform those checks after the running OpenFold3 benchmark to avoid additional
+  checkpoint I/O during timing.
+
+This is a separate target from the measured Mini-default model. The local
+upstream model configuration selects 10 cycles and 200 diffusion steps for
+Base-default v0.5.0, versus Mini-default's 4 cycles and 5 steps. Confirm the full
+resolved configuration against the pinned runtime source before benchmarking;
+do not silently apply the Mini workload or transfer its speedup claims.
+The maintained worker currently accepts Mini-default, Mini-ESM and Tiny-default,
+so Base requires an explicit integration and validation step.
+
+Sequence: complete the current OpenFold3 cycle, the one additional attention
+cycle, and README clarification; then integrate Base and profile representative
+1000/1536-residue workloads with native and optimized outputs checked at matched
+scientific settings. Preserve these weights unchanged and outside Git.

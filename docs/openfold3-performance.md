@@ -1,6 +1,38 @@
 # OpenFold3 / OpenBind-0 AMD performance work
 
-## Current whole-model bottlenecks (2026-10-06)
+## Latest accepted result and final-cycle decision (2026-10-06)
+
+Three complete N1536 pairs accept the triangle-memory combination at
+**452.471 → 416.226 seconds E2E (1.0871x incremental)** and
+**356.595 → 321.699 seconds model time (1.1085x)**. All six outputs match all
+11 arrays and full CIF bytes against three anchors; N1000 fallback passes.
+See [the complete comparison](#triangle-memory-accepted-incremental-e2e).
+
+The requested one additional attention cycle is complete. Both alternatives
+preserve exact raw scores/probabilities and trained attention outputs, but lose
+complete-operator performance with the same accepted HIP K packing:
+
+| Alternative | Ending attention, baseline → candidate | Starting attention, baseline → candidate | Decision |
+| --- | ---: | ---: | --- |
+| Native BMM into retained scores + owned HIP softmax | 276.495 → 306.176 ms | 266.272 → 296.169 ms | Reject; about 11% slower |
+| Double-LDS fused QK/softmax | 276.268 → 279.788 ms | 266.095 → 269.559 ms | Reject; about 1.3% slower |
+
+Each passes 21 numerical cases and real trained start/end replay, with six
+measured calls per arm after first-call exclusion. The double-buffer variant
+reduces barriers from11 to6 and doubles LDS16 to32KiB without spills, but that
+static improvement does not translate to lower latency. Its first publication
+attempt was correctly rejected after an inspection command rewrote the
+unpublished experimental ELF; a fresh isolated build and separate inspection
+output resolved the tooling error without changing arithmetic or acceptance.
+
+Neither rejected candidate proceeds to model promotion or E2E measurement.
+Evidence: `provenance/openfold3_attention_final_split_result.json` and
+`provenance/openfold3_attention_final_double_result.json`. The accepted
+triangle-memory combination is retained. This closes the requested cycle,
+not a claim of a global performance optimum. The historical development
+sequence below keeps its original timing boundaries.
+
+## Workspace-era whole-model bottlenecks (2026-10-06)
 
 The latest N1536 workspace candidate passes a coarse stage-event diagnostic
 under strict FP32/R3/D200/S1/seed101. All 11 output arrays and full CIF bytes
@@ -49,7 +81,7 @@ operator attribution. This prioritizes the remaining native multiplication cost
 alongside the already optimized attention path; no new kernel gain is claimed.
 See [fine-grained evidence](../provenance/openfold3_latest_pairformer_profile.json).
 
-## Latest workspace increment (2026-10-06)
+## Workspace increment before triangle copies (2026-10-06)
 
 Three isolated N1536 AB/BA/AB pairs compare the accepted D16/cache combination
 against qualified transposed-mask normalization and one retained 4.5 GiB HIP
@@ -392,3 +424,28 @@ measured ending 282.995 → 276.846 ms (1.0222x) and starting
 the primary attention targets; these small packing gains do not establish a
 performance plateau. Combined full-model, N1000 fallback and paired E2E gates
 are tracked separately by the guarded controller.
+
+### Triangle memory: accepted incremental E2E
+
+Three AB/BA/AB pairs at N1536, strict deterministic FP32 with memory filling,
+R3/four trunk passes, D200/S1, seed101 compare the latest accepted workspace
+combination against the same combination plus exact multiplication copies and
+attention key packing. Both use the same frozen worker; diagnostic stage
+profiling is disabled. All six outputs match all 11 arrays bitwise and full CIF
+bytes against original native, accepted D16 and latest workspace anchors.
+
+| Scope | Previous workspace median | Triangle memory median | Speedup |
+| --- | ---: | ---: | ---: |
+| Complete Rust invocation E2E | 452.471 s | 416.226 s | **1.0871x** |
+| Model forward | 356.595 s | 321.699 s | **1.1085x** |
+
+E2E time decreases by 8.01%; all paired ratios are 1.0847–1.0975x.
+Observed p95 improves from 464.711 to 428.428 seconds. Three observations per arm
+are not a production tail-latency estimate. Fresh processes retain warm filesystem
+and published-kernel caches; the environment inventory and declared treatment
+are verified. Each candidate selects 430 multiplication calls/7,740 exact copies
+and 5,064 key packs; N1000 native fallback separately passes.
+
+This is **incremental**, not a direct original-Torch ratio. Do not multiply
+historical improvements into a new direct E2E claim. Complete evidence:
+`provenance/openfold3_triangle_memory_e2e_n1536.json`.

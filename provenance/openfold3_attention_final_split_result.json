@@ -1,0 +1,266 @@
+{
+  "schema_version": 1,
+  "decision": "Rejected: bitwise exact but complete attention is slower",
+  "scope": "Final additional cycle alternative A; no model promotion or E2E claim",
+  "screen": {
+    "correctness_passed": true,
+    "records": [
+      {
+        "case": "random",
+        "mode": "raw_bmm_out",
+        "differences": 0
+      },
+      {
+        "case": "random",
+        "variant": "zero",
+        "transposed_bias": false,
+        "mode": "probabilities",
+        "differences": 0
+      },
+      {
+        "case": "random",
+        "variant": "zero",
+        "transposed_bias": true,
+        "mode": "probabilities",
+        "differences": 0
+      },
+      {
+        "case": "random",
+        "variant": "partial_outer",
+        "transposed_bias": false,
+        "mode": "probabilities",
+        "differences": 0
+      },
+      {
+        "case": "random",
+        "variant": "partial_outer",
+        "transposed_bias": true,
+        "mode": "probabilities",
+        "differences": 0
+      },
+      {
+        "case": "random",
+        "variant": "additive",
+        "transposed_bias": false,
+        "mode": "probabilities",
+        "differences": 0
+      },
+      {
+        "case": "random",
+        "variant": "additive",
+        "transposed_bias": true,
+        "mode": "probabilities",
+        "differences": 0
+      },
+      {
+        "case": "random",
+        "variant": "all_masked",
+        "transposed_bias": false,
+        "mode": "probabilities",
+        "differences": 0
+      },
+      {
+        "case": "random",
+        "variant": "all_masked",
+        "transposed_bias": true,
+        "mode": "probabilities",
+        "differences": 0
+      },
+      {
+        "case": "cancellation",
+        "mode": "raw_bmm_out",
+        "differences": 0
+      },
+      {
+        "case": "cancellation",
+        "variant": "zero",
+        "transposed_bias": false,
+        "mode": "probabilities",
+        "differences": 0
+      },
+      {
+        "case": "cancellation",
+        "variant": "zero",
+        "transposed_bias": true,
+        "mode": "probabilities",
+        "differences": 0
+      },
+      {
+        "case": "subnormal",
+        "mode": "raw_bmm_out",
+        "differences": 0
+      },
+      {
+        "case": "subnormal",
+        "variant": "zero",
+        "transposed_bias": false,
+        "mode": "probabilities",
+        "differences": 0
+      },
+      {
+        "case": "subnormal",
+        "variant": "zero",
+        "transposed_bias": true,
+        "mode": "probabilities",
+        "differences": 0
+      },
+      {
+        "case": "signed_zero",
+        "mode": "raw_bmm_out",
+        "differences": 0
+      },
+      {
+        "case": "signed_zero",
+        "variant": "zero",
+        "transposed_bias": false,
+        "mode": "probabilities",
+        "differences": 0
+      },
+      {
+        "case": "signed_zero",
+        "variant": "zero",
+        "transposed_bias": true,
+        "mode": "probabilities",
+        "differences": 0
+      },
+      {
+        "case": "nonfinite",
+        "mode": "raw_bmm_out",
+        "differences": 0
+      },
+      {
+        "case": "nonfinite",
+        "variant": "zero",
+        "transposed_bias": false,
+        "mode": "probabilities",
+        "differences": 0
+      },
+      {
+        "case": "nonfinite",
+        "variant": "zero",
+        "transposed_bias": true,
+        "mode": "probabilities",
+        "differences": 0
+      }
+    ],
+    "batch": 128,
+    "retained_bytes": 4831838208,
+    "softmax": {
+      "mode": "owned_scores_strict",
+      "submitted_shapes": {
+        "B128_N1536": 16
+      },
+      "storage_fallbacks": 0,
+      "limits": [
+        "Shape counts include tuning; not steady-state frequency.",
+        "Private-score ownership requires the audited adapter."
+      ]
+    },
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850",
+    "strict": true,
+    "seed": 101
+  },
+  "replay": {
+    "correctness_passed": true,
+    "results": [
+      {
+        "capture": "/media/IntelSSD/fireprot/outputs/triatt-profile-n1536-v1/trunk_pairformer-tri_att_end.pt",
+        "fusion_ms": 276.4954376220703,
+        "split_ms": 306.17576599121094,
+        "speedup": 0.9030611443951033,
+        "exact": true,
+        "samples_ms": {
+          "fusion": [
+            2885.22412109375,
+            276.1333312988281,
+            276.7538146972656,
+            276.3592529296875,
+            276.76806640625,
+            276.5421447753906,
+            276.44873046875
+          ],
+          "split": [
+            306.1247863769531,
+            306.39007568359375,
+            306.25311279296875,
+            306.0360412597656,
+            306.0984191894531,
+            305.9797058105469,
+            306.35491943359375
+          ]
+        },
+        "flags": {
+          "transpose_bias": true,
+          "chunk_size": 1024,
+          "use_deepspeed_evo_attention": false,
+          "use_cueq_triangle_kernels": false,
+          "use_triton_triangle_kernels": false,
+          "use_lma": false,
+          "inplace_safe": true
+        }
+      },
+      {
+        "capture": "/media/IntelSSD/fireprot/outputs/triatt-profile-n1536-v1/trunk_pairformer-tri_att_start.pt",
+        "fusion_ms": 266.2718048095703,
+        "split_ms": 296.1690216064453,
+        "speedup": 0.8990535315452304,
+        "exact": true,
+        "samples_ms": {
+          "fusion": [
+            266.4779357910156,
+            266.1076965332031,
+            266.39764404296875,
+            266.0189208984375,
+            266.3750915527344,
+            266.16851806640625,
+            266.4638977050781
+          ],
+          "split": [
+            295.8385314941406,
+            296.30316162109375,
+            296.2062072753906,
+            296.2121276855469,
+            296.0979309082031,
+            295.6483154296875,
+            296.1318359375
+          ]
+        },
+        "flags": {
+          "chunk_size": 1024,
+          "use_deepspeed_evo_attention": false,
+          "use_cueq_triangle_kernels": false,
+          "use_triton_triangle_kernels": false,
+          "use_lma": false,
+          "inplace_safe": true
+        }
+      }
+    ],
+    "key_pack_calls": 336,
+    "split_softmax": {
+      "mode": "owned_scores_strict",
+      "submitted_shapes": {
+        "B128_N1536": 168
+      },
+      "storage_fallbacks": 0,
+      "limits": [
+        "Shape counts include tuning; not steady-state frequency.",
+        "Private-score ownership requires the audited adapter."
+      ]
+    },
+    "modes": [
+      "combined-v12 fused QK/softmax + HIP key packing",
+      "native BMM out into retained scores + owned HIP softmax + same HIP key packing"
+    ],
+    "control_sha256": "4f9163e64c524d0c8eb9e0931557b5aec0a7e5414a3672270ea2c84b3cdadc29",
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850",
+    "seed": 101,
+    "cache_state": "Same process, one retained pool; first call per arm excluded; six measured calls per arm in balanced order; exact checks outside timing"
+  },
+  "remote_archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/conditioning-cache-20261006/final-attention-cycle-v1.tar.gz",
+    "sha256": "b316bc75ae3de473ae0d363ad95a78337ecb6b00f25144a6599a82f56dc8d356",
+    "size_bytes": 2043565
+  }
+}

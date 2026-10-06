@@ -2502,3 +2502,62 @@ python/fireprot_workers/protenix.py:18-24 explicitlyrejectsBase now; requires
 explicitintegration,source/weightpins,capabilityaudit,strictload andnativeagreement
 before optimization claims. No source/modelexecution change made inthisturn.
 Current E2E2235527/2242825 and queuedfinalcycle2250000 unchanged,stillactive.
+
+## Both requested cycles complete; README clarified (2026-10-06)
+
+Triangle-memory controller2235527 TERMINAL SUCCESS, six runs and all18anchor
+comparisons (native,D16,latest) all11bits/fullCIF exact. ThreeAB/BA/AB E2E medians
+452.470689673 ->416.226066696s,1.087079176x,8.01038%less time; observedp95
+464.711334616->428.427770304. Model356.594822704->321.698897176s,1.108473874x.
+Allcandidate430mulcalls/7740copies/5064keypacks; N1000fallbackpasses. Frozenworker
+integrity andRustinventoriespassed. Evidence
+provenance/openfold3_triangle_memory_e2e_n1536.json. Archive durableusualroot
+triangle-memory-e2e-v1.tar.gz SHA
+cc3ec462b41d8ebb71271fbe03248cbd12d0c550bcadaef9050853d6ba9d555f.
+This remainsincremental; latestcombination hasno accepted3pairdirectnative result.
+
+Finaladditionalcycle alternativeA2250000 TERMINAL SUCCESS numerically, REJECTED
+forperformance. Nativebmm(out=retainedscores)+ownedHIPsoftmax passes21raw/probability
+casesplusPVbits andtrainedstart/end replay. End276.495->306.176ms;start266.272->
+296.169ms,about11%slower. No furthermodel/E2Egate needed forrejectedarm.
+provenance/openfold3_attention_final_split_result.json.
+
+AlternativeB new qk_double_buffer.cpp reconstructs source-pinnedv12 with two16KiB
+LDSbuffers; BOTHproducer/consumeraddresses use(band&1)*4096; removesonly5reuse
+barriers. SameMFMA/add/softmaxorder. Prioruser-authorizedLunaISAagent reviewedactual
+localasm:producer/consumerparity0/16384 alternates,rangeends32767,6barriers(mode
+false independentlycounted6too),32KiBLDS,trueVGPR62SGPR34/no spills. Remote actual
+metadata confirms32KiB,VGPR62/51,SGPR34/20,no spills. Noactualoccupancyclaim.
+
+v1controller2284410 FAILED beforeGPU publishing: my llvm-objcopy --dump-section
+command lacked a separateoutput andrewrote the unpublishedexperimentalELF layout
+inits Rustcache. Rust correctly rejectedSHA mismatch. Rawfailedartifact/expected
+andactualSHA preservedv1/inspection-failure.json; no measured/maintainedkernel
+bundle changed. Explicit recoveryusesFRESHisolatedcache atv2 andhost-copy.so output;
+checks librarySHAunchangedbeforepublish. Do notreusecorruptedv1cacheentry.
+
+v2controller2286046 /tmp/fireprot-attention-final-double-v2 TERMINAL SUCCESS,
+21/21numericalrecords andtrainedattention exact. End276.268->279.788ms;
+start266.095->269.559ms (~1.3%slower). REJECTED, no modelpromotion. Evidence
+provenance/openfold3_attention_final_double_result.json. Bothalternative roots,
+v1failure andv2source/build/bundle/inspection/probe/replay archived atdurableusualroot
+final-attention-cycle-v1.tar.gz SHA
+b316bc75ae3de473ae0d363ad95a78337ecb6b00f25144a6599a82f56dc8d356,2043565bytes.
+No activeexperiment/controller remains. StopOpenFold3tuning peruser'sone-more-cycle
+instruction; retainedbest istriangle-memory combination. Notaglobaloptimumclaim.
+
+README nowEnglish and reorganized: Rustbuild/probe,request-vs-profile,hip_device,
+freshIDs,5real request/profileentryexamples,output/measure/pairedcommands, support
+matrix includingBaseplanned, directnative versusincrementalperformance tables,
+workload/cache/isolationlimits, maintainedversusfrozenexperiments. Keptlicense
+sectionbyteidentical andChinesehistoricalbaselineuntouched. All5referencedrequests
+passactualRustinspect;3profilesexist/parse;allediteddocslinks+anchorsvalidated.
+FixedstaleRustmigration/acceleratedOpenFold3claims inrust-running/worker-protocol
+andcheckpointinventory. UpdatedOpenFold3performance topwithfinalresults/rejections.
+
+IMPORTANT verifiedfromprovenance/protenix_native_requests_fa7cc55.json protocol:
+Protenixhistorical2.937x/3.889x usesC4/D1/S1,notdefaultMiniD5. Explicitlyinformeduser,
+READMEanddocs/protenix-native-requests.md nowstateD1. EarlierchatrecapgaveC4/S1without
+D; nofutureBase200-step speeduptransfer. AtlasN1536reported2.714xsequentialsets
+vschunkednative;uncutnativeOOM. CurrentOpenFold3direct1.499x isearliercombination,
+notlatest; nevermultiplyratios. NexttaskProtenixBasecheckpointperpriorentry.

@@ -1,0 +1,970 @@
+{
+  "schema_version": 1,
+  "decision": "Rejected: exact probabilities and trained attention, but complete attention is about 1.3% slower",
+  "scope": "Final additional cycle alternative B; no full-model or E2E promotion",
+  "remote_root": "/tmp/fireprot-attention-final-double-v2",
+  "control": {
+    "label": "double_lds",
+    "bundle": "/tmp/fireprot-attention-final-double-v2/bundle",
+    "manifest_sha256": "80fb5457b9c2407f46425d89b963a38e24deec0e8fb922d17ddcce507bd921b8",
+    "numerical_screen": {
+      "path": "/tmp/fireprot-attention-final-double-v2/probe/probe.json",
+      "sha256": "c1f9b4108c70f7e5c1dc4154cace7b08d1208802a6aa87349bfa89ba4faea744"
+    }
+  },
+  "probe": {
+    "schema_version": 1,
+    "completed": true,
+    "batch": 128,
+    "n": 1536,
+    "heads": 4,
+    "k": 32,
+    "seed": 101,
+    "dtype": "float32",
+    "records": [
+      {
+        "case": "random",
+        "mode": "raw_after_lds",
+        "layout": "contiguous",
+        "passed": true,
+        "elements": 1207959552,
+        "bitwise_mismatches": 0,
+        "mask_shape": [
+          1,
+          1,
+          1,
+          1536
+        ],
+        "mask_stride": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "bias_shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "bias_stride": [
+          9437184,
+          2359296,
+          1536,
+          1
+        ]
+      },
+      {
+        "case": "random/zero",
+        "mode": "softmax",
+        "layout": "contiguous",
+        "passed": true,
+        "elements": 1207959552,
+        "bitwise_mismatches": 0,
+        "mask_shape": [
+          1,
+          1,
+          1,
+          1536
+        ],
+        "mask_stride": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "bias_shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "bias_stride": [
+          9437184,
+          2359296,
+          1536,
+          1
+        ]
+      },
+      {
+        "case": "random/zero",
+        "mode": "softmax",
+        "layout": "transposed",
+        "passed": true,
+        "elements": 1207959552,
+        "bitwise_mismatches": 0,
+        "mask_shape": [
+          1,
+          1,
+          1,
+          1536
+        ],
+        "mask_stride": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "bias_shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "bias_stride": [
+          9437184,
+          2359296,
+          1,
+          1536
+        ]
+      },
+      {
+        "case": "random/partial_outer",
+        "mode": "softmax",
+        "layout": "contiguous",
+        "passed": true,
+        "elements": 1207959552,
+        "bitwise_mismatches": 0,
+        "mask_shape": [
+          128,
+          1,
+          1,
+          1536
+        ],
+        "mask_stride": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "bias_shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "bias_stride": [
+          9437184,
+          2359296,
+          1536,
+          1
+        ]
+      },
+      {
+        "case": "random/partial_outer",
+        "mode": "softmax",
+        "layout": "transposed",
+        "passed": true,
+        "elements": 1207959552,
+        "bitwise_mismatches": 0,
+        "mask_shape": [
+          128,
+          1,
+          1,
+          1536
+        ],
+        "mask_stride": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "bias_shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "bias_stride": [
+          9437184,
+          2359296,
+          1,
+          1536
+        ]
+      },
+      {
+        "case": "random/additive",
+        "mode": "softmax",
+        "layout": "contiguous",
+        "passed": true,
+        "elements": 1207959552,
+        "bitwise_mismatches": 0,
+        "mask_shape": [
+          1,
+          1,
+          1,
+          1536
+        ],
+        "mask_stride": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "bias_shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "bias_stride": [
+          9437184,
+          2359296,
+          1536,
+          1
+        ]
+      },
+      {
+        "case": "random/additive",
+        "mode": "softmax",
+        "layout": "transposed",
+        "passed": true,
+        "elements": 1207959552,
+        "bitwise_mismatches": 0,
+        "mask_shape": [
+          1,
+          1,
+          1,
+          1536
+        ],
+        "mask_stride": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "bias_shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "bias_stride": [
+          9437184,
+          2359296,
+          1,
+          1536
+        ]
+      },
+      {
+        "case": "random/all_masked",
+        "mode": "softmax",
+        "layout": "contiguous",
+        "passed": true,
+        "elements": 1207959552,
+        "bitwise_mismatches": 0,
+        "mask_shape": [
+          1,
+          1,
+          1,
+          1536
+        ],
+        "mask_stride": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "bias_shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "bias_stride": [
+          9437184,
+          2359296,
+          1536,
+          1
+        ]
+      },
+      {
+        "case": "random/all_masked",
+        "mode": "softmax",
+        "layout": "transposed",
+        "passed": true,
+        "elements": 1207959552,
+        "bitwise_mismatches": 0,
+        "mask_shape": [
+          1,
+          1,
+          1,
+          1536
+        ],
+        "mask_stride": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "bias_shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "bias_stride": [
+          9437184,
+          2359296,
+          1,
+          1536
+        ]
+      },
+      {
+        "case": "cancellation",
+        "mode": "raw_after_lds",
+        "layout": "contiguous",
+        "passed": true,
+        "elements": 1207959552,
+        "bitwise_mismatches": 0,
+        "mask_shape": [
+          1,
+          1,
+          1,
+          1536
+        ],
+        "mask_stride": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "bias_shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "bias_stride": [
+          9437184,
+          2359296,
+          1536,
+          1
+        ]
+      },
+      {
+        "case": "cancellation/zero",
+        "mode": "softmax",
+        "layout": "contiguous",
+        "passed": true,
+        "elements": 1207959552,
+        "bitwise_mismatches": 0,
+        "mask_shape": [
+          1,
+          1,
+          1,
+          1536
+        ],
+        "mask_stride": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "bias_shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "bias_stride": [
+          9437184,
+          2359296,
+          1536,
+          1
+        ]
+      },
+      {
+        "case": "cancellation/zero",
+        "mode": "softmax",
+        "layout": "transposed",
+        "passed": true,
+        "elements": 1207959552,
+        "bitwise_mismatches": 0,
+        "mask_shape": [
+          1,
+          1,
+          1,
+          1536
+        ],
+        "mask_stride": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "bias_shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "bias_stride": [
+          9437184,
+          2359296,
+          1,
+          1536
+        ]
+      },
+      {
+        "case": "subnormal",
+        "mode": "raw_after_lds",
+        "layout": "contiguous",
+        "passed": true,
+        "elements": 1207959552,
+        "bitwise_mismatches": 0,
+        "mask_shape": [
+          1,
+          1,
+          1,
+          1536
+        ],
+        "mask_stride": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "bias_shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "bias_stride": [
+          9437184,
+          2359296,
+          1536,
+          1
+        ]
+      },
+      {
+        "case": "subnormal/zero",
+        "mode": "softmax",
+        "layout": "contiguous",
+        "passed": true,
+        "elements": 1207959552,
+        "bitwise_mismatches": 0,
+        "mask_shape": [
+          1,
+          1,
+          1,
+          1536
+        ],
+        "mask_stride": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "bias_shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "bias_stride": [
+          9437184,
+          2359296,
+          1536,
+          1
+        ]
+      },
+      {
+        "case": "subnormal/zero",
+        "mode": "softmax",
+        "layout": "transposed",
+        "passed": true,
+        "elements": 1207959552,
+        "bitwise_mismatches": 0,
+        "mask_shape": [
+          1,
+          1,
+          1,
+          1536
+        ],
+        "mask_stride": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "bias_shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "bias_stride": [
+          9437184,
+          2359296,
+          1,
+          1536
+        ]
+      },
+      {
+        "case": "signed_zero",
+        "mode": "raw_after_lds",
+        "layout": "contiguous",
+        "passed": true,
+        "elements": 1207959552,
+        "bitwise_mismatches": 0,
+        "mask_shape": [
+          1,
+          1,
+          1,
+          1536
+        ],
+        "mask_stride": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "bias_shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "bias_stride": [
+          9437184,
+          2359296,
+          1536,
+          1
+        ]
+      },
+      {
+        "case": "signed_zero/zero",
+        "mode": "softmax",
+        "layout": "contiguous",
+        "passed": true,
+        "elements": 1207959552,
+        "bitwise_mismatches": 0,
+        "mask_shape": [
+          1,
+          1,
+          1,
+          1536
+        ],
+        "mask_stride": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "bias_shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "bias_stride": [
+          9437184,
+          2359296,
+          1536,
+          1
+        ]
+      },
+      {
+        "case": "signed_zero/zero",
+        "mode": "softmax",
+        "layout": "transposed",
+        "passed": true,
+        "elements": 1207959552,
+        "bitwise_mismatches": 0,
+        "mask_shape": [
+          1,
+          1,
+          1,
+          1536
+        ],
+        "mask_stride": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "bias_shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "bias_stride": [
+          9437184,
+          2359296,
+          1,
+          1536
+        ]
+      },
+      {
+        "case": "nonfinite",
+        "mode": "raw_after_lds",
+        "layout": "contiguous",
+        "passed": true,
+        "elements": 1207959552,
+        "bitwise_mismatches": 0,
+        "mask_shape": [
+          1,
+          1,
+          1,
+          1536
+        ],
+        "mask_stride": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "bias_shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "bias_stride": [
+          9437184,
+          2359296,
+          1536,
+          1
+        ]
+      },
+      {
+        "case": "nonfinite/zero",
+        "mode": "softmax",
+        "layout": "contiguous",
+        "passed": true,
+        "elements": 1207959552,
+        "bitwise_mismatches": 0,
+        "mask_shape": [
+          1,
+          1,
+          1,
+          1536
+        ],
+        "mask_stride": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "bias_shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "bias_stride": [
+          9437184,
+          2359296,
+          1536,
+          1
+        ]
+      },
+      {
+        "case": "nonfinite/zero",
+        "mode": "softmax",
+        "layout": "transposed",
+        "passed": true,
+        "elements": 1207959552,
+        "bitwise_mismatches": 0,
+        "mask_shape": [
+          1,
+          1,
+          1,
+          1536
+        ],
+        "mask_stride": [
+          1536,
+          1536,
+          1536,
+          1
+        ],
+        "bias_shape": [
+          1,
+          4,
+          1536,
+          1536
+        ],
+        "bias_stride": [
+          9437184,
+          2359296,
+          1,
+          1536
+        ]
+      }
+    ],
+    "reference_batch": 0,
+    "difference_count_outer_batch": 16,
+    "reference_method": "full_shape_qk_and_softmax",
+    "scope": "Synthetic packed operands only; no timing or model acceptance",
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850",
+    "visible_device": "7",
+    "source_sha256": {
+      "/tmp/fireprot-triangle-e2e-v1/python/experiments/mfma_qk/probe_fusion.py": "fa104615e1cdf81dc9246209574d6b81746f592f95138e2b9ac871d83e2290c4",
+      "/tmp/fireprot-triangle-e2e-v1/python/experiments/attention_trace/probe.py": "531d168ce84f7954b4e28f939ad4ab1efd47abd485ad8b20a5c713cbfcdc0c3b"
+    },
+    "settings": {
+      "strict_deterministic": true,
+      "warn_only": false,
+      "fill_uninitialized_memory": true,
+      "allow_tf32": false,
+      "preferred_blas_library": "_BlasBackend.Cublas"
+    },
+    "kernel": {
+      "mode": "published",
+      "kernel": {
+        "directory": "/tmp/fireprot-attention-final-double-v2/bundle",
+        "library": "/tmp/fireprot-attention-final-double-v2/bundle/fireprot_experimental_qk_softmax_90af2bdd7a32121bf26d47bc3c34ffd16fb4abcfa8c41c78a07b323f44f78c91.so",
+        "manifest_sha256": "80fb5457b9c2407f46425d89b963a38e24deec0e8fb922d17ddcce507bd921b8",
+        "build_identity_sha256": "90af2bdd7a32121bf26d47bc3c34ffd16fb4abcfa8c41c78a07b323f44f78c91",
+        "compatibility": {
+          "package": "fireprot_experimental_qk_softmax",
+          "target": "gfx90a",
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850",
+          "c_abi": "experimental-qk-softmax-n1536-f32-v1"
+        }
+      }
+    },
+    "native_qk_observation": {
+      "einsums": [
+        {
+          "label": "QK",
+          "operations": [
+            {
+              "operation": "aten::bmm",
+              "inputs": [
+                {
+                  "shape": [
+                    512,
+                    1536,
+                    32
+                  ],
+                  "strides": [
+                    49152,
+                    32,
+                    1
+                  ]
+                },
+                {
+                  "shape": [
+                    512,
+                    32,
+                    1536
+                  ],
+                  "strides": [
+                    49152,
+                    1536,
+                    1
+                  ]
+                }
+              ],
+              "external_id": 2,
+              "kernels": [
+                {
+                  "name": "__amd_rocclr_fillBufferUnAligned.kd",
+                  "correlation": 4,
+                  "device": 7,
+                  "stream": 1,
+                  "launch": "hipMemset"
+                },
+                {
+                  "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+                  "correlation": 18,
+                  "device": 7,
+                  "stream": 1,
+                  "launch": "hipExtModuleLaunchKernel"
+                }
+              ],
+              "completed": true,
+              "metadata_source": "kineto_trace"
+            }
+          ]
+        }
+      ]
+    },
+    "native_trace": {
+      "path": "/tmp/fireprot-attention-final-double-v2/probe/native-qk-trace.json",
+      "sha256": "735a02fd9984825c4a939e3ebc4b1ce761ea6c865909720e43faec8260bcfec2"
+    },
+    "native_qk_gemm": {
+      "name": "Cijk_Ailk_Bljk_SB_MT64x32x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS3_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB4_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS4_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW2_SNLL0_TSGRA0_TSGRB0_TT2_16_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW2_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM5.kd",
+      "correlation": 18,
+      "device": 7,
+      "stream": 1,
+      "launch": "hipExtModuleLaunchKernel"
+    },
+    "native_qk_initialization": [
+      {
+        "name": "__amd_rocclr_fillBufferUnAligned.kd",
+        "correlation": 4,
+        "device": 7,
+        "stream": 1,
+        "launch": "hipMemset"
+      }
+    ]
+  },
+  "replay": {
+    "correctness_passed": true,
+    "results": [
+      {
+        "capture": "/media/IntelSSD/fireprot/outputs/triatt-profile-n1536-v1/trunk_pairformer-tri_att_end.pt",
+        "fusion_ms": 276.2682189941406,
+        "double_ms": 279.7876739501953,
+        "speedup": 0.9874209792505685,
+        "exact": true,
+        "samples_ms": {
+          "fusion": [
+            2886.630126953125,
+            276.4678955078125,
+            276.02325439453125,
+            276.272705078125,
+            276.26373291015625,
+            276.07366943359375,
+            276.5306091308594
+          ],
+          "double": [
+            279.6206359863281,
+            279.8023986816406,
+            279.63262939453125,
+            279.7748718261719,
+            279.78814697265625,
+            279.79376220703125,
+            279.7872009277344
+          ]
+        },
+        "flags": {
+          "transpose_bias": true,
+          "chunk_size": 1024,
+          "use_deepspeed_evo_attention": false,
+          "use_cueq_triangle_kernels": false,
+          "use_triton_triangle_kernels": false,
+          "use_lma": false,
+          "inplace_safe": true
+        }
+      },
+      {
+        "capture": "/media/IntelSSD/fireprot/outputs/triatt-profile-n1536-v1/trunk_pairformer-tri_att_start.pt",
+        "fusion_ms": 266.0950927734375,
+        "double_ms": 269.5591125488281,
+        "speedup": 0.9871493130295748,
+        "exact": true,
+        "samples_ms": {
+          "fusion": [
+            265.73980712890625,
+            266.1732482910156,
+            265.98541259765625,
+            266.1098937988281,
+            265.7393493652344,
+            266.1196594238281,
+            266.0802917480469
+          ],
+          "double": [
+            269.58966064453125,
+            269.65142822265625,
+            269.333984375,
+            269.677978515625,
+            269.38006591796875,
+            269.5333557128906,
+            269.5848693847656
+          ]
+        },
+        "flags": {
+          "chunk_size": 1024,
+          "use_deepspeed_evo_attention": false,
+          "use_cueq_triangle_kernels": false,
+          "use_triton_triangle_kernels": false,
+          "use_lma": false,
+          "inplace_safe": true
+        }
+      }
+    ],
+    "key_pack_calls": 336,
+    "candidate_kernel": {
+      "mode": "published",
+      "kernel": {
+        "directory": "/tmp/fireprot-attention-final-double-v2/bundle",
+        "library": "/tmp/fireprot-attention-final-double-v2/bundle/fireprot_experimental_qk_softmax_90af2bdd7a32121bf26d47bc3c34ffd16fb4abcfa8c41c78a07b323f44f78c91.so",
+        "manifest_sha256": "80fb5457b9c2407f46425d89b963a38e24deec0e8fb922d17ddcce507bd921b8",
+        "build_identity_sha256": "90af2bdd7a32121bf26d47bc3c34ffd16fb4abcfa8c41c78a07b323f44f78c91",
+        "compatibility": {
+          "package": "fireprot_experimental_qk_softmax",
+          "target": "gfx90a",
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850",
+          "c_abi": "experimental-qk-softmax-n1536-f32-v1"
+        }
+      }
+    },
+    "modes": [
+      "combined-v12 fused QK/softmax + HIP key packing",
+      "double-LDS fused QK/softmax + same HIP key packing"
+    ],
+    "control_sha256": "4f9163e64c524d0c8eb9e0931557b5aec0a7e5414a3672270ea2c84b3cdadc29",
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850",
+    "seed": 101,
+    "cache_state": "Same process, one retained pool; first call per arm excluded; six measured calls per arm in balanced order; exact checks outside timing"
+  },
+  "inspection_failure": {
+    "reason": "llvm-objcopy dump-section without separate output rewrote ELF layout in experimental cache before publish; Rust rejected the changed SHA",
+    "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/rust-v1/fireprot_experimental_qk_softmax_63bae48661da6427263e6507996f0e8c5c7386976efc358555e9e2d831a1b05b/fireprot_experimental_qk_softmax_63bae48661da6427263e6507996f0e8c5c7386976efc358555e9e2d831a1b05b.so",
+    "expected_sha256": "b124d249e69623f7ae2d023b9e115d59618e3f018347fcbe53a88070e13e8810",
+    "observed_sha256": "e4c3d521f7bda1244a6a5974dd76cd873d27ca5500eef40045df51221c463060",
+    "affected_scope": "Unpublished double-LDS experimental artifact only; no measured or maintained kernel bundle changed",
+    "recovery": "Fresh isolated Rust cache and explicit separate objcopy host output"
+  },
+  "static_resources": {
+    "lds_bytes": 32768,
+    "barriers_per_mode": 6,
+    "vgpr": [
+      62,
+      51
+    ],
+    "sgpr": [
+      34,
+      20
+    ],
+    "spills": 0,
+    "limits": "Static resource/ISA checks are not a hardware occupancy or performance measurement"
+  },
+  "archive": {
+    "path": "outputs/experiments/triangle-memory-local-20261006/final-attention-results-v1.tar.gz",
+    "sha256": "68d6ac8034289f95b75392eb1f1a46d9e34306dec3c9bdc50b930d4d1b08994b"
+  },
+  "remote_resources": {
+    "group_segment_fixed_size": [
+      32768,
+      32768
+    ],
+    "vgpr_count": [
+      62,
+      51
+    ],
+    "sgpr_count": [
+      34,
+      20
+    ],
+    "private_segment_fixed_size": [
+      0,
+      0
+    ],
+    "vgpr_spill_count": [
+      0,
+      0
+    ],
+    "sgpr_spill_count": [
+      0,
+      0
+    ]
+  },
+  "remote_metadata_sha256": "e9e064ba86f9e74eada73d62b9debdd66aa950410fdff753ec656873f8648ba1",
+  "remote_archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/conditioning-cache-20261006/final-attention-cycle-v1.tar.gz",
+    "sha256": "b316bc75ae3de473ae0d363ad95a78337ecb6b00f25144a6599a82f56dc8d356",
+    "size_bytes": 2043565
+  }
+}

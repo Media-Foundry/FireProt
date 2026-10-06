@@ -16,7 +16,8 @@ an explicit PCI mapping and monitors the corresponding SMI index; see
 
 Framework source `fa7cc555ccd8eb6cb09f3f9b30081878d5918688`, independent
 Protenix `bb3be993b52713795796c72cf0a46ef8a7323442`. Mini-default v0.5.0,
-FP32, TF32 off, hipBLAS, C4/S1, one sample, seed 101, no MSA/RNA
+FP32, TF32 off, hipBLAS, **C4/D1/S1** (one explicitly selected diffusion step,
+not the upstream Mini D5 default), one sample, seed 101, no MSA/RNA
 MSA/templates/ESM. Three pairs of fresh workers per length, one prediction
 per worker, zero warmups, alternating execution order. Physical GPU 7
 computes serially while the launcher also monitors index 6. The historical

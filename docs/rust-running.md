@@ -1,12 +1,17 @@
 # Rust inference entry point
 
-The maintained Rust entry point is under active migration. OpenFold3 N1000 with
+The maintained Rust CLI and documented model workflows passed migration acceptance;
+see [the acceptance audit](rust-acceptance.md). OpenFold3 N1000/N1536 with
 explicit strict deterministic execution passes exact native-output parity; see
 [policy and evidence](openfold3-determinism.md). The legacy default-mode route has
 native-repeat variation and remains unpassed for numerical migration parity. Workers
 implement native OpenFold3/OpenBind-0, AtlasFold plus AtlasLM-3B, and Protenix
-Mini-default monomer inference. Protenix also has a FireProt backend connected to
-the Rust operator bridge. AtlasFold chunked, HIP and fused HIP routes also use Rust dispatch and supervision; accelerated OpenFold3 remains pending.
+Mini-default monomer inference, plus the validated Mini-ESM/Tiny variants.
+Protenix also has a FireProt backend connected to the Rust operator bridge.
+AtlasFold chunked, HIP and fused HIP routes and opt-in OpenFold3 HIP softmax use
+Rust dispatch and supervision. The later OpenFold3 cache/workspace/triangle
+combination remains a separately frozen experiment; see
+[performance scopes](openfold3-performance.md).
 
 ## Commands
 
@@ -78,15 +83,14 @@ raw uint16 bits with explicit original dtype; BF16-to-FP32 conversion is rejecte
 OpenFold3 batch/sample axes are split into individual sample archives. AtlasFold
 preserves its `[residues,14,3]` coordinate layout.
 
-## Remaining migration gates
+## Validated scope and remaining model coverage
 
 Rust owns the maintained single, batch and paired-benchmark entry points.
-Remaining migration acceptance covers environment dependencies and scan overhead,
-an updated independent installation, and final cross-model regression across
-the established workflows and length buckets. Paired execution and numerical
-verdicts are implemented; see [paired execution](paired-execution.md).
-OpenFold3 operator acceleration follows framework acceptance. OpenFold2 and
-ESMFold remain future integrations. Historical E2E speedups do not establish
+Independent installation and cross-model migration checks are recorded in the
+[acceptance audit](rust-acceptance.md). Paired execution and numerical verdicts
+are implemented; see [paired execution](paired-execution.md).
+Protenix Base, OpenFold2 and ESMFold remain future integrations. Checkpoint
+availability does not establish loader compatibility. Historical E2E speedups do not establish
 this entry point's overhead; use the explicitly scoped Rust invocation records.
 
 ## First N1000 execution evidence

@@ -60,7 +60,8 @@ BF16 autocast; diffusion sampling disables autocast. Preserve these boundaries.
 Default sampling uses 30 diffusion steps for 1000 residues and 100 steps for
 1536 residues. Record sample count explicitly (runner default: five). Baselines
 must include all LM passes and preserve the requested recycle/step/sample
-counts. No AtlasFold speedup has been established yet.
+counts. Subsequent measured speedups and their timing boundaries are documented
+in [AtlasFold performance](atlasfold-performance.md).
 
 ## Protenix Mini-ESM and ESM2-3B
 

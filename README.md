@@ -1,130 +1,208 @@
 # FireProt
 
-An AMD GPU protein structure inference framework with model adapters and
-capability-gated HIP/CK operators. The primary performance target is long proteins,
-including the measured 1,000- and 1,536-residue workloads.
+**Protein structure inference for AMD GPUs, focused on long sequences.**
+FireProt combines model-specific adapters with qualified HIP/CK kernels. Measured
+long-protein workloads currently include 1,000 and 1,536 residues on gfx90a MI250.
 
-**Status: Rust framework migration validated for the workflows below.** Rust owns
-request contracts, operator selection, process supervision, GPU isolation,
-provenance, native build/cache services, numerical acceptance and paired benchmarks.
-All six maintained loaders support pinned artifacts. Seven model requests pass
-validation from an independent Linux installation. Upstream model execution and
-tensor calls retain an explicit Python/Torch boundary. See the
-[acceptance audit](docs/rust-acceptance.md) for evidence and limits.
-Rust itself is not claimed to accelerate GPU kernels.
+The maintained entry point is the **Rust CLI**. Rust owns request validation,
+operator selection, builds/caches, process and GPU supervision, numerical acceptance,
+and paired benchmarks. Upstream models and tensor execution use Python/PyTorch;
+GPU acceleration comes from kernels and execution changes, not the language switch.
+See the [Rust acceptance audit](docs/rust-acceptance.md).
 
-## Model coverage
+## Model support
 
-| Model | Connected workflow | Verified scope / limits |
+| Model | Connected paths | Validated scope |
 | --- | --- | --- |
-| Protenix | Mini-default, Mini-ESM and Tiny-default FP32, native and FireProt paths | Mini-default N1000/N1536, Mini-ESM N1000 and Tiny L124 pass established coordinate/summary gates. Mini-ESM includes pinned ESM2-3B and exact feature parity. Full confidence arrays are retained, without a bitwise equality claim. |
-| AtlasFold + AtlasLM-3B | Monomer, original dual weights, native/chunked/HIP/fused HIP | N1000 native and N1000/N1536 accelerated routes pass exact public-output parity. N1536 reference uses bounded native math. |
-| OpenFold3 / OpenBind-0 | Native and opt-in HIP softmax under Rust supervision | Maintained `hip_fused` N1000/N1536 pass all 11 arrays bitwise. A separate combined experiment directly measures 1.499x E2E versus original strict Torch at N1536 across three pairs, with all 11 arrays bitwise and CIF identities checked. It includes experimental pair/atom reuse, in-place softmax and the measured confidence chunk ceiling. A subsequent D16 coverage experiment measures a further 1.162x E2E versus that combination; this is a separate incremental comparison. Legacy default-mode parity remains unpassed because native repeats vary. |
-| OpenFold2, ESMFold, other adapters | Planned | No verified integration claim. |
+| Protenix Mini-default v0.5.0 | `native`, `fireprot` | FP32 N1000/N1536; coordinate/confidence regression gates |
+| Protenix Mini-ESM and Tiny-default v0.5.0 | `native`, `fireprot` | Mini-ESM N1000 with ESM2-3B; Tiny L124; model-specific gates |
+| AtlasFold 260703 **with AtlasLM-3B** | Native, chunked, HIP and fused HIP | N1000/N1536; exact public-output bytes; N1536 reference uses chunked native math |
+| OpenFold3 / OpenBind-0 | `native`, opt-in `hip_fused` | Strict deterministic FP32 N1000/N1536; all 11 arrays bitwise equal |
+| Protenix Base-default v0.5.0 | **Next integration target** | Checkpoint located; loading and performance not yet validated |
+| OpenFold2, ESMFold and other models | Planned | No verified integration or speedup claim |
 
-Protenix and OpenFold3 are separate implementations. Model adapters preserve each
-model's own preprocessing, precision boundaries and cycle semantics. Recycle cuts
-are changes to inference work and require an explicit, separately validated policy.
+Protenix and OpenFold3 are separate implementations. Precision, preprocessing,
+recycles, diffusion steps, samples and language-model work remain model-specific.
+The latest OpenFold3 workspace/cache/triangle combination is an **experiment with
+frozen deployment artifacts**, not automatically enabled by the maintained profile.
 
-## Build and inspect
+## Build
 
 ```bash
-cargo build --release -p fireprot-cli -p fireprot-bridge -p fireprot-runtime --locked
-target/release/fireprot inspect configs/requests/atlasfold-n1000-native.json
-cargo test --workspace --locked
+cargo build --release -p fireprot-cli -p fireprot-runtime -p fireprot-bridge --locked
+target/release/fireprot --help
+target/release/fireprot inspect configs/requests/openfold3-n1536-hip-fused.json
 ```
 
-Request inspection is CPU-only and does not open weights. Model execution requires
-the pinned upstream checkout, model-specific Python/Torch ROCm environment,
-checkpoints, HIP identity probe and AMD SMI. The checked-in deployment profiles
-reference existing DiamondHill paths. Use the [Rust installer](docs/installation.md)
-to generate profiles for an independent deployment prefix.
-The bridge must be built explicitly before importing the shared Python operator API.
+`inspect` is CPU-only and does not open weights. Inference additionally requires:
 
-## Run on DiamondHill
+- The request's pinned upstream source, checkpoints, input and data resources.
+- A model-specific Python environment with compatible ROCm PyTorch dependencies.
+- ROCm, AMD SMI and the [HIP device identity probe](docs/worker-protocol.md#independent-amd-device-monitor).
+- The profile's published kernel bundles or supported build environment.
+- A matching [environment inventory](docs/environment-inventories.md), when pinned.
 
-From `/media/IntelSSD/fireprot`, after building the CLI/bridge and preparing the
-[HIP probe and worker environment](docs/worker-protocol.md):
+On a prepared ROCm host, build the device probe with:
 
 ```bash
-target/release/fireprot infer configs/requests/atlasfold-n1000-native.json \
-  configs/diamondhill/atlasfold-native.json
-target/release/fireprot infer configs/requests/protenix-n1000-fireprot.json \
-  configs/diamondhill/protenix-fireprot.json
+mkdir -p runtime
+/opt/rocm/bin/hipcc kernels/amd/tools/hip_device_probe.cpp \
+  -Wl,-rpath,/opt/rocm/lib -o runtime/fireprot-hip-probe
+```
+
+The checked-in profiles describe DiamondHill, whose workspace is
+`/media/IntelSSD/fireprot`. They are deployment examples with absolute paths,
+not a portable dependency installer. Update paths and verify artifact/inventory
+pins for your host; stale inventories are rejected. See
+[installation](docs/installation.md), [checkpoint locations](docs/diamondhill-checkpoints.md)
+and [kernel artifacts](docs/kernel-artifacts.md).
+
+## Run inference
+
+The interface is:
+
+```text
+fireprot infer REQUEST.json PROFILE.json
+```
+
+**The request selects the model, backend and workload.** It records `run_id`,
+`output_dir`, `hip_device`, input/checkpoint/source pins, precision, cycles or
+recycles, diffusion steps, samples and seed. **The profile selects the execution
+environment**: Python, workers, device probe, AMD SMI, environment settings and
+optional inventory. Rust sets GPU visibility and resolves HIP-to-SMI identity by
+PCI address; HIP and SMI ordinals are not interchangeable.
+
+Copy an example request and set a **new `run_id` and unused `output_dir`** before
+each run. Change input paths/hashes and workload fields explicitly when needed.
+Validate the copy, then execute it with a prepared matching profile:
+
+```bash
+cp configs/requests/openfold3-n1536-hip-fused.json /tmp/my-openfold3.json
+# Edit /tmp/my-openfold3.json: fresh run_id/output_dir and your pinned input.
+target/release/fireprot inspect /tmp/my-openfold3.json
+target/release/fireprot infer /tmp/my-openfold3.json \
+  configs/diamondhill/openfold3-hip-fused.json
+```
+
+Other starting points:
+
+| Workflow | Request to copy | DiamondHill profile |
+| --- | --- | --- |
+| Protenix Mini N1000 | `configs/requests/protenix-n1000-fireprot.json` | `configs/diamondhill/protenix-fireprot.json` |
+| Protenix Mini N1536 | `configs/requests/protenix-n1536-fireprot.json` | `configs/diamondhill/protenix-fireprot.json` |
+| AtlasFold + AtlasLM-3B N1536 | `configs/requests/atlasfold-n1536-hip-fused.json` | `configs/diamondhill/atlasfold-all-published.json` |
+| OpenFold3 strict N1000 | `configs/requests/openfold3-n1000-hip-fused.json` | `configs/diamondhill/openfold3-hip-fused.json` |
+| OpenFold3 strict N1536 | `configs/requests/openfold3-n1536-hip-fused.json` | `configs/diamondhill/openfold3-hip-fused.json` |
+
+The Mini examples explicitly use **C4/D1/S1**; they are not the upstream Mini
+D5 default. Review the workload before using an example as a scientific preset.
+Mini-ESM needs its ESM2-3B assets as well; see [Mini-ESM setup](docs/protenix-mini-esm.md).
+
+`scripts/infer.sh REQUEST PROFILE` delegates to Rust `infer`.
+`scripts/smoke.sh [MANIFEST]` delegates to Rust `infer-batch`; its default is the
+three-model Protenix smoke manifest. See [batch inference](docs/batch-inference.md).
+
+## Outputs and measurement
+
+A successful request writes `accepted.json`, `supervisor.json`, provenance and
+execution records, `predictions.json`, `sample-N.npz`, and native structures under
+`native/`. Failures do not produce successful acceptance receipts. Details:
+[commands and outputs](docs/rust-running.md), [numerical/CIF validation](docs/cif-validation.md).
+
+```bash
 target/release/fireprot compare-npz reference.npz candidate.npz
+target/release/fireprot help measure-inference
+target/release/fireprot help benchmark-pairs
 ```
 
-Use a fresh run ID and output directory for each request. Requests pin source,
-weights, input, precision, cycles/recycles, steps, sample count, seed and device.
-Rust verifies artifacts and maps HIP devices to AMD SMI through PCI identity before
-accepting continuously monitored inference. Failure or missing outputs cannot
-produce a successful run report.
+Use `measure-inference SPECIFICATION DESTINATION` for complete Rust invocation
+timing, and `benchmark-pairs SPECIFICATION DESTINATION` for declared, pinned
+comparisons with per-run gates. Specifications and reproduction procedures are in
+[invocation timing](docs/invocation-timing.md) and [paired execution](docs/paired-execution.md).
+Model forward time, worker request time and complete invocation E2E are different
+boundaries; `predictions.json` alone is not complete E2E evidence.
 
-See [commands, output schemas and exact model scope](docs/rust-running.md) and
-[checkpoint locations](docs/diamondhill-checkpoints.md). `scripts/infer.sh` calls
-Rust single-request inference; `scripts/smoke.sh` calls Rust batch inference.
-See [entry-point migration](docs/entrypoints.md) for arguments and archived commands.
-Historical benchmark tools remain explicit reproduction tools.
+## Measured speedups
 
-## Repository structure
+These are versioned comparisons, not a uniform benchmark of the current CLI.
+Ratios are reference time divided by optimized time. All workloads retain the
+same scientific settings within their comparison; filesystem/kernel caches are
+warm or unflushed as specified in the linked evidence.
+
+### Direct native comparisons
+
+| Model / length | Reference → optimized | Speedup | Timing boundary and evidence |
+| --- | ---: | ---: | --- |
+| Protenix Mini, 1000 aa | 82.074 → 27.949 s | **2.937x** | Historical worker request; three pairs [¹](docs/protenix-native-requests.md) |
+| Protenix Mini, 1536 aa | 177.345 → 45.596 s | **3.889x** | Historical worker request; three pairs [¹](docs/protenix-native-requests.md) |
+| AtlasFold + AtlasLM-3B, 1000 aa | 184.581 → 84.174 s | **2.193x** | Earlier packaged revision; one request pair [²](docs/atlasfold-performance.md#packaged-bias-reuse-and-batched-transpose) |
+| AtlasFold + AtlasLM-3B, 1536 aa | 553.359 → 203.910 s | **2.714x** | Chunked native math; medians of sequential three-run sets [²](docs/atlasfold-performance.md#final-qkv-request-repetitions) |
+| OpenFold3, 1536 aa, HIP softmax experiment | 956.112 → 694.973 s | **1.376x** | Complete Rust invocation; three pairs [³](docs/openfold3-performance.md#exact-fp32-hip-softmax-three-pair-n1536-result) |
+| OpenFold3, 1536 aa, combined reuse experiment | 949.999 → 633.712 s | **1.499x** | Complete Rust invocation; three pairs, before later increments [³](docs/openfold3-performance.md#combined-reuse-direct-original-torch-n1536-e2e-result) |
+
+1. **Protenix:** Mini-default v0.5.0 FP32, **C4/D1/S1**, seed101, no MSA/templates.
+   Reference is the same checkout's native Torch route, including a shared bond-mask
+   change, not an unmodified upstream checkout. Worker timing excludes parent
+   preflight and part of startup. Historical HIP/SMI monitor mapping limits the
+   isolation evidence; these are not newly verified Rust E2E numbers. Outputs pass
+   the established coordinate/confidence tolerances, not bitwise equality.
+2. **AtlasFold:** Includes AtlasLM-3B on every required pass; native BF16/FP32,
+   R4/five trunk passes, D30 at N1000 or D100 at N1536, S1, seed102.
+   Request timing includes loading/features/prediction/serialization, excluding
+   imports, hashing and preflight. Unchunked native N1536 OOMs. Public outputs
+   match byte-for-byte. N1000 has no new repeated direct comparison after QKV packing.
+3. **OpenFold3:** OpenBind-0 strict deterministic FP32 with memory filling,
+   R3/four trunk passes, D200/S1, seed101. All 11 arrays are bitwise equal;
+   comparisons also check CIF identities. These experiments do not mean every
+   optimization is enabled by `configs/diamondhill/openfold3-hip-fused.json`.
+
+### Later OpenFold3 increments — separate baselines
+
+| N1536 experiment | Previous → candidate E2E median | Incremental speedup |
+| --- | ---: | ---: |
+| D16 coverage vs combined reuse | 628.689 → 540.848 s | **1.1624x** |
+| Retained workspace/mask handling vs D16/cache combination | 540.302 → 449.723 s | **1.2014x** |
+| Triangle multiplication copies + attention K packing vs workspace | 452.471 → 416.226 s | **1.0871x** |
+
+Each row has three pairs under the same strict R3/D200/S1 contract. The latest
+triangle comparison also reduces model forward time **356.595 → 321.699 s
+(1.1085x)**; all six outputs match all 11 arrays and full CIF bytes against the
+native, D16 and workspace anchors. N1000 fallback passes separately.
+See [complete evidence and reproduction scope](docs/openfold3-performance.md).
+
+**Do not multiply these incremental ratios into an original-Torch speedup.**
+A complete three-pair direct original-Torch comparison of the latest combination
+is not available; 1.499x above applies to its earlier measured combination.
+
+The final additional attention cycle rejected both exact candidates: native BMM
+into reused scores plus HIP softmax made complete attention approximately 11%
+slower, and double-LDS buffering made it approximately 1.3% slower. The validated
+triangle-memory combination is retained; neither rejected candidate is promoted.
+
+C = Protenix cycles; R = additional recycles; D = diffusion steps; S = samples.
+Long inputs and the eight short development cases are regression/performance
+workloads, not an independent experimental structure-accuracy test set.
+
+## Repository layout and documentation
 
 | Path | Responsibility |
 | --- | --- |
-| `crates/fireprot-core` | Requests, workload semantics, protocol and operator registry |
-| `crates/fireprot-runtime` | Preflight, worker lifecycle, device monitoring, native build/cache services |
-| `crates/fireprot-validation` | Output acceptance, array comparison and numerical metrics |
-| `crates/fireprot-cli` | Rust command entry point |
-| `crates/fireprot-bridge` | In-process CPython boundary for Rust policy and build services |
-| `python/fireprot_workers` | Explicit upstream model invocation and tensor serialization |
-| `python/fireprot` | Model adapters, tensor inspection/calls and Rust bridge loading |
-| `kernels/amd` | Maintained HIP/CK sources |
-| `fireprot/__init__.py` | Import shim for upstream and historical entry points |
-| `configs`, `tests`, `provenance` | Explicit workloads, validation and measured evidence |
-| `docs`, `.agents` | Architecture, guides, migration decisions and historical context |
-| `Protenix/` | Independent upstream Git checkout; never a top-level submodule |
-| `runtime/`, `outputs/` | Local weights/build caches and generated predictions; excluded from Git |
+| `crates/fireprot-{core,runtime,validation,cli,bridge}` | Rust contracts, execution, acceptance, CLI and CPython bridge |
+| `python/fireprot_workers`, `python/fireprot` | Upstream model invocation and tensor adapters |
+| `kernels/amd` | Maintained HIP/CK operators |
+| `experiments`, `provenance` | Experimental implementations and measured evidence |
+| `configs`, `tests`, `docs`, `.agents` | Workloads, validation, guides and project history |
+| `Protenix/` | Independent upstream Git checkout, not a top-level submodule |
+| `runtime/`, `outputs/` | Local assets/build caches and predictions; excluded from Git |
 
-Weights and predictions are not synchronized or committed with framework source.
-Review destinations and dry-run changes before using the deployment sync script.
+- [Architecture](docs/architecture.md) and [Rust acceptance](docs/rust-acceptance.md)
+- [Installation](docs/installation.md), [checkpoint inventory](docs/diamondhill-checkpoints.md), [entry points](docs/entrypoints.md)
+- [Protenix measurements](docs/protenix-native-requests.md), [AtlasFold measurements](docs/atlasfold-performance.md), [OpenFold3 measurements](docs/openfold3-performance.md)
+- [Environment pins](docs/environment-inventories.md), [execution provenance](docs/execution-provenance.md), [run archives](docs/run-archives.md)
+- [Original Protenix baseline notes](.agents/protenix_baseline.md) (Chinese, retained unchanged)
 
-## Correctness and performance evidence
-
-Comparisons must retain model, weights, input, dtype, cycle/step/sample counts,
-random state and cache conditions. Report model time and complete-request time
-separately. Migration checks run concurrently on separate GCDs do not establish
-new E2E speedups. The eight short `cases/` examples are development cases; long
-workloads without experimental coordinates establish native agreement, not
-structural accuracy.
-
-- [Rust migration acceptance and remaining work](docs/rust-migration.md)
-- [Prediction CIF validation and sample associations](docs/cif-validation.md)
-- [Mini-ESM assets and feature validation](docs/protenix-mini-esm.md)
-- [Pinned batch inference](docs/batch-inference.md)
-- [Maintained and historical entry points](docs/entrypoints.md)
-- [Current architecture and dependency boundaries](docs/architecture.md)
-- [Independent Linux installation](docs/installation.md)
-- [Repository layout and historical path compatibility](docs/repository-layout.md)
-- [Worker launch and physical device provenance](docs/execution-provenance.md)
-- [Explicit environment content inventories](docs/environment-inventories.md)
-- [Accepted run archives and timing collection](docs/run-archives.md)
-- [Complete inference invocation timing](docs/invocation-timing.md)
-- [Paired correctness and timing comparisons](docs/paired-comparisons.md)
-- [Rust paired execution and per-run correctness gates](docs/paired-execution.md)
-- [Framework CPU continuous integration](docs/continuous-integration.md)
-- [Operator policy and bridge deployment](docs/rust-operators.md)
-- [Published kernel artifacts](docs/kernel-artifacts.md)
-- [Torch extension loader ownership](docs/torch-loaders.md)
-- [Direct HIP builds and C ABI loaders](docs/hip-builds.md)
-- [Native build/cache migration](docs/kernel-builds.md)
-- [AtlasFold performance and exact-output evidence](docs/atlasfold-performance.md)
-- [OpenFold3 experimental HIP speedup and exact-output evidence](docs/openfold3-performance.md)
-- [Protenix request performance and historical isolation correction](docs/protenix-native-requests.md)
-- [Historical README measurements](.agents/readme_history_2026-10-04.md)
-- [Original Protenix setup notes](.agents/protenix_baseline.md)
-
-OpenFold3 optimization proceeds through the Rust framework and the same correctness
-gates. Existing validated GPU arithmetic remains available through capability
-checks and native fallback.
+Weights and predictions are not committed or transferred by the source-sync
+script. Review its destination and dry-run changes before synchronization.
 
 ## License
 

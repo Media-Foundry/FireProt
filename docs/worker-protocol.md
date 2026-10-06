@@ -3,7 +3,8 @@
 Status: the Rust contracts and state machine are implemented in `fireprot-core`.
 The Unix process transport and artifact hashing are implemented in
 `fireprot-runtime`. The independent HIP/SMI device monitor is implemented. Rust content validation and Protenix, AtlasFold and native OpenFold3 workers are
-connected. Full migration acceptance remains incomplete; see [current status](rust-migration.md).
+connected. The maintained migration workflows passed the
+[acceptance audit](rust-acceptance.md); experimental optimizations require their own gates.
 
 ## Ownership
 

@@ -1,6 +1,7 @@
 //! CPython stable-ABI bridge: metadata and capability callbacks only. Device
 //! tensors and implementation functions stay in the upstream model process.
 mod build;
+mod workspace;
 
 use std::{
     collections::BTreeMap,
@@ -149,6 +150,7 @@ impl OperatorRegistry {
 fn _fireprot_bridge(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add("ABI_VERSION", 1)?;
     module.add_class::<OperatorRegistry>()?;
+    module.add_class::<workspace::WorkspaceLease>()?;
     module.add_function(wrap_pyfunction!(build::cached_build, module)?)?;
     module.add_function(wrap_pyfunction!(build::accept_kernel, module)?)?;
     module.add_function(wrap_pyfunction!(build::build_torch, module)?)?;

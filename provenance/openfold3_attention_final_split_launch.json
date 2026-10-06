@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "phase": "queued",
+  "root": "/tmp/fireprot-attention-final-split-v1",
+  "pid": 2250000,
+  "prerequisite": {
+    "root": "/tmp/fireprot-triangle-e2e-v1",
+    "pid": 2235527,
+    "requires": "terminal success, all outputs exact, median speedup >1 and faster median/p95, then all8GCD idle"
+  },
+  "scope": "Final additional cycle candidate A: native bmm(out=retained scores) and owned HIP softmax; 21 numerical cases with PV checks, then actual trained attention balanced replay; no full-model or E2E claim",
+  "source_archive": {
+    "path": "outputs/experiments/triangle-memory-local-20261006/final-split-launch-v1.tar.gz",
+    "sha256": "6f388b879dbc95fa9b47e5fd83f346319aed75239ac43ca1ddae07f3addca28e"
+  },
+  "sources": [
+    {
+      "path": "experiments/attention_final/replay_split.py",
+      "sha256": "69b21e43681b8dcc3ef0c0307f744519a1e55748e57c1cdda6f0c1e0226d7107"
+    },
+    {
+      "path": "experiments/attention_final/screen_split.py",
+      "sha256": "91a282d6d621e15b6463c41c6a2179a12cb05bee734587e81a85015d843bdc14"
+    },
+    {
+      "path": "experiments/attention_final/split_workspace.py",
+      "sha256": "ab6c34a710cb27b71159390e37796d7d951d58dae3ee6681214e4f9538028e4c"
+    }
+  ],
+  "limits": [
+    "No GPU work before previous cycle terminal success",
+    "No automatic retry",
+    "Alternative B double-LDS buffering and subsequent model/E2E gates not implemented or queued yet",
+    "README update follows completion of this additional cycle"
+  ]
+}

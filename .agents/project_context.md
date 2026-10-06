@@ -2443,3 +2443,44 @@ Atlasfoldfinal docs: N1536chunked-native553.359->203.910s2.714x,sequentialsets,
 uncutnativeOOM; excludesimports/hash/preflight,seed102R4/fivepassesD100S1native
 precision withAtlasLMpreserved. Earlierpaired2.671x isdifferentcandidate. Need
 clearlylabel allmodels'timingboundaries andbench versions in READMEtable.
+
+## Final-cycle CPU preparation and guarded split replay queued (2026-10-06)
+
+CurrentHEADbb28827, newworkingbranch openfold3-attention-final-cycle. Plan isalready
+committed,pushed onparentbranch;read-plan digest
+sha256:a92e3b7cbc997193f7a4f0b84b7c0bea261eff211321658979409ff02746bdbf.
+Workreanchor /tmp/fireprot-attention-cycle2-work-provenance.json proves all6cited
+paths unchanged fromplan; HEAD/journal/docs onlychanged. IndependentCPUpreparation
+advanced while priorE2E runs; newGPU work remains strictlydeferred toits terminal.
+
+New experiments/attention_final/{split_workspace,screen_split,replay_split}.py:
+source-pinned WorkspaceFusion callfactory preserves lock,owner,stream,private
+storage/fail-closed/nativePV. Botharms useacceptedHIPkeypacking. Splitarm replaces
+only fusedQKsoftmax launch withtorch.bmm(out=retainedscores) andOwnedScoreSoftmax.
+21raw/probability cases withPVbits checks; then14trainedcalls perstart/end direction,
+6timed perarm excludingfirstcall. Exactmode strings inreport distinguishsplit
+fromfused ratherthan claiming fusedkernel launched. Syntaxchecked; dynamicmethod
+substitution separatelycompiled fromactualsource viaAST. NoGPUresultyet.
+
+ACTIVE QUEUED controller2250000 /tmp/fireprot-attention-final-split-v1.
+status=waiting_previous_cycle. Waits original2235527 untilsucceeded, verifies
+collectedcorrectness,median_speedup>1 andobserved_trend=faster_median_and_p95,
+thenall8GCDidle; numericalscreen then trainedreplay, noautoretry. Priorfailure or
+nonwinningE2E stops beforeGPU and requiresreview. controller.py/main guard avoids
+stdlibshadow issue. status.json/controller.log,screen.stdout/stderr,screen.json,
+replay.stdout/stderr,replay.json authoritative. It does NOT startfullmodel orE2E.
+AlternativeB twoLDSbuffers notimplementedyet. README remainsafterthiscycle.
+Launch/sourcearchive pins provenance/openfold3_attention_final_split_launch.json.
+
+Latest priorE2Ejournal: baseline0 measured+verified atoffset465.448s; candidate0
+started. No completepair or3pairratioyet. Scheduler2242825 anddriver2235527 still
+active; do notlaunch competingGPUwork orheavybuild. Bothcontrollersalreadyown
+sequence; poll originalPIDs/receipts,neverrestartonSSHtimeout.
+
+Read-only next-scope evidence: actualcombinedv12 kernel hasstage16*256floats,
+vectorwrite stage[destination],read stage[stage_index(wave,...)],6producerbarriers
+and5reusebarriers. Potentialtwo-buffer transformation doublesstage, adds
+(band&1)*4096 toBOTHwrite/read addresses andremovesonlyif(band!=5)barriers; keeps
+MFMA/add/reductionorder. NeedcompilerISA/resourceproof andGPUstressbeforerelying.
+Nativebmmout prototype stillneeds selectedkernel/hiddenallocation inspection
+beforepromotion even ifbitwise/replaypass. UserISA PDF untracked; nevercommit.

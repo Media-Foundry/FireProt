@@ -65,3 +65,17 @@ def test_control_hash_is_checked_before_loader(tmp_path):
         with pytest.raises(ValueError, match='hash mismatch'):
             load_workspace(p, '0' * 64)
         loader.assert_not_called()
+
+
+@pytest.mark.parametrize('capacity', [None, 32, 128])
+def test_hashed_control_selects_capacity_with_legacy_default(tmp_path, capacity):
+    import hashlib
+    import json
+    control = {'fusion': {'kernel': 'test'}}
+    if capacity is not None:
+        control['microbatch'] = capacity
+    p = tmp_path / 'control.json'
+    p.write_text(json.dumps(control))
+    with patch('experiments.mfma_qk.workspace_dispatch.ModelWorkspaceFusion') as loader:
+        load_workspace(p, hashlib.sha256(p.read_bytes()).hexdigest())
+        loader.assert_called_once_with(control['fusion'], microbatch=256 if capacity is None else capacity)

@@ -17,21 +17,26 @@ SCORE_SHAPE = (256, 4, 1536, 1536)
 
 
 class ModelWorkspaceFusion:
-    def __init__(self, control):
+    def __init__(self, control, *, microbatch=256):
+        if type(microbatch) is not int or microbatch not in (32, 128, 256):
+            raise ValueError('Only explicitly qualified capacities32/128/256 are supported')
+        self.microbatch = microbatch
+        self.score_shape = (microbatch, 4, 1536, 1536)
+        self.retained_bytes = microbatch * 4 * 1536 * 1536 * 4
         self._owner = threading.get_ident()
         self._lock = threading.Lock()
         self._closed = self._released = False
-        self._lease = bridge.WorkspaceLease(SCORE_SHAPE, 4, BYTES)
-        self._pool = WorkspaceFusion(control, 256, max_bytes=BYTES)
+        self._lease = bridge.WorkspaceLease(self.score_shape, 4, self.retained_bytes)
+        self._pool = WorkspaceFusion(control, microbatch, max_bytes=self.retained_bytes)
         self.calls_by_batch = {}
 
-    @staticmethod
-    def eligibility(query, key, value, mask, bias):
+    def eligibility(self, query, key, value, mask, bias):
         """Immutable tensor metadata only; runtime state is checked on each call."""
         tensors = (query, key, value, mask, bias)
         if any(type(t) is not torch.Tensor for t in tensors):
             return False, 'plain_tensors_required'
-        if query.ndim != 4 or query.shape[0] not in (256, 512, 1024):
+        if (query.ndim != 4 or query.shape[0] not in (128, 256, 512, 1024)
+                or query.shape[0] % self.microbatch):
             return False, 'unmeasured_outer_batch'
         batch = query.shape[0]
         if any(tuple(t.shape) != (batch, 4, 1536, 32) for t in tensors[:3]):
@@ -70,7 +75,7 @@ class ModelWorkspaceFusion:
         self._lease.reserve(query.device.index, stream)
         # Bind before allocation so interrupted initialization is also drained.
         self._pool._device, self._pool._stream = query.device, stream
-        self._pool._scores = torch.empty(SCORE_SHAPE, device=query.device, dtype=query.dtype)
+        self._pool._scores = torch.empty(self.score_shape, device=query.device, dtype=query.dtype)
         self._pool.allocations += 1
         self._lease.allocation_committed()
 
@@ -92,8 +97,8 @@ class ModelWorkspaceFusion:
                 self._allocate(query, stream)
             self._lease.begin_use(query.device.index, stream)
             results = []
-            for start in range(0, batch, 256):
-                end = start + 256
+            for start in range(0, batch, self.microbatch):
+                end = start + self.microbatch
                 if reference_probabilities is not None:
                     self._pool._scores.fill_(float('nan'))
                 part = self._pool(query[start:end], key[start:end], value[start:end],
@@ -102,7 +107,7 @@ class ModelWorkspaceFusion:
                         reference_probabilities[start:end], self._pool._scores):
                     raise RuntimeError('Model workspace probability mismatch')
                 results.append(part)
-            result = results[0] if batch == 256 else torch.cat(results, dim=0)
+            result = results[0] if batch == self.microbatch else torch.cat(results, dim=0)
             self._lease.finish_use()
             self.calls_by_batch[str(batch)] = self.calls_by_batch.get(str(batch), 0) + 1
             return result
@@ -134,6 +139,7 @@ class ModelWorkspaceFusion:
 
     def manifest(self):
         return dict(policy_engine=identity, lease=json.loads(self._lease.manifest()),
+                    microbatch=self.microbatch, retained_bytes=self.retained_bytes,
                     kernel=self._pool.receipt, allocations=self._pool.allocations,
                     successful_kernel_calls=self._pool.calls,
                     calls_by_batch=dict(self.calls_by_batch), closed=self._closed,

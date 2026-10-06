@@ -301,3 +301,21 @@ test reproduces it and verifies the corrected ordering. Confidence retains its
 captured instance callable and its existing report; the observer records the
 remaining class-dispatched tuners, including MSA and Pairformer. Ten observer/
 confidence-policy tests pass. Model diagnostic acceptance remains required.
+
+### Explicit smaller-capacity candidates
+
+The owner now accepts a fixed `microbatch` of32,128 or256 through hashed controls;
+the reproduction default remains256. Shape, lease budget and slice count derive
+from that one capacity (1.125,4.5 or9GiB). Only measured candidate outer batches
+128/256/512/1024 divisible by the chosen capacity are eligible. B64 remains on
+the accepted fallback. The manifest's retained_bytes describes configured pool
+capacity; current charge/committed storage and release state are in the Rust lease.
+
+Combined-v12 passes all21 raw/softmax numerical cases at B128 with zero bit
+mismatches. Evidence: `provenance/openfold3_qk_combined_b128_probe.json`; archive
+`qk-combined-b128-v1-results.tar.gz`, SHA256
+`6ed8f18b7778e9ac31b160427f2c3a3f595840a94774cad4088bf6c1122ad499`.
+This enables the128 loader gate but does not establish microchunk native-PV or
+model equivalence. Capacity-aware mixed-batch qualification is prepared next.
+Seventy-three related CPU tests pass, including capacity accounting, legacy
+default controls, invalid-capacity rejection and confidence-hook ordering.

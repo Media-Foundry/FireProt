@@ -24,7 +24,7 @@ class WorkspaceFusion(PackedFusion):
 
     def __init__(self, control, batch, *, max_bytes, contiguous_bias=False):
         needed = batch * 4 * 1536 * 1536 * 4
-        if batch not in (32, 256) or needed > max_bytes or max_bytes > 9 * 2**30:
+        if batch not in (32, 128, 256) or needed > max_bytes or max_bytes > 9 * 2**30:
             raise ValueError('Experimental workspace requires tested batch and explicit <=9GiB budget')
         super().__init__(control, batch)
         self.batch = batch

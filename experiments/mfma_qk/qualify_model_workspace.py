@@ -25,7 +25,7 @@ def main(controls_path, destination):
         controls=pin(controls_path), policy_engine=identity,
         sources=[pin(__file__), pin(model_workspace.__file__), pin(workspace_attention.__file__)],
         visible_device=os.environ.get('HIP_VISIBLE_DEVICES'), batch_order=[],
-        cache_state='One lazily initialized B256 workspace reused across all18 complete calls; poisoned per microchunk for full overwrite checks')
+        cache_state='One lazily initialized fixed-capacity workspace reused across all complete calls; poisoned per microchunk for full overwrite checks')
     candidate = None
     try:
         if str(torch.__version__) != softmax_fp32.TORCH_VERSION or torch.version.hip != softmax_fp32.HIP_VERSION:
@@ -47,13 +47,16 @@ def main(controls_path, destination):
         os.environ['FIREPROT_SOFTMAX_FP32_BUNDLE_SHA256'] = control['split_hip']['manifest_sha256']
         with torch.inference_mode():
             split = OwnedScoreSoftmax()
-            candidate = model_workspace.ModelWorkspaceFusion(control['fusion'])
+            candidate = model_workspace.ModelWorkspaceFusion(control['fusion'],
+                microbatch=control.get('microbatch', 256))
+            measured_batches = tuple(b for b in (128, 256, 512, 1024) if b % candidate.microbatch == 0)
+            report.update(microbatch=candidate.microbatch, retained_workspace_bytes=candidate.retained_bytes)
             previous = None
             score_pointer = None
             torch.cuda.reset_peak_memory_stats()
             for seed in (101, 102, 103):
                 for layout in ('head_last', 'head_last_transposed'):
-                    batches = (256, 512, 1024) if layout == 'head_last' else (1024, 512, 256)
+                    batches = measured_batches if layout == 'head_last' else tuple(reversed(measured_batches))
                     for batch in batches:
                         args = operands(batch, seed, layout)
                         if seed == 102:
@@ -109,12 +112,15 @@ def main(controls_path, destination):
             del args
             report['workspace_before_close'] = candidate.manifest()
             r = report['workspace_before_close']
-            if (r['allocations'] != 1 or r['successful_kernel_calls'] != 42
-                    or r['calls_by_batch'] != {'256': 6, '512': 6, '1024': 6}
-                    or r['lease']['allocation_count'] != 1 or r['lease']['completed_calls'] != 18
-                    or r['lease']['charged_bytes'] != model_workspace.BYTES):
+            expected_calls = {str(b): 6 for b in measured_batches}
+            if (r['allocations'] != 1 or r['successful_kernel_calls'] != sum(
+                        6 * b // candidate.microbatch for b in measured_batches)
+                    or r['calls_by_batch'] != expected_calls
+                    or r['lease']['allocation_count'] != 1
+                    or r['lease']['completed_calls'] != sum(expected_calls.values())
+                    or r['lease']['charged_bytes'] != candidate.retained_bytes):
                 raise RuntimeError('Mixed-batch execution accounting failed')
-            if split.storage_fallbacks or split.launches_submitted != 18:
+            if split.storage_fallbacks or split.launches_submitted != sum(expected_calls.values()):
                 raise RuntimeError('Reference execution accounting failed')
             report['split_runtime'] = split.experiment_manifest()
             torch.cuda.synchronize()
@@ -122,7 +128,7 @@ def main(controls_path, destination):
             candidate.close()
             report['released_tensor_bytes'] = before - torch.cuda.memory_allocated()
             report['workspace_after_close'] = candidate.manifest()
-            if (report['released_tensor_bytes'] != model_workspace.BYTES
+            if (report['released_tensor_bytes'] != candidate.retained_bytes
                     or report['workspace_after_close']['lease']['charged_bytes'] != 0
                     or report['workspace_after_close']['lease']['release_count'] != 1):
                 raise RuntimeError('Workspace tensor release does not match Rust receipt')

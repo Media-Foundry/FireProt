@@ -199,3 +199,36 @@ def test_dynamic_context_checked_on_every_call_even_with_cached_metadata():
         with patch.object(torch.utils.deterministic, 'fill_uninitialized_memory', False):
             with pytest.raises(RuntimeError, match='Strict inference'):
                 p._check(q, q, q, q, q)
+
+
+@pytest.mark.parametrize('capacity', [32, 128, 256])
+def test_fixed_capacities_derive_one_pool_and_correct_slice_counts(capacity):
+    with patch('experiments.mfma_qk.model_workspace.WorkspaceFusion', FakePool):
+        p = ModelWorkspaceFusion({}, microbatch=capacity)
+    batches = [b for b in (128, 256, 512, 1024) if b % capacity == 0]
+    for batch in batches:
+        fake_call(p, batch)
+    r = p.manifest()
+    assert p.score_shape == (capacity, 4, 1536, 1536)
+    assert r['microbatch'] == capacity and r['retained_bytes'] == capacity * BYTES // 256
+    assert r['lease']['charged_bytes'] == r['lease']['budget_bytes'] == r['retained_bytes']
+    assert r['lease']['completed_calls'] == len(batches)
+    assert r['allocations'] == 1 and r['successful_kernel_calls'] == sum(b // capacity for b in batches)
+    p.close()
+    assert p.manifest()['lease']['charged_bytes'] == 0
+
+
+@pytest.mark.parametrize('capacity', [True, 64, 0, 512, '128'])
+def test_unqualified_capacity_rejected_before_loading(capacity):
+    with patch('experiments.mfma_qk.model_workspace.WorkspaceFusion') as loader:
+        with pytest.raises(ValueError, match='qualified capacities'):
+            ModelWorkspaceFusion({}, microbatch=capacity)
+        loader.assert_not_called()
+
+
+def test_smaller_outer_batch_rejected_by_default_pool():
+    p = instance()
+    q = torch.empty(128, 4, 1536, 32, device='meta')
+    mask = torch.empty(1, 1, 1, 1536, device='meta')
+    bias = torch.empty(1, 4, 1536, 1536, device='meta')
+    assert p.eligibility(q, q, q, mask, bias) == (False, 'unmeasured_outer_batch')

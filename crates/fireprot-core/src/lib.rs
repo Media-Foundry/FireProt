@@ -4,6 +4,7 @@
 pub mod protocol;
 pub mod registry;
 pub mod request;
+pub mod workspace;
 
 pub use request::{Request, RequestError, ValidatedRequest};
 

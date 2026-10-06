@@ -3859,3 +3859,62 @@ ExpectedmayneedfreshreportTAGifRustconditiondiagnosticunexpected; neveroverwrite
 failedreport. Provisionaldocsupdatedmismatch/constructor reporting. No GPUlive.
 Worktreea0e86fe +worker/tests/aggregator/mismatchprovenance/docs/memorydirty.
 DoNOTclaimgoalcomplete: correctedshared-initdirectstudy/READMEfinalratio pending.
+
+## 2026-10-07 corrected shared-init direct study launched
+
+Fix/aggregator committed and pushed on master 0881f0a; 34 targeted CPU tests pass.
+Fresh typed GitNexus status was current/schema4/incompleteReasons empty; staged
+HIGH gate covered expected worker construction/report flows and aggregator only.
+Reviewed actual native helper, runtime.install, construction.install and worker
+entry before re-stage/re-gate/commit. Postcommit index refresh completed and final
+detect_changes(all) returned no changed symbols (user docs/isa remains untracked).
+
+CURRENT LIVE wrapper PID/PGID2442330, verified ps at elapsed6s, root
+outputs/experiments/protenix-base-maintained-native-fastinit-pairs-20261007.
+All six spec/request/profile/reference pins and driver hash verified before launch;
+scientific settings equal, HIP7, both fastinit1, only backend/compositionflag differs.
+All destinations absent, no GPU job active before launch. Serial timeout7200 driver,
+1800 per run; AB/BA/AB. No remote source/profile changes or overlapping GPU/build
+work until terminal. Poll same PID and order.jsonl; do not relaunch on observation
+failure. Check first native actual constructor selected1/errors0/recovered0 and
+all9 bitwise anchor match. Final driver exit0/six receipts/three aligned gates,
+then run committed summarize_native_study.py with fresh TAG; this aggregator has
+not yet been run on a completed direct study. README final native ratio pending.
+
+User asked about Graph. Audited three existing graph experiments and reported
+single-pair E2E results, not new measurements. Maintained composition excludes
+Graph. Next graph investigation must preserve current fast path: dual_storage
+rejects capture and binds its two slots to one stream; triangle_lt currently
+falls back under capture and expects 524 incoming+524 outgoing Python calls.
+Old recycle_graph warms side stream and captures complete48blockstack, which
+conflicts with a dual workspace already owned by default stream (e.g. MSA).
+Do not remove guards or silently fall back to other math. A qualified experimental
+composition needs explicit stream ordering/ownership, logical replay coverage
+separate from Python counters, input/weight versions and stable-address guards.
+Partition capture alone does not establish lower total capture cost: 48 distinct
+weighted blocks still require their own captured launches. Prefer measuring
+setup vs replay on current route before promising block partition gains.
+Local investigation only during live direct study; no new graph GPU experiment yet.
+
+## 2026-10-07 local composed trunk Graph prototype prepared during direct study
+
+LIVE direct wrapper2442330 recheckedelapsed03:05, nativeindex0running; no restart.
+NewLOCALUNCOMMITTED experimentstrunk_graph.py,graph_dual_storage.py,
+graph_triangle_lt.py andtests/adapters/test_protenix_trunk_graph_contract.py.
+ASTall3PASS;10CPUcontracttestsPASS (notGPUqualification). Derivedtrianglehelpers
+frommaintained0881f0a; originalsunchanged. Entiremodelinvocationbotharmssameseparate
+side streamavoidsMSA/defaultworkspaceownershipcollision;captureper4/12/48blocks,
+firsttrunkwarm,secondcapture/replay,8remainingreplay. Global/localbiascachesand
+transitionfusionkeptoutsidecapturedtrunk. Graph poolsharedwithstrictcaptureorder.
+Parameter/bufferversion/shape/RNGguards; partitionstaticinputsretained.
+Ltpermitcaptureonlydeclaredcontract (noalgorithmfallback); dualstoragepermits
+captureonlysamephase/streamandregistersbefore-replayownershipguard. Expected
+Pythoncontractionsgraph280=88other+96warm+96capture vs1048off;logicalboth1048.
+Incoming/outgoing140eachgraph vs524off;2projectionsperpair. No GPUbuildneeded.
+Unqualifiedprototype READMEexplicit. Needfreshindex/commitgatebeforecommit.
+DoNOTsync/editremotePythonorlaunchuntilcurrentdirectstudyterminal. Afterwards
+freezeindependentworker snapshot andreplacebase_optimizationsimportwithtrunk_graph,
+include3newmodules+diffusion_graph.pyidentityhelperinPYTHONPATH. Usemaintained
+publishedbundleprofile;graphofffirstmustall9bitsvsmaintainedanchor;thenonG12
+sameworker/profileexceptflag, fullcoverage+all9bitsandE2E. Recordcaptureandfirst
+replaysubmissiontime separately (instantiationmaybe deferred). No claims yet.

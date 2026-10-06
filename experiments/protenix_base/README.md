@@ -233,3 +233,42 @@ confidence diagnostics. Its legacy result remains intact; the user-authorized
 0.1-A aligned criterion is reported separately with descriptive timings. The
 script refuses incomplete studies, condition errors, confidence failures and
 report overwrites. It does not launch inference or modify acceptance thresholds.
+
+## Composed trunk graph prototype (not yet GPU-qualified)
+
+`trunk_graph.py`, `graph_dual_storage.py`, and `graph_triangle_lt.py` are an
+isolated follow-up to the earlier whole-trunk graph experiment. They preserve
+scoped Torch Lt and two-slot dual storage instead of invoking the maintained
+helpers' capture rejection/fallback. The two triangle helpers are derived from
+`python/fireprot/adapters/protenix/base_n1000` at commit `0881f0a`.
+
+A frozen worker may replace its `base_optimizations` import with
+`from trunk_graph import install as base_optimizations`; it must include these
+three files and `diffusion_graph.py` (tensor identity helper) on its pinned path.
+The public profile and maintained worker do not load this experiment.
+
+- `FIREPROT_BASE_COMPOSED_GRAPH=off/on` selects the matched control/treatment.
+- `FIREPROT_BASE_GRAPH_GROUP_SIZE=4/12/48` sets contiguous block partition size.
+  Start at 12; partition size is not itself a claim of lower capture cost.
+- Both arms execute the complete model call on a single side stream. This keeps
+  MSA, trunk and confidence use of the same retained dual workspace ordered.
+- The first actual trunk pass warms the stream. The second captures each group
+  and executes it once; the remaining eight refresh inputs and replay in the
+  same order. C10/D200/S1 and random sampling remain unchanged.
+- Shared graph-pool replay follows capture order. Each partition retains its
+  own inputs/outputs; outputs are consumed before the next replay overwrites them.
+- Capture checks fixed signatures, parameter/buffer identities and versions,
+  unexpected RNG use, stream ownership, and full A/B consumption.
+- Graph mode expects 280 Python contractions (including capture), versus 1048
+  in eager mode. Both execute 1048 logical contractions. Coverage is accepted
+  only after all ten trunk calls and every partition replay complete.
+- Record capture time, first-replay submission time (including any deferred
+  instantiation), memory peaks and complete invocation time. All costs remain
+  inside E2E; do not report isolated replay time as the invocation speedup.
+
+CPU bookkeeping tests pass. No GPU qualification or performance claim exists
+for this composition yet. After the direct native study terminates, first run
+its eager control and require all nine arrays bitwise equal to the maintained
+anchor. Then run graph-on with the same frozen worker/profile except the graph
+flag, require the same exact output checks and full coverage, and compare E2E.
+Do not weaken capture guards or silently switch contraction algorithms on failure.

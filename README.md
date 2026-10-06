@@ -169,11 +169,12 @@ This is numerical regression, not experimental structure accuracy. Base FP32,
 C10/D200/S1, seed101, N1000, strict determinism, HIP7, unflushed caches.
 See [scope, profiles and separate raw-native baseline](docs/protenix-base.md#full-ckhip-cycle-and-revised-coordinate-assessment-2026-10-07).
 
-The subsequent published-artifact experiment retains the identical HIP/CK
-binaries and avoids build-input scans during inference. Its first pair measures
-**146.265 -> 137.239 s (1.066x incremental)** with all nine arrays bitwise equal.
-Two further pairs are pending; this is not yet a repeated timing result. The
-experimental profile above pins both bundles. See
+The published-artifact route retains the identical HIP/CK binaries and avoids
+build-input scans during inference. **Three AB/BA/AB pairs** measure complete
+invocation medians **146.146 -> 133.437 s (1.095x incremental, 8.70% less time)**.
+All six outputs match all nine arrays bitwise. This is a loading-path gain over
+full CK/HIP, separate from the earlier native-GPU baseline. The experimental
+profile above pins both bundles. See
 [published Base deployment](docs/protenix-base.md#published-artifact-loading).
 
 ### Later OpenFold3 increments — separate baselines

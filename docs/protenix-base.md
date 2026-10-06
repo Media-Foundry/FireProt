@@ -247,7 +247,38 @@ All nine arrays are bitwise equal and Rust paired comparison passes unchanged
 gates between the two loading routes. The earlier native-versus-CK confidence
 limitation still applies. [First-pair evidence](../provenance/protenix_base_published_first_pair.json).
 
-Two additional AB/BA pairs are running under Rust `benchmark-pairs`, with
-per-run reference checks and pair gates. Do not describe this first pair as a
-three-pair trend. All trials retain strict FP32 N1000 C10/D200/S1 seed101, HIP7,
-fresh processes and unflushed filesystem/compiled-kernel caches.
+The initial pilot used a 7200-second invocation deadline, while the repeated
+jobs use 1800 seconds. Rust rejected combining those timing conditions. That
+pilot is retained separately; an additional matching pair completed the final
+**three AB/BA/AB pairs**, with all invocation deadlines set to 1800 seconds.
+[Aggregation rejection](../provenance/protenix_base_published_aggregation_rejection.json).
+
+| Three-pair median | Build-cache loading | Published loading | Speedup |
+| --- | ---: | ---: | ---: |
+| Complete invocation | 146.146473 s | 133.436657 s | 1.09525x |
+| Model-call boundary (includes lazy loading) | 121.802534 s | 109.062242 s | 1.11682x |
+
+Complete invocation time falls **8.70%**. Every individual pair is faster
+(1.08579x to 1.09998x); Rust reports faster median and p95. All six archives match
+all nine arrays bitwise, with unchanged published-route selection counts and
+passing Rust reference/pair/aggregate gates. These descriptive repetitions do not
+establish a cross-host or cold-cache guarantee. All trials retain strict FP32
+N1000 C10/D200/S1 seed101, HIP7, fresh processes and unflushed filesystem/compiled
+kernel caches. [Complete result](../provenance/protenix_base_published_three_pairs.json).
+
+## Padded N1000 hipBLASLt candidate
+
+A separate C ABI experiment preserves the current triangle input strides
+`[1000128,1000,1]` and uses a contiguous output. Sixteen hipBLASLt heuristic
+algorithms in each direction passed synthetic FP32 comparison to native hipBLAS.
+Heuristic index 0 was fastest in both directions: incoming **9.248 -> 7.857 ms**,
+outgoing **10.558 -> 7.905 ms**. Incoming matches bitwise; outgoing maximum
+absolute delta is 3.28e-7 on this input. Output allocation and strict memory
+filling are included; a reusable 32 MiB workspace is outside timing.
+
+This is an operator screen, not model/E2E evidence. The full Base experiment is
+running with the same C10/D200/S1 workload and a pinned published Lt bundle in
+an isolated worker snapshot. It must pass aligned-coordinate/relative-geometry
+checks and complete E2E comparison before promotion. The maintained N1536-only
+Lt adapter and the published Base profile remain unchanged.
+[Screen evidence](../provenance/protenix_base_lt_padded_screen.json).

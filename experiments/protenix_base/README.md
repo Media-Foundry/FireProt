@@ -65,3 +65,16 @@ the maintained vector-bias CK operator before timing. Four warmup rounds precede
 is included; the bias is already contiguous. These are synthetic operator screens,
 not Base structural accuracy or E2E evidence. Raw Rust build receipts are retained
 beside `screen.json` in the experiment roots recorded in provenance.
+
+## Padded N1000 hipBLASLt contraction screen
+
+`screen_lt_padded.py OUTPUT` builds `lt_padded.cpp` through the Rust HIP build
+service. The input is FP32 `[128,1000,1000]` with strides `[1000128,1000,1]`,
+matching the current tiled dual projection; output is contiguous. Incoming and
+outgoing contractions use separate Lt descriptors and up to 16 returned heuristic
+algorithms. An external 32 MiB workspace is retained across calls. Comparisons
+use Torch hipBLAS with TF32 disabled, seed101, strict determinism and memory
+filling. Each algorithm must pass 2e-5 absolute/relative synthetic agreement
+before timing. Output allocation/filling is timed; workspace creation is not.
+This screen is not connected to model dispatch. A winner still requires trained
+model correctness and complete invocation comparisons including setup costs.

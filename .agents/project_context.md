@@ -2877,3 +2877,90 @@ aggregateexistingfirstpair+2newpairs viaRustcompare-runs (3observationsperarm)
 using retainedaccepted/invocationpins. AllstrictgatesapplybetweenidenticalCKroutes.
 Do notreplace357.921nativefastinitbaselinewithoutlabeling. NootherGPUexperiment
 shouldoverlap orheavyremoteCPUbuildduringtimedruns. Workdirectlymaster.
+
+## 2026-10-07 active published repetition and next Lt screen preparation
+
+Previousgoalturn progress: CKtile alternatives rejected; publishedloadingfirstpair
+1.06576x exact, committed/pushedmaster4dce024. CurrentRustbenchmark2344669 verified
+live05:06. Journalnewbaseline measured146.3407s andnewcandidate~133.0227s, gatespass;
+index2published-r2 started, index3source-r2 followsautomatically. Do notrestart or
+launch GPU/remoteheavybuild untilbenchmarkterminal. Exacttimesuseinvocationreceipts,
+notjournaloffsetsubtraction infinalreport.
+
+Prepared newisolated files experiments/protenix_base/lt_padded.cpp and
+screen_lt_padded.py, copiedonly tooutputs/experiments/protenix-base-lt-padded-20261007.
+NO remotebuild/GPUrun yet. Screen targets actualBaseN1000 packedinput
+shape128x1000x1000, strides1000128/1000/1, outputcontiguous. CurrentLtadapteronly
+acceptscontinuousN1536, cannotdirectlyreuse. NewRAII C ABI queriesup to16heuristics
+perincoming/outgoing, FP32HIPBLAS_COMPUTE_32F,32MiB callerworkspace; compares
+alloutputswithTorchhipBLAS beforeinterleavedtimings. Synthetic2e-5abs/rel,seed101,
+4warmup12measuredrounds, outputallocation/fill included,reusedworkspaceexcluded.
+LocalPythonASTpasses. Localhipcccompilefailsmissinghipblaslt/hipblaslt.h inlocal
+ROCm layout; do notclaimcompiled. RemoteexistingLtbuildprovidesheader/library,
+performRust-ownedremotecompile onlyaftercurrenttimedbenchmarkterminal.
+No productionchanges; useronlyHIP6/7, workmaster, maintaincoordinate0.1A policy.
+
+## 2026-10-07 published repetition aggregation correction
+
+Rustbenchmark2344669 TERMINAL SUCCESS, bothadditionalpairs andall6reference/pair
+checks pass. Independentlychecked all6outputs(initial+repeats) all9arraysbits vs
+initialsource; all3publishedroutecounts1048/1048 andbothmodepublished.
+Two-compatible-pairE2Emedians146.1837160225->133.183402945s, positive.
+Attempttoaggregateinitialmanualpair+2repeats REJECTEDbyRust:
+"schema error: incompatible timing conditions". Actualcauseinitialinvocation
+ timeout7200seconds, repeatedjobs1800seconds. Do NOT editreceipts/weakencomparator
+orclaimsuccessful3pairresultfromthatmix. Failedspec retainedthree-pair-compare.json;
+provenance/protenix_base_published_aggregation_rejection.json recordsreason.
+
+NOW LIVE thirdcompatiblepair RustPID2350448 atsameartifactroot:
+third-pair-spec.json/third-pair-measurement/third-pair-launch.log/third-pair-pid.
+ABorder, source-r3 thenpublished-r3, both1800s invocationtimeout. Initialmanualpair
+nowindependentpilot; final3pairaggregate must ONLY use repeat-measurement jobs
+0(source-r1),1(published-r1),2(published-r2),3(source-r2), plus third-pair-measurement
+0(source-r3),1(published-r3). Allsameprofiles/scientificsettings. FinalorderAB/BA/AB.
+Old /tmp/fireprot-aggregate-published.py includespilot; DO NOT rerununchanged.
+Onthirdterminalsuccess regeneratecompare-spec using3accepted/invocationsperarm,
+retain all9bitwise andpublishedselectionchecks; reportmedians/modeltime andtrend.
+NewLt screen remainssourcepreparedonly; noGPU untilthisbenchmarkterminal.
+Compatibleaggregation script prepared atDiamondHill
+/tmp/fireprot-aggregate-published-compatible.py; requires bothbenchmark.jsonphase
+succeeded, excludesinitialpilot, combinesAB/BA/AB usingrepeat jobs0/3vs1/2 and
+thirdpairjobs0vs1, verifiesall9bits/allpublishedselectionthenRustcompare-runs.
+Writes three-pair-summary.json and three-pair-comparison.json inartifactroot.
+ThirdpairPID2350448 verifiedlive02:42, baselinesource-r3 measured145.4045s and
+verified, finalpublished-r3 nowrunning. Lt screen notbuilt/launched yet.
+Thirdcompatiblepair2350448 TERMINAL SUCCESS. Correctedcompatibleaggregationpassed:
+provenance/protenix_base_published_three_pairs.json. Final3AB/BA/ABpairs ONLY
+1800secondinvocations, initial7200pilotexcluded. E2Emedians146.146472885 ->
+133.436657165s,1.095249806x,8.70%less; individual1.0857875-1.0999834x,
+p95ratio1.09278194, faster_median_and_p95. Model121.802533924->109.062242168s,
+includeslazyloading; do notcallsteady-stateGPUcomputeimprovement. All6outputs
+all9arraysbits tosourceanchor; all3pub AMD+CKmodepublished/1048each, Rustgatespass.
+README/docsupdatedto3pairresult. Changesstilluncommittedthisturn.
+
+NOW LIVE paddedLt screen PID2354292, root outputs/experiments/protenix-base-lt-padded-20261007,
+launch.log/pid/screen.json/screen.build.json. Rust-ownednativecompile +PythonGPU
+microbench, HIP7only. All8GCDidlepreflight savedpreflight-processes.json. No E2E
+modelbenchmarkactive. PollsamePIDbeforeanyotherGPUexperiment. Onscreencomplete
+inspectnumerics/timings bothdirections; onlyfasteralgo deservesBasefullmodeltrial.
+No productionLtN1000adapteryet. Existingreference remainsTorchhipBLAS.
+PaddedLt screen2354292 TERMINAL SUCCESS, remotebuildworked (localheaderfailure
+notremoteissue). 16algorithms*2directions allpass2e-5syntheticgate. Fastestindex0
+incoming7.85658ms vsTorchhipBLAS9.24803 (bitwise); outgoing7.90506 vs10.55755ms
+(maxabs3.2782554626e-7, notbits). Evidenceprovenance/protenix_base_lt_padded_screen.json;
+rawbuildreceiptinexperimentroot. Publishedsame library134e817b2f642812d8af854469cfc6d156335209856240e5eaa0c418b3b4efac
+at runtime/kernels/protenix-base-lt-padded-20261007, manifest
+23e3e90adb333bc26f589b66db0cb6b22cf89baf932f0ceee3f796f3dc3f174b.
+
+CURRENT LIVE fullBaseLt candidate PID2355487, root
+outputs/experiments/protenix-base-lt-model-20261007;on-{request,profile,spec}.json,
+on-measurement/on-launch.log/on-pid; output outputs/protenix-base-lt-on.
+Frozenworkersnapshot wrapsmodelcallwithmodel_lt_padded.py context (newexperiment,
+notmaintainedLtadapter). Selectalgorithm0, exactstridesguards, retained32MiBworkspace,
+requires524incoming+524outgoing/no fallback. FullpublishedAMD/CK profile otherwise
+unchanged, strictFP32N1000C10D200S1seed101 HIP7. BothON/OFFspecs timeout1800consistent.
+OFFcontrolpreparedNOTlaunched. PollcandidatebeforeGPUwork; inspectbase-lt-padded.json,
+Rustbase-drift vsstrictinitnative AND versuspreviouspublished/fullCK predictions,
+all9arraydeltas/confidences/CIFmetadata. User0.1Aalignedgate; old1e-3legacygate
+mayfail andmustnotbehidden. Onlyaftercandidateacceptedcoordinateassessmentstart
+OFFcontrolsameworker; compareE2Ethenrepeatsifgain. No newLtmodelresultclaimedyet.

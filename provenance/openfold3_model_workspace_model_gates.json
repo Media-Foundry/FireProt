@@ -1,0 +1,2397 @@
+{
+  "schema_version": 1,
+  "scope": "OpenFold3 strict model correctness and memory gate; no E2E speedup claim",
+  "correctness_passed": true,
+  "paired_timing_started": false,
+  "runs": {
+    "1000": {
+      "n": 1000,
+      "completed": true,
+      "scope": "Correctness and model memory gate; runs overlapped across HIP6/HIP7, so timings are not speedup evidence",
+      "exit": {
+        "returncode": 0,
+        "elapsed_seconds": 240.89425921440125
+      },
+      "request": {
+        "schema_version": 1,
+        "run_id": "workspace-model-n1000-candidate-0",
+        "workload": {
+          "model": "openfold3",
+          "model_name": "openbind-0",
+          "recycles": 3,
+          "diffusion_steps": 200,
+          "samples": 1,
+          "precision": "float32",
+          "deterministic": true
+        },
+        "backend": "hip_fused",
+        "seed": 101,
+        "hip_device": 6,
+        "source": {
+          "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+          "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+            "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+          }
+        },
+        "resources": {},
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01000_462bb697ecdcce2f.json",
+          "sha256": "2715542db697dbd2dd5021063173f6e91a405ac0f46a46a69b748c815826ae5b"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/workspace-model-n1000-candidate-0"
+      },
+      "profile": {
+        "path": "/tmp/fireprot-workspace-model-e2e-v1/candidate-profile.json",
+        "sha256": "3fa1bfe10ef5369493f0f5bb8cf2952cc772aefecf721f67a3685674807f71a5"
+      },
+      "framework_cli": {
+        "path": "/tmp/fireprot-workspace-model-e2e-v1/target/release/fireprot",
+        "sha256": "6e81349891a472b92bc29ff43825628a3d0352e56996784a20594e6c7c2b4fce"
+      },
+      "comparisons": {
+        "original_native": {
+          "arrays": {
+            "confidence.chain_ptm.1": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.disorder": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.gpde": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.has_clash": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.iptm": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.pae": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.pde": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.plddt": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.ptm": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.sample_ranking_score": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "coordinates": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            }
+          },
+          "reference_npz": {
+            "path": "/media/IntelSSD/fireprot/outputs/zero-mask-e2e-n1000-baseline-0/sample-0.npz",
+            "sha256": "e6ea97dc8a3e9b5df0eb924f51d440918658a2f50d957338f8be8da24d8c7709"
+          },
+          "candidate_npz": {
+            "path": "/media/IntelSSD/fireprot/outputs/workspace-model-n1000-candidate-0/sample-0.npz",
+            "sha256": "e6ea97dc8a3e9b5df0eb924f51d440918658a2f50d957338f8be8da24d8c7709"
+          },
+          "reference_cif": {
+            "path": "/media/IntelSSD/fireprot/outputs/zero-mask-e2e-n1000-baseline-0/native/umem_L01000_462bb697ecdcce2f/seed_101/umem_L01000_462bb697ecdcce2f_seed_101_sample_1_model.cif",
+            "sha256": "5f845dad470aee78185625581de805ca6c2ff3fb9c063ea1985d339b2538c368"
+          },
+          "candidate_cif": {
+            "path": "/media/IntelSSD/fireprot/outputs/workspace-model-n1000-candidate-0/native/umem_L01000_462bb697ecdcce2f/seed_101/umem_L01000_462bb697ecdcce2f_seed_101_sample_1_model.cif",
+            "sha256": "5f845dad470aee78185625581de805ca6c2ff3fb9c063ea1985d339b2538c368"
+          },
+          "cif_bytes_equal": true
+        }
+      },
+      "runtime": {
+        "experimental_head_dimensions": {
+          "allowed": [
+            16,
+            32
+          ],
+          "submitted_launches": {
+            "16": 264,
+            "32": 1702
+          }
+        },
+        "registry": {
+          "implementations": {
+            "attention": [
+              {
+                "name": "hip_mask_bias_softmax_fp32",
+                "priority": 10,
+                "version": "softmax-fp32-v1"
+              }
+            ]
+          },
+          "selection_counts": [
+            {
+              "operation": "attention",
+              "implementation": "hip_mask_bias_softmax_fp32",
+              "count": 1966
+            },
+            {
+              "operation": "attention",
+              "implementation": "native",
+              "count": 6201
+            }
+          ],
+          "decisions": [
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1,
+                  1,
+                  16,
+                  1000,
+                  48
+                ],
+                "strides": [
+                  768000,
+                  768000,
+                  48,
+                  768,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "False",
+                  "high_precision": "True"
+                }
+              },
+              "selected": "native",
+              "rejected": [
+                {
+                  "implementation": "hip_mask_bias_softmax_fp32",
+                  "reason": "FP32 GPU tensor, mask, layout or published-kernel contract mismatch"
+                }
+              ]
+            },
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1,
+                  1,
+                  250,
+                  4,
+                  32,
+                  32
+                ],
+                "strides": [
+                  1024000,
+                  1024000,
+                  4096,
+                  32,
+                  128,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "False",
+                  "high_precision": "True"
+                }
+              },
+              "selected": "native",
+              "rejected": [
+                {
+                  "implementation": "hip_mask_bias_softmax_fp32",
+                  "reason": "FP32 GPU tensor, mask, layout or published-kernel contract mismatch"
+                }
+              ]
+            },
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1,
+                  16,
+                  1000,
+                  24
+                ],
+                "strides": [
+                  384000,
+                  24,
+                  384,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "False",
+                  "high_precision": "True"
+                }
+              },
+              "selected": "native",
+              "rejected": [
+                {
+                  "implementation": "hip_mask_bias_softmax_fp32",
+                  "reason": "FP32 GPU tensor, mask, layout or published-kernel contract mismatch"
+                }
+              ]
+            },
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1,
+                  250,
+                  4,
+                  32,
+                  32
+                ],
+                "strides": [
+                  1024000,
+                  4096,
+                  32,
+                  128,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "False",
+                  "high_precision": "True"
+                }
+              },
+              "selected": "native",
+              "rejected": [
+                {
+                  "implementation": "hip_mask_bias_softmax_fp32",
+                  "reason": "FP32 GPU tensor, mask, layout or published-kernel contract mismatch"
+                }
+              ]
+            },
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  232,
+                  4,
+                  1000,
+                  16
+                ],
+                "strides": [
+                  64000,
+                  16,
+                  64,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "True",
+                  "high_precision": "False"
+                }
+              },
+              "selected": "hip_mask_bias_softmax_fp32",
+              "rejected": []
+            },
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  232,
+                  4,
+                  1000,
+                  32
+                ],
+                "strides": [
+                  128000,
+                  32,
+                  128,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "True",
+                  "high_precision": "False"
+                }
+              },
+              "selected": "hip_mask_bias_softmax_fp32",
+              "rejected": []
+            },
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  256,
+                  4,
+                  1000,
+                  16
+                ],
+                "strides": [
+                  64000,
+                  16,
+                  64,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "True",
+                  "high_precision": "False"
+                }
+              },
+              "selected": "hip_mask_bias_softmax_fp32",
+              "rejected": []
+            },
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  256,
+                  4,
+                  1000,
+                  32
+                ],
+                "strides": [
+                  128000,
+                  32,
+                  128,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "True",
+                  "high_precision": "False"
+                }
+              },
+              "selected": "hip_mask_bias_softmax_fp32",
+              "rejected": []
+            },
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1000,
+                  4,
+                  1000,
+                  16
+                ],
+                "strides": [
+                  64000,
+                  16,
+                  64,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "True",
+                  "high_precision": "False"
+                }
+              },
+              "selected": "hip_mask_bias_softmax_fp32",
+              "rejected": []
+            },
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1000,
+                  4,
+                  1000,
+                  32
+                ],
+                "strides": [
+                  128000,
+                  32,
+                  128,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "True",
+                  "high_precision": "False"
+                }
+              },
+              "selected": "hip_mask_bias_softmax_fp32",
+              "rejected": []
+            }
+          ],
+          "policy_engine": {
+            "name": "fireprot-core",
+            "bridge_abi": 1,
+            "library": "/tmp/fireprot-workspace-model-e2e-v1/target/release/lib_fireprot_bridge.so",
+            "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+          }
+        },
+        "kernel": {
+          "mode": "published",
+          "kernel": {
+            "directory": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1",
+            "library": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1/fireprot_softmax_fp32_7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251.so",
+            "manifest_sha256": "4914cb71a64c42bf54495f1c9ee0eeb27808f0571b6a50fed81e8067f56f01be",
+            "build_identity_sha256": "7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251",
+            "compatibility": {
+              "package": "fireprot_softmax_fp32",
+              "target": "gfx90a",
+              "torch": "2.12.0a0+git78258b9",
+              "hip": "7.14.60850",
+              "c_abi": "softmax-fp32-v1"
+            }
+          }
+        },
+        "launches_submitted": 1966,
+        "limits": [
+          "Registry selection counts precede QK and do not prove a HIP launch.",
+          "Submitted launches passed the immediate HIP status check; asynchronous completion requires the model acceptance gate."
+        ],
+        "experimental_workspace": {
+          "enabled": true,
+          "registry": {
+            "implementations": {
+              "attention_workspace": [
+                {
+                  "name": "hip_qk_softmax_workspace_fp32",
+                  "priority": 20,
+                  "version": "combined-v12-rust-lease-v1"
+                }
+              ]
+            },
+            "selection_counts": [
+              {
+                "operation": "attention_workspace",
+                "implementation": "native",
+                "count": 8167
+              }
+            ],
+            "decisions": [
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    1,
+                    1,
+                    16,
+                    1000,
+                    48
+                  ],
+                  "strides": [
+                    768000,
+                    768000,
+                    48,
+                    768,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "True"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    1,
+                    1,
+                    250,
+                    4,
+                    32,
+                    32
+                  ],
+                  "strides": [
+                    1024000,
+                    1024000,
+                    4096,
+                    32,
+                    128,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "True"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    1,
+                    16,
+                    1000,
+                    24
+                  ],
+                  "strides": [
+                    384000,
+                    24,
+                    384,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "True"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    1,
+                    250,
+                    4,
+                    32,
+                    32
+                  ],
+                  "strides": [
+                    1024000,
+                    4096,
+                    32,
+                    128,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "True"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    232,
+                    4,
+                    1000,
+                    16
+                  ],
+                  "strides": [
+                    64000,
+                    16,
+                    64,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "False"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    232,
+                    4,
+                    1000,
+                    32
+                  ],
+                  "strides": [
+                    128000,
+                    32,
+                    128,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "False"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    256,
+                    4,
+                    1000,
+                    16
+                  ],
+                  "strides": [
+                    64000,
+                    16,
+                    64,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "False"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    256,
+                    4,
+                    1000,
+                    32
+                  ],
+                  "strides": [
+                    128000,
+                    32,
+                    128,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "False"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    1000,
+                    4,
+                    1000,
+                    16
+                  ],
+                  "strides": [
+                    64000,
+                    16,
+                    64,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "False"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    1000,
+                    4,
+                    1000,
+                    32
+                  ],
+                  "strides": [
+                    128000,
+                    32,
+                    128,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "False"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              }
+            ],
+            "policy_engine": {
+              "name": "fireprot-core",
+              "bridge_abi": 1,
+              "library": "/tmp/fireprot-workspace-model-e2e-v1/target/release/lib_fireprot_bridge.so",
+              "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+            }
+          },
+          "fallback_reasons": {
+            "accepted_adapter_ineligible": 6201,
+            "unmeasured_outer_batch": 502,
+            "unmeasured_qkv_shape": 1464
+          },
+          "workspace": {
+            "policy_engine": {
+              "name": "fireprot-core",
+              "bridge_abi": 1,
+              "library": "/tmp/fireprot-workspace-model-e2e-v1/target/release/lib_fireprot_bridge.so",
+              "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+            },
+            "lease": {
+              "state": "released",
+              "binding": null,
+              "required_bytes": 9663676416,
+              "budget_bytes": 9663676416,
+              "charged_bytes": 0,
+              "committed_bytes": 0,
+              "allocation_count": 0,
+              "completed_calls": 0,
+              "release_count": 1,
+              "last_failure": null
+            },
+            "kernel": {
+              "mode": "published",
+              "kernel": {
+                "directory": "/tmp/fireprot-qk-softmax-combined-v12/bundle",
+                "library": "/tmp/fireprot-qk-softmax-combined-v12/bundle/fireprot_experimental_qk_softmax_2a6eface672e460a4b81acd7dc12eaecf583b29b773fe2bc3549ed680fbe3dc7.so",
+                "manifest_sha256": "1f04b110c79520749dc2a9a483b77f35330b559f5c043dfcdd13c72947ec5122",
+                "build_identity_sha256": "2a6eface672e460a4b81acd7dc12eaecf583b29b773fe2bc3549ed680fbe3dc7",
+                "compatibility": {
+                  "package": "fireprot_experimental_qk_softmax",
+                  "target": "gfx90a",
+                  "torch": "2.12.0a0+git78258b9",
+                  "hip": "7.14.60850",
+                  "c_abi": "experimental-qk-softmax-n1536-f32-v1"
+                }
+              }
+            },
+            "allocations": 0,
+            "successful_kernel_calls": 0,
+            "calls_by_batch": {},
+            "closed": true,
+            "released": true
+          }
+        },
+        "torch_peak_allocated_bytes": 23660892160,
+        "torch_peak_reserved_bytes": 24907874304,
+        "experimental_owned_scores": {
+          "mode": "owned_scores_strict",
+          "submitted_shapes": {
+            "B1000_N1000": 14,
+            "B256_N1000": 1464,
+            "B232_N1000": 488
+          },
+          "storage_fallbacks": 0,
+          "limits": [
+            "Shape counts include tuning; not steady-state frequency.",
+            "Private-score ownership requires the audited adapter."
+          ]
+        },
+        "confidence_chunk_policy": {
+          "mode": "measured_native_confidence_ceiling",
+          "calls": [
+            {
+              "requested_max": 1024,
+              "bounded_max": 1024,
+              "selected": 1024,
+              "n": 1000
+            }
+          ]
+        },
+        "chunk_tuners": {
+          "template_embedder.template_pair_stack": 1024,
+          "msa_module": 1024,
+          "pairformer_stack": 1024,
+          "diffusion_module.diffusion_conditioning": 1024,
+          "aux_heads.pairformer_embedding.pairformer_stack": 1024
+        }
+      },
+      "runtime_pin": {
+        "path": "/media/IntelSSD/fireprot/outputs/workspace-model-n1000-candidate-0/operator-runtime.json",
+        "sha256": "696c0976f04e7cc0246f6a8cfc6d9d85e108e9af58da337eacb0a890a1af10fc"
+      }
+    },
+    "1536": {
+      "n": 1536,
+      "completed": true,
+      "scope": "Correctness and model memory gate; runs overlapped across HIP6/HIP7, so timings are not speedup evidence",
+      "exit": {
+        "returncode": 0,
+        "elapsed_seconds": 551.1890671253204
+      },
+      "request": {
+        "schema_version": 1,
+        "run_id": "workspace-model-n1536-candidate-0",
+        "workload": {
+          "model": "openfold3",
+          "model_name": "openbind-0",
+          "recycles": 3,
+          "diffusion_steps": 200,
+          "samples": 1,
+          "precision": "float32",
+          "deterministic": true
+        },
+        "backend": "hip_fused",
+        "seed": 101,
+        "hip_device": 7,
+        "source": {
+          "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+          "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+            "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+          }
+        },
+        "resources": {},
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/workspace-model-n1536-candidate-0"
+      },
+      "profile": {
+        "path": "/tmp/fireprot-workspace-model-e2e-v1/candidate-profile.json",
+        "sha256": "3fa1bfe10ef5369493f0f5bb8cf2952cc772aefecf721f67a3685674807f71a5"
+      },
+      "framework_cli": {
+        "path": "/tmp/fireprot-workspace-model-e2e-v1/target/release/fireprot",
+        "sha256": "6e81349891a472b92bc29ff43825628a3d0352e56996784a20594e6c7c2b4fce"
+      },
+      "comparisons": {
+        "accepted_head16": {
+          "arrays": {
+            "confidence.chain_ptm.1": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.disorder": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.gpde": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.has_clash": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.iptm": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.pae": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.pde": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.plddt": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.ptm": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.sample_ranking_score": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "coordinates": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            }
+          },
+          "reference_npz": {
+            "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-candidate-0/sample-0.npz",
+            "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+          },
+          "candidate_npz": {
+            "path": "/media/IntelSSD/fireprot/outputs/workspace-model-n1536-candidate-0/sample-0.npz",
+            "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+          },
+          "reference_cif": {
+            "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-candidate-0/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+            "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+          },
+          "candidate_cif": {
+            "path": "/media/IntelSSD/fireprot/outputs/workspace-model-n1536-candidate-0/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+            "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+          },
+          "cif_bytes_equal": true
+        },
+        "original_native": {
+          "arrays": {
+            "confidence.chain_ptm.1": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.disorder": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.gpde": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.has_clash": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.iptm": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.pae": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.pde": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.plddt": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.ptm": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.sample_ranking_score": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "coordinates": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            }
+          },
+          "reference_npz": {
+            "path": "/media/IntelSSD/fireprot/outputs/hip-softmax-e2e-n1536-baseline-0/sample-0.npz",
+            "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+          },
+          "candidate_npz": {
+            "path": "/media/IntelSSD/fireprot/outputs/workspace-model-n1536-candidate-0/sample-0.npz",
+            "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+          },
+          "reference_cif": {
+            "path": "/media/IntelSSD/fireprot/outputs/hip-softmax-e2e-n1536-baseline-0/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+            "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+          },
+          "candidate_cif": {
+            "path": "/media/IntelSSD/fireprot/outputs/workspace-model-n1536-candidate-0/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+            "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+          },
+          "cif_bytes_equal": true
+        }
+      },
+      "runtime": {
+        "experimental_head_dimensions": {
+          "allowed": [
+            16,
+            32
+          ],
+          "submitted_launches": {
+            "16": 400,
+            "32": 5448
+          }
+        },
+        "registry": {
+          "implementations": {
+            "attention": [
+              {
+                "name": "hip_mask_bias_softmax_fp32",
+                "priority": 10,
+                "version": "softmax-fp32-v1"
+              }
+            ]
+          },
+          "selection_counts": [
+            {
+              "operation": "attention",
+              "implementation": "hip_mask_bias_softmax_fp32",
+              "count": 5850
+            },
+            {
+              "operation": "attention",
+              "implementation": "native",
+              "count": 6204
+            }
+          ],
+          "decisions": [
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1,
+                  1,
+                  16,
+                  1536,
+                  48
+                ],
+                "strides": [
+                  1179648,
+                  1179648,
+                  48,
+                  768,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "False",
+                  "high_precision": "True"
+                }
+              },
+              "selected": "native",
+              "rejected": [
+                {
+                  "implementation": "hip_mask_bias_softmax_fp32",
+                  "reason": "FP32 GPU tensor, mask, layout or published-kernel contract mismatch"
+                }
+              ]
+            },
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1,
+                  1,
+                  380,
+                  4,
+                  32,
+                  32
+                ],
+                "strides": [
+                  1556480,
+                  1556480,
+                  4096,
+                  32,
+                  128,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "False",
+                  "high_precision": "True"
+                }
+              },
+              "selected": "native",
+              "rejected": [
+                {
+                  "implementation": "hip_mask_bias_softmax_fp32",
+                  "reason": "FP32 GPU tensor, mask, layout or published-kernel contract mismatch"
+                }
+              ]
+            },
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1,
+                  16,
+                  1536,
+                  24
+                ],
+                "strides": [
+                  589824,
+                  24,
+                  384,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "False",
+                  "high_precision": "True"
+                }
+              },
+              "selected": "native",
+              "rejected": [
+                {
+                  "implementation": "hip_mask_bias_softmax_fp32",
+                  "reason": "FP32 GPU tensor, mask, layout or published-kernel contract mismatch"
+                }
+              ]
+            },
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1,
+                  380,
+                  4,
+                  32,
+                  32
+                ],
+                "strides": [
+                  1556480,
+                  4096,
+                  32,
+                  128,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "False",
+                  "high_precision": "True"
+                }
+              },
+              "selected": "native",
+              "rejected": [
+                {
+                  "implementation": "hip_mask_bias_softmax_fp32",
+                  "reason": "FP32 GPU tensor, mask, layout or published-kernel contract mismatch"
+                }
+              ]
+            },
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  32,
+                  4,
+                  1536,
+                  32
+                ],
+                "strides": [
+                  196608,
+                  32,
+                  128,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "True",
+                  "high_precision": "False"
+                }
+              },
+              "selected": "hip_mask_bias_softmax_fp32",
+              "rejected": []
+            },
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  64,
+                  4,
+                  1536,
+                  32
+                ],
+                "strides": [
+                  196608,
+                  32,
+                  128,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "True",
+                  "high_precision": "False"
+                }
+              },
+              "selected": "hip_mask_bias_softmax_fp32",
+              "rejected": []
+            },
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  128,
+                  4,
+                  1536,
+                  32
+                ],
+                "strides": [
+                  196608,
+                  32,
+                  128,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "True",
+                  "high_precision": "False"
+                }
+              },
+              "selected": "hip_mask_bias_softmax_fp32",
+              "rejected": []
+            },
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  256,
+                  4,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  98304,
+                  16,
+                  64,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "True",
+                  "high_precision": "False"
+                }
+              },
+              "selected": "hip_mask_bias_softmax_fp32",
+              "rejected": []
+            },
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  256,
+                  4,
+                  1536,
+                  32
+                ],
+                "strides": [
+                  196608,
+                  32,
+                  128,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "True",
+                  "high_precision": "False"
+                }
+              },
+              "selected": "hip_mask_bias_softmax_fp32",
+              "rejected": []
+            },
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  512,
+                  4,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  98304,
+                  16,
+                  64,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "True",
+                  "high_precision": "False"
+                }
+              },
+              "selected": "hip_mask_bias_softmax_fp32",
+              "rejected": []
+            },
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  512,
+                  4,
+                  1536,
+                  32
+                ],
+                "strides": [
+                  196608,
+                  32,
+                  128,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "True",
+                  "high_precision": "False"
+                }
+              },
+              "selected": "hip_mask_bias_softmax_fp32",
+              "rejected": []
+            },
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1024,
+                  4,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  98304,
+                  16,
+                  64,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "True",
+                  "high_precision": "False"
+                }
+              },
+              "selected": "hip_mask_bias_softmax_fp32",
+              "rejected": []
+            },
+            {
+              "signature": {
+                "operation": "attention",
+                "device_type": "cuda",
+                "architecture": "gfx90a",
+                "dtype": "float32",
+                "shape": [
+                  1024,
+                  4,
+                  1536,
+                  32
+                ],
+                "strides": [
+                  196608,
+                  32,
+                  128,
+                  1
+                ],
+                "layout": "strided",
+                "mode": "inference",
+                "mask": "pair_and_token",
+                "inplace": false,
+                "attributes": {
+                  "eligible": "True",
+                  "high_precision": "False"
+                }
+              },
+              "selected": "hip_mask_bias_softmax_fp32",
+              "rejected": []
+            }
+          ],
+          "policy_engine": {
+            "name": "fireprot-core",
+            "bridge_abi": 1,
+            "library": "/tmp/fireprot-workspace-model-e2e-v1/target/release/lib_fireprot_bridge.so",
+            "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+          }
+        },
+        "kernel": {
+          "mode": "published",
+          "kernel": {
+            "directory": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1",
+            "library": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1/fireprot_softmax_fp32_7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251.so",
+            "manifest_sha256": "4914cb71a64c42bf54495f1c9ee0eeb27808f0571b6a50fed81e8067f56f01be",
+            "build_identity_sha256": "7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251",
+            "compatibility": {
+              "package": "fireprot_softmax_fp32",
+              "target": "gfx90a",
+              "torch": "2.12.0a0+git78258b9",
+              "hip": "7.14.60850",
+              "c_abi": "softmax-fp32-v1"
+            }
+          }
+        },
+        "launches_submitted": 5848,
+        "limits": [
+          "Registry selection counts precede QK and do not prove a HIP launch.",
+          "Submitted launches passed the immediate HIP status check; asynchronous completion requires the model acceptance gate."
+        ],
+        "experimental_workspace": {
+          "enabled": true,
+          "registry": {
+            "implementations": {
+              "attention_workspace": [
+                {
+                  "name": "hip_qk_softmax_workspace_fp32",
+                  "priority": 20,
+                  "version": "combined-v12-rust-lease-v1"
+                }
+              ]
+            },
+            "selection_counts": [
+              {
+                "operation": "attention_workspace",
+                "implementation": "hip_qk_softmax_workspace_fp32",
+                "count": 28
+              },
+              {
+                "operation": "attention_workspace",
+                "implementation": "native",
+                "count": 12054
+              }
+            ],
+            "decisions": [
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    1,
+                    1,
+                    16,
+                    1536,
+                    48
+                  ],
+                  "strides": [
+                    1179648,
+                    1179648,
+                    48,
+                    768,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "True"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    1,
+                    1,
+                    380,
+                    4,
+                    32,
+                    32
+                  ],
+                  "strides": [
+                    1556480,
+                    1556480,
+                    4096,
+                    32,
+                    128,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "True"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    1,
+                    16,
+                    1536,
+                    24
+                  ],
+                  "strides": [
+                    589824,
+                    24,
+                    384,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "True"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    1,
+                    380,
+                    4,
+                    32,
+                    32
+                  ],
+                  "strides": [
+                    1556480,
+                    4096,
+                    32,
+                    128,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "True"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    32,
+                    4,
+                    1536,
+                    32
+                  ],
+                  "strides": [
+                    196608,
+                    32,
+                    128,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "False"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    64,
+                    4,
+                    1536,
+                    32
+                  ],
+                  "strides": [
+                    196608,
+                    32,
+                    128,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "False"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    128,
+                    4,
+                    1536,
+                    32
+                  ],
+                  "strides": [
+                    196608,
+                    32,
+                    128,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "False"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    256,
+                    4,
+                    1536,
+                    16
+                  ],
+                  "strides": [
+                    98304,
+                    16,
+                    64,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "False"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    256,
+                    4,
+                    1536,
+                    32
+                  ],
+                  "strides": [
+                    196608,
+                    32,
+                    128,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "False"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    256,
+                    4,
+                    1536,
+                    32
+                  ],
+                  "strides": [
+                    196608,
+                    32,
+                    128,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "True",
+                    "high_precision": "False"
+                  }
+                },
+                "selected": "hip_qk_softmax_workspace_fp32",
+                "rejected": []
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    512,
+                    4,
+                    1536,
+                    16
+                  ],
+                  "strides": [
+                    98304,
+                    16,
+                    64,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "False"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    512,
+                    4,
+                    1536,
+                    32
+                  ],
+                  "strides": [
+                    196608,
+                    32,
+                    128,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "False"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    512,
+                    4,
+                    1536,
+                    32
+                  ],
+                  "strides": [
+                    196608,
+                    32,
+                    128,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "True",
+                    "high_precision": "False"
+                  }
+                },
+                "selected": "hip_qk_softmax_workspace_fp32",
+                "rejected": []
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    1024,
+                    4,
+                    1536,
+                    16
+                  ],
+                  "strides": [
+                    98304,
+                    16,
+                    64,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "False"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    1024,
+                    4,
+                    1536,
+                    32
+                  ],
+                  "strides": [
+                    196608,
+                    32,
+                    128,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "False",
+                    "high_precision": "False"
+                  }
+                },
+                "selected": "native",
+                "rejected": [
+                  {
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "reason": "Outside the measured workspace signature"
+                  }
+                ]
+              },
+              {
+                "signature": {
+                  "operation": "attention_workspace",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    1024,
+                    4,
+                    1536,
+                    32
+                  ],
+                  "strides": [
+                    196608,
+                    32,
+                    128,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "pair_and_token",
+                  "inplace": false,
+                  "attributes": {
+                    "eligible": "True",
+                    "high_precision": "False"
+                  }
+                },
+                "selected": "hip_qk_softmax_workspace_fp32",
+                "rejected": []
+              }
+            ],
+            "policy_engine": {
+              "name": "fireprot-core",
+              "bridge_abi": 1,
+              "library": "/tmp/fireprot-workspace-model-e2e-v1/target/release/lib_fireprot_bridge.so",
+              "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+            }
+          },
+          "fallback_reasons": {
+            "accepted_adapter_ineligible": 6204,
+            "unmeasured_qkv_shape": 400,
+            "unmeasured_bias_or_mask_layout": 26,
+            "unmeasured_outer_batch": 5424
+          },
+          "workspace": {
+            "policy_engine": {
+              "name": "fireprot-core",
+              "bridge_abi": 1,
+              "library": "/tmp/fireprot-workspace-model-e2e-v1/target/release/lib_fireprot_bridge.so",
+              "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+            },
+            "lease": {
+              "state": "released",
+              "binding": {
+                "device": 0,
+                "stream": 0
+              },
+              "required_bytes": 9663676416,
+              "budget_bytes": 9663676416,
+              "charged_bytes": 0,
+              "committed_bytes": 0,
+              "allocation_count": 1,
+              "completed_calls": 28,
+              "release_count": 1,
+              "last_failure": null
+            },
+            "kernel": {
+              "mode": "published",
+              "kernel": {
+                "directory": "/tmp/fireprot-qk-softmax-combined-v12/bundle",
+                "library": "/tmp/fireprot-qk-softmax-combined-v12/bundle/fireprot_experimental_qk_softmax_2a6eface672e460a4b81acd7dc12eaecf583b29b773fe2bc3549ed680fbe3dc7.so",
+                "manifest_sha256": "1f04b110c79520749dc2a9a483b77f35330b559f5c043dfcdd13c72947ec5122",
+                "build_identity_sha256": "2a6eface672e460a4b81acd7dc12eaecf583b29b773fe2bc3549ed680fbe3dc7",
+                "compatibility": {
+                  "package": "fireprot_experimental_qk_softmax",
+                  "target": "gfx90a",
+                  "torch": "2.12.0a0+git78258b9",
+                  "hip": "7.14.60850",
+                  "c_abi": "experimental-qk-softmax-n1536-f32-v1"
+                }
+              }
+            },
+            "allocations": 1,
+            "successful_kernel_calls": 42,
+            "calls_by_batch": {
+              "1024": 2,
+              "512": 8,
+              "256": 18
+            },
+            "closed": true,
+            "released": true
+          }
+        },
+        "torch_peak_allocated_bytes": 51757716992,
+        "torch_peak_reserved_bytes": 57139003392,
+        "experimental_owned_scores": {
+          "mode": "owned_scores_strict",
+          "submitted_shapes": {
+            "B1024_N1536": 8,
+            "B512_N1536": 14,
+            "B256_N1536": 402,
+            "B32_N1536": 192,
+            "B128_N1536": 5040,
+            "B64_N1536": 192
+          },
+          "storage_fallbacks": 0,
+          "limits": [
+            "Shape counts include tuning; not steady-state frequency.",
+            "Private-score ownership requires the audited adapter."
+          ]
+        },
+        "confidence_chunk_policy": {
+          "mode": "measured_native_confidence_ceiling",
+          "calls": [
+            {
+              "requested_max": 1024,
+              "bounded_max": 256,
+              "selected": 256,
+              "n": 1536
+            }
+          ]
+        },
+        "chunk_tuners": {
+          "template_embedder.template_pair_stack": 1024,
+          "msa_module": 512,
+          "pairformer_stack": 512,
+          "diffusion_module.diffusion_conditioning": 1024,
+          "aux_heads.pairformer_embedding.pairformer_stack": 256
+        }
+      },
+      "runtime_pin": {
+        "path": "/media/IntelSSD/fireprot/outputs/workspace-model-n1536-candidate-0/operator-runtime.json",
+        "sha256": "cbb617951d2e3488f2fd43bf1d4c1cad2ec1cb0bd075ca0fd6400a3d11997bef"
+      }
+    }
+  },
+  "archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/conditioning-cache-20261006/workspace-model-e2e-v1-gates.tar.gz",
+    "sha256": "f27f5e4881cc5a63b2959e30dec3ba5c0a025ce47337d00d5a18742d67519393",
+    "bytes": 74196893
+  },
+  "accepted_baseline_runtime": {
+    "path": "/media/IntelSSD/fireprot/outputs/head16-e2e-n1536-candidate-0/operator-runtime.json",
+    "sha256": "52d809f646a98a18751daea539e9024cf30f3a71d527c987353cf222513ff57f",
+    "chunk_tuners": {
+      "template_embedder.template_pair_stack": 1024,
+      "msa_module": 1024,
+      "pairformer_stack": 1024,
+      "diffusion_module.diffusion_conditioning": 1024,
+      "aux_heads.pairformer_embedding.pairformer_stack": 256
+    },
+    "owned_shapes": {
+      "B1024_N1536": 12,
+      "B512_N1536": 12,
+      "B256_N1536": 2892,
+      "B64_N1536": 192
+    }
+  },
+  "tuner_source": {
+    "path": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3/openfold3/core/utils/chunk_utils.py",
+    "sha256": "4c9ab484854868e3c3d9a28a0d2e8fe0f9b1c75a35dca4984e0631591489fac5",
+    "observation": "ChunkSizeTuner chooses the largest tested candidate that raises no RuntimeError. It swallows all RuntimeError types; actual rejection reasons were not captured."
+  },
+  "decision": "Do not start v1 paired timing. MSA/Pairformer changed1024 to512, producing a dominant B128 fallback; only28 workspace calls were selected. Revisit retained capacity and B128 coverage; log tuner rejection causes before claiming memory caused the change.",
+  "limits": [
+    "The correctness runs overlapped on HIP6/HIP7; their times are not isolated performance evidence.",
+    "The retained9GiB pool is a possible cause of the tuner change; no OOM diagnosis was captured.",
+    "Shape histograms include autotuning calls.",
+    "No paired timing job was started; all model drivers exited0 and all eight GCDs were idle after collection."
+  ]
+}

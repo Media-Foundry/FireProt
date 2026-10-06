@@ -1607,3 +1607,82 @@ full probability/output bits and old-output independence,1allocation9GiB and
 release receipts. Stage a new source root and new bridge, preserve existing
 reference artifacts; then overlay frozen accepted D16 worker, model gates and
 isolated three-pair timing. Keep goal active; no workspace model/E2E gain yet.
+
+## Model workspace GPU/model gates passed; revise coverage before timing (2026-10-06)
+
+Previous turn pushed a379258. This turn committed e22426f (mixed-batch GPU gate)
+and bac2074 (opt-in model dispatcher/worker overlay). Branch remains
+openfold3-workspace-model-integration. No active GPU jobs after final collection.
+
+Mixed-batch root /tmp/fireprot-model-workspace-v1, driver2018184/child2018191
+both terminal, returncode0.18 calls (3seeds×2head-last layouts×3batches), allscore/
+PVbits, outputstrides and old-output independence pass.42 kernel calls,1allocation,
+exact9GiB physical tensor release agrees with Rust receipt. Peak Torch55,429,834,752
+bytes with full B1024 reference retained; notmodelmemory. Archive
+model-workspace-v1-results.tar.gz SHA678f049127c3502a0b04807b93b2fdc38e39e07de29ca86c85e358fc840dd4d9,
+includes prepared source+rebuilt binaries. Sourcepackage SHA1a8448b63d6ca4fcb26fa7ab47138d41d15a54816a7d751f3f5ca03f6891ca95.
+Evidence provenance/openfold3_model_workspace_qualification.json.
+
+New workspace_dispatch.py composes its own Rust OperationRegistry around the
+frozen accepted AttentionDispatcher. Enabled only via FIREPROT_QK_WORKSPACE=1;
+mode0 directly invokes accepted dispatcher. Controls require path+SHA variables.
+Dynamic lease guards still run after registry cache hits. All51 CPU tests pass;
+initial missing required inplace=False argument was caught and corrected BEFORE
+deployment. Original worker source SHA2ddc92f55f70e3b25b38e721fa71eb3f91a72720b0bf386f36fbfef6a357216e;
+model-workspace.patch applies without fuzz. Shared pool context exits before
+operator-runtime.json, which includes peak allocated/reserved bytes and both
+registries. No maintained worker defaults changed.
+
+Model root /tmp/fireprot-workspace-model-e2e-v1 copies frozen head16 baseline,
+then overlays new code/binaries under python/experiments plus worker patch.
+Overlayarchive /tmp/fireprot-workspace-model-e2e-v1-overlay.tar.gz SHA
+04eb211410134fc8c163d6e18f27dff0ad09394b086c1a3715e06f4e0ab7b99a.
+Remote preparation /tmp/fireprot-prepare-workspace-model-e2e-v1.py; root
+preparation.json holds all base/overlay source pins. Bridge and CLI hashes remain
+the prior turn's rebuilt values. Candidate/baseline profiles differ ONLY by
+FIREPROT_QK_WORKSPACE flag; both retain D16, conditioning/atom caches, confidence
+cap and original scientific workload. Both profile paths point at this root.
+
+N1536 driver2020100/CLI2020107 exited0; N1000 driver2024791/CLI2024801 exited0.
+They overlapped onHIP7/HIP6 for CORRECTNESS only. Do not treat551.189/240.894s
+driver durations as isolated E2E observations. Outputs:
+/media/IntelSSD/fireprot/outputs/workspace-model-n1536-candidate-0
+/media/IntelSSD/fireprot/outputs/workspace-model-n1000-candidate-0.
+root/collect.py invokes Rust compare-npz and requires11 bitwise arrays, complete
+CIF byte equality, released/zero-charge Rust lease, and exact call/allocation
+accounting. gate-n1536.json passes against BOTH accepted head16 candidate0 and
+originalnative hip-softmax-e2e-n1536-baseline-0. gate-n1000.json passes against
+zero-mask-e2e-n1000-baseline-0; no workspace allocation or call. All8GCD idle.
+
+CRITICAL next action: DO NOT launch the v1 paired timing script. Actual N1536
+MSA/pairformer chunks changed1024->512; template andconditioning remain1024,
+confidence remains256. Workspace hits only28 complete calls (B25618/B5128/B10242),
+42 microchunks. Accepted fallback nowB1285040, B256402, B64192, B32192, B51214,
+B10248; D16400 andD325448. Fallback reasons: outerbatch5424, qkvshape400,
+bias/masklayout26, baseadapterineligible6204. The old B256-dominant histogram
+was real outerbatch (owned_scores.py keys scores.shape[0], NOT flattenedheads),
+but the new retained pool changes the model's tuning regime. Do not repeat the
+incorrect hypothesis that oldB256 meantB64 after flattening; source disproves it.
+
+Model peak Torch51,757,716,992 bytes; pool charged9GiB and correctlyreleased.
+Upstream core/utils/chunk_utils.py SHA4c9ab484854868e3c3d9a28a0d2e8fe0f9b1c75a35dca4984e0631591489fac5:
+ChunkSizeTuner._determine_favorable_chunk_size binary searches powers-of-two plus
+maxsize; test_chunk_size calls fn under no_grad and catches ALL RuntimeError.
+Thus reducedtuning suggests capacity pressure but no OOM cause has been captured.
+Need instrument representative_fn failures while preserving rethrow/upstream
+selection, then consider4.5GiB B128 pool, microchunk larger tested sizes, and
+support dominantB128. Requalify B128 raw/softmax21cases on combined-v12 first
+(currently its saved numerical screens onlyB32/B256), then fullscore/PV and
+mixedbatches. Existing WorkspaceFusion onlyaccepts32/256; plan/coreModel cap9GiB
+must be revised coherently. No needchangeHIPmath. Route plan to Deepen for the
+capacity/capability decision; user alreadyauthorizedDeep/autonomous optimization.
+
+Full model archive workspace-model-e2e-v1-gates.tar.gz SHA
+f27f5e4881cc5a63b2959e30dec3ba5c0a025ce47337d00d5a18742d67519393 (74,196,893bytes)
+contains source/deployment, binaries, both complete modeloutputs, pins/collector.
+Evidence provenance/openfold3_model_workspace_model_gates.json records the
+coverage issue and no-speedup limitation. Baseline runtime pin52d809f646a98a18751daea539e9024cf30f3a71d527c987353cf222513ff57f
+is unchanged; oldchunkmain1024 confirmed. /tmp/fireprot-prepare-workspace-pairs-v1.py
+was uploaded but NEVERexecuted; /tmp/fireprot-workspace-paired-v1 doesnotexist.
+Keepgoalactive. Correctness gatespassed; acceptablemodelcoverage and E2Egain
+remainunproven. Nextmustfixthisrealcoverage/memory issue, not waste3pairs onv1.

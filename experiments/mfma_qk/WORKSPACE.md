@@ -257,3 +257,30 @@ rejection. The initial test run caught a missing required `inplace=False` signat
 argument; the corrected code passed before deployment. Model acceptance and E2E
 performance remain separate gates. Concurrent correctness runs must not be used
 as isolated latency evidence.
+
+### Model correctness passed; coverage changed with the tuner
+
+The v1 model gates complete successfully at N1000 and N1536 with the unchanged
+FP32 strict deterministic R3/D200/S1 seed101 contract. At N1536 all11 arrays
+match both the accepted D16 baseline and original native anchor bitwise; complete
+CIF bytes also match. N1000 matches its original native anchor and allocates no
+score workspace. These two correctness runs overlapped on HIP6/HIP7; their
+durations are not isolated speedup measurements.
+
+The N1536 result exposes a coverage problem. MSA and Pairformer cached chunks
+change from1024 to512; other recorded tuners match the accepted baseline.
+The workspace runs only28 times (B256:18, B512:8, B1024:2), totaling42 kernel
+submissions. Meanwhile the accepted fallback records5,040 B128 calls. The
+9GiB workspace is released successfully, but retaining that much memory may
+have influenced tuning. Peak Torch allocated memory is51,757,716,992 bytes.
+
+The source-pinned upstream `ChunkSizeTuner` tests candidate sizes and catches
+all `RuntimeError` exceptions. A changed cached chunk therefore does not prove
+an OOM without the rejected-call error. Before paired timing, revise the pool
+capacity/B128 coverage and capture the tuner rejection causes. Do not force
+the old chunk setting or infer a speedup from the earlier operator screen.
+No paired timing was launched for v1.
+
+Evidence: `provenance/openfold3_model_workspace_model_gates.json`; archive
+`workspace-model-e2e-v1-gates.tar.gz`, SHA256
+`f27f5e4881cc5a63b2959e30dec3ba5c0a025ce47337d00d5a18742d67519393`.

@@ -118,3 +118,18 @@ normalization, dual projection, contraction, packed normalization, output linear
 gate linear, and residual fusion. It eagerly loads the selected AMD extension
 and adds hooks/wrappers, so its E2E is not performance evidence. All nine output
 arrays must match the uninstrumented scoped-Lt anchor before interpreting timings.
+
+## Dual-projection storage and tile experiments
+
+- `dual_tiles.cpp` / `screen_dual_tiles.py`: seven FP32 MFMA tile shapes, exact
+  comparison against the published maintained projection, alternating timing order.
+- `quad_projection.cpp` / `screen_quad_projection.py`: five fused A/B kernels;
+  no useful gain found despite exact synthetic outputs.
+- `screen_dual_reuse.py`: retained output versus fresh allocation, deterministic
+  fill enabled, changing-input overwrite checks. Initial allocation is excluded.
+- `model_dual_reuse.py`: isolated model trial with two retained slots and guarded
+  projection-to-BMM consumption on one stream. Requires 2096 projections and
+  1048 consumed pairs. Full invocation timing includes initialization/loading.
+
+Microbenchmark speedups are not model E2E results. The published C ABI kernel is
+selected and authenticated by Rust; these adapters do not compile during inference.

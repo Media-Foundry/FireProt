@@ -391,3 +391,39 @@ These include launch gaps, hooks and allocation effects; they are diagnostic
 intervals rather than attainable E2E savings. The next kernel target is the dual
 projection, which remains the largest measured non-BMM triangle substage.
 [Profile evidence](../provenance/protenix_base_triangle_profile.json).
+
+## Dual-projection tile and storage experiments
+
+The seven-tile HIP screen compares exact logical padded outputs against the
+maintained projection at ordinary and enlarged gate scales. All 14 checks are
+bitwise equal. Alternative row/channel/K/wave tiles take 3.020–4.004 ms versus
+2.888 ms maintained. Recompiling the identical tile through a C ABI takes
+2.866 ms; that small difference does not establish a new tile improvement.
+[Tile screen](../provenance/protenix_base_dual_tiles.json).
+
+A second screen fuses both A/B projections into one four-product kernel. All
+10 numerical checks are bitwise equal. Two maintained calls take 5.787 ms;
+the best fused variant takes 5.773 ms, while other variants take 7.540–10.443 ms.
+Neither tile replacement nor A/B fusion is promoted.
+[Fusion screen](../provenance/protenix_base_quad_projection.json).
+
+Retaining initialized output storage reduces the synthetic steady-state call
+from 2.885 to 2.482 ms (about 14% less time), with exact outputs for three
+successively changed inputs. Deterministic initialization stays enabled;
+initial storage allocation is excluded from this microbenchmark and must be
+included in model E2E. [Reuse screen](../provenance/protenix_base_dual_reuse_screen.json).
+
+`model_dual_reuse.py` experiments with two retained projection slots. It checks
+FP32 N1000 shape, layout, device, stream, A/B input identity, and consumption by
+the matching packed BMM before allowing reuse. It rejects capture and unexpected
+call sequences. This remains an isolated frozen-worker trial; no maintained
+operator or default profile has changed.
+
+The first matched full-model pair rejects this reuse adapter: complete invocation
+**131.688016 -> 133.046890 s** (about **1.03% slower**), with model-call time
+107.224377 -> 108.595448 s. All nine arrays are bitwise equal, and unchanged
+Rust comparison gates pass between these two routes. The candidate records one
+retained allocation, 2096 projections and 1048 consumed pairs without error.
+[First pair](../provenance/protenix_base_dual_reuse_first_pair.json).
+A separate instrumented trial is separating common AMD loading, additional
+adapter setup, and trained substage intervals; no default promotion is made.

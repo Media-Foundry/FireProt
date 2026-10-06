@@ -3152,3 +3152,78 @@ paddedoutputs, include allocation/fill in relevantmicrobench, thenfulltrained
 E2Etrialonlyifwin. Existingkernel kernels/amd/fireprot_amd_ops.cu:787 uses
 R128/C128/K16/W8, paddedchannelstride rows+128. No candidatekernelwrittenyet.
 Thisturnmadeprogress:3pairLt trend andqualifiedprofile. Goalactive, notblocked.
+
+## 2026-10-07 dual-projection tile and A/B fusion screens
+
+Master415ab45. New isolated kernels/screen sources only, no production edits.
+HIP7 dualtiles PID2377055 TERMINAL SUCCESS at
+outputs/experiments/protenix-base-dual-tiles-20261007. Seven R/C/K/W variants
+all14 ordinary/large-gate comparisons exact to maintained. Baseline2.888323ms;
+identicaltile CABI0 2.865683ms; alternatives1..6 3.455763,3.020403,3.021362,
+3.690163,3.897683,4.003603ms. No newtilewin; baselineclone0.8%noise notpromotion.
+Evidence provenance/protenix_base_dual_tiles.json. Rust nativebuild receipt
+screen.build.json; library SHAab7baa17db0f6973dd7c39b101387467efe7563e9d5ae6a4d97d93027fa73a41.
+
+Fused A/B quadprojection PID2377914 TERMINAL SUCCESS, root
+outputs/experiments/protenix-base-quad-projection-20261007. Fivevariantsall10
+ordinary/largegatecases exact. Two maintainedcalls5.786562ms vsquadvariants
+8.893204,8.017283,7.539523,10.443444,5.773362ms. Bestonly0.2%faster, no material
+win orfullmodeltrial. Evidence provenance/protenix_base_quad_projection.json.
+
+Nextscreen retains initialized dualoutputstorage toavoidrepeatallocation/fill;
+deterministicfill staysTrue. CURRENT PID2379098, rootdualtiles/reuse-screen.json,
+reuse-launch.log/reuse-pid. Publishedoriginaltile0viaRust at
+runtime/kernels/protenix-base-dual-tiles-20261007, manifest
+5122da38f866545270fac913bdfda28bebc1d221181871b67116c63b6cac3105,
+libraryab7baa17db0f6973dd7c39b101387467efe7563e9d5ae6a4d97d93027fa73a41.
+Publication succeeded; preparationinitiallylookedformanifest.json(nonexistent),
+fixedusingpublicationreceiptmanifest_sha256, no GPUjobwasstartedbyfailedprep.
+Currentreusemicrochecks3changinginputs againstreferenceexact andcomparessteady
+retainedstoragevsmaintainedfreshallocation. Retainedinitialallocationexcluded;
+E2Emustincludeit. Onwin nextfullmodeladaptermustguardA/Bpairlifetimesandstream:
+retain2buffers, reuseonlyaftermatchingpacked_bmm consumptionenqueuedonsamestream,
+rejectunexpectedcalls/shapes/training/capture ratherthanallowaliascorruption.
+No fullmodelreuseadapterwrittenthisturnyet. Allnewcode/evidenceuncommitted.
+Reusemicro2379098 TERMINAL SUCCESS: maintained2.884561ms vs retained2.481680ms,
+14%lesstime, all3changinginputcasesexact. Evidence
+provenance/protenix_base_dual_reuse_screen.json. Initialretainedallocationexcluded
+frommicroonly; no E2Eclaim. New model_dual_reuse.py replacesdualprojectionwith
+same tile0 andtwoinitializedslots. GuardsFP32N1000gfx90a/noautograd/TF32off,
+streamidentity, A/Bsameinputidentity/version, pairconsumptionbeforeoverwrite;
+intercepts existingLtBMMto release slots onlyafterconsumptionenqueued. Restores
+bothwrappers in finally; requires2096projectioncalls/1048pairs. Grad-enabled
+parameterflagsalonearenotrejectedbecauseinferenceusesno_grad; inputmustnograd.
+
+CURRENT LIVE fullBasecandidatePID2379733, root
+outputs/experiments/protenix-base-dual-reuse-model-20261007;on-measurement,
+on-launch.log/on-pid. Output outputs/protenix-base-dual-reuse-on. Frozenworker
+fromTorchLt snapshot nesteddual_install inside lt_install, FP32N1000C10D200S1
+seed101HIP7timeout1800, publishedAMD+CK+newdualtilebundle. OFFcontrolprepared
+NOTlaunched; retainsTorchLt andsameworker/bundleenv exceptFIREPROT_BASE_DUAL_REUSE.
+Onterminal inspectbase-dual-reuse.json counts/error, all9arraysBITWISE vs
+outputs/protenix-base-torch-lt-on. OnlyifcorrectstartOFFafterterminal; measure
+actualE2Eincludinglazybufferallocation/libraryload/guards. NootherGPUjobs.
+Kernel tile/quad sources andscripts, reuseadapter and3provenancefiles allnew
+uncommitted; productionunchanged. No speedupclaimfornewfullmodelyet.
+
+## 2026-10-07 dual storage full-model rejection and diagnosis
+
+DualreuseON2379733 TERMINAL SUCCESS133.04689037s/model108.595448331s,
+2096projection/1048consumedpairs/1retainedallocation/noerror. All9arraysBITS
+vs scopedTorchLtON. OFF2380778 TERMINAL SUCCESS131.688015749s/model107.224376964.
+Matchedpair0.989786498x,1.03%slower. Rustcompare-runs unchangedgatesPASS between
+theseidenticalmathroutes; do notpromote. Evidence
+provenance/protenix_base_dual_reuse_first_pair.json; fullreceipts+comparison in
+outputs/experiments/protenix-base-dual-reuse-model-20261007. Micro14%doesnot
+translateE2E; needseparateinitialization/steadytrainedoperatorcostbeforeclaimcause.
+
+CURRENT LIVE diagnosticON PID2382655, root
+outputs/experiments/protenix-base-dual-reuse-profile-20261007;
+on-measurement/on-launch.log/on-pid. OFFpreparedNOTlaunched. Frozenworkercloned
+fromdualreuseworker, firstrecordscommonAMDpreload, thenextra dual_install setup,
+then triangle_measure nested inside dual_install inside lt_install. Writes
+base-dual-setup.json andbase-triangle-profile.json. HIP7standardFP32C10D200S1,
+N1000umemseed101timeout1800. Onterminal requireall9bitsvsuninstrumentedON, inspect
+setup+eventrows, thenOFFsameworkerafterterminal. InstrumentedE2Enotspeedup.
+NootherGPUjobs; productionunchanged; newkernels/screens/modeladapter+negative
+andmicroscreenresults beingcommittedthisturn. docs/isauserfileuntouched.

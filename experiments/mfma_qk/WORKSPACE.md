@@ -450,3 +450,37 @@ A fresh N1536 model trial combines this qualified normalization with ordinary
 allocation, isolating the layout change from the successful one-time cache
 release policy. It will establish actual copy/coverage counts, chunk choices,
 and all11-array/CIF correctness before paired E2E measurements.
+
+### Mask-normalized model gate and gain attribution
+
+The isolated N1536 model finishes with ordinary allocation, no explicit cache
+release, and no rejected tuning attempts. MSA/Pairformer remain at1024. Both
+triangle directions are covered:2,516 complete workspace calls (B256:2,508;
+B512:4;B1024:4),5,064 kernel launches,1,258 mask copies and one fully released
+4.5GiB lease. All11 arrays and complete CIF bytes match both native and accepted
+D16 references. The449.258-second single diagnostic duration is not a paired E2E
+claim. See `provenance/openfold3_workspace_mask_model_gate.json`.
+
+The three-arm ablation now separates layout repair from fusion. Twelve samples
+per arm per shape/layout produce144 bitwise-exact timed outputs. Complete B256
+attention medians are106.740/107.143ms for the original strided-mask split path,
+43.718/44.102ms with only mask normalization, and38.872/39.247ms with normalization
+plus the fused workspace (head-last/transposed head-last bias respectively).
+Normalization is inside each timed normalized call. Roughly93% of the saved time
+in these cases comes from layout repair; fusion removes another11% of normalized
+split-path time. The pool remains resident in all three arms. Evidence:
+`provenance/openfold3_workspace_mask_ablation.json`. These remain operator results.
+
+The same mask-enabled implementation also passes the N1000 native-reference
+gate: all11 arrays and complete CIF bytes match, with zero workspace allocations,
+zero complete workspace calls, zero mask copies and zero explicit cache releases.
+Both model gates and archives are in the model-gate evidence above.
+
+Three isolated N1536 pairs have now started under the Rust scheduler, in
+AB/BA/AB order. Both arms use the same worker and rebuilt CLI/bridge, with strict
+FP32 R3/D200/S1 seed101. Diagnostics are disabled in both; the only treatment
+switch is workspace enablement. Candidate mask normalization uses ordinary
+allocation, with no explicit cache release. This compares incrementally against
+the accepted D16/cache/confidence-ceiling combination, not directly against
+original Torch. `provenance/openfold3_workspace_mask_paired_launch.json` records
+launch controls only; it is not a completed benchmark or a speedup result.

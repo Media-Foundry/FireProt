@@ -1890,3 +1890,77 @@ preparers targetoldercode and remain unrun; use fresh deployment roots.
 Plan unchanged; reanchor /tmp/fireprot-mask-provenance.json. GitNexus classLOW,
 loaderUNKNOWN/no graphcalls textverified workerpatch+tests; qualifierLOW.
 Accepted E2E claims unchanged: directnative1.499x, separateD16increment1.162x.
+
+## Both mask model gates pass; three E2E pairs running (2026-10-06)
+
+Previous turn pushed39f2fed (qualified transposed-mask normalization). This turn
+completed its N1536 model, measured a three-arm attribution, passed N1000 and
+started actual E2E. This is progress; keep the goal active, no plateau/blocker.
+
+N1536 root /tmp/fireprot-model-mask-v1 driver2069120/CLI2069128 terminal rc0,
+449.25774s diagnostic duration. Collector1536 passes all11 and fullCIF vs both
+native and acceptedD16. Ordinary allocation, NO cache release; mainchunks1024,
+confidence256, NO rejected tuning attempts.2516 fullcalls B2562508/B5124/B10244,
+5064 kernelcalls,1258 maskcopies, one4.5GiB lease fullyreleased. Peak51757716992.
+Thus mask coverage alone removes the observed tuning failure in this run.
+Evidence provenance/openfold3_workspace_mask_model_gate.json. Archive
+model-mask-v1-results.tar.gz SHA7849dcab7a7fb21083d2099ae3b03ba9a0f5e104193d3a4d5e76c36e9062e9e7,
+47731770bytes, usual durable root. No paired speedup inferred from449s.
+
+benchmark_mask.py now adds split_normalized_mask, with contiguous copy INSIDE
+its timed call. Three arms, balanced12samples eachcase,144 timed outputs exact.
+Root /tmp/fireprot-mask-ablation-v1, session55189 terminal0. B256 headlast:
+original106.740ms, normalization-only43.718ms, workspace38.872ms. Transposedbias:
+107.143/44.102/39.247ms. B128 original53.513/53.930, normalized21.918/22.315,
+workspace19.413/19.799ms. ~93% of the saved time in these cases is mask layout;
+fusion adds ~11% time reduction over normalized split HIP. Do NOT attribute
+combined2.7x to fusion alone. One4.5GiB pool retained throughout all arms.
+Evidence openfold3_workspace_mask_ablation.json. Archive mask-ablation-v1-results
+SHA d206e898ec489aeac509e22be9b8ecd07f617ebf7b44e69a77239c48f788997e,
+2585321bytes. Model code unchanged; benchmark-only edit, GPU-tested.
+
+N1000 root /tmp/fireprot-model-mask-n1000-v1 driver2077632/CLI2077639 terminal0,
+238.9724s diagnostic duration. Collector1000 passes all11+fullCIF againstnative;
+zero allocations/calls/maskcopies/cache releases, clean lease. Same code asN1536,
+configured normalize=True, but unsupported length retains accepted fallback.
+Gate appended to same model-gate provenance. Archive model-mask-n1000-v1-results
+SHA57832cb364ba57620ec31e6bd3ed16bc812f8bd2cca040d0590c977eb982aa41,
+26579869bytes. Collector scope text corrected before launch and prep pin updated.
+Local/remote /tmp/fireprot-prepare-mask-fallback-v1.py reproduces that correction.
+
+ACTIVE PAIRED BENCHMARK, no other GPU work/heavy remote builds until terminal:
+/tmp/fireprot-mask-paired-v1 onDiamondHill, driver2083396, Rust scheduler2083407.
+Detached start_new_session. Driver/source /tmp/fireprot-mask-paired-v1/driver.py;
+local /tmp/fireprot-mask-paired-driver-v1.py. Root start.json/exit.json/paired.log;
+root paired-n1536/order.jsonl and benchmark.json/comparison.json when complete.
+Spec pairs-n1536.json SHA3282f9e6db06fcabe276dd8e98ab023e8ca86d2fadeeff7952c3d802fd57d77b.
+AB/BA/AB: mask-e2e-n1536-baseline-0,candidate-0,candidate-1,baseline-1,baseline-2,
+candidate-2. Outputs /media/IntelSSD/fireprot/outputs/<runid>. Firstbaseline
+started; inspect journal+actual PIDs, neverrestart for observation/networktimeout.
+Parent can be alive while child jobs change; scheduler authoritative outcome.
+All8GCD idle preflight saved. No overlap with diagnostic/ablation/archive jobs.
+
+Both profiles use SAME /tmp/fireprot-model-mask-v1/python and rebuiltCLI6e8134/
+bridgee021ec; diagnostics0 botharms, samehashedcontrols. Onlyworkspaceflag0->1
+anddeclaredprofilehash differ. Candidateordinaryallocation+capacity128+masknorm;
+baseline acceptedD16/pair+atomcaches/ownedsoftmax/confidencecap. BothstrictFP32
+R3/fourtrunkpasses,D200,S1,seed101,HIP7/PCI93. This is incremental vsacceptedD16,
+NOTdirectoriginalTorch. Do not multiply into a directratio. Runtime limits7200s
+wholebatch,1800s/invocation. Expected~50min from prior individual observations.
+Preparation local/remote /tmp/fireprot-prepare-mask-pairs-v1.py; sourcegatespinned.
+Launch evidence provenance/openfold3_workspace_mask_paired_launch.json is only a
+historical running-state record, not acceptance. Record final complete outcome
+separately. Rust compare_prediction uses Policy::Exact for ALL OpenFold3 arrays
+(bytecomparison), and schedulerchecksCIFatomidentities aftereachrun. Still verify
+fullCIFbytes and nativeanchor in final collector, as stronger existing evidence.
+
+Next: poll known scheduler/journal, do not launch another GPU experiment.
+Aftercomplete, collect all6 runtimes/chunks/copycounts and model/invocationtimes,
+require11arrays/completeCIF/nativeanchors, archive entire pairedroot+6outputs+
+source/binaries, then publish measuredratio or rejection. Do not promote on
+launch or partialpairs. Complete plan's final gates before promotion; no need
+rerun unchanged Rust tests repeatedly while timing. Possible future CPU-only
+analysis: normalization could benefit remaining D16/N1000 fallback paths, but
+that is beyond this plan's retained-fallback scope and needs a new/deepened plan
+plus exact gates after currentpairs. Acceptedpublished E2E remains1.499xdirect
+andseparate1.162xD16increment until the new result is fullycollected.

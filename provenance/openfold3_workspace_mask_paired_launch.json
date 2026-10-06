@@ -1,0 +1,144 @@
+{
+  "status_at_capture": "running_first_baseline",
+  "captured_unix": 1791253222.1182249,
+  "start": {
+    "driver_pid": 2083396,
+    "child_pid": 2083407,
+    "command": [
+      "/tmp/fireprot-model-mask-v1/target/release/fireprot",
+      "benchmark-pairs",
+      "/tmp/fireprot-mask-paired-v1/pairs-n1536.json",
+      "/tmp/fireprot-mask-paired-v1/paired-n1536"
+    ],
+    "started": 1791253000.767024,
+    "driver_sha256": "d901c1499c5a59aa736201ab289beda8183a10d3a2345691b85929005720451a"
+  },
+  "specification": {
+    "schema_version": 1,
+    "execution": {
+      "schema_version": 1,
+      "timeout_seconds": 7200,
+      "invocation_timeout_seconds": 1800,
+      "pairs": [
+        {
+          "first": "baseline",
+          "baseline": {
+            "request": {
+              "path": "/tmp/fireprot-mask-paired-v1/mask-e2e-n1536-baseline-0.json",
+              "sha256": "caf5ab5dd73c9d338eba9614c96b55e2b66507fdeedfba6f06b36765a2931b64"
+            },
+            "profile": {
+              "path": "/tmp/fireprot-mask-paired-v1/baseline-profile.json",
+              "sha256": "d4c402629051413a27005b1e014e7047e9eeb21e660fbd5d68a1cfc1c83574e2"
+            }
+          },
+          "candidate": {
+            "request": {
+              "path": "/tmp/fireprot-mask-paired-v1/mask-e2e-n1536-candidate-0.json",
+              "sha256": "8d0bf8c4fd31af42b1a05c1f93467ac861e9eab03142d2b060b1e9233ea5a288"
+            },
+            "profile": {
+              "path": "/tmp/fireprot-mask-paired-v1/candidate-profile.json",
+              "sha256": "fb617606a01cc69b8a55d6584e9f5b9c12182dcd48691a353df32d36aedd80ae"
+            }
+          }
+        },
+        {
+          "first": "candidate",
+          "baseline": {
+            "request": {
+              "path": "/tmp/fireprot-mask-paired-v1/mask-e2e-n1536-baseline-1.json",
+              "sha256": "66a0ff85792bb8711635d9c7633bbed1a80fe82731bc209dd9ba560a7d3fb99f"
+            },
+            "profile": {
+              "path": "/tmp/fireprot-mask-paired-v1/baseline-profile.json",
+              "sha256": "d4c402629051413a27005b1e014e7047e9eeb21e660fbd5d68a1cfc1c83574e2"
+            }
+          },
+          "candidate": {
+            "request": {
+              "path": "/tmp/fireprot-mask-paired-v1/mask-e2e-n1536-candidate-1.json",
+              "sha256": "b2bce2f2d3bff56c150ba1e8682eb4c50284f35a296f6ade5072c6c555e26428"
+            },
+            "profile": {
+              "path": "/tmp/fireprot-mask-paired-v1/candidate-profile.json",
+              "sha256": "fb617606a01cc69b8a55d6584e9f5b9c12182dcd48691a353df32d36aedd80ae"
+            }
+          }
+        },
+        {
+          "first": "baseline",
+          "baseline": {
+            "request": {
+              "path": "/tmp/fireprot-mask-paired-v1/mask-e2e-n1536-baseline-2.json",
+              "sha256": "f2f34519eb8aa2532b68b31a1fd4bb3154a8087db0adf5029b508100d0eb467b"
+            },
+            "profile": {
+              "path": "/tmp/fireprot-mask-paired-v1/baseline-profile.json",
+              "sha256": "d4c402629051413a27005b1e014e7047e9eeb21e660fbd5d68a1cfc1c83574e2"
+            }
+          },
+          "candidate": {
+            "request": {
+              "path": "/tmp/fireprot-mask-paired-v1/mask-e2e-n1536-candidate-2.json",
+              "sha256": "c66e7c622ec3a62760b12a16931db7673352e0b38258f36f6ae6595d2e8cff0a"
+            },
+            "profile": {
+              "path": "/tmp/fireprot-mask-paired-v1/candidate-profile.json",
+              "sha256": "fb617606a01cc69b8a55d6584e9f5b9c12182dcd48691a353df32d36aedd80ae"
+            }
+          }
+        }
+      ]
+    },
+    "comparison": {
+      "scope": "end_to_end",
+      "cache_state": "Fresh model processes; filesystem caches not flushed; sequential AB/BA/AB on HIP7/PCI93; correctness jobs finished before timing; no other FireProt GPU work or heavy remote builds during timing; other host jobs not continuously audited",
+      "treatment_description": "Incremental capacity128 QK/softmax workspace with qualified transposed-mask normalization versus accepted D16 plus pair/atom caches, owned scores and confidence ceiling. Both arms use identical worker and rebuilt Rust CLI/bridge. Strict deterministic FP32 with memory filling, R3/four trunk passes,D200,S1,seed101. Candidate owns one4.5GiB pool for measured N1536/D32 outer128/256/512/1024; unmatched shapes retain accepted fallback. Ordinary strict allocator without explicit cache release; qualified transposed pair masks are made contiguous once per outer call; unforced upstream tuners. Diagnostic observer disabled in both arms.",
+      "expected_changes": {
+        "launch.environment.FIREPROT_QK_WORKSPACE": {
+          "baseline": "0",
+          "candidate": "1"
+        },
+        "invocation.profile_sha256": {
+          "baseline": "d4c402629051413a27005b1e014e7047e9eeb21e660fbd5d68a1cfc1c83574e2",
+          "candidate": "fb617606a01cc69b8a55d6584e9f5b9c12182dcd48691a353df32d36aedd80ae"
+        }
+      }
+    }
+  },
+  "specification_pin": {
+    "path": "/tmp/fireprot-mask-paired-v1/pairs-n1536.json",
+    "sha256": "3282f9e6db06fcabe276dd8e98ab023e8ca86d2fadeeff7952c3d802fd57d77b"
+  },
+  "preparation": {
+    "model_gate": {
+      "path": "/tmp/fireprot-model-mask-v1/gate-n1536.json",
+      "sha256": "f8f58112bbcf38ffca8a5a4049f6652055281e271856a08e15b57918f1edcca3"
+    },
+    "fallback_gate": {
+      "path": "/tmp/fireprot-model-mask-n1000-v1/gate-n1000.json",
+      "sha256": "3bb2630dd9ee6b55b74155ed51100ce05d0cd7d7e04259ce7c2549836b20fc1e"
+    },
+    "framework_cli": {
+      "path": "/tmp/fireprot-model-mask-v1/target/release/fireprot",
+      "sha256": "6e81349891a472b92bc29ff43825628a3d0352e56996784a20594e6c7c2b4fce"
+    },
+    "source_preparation": {
+      "path": "/tmp/fireprot-model-mask-v1/preparation.json",
+      "sha256": "917eefb863bd113aa1f5c0f83ee1db3760fcf49a5ce3ceb19573f466524a1579"
+    },
+    "spec": {
+      "path": "/tmp/fireprot-mask-paired-v1/pairs-n1536.json",
+      "sha256": "3282f9e6db06fcabe276dd8e98ab023e8ca86d2fadeeff7952c3d802fd57d77b"
+    }
+  },
+  "driver": {
+    "path": "/tmp/fireprot-mask-paired-v1/driver.py",
+    "sha256": "d901c1499c5a59aa736201ab289beda8183a10d3a2345691b85929005720451a"
+  },
+  "limits": [
+    "Launch record only; no successful benchmark outcome or E2E speedup claim yet.",
+    "No other FireProt GPU experiments or heavy remote builds while this paired benchmark is running."
+  ]
+}

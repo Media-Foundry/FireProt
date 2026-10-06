@@ -23,6 +23,9 @@ def main(controls, destination):
     report = dict(completed=False, controls=pin(controls), source=pin(__file__), records=[],
         qualification=[], visible_device=os.environ.get('HIP_VISIBLE_DEVICES'),
         scope='Complete attention with transposed pair masks; no model/E2E claim',
+        arms=dict(split_hip='Native QK/PV and accepted HIP softmax with original strided mask',
+                  split_normalized_mask='Same split path with mask.contiguous inside each timed call',
+                  workspace='Qualified mask normalization plus combined HIP workspace'),
         cache_state='One4.5GiB pool retained in both arms; configured first-allocation policy before timing; no cache release during timing')
     pool = None
     try:
@@ -58,7 +61,10 @@ def main(controls, destination):
                         mask_strides=list(args[3].stride()), mask_offset=args[3].storage_offset(),
                         all_probability_bits_exact=True, all_output_bits_exact=True))
                     del probabilities, output
-                    arms = dict(split_hip=lambda: reference(args, split)[1], workspace=lambda: pool(*args))
+                    arms = dict(split_hip=lambda: reference(args, split)[1],
+                        split_normalized_mask=lambda: reference(
+                            (*args[:3], args[3].contiguous(), args[4]), split)[1],
+                        workspace=lambda: pool(*args))
                     for fn in arms.values():
                         for _ in range(2):
                             output = fn()
@@ -66,7 +72,7 @@ def main(controls, destination):
                             exact(expected, output)
                             del output
                     releases = pool.cache_release_attempts
-                    for index, order in enumerate(balanced_orders(list(arms)) * 3):
+                    for index, order in enumerate(balanced_orders(list(arms)) * 2):
                         for position, name in enumerate(order):
                             torch.cuda.synchronize()
                             start = time.perf_counter()

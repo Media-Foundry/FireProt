@@ -203,3 +203,11 @@ attention, adaptive normalization, Q/K/V/output/gate projections, conditioned
 transition, and the SDPA core at `[1,16,1000,48]`. It requires 4800 observations
 per group and restores hooks/SDPA dispatch on exit. Qualification against the
 uninstrumented cache output is required before interpreting its diagnostic rows.
+
+`diffusion_transition_fusion.py` reuses the published HIP `silu_mul_f32` and
+`sigmoid_mul_f32` kernels in 24 global and six local conditioned transitions.
+Each retained linear/normalization module computes as before; the fused kernels
+consume fresh gate/projection outputs in place. The N1000/7979-atom prototype
+requires 200 calls per block and rejects graph capture, autograd and autocast.
+The 16 synthetic shape/range checks and first full-model candidate preserve
+bitwise results; matched E2E qualification is recorded in the Base guide.

@@ -3569,3 +3569,49 @@ requires4800observationspergroup. NewcodeASTcheckedbutfullGPUprofileNOTYETqualif
 Onterminal requirebase-diffusion-global-profile.json ANDall9bits vs localbiasON;
 onlytheninterpretrows. Failurecountsrecordinworkerlog; retainfailurebeforefix.
 No otherGPUjob. Source/evidence/docsbeingcommitted; no newoperator speedupclaim.
+
+## 2026-10-07 global profile qualification; HIP transition fusion first pair
+
+Globalprofile2416052 TERMINAL SUCCESS/all9arraysBITSvs eagerlocalcacheanchor.
+Evidenceprovenance/protenix_base_diffusion_global_profile.json. 4800calls/group,
+inclusiveattention6.660825s,attentionwithprojections4.040036,conditionedtransition
+2.708735,SDPAcore1.975685,adaNorm.861349,Q.408210,K.353779,V.362794,gate.282909,
+outputlinear.274896s. NestedinstrumentedrowsNOTadditive; moreprobeoverheadthan
+previousglobaltransformer7.77s. SDPAqFP32[1,16,1000,48],stride[768000,48,768,1].
+
+PublishedAMDlibraryalreadyhassilu_mul_f32/sigmoid_mul_f32. HIP7synthetic16checks
+shapes[1,1000,1536],[1,1000,768],[1,7979,256],[1,7979,128],randomscale1/20,
+seed101strictfillallBITWISE vsTorch. Evidence
+provenance/protenix_base_diffusion_transition_synthetic.json; remote
+outputs/experiments/protenix-base-diffusion-transition-20261007/synthetic.json.
+No newkernelbuild. Newisolateddiffusion_transition_fusion.py usesexistingHIPkernels
+for30conditionedtransitionblocks, keptnormalization/linearoperations, fresh
+projectedgate/outputstorageconsumedinplace; rejectsgrad/autocast/capture, strict
+N1000global768/local7979x128; requires200calls/block=6000. Prototype hardcoded
+7979atomscannotyetserve5ZMW7711; generalizewithseparatequalificationbeforepromotion.
+
+TransitionON2418291 andOFF2420551 TERMINAL SUCCESS. All9arraysBITSagainstcombined
+anchorandcrossarm; RustgatesPASS. ON111.950568443s/model87.935992179,
+OFF118.374006712s/model93.792648997. Rawpair1.05737745x isPROVISIONAL becauseoff
+outlierslowversusprior~113s. Preserveit, DONOTclaimstable5.7%. Evidence
+provenance/protenix_base_diffusion_transition_first_pair.json; aggregator
+/tmp/fireprot-diffusion-transition-pair.py onbothhosts. Frozenworkerclonedcombined
+reuseONworker; addsfusioninnermost. Bothcaches/dualreuse/Lt/bufferedON, graphOFF.
+
+CURRENT LIVE repeat schedulerPID2421662, root
+outputs/experiments/protenix-base-diffusion-transition-20261007,
+repeat-spec.json/repeat-measurement/repeat-launch.log/repeat-pid.
+2additionalABthenBApairs afterfirstmanualBA, eachtimeout1800total7200. HIP7only;
+nooverlappingGPUjobs orremoteheavybuild. Finaljournalorder.jsonl/benchmark.json.
+Outputprotenix-base-diffusion-transition-{off,on}-r{1,2}; mapbaselineidx0,3,
+candidate1,2. Prepareaggregatefrom/tmp/fireprot-aggregate-local-bias.py byreplace
+root/outputnames/anchors; verifyall6outputsall9bits +Lt524each andfusionon6000.
+Awaitterminal, no restartonobservationtimeout. Goalactive, gainsnotflatproven.
+
+PotentialnextHIPcandidateafterrepeat: attention _wrap_up multiplies transposed
+SDPAoutput bysigmoid(linear_g) thenflattens. Could fusegatewithlayoutconversion
+andoverwritefreshlinear_gstorage, retaininglinear_o andFP32operationorder;
+requireactualo shape/stride/alias guards andsyntheticexacttests beforemodeltrial.
+No newgatingkernelwritten. Biggerdeliverableremainsintegratingqualifiedroute
+into maintainedopt-inentry/profile anddirectoriginalTorchE2Erepeats; current
+fastestpathsfrozenexperimentalworkers, don'tclaimdefaultprofile~112s.

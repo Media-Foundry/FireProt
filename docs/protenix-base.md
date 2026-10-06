@@ -567,3 +567,32 @@ modules is therefore deferred while global diffusion attention/transition costs
 are examined. Nested event intervals include host launch gaps and must not be
 summed into an E2E improvement claim.
 [Qualified profile](../provenance/protenix_base_diffusion_static_profile.json).
+
+### Global diffusion attention and transition diagnosis
+
+A second qualified probe observes 4800 calls per global-block component; all
+nine output arrays match the eager cached route bitwise. Inclusive diagnostic
+totals include attention 6.661 s, conditioned transition 2.709 s, SDPA core
+1.976 s, and adaptive normalization 0.861 s. Q/K/V projections total about
+1.125 s. These nested intervals include extra instrumentation overhead and are
+not directly additive or comparable as uninstrumented E2E measurements.
+The SDPA input is FP32 `[1,16,1000,48]`, with strides `[768000,48,768,1]`.
+[Global profile](../provenance/protenix_base_diffusion_global_profile.json).
+
+### Diffusion transition elementwise fusion: provisional first pair
+
+The published HIP SiLU/product and sigmoid/product kernels pass 16 exact
+synthetic checks for the global/local transition shapes and ordinary/large
+activations. An isolated adapter applies them to 24 global and six local
+conditioned transitions, retaining the normalization and linear modules.
+All 6000 transition calls are covered; all nine complete-model arrays remain
+bitwise equal to the prior combined-reuse route.
+
+One matched pair is **118.374007 -> 111.950568 s E2E** (1.05738x), with model
+calls 93.792649 -> 87.935992 s. Unchanged Rust gates pass. However, this off-arm
+baseline is noticeably above the previous approximately 113 s observations.
+The observation is retained, and two alternating pairs are running before any
+stable performance claim or promotion. Both bias caches, dual storage reuse,
+scoped Lt and buffered receipts are enabled in both arms; graph is off.
+[Synthetic evidence](../provenance/protenix_base_diffusion_transition_synthetic.json),
+[first paired evidence](../provenance/protenix_base_diffusion_transition_first_pair.json).

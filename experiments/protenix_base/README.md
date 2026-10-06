@@ -298,6 +298,13 @@ cost drops to 7.098824 s, but E2E is 113.415506 s, which does not improve on the
 G12 observation. This is a single candidate, not a repeated speedup claim.
 [G48 evidence](../../provenance/protenix_base_composed_graph_g48_trial.json).
 
+The direct maintained-eager/G12 AB/BA/AB confirmation is complete. All six runs
+are bitwise equal to the maintained anchor and unchanged Rust gates pass. E2E
+medians are **112.761229 s maintained versus 113.374822 s Graph (0.99459x)**;
+two of three pairs favor eager. Graph is not promoted. This supersedes any
+suggestion of a production gain from the single experimental off/on pair.
+[Three-pair evidence](../../provenance/protenix_base_maintained_vs_graph_three_pairs.json).
+
 ## Base unused-template preprocessing candidate (unqualified)
 
 `unused_templates.py` extends the existing Mini guard only inside an isolated

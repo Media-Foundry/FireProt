@@ -4172,3 +4172,46 @@ maintainedanchor; inspectfeature_preparation skip/nativecounts andE2E. Neither
 assumeignoredfeaturesnorCPUtestsprovepredictionRNGequivalence. Ifno materialgain,
 reject; ifgainrepeatandsecondinput5ZMWbeforepromotion. This closesremaining
 Mini-to-Base preprocessingcandidate beforedeclaringE2Eplateau.
+
+TemplatecandidateCOMMITTED/PUSHEDmaster6cafde8; postcommitindexrefresh/finalgate
+clean. Freshfeature._supportedimpactLOW directbuild_template_features reviewed,
+manualupstreamdatasetcallverified(theProtenixcheckoutisindependentofgraphindex).
+17CPUtestsPASS. Graphrepeatwrapper2462871 stillrunning, lastobservedindex3maintained.
+NewLOCALONLY /tmp/fireprot-prepare-base-template-pair.py (ASTPASS) andsourcebundle
+/tmp/fireprot-base-template-source/unused_templates.py+manifest. RequiresGraph
+repeatdriverexit0 andnoGPUjobsbeforepreparation. Createsfreshrootoutputs/experiments/
+protenix-base-unused-templates-20261007; clonesmaintainedpython/fireprot/kernels,
+wrapsfrozenworkers/__main__.py entirepredictwithunused_templates.install, leaves
+modelworker/base_n1000maintainedcontextunchanged. Off/ononlyfeatureflag0/1; HIP7,
+usesUMEMrequestandmaintainedanchor. Driverall9BITSandfeature_preparationcounts
+skip0/native1 orskip1/native0beforeeachverifiedevent. PreparationdoesNOTlaunch;
+reviewpins/requests/profiles thenlaunchaftercurrentstudy. NoBaseGPUparttested yet.
+
+## 2026-10-07 Graph direct confirmation complete: reject promotion
+
+Wrapper2462871 TERMINAL SUCCESS,6verifiedruns. Aggregator
+/tmp/fireprot-summarize-maintained-graph-pairs.py final-v1 SUCCESS. MaintainedE2E
+[112.761228699,113.444521726,112.632747294]; Graph
+[113.684114227,112.623723071,113.374821634]. Medians112.761228699->113.374821634,
+ratio.9945879259 (Graph~.54%slower), pairedratios.991882/1.007288/.993455.
+Modelmedians88.361868094->88.477236631. All6all9BITSanchor, allGraph4captures36
+replays1048logical; unchangedRustcompare-runsgatesPASS. Copiedevidence
+provenance/protenix_base_maintained_vs_graph_three_pairs.json. README/Baseguide/
+experimentguide updateddecisionNO GRAPHpromotion; priorG12singlepairgainwas
+experimentalcontrol, notproductiongain. Directnative3.42210xunchanged.
+
+CURRENT LIVE unused-templatepairwrapper2468516, root
+outputs/experiments/protenix-base-unused-templates-20261007, run.sh/plan/pid/log.
+Preparation+source+aggregatortransferredafterGraphterminal; noactiveGPUatlaunch.
+Allsource/entry/control/referencepinschecked; frozenworker__main__contextcovers
+features, maintainedGPUcompositionunchanged. HIP7N1000umemFP32C10D200S1seed101,
+offthenon, onlyFIREPROT_SKIP_UNUSED_TEMPLATES0/1 differs. EachRustmeasure1800,
+overall4000INT/kill60; all9BITSandactualfeaturecountsrequired before next.
+Outputsprotenix-base-unused-template-{off,on}; driver-statusatcompletion. Candidate
+ONrequiresverifiedconsumerhashandskip1/native0; OFFskip0/native1.
+
+/tmp/fireprot-summarize-base-template-pair.py isonbothhosts,ASTPASSNOTyetexecuted.
+Afterdriverexit0, freshTAGfirst-v1 verifiescontrols, consumer/counts, Rustexact
+arrays+conditions/gates, emitsfirst-v1-summary.json. No performanceclaimyet.
+CurrentGraphdocs/evidence/memoryuncommitted; master6cafde8 pushed. Needindex/gate
+thencommitwhiletiming(remoteuntouched). NootherGPU/buildwhile2468516live.

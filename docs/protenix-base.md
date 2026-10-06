@@ -777,3 +777,30 @@ in E2E. This is one pair, not a stable speedup or a new direct-native ratio.
 The wrapper's control also differs from the maintained eager entry through its
 side stream and guards. No graph path is promoted on this evidence alone.
 [G12 pair evidence](../provenance/protenix_base_composed_graph_g12_first_pair.json).
+
+### Graph versus maintained eager: three-pair decision
+
+The experimental `maintained` mode delegates directly to the maintained context,
+before creating a side stream or graph guards. Three AB/BA/AB pairs therefore
+test the G12 graph against the actual eager execution path, with identical frozen
+worker sources and published kernels. All scientific settings remain the same.
+
+| Pair | Maintained eager E2E (s) | G12 Graph E2E (s) |
+| --- | ---: | ---: |
+| 1 (AB) | 112.761229 | 113.684114 |
+| 2 (BA) | 113.444522 | 112.623723 |
+| 3 (AB) | 112.632747 | 113.374822 |
+| Median | **112.761229** | **113.374822** |
+
+The median ratio is **0.99459x**: Graph takes about **0.54% more E2E time**, and
+two of three pairs are slower. All six runs match the maintained prediction
+anchor in all nine arrays bitwise; unchanged Rust archive, condition, coordinate
+and confidence checks pass. Every graph run records four captures and 36 replays
+with all 1048 logical contractions accounted for.
+
+**Decision: retain maintained eager execution; do not promote Graph.** The earlier
+single-pair 1.00795x result used an experimental side-stream control and did not
+establish a gain over the maintained entry. The G48 candidate also failed to
+improve E2E. The direct-native **3.42210x** result remains the maintained result;
+these graph experiments do not increase it.
+[Three-pair graph evidence](../provenance/protenix_base_maintained_vs_graph_three_pairs.json).

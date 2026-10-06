@@ -105,6 +105,11 @@ N1000 input, with shared fast initialization. Native-to-optimized outputs meet
 the explicit aligned-coordinate and summary-confidence criteria, not bitwise equality.
 See [Base entry and qualification](docs/protenix-base.md#maintained-n1000-optimization-entry).
 
+HIP Graph is **not enabled** in this profile. Three matched comparisons against
+maintained eager execution found no E2E gain (112.761 s eager versus 113.375 s
+Graph medians), despite bitwise-identical outputs. See the
+[Graph decision](docs/protenix-base.md#graph-versus-maintained-eager-three-pair-decision).
+
 The Mini examples explicitly use **C4/D1/S1**; they are not the upstream Mini
 D5 default. Review the workload before using an example as a scientific preset.
 Mini-ESM needs its ESM2-3B assets as well; see [Mini-ESM setup](docs/protenix-mini-esm.md).

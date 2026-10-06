@@ -1964,3 +1964,85 @@ analysis: normalization could benefit remaining D16/N1000 fallback paths, but
 that is beyond this plan's retained-fallback scope and needs a new/deepened plan
 plus exact gates after currentpairs. Acceptedpublished E2E remains1.499xdirect
 andseparate1.162xD16increment until the new result is fullycollected.
+
+## Paired benchmark in progress; final CPU gates and ISA review (2026-10-06)
+
+No model or kernel changes this turn. Same detached benchmark remains active:
+/tmp/fireprot-mask-paired-v1, driver2083396 and scheduler2083407. Latest poll at
+33:25 scheduler elapsed: first four runs measured and verified, baseline2
+started at journal offset1991.497448605. No restart and no overlapping GPU work
+or heavy remote build. Continue polling the SAME handles; a network timeout is
+not a failed run. Full benchmark/collector acceptance remains pending.
+
+First pair only: invocation537.407814490 ->449.722786494 seconds,1.19497572867x,
+all11 arrays exact and CIF atom identities checked. This is preliminary and
+incremental versus D16, not a published three-pair result or direct Torch ratio.
+Do not update accepted speedup claims from partial measurements.
+
+Final local cargo test --workspace --locked:180 passed,0 failed,1 ignored across
+44 test summaries. Release CLI/bridge/runtime build passed; CLI6e81349891a472b92bc29ff43825628a3d0352e56996784a20594e6c7c2b4fce
+and bridgee021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a
+match timed deployment. Logs /tmp/fireprot-workspace-final-cargo-tests.log and
+/tmp/fireprot-workspace-final-build.log. Plan Python regression command plus
+model_workspace/workspace_dispatch/tuner_observer:74 passed. Additional mask
+layout and Rust workspace tests:21 passed. This turn's95 tests do not replace
+the earlier98-test implementation record. No behavioral edit after these gates.
+
+Terminal-only collector is local /tmp/fireprot-collect-mask-pairs-v1.py and
+remote /tmp/fireprot-mask-paired-v1/collect.py, SHA
+d3fa15d870784cb641e5dd49b787dd12c6407b2ce84f17b6603e86efc4897392.
+It refuses a live benchmark (guard exercised successfully), requires all6 jobs,
+18 journal events and3 correct pairs, replays Rust compare-runs from pinned
+receipts, and compares EACH output to BOTH native and D16 anchors with all11
+bits and full CIF bytes. It checks ordinary4.5GiB lease/call/copy accounting,
+diagnostics disabled, caches and policy. Creates collection-v1 exclusively;
+if post-terminal collection fails, investigate before creating a new versioned
+collection root. Writes collected.json exclusively only after all gates pass.
+No collection root or collected.json was created during the live-guard check.
+
+Terminal-only archiver local /tmp/fireprot-archive-mask-pairs-v1.py and remote
+/tmp/fireprot-mask-paired-v1/archive.py, SHA
+4eebd88f932f5a9f54ab50c49b030adb0401ae3d664e3af56c890792b257e2de.
+After collector success, creates usual durable-root/mask-paired-v1-results.tar.gz
+exclusively, including controller,6outputs,frozenworker/binaries,2reference
+outputs,kernelbundles,B128screen,input; checkpoint bytes remain external pins.
+Both helper scripts syntax checked. Neither terminal action has run yet.
+
+LOCAL ONLY guarded direct-native preparer:
+/tmp/fireprot-prepare-mask-native-pairs-v1.py SHA
+188171436bebbc90c07dbd1d48d033b1daf13c783ff44f26758f62162b16d156.
+Not uploaded/executed; /tmp/fireprot-mask-native-paired-v1 does not yet exist.
+Requires complete successful incremental collection with faster median and p95.
+Then creates3 AB/BA/AB native-vs-full-candidate pairs, same frozen worker/CLI,
+strict science unchanged. Native backend returns upstream forward before HIP
+hooks; pair/atom caches separately disabled. Declared treatment: backend and
+conditioning/atom/head16/workspace flags plus profile hashes. Timeout10800s,
+1800/invocation. No driver prepared for this future sequence yet. Finish current
+benchmark and archive before deciding/launching direct comparison.
+
+Existing user-authorized GPT6-luna xhigh ISA agent resumed read-only and finished;
+no GPU/compilation/source edits. It verified actual localv12 asm SHA
+97f2bcd6cae933131d7373b040f8145c98f2c0f42ab16ce813429bc5cbcb32ef
+and metadata SHA07886b5053d81e9cf578f69e708ab26b86bac77f769bcdeb4cf53d66537a38a4
+at /tmp/fireprot-fusion-combined-v12.asm and -metadata.txt. Actual true kernel
+has11 barriers,16KiB LDS,62VGPR34SGPR,no spills. Six producer barriers and five
+consumer-to-reuse barriers are distinct. All DS accesses currently useVGPR
+addresses with offset0; no explicit M0 reference in assembly.
+
+Two FUTURE experiments, not implemented or authorized by this plan's arithmetic
+scope: (1) native torch.bmm(out=retained_scores) plus same in-place HIPsoftmax to
+separate allocation reuse from handwrittenQK gains; validate selected kernel,
+hidden allocations/fill and full probability/PV bits. (2) alternate two16KiB LDS
+buffers, potentially remove5 reuse barriers while retaining6 producer barriers
+and exact arithmetic order. ISA offset encoding covers32767B; new compilation
+must establish32KiB segment/addressing,barrier count,resources,no spills and
+runtime LDS range. Actual occupancy and performance cannot be inferred from
+LDS size alone. No speedup claim. Plan currently forbids HIP arithmetic edits;
+complete current E2E/promotion decision before a new/deepened implementation plan.
+User PDF remains untracked and must never be committed.
+
+Reanchor /tmp/fireprot-mask-paired-current-provenance.json: HEAD1203df1;
+cited manifest unchanged since prior reanchor, dirtydigest2c6402b0053bf1b1d85ccb785f269c24e0d3531ff1b0a288fad3cf5b9ec36643
+(only untrackedISA). Typed GitNexus status/context agree: sameHEAD,current
+schema4runner,incompleteReasons[],up-to-date. Plan digest remains6177e9b38a9535dde6ecc6a159e630986ed7a69760e2fe180ab38d76d8a9782f.
+Step5 still active; step6 pending; goal remains active, no plateau or blocker.

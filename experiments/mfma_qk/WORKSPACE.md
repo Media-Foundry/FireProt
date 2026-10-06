@@ -284,3 +284,20 @@ No paired timing was launched for v1.
 Evidence: `provenance/openfold3_model_workspace_model_gates.json`; archive
 `workspace-model-e2e-v1-gates.tar.gz`, SHA256
 `f27f5e4881cc5a63b2959e30dec3ba5c0a025ce47337d00d5a18742d67519393`.
+
+### Scoped tuner diagnostics
+
+`tuner_observer.py` records candidate chunk sizes and exact RuntimeError types/
+messages while rethrowing the same exception into the unchanged upstream tuner.
+Cached calls do not execute extra trials. The source hash and method origin are
+checked before installation; context/ownership guards and restoration are tested.
+Enable it explicitly with `FIREPROT_CHUNK_DIAGNOSTICS=1` in the experimental
+worker overlay; keep it disabled for final latency measurements.
+
+The existing confidence-cap scope must enter before the class observer. Otherwise
+its source guard correctly rejects the replaced tuner method. A first diagnostic
+run terminated before any pool allocation for this integration error; a regression
+test reproduces it and verifies the corrected ordering. Confidence retains its
+captured instance callable and its existing report; the observer records the
+remaining class-dispatched tuners, including MSA and Pairformer. Ten observer/
+confidence-policy tests pass. Model diagnostic acceptance remains required.

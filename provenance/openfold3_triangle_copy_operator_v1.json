@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "scope": "Isolated N1536/C128/chunk256 copy and captured trained multiplication; no E2E claim",
+  "copy_screen": {
+    "correctness_passed": true,
+    "calls": 232,
+    "fallbacks": 2,
+    "results": [
+      {
+        "mode": "row",
+        "offset": 0,
+        "native_ms": 5.428692817687988,
+        "hip_ms": 1.393259048461914,
+        "exact": true
+      },
+      {
+        "mode": "row",
+        "offset": 256,
+        "native_ms": 5.420533180236816,
+        "hip_ms": 1.3900569677352905,
+        "exact": true
+      },
+      {
+        "mode": "row",
+        "offset": 1280,
+        "native_ms": 5.424214839935303,
+        "hip_ms": 1.3902169466018677,
+        "exact": true
+      },
+      {
+        "mode": "column",
+        "offset": 0,
+        "native_ms": 6.470077037811279,
+        "hip_ms": 1.8413009643554688,
+        "exact": true
+      },
+      {
+        "mode": "column",
+        "offset": 256,
+        "native_ms": 6.469597816467285,
+        "hip_ms": 1.8377809524536133,
+        "exact": true
+      },
+      {
+        "mode": "column",
+        "offset": 1280,
+        "native_ms": 6.467195987701416,
+        "hip_ms": 1.8304200172424316,
+        "exact": true
+      },
+      {
+        "mode": "bmm",
+        "offset": 0,
+        "native_ms": 6.214531898498535,
+        "hip_ms": 2.537529945373535,
+        "exact": true
+      },
+      {
+        "mode": "norm",
+        "offset": 0,
+        "native_ms": 5.3050031661987305,
+        "hip_ms": 1.0618640184402466,
+        "exact": true
+      }
+    ],
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850",
+    "device": "AMD Instinct MI250X / MI250",
+    "strict": true,
+    "seed": 101
+  },
+  "trained_replay": {
+    "correctness_passed": true,
+    "results": [
+      {
+        "capture": "/media/IntelSSD/fireprot/outputs/trimul-profile-n1536-v1/trunk_pairformer-tri_mul_in.pt",
+        "capture_sha256": "65d77b65095932a3107d0e518ad86e32bc48b62d61bc3a810142af7dac0cdf88",
+        "native_ms": 238.18223571777344,
+        "copy_ms": 160.79928588867188,
+        "speedup": 1.4812393873606942,
+        "exact": true,
+        "samples_ms": {
+          "native": [
+            801.6902465820312,
+            238.2452850341797,
+            238.16015625,
+            238.23184204101562,
+            238.0908660888672,
+            238.1007843017578,
+            238.20431518554688
+          ],
+          "copy": [
+            160.8140411376953,
+            160.812255859375,
+            160.86090087890625,
+            160.7716064453125,
+            160.9066619873047,
+            160.7283935546875,
+            160.78631591796875
+          ]
+        }
+      },
+      {
+        "capture": "/media/IntelSSD/fireprot/outputs/trimul-profile-n1536-v1/trunk_pairformer-tri_mul_out.pt",
+        "capture_sha256": "6a08759df79a9e42e57cc9f556dfa565f7c4f0928fdffb8e5407b19c43a91a5c",
+        "native_ms": 239.37116241455078,
+        "copy_ms": 167.5842742919922,
+        "speedup": 1.4283629142760732,
+        "exact": true,
+        "samples_ms": {
+          "native": [
+            239.43997192382812,
+            239.36044311523438,
+            239.29965209960938,
+            239.33229064941406,
+            244.2169189453125,
+            239.4529266357422,
+            239.3818817138672
+          ],
+          "copy": [
+            167.53866577148438,
+            167.4247589111328,
+            167.4071044921875,
+            167.62364196777344,
+            167.59002685546875,
+            167.57852172851562,
+            167.67340087890625
+          ]
+        }
+      }
+    ],
+    "calls": 252,
+    "fallbacks": 0,
+    "source_sha256": "612caf7abd07a86a7fdf4eda7e0a2170c04b407f9121fc286ab864a648db1ba7",
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850",
+    "seed": 101,
+    "strict": true
+  },
+  "build": {
+    "library": "/media/IntelSSD/fireprot/runtime/torch_extensions/rust-v1/fireprot_triangle_bitcopy_v1_6d7882f17def98695f8f777eec541f4cf92638dd75d10d3bf320952afa8cb520/fireprot_triangle_bitcopy_v1_6d7882f17def98695f8f777eec541f4cf92638dd75d10d3bf320952afa8cb520.so",
+    "library_sha256": "e4ae99d240a91fb7ec0c82b74ba41ba6744e01470b2122fd8e9525d80c357685",
+    "dependency_scope": "Declared HIP compiler tools and load-time dependencies, ROCm/Clang/system/GCC headers, and explicitly linked libraries; runtime plugins and device-library data are not a complete environment lock",
+    "raw_receipt_sha256": "26c63000e2a7fd43f6e8a7b5fa2cec82c1c0ffc9491af1de7013c0ef07682165",
+    "remote_path": "/tmp/fireprot-triangle-memory-v1/build/build.json"
+  },
+  "cache_state": "Published HIP artifact; fresh process; first operator call discarded, six measured repeats per arm in balanced order; checks outside timing; filesystem/device caches not flushed",
+  "model_validation": "Running separately; not yet accepted"
+}

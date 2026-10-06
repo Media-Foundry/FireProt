@@ -2287,3 +2287,53 @@ existence as completed diagnostic acceptance; fullmodel check remains pending.
 Possible follow-up seams are exact reuse of repeated input normalization and
 fusion of native-order pointwise gates with packing; preserve actual GEMM shapes
 and residual aliasing. Choose only after bounded operator table confirms cost.
+
+## Triangle memory work: real operator wins, model validation active (2026-10-06)
+
+User explicitly requests continued optimization of BOTH triangle multiplication
+and attention. New committed plan8bb3e13 on branch
+openfold3-triangle-memory-optimization:
+docs/plans/2026-10-06-gitnexus-plan-openfold3-triangle-memory-optimization.md.
+Scope is exact memory/layout improvements; arithmetic/recycle changes excluded.
+Prior user Deep preference retained. GitNexus current schema4runner and index
+proved; new experiment symbols have no previous consumers. Loader reused unchanged.
+
+Both bounded diagnostics succeeded, all11/fullCIF against native,D16,latest.
+Compact provenance/openfold3_triangle_{trimul,triatt}_profile.json retains pins
+and aten tables. Attention current per-call QKsoftmax144ms,PV71ms; K packing8ms.
+Do not sum aten parents with kernel events. Attention memory work is only a small
+component; future compute changes need their own qualified scope.
+
+New experiments/triangle_memory bit-copy C++ HIP, guarded ctypes glue and
+source-pinned upstream method substitution. Native sourceSHA
+612caf7abd07a86a7fdf4eda7e0a2170c04b407f9121fc286ab864a648db1ba7.
+Copies only: two projection assignments, BMM input contiguous, output LN input
+contiguous. Existing GEMM shape,norm,sigmoid,residual unchanged. Derived replay
+Apache attribution retained in THIRD_PARTY. Rust native HIP builder reused.
+All8synthetic cases exact inclNaN/zero,offsetcanaries,nondefaultstream;2fallbacks.
+Real trained fulloperator incoming238.182->160.799ms1.481x;outgoing239.371->167.584
+1.428x,all14outputs per direction exact (firstcalls excluded from medians).
+First replay attempt failed source-substitution count before GPU; fixed to target
+only nonTritonbranch. Successful final source is retained. No E2E claim.
+Remote /tmp/fireprot-triangle-memory-v1 has build/build.json,copy-screen.json,
+trimul-replay.json and source. Provenance/openfold3_triangle_copy_operator_v1.json.
+
+ACTIVE fullmodel driver2219704 Rust2219713 /tmp/fireprot-triangle-model-v1.
+Frozen lateststagev3 + experimental scope, strictR3D200S1seed101N1536HIP7; ordinary
+memoryfill remains. Outputs triangle-copy-model-n1536-v1. Driver verifies all11
+and fullCIF against3anchors, retains fine stage events and triangle-copy.json.
+Unsupported calls native. Model success still pending; no E2E measurement.
+
+ACTIVE guarded attentioncontroller2226479 /tmp/fireprot-triangle-attention-v1.
+Waits for model collected correctness and idle8GCD; then Rustbuild+synthetic
+Kpacking screen and real trained attention replay. No concurrent GPU work.
+status.json/controller.log,screen.stdout/stderr,replay.stdout/stderr authoritative.
+No automaticretry. Source attention_copy.cpp packs exact B128H4N1536D32
+headlastK withstrides196608,32,128,1. Replay source-pins existing WorkspaceFusion
+and changes only packed_k; native arithmetic/workspace lifecycle retained.
+Pending actual performance and exact acceptance. Old model roots not mutated.
+Launch/sourcearchive pins provenance/openfold3_triangle_memory_launch.json.
+Local archive outputs/experiments/triangle-memory-local-20261006/launch-sources-v1.tar.gz
+contains preparer,controller,fullbuildreceipt and rawboundedprofilereports.
+Next poll originalPIDs, resolve any failures without restart, then N1000fallback,
+combinedmodel ifattentionwins, and fresh pairedE2E stableenvironment.

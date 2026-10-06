@@ -350,3 +350,28 @@ original-Torch speedup. Do not multiply it by the separate1.49910x measurement.
 D16 remains experimental. Evidence:
 `provenance/openfold3_head16_e2e_n1536.json`; controls:
 `provenance/openfold3_head16_paired_preparation.json`.
+
+## Triangle memory experiments (2026-10-06)
+
+The bounded multiplication and attention diagnostics both pass all 11 arrays
+and full CIF bytes against original native, accepted D16 and latest workspace
+anchors. Their detailed operation tables are recorded in
+`provenance/openfold3_triangle_trimul_profile.json` and
+`provenance/openfold3_triangle_triatt_profile.json`. These instrumented intervals
+are not E2E measurements. Attention's current QK+softmax and PV remain larger
+costs than its key packing.
+
+The first handwritten HIP bit-copy experiment preserves native multiplication
+arithmetic, chunk256 and in-place residual behavior. On the actual captured
+N1536/C128 trained inputs, incoming multiplication measures **238.182 → 160.799
+ms (1.481x)** and outgoing **239.371 → 167.584 ms (1.428x)**. All repeated outputs
+match bitwise. FP32 strict deterministic mode and memory filling remain enabled;
+first calls are excluded, with six measured calls per arm in balanced order.
+Copy-specific tests also pass NaN/signed-zero bits, offset destination canaries,
+nondefault streams and fallback checks. See
+`provenance/openfold3_triangle_copy_operator_v1.json`.
+
+This is an experimental complete-operator result, not a new model or E2E
+speedup. Full-model acceptance, N1000 fallback and paired E2E are separate
+requirements. Sources and reproduction commands are in
+`experiments/triangle_memory/README.md`.

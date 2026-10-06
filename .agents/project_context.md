@@ -3342,3 +3342,80 @@ HIP7, latestbufferedbridgebotharms. Requireall9bits againstpriorbuffered/scopedL
 anchorand2096projection1048paircoverage; thenmatchedOFF. Thisretestsreusewithout
 2.169sreceiptsetupoverhead. NoE2Egainclaimyet. New3pairbufferedevidence/README/
 CKschedulingcodeandreportuncommittedthisturn. Goalactive, meaningfulprogress.
+
+## 2026-10-07 buffered dual reuse positive pair; diffusion bias audit
+
+RetaineddualbufferedON2394664 TERMINAL SUCCESS121.635853086s/model97.410903361;
+OFF2395668 TERMINAL SUCCESS123.362992166s/model98.966769612. Singlepair1.01419926x,
+1.40%lesstime. All9arraysbits tobufferedanchor/eachother; unchangedRustgatesPASS.
+ON2096projections/1048consumedpairs/oneallocation/noerror. Evidence
+provenance/protenix_base_dual_reuse_buffered_first_pair.json uncommitted.
+No repeatedtrend/promotionyet. Earlierunbufferednegativepairretained.
+
+Newisolated diffusion_bias_cache.py supports off/audit/on, globaldiffusion24blocks
+only (not6localatomblocks). Upstreampair_z suppliedbyenable_cache is cloned by
+DiffusionConditioning wheninplace, thennormalized andper-blockF.conv2d biasrepeated
+200steps. Hypothesisbiasstatic; audit RETAINS ORIGINALCOMPUTATION andcompares
+4776laterbiases bitwise to24firstbiases, sourcepair_zidentity/versionandweight
+identity/versionguarded. Expected200conditioningcalls/4800globalattentioncalls.
+Cachemodeonlyafterauditpass; preservesadaptiveQKV/outputgate/timeconditioning.
+Newcodeuncommitted, ASTpasses. Auditstorageretains24*64MB=1.536GBbiases.
+
+CURRENT LIVE auditPID2396798 confirmedlive02:00. Root
+outputs/experiments/protenix-base-diffusion-bias-cache-20261007,
+audit-measurement/audit-launch.log/audit-pid. Outputoutputs/protenix-base-diffusion-bias-audit.
+FrozenTworker addsbias_install nestedinLt; bufferedbridge; no dualreuse; HIP7
+strictFP32N1000umemC10D200S1seed101timeout1800. ON/OFFrequest/profile/specprepared
+NOTlaunched. Onterminal inspectbase-diffusion-bias-cache.json counts/auditexact,
+requireall9outputarraysbits vsoutputs/protenix-base-buffered-receipts. Onlythen
+startONcachingfullmodel; afterONbitsvalidationstartmatchedOFF. AuditE2Enotspeedup.
+Ifsource/shapeinvariantfails preservefailureandinspectactualinputs; don'tassume
+biasconstantwithoutproof. NootherGPUjob, master471d2c8 current.
+Diffusionbiasaudit2396798 TERMINAL SUCCESS:200conditioningcalls/4800global
+attentioncalls/24firstbiases/4776laterbiasesBITWISEEQUAL; originalcomputations
+retained, all9predictionarraysbits vsbufferedanchor. Storedcache1536000000bytes.
+Evidenceprovenance/protenix_base_diffusion_bias_audit.json uncommitted.
+CURRENT LIVE ONcachePID2397709 atsamebiasexperimentroot/on-measurement,
+on-launch.log/on-pid; output outputs/protenix-base-diffusion-bias-on.
+OnlyafterONterminalverifyrecordhits4776/created24/calls4800andall9arraysbits,
+thenlaunchpreparedOFFcontrol. NootherGPUjobs. NewcachecodeauditedbutfastON
+E2E/correctnessnotyetqualified. Worktree master471d2c8 plusuncommittednewsource,
+2provenancefiles/docs/memory. Keepgoalactive; concreteprogress, notplateaued.
+
+
+## 2026-10-07 global diffusion cache first pair complete; local bias audit live
+
+GlobalcacheON2397709 TERMINAL SUCCESS119.582363404s/model95.130140742;
+OFF2399502 TERMINAL SUCCESS122.429573457s/model98.352285347. Onepair1.023809615x,
+2.33%lesstime. All9arraysbits; unchangedRustcompare-runs gatesPASS. Created24,
+hits4776,total4800; conditioning200; cache1536000000bytes. Evidence
+provenance/protenix_base_diffusion_bias_first_pair.json. No defaultpromotion or
+threepairtrendyet; retainedmathsameasbuffered/scopedLtanchor. Source/audit/firstpair
+andpreviousbuffereddualpairdocs stilluncommitted. No oldreceipt rewritten.
+
+Prepared NEW diffusion_local_bias_cache.py, separateoff/audit/oncontext for6atom
+attentionblocks (3encoder+3decoder). Sourceinspection: encoder c_l augmentation
+usesstatic s_trunk; r_noisy entersq_l separately, thenpairfeaturep_lm update uses
+c_l_q/k andsmallMLP, so localbias MAY bestatic. Auditmustprove1194laterbiases
+bitwise against6firstbiases. Denoiserprehookbindssignature andguards inputp_lm,
+c_l,s_trunk identity/version, stream, andallencoder/decoderparameter versions.
+Original calculationsretainedinaudit; expected200denoiser/1200attentioncalls.
+GlobalbiascacheONalreadyactiveinalllocalexperimentarms; no dualreuse here.
+
+CURRENT LIVE localauditPID2400638 confirmedlive01:47; root
+outputs/experiments/protenix-base-local-bias-cache-20261007; audit-measurement,
+audit-launch.log/audit-pid. Output outputs/protenix-base-local-bias-audit.
+Frozenworkerclonedglobalbiasworker, nestedlocal_bias_install insideglobalbias
+insideLt. Bufferedbridge, FP32N1000C10D200S1seed101HIP7timeout1800. ON/OFFprepared
+NOTlaunched. Onterminal inspectbase-local-bias-cache.json andall9arraysbits vs
+outputs/protenix-base-diffusion-bias-on; onlythenlaunchlocalON andverifybeforeOFF.
+IfinvariancefailsrecordanddoNOTcachelocalbias. NootherGPUjobs. Newlocalauditcode
+uncommitted; globalcachecodeawaitingcommitwithitsqualifiedfirstpair.
+Localaudit2400638 TERMINAL SUCCESS:200denoiser/1200localattention/6firstbiases/
+1194laterbiasesALLBITWISEEQUAL; originalcomputationsretained. Cache98304000bytes.
+All9predictionarraysbits vs globalcacheON. Evidence
+provenance/protenix_base_local_bias_audit.json. CURRENT LIVE localON PID2401548,
+samelocalexperimentroot/on-measurement,on-launch.log/on-pid; output
+outputs/protenix-base-local-bias-on. Validatehits1194/created6/calls1200, global
+cachealsohits4776, all9predictionarraysbits toglobalONanchorbeforelaunchingOFF.
+OFFpreparedNOTlaunched. NootherGPUjobs. FastlocalE2E/resultstillpending.

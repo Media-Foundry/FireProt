@@ -142,3 +142,20 @@ Generate `fmha_swizzle.hpp` beside the source before building; the screen adds
 that directory explicitly to compiler include paths and fingerprints both the
 header and its provenance. All eight exact checks pass, but no useful gain was
 measured, so the maintained schedule stays unchanged.
+
+`diffusion_bias_cache.py` audits or reuses the 24 global diffusion attention biases.
+Audit mode retains every original projection and checks the 4776 later biases
+against the first 24 bitwise. Pair-source and projection-parameter identity/version
+checks remain active. Cache mode reuses only those biases; adaptive single
+conditioning, attention and output gates still run every step. The experiment
+requires Base N1000, 200 steps and one sample, retaining 1.536 GB of bias tensors.
+Its original-computation audit passes with all nine prediction arrays unchanged;
+the first cache-mode full-model pair also preserves all nine arrays and reduces
+E2E from 122.430 to 119.582 s. Repeated timing is still required before a stable
+performance claim.
+
+`diffusion_local_bias_cache.py` independently audits/reuses six local atom biases.
+The audit retains original projections, checks 1194 later values bitwise, and
+verifies static `p_lm`, `c_l`, `s_trunk`, parameter versions and the execution stream.
+It runs on top of global bias caching, with its own mode and output record.
+The audit passes; cache-mode E2E and numerical qualification remain separate.

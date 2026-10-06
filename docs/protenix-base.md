@@ -473,3 +473,41 @@ large-bias checks are bitwise equal to maintained CK. Median synthetic times are
 20.369, 20.604, 20.489 and 20.315 ms respectively. The best difference is only
 0.27%; no scheduling change is promoted or sent to a full-model speedup trial.
 [Screen evidence](../provenance/protenix_base_ck_swizzle.json).
+
+## Dual-projection reuse after buffered loading
+
+Repeating the storage experiment with the buffered Rust bridge in both arms
+changes the first matched result to **123.362992 -> 121.635853 s E2E**
+(**1.01420x**, 1.40% less time). Model-call times are 98.966770 -> 97.410903 s.
+All nine arrays remain bitwise equal and unchanged comparison gates pass.
+The candidate uses one allocation for 2096 projections and 1048 consumed pairs.
+This is one pair, not a repeated trend or a default-profile promotion. The earlier
+negative result with unbuffered receipt parsing remains part of the record.
+[Buffered reuse pair](../provenance/protenix_base_dual_reuse_buffered_first_pair.json).
+
+## Static diffusion-bias audit
+
+The global diffusion transformer has 24 attention blocks called over 200 steps.
+An isolated audit preserves the original calculations and checks all 4776 later
+bias tensors bitwise against the first 24. Pair-source identity/version and
+projection parameters remain stable; all nine prediction arrays match the earlier
+buffered route. The retained tensors occupy 1.536 GB. This establishes invariance
+on the measured Base N1000 C10/D200/S1 workload; it is not a cache-mode speedup
+claim. The subsequent cache-mode first pair is recorded below.
+[Audit evidence](../provenance/protenix_base_diffusion_bias_audit.json).
+
+
+The global cache-mode first pair measures **122.429573 -> 119.582363 s E2E**
+(**1.02381x**, 2.33% less time), with model calls 98.352285 -> 95.130141 s.
+It creates 24 biases and reuses them 4776 times across all 200 steps. All nine
+arrays are bitwise equal and unchanged Rust comparison gates pass. This is one
+pair, not a repeated trend; adaptive conditioning, attention and output gates
+still execute on every step.
+[First cache pair](../provenance/protenix_base_diffusion_bias_first_pair.json).
+
+A separate audit of the six local atom-attention blocks also finds all 1194
+later biases bitwise equal to the first six. Static pair/trunk inputs and
+encoder/decoder parameter versions remain fixed; all nine predictions match
+the global-cache anchor. Retained local biases occupy 98,304,000 bytes.
+The full local-cache trial is pending; no local-cache speedup is claimed.
+[Local audit](../provenance/protenix_base_local_bias_audit.json).

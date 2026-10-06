@@ -512,6 +512,35 @@ the global-cache anchor. Retained local biases occupy 98,304,000 bytes.
 The first full local-cache pair measures **120.024906 -> 112.687053 s E2E**
 (**1.06512x**, 6.11% less time), with global caching and buffered receipt reading
 enabled in both arms. All nine arrays remain bitwise equal and unchanged Rust
-comparison gates pass. This is one pair; two alternating repetitions are running.
+comparison gates pass. This first pair has now been followed by two alternating repetitions.
 [Local first pair](../provenance/protenix_base_local_bias_first_pair.json).
 [Local audit](../provenance/protenix_base_local_bias_audit.json).
+
+
+The complete **three BA/AB/BA pairs** measure E2E medians
+**120.024906 -> 113.317563 s**, **1.05919x**, or **5.59% less time**.
+All three paired ratios favor caching (1.05374x to 1.09290x); baseline range is
+119.818–123.845 s and candidate range 112.687–113.708 s. All six outputs match
+all nine arrays bitwise and unchanged Rust pair/aggregate gates pass. Published
+kernels, global bias caching, scoped Lt, buffered bridge, FP32 N1000 C10/D200/S1,
+seed101, HIP7 and unflushed caches are common to both arms. This remains an
+increment over the global-cache route, not a new direct original-Torch ratio.
+[Three-pair evidence](../provenance/protenix_base_local_bias_three_pairs.json).
+
+
+### HIP Graph after global and local bias caching
+
+The cache-aware denoiser trial preserves both bias caches and scoped triangle Lt.
+One matched pair measures **113.316117 s off -> 113.569439 s on** complete E2E
+(**0.99777x**, 0.22% more time). Model calls are 88.917637 -> 88.841963 s.
+Capture costs 0.078879 s; all 200 denoising steps execute with one capture and
+199 replays. All nine outputs match the same-worker graph-off control and the
+previous eager-cache anchor bitwise; unchanged Rust comparison gates pass.
+
+The experiment validates graph/cache composition but observes no useful E2E
+benefit, so graph is not selected for the next combined optimization. Logical
+steps and actual Python cache visits are checked separately; parameters, fixed
+inputs and retained bias versions remain guarded across replay. Peak allocated
+memory is 10,644,840,960 bytes. This single pair does not rule out other graph
+partitions or persistent multi-request reuse.
+[Cache-aware graph evidence](../provenance/protenix_base_cached_diffusion_graph.json).

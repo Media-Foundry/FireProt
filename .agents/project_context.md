@@ -3447,3 +3447,74 @@ staticcachelifetime/version validation andlogicalstepcounts, preservingselected
 BLASroute; doNOTjustremoveguards. No newgraphtrialstarted. Firstfinishrepeat.
 Currentgoalprogress: localcachegain/fulloutputcorrectness, notplateaued.
 Master7242778 includespriorglobal/localaudits; thisappend/localpairdocsawaitcommit.
+
+## 2026-10-07 cache-aware denoiser graph prepared during repetitions
+
+Repeat scheduler2404870 stillLIVE confirmedelapsed04:33: repeatbaselineindex0
+completed119.916s, candidateindex1completed~113.799s, unchangedRustgatesPASS;
+index2candidateONr2 startedat234.46s. Index3baselineOFFr2 stillpending.
+No overlappingGPUexperiment. Completeaggregation script prepared onbothhosts
+/tmp/fireprot-aggregate-local-bias.py, adaptedvalidatedbufferedaggregator; require
+benchmark.json phase=succeeded beforeexecution. It builds3pair-compare andchecks
+all6outputsall9bits againstlocalON anchor +524Ltcounts. Firstpairalreadycommitted
+20d26a2; currentnewsourceuncommitted.
+
+Prepared root outputs/experiments/protenix-base-cached-diffusion-graph-20261007
+on/off-request/profile/spec.json andfrozenpython clonedlocalbiasworker; NOTLAUNCHED.
+Preparation /tmp/fireprot-prepare-cached-graph.py, exactsourcescopiedfromlocal
+experiments/protenix_base/{diffusion_graph,diffusion_bias_cache,diffusion_local_bias_cache}.py.
+FreshGitNexusimpact on3install symbols, typedindexmetaHEAD20d26a2/schema4current;
+MCPstalenessprosewrong(14behind), noindexedcallers; textsearch+frozenworkersreviewed.
+NewoptionalCacheReplayContract keepsoldnon-graphcachebehaviorunchanged.
+Workercreatescontract, nestsLt>globalcache>localcache>graph, graphinnermostso
+localhookinspect.signature seesoriginalforward. GraphONwarmactualstep1 andcapture
+step2,199replays; graphchecksallnamedparameteridentity/version, fixedinputidentity/
+version, andcachedbiasversions eachlogicalcall. Localprehookstillfires200times
+outsidemodule.forward; globalconditioner2/globalattention48/localattention12,
+cachehits24global/6local. ThesePythoncountscheckedseparatelyfrom200logicalcalls.
+Graphcontextmarkssuccessonlyafter200/1/199coverage, cachesrequireitbeforeaccepting
+reducedPythoncounts. OFFexpectsoriginal200/4800/1200and4776/1194hits.
+Biasesfirstcreatedduringwarm(notcapture); nosyncfinitechecksinsidecapture.
+Lttrianglepathoutsidegraph, still524each/nofallback. Nodualreuseinthistrial.
+CPUcontractchecksrejectincompletecompletionandpropagateretainedmutationguard;
+AST/diffchecksPASS. FullGPUcorrectnessNOTYETtested. DoNOTpromoteorclaimspeedup.
+
+NextfinishrepeatPID2404870,aggregate/copysummary/updatedocs. ThenlaunchnewgraphON
+viaRustmeasure-inferenceon-spec.json/on-measurement, HIP7onlytimeout1800.
+Requiregraph200calls/1capture/199replays, global2/48/24hits,local200/12/6hits,
+all9arraysBITWISEvs outputs/protenix-base-local-bias-on. Onlyifpassedlaunchsame
+frozenworkergraphOFFbeforeclaimingincrement. Onfailurepreservereceiptanddiagnose;
+donotdisableinvariantchecks. Graphnewsource/docsremainuncommittedpendingtrial.
+
+## 2026-10-07 local cache repeated gain; cache-aware graph rejected
+
+Repeat2404870 TERMINAL SUCCESS. Aggregate via/tmp/fireprot-aggregate-local-bias.py
+savedthree-pair-summary.json andcomparison inlocalbiasexperimentroot, copiedto
+provenance/protenix_base_local_bias_three_pairs.json. ExactofficialE2Emedians
+120.024906411->113.317563216s,1.059190676x/5.59%less. Baseline119.818-123.845,
+candidate112.687-113.708; all3pairedratios>1; all6outputsall9bits andunchanged
+Rustpair/aggregategatesPASS. Earliercommentaryusedjournalintervals(~0.09slarger);
+finaldocsuseinvocationelapsedonly. READMEupdatedwiththisincrement, nodirectnativeclaim.
+
+Cache-awaregraphON2409214 andOFF2410991 bothTERMINAL SUCCESS, root
+outputs/experiments/protenix-base-cached-diffusion-graph-20261007. On113.569438927s/
+model88.841963322 vsOff113.316117284s/model88.917637080;0.997769456x,0.22%slowerE2E.
+No usefulgain; graphnotselected. All9arraysBITSoff/onandearlierlocalONanchor;
+RustgatesPASS. Graph200logicalcalls,1capture,199replays,capture.078879s,peakalloc
+10644840960B. Globalcondition2/attention48/hits24; localdenoiser200/attention12/
+hits6 exactlyasnewcontractexpects. OFForiginalcounts200/4800/1200,hits4776/1194.
+Evidenceprovenance/protenix_base_cached_diffusion_graph.json; aggregation
+/tmp/fireprot-cached-graph-pair.py onbothhosts. New3filesoptionalcontractchanges
+nowfullmodelvalidated; docs/source/provenanceawaitcommit. Defaultsremainoff.
+
+CURRENT LIVE combineddualreuse+biascacheON PID2412262 confirmedlaunchedafterboth
+grapharmsterminal. Newroot outputs/experiments/protenix-base-combined-reuse-20261007;
+on-measurement/on-launch.log/on-pid. Frozenworkerclonedpregraphlocalbiasworker,
+addsoriginalqualifiedbase_dual_reuse.py fromdual-reuse-model snapshot; nest
+Lt>dual>globalcache>localcache. BothcachesON, bufferedbridge, graphOFF, FP32N1000
+umemC10D200S1seed101HIP7timeout1800. Profilesaddpublisheddualtilebundleidentical
+inbotharms; onlyFIREPROT_BASE_DUAL_REUSE differs. OFFpreparedNOTlaunched.
+Onterminal requireall9bitsvsoutputs/protenix-base-local-bias-on, dual2096/1048,
+global4800/4776local1200/1194,nofailures. OnlythenlaunchmatchedOFF. Nextmeasure
+whetherseparatelyqualifiedstoragegainstackswithcachegain; no combinedclaimyet.
+RootremoteRustCLI/bridgeunchanged. NootherGPUjob. docs/isauntouched; goalactive.

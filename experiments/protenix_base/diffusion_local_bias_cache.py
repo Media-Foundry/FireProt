@@ -8,9 +8,11 @@ import torch
 
 
 @contextmanager
-def install(model, output):
+def install(model, output, cache_contract=None):
     mode=os.environ.get('FIREPROT_BASE_LOCAL_BIAS_CACHE','off')
     if mode not in ('off','audit','on'):raise ValueError('Unknown local bias mode')
+    if cache_contract is not None and mode!='on':
+        raise RuntimeError('Combined graph trial requires cache mode on')
     if mode=='off':
         yield
         return
@@ -55,6 +57,14 @@ def install(model, output):
             raise RuntimeError('Atom-conditioning parameters changed')
         records['denoiser_calls']+=1
 
+    def check_retained():
+        for cached,stamp in caches.values():
+            if key(cached)!=stamp:
+                raise RuntimeError('Graph-retained bias was modified')
+
+    if cache_contract is not None:
+        cache_contract.guards.append(check_retained)
+
     try:
         handles.append(diffusion.register_forward_pre_hook(before_denoise,with_kwargs=True))
         for index,block in enumerate(blocks):
@@ -93,10 +103,14 @@ def install(model, output):
                 return original(q,kv,z,n_queries=n_queries,n_keys=n_keys,inplace_safe=inplace_safe,chunk_size=chunk_size)
             module.local_multihead_attention=local
         yield
-        if records['denoiser_calls']!=200 or records['attention_calls']!=1200 or records['created']!=6:
+        executions=200
+        if cache_contract is not None:
+            cache_contract.validate_completed()
+            executions=cache_contract.python_executions
+        if records['denoiser_calls']!=200 or records['attention_calls']!=6*executions or records['created']!=6:
             raise RuntimeError('Incomplete atom bias coverage')
         if mode=='audit' and records['audited_equal']!=1194:raise RuntimeError('Incomplete local audit')
-        if mode=='on' and records['hits']!=1194:raise RuntimeError('Incomplete local reuse')
+        if mode=='on' and records['hits']!=6*(executions-1):raise RuntimeError('Incomplete local reuse')
     except BaseException as error:
         records['error']=f'{type(error).__name__}: {error}'
         raise

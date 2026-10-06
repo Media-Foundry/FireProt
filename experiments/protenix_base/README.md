@@ -160,7 +160,8 @@ verifies static `p_lm`, `c_l`, `s_trunk`, parameter versions and the execution s
 It runs on top of global bias caching, with its own mode and output record.
 The audit and first cache-mode pair pass: all nine arrays are bitwise equal,
 unchanged Rust gates pass, and complete invocation is 120.025 -> 112.687 s.
-Two further alternating pairs are required to assess repeatability.
+Three BA/AB/BA pairs now pass: E2E medians 120.025 -> 113.318 s (1.05919x),
+all six outputs bitwise equal and unchanged Rust gates passing.
 
 The existing graph experiments cannot be stacked with these wrappers unchanged:
 scoped Lt rejects capture, and bias coverage counters count Python executions
@@ -168,3 +169,24 @@ rather than graph replays. A combined experiment must preserve the selected BLAS
 route, validate static-cache lifetimes/streams across capture, and distinguish
 logical model steps from eager/captured Python calls. Do not disable these checks
 just to make replay succeed.
+
+### Cache-aware denoiser graph trial
+
+The optional `CacheReplayContract` in `diffusion_graph.py` supports a new isolated
+combination with both bias caches. Create one contract, install global and local
+cache contexts with it, then install the graph context innermost. The local hook
+must bind the original denoiser signature before the graph wrapper is installed.
+The graph checks parameter identities/versions, constant inputs and retained bias
+versions before replay. The local denoiser hook still observes all 200 calls.
+Global conditioning and global/local attention execute in Python twice (warmup
+and capture), while the graph records one capture and 199 replays. Completion
+requires both logical-step and Python-execution counts to match. Off mode keeps
+all 200 Python executions and the original cache coverage requirements.
+
+This captures only the denoiser; triangle Lt dispatch remains eager and retains
+its 524 incoming/524 outgoing coverage gate. The prepared frozen worker is not a
+maintained deployment profile. CPU contract checks and full-model graph-on/off correctness pass: all nine
+arrays are bitwise equal, including against the earlier eager-cache anchor.
+The matched E2E pair is 113.316 s off versus 113.569 s on (0.99777x).
+Model time is 88.918 versus 88.842 s. No useful gain was observed; graph remains
+disabled. Capture costs 0.0789 s, with one capture and 199 replays.

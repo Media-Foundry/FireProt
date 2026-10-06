@@ -7,9 +7,11 @@ import torch
 
 
 @contextmanager
-def install(model, output):
+def install(model, output, cache_contract=None):
     mode=os.environ.get('FIREPROT_BASE_DIFFUSION_BIAS_CACHE','off')
     if mode not in ('off','audit','on'):raise ValueError('Unknown bias cache mode')
+    if cache_contract is not None and mode!='on':
+        raise RuntimeError('Combined graph trial requires cache mode on')
     if mode=='off':
         yield
         return
@@ -41,6 +43,14 @@ def install(model, output):
         if pair is not source or key(pair)!=source_key:
             raise RuntimeError('Diffusion pair source changed during sampling')
         records['conditioning_calls']+=1
+
+    def check_retained():
+        for cached,stamp in caches.values():
+            if key(cached)!=stamp:
+                raise RuntimeError('Graph-retained bias was modified')
+
+    if cache_contract is not None:
+        cache_contract.guards.append(check_retained)
 
     try:
         handles.append(diffusion.diffusion_conditioning.register_forward_pre_hook(before_conditioning,with_kwargs=True))
@@ -87,10 +97,14 @@ def install(model, output):
                 return original(q,kv,z,inplace_safe=inplace_safe,enable_efficient_fusion=enable_efficient_fusion)
             module.standard_multihead_attention=standard
         yield
-        if records['conditioning_calls']!=200 or records['attention_calls']!=4800 or records['created']!=24:
+        executions=200
+        if cache_contract is not None:
+            cache_contract.validate_completed()
+            executions=cache_contract.python_executions
+        if records['conditioning_calls']!=executions or records['attention_calls']!=24*executions or records['created']!=24:
             raise RuntimeError('Incomplete Base diffusion cache coverage')
         if mode=='audit' and records['audited_equal']!=4776:raise RuntimeError('Incomplete bias audit')
-        if mode=='on' and records['hits']!=4776:raise RuntimeError('Incomplete cache reuse')
+        if mode=='on' and records['hits']!=24*(executions-1):raise RuntimeError('Incomplete cache reuse')
     except BaseException as error:
         records['error']=f'{type(error).__name__}: {error}'
         raise

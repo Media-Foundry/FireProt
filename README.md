@@ -192,6 +192,14 @@ claim. See [Lt evidence](docs/protenix-base.md#trained-lt-cost-diagnosis-and-tor
 and [receipt parsing](docs/protenix-base.md#receipt-parsing-diagnosis).
 
 
+Static diffusion bias reuse was subsequently qualified in the experimental Base
+worker. With global bias caching already enabled in both arms, **three local-bias
+cache pairs** measure **120.025 -> 113.318 s** complete invocation medians
+(**1.0592x incremental**, 5.59% less time). All six outputs match all nine arrays
+bitwise and unchanged Rust gates pass. This frozen worker is not yet the published
+profile's default. See [cache results](docs/protenix-base.md#static-diffusion-bias-audit).
+
+
 ### Later OpenFold3 increments — separate baselines
 
 | N1536 experiment | Previous → candidate E2E median | Incremental speedup |

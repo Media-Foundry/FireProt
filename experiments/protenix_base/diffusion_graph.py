@@ -20,13 +20,38 @@ def identity(value):
     raise TypeError(f'Unsupported denoiser constant {type(value).__name__}')
 
 
+class CacheReplayContract:
+    """Keep Python execution coverage distinct from 200 logical denoiser steps."""
+
+    def __init__(self, enabled):
+        self.enabled = enabled
+        self.guards = []
+        self.completed = False
+
+    def validate_completed(self):
+        if not self.completed:
+            raise RuntimeError('Graph/cache coverage was not completed')
+
+    @property
+    def python_executions(self):
+        return 2 if self.enabled else 200
+
+    def check_retained(self):
+        for guard in self.guards:
+            guard()
+
+
 @contextmanager
-def install(model, output):
+def install(model, output, cache_contract=None):
     mode = os.environ.get('FIREPROT_BASE_DIFFUSION_GRAPH', 'off')
     if mode not in ('on', 'off'):
         raise ValueError('Expected FIREPROT_BASE_DIFFUSION_GRAPH=off/on')
+    if cache_contract is not None and cache_contract.enabled != (mode == 'on'):
+        raise RuntimeError('Graph/cache mode mismatch')
     if mode == 'off':
         yield
+        if cache_contract is not None:
+            cache_contract.completed = True
         return
     if (model.training or not torch.version.hip
             or not torch.are_deterministic_algorithms_enabled()
@@ -36,6 +61,8 @@ def install(model, output):
         raise RuntimeError('Denoiser graph requires strict Base HIP D200/S1')
     module = model.diffusion_module
     original = module.forward
+    parameters = dict(module.named_parameters())
+    parameter_stamp = identity(parameters)
     side = torch.cuda.Stream()
     graph = static = result = constants = signature = None
     records = dict(mode=mode, calls=0, captures=0, replays=0, warmup_calls=0,
@@ -57,6 +84,10 @@ def install(model, output):
         now = (tuple(x.shape), tuple(x.stride()), tuple(t.shape), tuple(t.stride()), identity(fixed))
         if signature is not None and now != signature:
             raise RuntimeError('Denoiser inputs/constants changed identity, version or signature')
+        if identity(dict(module.named_parameters())) != parameter_stamp:
+            raise RuntimeError('Denoiser parameters changed before replay')
+        if cache_contract is not None:
+            cache_contract.check_retained()
         current = torch.cuda.current_stream()
         if records['calls'] == 1:
             side.wait_stream(current)
@@ -96,6 +127,9 @@ def install(model, output):
         yield
         if records['calls'] != 200 or records['captures'] != 1 or records['replays'] != 199:
             raise RuntimeError('Denoiser graph did not execute all 200 steps')
+        if cache_contract is not None:
+            cache_contract.check_retained()
+            cache_contract.completed = True
         torch.cuda.synchronize()
         records['peak_memory_allocated_bytes'] = torch.cuda.max_memory_allocated()
         records['peak_memory_reserved_bytes'] = torch.cuda.max_memory_reserved()

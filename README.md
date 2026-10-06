@@ -18,7 +18,7 @@ See the [Rust acceptance audit](docs/rust-acceptance.md).
 | Protenix Mini-ESM and Tiny-default v0.5.0 | `native`, `fireprot` | Mini-ESM N1000 with ESM2-3B; Tiny L124; model-specific gates |
 | AtlasFold 260703 **with AtlasLM-3B** | Native, chunked, HIP and fused HIP | N1000/N1536; exact public-output bytes; N1536 reference uses chunked native math |
 | OpenFold3 / OpenBind-0 | `native`, opt-in `hip_fused` | Strict deterministic FP32 N1000/N1536; all 11 arrays bitwise equal |
-| Protenix Base-default v0.5.0 | `native`, experimental `fireprot` | Strict N600 initialization optimization: exact outputs; broad HIP/CK transplant unqualified ([status](docs/protenix-base.md)) |
+| Protenix Base-default v0.5.0 | `native`, experimental `fireprot` | Strict N600 initialization: exact outputs; N1000 CK/HIP meets user 0.1 Å aligned-RMSD criterion, legacy confidence gate fails ([status](docs/protenix-base.md)) |
 | OpenFold2, ESMFold and other models | Planned | No verified integration or speedup claim |
 
 Protenix and OpenFold3 are separate implementations. Precision, preprocessing,
@@ -156,6 +156,17 @@ warm or unflushed as specified in the linked evidence.
    R3/four trunk passes, D200/S1, seed101. All 11 arrays are bitwise equal;
    comparisons also check CIF identities. These experiments do not mean every
    optimization is enabled by `configs/diamondhill/openfold3-hip-fused.json`.
+
+### Experimental Base N1000 cycle
+
+With fast initialization in both arms, native GPU computation takes **357.921 s**
+and full CK/HIP takes **146.035 / 146.199 s** complete invocation time: approximately
+**2.45x**, one baseline and two candidate observations. The candidate repeats match
+all nine arrays bitwise. Native-to-candidate aligned RMSD is **0.054688 Å**, within
+the user-authorized 0.1 Å coordinate criterion; the old confidence gate still fails.
+This is numerical regression, not experimental structure accuracy. Base FP32,
+C10/D200/S1, seed101, N1000, strict determinism, HIP7, unflushed caches.
+See [scope, profiles and separate raw-native baseline](docs/protenix-base.md#full-ckhip-cycle-and-revised-coordinate-assessment-2026-10-07).
 
 ### Later OpenFold3 increments — separate baselines
 

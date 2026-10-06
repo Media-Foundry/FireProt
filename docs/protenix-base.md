@@ -31,14 +31,15 @@ FireProt hooks. Only HIP devices 6 and 7 are authorized for these experiments.
 Existing HIP/CK triangle multiplication, triangle attention, LayerNorm, transition
 and layout paths retain their exact shape/dtype/stride/device capability guards.
 Unsupported signatures retain native execution. Their selection on Base must be
-verified in `operator-runtime.json`, and model outputs must pass the existing
-Protenix coordinate/confidence gates before reporting performance gains.
+verified in `operator-runtime.json`, and model outputs must be evaluated under the explicitly recorded policy.
+The later user-authorized Base coordinate tolerance is described below; historical
+comparison receipts retain their original coordinate/confidence gates.
 
 Fast model construction and skipped template preparation remain disabled in the
 original broad-operator Base profile. The separate construction experiment qualifies
 Base initialization; template omission still only qualifies Mini. Base's deeper stack
-and full diffusion workload require independent output validation. The first GPU transplant failed the coordinate gate; no accepted Base GPU-operator speedup
-is claimed. See the result below.
+and full diffusion workload require independent output validation. The first GPU transplant failed the original coordinate gate. See the dated
+results and the subsequent user-authorized coordinate assessment below.
 
 
 ## First N1000 transplant: rejected
@@ -103,10 +104,60 @@ candidate still fails: aligned RMSD 0.0749593 Angstrom and summary confidence
 maximum delta 0.00131607. Diagnostic invocation times are 430.648 s and
 216.682 s; **no performance verdict is accepted**.
 [Evidence](../provenance/protenix_base_strict1000_attention.json).
-An initialization-only N1000 control is in progress to check the reference at
-this length independently of CK.
+The completed initialization-only control matches all nine native arrays exactly.
+Its invocation time is 357.921 s and model time is 333.301 s.
 
 An experimental HIP bias/softmax kernel retaining native QK/PV arithmetic passes
 30 synthetic bitwise cases at N600/N1000. This establishes only an operator screen;
 trained-attention replay and complete model qualification remain outstanding.
 [Screen evidence](../provenance/protenix_base_bias_softmax_screen.json).
+
+
+## Full CK/HIP cycle and revised coordinate assessment (2026-10-07)
+
+The user authorized **Kabsch-aligned all-atom RMSD <=0.1 Angstrom** for Base
+numerical regression, compensating global rotation and translation. This does
+not mean every atom is within 0.1 Angstrom. The diagnostic Rust example
+`crates/fireprot-validation/examples/base_drift.rs` also measures relative CA
+pair distances. Its tests distinguish rigid motion from internal deformation.
+It reports a coordinate verdict in JSON; process success alone is not acceptance.
+The generic CLI's historical 0.001 coordinate/confidence gates are unchanged.
+
+All rows below use the same N1000 input, Base FP32 C10/D200/S1, seed 101,
+strict determinism and memory filling, no MSA/templates, HIP7, fresh processes
+and unflushed filesystem/kernel caches. Complete invocation timing includes
+startup; model timing is a separate boundary.
+
+| Execution | Complete invocation (s) | Model forward (s) |
+| --- | ---: | ---: |
+| Native computation with fast initialization (incremental baseline) | 357.921 | 333.301 |
+| CK attention only with fast initialization | 216.682 | 192.641 |
+| Full CK/HIP with fast initialization | 146.035 | 121.084 |
+| Full CK/HIP repeat | 146.199 | 121.541 |
+
+The full route is **2.451x** against the 357.921 s baseline and **1.484x**
+against CK attention alone (32.6% less time). These are observations from one
+baseline and two candidate runs, not a three-pair trend. A separate raw-native
+initialization run took 430.648 s; its 2.949x comparison includes initialization
+and must not replace the incremental baseline without explicit labeling.
+The 430.648-to-357.921 difference also includes run-to-run model timing variation;
+it is not an isolated measurement of initialization savings.
+
+Full CK/HIP selects 1,048 CK attention and 1,048 packed triangle multiplication
+calls. The two full runs match all nine arrays bitwise. Both have aligned all-atom
+RMSD **0.054688 Angstrom** relative to the native/init-control prediction, passing
+the new coordinate criterion. CA aligned RMSD is 0.043968 Angstrom; CA pair-distance
+RMS delta is 0.033756 Angstrom, p95 absolute delta 0.034152 and maximum 0.838485.
+The maximum shows that small aggregate RMSD does not bound every local change.
+Summary confidence maximum delta is **0.00192642**: the legacy confidence gate
+still fails and is not claimed passed. Atom identities and metadata match.
+
+These metrics assess numerical changes to a prediction, **not accuracy against
+experimental structures**. The performance sequence has no experimental truth.
+The CA-only lDDT against the native prediction is 0.999659; it must not be labeled
+experimental lDDT. Experimental-structure validation remains outstanding.
+See [cycle evidence](../provenance/protenix_base_full_user_coordinate_gate.json).
+Frozen profiles and receipts are retained in the evidence root recorded there;
+this experiment does not automatically enable fast initialization in the broad
+checked-in Base profile. The alternative native-BMM/HIP-softmax adapter remains
+an undeployed prototype; its synthetic screen is not model qualification.

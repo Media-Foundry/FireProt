@@ -2697,3 +2697,71 @@ Thiscontrol checks N1000 strictbaseline/fastinitrepeatability beforeassigningcau
 toCKalone. Nextoptimization: trainedreplay/fullmodel of exactHIPbias-softmax while
 keepingnativeQK/PV. Must keepnative computationalordering and all9arraygates;
 neverpromoteon30syntheticcasesalone. Goalactive, previouscontinuationmadeprogress.
+
+## 2026-10-07 USER CORRECTIONS: quality reference, tolerance, and rigid drift
+
+User explicitly corrected evaluation: do NOT equate agreement with native inference
+with experimental structural accuracy. User confirmed experimental PDB/mmCIF truth,
+agent chooses samples, then clarified exactness is not so important and authorized
+aligned coordinate RMSD tolerance0.1A. User also required compensating global
+translation/rotation: relative deformation matters. Keep numerical-vs-truth scopes
+separate; preserve historical failed1e-3 receipts, do not relabel them originalpasses.
+New0.1A is alignedRMSD, NOT maxperatom. Confidence discrepancies must remain visible;
+no hidden rewriting of existinggenericMini/OF3 gates. CK route remainspriority.
+
+StrictN1000 initcontrol PID2314374 nowTERMINAL SUCCESS: E2E357.921254723s,
+model333.300734983s, all9arrays BITWISE vsstrictnative. Newfull CK/HIP+fastinit
+PID2320185 TERMINAL SUCCESS: E2E146.034532219s vsnative430.647801512s (~2.949x,
+onepair), allatomalignedRMSD0.0546879705A <user0.1A; CAaligned0.0439675883A.
+RelativeCApair-distance RMSdelta0.0337561904A,p95abs0.0341522266A,max0.838484831A;
+CA-onlylocal lDDT to NATIVE output0.99965923 (nottruthaccuracy). Confidence
+maxdelta0.00192642212, mean0.000142860413; oldfixedconfidence1e-3 gate alsofails.
+CIFatomidentities and4metadataarrays exact; CKattention1048 andpackedtrimul1048,
+fastinitselected1. Legacycompare full-comparison-old-policy.json remainsfailed;
+separatefull-drift.json is newUSER coordinate-gate report. Do notclaimalllegacy
+confidencegatespassed. CK-only drift0.0749593443A, CA0.0631558372A,relativeCA
+pairRMS0.048096469A,CA-lDDTtonative0.999299713. NowpassesUSERcoordinategate.
+
+ExperimentalRustdiagnostic crates/fireprot-validation/examples/base_drift.rs
+uses existingKabsch, bindsNPZcoords toCIFidentities/order, computesCApairdistance
+andlocalCA-lDDT withoutalignment; emits0.1Acoordinateverdict, nottruthquality.
+2testsprove rigidrotation/translationinvariance andinternaldeformationdetection;
+releasebuilt/copied to SAMEremoteexperimentroot/base-drift. Firstcompilefailed
+missingread_npz cap argument; fixedwith512MiB cap; tests/buildpassed. Uncommitted.
+
+CURRENT LIVE fullrepeat PID2320885 placeholder: use actualPID from
+outputs/experiments/protenix-base-strict1000-attention-20261006/full-repeat-pid
+(onDiamondHill). full-repeat-{request,spec}.json, full-repeat-measurement,
+full-repeat-launch.log. HIP7only, samefullprofile C10D200S1seed101 strict. Before
+newGPUwork inspectactualPID/receipt; repeat intendedtoverifyfullpathstability.
+
+GT discovery: exactN1000 RCSBsearch(entity_poly.rcsb_sample_sequence_length=1000,
+resolution<=3A,Protein) returns3DEC_1,5UM6_1,5ZMW_1,8FY3_1. Locallyavailable mmCIFs
+under/media/PM982/onestepfold/Dataset/raw/pdb_mmcif/{id[1:3]}/{id}.cif.gz.
+Gemmi0.7.5 onfold env. CAcoverage:3DEC983/1000,res2.80;5UM6962/1000,res2.794;
+5ZMW1000/1000,res2.500;8FY3561/1000. AllcanonicalstandardAA. Prefer5ZMWchainA
+forfirsttruthcase (membraneCaATPase,E309Q,ligandstatecontext mustbereported).
+NoGTcasecreated/runslaunchedyet; noexternaldatasetwrites. Eightexistingcases
+areonly124-164aaandcannotvalidateN1000CK. CurrentumemN1000hasNOexperimentalGT.
+
+Prepared untracked experiments/protenix_base/model_softmax.py for isolated
+trainedverification, but deferdeployment whileCKpriorityundernewtolerance.
+NoHIPsoftmaxmodel run yet. Do notdiscardthiswork; goalstillactive.
+Actual full-repeat PID is 2322358 (authoritative launch output and full-repeat-pid).
+The preceding PID2320885 text was explicitly a placeholder, not a process to poll.
+
+
+## 2026-10-07 full repeat complete; baseline clarification and branch policy
+
+Full-repeat PID2322358 TERMINAL SUCCESS: E2E146.199362672s/model121.540581826s,
+invocation SHA4048ffe132efa42eeb87c59d9c1ec9f30d262a7cc8d0dfa0753a78f7dac3ea82.
+All9arrays bitwise equal to firstfull146.034532219s/model121.083635204s.
+Rust full-repeat-drift.json vsinitcontrol passes user0.1A coordinate criterion,
+alignedRMSD0.0546879705055A. NoGPU experiment remains live fromthiscycle.
+Use357.921254723s nativeGPU+fastinit asincrementalbaseline: full~2.451x;
+vsCK-only216.681660333s ~1.484x. Raw-native430.647801512 includesnativeinit;
+its~2.949x isseparate andmustnot silentlyreplace357.921 baseline. Not3pairedruns.
+User explicitly directs: afterthiscycle switchto master, setGitHubdefaultmaster,
+andworkdirectlythere consistently. Remote currently hasmain, nomaster; create
+masterfromcompletedcycle, retainhistory/otherbranches. This overrides routine
+featurebranch guidance. docs/isa remainsuser-owned/untracked. OnlyHIP6/7 allowed.

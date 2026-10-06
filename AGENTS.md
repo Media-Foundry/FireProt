@@ -10,3 +10,5 @@ Read `README.md`, `docs/architecture.md`, and `.agents/project_context.md` first
 - The eight `cases/` examples are development cases, not an independent test set. For experimental-coordinate metrics, use only `coordinates[mask]` from `gt_mapping.npz`; `reference` is an input reference conformation.
 - Record model, input, dtype, cycle, step, sample count, random state, and cache state for performance or accuracy comparisons. `provenance/smoke_report.json` only establishes that three models loaded and produced finite coordinates.
 - Historical Protenix setup is in `.agents/protenix_baseline.md`. `docs/architecture.md` distinguishes implemented boundaries from proposed contracts; the complete framework is still in migration. Maintained Python lives under `python/fireprot`, native sources under `kernels/amd`; `fireprot/__init__.py` is an import shim; historical source paths are mapped explicitly. Preserve `provenance/layout_path_map.json` as migration evidence.
+
+- Work directly on `master` for future development, as explicitly requested by the user. Keep `master` as the GitHub default branch; do not create routine feature branches unless subsequently requested.

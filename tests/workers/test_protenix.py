@@ -55,13 +55,14 @@ def test_distributed_environment_rejected(tmp_path, monkeypatch):
     with pytest.raises(ValueError, match='Distributed'): check_request(request(tmp_path))
 
 
-def test_tiny_default_uses_its_own_checkpoint_and_no_language_model(tmp_path):
+@pytest.mark.parametrize('model', ['protenix_tiny_default_v0.5.0', 'protenix_base_default_v0.5.0'])
+def test_default_variant_uses_its_own_checkpoint_and_no_language_model(tmp_path, model):
     r = request(tmp_path)
-    r['workload']['model_name'] = 'protenix_tiny_default_v0.5.0'
+    r['workload']['model_name'] = model
     with pytest.raises(ValueError, match='Checkpoint filename'):
         check_request(r)
-    r['checkpoints']['model']['path'] = str(tmp_path / 'protenix_tiny_default_v0.5.0.pt')
-    assert check_request(r)[1].name == 'protenix_tiny_default_v0.5.0.pt'
+    r['checkpoints']['model']['path'] = str(tmp_path / (model + '.pt'))
+    assert check_request(r)[1].name == model + '.pt'
     r['checkpoints']['language_model'] = {'path': 'unused.pt'}
     with pytest.raises(ValueError, match='Unexpected Protenix checkpoint roles'):
         check_request(r)

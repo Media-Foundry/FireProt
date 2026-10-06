@@ -2561,3 +2561,20 @@ READMEanddocs/protenix-native-requests.md nowstateD1. EarlierchatrecapgaveC4/S1w
 D; nofutureBase200-step speeduptransfer. AtlasN1536reported2.714xsequentialsets
 vschunkednative;uncutnativeOOM. CurrentOpenFold3direct1.499x isearliercombination,
 notlatest; nevermultiplyratios. NexttaskProtenixBasecheckpointperpriorentry.
+
+## 2026-10-06 Protenix Base entry integration in progress
+
+OpenFold3 final cycles and README committed/pushed as 04f6ca0. Base checkpoint
+/media/IntelSSD/fireprot/runtime/checkpoint/protenix_base_default_v0.5.0.pt
+SHA256 9ea20b0aba42f2256711da1d0cd081510a4b291e64375bff6b70ced70b87a5f1,
+1474265486 bytes. CPU weights_only load and strict Protenix state-dict loading
+passed: 4092 tensors, 368088191 FP32 parameters, no missing/unexpected keys.
+Defaults C10/D200/S5, 48 Pairformer blocks. Entry now permits Base v0.5 FP32;
+30 worker request tests pass. N1000/N1536 native and experimental FireProt
+requests explicitly use C10/D200/S1 seed101 no MSA/templates. Base profile
+keeps Mini-only fast initialization and template omission OFF. Existing shape
+capability guards remain intact. User renewed restriction: HIP6/7 only.
+First N1000 native complete invocation measurement launched PID2289487 at
+outputs/experiments/protenix-base-first-20261006 on DiamondHill, output
+outputs/protenix-base-n1000-native. Check terminal result before any next GPU
+experiment. No Base GPU speedup or numerical agreement claimed yet.

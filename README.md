@@ -18,7 +18,7 @@ See the [Rust acceptance audit](docs/rust-acceptance.md).
 | Protenix Mini-ESM and Tiny-default v0.5.0 | `native`, `fireprot` | Mini-ESM N1000 with ESM2-3B; Tiny L124; model-specific gates |
 | AtlasFold 260703 **with AtlasLM-3B** | Native, chunked, HIP and fused HIP | N1000/N1536; exact public-output bytes; N1536 reference uses chunked native math |
 | OpenFold3 / OpenBind-0 | `native`, opt-in `hip_fused` | Strict deterministic FP32 N1000/N1536; all 11 arrays bitwise equal |
-| Protenix Base-default v0.5.0 | **Next integration target** | Checkpoint located; loading and performance not yet validated |
+| Protenix Base-default v0.5.0 | `native`, experimental `fireprot` | Strict CPU checkpoint load passed; GPU qualification in progress ([setup](docs/protenix-base.md)) |
 | OpenFold2, ESMFold and other models | Planned | No verified integration or speedup claim |
 
 Protenix and OpenFold3 are separate implementations. Precision, preprocessing,

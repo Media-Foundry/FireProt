@@ -177,6 +177,21 @@ full CK/HIP, separate from the earlier native-GPU baseline. The experimental
 profile above pins both bundles. See
 [published Base deployment](docs/protenix-base.md#published-artifact-loading).
 
+Two later Base experiments use separate matched baselines, each with three pairs:
+
+| Increment | Complete invocation medians | Incremental speedup |
+| --- | ---: | ---: |
+| Scoped Torch hipBLASLt triangle contractions | 133.856 -> 131.123 s | **1.0208x** |
+| Buffered Rust parsing of published kernel receipts | 131.745 -> 122.459 s | **1.0758x** |
+
+The Lt experiment meets the user coordinate criterion while its legacy comparison
+still fails; the buffered-reading comparison preserves all nine arrays bitwise
+and passes unchanged gates. These use frozen experimental workers/bridges, beyond
+the published profile above. Do not multiply their ratios into an original-Torch
+claim. See [Lt evidence](docs/protenix-base.md#trained-lt-cost-diagnosis-and-torch-blas-reuse)
+and [receipt parsing](docs/protenix-base.md#receipt-parsing-diagnosis).
+
+
 ### Later OpenFold3 increments — separate baselines
 
 | N1536 experiment | Previous → candidate E2E median | Incremental speedup |

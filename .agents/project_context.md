@@ -3272,3 +3272,73 @@ No pairedratioyet; onlyhistorical~131scomparison isnotmatched. Awaitcontroland
 Rustcompare-runs withexplicitbridgeinput/env/profile treatment. Worktreecorefix
 anddiagnostics beingcommitted; rootDiamondHilldefaultbridge stilldf7d1537,
 frozenCLI stilldfbbe303. NootherGPUjob.
+
+
+## 2026-10-07 buffered first pair and CK scheduling preparation
+
+Bufferedfirstpair bothterminal: oldbridge131.150439245s/model106.907066886,
+newbridge122.355360071s/model98.130984192. 1.071881438x/6.71%lesstime,
+all9arraysbits andunchangedRustcompare-runsPASS. Evidence copiedto
+provenance/protenix_base_buffered_receipts_first_pair.json. Sourcecomparison
+provesonlyBufReaderdiffbetweenpairedbridges; frozenoriginalbridgeuntouched.
+
+CURRENT LIVE Rustbenchmark-pairs PID2388403 at
+outputs/experiments/protenix-base-buffered-receipts-20261007/repeat-measurement;
+repeat-spec.json/repeat-launch.log/repeat-pid. TwoadditionalpairsABthenBA;
+combinedwithfirstmanualBA gives3pairsBA/AB/BA. Bothoriginalandnewinvocations
+alltimeout1800. Do NOT restart orlaunchGPU/remoteheavybuilduntilterminal.
+Journal order.jsonl (notjournal.jsonl); benchmark.json oncompletion. Newoutputs
+protenix-base-{unbuffered,buffered}-receipts-r{1,2}. Finalaggregate usesmanual
+unbuffered/buffered-measurement plusrepeatmeasurement000/001 and003/002.
+Allsameprofilepins. Declareexpectedbridgeinput/env/profilechanges asfirstcompare.
+
+Prepared ONLY nextretaineddualtrial at
+outputs/experiments/protenix-base-dual-reuse-buffered-20261007,
+on/off-request/profile/spec.json; usesoriginaldualreusefrozenworker withbotharms
+newbufferedbridge. NO GPUrunyet. Intendedretest0.727strainedkernelgainafter
+eliminating2.169sadditionalJSONloadcost. PriorunbufferedreuseE2Erejectedremains.
+
+Newlocaluncommitted CKscheduling files prepare_ck_swizzle.py,ck_swizzle.cpp,
+screen_ck_swizzle.py. Remote prepared outputs/experiments/protenix-base-ck-swizzle-20261007
+includinggeneratedfmha_swizzle.hpp/provenance.json; NOTcompiled/run.
+ReviewedupstreamheaderSHAaf3ae7102bb6c6439ce8501fec214571076eaec9540c1f02ac1a9d16bb0e1ef1.
+GeneratorrequiresSHA, keepsAMDcopyrightMIT, renamesclass/helpernamespace andadds
+BatchGrouptemplate, replacesonlyGetTileIndex; remainderpipelineunchanged.
+Fourbatchgroupvariants1(currentorder),16,64,1000, fixedB1000H4N1000D32.
+All32000tile/head/batchtuplescheckedbijective locallyincludingpartiallastgroup.
+HypothesisgroupbatchCTAorderreusesbroadcastbiasbetter; couldtradeKVlocalityaway,
+NOT measuredgain. Requirebitwiseoutputsnormal/largebiasbeforetiming. Rustbuild
+fingerprint includesgeneratedheader+provenancerecord. Defaultheadersuntouched.
+Onlycompile/microbenchaftercurrentRustpairedbenchmarkterminal. Bothnexttrials
+prepared; runseriallyandchoosepriorityfromrepeatevidence. Goalactive.
+
+Bufferedrepeat2388403 TERMINAL SUCCESS; correct3pairaggregationpassedvia
+/tmp/fireprot-aggregate-buffered.py. Newprovenance/protenix_base_buffered_receipts_three_pairs.json.
+All6outputsall9bits/route524each, Rustperrun/pair/aggregategatesPASS. E2Emedians
+131.744855106->122.458591367s,1.075831868x/7.05%less. Baseline131.150-138.963,
+candidate122.355-123.521; retainbaseline138.963outlier. All3pairsfaster. README
+andBase docsupdateduncommitted. No overallnative-ratiomultiplication.
+
+CURRENT LIVE CKschedulingmicro/build PID2392609, root
+outputs/experiments/protenix-base-ck-swizzle-20261007;launch.log/pid/screen.json.
+Startedonlyafterpairedbenchmarkterminal. Usesbufferedbridge, HIP7, Rust-owned
+nativebuild includesgeneratedpinnedCKheader. PollsamePID; oncompilefailurefixonly
+isolatedsource withfreshartifact/run preservinglogs. Onnumericalpassinspect4group
+varianttimings; onlyclearwinshouldgettrainedmodeltrial. No fullGPUmodeljobactive.
+Retaineddualwithbufferedbridge pairremainspreparedNOTlaunched.
+CKschedulingv1 PID2392609 TERMINAL COMPILE FAILURE missingfmha_swizzle.hpp:
+Rustbuildstagesonlycpp, extra_fileshashesdoesnotcopyheaders. Preservedv1failure.
+Fixednewscreen with explicit-Igeneratedheaderdirectory, freshv2root
+outputs/experiments/protenix-base-ck-swizzle-v2-20261007;PID2393983 TERMINAL SUCCESS.
+All8random/largebiasexact; group1/16/64/1000 medians20.368997/20.603715/
+20.488755/20.314756ms. Best0.27%notmaterial; rejectpromotion/fullmodeltrial.
+Evidenceprovenance/protenix_base_ck_swizzle.json. InstalledCKheadersuntouched.
+
+CURRENT LIVE retaineddual+bufferedbridge candidatePID2394664;
+root outputs/experiments/protenix-base-dual-reuse-buffered-20261007,on-pid confirms2394664;
+on-measurement/on-launch.log.
+StartedafterCKmicroterminal. OFFpreparedNOTlaunched. SameFP32N1000C10D200S1seed101
+HIP7, latestbufferedbridgebotharms. Requireall9bits againstpriorbuffered/scopedLt
+anchorand2096projection1048paircoverage; thenmatchedOFF. Thisretestsreusewithout
+2.169sreceiptsetupoverhead. NoE2Egainclaimyet. New3pairbufferedevidence/README/
+CKschedulingcodeandreportuncommittedthisturn. Goalactive, meaningfulprogress.

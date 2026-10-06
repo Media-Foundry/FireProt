@@ -133,3 +133,12 @@ arrays must match the uninstrumented scoped-Lt anchor before interpreting timing
 
 Microbenchmark speedups are not model E2E results. The published C ABI kernel is
 selected and authenticated by Rust; these adapters do not compile during inference.
+
+`prepare_ck_swizzle.py` generates a separate MIT CK-header derivative from one
+pinned installed header. It retains AMD notices and changes helper/class names
+and block-index mapping. `ck_swizzle.cpp` / `screen_ck_swizzle.py` screen batch
+scheduling groups without modifying installed CK headers or inner tile math.
+Generate `fmha_swizzle.hpp` beside the source before building; the screen adds
+that directory explicitly to compiler include paths and fingerprints both the
+header and its provenance. All eight exact checks pass, but no useful gain was
+measured, so the maintained schedule stays unchanged.

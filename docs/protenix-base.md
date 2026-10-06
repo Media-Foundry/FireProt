@@ -447,5 +447,29 @@ schema and compatibility checks remain in place; all three kernel-bundle tests
 pass. A DiamondHill E2E trial uses paired Rust bridges built from one source
 snapshot differing only in this change. The buffered candidate completes in
 122.355360 s E2E (98.130984 s model call), with all nine arrays bitwise equal
-to the earlier scoped-Lt output. Its matched unbuffered control is still pending;
-no paired E2E ratio is claimed yet.
+to the earlier scoped-Lt output. The matched unbuffered control takes
+131.150439 s E2E (106.907067 s model call), giving **1.071881x** and **6.71% less
+time** in the first pair. All nine arrays match bitwise and unchanged Rust
+comparison gates pass.
+[First paired evidence](../provenance/protenix_base_buffered_receipts_first_pair.json).
+
+
+Three compatible BA/AB/BA pairs now confirm complete-invocation medians
+**131.744855 -> 122.458591 s**, **1.075832x**, or **7.05% less time**. Baseline
+range is 131.150–138.963 s; candidate range is 122.355–123.521 s. The slow baseline
+observation is retained. All six outputs match all nine arrays bitwise; every
+candidate selects 524 incoming and 524 outgoing Lt contractions without fallback.
+Rust aggregate and per-run/pair gates pass, with a faster median and p95. This is
+a loading improvement over the scoped-Lt route, not a new original-Torch baseline.
+[Three-pair evidence](../provenance/protenix_base_buffered_receipts_three_pairs.json).
+
+## CK block-scheduling screen
+
+An isolated, source-hash-pinned CK header derivative changes only block-to-batch
+scheduling (plus helper/class names), preserving the maintained 128/32/4 tile
+arithmetic. Batch groups of 1, 16, 64 and 1000 cover all 32,000 tile/head/batch
+combinations exactly once, including final partial groups. All eight random and
+large-bias checks are bitwise equal to maintained CK. Median synthetic times are
+20.369, 20.604, 20.489 and 20.315 ms respectively. The best difference is only
+0.27%; no scheduling change is promoted or sent to a full-model speedup trial.
+[Screen evidence](../provenance/protenix_base_ck_swizzle.json).

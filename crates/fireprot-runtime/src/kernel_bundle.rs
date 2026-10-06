@@ -9,7 +9,7 @@ use nix::fcntl::{Flock, FlockArg, OFlag};
 use serde::{Deserialize, Serialize, de::DeserializeOwned};
 use std::{
     fs::{self, File, OpenOptions},
-    io::{self, Write},
+    io::{self, BufReader, Write},
     os::unix::fs::OpenOptionsExt,
     path::{Component, Path, PathBuf},
 };
@@ -104,7 +104,7 @@ fn read_json<T: DeserializeOwned>(path: &Path, limit: u64) -> io::Result<T> {
     if fs::metadata(path)?.len() > limit {
         return Err(io::Error::other("bundle JSON exceeds size limit"));
     }
-    serde_json::from_reader(File::open(path)?).map_err(io::Error::other)
+    serde_json::from_reader(BufReader::new(File::open(path)?)).map_err(io::Error::other)
 }
 
 fn compatibility(receipt: &BuildReceipt) -> io::Result<KernelCompatibility> {

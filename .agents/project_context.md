@@ -3227,3 +3227,48 @@ N1000umemseed101timeout1800. Onterminal requireall9bitsvsuninstrumentedON, inspe
 setup+eventrows, thenOFFsameworkerafterterminal. InstrumentedE2Enotspeedup.
 NootherGPUjobs; productionunchanged; newkernels/screens/modeladapter+negative
 andmicroscreenresults beingcommittedthisturn. docs/isauserfileuntouched.
+
+## 2026-10-07 receipt parsing bottleneck and buffered candidate
+
+DualreuseprofileON2382655/OFF2383727 bothTERMINAL SUCCESS/all9bits torespective
+uninstrumentedoutputs. CommonAMDpreload6.771/6.747s; additionaldualsetupON2.169354s,
+OFF0.000007s. Dualprojectionevents6.007510s OFF ->5.280494s ON, so0.727s actual
+operatorgain offsetby2.169s setup. Evidenceprovenance/protenix_base_dual_reuse_profile.json.
+Rootcause candidate found inRustkernel_bundle.rs:read_json uses
+serde_json::from_reader(File::open) withoutBufReader. NewlocalRustexample
+receipt_read_probe.rs countsactualFile.readcalls whileparsingreal2.4MBreceipt:
+unbuffered2,436,810readcalls,1.638/1.654/1.658s; buffered299calls,.00658/.00598/.00623s.
+AllsixdecodedBuildReceiptvaluesexact. Evidenceprovenance/kernel_receipt_read_probe.json,
+localCPUonly, NOT DiamondHillE2E. Bothpublisherandacceptcallread_json (freshimpact
+HIGHdue3modules,2directcallersreviewed). Minimalproductionedit importBufReader and
+wrapFileonly; retainedsize/hash/schema/compatibilitychecks. Existing3kernel_bundle
+testsPASSincludingcorruption/symlink/mismatchrejects. Newprobeandedituncommitted.
+
+Built TWO localRustbridgesfromsameisolatedgitarchiveccf6b19workspace at
+/tmp/fireprot-buffered-receipt-src withCARGO_TARGET_DIR=/home/husrcf/Code/fireprot/target.
+Oldfirstthennew; verifiedonlyonefilediffkernel_bundle.rs inentiresnapshot.
+Artifacts/tmp/fireprot-buffered-receipt-libs/{unbuffered,buffered}.so plusbuild-comparison.json.
+SHAold0dcc10a43b01e9261094f69638b5d67d58d4747d13bbeb5575885b0776b0703f;
+new e8f166bb0a7f13f2600702207a7d07660f5193dbcf0de177fddd21bdfb51f965.
+BothremoteCPUimportABI1PASS; originalDiamondHillrootbridge andRustCLI untouched.
+
+CURRENT LIVE bufferedcandidatePID2386359; root
+outputs/experiments/protenix-base-buffered-receipts-20261007, buffered-measurement,
+buffered-launch.log/buffered-pid. Output outputs/protenix-base-buffered-receipts.
+SamefrozenTorchLtworker T/python andpublishedAMD/CK, no dualreuse; onlyprofile
+FIREPROT_BRIDGE_LIBRARY choosespairedsame-sourcebuiltlibs atthisroot. FP32N1000
+umemC10D200S1seed101HIP7timeout1800. Unbufferedrequest/profile/specpreparedNOTlaunched.
+Pollcandidate; requireall9bits tooutputs/protenix-base-torch-lt-on andpublished
+kernelcounts, thenstartunbufferedcontrolsameworker. Compare-runs expectedchanges
+mustdeclarelaunch.inputs.rust-bridge (pinnedinputobject), launch.environment.
+FIREPROT_BRIDGE_LIBRARY andinvocation.profile_sha256. Do notcomparetooldfrozenbridge
+asifonlyBufReaderchanged; usebothnewlybuiltpairedartifacts toisolatetreatment.
+NootherGPUjob. Updatedbuild-comparison.jsonincludesbasecommit/compiler/lockSHA,
+sourcearchiveSHA andverifiedsinglechangedpath. Goalactive, concreteprogress.
+Bufferedcandidate2386359 TERMINAL SUCCESS122.355360071s/model98.130984192s;
+all9arraysBITS vs scopedLtON. CURRENT unbufferedcontrolPID2387269 samebuffered
+experimentroot, unbuffered-measurement/unbuffered-launch.log/unbuffered-pid.
+No pairedratioyet; onlyhistorical~131scomparison isnotmatched. Awaitcontroland
+Rustcompare-runs withexplicitbridgeinput/env/profile treatment. Worktreecorefix
+anddiagnostics beingcommitted; rootDiamondHilldefaultbridge stilldf7d1537,
+frozenCLI stilldfbbe303. NootherGPUjob.

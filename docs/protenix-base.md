@@ -427,3 +427,25 @@ retained allocation, 2096 projections and 1048 consumed pairs without error.
 [First pair](../provenance/protenix_base_dual_reuse_first_pair.json).
 A separate instrumented trial is separating common AMD loading, additional
 adapter setup, and trained substage intervals; no default promotion is made.
+
+### Receipt parsing diagnosis
+
+The paired trained profile preserves all nine arrays. Retained dual-projection
+intervals total 5.280 s versus 6.008 s with allocation, but extra adapter setup
+costs 2.169 s. Common AMD extension preload alone costs about 6.75 s.
+[Setup and trained profile](../provenance/protenix_base_dual_reuse_profile.json).
+
+A local CPU probe identifies an unbuffered Rust JSON read in published-kernel
+acceptance. Parsing the actual 2.4 MB build receipt makes 2,436,810 `File::read`
+calls and takes about 1.65 s. `BufReader` reduces this to 299 reads and about
+6 ms; all decoded receipt values match exactly across three alternating pairs.
+[CPU evidence](../provenance/kernel_receipt_read_probe.json). These are local
+parsing timings, not DiamondHill E2E measurements.
+
+The runtime fix only wraps this file read in `BufReader`. Size limits, hashes,
+schema and compatibility checks remain in place; all three kernel-bundle tests
+pass. A DiamondHill E2E trial uses paired Rust bridges built from one source
+snapshot differing only in this change. The buffered candidate completes in
+122.355360 s E2E (98.130984 s model call), with all nine arrays bitwise equal
+to the earlier scoped-Lt output. Its matched unbuffered control is still pending;
+no paired E2E ratio is claimed yet.

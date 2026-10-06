@@ -234,7 +234,7 @@ confidence diagnostics. Its legacy result remains intact; the user-authorized
 script refuses incomplete studies, condition errors, confidence failures and
 report overwrites. It does not launch inference or modify acceptance thresholds.
 
-## Composed trunk graph prototype (not yet GPU-qualified)
+## Composed trunk graph experiment
 
 `trunk_graph.py`, `graph_dual_storage.py`, and `graph_triangle_lt.py` are an
 isolated follow-up to the earlier whole-trunk graph experiment. They preserve
@@ -266,11 +266,11 @@ The public profile and maintained worker do not load this experiment.
   instantiation), memory peaks and complete invocation time. All costs remain
   inside E2E; do not report isolated replay time as the invocation speedup.
 
-CPU bookkeeping tests pass. No GPU qualification or performance claim exists
-for this composition yet. After the direct native study terminates, first run
-its eager control and require all nine arrays bitwise equal to the maintained
-anchor. Then run graph-on with the same frozen worker/profile except the graph
-flag, require the same exact output checks and full coverage, and compare E2E.
+CPU bookkeeping tests pass; the first G12 GPU result is recorded below. For each
+new composition, first run its eager control and require all nine arrays bitwise
+equal to the maintained anchor. Then run graph-on with the same frozen worker/
+profile except the graph flag, require the same exact output checks and full
+coverage, and compare E2E.
 Do not weaken capture guards or silently switch contraction algorithms on failure.
 
 The first eager qualification stopped at the trunk guard. A second, diagnostic
@@ -280,4 +280,9 @@ ROCm Torch 2.12 reported `autocast_enabled=true` for the upstream explicit
 an explicit FP32 target, rejects lower-precision targets, and binds the autocast
 state across cycles. Neither failed attempt reached graph capture; both remain
 preserved in the [diagnosis record](../../provenance/protenix_base_graph_fp32_autocast_diagnosis.json).
-Full GPU qualification of the revised composition is still pending.
+The revised G12 composition subsequently completed a full matched pair: all nine
+arrays match the maintained anchor bitwise in both arms; unchanged Rust gates
+pass. E2E is 113.765412 s off and 112.868515 s on (1.00795x), including 11.654718 s
+capture cost. Four captures and 36 replays preserve all ten trunk passes. This
+single small gain does not qualify a stable speedup or maintained promotion.
+[G12 evidence](../../provenance/protenix_base_composed_graph_g12_first_pair.json).

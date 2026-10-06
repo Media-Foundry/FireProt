@@ -758,5 +758,22 @@ attempt, and passes Rust archive/condition authentication before numerical
 reporting. Measurements and outputs were not rerun or changed.
 
 [Complete three-pair evidence](../provenance/protenix_base_maintained_native_three_pairs.json).
-The composed HIP Graph follow-up remains a separate, unqualified experiment;
+The composed HIP Graph follow-up remains a separate experiment;
 Graph is not included in the result or maintained profile above.
+
+### Composed Pairformer graph: first G12 pair
+
+The revised graph wrapper retains scoped Torch Lt, dual-projection storage,
+both diffusion bias caches and transition fusion. Both arms run on one side
+stream. Four contiguous 12-block partitions capture the second scientific trunk
+pass and replay through C10. A matched off/on pair measures **113.765412 ->
+112.868515 s E2E**, **1.00795x** (0.79% less time). All nine arrays match the
+maintained optimized anchor bitwise in both arms, and unchanged Rust gates pass.
+
+The graph records four captures, 36 replays and 1048 logical contractions;
+capture costs **11.654718 s**, first-replay submission totals 0.000166 s, and
+peak allocated memory is 13,181,979,648 bytes. These setup costs are included
+in E2E. This is one pair, not a stable speedup or a new direct-native ratio.
+The wrapper's control also differs from the maintained eager entry through its
+side stream and guards. No graph path is promoted on this evidence alone.
+[G12 pair evidence](../provenance/protenix_base_composed_graph_g12_first_pair.json).

@@ -4057,3 +4057,27 @@ sourcebundlefireprot-composed-graph-source-fp32-v3. AggregatorfreshTAGonly after
 fullsuccess. Local10CPUcontracttestsPASS; actualGPUqualificationpending.
 Sourceguard/diagnosisevidence/README/memoryuncommitted. Nextpollsame2458570,
 inspectterminalreceiptsbeforeanyrepeat. No otherGPUwork/builds whiletiming.
+
+## 2026-10-07 composed G12 Graph passes; G48 candidate running
+
+GraphFP32v3 wrapper2458570 TERMINAL SUCCESS, off113.765412431/model89.189898546,
+on112.868515248/model88.866562517s. Bothall9BITSvssamemaintainedanchor; unchanged
+Rustcompare-runsgatesPASS. G12on4captures36replays/280Pythoncontractions1048logical;
+capture11.654718172s/firstreplaysubmit.000166301s,peakallocated13181979648.
+Onepair1.007946389x/.79%less; modelgainonly.323s, no stablepromotionclaim.
+Aggregator/tmp/fireprot-summarize-composed-graph-fp32-v3.py first-v1SUCCESS;
+copiedevidenceprovenance/protenix_base_composed_graph_g12_first_pair.json.
+DocsupdatedG12resultuncommitted; sourceguardfix9c8d9f5COMMITTED/PUSHED.
+Post9c8d9f5indexrefresh/finalgatecleanbeforethesedocadditions.
+
+CURRENT LIVE G48candidatewrapper2461333; root
+outputs/experiments/protenix-base-composed-trunk-graph-g48-20261007,
+plan.json/spec.json/request.json/profile.json/run.sh/pid/launch.log/driver-status.
+UsesSAMEfrozenworkerfromFP32v3; onlyFIREPROT_BASE_GRAPH_GROUP_SIZE12->48 vsG12on.
+Outputoutputs/protenix-base-composed-graph-on-g48; HIP7FP32N1000C10D200S1seed101.
+SinglecandidateNOTpairedspeedupclaim. DriverRustmeasure1800 (overall1900), then
+compare-npzall9bitsandgraphcalls10/captures1/replays9/logical1048. Allpinschecked,
+nootherGPUactivebeforelaunch. Needterminalandallchecks thencompareG48/G12setup/E2E;
+ifmaterialgainrepeatmatchedbestgraph/eager. CurrentG12onlymarginalandstill~112.9,
+notbetterthanmaintained~112median; doNOTmultiplyratiosinto3.422directresult.
+No maintainedsource/profilechangeswhilecandidateactive.

@@ -319,3 +319,42 @@ This enables the128 loader gate but does not establish microchunk native-PV or
 model equivalence. Capacity-aware mixed-batch qualification is prepared next.
 Seventy-three related CPU tests pass, including capacity accounting, legacy
 default controls, invalid-capacity rejection and confidence-hook ordering.
+
+### Capacity gates and complete-operator screen
+
+The 128- and 32-row pools each pass 24 complete calls across outer batches
+128/256/512/1024, three seeds and both head-last layouts. All probability and
+output bits, output strides, retained-output independence, thread/stream guards,
+and one-allocation/release receipts pass. They retain 4.5 and 1.125 GiB.
+
+`benchmark_capacity.py` measures complete QK/softmax/PV including packing, bias
+conversion and result assembly. Both pools remain resident during every arm
+(5.625 GiB total). Each arm has twelve samples per shape/layout; all 144 timed
+outputs are bitwise equal. Medians in milliseconds:
+
+| Batch/layout | Accepted split HIP | Capacity128 | Capacity32 |
+| --- | ---: | ---: | ---: |
+| B128 head-last | 21.917 | 19.384 | 19.905 |
+| B128 transposed head-last | 22.297 | 19.788 | 20.300 |
+| B256 head-last | 43.728 | 38.867 | 39.540 |
+| B256 transposed head-last | 44.106 | 39.242 | 39.934 |
+
+Evidence: `provenance/openfold3_workspace_capacity_screen.json`. These are
+operator measurements, not E2E improvements. Capacity128 is selected for the
+next model correctness/coverage trial; the ordinary strict allocator remains.
+
+### Tuner rejection diagnosed
+
+An isolated unchanged 9 GiB model run reproduces the reduced MSA/Pairformer
+chunk size. The observer records actual `torch.OutOfMemoryError` at chunk1024:
+a 36 GiB allocation fails, then chunk512 succeeds. All11 arrays and complete
+CIF bytes still match both native and accepted D16 references. The failed first
+observer-order attempt and corrected run are archived separately. See
+`provenance/openfold3_workspace_tuner_diagnosis.json`.
+
+A separate synthetic sequence shows both 9 and4.5 GiB pools can split and pin a
+cached36 GiB segment, preventing a subsequent36 GiB allocation. Releasing free
+cached segments before pool allocation avoids that synthetic failure. This does
+not prove the actual model pool has that placement or that cache release fixes
+model tuning. No allocator change has been promoted. See
+`provenance/openfold3_workspace_allocator_reproduction.json`.

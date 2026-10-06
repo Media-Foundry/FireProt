@@ -1686,3 +1686,48 @@ is unchanged; oldchunkmain1024 confirmed. /tmp/fireprot-prepare-workspace-pairs-
 was uploaded but NEVERexecuted; /tmp/fireprot-workspace-paired-v1 doesnotexist.
 Keepgoalactive. Correctness gatespassed; acceptablemodelcoverage and E2Egain
 remainunproven. Nextmustfixthisrealcoverage/memory issue, not waste3pairs onv1.
+
+## Smaller workspace qualified; model trial active (2026-10-06)
+
+Previous license-only reply verified an already-landed change; the benchmark
+poll did establish terminal successful completion. This turn archives and
+records the actual pending evidence and launches the next model trial.
+Commits149b011/d022490/b6cf2f3 revise plan, observe tuner exceptions and qualify
+explicit capacities32/128/256. Rust CLI/bridge unchanged. Seventy-three targeted
+CPU tests passed in their implementation turn. Current plan digest6177e9b38a9535dde6ecc6a159e630986ed7a69760e2fe180ab38d76d8a9782f;
+receipt /tmp/fireprot-workspace-v2-execution.json, current reanchor snapshot
+/tmp/fireprot-capacity-current-provenance.json. GitNexus work remains active.
+
+B128 raw21case screen passes; provenance/openfold3_qk_combined_b128_probe.json.
+/tmp/fireprot-workspace-capacity-v1: both capacities128/32 complete24 calls across
+B128/256/512/1024, allprobability/outputbits andguards/releasereceipts pass.
+128pool4.5GiB90launches;32pool1.125GiB360launches. Complete-operator screen finished
+exit0 (oldsession67404),144timedoutputs exact. B256split43.728/44.106ms versus
+cap12838.867/39.242ms, cap3239.540/39.934ms. Bothpoolsresident5.625GiB duringallarms.
+Evidence openfold3_workspace_capacity_screen.json. No model/E2Egainclaim.
+
+Tuner-v1 terminalfailure dueobserver installedbeforeconfidencehooksourcecheck;
+correctedv2entersconfidencehookbeforeobserver, preservingguard. Isolatedv2model
+exit0,551.744s diagnosticduration, all11+CIFbytesexactvsnativeandD16. Twoactual
+OutOfMemoryErrors atMSA/Pairformerchunk1024 trying36GiB; bothselect512. Pool9GiB,
+28calls unchanged. Evidence openfold3_workspace_tuner_diagnosis.json. Bothfailed/
+successfuldeployments+outputsarchived. Syntheticallocatorrepro shows9/4.5GiB
+poolcanpin36GiBcachedsegment;purgebeforepoolfixessyntheticrequest. Actualmodel
+segmentnotobserved;noallocationpolicychange. Evidence
+openfold3_workspace_allocator_reproduction.json. Allarchivesunderexistingdurable
+conditioning-cache-20261006root;JSONfilespinsha256andbytes.
+
+ACTIVE MODEL TRIAL: /tmp/fireprot-model-cap128-v1 onDiamondHill HIP7.
+Driver2050018,CLI2050019, localshellsession63470. Single4.5GiBpool/cap128 supports
+B128; ordinarystrictallocatorunchanged. Scopedchunkdiagnosticsremainenabled.
+Preparedfromexacttuner-v2worker plus3qualifiedcapacityfiles; allhashesin
+preparation.json. Local/remote /tmp/fireprot-prepare-model-cap128-v1.py records
+setup. Request /media/IntelSSD/fireprot/outputs/model-cap128-n1536-0, R3/D200/S1/
+seed101 strictFP32. All8GCDidleconfirmedbeforelaunch. Rootdriver/start/exit/log;
+collect.py1536 checksall11andfullCIFagainstbothnativeandD16 pluscapacity-aware
+leaseaccounting. Nextpollknownprocess/exit;NEVERrestartonobservationtimeout.
+RuncollectorONLYafterrc0. NeedN1000fallbackgateforselectedimplementation then
+isolated3pairs withdiagnosticsoff;doNOTlauncholdv1paired28-calltreatment.
+IfsmallercapacitystillcausesOOM, consideractualsegmentdiagnostic orcontrolled
+allocationisolationtrial;syntheticpurgeisnotmodelproof. AcceptedE2Eunchanged:
+directnative1.499x;D16incrementalseparate1.162x. Keepgoalactive.

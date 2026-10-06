@@ -1,0 +1,103 @@
+{
+  "archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/conditioning-cache-20261006/allocation-fragmentation-v1-results.tar.gz",
+    "sha256": "e37ce62883d99e01213b6502ca6fc08db215947b6af1d5c93b4f320cd612abb2",
+    "bytes": 2210
+  },
+  "report": {
+    "completed": true,
+    "scope": "Synthetic allocator-segment reproduction, not a model or speed benchmark",
+    "visible_device": "7",
+    "cases": [
+      {
+        "pool_bytes": 9663676416,
+        "purge_before_pool": false,
+        "segment_before_request": {
+          "total_size": 38654705664,
+          "allocated_size": 21474836480,
+          "active_size": 21474836480,
+          "segment_type": "large",
+          "blocks": [
+            {
+              "size": 9663676416,
+              "state": "active_allocated"
+            },
+            {
+              "size": 11811160064,
+              "state": "active_allocated"
+            },
+            {
+              "size": 17179869184,
+              "state": "inactive"
+            }
+          ]
+        },
+        "allocated": 21474836480,
+        "reserved": 38654705664,
+        "large_request_succeeded": false,
+        "error": "CUDA out of memory. Tried to allocate 36.00 GiB. GPU 0 has a total capacity of 63.98 GiB of which 27.72 GiB is free. Of the allocated memory 20.00 GiB is allocated by PyTorch, and 16.00 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)"
+      },
+      {
+        "pool_bytes": 4831838208,
+        "purge_before_pool": false,
+        "segment_before_request": {
+          "total_size": 38654705664,
+          "allocated_size": 16642998272,
+          "active_size": 16642998272,
+          "segment_type": "large",
+          "blocks": [
+            {
+              "size": 4831838208,
+              "state": "active_allocated"
+            },
+            {
+              "size": 11811160064,
+              "state": "active_allocated"
+            },
+            {
+              "size": 22011707392,
+              "state": "inactive"
+            }
+          ]
+        },
+        "allocated": 16642998272,
+        "reserved": 38654705664,
+        "large_request_succeeded": false,
+        "error": "CUDA out of memory. Tried to allocate 36.00 GiB. GPU 0 has a total capacity of 63.98 GiB of which 27.72 GiB is free. Of the allocated memory 15.50 GiB is allocated by PyTorch, and 20.50 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)"
+      },
+      {
+        "pool_bytes": 9663676416,
+        "purge_before_pool": true,
+        "segment_before_request": {
+          "total_size": 9663676416,
+          "allocated_size": 9663676416,
+          "active_size": 9663676416,
+          "segment_type": "large",
+          "blocks": [
+            {
+              "size": 9663676416,
+              "state": "active_allocated"
+            }
+          ]
+        },
+        "allocated": 21474836480,
+        "reserved": 21474836480,
+        "large_request_succeeded": true
+      }
+    ],
+    "preflight": {
+      "free": 68572676096,
+      "total": 68702699520
+    }
+  },
+  "report_pin": {
+    "sha256": "2cf2da2c26952d988294ff7a9f6de758d6e84a30a61c72b8c2a9b76ae4c54671",
+    "bytes": 3129
+  },
+  "conclusion": "A long-lived pool can split and pin a36GiB cached segment even at4.5GiB; a one-time cache release before pool allocation avoids this in the synthetic sequence.",
+  "limits": [
+    "The actual model pool segment has not been observed.",
+    "No claim that empty_cache fixes the real model.",
+    "No model allocator policy has been changed."
+  ]
+}

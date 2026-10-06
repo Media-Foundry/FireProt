@@ -4030,3 +4030,30 @@ Local/tmp/fireprot-prepare-composed-graph-diagnostic-v2.py andsourcebundle
 /tmp/fireprot-composed-graph-source-diagnostic-v2. Sourceoriginlabela288ecd+diagnostics.
 No remoteactivejobsbeforelaunch, timeout1900 each1800. Goalactive: Graphqualification
 andfinalplateaudecisionpending; directREADMEresultnowcompleteawaitingcommit.
+
+## 2026-10-07 Graph FP32 autocast guard corrected, fresh pair running
+
+DirectnativeREADME/evidence/aggregatorfixCOMMITTED/PUSHEDmaster2e29d5f,3.42210x.
+Diagnosticwrapper2457206 TERMINALFAILUREexpected. Detailedrejectionproved
+s[1000,384]/z[1000,1000,128],FP32,gradfalse,streammatches,kwargsallcorrect;
+ONLYautocasttrue. SeparateHIP7Torchprobe confirmedtorch2.12.0a0+git78258b9/
+HIP7.14.60850 reportsautocasttrue AND targettorch.float32 insideupstreamexplicit
+FP32context. ExistingupstreamInferenceRunner.predict creates that context.
+NoBF16modelrequest. Fixexperimental_trunk.forward acceptsdisabledorFP32target,
+stillrejectslowerprecision; autocasttupleboundintosignatureacrosscycles.
+FreshGitNexusimpactforwardunknown0; manuallyverifiedstack.forwardcaller. Evidence
+provenance/protenix_base_graph_fp32_autocast_diagnosis.json pinsbothfailures,
+signaturesandworkerhashes. Failedmeasurementsusefailure.json, noinvocation.json.
+
+CURRENT LIVE Graph pair wrapper2458570, root
+outputs/experiments/protenix-base-composed-trunk-graph-fp32-v3-20261007.
+Samefrozenfourhelpers withcorrectedguard, originslabela288ecd+fp32-autocast-guard.
+Allcontrol/source/referencepinscheckedandnootherGPUjobbeforelaunch. OffthenonG12,
+HIP7 FP32C10D200S1seed101, timeout4000overall/1800each. Ononlyrunsafteroffall9bits.
+Currentoffoutputoutputs/protenix-base-composed-graph-fp32-v3-off-g12;onanalogous.
+Oldv1/v2rootsuntouched;maintainedremotePythonunchanged. Newlocal/remote/tmp scripts:
+fireprot-prepare-composed-graph-fp32-v3.py,fireprot-summarize-composed-graph-fp32-v3.py,
+sourcebundlefireprot-composed-graph-source-fp32-v3. AggregatorfreshTAGonly after
+fullsuccess. Local10CPUcontracttestsPASS; actualGPUqualificationpending.
+Sourceguard/diagnosisevidence/README/memoryuncommitted. Nextpollsame2458570,
+inspectterminalreceiptsbeforeanyrepeat. No otherGPUwork/builds whiletiming.

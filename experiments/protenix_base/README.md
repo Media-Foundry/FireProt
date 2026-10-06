@@ -272,3 +272,12 @@ its eager control and require all nine arrays bitwise equal to the maintained
 anchor. Then run graph-on with the same frozen worker/profile except the graph
 flag, require the same exact output checks and full coverage, and compare E2E.
 Do not weaken capture guards or silently switch contraction algorithms on failure.
+
+The first eager qualification stopped at the trunk guard. A second, diagnostic
+run established that the input shapes, FP32 dtypes and stream matched, while
+ROCm Torch 2.12 reported `autocast_enabled=true` for the upstream explicit
+`autocast(dtype=float32)` context. The revised guard accepts disabled autocast or
+an explicit FP32 target, rejects lower-precision targets, and binds the autocast
+state across cycles. Neither failed attempt reached graph capture; both remain
+preserved in the [diagnosis record](../../provenance/protenix_base_graph_fp32_autocast_diagnosis.json).
+Full GPU qualification of the revised composition is still pending.

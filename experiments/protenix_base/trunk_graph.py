@@ -83,7 +83,8 @@ def _trunk(model, output, contract, side):
     def forward(s, z, **kwargs):
         nonlocal signature
         record['calls'] += 1
-        if (torch.is_grad_enabled() or torch.is_autocast_enabled()
+        autocast = (torch.is_autocast_enabled('cuda'), torch.get_autocast_dtype('cuda'))
+        if (torch.is_grad_enabled() or (autocast[0] and autocast[1] != torch.float32)
                 or torch.cuda.current_stream().cuda_stream != side.cuda_stream
                 or any(t.dtype != torch.float32 or not t.is_cuda or t.requires_grad
                        or t.is_conj() or t.is_neg() for t in (s, z))
@@ -93,8 +94,15 @@ def _trunk(model, output, contract, side):
                 or kwargs.get('inplace_safe') is not True
                 or kwargs.get('triangle_attention') != 'fireprot'
                 or kwargs.get('triangle_multiplicative') != 'fireprot'):
+            record['rejected_signature'] = dict(
+                grad=torch.is_grad_enabled(), autocast=autocast[0], autocast_dtype=str(autocast[1]),
+                stream=torch.cuda.current_stream().cuda_stream, expected_stream=side.cuda_stream,
+                tensors={name: dict(shape=list(t.shape), stride=list(t.stride()),
+                    dtype=str(t.dtype), device=str(t.device), requires_grad=t.requires_grad,
+                    conjugate=t.is_conj(), negative=t.is_neg()) for name, t in [('s', s), ('z', z)]},
+                kwargs={k: dict(type=type(v).__name__, value=str(v)) for k, v in kwargs.items()})
             raise RuntimeError('Unsupported trunk graph inputs or stream')
-        now = (tuple(s.stride()), tuple(z.stride()), identity(kwargs))
+        now = (tuple(s.stride()), tuple(z.stride()), identity(kwargs), autocast)
         if signature is None:
             signature = now
         if now != signature or identity(dict(stack.named_parameters())) != stamp:

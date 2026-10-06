@@ -1,0 +1,126 @@
+{
+  "scope": "Two failed eager qualification attempts; no Graph-on execution or speedup result",
+  "trials": [
+    {
+      "root": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-composed-trunk-graph-20261007",
+      "driver": {
+        "exit_code": 1
+      },
+      "failure": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-composed-trunk-graph-20261007/off-measurement/failure.json",
+        "sha256": "e54ec9fe339c2bcc2fbf42978afe2f459bc6d69f637b11eb771c88abbc146a4e"
+      },
+      "graph": {
+        "calls": 1,
+        "capture_seconds": 0.0,
+        "first_replay_submit_seconds": 0.0,
+        "group_size": 12,
+        "enabled": false,
+        "error": "RuntimeError: Unsupported trunk graph inputs or stream"
+      },
+      "stderr": {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-base-composed-graph-off-g12/stderr.log",
+        "sha256": "dafd3ac2ed898b5d205340bfe39578c35992e47793a60d36f7c1bfe27bdd490c"
+      },
+      "worker_source": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-composed-trunk-graph-20261007/python/fireprot_workers/trunk_graph.py",
+        "sha256": "a46b83c9f2b1bed54d5026b6622aa09ce9351b21299ad587f69d4bdd83341301"
+      }
+    },
+    {
+      "root": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-composed-trunk-graph-diagnostic-v2-20261007",
+      "driver": {
+        "exit_code": 1
+      },
+      "failure": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-composed-trunk-graph-diagnostic-v2-20261007/off-measurement/failure.json",
+        "sha256": "940c0866823f557e0cdf73c95a537a42810dd7a5c4e5a5aeec4d67fb7e2dd8be"
+      },
+      "graph": {
+        "calls": 1,
+        "capture_seconds": 0.0,
+        "first_replay_submit_seconds": 0.0,
+        "group_size": 12,
+        "enabled": false,
+        "error": "RuntimeError: Unsupported trunk graph inputs or stream",
+        "rejected_signature": {
+          "grad": false,
+          "autocast": true,
+          "stream": 101294305948976,
+          "expected_stream": 101294305948976,
+          "tensors": {
+            "s": {
+              "shape": [
+                1000,
+                384
+              ],
+              "stride": [
+                384,
+                1
+              ],
+              "dtype": "torch.float32",
+              "device": "cuda:0",
+              "requires_grad": false,
+              "conjugate": false,
+              "negative": false
+            },
+            "z": {
+              "shape": [
+                1000,
+                1000,
+                128
+              ],
+              "stride": [
+                128000,
+                128,
+                1
+              ],
+              "dtype": "torch.float32",
+              "device": "cuda:0",
+              "requires_grad": false,
+              "conjugate": false,
+              "negative": false
+            }
+          },
+          "kwargs": {
+            "pair_mask": {
+              "type": "NoneType",
+              "value": "None"
+            },
+            "triangle_multiplicative": {
+              "type": "str",
+              "value": "fireprot"
+            },
+            "triangle_attention": {
+              "type": "str",
+              "value": "fireprot"
+            },
+            "inplace_safe": {
+              "type": "bool",
+              "value": "True"
+            },
+            "chunk_size": {
+              "type": "NoneType",
+              "value": "None"
+            }
+          }
+        }
+      },
+      "stderr": {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-base-composed-graph-diagnostic-v2-off-g12/stderr.log",
+        "sha256": "1b17e284a9dbfffd1c912deab66cc6c5c5edc6ab7f241ff8681669061c3131e3"
+      },
+      "worker_source": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-composed-trunk-graph-diagnostic-v2-20261007/python/fireprot_workers/trunk_graph.py",
+        "sha256": "2de496943bf0e27f4ad3146d376b922f5f561bfc8d1303032ed69ab03d4cbb47"
+      }
+    }
+  ],
+  "diagnosis": "Guard rejected the upstream explicit FP32 autocast context. Side stream and FP32 tensor shapes were correct. Separate HIP7 Torch probe reports enabled=true and autocast_dtype=torch.float32 under torch.autocast(cuda,float32).",
+  "torch_probe": {
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850",
+    "autocast_enabled": true,
+    "autocast_dtype": "torch.float32"
+  }
+}

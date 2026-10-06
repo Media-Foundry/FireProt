@@ -215,3 +215,22 @@ model-owner tests use explicit allocation/device test doubles around the real
 Rust lease; they are not numerical or GPU memory evidence. Core/bridge Clippy
 checks pass with warnings denied. Next gates are mixed-batch GPU score/PV
 bitwise comparison, N1536/N1000 model arrays/CIF, then isolated paired E2E.
+
+### Mixed-batch GPU qualification passed
+
+One `ModelWorkspaceFusion` instance passes18 complete calls on HIP7: seeds
+101/102/103, head-last and head-last-transposed bias, B256/B512/B1024 in
+alternating ascending/descending order. The reference computes full-batch
+native QK and PV with the already accepted in-place HIP softmax. Every
+probability/output bit and output stride matches, including fully masked rows
+and broadcast masks. Previously returned results remain unchanged.
+
+All42 microchunk kernel calls use the same score pointer and one9GiB allocation.
+Cross-thread/stream rejection leaves the lease unchanged. Actual released live
+tensor bytes equal9,663,676,416, matching the final Rust receipt. Peak Torch
+allocated memory is55,429,834,752 bytes while holding the full reference; this
+is not a model-memory measurement. No latency claim comes from this probe.
+
+Evidence: `provenance/openfold3_model_workspace_qualification.json`. The archive
+`model-workspace-v1-results.tar.gz` includes source and rebuilt framework
+binaries; SHA256 `678f049127c3502a0b04807b93b2fdc38e39e07de29ca86c85e358fc840dd4d9`.

@@ -99,14 +99,16 @@ Other starting points:
 The opt-in Base profile requires **N1000, FP32 C10/D200/S1** and uses maintained
 workers plus the published bundles and buffered bridge installed on DiamondHill.
 Both umem and 5ZMW outputs match their frozen optimized references bitwise
-through the Rust-selected maintained context. Three matched native comparisons
-measure **383.350 -> 112.022 s complete invocation medians (3.422x)** on the umem
-N1000 input, with shared fast initialization. Native-to-optimized outputs meet
-the explicit aligned-coordinate and summary-confidence criteria, not bitwise equality.
-That direct series predates unused-template omission. The updated profile enables
-this additional preprocessing change, whose separate three-pair experiment
-measures **111.936 -> 110.248 s (1.0153x incremental)** with identical outputs;
-maintained-entry qualification passes on both umem and 5ZMW. Do not multiply the ratios.
+through the Rust-selected maintained context. The latest three matched native
+comparisons, including unused-template omission, measure **381.968 -> 110.025 s
+complete invocation medians (3.472x, 71.20% less time)** on the umem N1000 input,
+with shared fast initialization. Model-forward medians are 357.795 -> 86.894 s
+(4.118x). Native-to-optimized outputs meet the explicit 0.1 Angstrom aligned-RMSD
+and 0.001 summary-confidence criteria; cross-arm arrays are not bitwise equal,
+and the unchanged legacy 0.001 Angstrom coordinate gate still fails.
+The separate three-pair template experiment measures **111.936 -> 110.248 s
+(1.0153x incremental)** with identical outputs. The latest direct result is
+measured independently; incremental ratios are not multiplied.
 See [Base entry and qualification](docs/protenix-base.md#maintained-n1000-optimization-entry).
 
 HIP Graph is **not enabled** in this profile. Three matched comparisons against
@@ -154,7 +156,7 @@ warm or unflushed as specified in the linked evidence.
 | Model / length | Reference → optimized | Speedup | Timing boundary and evidence |
 | --- | ---: | ---: | --- |
 | Protenix Base, 600 aa, initialization only | 179.350 → 127.047 s | **1.412x** | Complete Rust invocation; one pair, strict deterministic C10/D200/S1; all 9 arrays exact ([details](docs/protenix-base.md#fast-construction-qualification)) |
-| Protenix Base, 1000 aa, maintained composition | 383.350 → 112.022 s | **3.422x** | Complete Rust invocation; three AB/BA/AB pairs, strict FP32 C10/D200/S1, shared fast initialization; explicit aligned-coordinate/summary-confidence policy ([details](docs/protenix-base.md#maintained-direct-native-three-pair-result)) |
+| Protenix Base, 1000 aa, latest maintained composition | 381.968 → 110.025 s | **3.472x** | Complete Rust invocation; three AB/BA/AB pairs, strict FP32 C10/D200/S1, shared fast initialization, unused-template omission; explicit aligned-coordinate/summary-confidence policy ([details](docs/protenix-base.md#latest-maintained-direct-native-result)) |
 | Protenix Mini, 1000 aa | 82.074 → 27.949 s | **2.937x** | Historical worker request; three pairs [¹](docs/protenix-native-requests.md) |
 | Protenix Mini, 1536 aa | 177.345 → 45.596 s | **3.889x** | Historical worker request; three pairs [¹](docs/protenix-native-requests.md) |
 | AtlasFold + AtlasLM-3B, 1000 aa | 184.581 → 84.174 s | **2.193x** | Earlier packaged revision; one request pair [²](docs/atlasfold-performance.md#packaged-bias-reuse-and-batched-transpose) |
@@ -192,7 +194,7 @@ See [scope, profiles and separate raw-native baseline](docs/protenix-base.md#ful
 The historical 357.921 s control used FireProt dispatch with native Torch triangle
 operators and already omitted the all-valid mask's zero bias. It is not the same
 execution path as `backend=native`. The new maintained direct comparison uses
-the latter with shared fast initialization; its **3.422x** result is listed above.
+the latter with shared fast initialization; its latest **3.472x** result is listed above.
 See the [baseline route audit](docs/protenix-base.md#strict-n1000-attention-isolation).
 
 The published-artifact route retains the identical HIP/CK binaries and avoids

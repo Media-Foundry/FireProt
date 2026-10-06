@@ -1,7 +1,8 @@
 # Protenix Base optimization qualification audit
 
-Status: final direct-native timing of the template-enabled maintained entry is
-running. This audit does not yet declare the optimization cycle complete.
+Status: the template-enabled maintained entry has completed its direct-native
+three-pair qualification. The tested follow-up candidates show diminishing
+returns; the qualified composition is retained.
 
 ## Scope and acceptance
 
@@ -35,13 +36,13 @@ remains unchanged; its failure is preserved alongside the separate user policy.
 | Verify every promoted change | Versioned per-trial evidence linked in the [Base guide](protenix-base.md) | Rejected numerical/performance trials retained; no generic gate relaxed |
 | Verify the actual maintained entry on two inputs | [Template-enabled entry qualification](../provenance/protenix_base_maintained_templates_qualification.json) | All nine output arrays bitwise equal to each input's prior optimized anchor; actual skip counters/source guard verified |
 | Guard activation and restore hooks on failure | `tests/adapters/test_protenix_base_n1000.py`, `test_protenix_features.py`, `test_protenix_base_template_experiment.py`, `test_protenix_trunk_graph_contract.py`, `tests/workers/test_protenix.py` | 70 targeted CPU checks pass; GPU entry qualification supplies the numerical evidence |
-| Report direct complete-invocation E2E | [Earlier three native pairs](../provenance/protenix_base_maintained_native_three_pairs.json) | 3.42210x before template omission; updated direct series still running |
+| Report direct complete-invocation E2E | [Latest three native pairs](../provenance/protenix_base_final_native_three_pairs.json) | Six terminal verified invocations; 381.967820 to 110.025357 s medians, 3.47163x |
 | Document entry and measured limitations | [README](../README.md), [Base guide](protenix-base.md) | Entry, workload, timing boundary and separate accuracy criteria documented |
-| Work on master and publish changes | Commit `1b1825a`, pushed to `origin/master` | Template promotion published; final report/audit still pending |
+| Work on master and publish changes | Promotion commit `1b1825a`; final report and audit are versioned with their evidence | Local and GitHub default branches verified as master; promotion pushed |
 
 The entry qualification is a migration/regression check, not a second-input
 speedup measurement. Bitwise agreement with an optimized anchor does not imply
-bitwise agreement with native predictions. The earlier native comparison has
+bitwise agreement with native predictions. The latest three native comparison pairs each have
 aligned RMSD 0.006099824 Angstrom and summary-confidence maximum delta 0.0000495911;
 full confidence arrays retain nonzero diagnostic differences.
 
@@ -65,17 +66,26 @@ not a proof that all possible kernels are optimal. Persistent multi-request Grap
 reuse, other sequence buckets and approximate recycle/step reduction remain
 unqualified. No cycle or diffusion step was removed to obtain these results.
 
-## Remaining completion gate
+## Completed final gate
 
 The final study is
 `outputs/experiments/protenix-base-final-native-pairs-20261007` on DiamondHill.
-It alternates native/optimized, optimized/native, native/optimized. Every run
-must reproduce its own arm's prediction anchor, actually select fast initialization,
-and, for the optimized arm, report one verified unused-template omission. Each
-completed pair also checks rigid-aligned coordinates.
+Its driver terminated with exit code zero and the exact twelve started/verified
+journal events. All three native and three optimized complete invocations were
+authenticated by the Rust comparison. Each arm reproduces its own prediction
+anchor bitwise; actual initialization and template-omission checks pass.
 
-Before completion, require the terminal successful driver receipt and all twelve
-journal events, authenticate all six measured invocations through Rust, retain
-the legacy numerical report, evaluate the separate user policy, publish the new
-direct median ratio, and update this audit from those completed records. A live
-process or a passing subset of the six runs cannot satisfy that gate.
+The final medians are **381.967820 -> 110.025357 s**, **3.47163x**, or **71.20% less
+complete-invocation time**. Model-forward medians are 357.794972 -> 86.894094 s,
+4.11760x. All three pairs satisfy the explicitly authorized aligned-coordinate
+and unchanged summary-confidence criteria described above. The original Rust
+0.001 Angstrom result remains failed, with a null performance verdict; it is not
+relabeled as passing. The separate policy and all per-pair diagnostics are in
+[the final evidence](../provenance/protenix_base_final_native_three_pairs.json).
+
+The README, Base entry guide and experimental guide now report this latest direct
+result. Historical comparisons and rejected candidates remain available. The
+qualified optimizations preserve the requested scientific settings; additional
+unmeasured ideas are not reported as achieved speedups. This completes the current
+Base N1000 optimization cycle at the observed performance plateau, within the
+explicit workload and numerical scope above.

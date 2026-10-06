@@ -4392,3 +4392,45 @@ prediction parity from experimental accuracy, and does not claim global kernel
 optimality. Source/profile inspection confirms N1000 scope and preserved C10D200S1.
 Local documentation link checks PASS; corrected obsolete direct-series-pending
 sentence in Base entry history. No new runtime or kernel edits in this turn.
+
+## 2026-10-07 final direct-native pair0 verified; remaining pairs LIVE
+
+Authoritative re-poll SAME wrapper2479402 at elapsed08:41 confirms live.
+Journal indices0native/1optimized verified; index2optimized(pair1) started.
+First native E2E382.136964420s, optimized110.025357019s, single pair ratio
+3.47317x (not final median). Both exact-NNN reports have9entries allbitwise/pass.
+Aligned pair0 gatePASS, allatom RMSD0.0060998239421515815A, rawcomponentmax
+0.13372135162353516A. Driver additionally verifies actual constructor and
+candidate feature counts/consumer before verified. No benchmark restarted and
+no remote source/profile modified. Remaining4runs pending; final full Rust
+condition/summary-confidence aggregation only after complete driverexit0.
+Masterf03015f auditdocs pushed; postcommit typed indexup-to-date/current/no
+incompleteReasons and finaldetect_changesclean beforethisappend. Goalactive.
+
+## 2026-10-07 final maintained Base direct-native study complete
+
+Wrapper2479402 TERMINAL SUCCESS, handle absent, driver-status exit0 and exact12
+journal events. No run restarted. Aggregator experiments/protenix_base/
+summarize_native_study.py STUDY CLI final-v1 completed successfully, including
+actual template omission and shared construction checks, authenticated Rust
+conditions/archives, all6 own-arm all9 bitwise checks and all3 aligned policies.
+Evidence copied provenance/protenix_base_final_native_three_pairs.json.
+Native E2E[382.136964420,381.967820082,381.903691933]; optimized
+[110.025357019,109.572206027,110.057017543]. Medians381.967820082->110.025357019,
+3.4716344526x,71.19512%less. Paired3.47317/3.48599/3.47005. Modelmedians
+357.794972017->86.894093936,4.11759828x. All3alignedRMSD.00609982394215158A;
+summaryconfidence max4.9591064453125e-5. Exactmetadata/CIFidentitiespass.
+Legacyexit1/coordinate.001AFAIL/performanceNULL preserved; separate user.1A+
+summary.001 policyPASS. Crossarmfullconfidencearrays notbitwise. No genericgate
+relaxation or scientificsettingchange; HIP7FP32N1000C10D200S1seed101,unflushed.
+
+README/guide/experimentguide/audit updated latest direct3.472x with correctscope;
+old3.42210x remains historical pre-template evidence. All54 recorded own-arm
+arraychecks and3numericpolicies rechecked locally; statisticsrecomputed and
+alllocaldoclinksPASS. 70CPUchecks lastpassedwithpromotion, runtime unchanged
+since. GraphOFF. CKtile/scheduling/projection andgate/Graph followups lackuseful
+E2Egain; latesttemplate1.53%gain qualified. Audit documents observedplateau,
+notglobaloptimality; no unsupportedworkload or experimentalaccuracyclaims.
+Remaining: commit/push final docs/evidence, refreshindex/finalgate, verifyremote
+noactivejobs andfinalrepositorycondition, then completionaudit/status. Master
+andGitHubdefaultmasterverified; userdocs/isa remainsuntoucheduntracked.

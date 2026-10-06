@@ -715,8 +715,9 @@ not accepted as evidence of initialization parity.
 
 ### Maintained direct native three-pair result
 
-Three complete AB/BA/AB pairs compare the maintained `native` entry against
-`configs/diamondhill/protenix-base-n1000-optimized.json`. Both arms select the
+This earlier series predates unused-template omission; its frozen profiles and
+measurements remain preserved. Three complete AB/BA/AB pairs compare the maintained
+`native` entry against the then-current optimized profile. Both arms select the
 qualified fast constructor, with no recovery or construction errors. Workload:
 Base-default v0.5.0, umem N1000/7979 atoms, FP32, C10/D200/S1, seed101, no MSA or
 templates, strict determinism with memory filling, HIP7. Every invocation starts
@@ -802,7 +803,7 @@ with all 1048 logical contractions accounted for.
 **Decision: retain maintained eager execution; do not promote Graph.** The earlier
 single-pair 1.00795x result used an experimental side-stream control and did not
 establish a gain over the maintained entry. The G48 candidate also failed to
-improve E2E. The direct-native **3.42210x** result remains the maintained result;
+improve E2E. The then-current direct-native **3.42210x** result excludes Graph;
 these graph experiments do not increase it.
 [Three-pair graph evidence](../provenance/protenix_base_maintained_vs_graph_three_pairs.json).
 
@@ -849,3 +850,45 @@ and must not be relabeled as a measurement of the updated profile.
 
 See the [qualification and diminishing-returns audit](protenix-base-optimization-audit.md)
 for the remaining completion gate and the scope of rejected follow-up candidates.
+
+### Latest maintained direct-native result
+
+After the template omission passed both maintained-entry checks, a fresh set of
+three AB/BA/AB pairs remeasured the actual maintained profile. The scientific
+contract remains Base-default v0.5.0, umem N1000/7979 atoms, strict FP32 with
+memory filling, C10/D200/S1, seed101, no supplied MSA/templates, HIP7, fresh
+processes and unflushed caches. Both arms actually select fast initialization;
+only the FireProt arm selects the maintained GPU composition and verifies the
+unused-template omission. The pinned native Torch source route remains
+`bb3be993`; no pristine-upstream claim is made.
+
+| Pair | Native E2E (s) | Optimized E2E (s) | Speedup |
+| --- | ---: | ---: | ---: |
+| 1 (AB) | 382.136964 | 110.025357 | 3.47317x |
+| 2 (BA) | 381.967820 | 109.572206 | 3.48599x |
+| 3 (AB) | 381.903692 | 110.057018 | 3.47005x |
+| Median | **381.967820** | **110.025357** | **3.47163x** |
+
+Complete invocation time falls **71.20%**. Model-forward medians are
+**357.794972 -> 86.894094 s (4.11760x)**. Complete invocation includes startup,
+loading, feature preparation, serialization and supervisor overhead. This is a
+new direct measurement, not multiplication of incremental ratios.
+
+All six runs reproduce all nine arrays of their respective native/optimized
+prediction anchors bitwise. The driver completes successfully with all twelve
+started/verified events. Actual fast-initialization selection passes in all six;
+all three optimized runs record one template omission, zero native template
+constructions and the verified consumer hash. Rust authenticates archived
+conditions and output artifacts before the separate numerical-policy report.
+
+Each cross-arm pair has aligned all-atom RMSD **0.006099824 Angstrom** and
+summary-confidence maximum difference **0.0000495911**. Exact metadata and CIF
+atom identities pass. The user-authorized 0.1 Angstrom aligned-RMSD policy and
+unchanged 0.001 summary-confidence threshold pass. The legacy 0.001 Angstrom
+coordinate gate still fails and retains a null performance verdict. No generic
+threshold is weakened; prediction regression remains distinct from experimental
+structure accuracy. Full confidence-array differences are recorded separately.
+
+[Latest direct three-pair evidence](../provenance/protenix_base_final_native_three_pairs.json).
+Graph stays disabled. The small-gain and rejected follow-up trials are summarized
+in the [qualification audit](protenix-base-optimization-audit.md).

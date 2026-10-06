@@ -343,3 +343,20 @@ speedup comparison.
 [Entry qualification](../../provenance/protenix_base_maintained_templates_qualification.json).
 The original experimental wrapper and evidence remain available for reproduction.
 [5ZMW qualification](../../provenance/protenix_base_unused_templates_5zmw.json).
+
+## Final template-enabled maintained E2E
+
+A fresh direct-native three-pair study measures complete invocation medians
+**381.967820 -> 110.025357 s (3.47163x)**, with shared actual fast initialization,
+strict FP32 N1000 C10/D200/S1 seed101 on HIP7 and unflushed caches. The maintained
+candidate includes the qualified template omission and keeps Graph disabled.
+All six runs match their respective prediction anchors bitwise; each cross-arm
+aligned RMSD is 0.006099824 Angstrom and summary-confidence maximum delta is
+0.0000495911. The explicit user policy passes; the legacy 0.001 Angstrom gate
+remains failed with no performance verdict. No thresholds changed.
+
+Remote study: `outputs/experiments/protenix-base-final-native-pairs-20261007`.
+The completed `final-v1` aggregation uses `summarize_native_study.py`; invocation,
+profile, source and output identities remain pinned. This is a direct measurement,
+not an accumulated incremental ratio.
+[Final evidence](../../provenance/protenix_base_final_native_three_pairs.json).

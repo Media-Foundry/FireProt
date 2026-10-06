@@ -276,9 +276,86 @@ outgoing **10.558 -> 7.905 ms**. Incoming matches bitwise; outgoing maximum
 absolute delta is 3.28e-7 on this input. Output allocation and strict memory
 filling are included; a reusable 32 MiB workspace is outside timing.
 
-This is an operator screen, not model/E2E evidence. The full Base experiment is
-running with the same C10/D200/S1 workload and a pinned published Lt bundle in
-an isolated worker snapshot. It must pass aligned-coordinate/relative-geometry
-checks and complete E2E comparison before promotion. The maintained N1536-only
+The first full Base pair retains C10/D200/S1 and a pinned Lt bundle in an
+isolated worker. E2E is **132.947 s off -> 134.390 s on**, about **1.09% slower**;
+model-call time is 108.921 -> 109.776 s. All 524 incoming and 524 outgoing calls
+select Lt with no fallback. This candidate is not promoted. A trained-call
+profile is investigating why the operator-screen gain did not carry into E2E.
+
+Aligned all-atom RMSD is 0.006100 Å against the native/init-control prediction
+and 0.050504 Å against the previous CK/HIP output, both within the user 0.1 Å
+criterion. CA pair-distance RMS deltas are 0.004659 and 0.029868 Å respectively.
+Summary confidence maximum delta against the previous CK route is 0.00187683;
+the old 0.001 coordinate/confidence comparison fails and its performance verdict
+remains withheld. The timings above are diagnostic observations under the separate
+user coordinate criterion, not a claim that legacy gates or experimental accuracy
+passed. [Full-model evidence](../provenance/protenix_base_lt_first_pair.json). The maintained N1536-only
 Lt adapter and the published Base profile remain unchanged.
 [Screen evidence](../provenance/protenix_base_lt_padded_screen.json).
+
+## Trained Lt cost diagnosis and Torch BLAS reuse
+
+The instrumented contraction probe preserves all nine arrays for each route.
+Summed inclusive contraction events fall from 10.385 s (native hipBLAS) to
+8.900 s (direct Lt), but direct adapter setup costs 2.112 s and the first Lt calls
+cost roughly 0.2–0.3 s each. Setup offsets the contraction improvement. These
+inclusive event intervals include launch gaps and are not complete E2E timings.
+[Profile evidence](../provenance/protenix_base_lt_profile.json).
+
+Reusing Torch's `hipblaslt` preference around each matching BMM avoids loading
+the additional wrapper library. The preference is restored in `finally` before
+returning, preserving other operators' selection. A synthetic screen, including
+preference-switch cost, measures incoming 9.256 -> 7.515 ms and outgoing
+10.537 -> 7.567 ms. [Screen](../provenance/protenix_base_torch_blas_screen.json).
+
+One matched full-model pair measures **132.950508 -> 130.926517 s E2E**
+(**1.01546x**, 1.52% less time); model-call time is 108.905801 -> 106.646227 s.
+All nine candidate arrays are bitwise equal to the direct-Lt candidate, hence
+the same 0.006100 Å native-relative / 0.050504 Å previous-CK-relative aligned
+RMSD assessment applies. Both directions select 524 calls without fallback.
+The old coordinate/confidence comparison still fails; its withheld performance
+verdict is preserved alongside these separate user-policy observations. This is
+not a repeated timing trend or a production promotion.
+[First pair](../provenance/protenix_base_torch_lt_first_pair.json).
+
+A separate full-forward Torch BLAS-preference pair measures 133.003585 ->
+132.596816 s E2E (1.00307x, only 0.31% less time). Native-relative aligned RMSD
+is 0.047952 Å, and previous-CK-relative RMSD is 0.009690 Å. Both meet the user
+coordinate criterion. This small single-pair gain is not promoted; requesting a
+preference does not prove every internal call uses that library.
+[Global preference evidence](../provenance/protenix_base_global_blas_first_pair.json).
+
+## Experimental structure qualification: 5ZMW chain A
+
+A sequence-only 1000-residue development case is stored in
+`benchmarks/protenix/experimental/5zmw_A`. Its metadata pins the source mmCIF,
+canonical sequence, alternate-location selection, and per-residue mapping.
+`gt_mapping.npz` contains **CA-only experimental `coordinates[mask]`**, with
+1000 valid positions, rather than input reference conformations. Predictions
+omit experimental ligands and state context; this case is not an independent
+or training-excluded test set.
+
+The Rust `experimental_ca` example checks artifact hashes, residue identities,
+and NPZ/CIF coordinate binding, then reports Kabsch-aligned CA RMSD and CA-only
+lDDT against experimental coordinates. It does not change acceptance policies.
+One matched pair on this input uses FP32 C10/D200/S1, seed101, HIP7, no MSA
+or templates, fresh processes and unflushed filesystem caches. Both arms retain
+qualified fast initialization; the candidate combines published CK/HIP and scoped
+Torch Lt (524 incoming and 524 outgoing contractions, no fallback).
+
+| Metric | Native GPU computation | Optimized |
+| --- | ---: | ---: |
+| Complete invocation E2E | 357.848379 s | 130.295645 s |
+| Model call | 333.304562 s | 106.450242 s |
+| Experimental CA aligned RMSD | 30.349352 Å | 30.350175 Å |
+| Experimental CA-lDDT | 0.31538224 | 0.31534813 |
+
+This is **2.74643x E2E** in one pair, not a repeated trend. Numerical regression
+between predictions gives all-atom aligned RMSD **0.063961 Å** (7711 atoms),
+within the user 0.1 Å criterion; CA aligned RMSD is 0.041719 Å. Summary confidence
+maximum delta is 0.000179291, below 0.001. The legacy 0.001 Å coordinate gate
+still fails and its performance verdict remains withheld; that record is retained.
+Experimental metrics show very little change, but both absolute predictions have
+low structure agreement under this sequence-only setup. No claim of a generally
+accurate or independent test result follows from this single case.
+[Paired timing, numerical and experimental evidence](../provenance/protenix_base_5zmw_first_pair.json).

@@ -78,3 +78,37 @@ filling. Each algorithm must pass 2e-5 absolute/relative synthetic agreement
 before timing. Output allocation/filling is timed; workspace creation is not.
 This screen is not connected to model dispatch. A winner still requires trained
 model correctness and complete invocation comparisons including setup costs.
+
+## Lt setup diagnosis and Torch routing
+
+`packed_probe.py` records first-call and aggregate event/wall intervals around
+trained contractions. Its instrumented outputs must match the corresponding
+uninstrumented route; its timings are diagnostic, not E2E benchmark replacements.
+The direct Lt adapter's 2.11 s setup and first-call costs offset its contraction
+gains in the first full-model pair.
+
+`screen_torch_blas.py` compares Torch `hipblas`/`hipblaslt` preferences with the
+same padded input strides. `model_torch_lt.py` scopes that preference to each
+matching BMM and restores it in `finally`. This avoids an extra native extension
+load and preserves all other calls' BLAS preference. It is intended only for the
+single-threaded inference worker; it does not establish safety for concurrent
+model threads sharing a process.
+
+`model_global_blas.py` is a separate full-forward preference experiment. It
+records requested/effective/restored settings; a preference is not proof that
+every internal call selected that library. Both model experiments use frozen
+workers and require full coordinate/relative-geometry checks and E2E comparison.
+Neither changes the maintained worker's BLAS default.
+
+`prepare_experimental_case.py` extracts the pinned 5ZMW chain-A sequence and
+experimental CA coordinates. The generated development case is under
+`benchmarks/protenix/experimental/5zmw_A`; metadata records source hashes and
+residue mapping. Use the Rust diagnostic after inference:
+
+```bash
+cargo run --release -p fireprot-validation --example experimental_ca -- \
+  benchmarks/protenix/experimental/5zmw_A sample-0.npz prediction.cif result.json A
+```
+
+This reports experimental CA RMSD/lDDT and verifies sequence/CIF/NPZ binding.
+It does not reinterpret native-model numerical parity as experimental accuracy.

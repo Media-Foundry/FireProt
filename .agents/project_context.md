@@ -2964,3 +2964,122 @@ Rustbase-drift vsstrictinitnative AND versuspreviouspublished/fullCK predictions
 all9arraydeltas/confidences/CIFmetadata. User0.1Aalignedgate; old1e-3legacygate
 mayfail andmustnotbehidden. Onlyaftercandidateacceptedcoordinateassessmentstart
 OFFcontrolsameworker; compareE2Ethenrepeatsifgain. No newLtmodelresultclaimedyet.
+LtON2355487 TERMINAL SUCCESS E2E134.389951601s/model109.776045909s,
+524incoming/524outgoing/fallback0. oninvocationSHAd5ab774efc3d2ee48e0706f47a803aebc06538b721fe8c4754d2fbf60677a425.
+Rustnative-drift vsstrictinitnative aligned0.00609982394215A,CA0.00602146;
+previous-drift vspublished-r1 aligned0.0505035007132A,CA0.03884285. Bothuser0.1gatepass,
+CIFidentitiesmatch,all4integermetadataarraysbits. candidate-checks.json retains
+all9arraydelta maxima; remainingconfidence summary/relativegeometryreports should
+be included infinalassessment. NativeagreementNOTexperimentalaccuracy.
+CURRENT LIVE OFFcontrolPID2356631 sameLtmodelroot/off-measurement/off-launch.log,
+output outputs/protenix-base-lt-off. PollbeforeGPUwork. Nomodelspeedupclaimyet:
+candidate134.39 vspriorpublishedmedian133.44 isnotmatchedpair andnotfastersofar.
+Master714427e pushedcontains3pairpublishedqualification+Ltcode/screen; thislatest
+stateappendisaftercommit anduncommitted. Keepgoalactive, controlinprogress.
+
+## 2026-10-07 Lt E2E rejection, trained profile, Torch BLAS reuse
+
+InitialLtOFF2356631 TERMINAL SUCCESS132.947387034s/model108.921124792.
+DirectC ABI LtON134.389951601s =>1.09%slower. User0.1Acoordinatecriteria passes,
+but unchangedRust1e-3coordinate/confidencegatefails (summarymax0.00187683105),
+performancewithheld. Preservecomparison-old-policy.json; compactresult
+provenance/protenix_base_lt_first_pair.json. NativeCApairRMS0.00465853A; relative
+previousCKpairRMS0.0298676A. NativeagreementnotGTaccuracy. Notpromoted.
+
+TrainedprofileON2357913/OFF2359033 TERMINAL SUCCESS at
+outputs/experiments/protenix-base-lt-profile-20261007. Bothprofiles all9arraysbits
+vsrespectiveuninstrumentedoutputs. Newpacked_probe.py wrapsactual1048contractions
+withGPUeventsandCPUenqueue timers. Offtotalout5466.859ms,in4918.433ms;
+OndirectLt out4498.394,in4401.296ms. Ltsetup2111.568ms vsnative0.0117ms;
+Ltfirstevents272.776/213.279ms, medians7.87058/7.81258ms. Startupcostoffsetsgain;
+do nottreatinstrumentedtotalsasE2E. provenance/protenix_base_lt_profile.json.
+
+TorchBLASscreen2360039 TERMINAL SUCCESS at
+outputs/experiments/protenix-base-torch-blas-20261007. UsesTorchpreferredhipblaslt
+onlyaroundtorch.bmm thenrestorespreviouspreference; switchcostincludedtiming.
+Incoming9.25634->7.51490ms(bits), outgoing10.53706->7.56682ms(max3.27825546e-7).
+NoextraCABIextension/publishedbundleload. Syntheticonly, preferredroute doesnot
+proveeveryinternalkernelidentity. Evidenceprovenance/protenix_base_torch_blas_screen.json.
+
+CURRENT LIVE TorchLtfullmodel candidatePID2360590, root
+outputs/experiments/protenix-base-torch-lt-model-20261007; on-{request,profile,spec}.json,
+on-measurement/on-launch.log/on-pid. Output outputs/protenix-base-torch-lt-on.
+Newmodel_torch_lt.pycontextinfrozenworker setsTorchBLASprefonlyaroundmatching
+N1000paddedbmm, restoresinfinally; requires524callsperdirection/nofallback.
+Bothspecs1800s, standardpublishedAMD/CK otherwiseunchanged, HIP7strictFP32C10D200S1.
+OFFpreparedNOTlaunched. Pollcandidate, verifybase-torch-lt.json+Rustdrift vsnative
+andpreviousCK (and comparetoearlierdirectLtoutput), thenOFFsameworkersnapshot.
+Source/provenance/docschangesuncommittedthisturn. NoTorchLtmodelspeedupclaimed.
+TorchLtON2360590 TERMINAL SUCCESS130.92651685s/model106.646226768,
+all9arraysBITS todirectLtON (so0.00609982A nativeRMSD/0.0505035A previousCKsame),
+524perdirection/nofallback. OFF2361595 TERMINAL SUCCESS132.95050763s/model108.905800575,
+outputbits topreviouspublishedCK. Onepair1.015458983x/1.52%lessE2E. OldRust1e-3
+coord/confidencegatesstillfailwithheldperformance, keptcomparison-old-policy.json;
+newuser0.1Acriteria passes. Evidenceprovenance/protenix_base_torch_lt_first_pair.json.
+No repeatedtrend/promotionyet. Newsourceprofilingand4experimentalPythonfiles
+plusprovenance/docs remainuncommittedthisturn.
+
+CURRENT LIVE globalTorchBLAS experimentPID2362740, root
+outputs/experiments/protenix-base-global-blas-20261007; hipblaslt-{request,profile,spec}.json,
+hipblaslt-measurement/hipblaslt-launch.log/hipblaslt-pid; output
+outputs/protenix-base-global-hipblaslt. Fullforward preferredhipblaslt withrestore
+infrozenworkercontextmodel_global_blas.py, keepallcustomHIP/CK/source/FP32TF32off
+C10D200S1N1000seed101 HIP7 andpublishedkernels. hipblascontrolpreparedNOTlaunched.
+This isseparatefromper-contractionTorchLt. PollsamePID; validateoutputs0.1A against
+nativeandpreviouspublishedCK plusconfidence/relativegeometry beforecontrol.
+Preparedglobalworker onlyrequestsTorchpreference; no guaranteeofeachinternalkernel.
+
+## 2026-10-07 global Lt completed and experimental 5ZMW qualification started
+
+Global BLAS candidate/control both terminal: 132.596815995 / 133.003585493 s
+complete invocation, only 1.003067717x single-pair gain; not promoted. Candidate
+native-aligned RMSD 0.04795159931865 A, previous-CK-aligned 0.00969020791282 A;
+both user 0.1 A criteria pass. Control all nine arrays match published CK.
+Evidence provenance/protenix_base_global_blas_first_pair.json remains uncommitted.
+
+Prepared experimental development case benchmarks/protenix/experimental/5zmw_A
+locally and on DiamondHill. Full 1000-residue chain A/entity 1/model 1, 1000 valid
+CA positions. Source /media/PM982/onestepfold/Dataset/raw/pdb_mmcif/zm/5zmw.cif.gz,
+gzip SHA b74b97cfda7a8fe4a3a30a224e439e6efcc33e9d217e915bff417503d2574272.
+Input SHA 938324d41314ec19427baf6bef797cfb67488c03cf0cf1f21681a0e5d97c7003;
+gt_mapping.npz SHA b8ab495c1bcea46afa9c4343557ec53b2c5c4f6493418320b99fc1e00b2f31cf.
+Truth is CA-only coordinates[mask], no reference field; metadata records sequence,
+residue mapping, occupancy/altloc selection and source hashes. Not an independent
+or training-excluded test set. Sequence-only inference omits experimental ligands.
+
+CURRENT native PID2366088 confirmed live at 03:20; root DiamondHill
+outputs/experiments/protenix-base-5zmw-20261007/native-measurement, native-launch.log.
+Output outputs/protenix-base-5zmw-native. Native GPU computation plus bitwise-qualified
+fast initialization; HIP7 FP32 C10/D200/S1 seed101 timeout1800. Both arms use frozen
+outputs/experiments/protenix-base-torch-lt-model-20261007/python worker. Optimized
+request/profile/spec prepared at same root, NOT launched; wait native terminal.
+Optimized includes published CK/HIP plus scoped Torch Lt. Do not overlap GPU jobs
+or heavy remote CPU builds. Experimental CA scoring in Rust remains to implement;
+also assess native-versus-candidate 0.1 A aligned RMSD on this new input. Do not
+assume old umem numerical or performance results transfer to 5ZMW.
+
+5ZMW native2366088 TERMINAL SUCCESS357.848379466s/model333.304561644s,
+7711 atoms/1000 residues. CURRENT optimizedPID2368531, same root,
+optimized-measurement/optimized-launch.log. Started after native terminal;
+HIP7 only. New Rust example experimental_ca.rs compiles and test passes:
+rigid-motion invariance, internal-deformation detection; manual wrong-chain and
+modified-input-hash rejection also verified. Native experimental CA RMSD
+30.3493519552 A, CA-lDDT0.31538224243: absolute sequence-only structure quality
+is low. Local native NPZ/CIF/score at /tmp/fireprot-5zmw-native. Do not claim
+optimized experimental result before terminal. Collection script prepared remotely
+/tmp/fireprot-collect-5zmw.py (not run); it requires both receipts and computes
+Rust native-vs-optimized drift. Experimental scoring still needs candidate.
+
+5ZMW optimized2368531 TERMINAL SUCCESS130.295645407s/model106.450242092s.
+Single native357.848379466s pair gives2.746433915x. Route524incoming/524outgoing,
+no fallback. Rust native-vs-optimized alignedallatomRMSD0.0639613409462A passes
+user0.1A; CA0.0417187393866A. Experimental CA nativeRMSD30.3493519552A,
+optimized30.3501750962A; CA-lDDT0.31538224243->0.315348133069. Bothlowabsolute
+sequence-only accuracy; no independenttestclaim. Summaryconfidence maxdelta
+0.0001792907715<0.001. OldRustcompare-runs correctly FAILS0.001Acoordinategate
+andwithholdsperformance; preservedcomparison-old-policy.json inremoteexperiment.
+Compactprovenance/protenix_base_5zmw_first_pair.json includesallreceiptsandresults.
+NewRustexperimental_ca example testpasses andwrong-chain/tampered-inputnegative
+checks pass. NoGPUjobcurrentlylive. Candidateper-BMMLtremainsunpromoted; future
+workrepeatE2Etrend underexplicituser0.1Apolicyandretainconfidence, thencontinue
+profilingremainingattention/trunkhotspots. Nooverallplateauclaim.

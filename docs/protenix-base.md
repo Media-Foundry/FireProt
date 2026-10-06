@@ -37,7 +37,7 @@ Protenix coordinate/confidence gates before reporting performance gains.
 Fast model construction and skipped template preparation remain disabled in the
 original broad-operator Base profile. The separate construction experiment qualifies
 Base initialization; template omission still only qualifies Mini. Base's deeper stack
-and full diffusion workload require independent output validation. The first GPU transplant failed the coordinate gate; no accepted Base speedup
+and full diffusion workload require independent output validation. The first GPU transplant failed the coordinate gate; no accepted Base GPU-operator speedup
 is claimed. See the result below.
 
 
@@ -93,3 +93,20 @@ The input is an explicitly documented 600-residue prefix of the N1000 developmen
 sequence. It is a performance/repeatability diagnostic, not an experimental
 structure-quality benchmark. N1000 strict operator qualification remains open;
 N1536 is outside this round's requested scope.
+
+## Strict N1000 attention isolation
+
+A subsequent strict deterministic N1000 C10/D200/S1 comparison enables only CK
+attention and qualified initialization, leaving triangle multiplication and the
+other GPU substitutions native. CK attention executes 1,048 times, but the
+candidate still fails: aligned RMSD 0.0749593 Angstrom and summary confidence
+maximum delta 0.00131607. Diagnostic invocation times are 430.648 s and
+216.682 s; **no performance verdict is accepted**.
+[Evidence](../provenance/protenix_base_strict1000_attention.json).
+An initialization-only N1000 control is in progress to check the reference at
+this length independently of CK.
+
+An experimental HIP bias/softmax kernel retaining native QK/PV arithmetic passes
+30 synthetic bitwise cases at N600/N1000. This establishes only an operator screen;
+trained-attention replay and complete model qualification remain outstanding.
+[Screen evidence](../provenance/protenix_base_bias_softmax_screen.json).

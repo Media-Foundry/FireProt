@@ -2628,3 +2628,72 @@ provenance/protenix_base_cpu_initialization.json. README/docs nowreportvalidated
 singlepair1.412x separatelyfromfailedbroadtransplant. Do nottransferthese
 numbers toN1000/N1536 ordefaultS5. Subsequentoperatorisolation needsstrictnative
 reference andpertrialcorrectnesschecks; no thresholdrelaxation authorized.
+
+## 2026-10-06 active goal: strict N1000 attention isolation started
+
+Goal remains active: consistently optimize Protenix Base while keeping correctness.
+Previous turn was progress (ce54cbf exact N600 initialization qualification).
+Rechecked local clean tracked tree and DiamondHill GPU idle before launch.
+Current LIVE native measurement PID2308434 under
+/media/IntelSSD/fireprot/outputs/experiments/protenix-base-strict1000-attention-20261006.
+Output outputs/protenix-base-strict1000-attention-native. HIP7 only.
+Fixed BaseFP32 N1000 C10D200S1 seed101 strictdeterministic/memoryfill.
+Profile derived from base-init-only; sets DISABLE_CK_ATTENTION=0,
+DISABLE_LONG_TRIANGLE_ATTENTION=0, DISABLE_LONG_DIRECT_ATTENTION=0.
+Other GPU substitutions stay disabled. Native backend ignores these hooks;
+candidate will select CK attention and fast initialization only.
+Candidate request/spec PREPARED, NOT LAUNCHED. Poll PID2308434 and native invocation
+receipt; do not launch another GPU run until native terminal. Then run the
+prepared fireprot-spec.json with Rust measure-inference into fireprot-measurement,
+same root/CWD/env HIP7. Compare via Rust compare-runs with unchanged 1e-3 gates.
+Do not restart based on a timeout. No strict N1000 result yet. Local launch
+receipt /tmp/fireprot-base-strict1000-attention-launch.json records control hashes.
+Potential fallback direction if CK-only fails: existing exact OF3 HIP softmax
+supports N1000, but requires two biases; Protenix often provides only one. Need
+real tensor/bias/add-order qualification before reuse; no implementation change yet.
+
+### Strict N1000 attention continuation: verified live wait and fallback preparation
+
+Re-polled PID2308434: confirmed live at elapsed03:06; no native invocation receipt
+or completion yet. Do NOT restart. Candidate still NOT launched. Continue same
+root and compare original prepared control hashes from local launch receipt.
+Prepared unpromoted experiments/protenix_base/bias_softmax.cpp and
+screen_bias_softmax.py while native runs. Based on maintained HIP softmax,
+adds N600 and optional mask (no artificial +0 for single-bias Protenix), retains
+ordered adds/native wave reduction; screen checks private in-place scores at
+N600/N1000 B1/2/8 random/zero/large/partial-mask/all-mask. Python syntax check passed.
+NO GPU build/screen yet; do not describe as qualified. Run only after timed
+experiments finish. Existing CK-only candidate takes priority before fallback.
+These files are untracked work in progress, not deployed or integrated. Keep goal
+active; no new accepted speedup in this continuation.
+
+### Strict N1000 CK attention rejected; exact softmax screen passed
+
+Native PID2308434 TERMINAL SUCCESS, E2E430.647801512s. InvocationSHA
+88e7989b111c197996f31445aa7950451a1f65ef6d4c04314da3037e3be8a486.
+CK-only+fastinit PID2311416 TERMINAL SUCCESS in content but pairedcorrectnessFAIL:
+E2E216.681660333s, alignedRMSD0.07495934435A, confidence maxdelta0.00131607056;
+performance=null. Runtime1048CKattention,1048NATIVEmultiplication,fastinitselected1.
+Evidence provenance/protenix_base_strict1000_attention.json. No accepted GPU gain.
+
+Prepared HIP fallback now locally compiled AND remotely Rust-built/screened onHIP7
+with no overlappingtiming. experiments/protenix_base/bias_softmax.cpp optionalmask
+avoidsinvented+0add; retainsnativebiasadd/reductionorder, privateinplacescores.
+screen_bias_softmax.py passes30/30BITWISE cases: N600/N1000 x B1/2/8 x
+random/zero/large/partial-mask/all-mask. Evidence
+provenance/protenix_base_bias_softmax_screen.json; remote screenroot
+outputs/experiments/protenix-base-softmax-screen-20261006 contains build/cache/source.
+NO trained-attention replay or model/E2E qualification yet. No productionintegration.
+N1536 inheritedkernelbranch is notqualifiedbythisscreen and notrequested.
+
+Now LIVE initialization-only N1000 control PID2314374, SAME attentionexperimentroot.
+Files init-control-{request,profile,spec}.json; measurement init-control-measurement;
+log init-control-launch.log; output outputs/protenix-base-strict1000-init-control.
+HIP7, sameC10D200S1seed101 strictBase. All3attentiondisableflags resetto1; otherwise
+sameprofileasCK experiment. BeforeanynextGPUwork pollthisPID/receipt toterminal.
+Compareagainststrictnative viaRustcompare-runs: declarebackend,bridge,
+3FIREPROT_DISABLE_*attentionenv0->1 and invocation.profile_sha256 change explicitly.
+Thiscontrol checks N1000 strictbaseline/fastinitrepeatability beforeassigningcause
+toCKalone. Nextoptimization: trainedreplay/fullmodel of exactHIPbias-softmax while
+keepingnativeQK/PV. Must keepnative computationalordering and all9arraygates;
+neverpromoteon30syntheticcasesalone. Goalactive, previouscontinuationmadeprogress.

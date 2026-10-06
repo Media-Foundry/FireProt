@@ -1823,3 +1823,70 @@ rejects noncontiguous masks; do not silently widen capabilities. N1000/pair
 preparers from preceding turn remain unrun and target the old implementation;
 prepare fresh roots after selecting the improved implementation. Accepted E2E
 claims unchanged. Keep goal active.
+
+## Cache release fixes model tuning; transposed masks qualify (2026-10-06)
+
+Previous turn pushedf956b00. This turn completed its model gate and implemented
+an opt-in exact transposed-mask path. Goal remains active; substantial progress.
+
+Release-cache model root /tmp/fireprot-model-release-cache-v1 finished rc0,
+536.879s diagnostic duration (not paired E2E). Driver2060234/CLI2060243 terminal.
+Collector1536 passes all11 arrays and full CIF bytes vs native+D16. MSA and
+Pairformer recover1024; observer records ZERO rejected tuning attempts. Other
+main chunks1024, confidence256. Pool one4.5GiB, one cache release,1258 fullcalls
+(B2561254/B5122/B10242),2532 launches, clean lease release. Peak Torch allocated
+55585914368. Evidence openfold3_workspace_release_cache_model_gate.json.
+Archive model-release-cache-v1-results.tar.gz SHA
+c08cedf351772b215b31839939ddae5edafcdc1a42d19a804b886b98b88a673f,
+47731676bytes under usual durable root. Actual pool segment not observed;
+restored tuning is direct evidence of effectiveness, not a claimed E2E gain.
+
+New transposed_pair_mask_supported accepts ONLY plain FP32 [B,1,1,1536],
+B1/128/256/512/1024, strides0=1/final=1536, no neg/conj. Model constructor
+normalize_transposed_mask plainbool defaultFalse; hashed controls forward it.
+When enabled, known transposed masks become contiguous once before slicing;
+mask_copies recorded. Existing matched contiguous path stays available. Invalid
+metadata still falls back before submission. Copy interruption poisons owner
+before reserve; no fallback, lease zero-charge cleanup proven. No HIP/Rust edits.
+98 CPU tests pass. New normalization test first failed against previous
+constructor; metadata tests cover offsets0/17, broadcasts, overlapping and
+unmeasured pitches, invalidoptions, input preservation and shared copiedstorage.
+
+GPU root /tmp/fireprot-workspace-mask-v2, session15691 terminal0. Ordinary
+allocation, capacity128. Qualifier control qualification_mask_layout=
+transposed_pair builds real strided column slices including nonzero offsets;
+24 complete calls over B128/256/512/1024, full probabilities+outputs exact,
+old-output/stride/guard/release checks pass,24copies. benchmark_mask.py:
+96 timed exact outputs; B128 split53.533/53.926 ->19.398/19.798ms; B256
+106.723/107.135 ->38.862/39.233ms. One4.5GiB pool resident in botharms; normalization,
+packing and concat included. ~2.7x is COMBINED layout+fusion gain, not pureHIPgain.
+Need normalization-only ablation for attribution; current screen has twoarms.
+Evidence openfold3_workspace_transposed_mask_screen.json. Archive
+workspace-mask-v2-results.tar.gz SHA
+0d9534a9ac90b9e0c4e5d2a5d2bb4be5971f4d81f80b284cbb72b7100da364f6,
+2594817bytes. Overlay5791b30ddc92d6af0cf46ccf672a1f76c831ad9346c0d3a76a648ccba374879e.
+/tmp/fireprot-workspace-mask-v1 was PREPARED ONLY with release_cached_once,
+never executed. v2 explicitly ordinary allocation, tests one new treatment.
+
+ACTIVE MODEL: /tmp/fireprot-model-mask-v1, driver2069120, CLI2069128 onHIP7.
+Output /media/IntelSSD/fireprot/outputs/model-mask-n1536-0. Same strictFP32
+R3/D200/S1 seed101, one4.5GiB capacity128, normalize_transposed_mask=True,
+allocation_policy=ordinary (NO empty_cache), observerenabled. Prepared from
+exact cap128 model plus GPU-qualified model_workspace/dispatcher; allsourcepins
+in preparation.json. Local/remote /tmp/fireprot-prepare-mask-model-v1.py.
+Driver detached with start_new_session; poll PID/start/exit/log, neverrestart
+on timeout. Collector1536 requires all11+fullCIF vsnative+D16, copies>0,
+zero cache releases and full lease accounting. Run onlyafterrc0.
+
+Reason for ordinary allocation in this trial: unsupported ending-node masks
+previously fell back to full nativeQK, potentially causing the36GiB request.
+Covering both directions MAY remove that request as well as eliminate expensive
+strided mask access. This is a hypothesis until model counters/tuning are read;
+not a reason to force chunks. If ordinary+mask stillOOM, combine the separately
+verified cache-release option in a fresh exact model trial. Do not mutate the
+running root. No other GPU jobs while this diagnostic runs. Model gate, N1000
+fallback and isolated3pairE2E remain before promotion. Prior N1000 andpair
+preparers targetoldercode and remain unrun; use fresh deployment roots.
+Plan unchanged; reanchor /tmp/fireprot-mask-provenance.json. GitNexus classLOW,
+loaderUNKNOWN/no graphcalls textverified workerpatch+tests; qualifierLOW.
+Accepted E2E claims unchanged: directnative1.499x, separateD16increment1.162x.

@@ -16,6 +16,8 @@ def load_workspace(path, expected_sha256):
     control = json.loads(data)
     options = ({'allocation_policy': control['allocation_policy']}
                if 'allocation_policy' in control else {})
+    if 'normalize_transposed_mask' in control:
+        options['normalize_transposed_mask'] = control['normalize_transposed_mask']
     return ModelWorkspaceFusion(control['fusion'], microbatch=control.get('microbatch', 256),
                                 **options)
 

@@ -43,13 +43,18 @@ def main(controls_path, destination):
         if free < 54 * 2**30:
             raise RuntimeError('Insufficient free memory for full B1024 reference and shared pool')
         control = json.loads(Path(controls_path).read_text())
+        mask_layout = control.get('qualification_mask_layout', 'contiguous')
+        if mask_layout not in ('contiguous', 'transposed_pair'):
+            raise ValueError('Unsupported qualification mask layout')
+        report['mask_layout'] = mask_layout
         os.environ['FIREPROT_SOFTMAX_FP32_BUNDLE'] = control['split_hip']['bundle']
         os.environ['FIREPROT_SOFTMAX_FP32_BUNDLE_SHA256'] = control['split_hip']['manifest_sha256']
         with torch.inference_mode():
             split = OwnedScoreSoftmax()
             candidate = model_workspace.ModelWorkspaceFusion(control['fusion'],
                 microbatch=control.get('microbatch', 256),
-                allocation_policy=control.get('allocation_policy', 'ordinary'))
+                allocation_policy=control.get('allocation_policy', 'ordinary'),
+                normalize_transposed_mask=control.get('normalize_transposed_mask', False))
             measured_batches = tuple(b for b in (128, 256, 512, 1024) if b % candidate.microbatch == 0)
             report.update(microbatch=candidate.microbatch, retained_workspace_bytes=candidate.retained_bytes)
             previous = None
@@ -62,6 +67,16 @@ def main(controls_path, destination):
                         args = operands(batch, seed, layout)
                         if seed == 102:
                             args = (*args[:3], args[3][:1], args[4])
+                        if mask_layout == 'transposed_pair':
+                            # Match upstream end-node pair-mask storage, including
+                            # an outer slice with nonzero storage offset.
+                            mask = args[3]
+                            offset = 17 if seed != 101 else 0
+                            storage = torch.empty(1536, 1536, device=mask.device, dtype=mask.dtype)
+                            transposed = storage.T[offset:offset + mask.shape[0], None, None, :]
+                            transposed.copy_(mask)
+                            args = (*args[:3], transposed, args[4])
+                            del storage, transposed, mask
                         probability, expected = reference(args, split)
                         actual = candidate(*args, reference_probabilities=probability)
                         exact(expected, actual)
@@ -76,6 +91,7 @@ def main(controls_path, destination):
                             raise RuntimeError('Workspace storage changed across outer batches')
                         score_pointer = pointer
                         record = dict(seed=seed, batch=batch, layout=layout, mask_batch=args[3].shape[0],
+                            mask_strides=list(args[3].stride()), mask_offset=args[3].storage_offset(),
                             bias_strides=list(args[-1].stride()), output_strides=list(actual.stride()),
                             all_probability_bits_exact=True, all_output_bits_exact=True,
                             previous_result_unchanged=True if prior_checked else None,
@@ -117,6 +133,8 @@ def main(controls_path, destination):
             if r['cache_release_attempts'] != expected_releases or r['cache_releases_completed'] != expected_releases:
                 raise RuntimeError('One-time cache release accounting failed')
             expected_calls = {str(b): 6 for b in measured_batches}
+            if r['mask_copies'] != (sum(expected_calls.values()) if mask_layout == 'transposed_pair' else 0):
+                raise RuntimeError('Mask normalization copy count differs from complete calls')
             if (r['allocations'] != 1 or r['successful_kernel_calls'] != sum(
                         6 * b // candidate.microbatch for b in measured_batches)
                     or r['calls_by_batch'] != expected_calls

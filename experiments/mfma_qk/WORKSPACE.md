@@ -401,3 +401,52 @@ release accounting unchanged. Exactly one cache release completes. See
 
 A fresh isolated N1536 trial is running with this option, unchanged capacity128
 and unchanged layout predicates. Model acceptance and E2E remain pending.
+
+### One-time cache release restores model tuning
+
+The isolated N1536 trial finishes successfully with all11 arrays and complete
+CIF bytes identical to both native and accepted D16 references. MSA and
+Pairformer select1024 again; the observer records no failed tuning attempts.
+The capacity128 pool completes1,258 outer calls and2,532 kernel launches, with
+one cache release and complete4.5GiB lease release. This demonstrates a model
+allocation-policy fix, not a paired speedup. The536.879-second diagnostic run
+is retained in `provenance/openfold3_workspace_release_cache_model_gate.json`.
+
+### Transposed pair masks: qualified normalization and timing
+
+Hashed controls may opt into `normalize_transposed_mask: true`. The additional
+layout is restricted to FP32 shape `[B,1,1,1536]`, B in1/128/256/512/1024, outer
+stride1 and final stride1536. This models column slices of a transposed N1536
+pair mask; offsets0 and17 are qualified. Expanded/overlapping masks and other
+pitches remain unsupported. Existing plain-tensor, dtype, view, device, owner,
+stream and strict-mode checks remain. A full mask is made contiguous once per
+outer call before microbatch slicing; the input remains unchanged. The default
+flag is false. Mask-copy interruption poisons the owner before reservation and
+cannot cause a fallback after work begins.
+
+All98 related CPU tests pass. A GPU qualification with ordinary allocation
+passes24 calls across B128/256/512/1024, both head-last bias layouts, seeds101/102/
+103, broadcast/per-outer masks and a fully masked row. All probability and output
+bits, strides, previous-output independence, guards and release accounting pass.
+Exactly24 mask copies occur. No cache release is used in this experiment.
+
+`benchmark_mask.py` includes normalization, packing and assembly in complete
+attention timing, with one4.5GiB pool retained in both arms. All96 timed outputs
+are exact. Medians in milliseconds:
+
+| Batch/bias layout | Accepted split HIP with transposed mask | Normalized mask + workspace |
+| --- | ---: | ---: |
+| B128 head-last | 53.533 | 19.398 |
+| B128 transposed head-last | 53.926 | 19.798 |
+| B256 head-last | 106.723 | 38.862 |
+| B256 transposed head-last | 107.135 | 39.233 |
+
+The approximately2.7x ratio combines layout normalization and fused arithmetic;
+it must not be attributed to HIP fusion alone. The two-arm experiment does not
+isolate normalization-only performance. Evidence and complete archives:
+`provenance/openfold3_workspace_transposed_mask_screen.json`.
+
+A fresh N1536 model trial combines this qualified normalization with ordinary
+allocation, isolating the layout change from the successful one-time cache
+release policy. It will establish actual copy/coverage counts, chunk choices,
+and all11-array/CIF correctness before paired E2E measurements.

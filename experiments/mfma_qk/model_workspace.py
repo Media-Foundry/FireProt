@@ -16,13 +16,27 @@ BYTES = 9 * 2**30
 SCORE_SHAPE = (256, 4, 1536, 1536)
 
 
+def transposed_pair_mask_supported(mask):
+    """Exact N1536 pair-mask column slices, including nonzero storage offsets."""
+    return (type(mask) is torch.Tensor and mask.ndim == 4
+            and mask.shape[0] in (1, 128, 256, 512, 1024)
+            and tuple(mask.shape[1:]) == (1, 1, 1536)
+            and mask.dtype == torch.float32 and not mask.is_neg() and not mask.is_conj()
+            and mask.stride(0) == 1 and mask.stride(-1) == 1536)
+
+
 class ModelWorkspaceFusion:
-    def __init__(self, control, *, microbatch=256, allocation_policy='ordinary'):
+    def __init__(self, control, *, microbatch=256, allocation_policy='ordinary',
+                 normalize_transposed_mask=False):
         if type(microbatch) is not int or microbatch not in (32, 128, 256):
             raise ValueError('Only explicitly qualified capacities32/128/256 are supported')
         if type(allocation_policy) is not str or allocation_policy not in (
                 'ordinary', 'release_cached_once'):
             raise ValueError('Unknown experimental allocation policy')
+        if type(normalize_transposed_mask) is not bool:
+            raise ValueError('Mask normalization requires a plain bool')
+        self.normalize_transposed_mask = normalize_transposed_mask
+        self.mask_copies = 0
         self.allocation_policy = allocation_policy
         self.cache_release_attempts = self.cache_releases_completed = 0
         self.microbatch = microbatch
@@ -54,7 +68,9 @@ class ModelWorkspaceFusion:
         if any(not t.is_cuda or t.device != query.device or t.dtype != torch.float32
                or t.requires_grad for t in tensors):
             return False, 'inference_fp32_hip_required'
-        if not mask.is_contiguous() or not bias_layout_supported(bias, normalize=True):
+        mask_supported = mask.is_contiguous() or (
+            self.normalize_transposed_mask and transposed_pair_mask_supported(mask))
+        if not mask_supported or not bias_layout_supported(bias, normalize=True):
             return False, 'unmeasured_bias_or_mask_layout'
         return True, ''
 
@@ -105,6 +121,9 @@ class ModelWorkspaceFusion:
                 raise ValueError('Invalid probability reference')
             bias = bias.contiguous()
             started = True
+            if self.normalize_transposed_mask and not mask.is_contiguous():
+                mask = mask.contiguous()
+                self.mask_copies += 1
             if self._pool._scores is None:
                 self._allocate(query, stream)
             self._lease.begin_use(query.device.index, stream)
@@ -153,6 +172,8 @@ class ModelWorkspaceFusion:
         return dict(policy_engine=identity, lease=json.loads(self._lease.manifest()),
                     microbatch=self.microbatch, retained_bytes=self.retained_bytes,
                     allocation_policy=self.allocation_policy,
+                    normalize_transposed_mask=self.normalize_transposed_mask,
+                    mask_copies=self.mask_copies,
                     cache_release_attempts=self.cache_release_attempts,
                     cache_releases_completed=self.cache_releases_completed,
                     kernel=self._pool.receipt, allocations=self._pool.allocations,

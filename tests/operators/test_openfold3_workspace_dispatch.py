@@ -90,3 +90,14 @@ def test_hashed_control_selects_allocation_policy(tmp_path):
     with patch('experiments.mfma_qk.workspace_dispatch.ModelWorkspaceFusion') as loader:
         load_workspace(p, hashlib.sha256(p.read_bytes()).hexdigest())
         loader.assert_called_once_with({}, microbatch=128, allocation_policy='release_cached_once')
+
+
+def test_hashed_control_selects_mask_normalization(tmp_path):
+    import hashlib
+    import json
+    control = {'fusion': {}, 'normalize_transposed_mask': True}
+    p = tmp_path / 'control.json'
+    p.write_text(json.dumps(control))
+    with patch('experiments.mfma_qk.workspace_dispatch.ModelWorkspaceFusion') as loader:
+        load_workspace(p, hashlib.sha256(p.read_bytes()).hexdigest())
+        loader.assert_called_once_with({}, microbatch=256, normalize_transposed_mask=True)

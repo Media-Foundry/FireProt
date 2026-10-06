@@ -591,8 +591,40 @@ bitwise equal to the prior combined-reuse route.
 One matched pair is **118.374007 -> 111.950568 s E2E** (1.05738x), with model
 calls 93.792649 -> 87.935992 s. Unchanged Rust gates pass. However, this off-arm
 baseline is noticeably above the previous approximately 113 s observations.
-The observation is retained, and two alternating pairs are running before any
-stable performance claim or promotion. Both bias caches, dual storage reuse,
+The observation is retained; the completed alternating repetitions are summarized
+below. No default-profile promotion is implied. Both bias caches, dual storage reuse,
 scoped Lt and buffered receipts are enabled in both arms; graph is off.
 [Synthetic evidence](../provenance/protenix_base_diffusion_transition_synthetic.json),
 [first paired evidence](../provenance/protenix_base_diffusion_transition_first_pair.json).
+
+
+Across **three BA/AB/BA pairs**, transition fusion measures E2E medians
+**112.610351 -> 112.040998 s**, **1.00508x**, or **0.51% less time**.
+Baseline range is 112.483–118.374 s and candidate range 111.951–112.386 s;
+the initial slow baseline is retained. All six outputs match all nine arrays
+bitwise, every fused run covers 30 blocks times 200 steps, and unchanged Rust
+pair/aggregate gates pass. The final pair improves only 0.086%, so this is a
+small observed incremental gain, not evidence of a broad 5.7% improvement.
+[Three transition pairs](../provenance/protenix_base_diffusion_transition_three_pairs.json).
+
+### Attention gate/layout HIP screen
+
+A new hand-written gfx90a kernel folds sigmoid gating and layout conversion into
+the fresh gate-projection buffer. Four synthetic checks (two layouts, two input
+ranges) are bitwise equal. Allocation-inclusive medians for the isolated gate
+operation are 51.12 -> 39.60 microseconds for token-major attention output and
+71.52 -> 41.12 microseconds for head-major output. Linear projections are excluded;
+these are not E2E gains. A published, pinned bundle is used for the subsequent
+full-model trial, whose result is recorded below.
+[Gate screen](../provenance/protenix_base_diffusion_gate_screen.json).
+
+
+The full-model gate trial covers all 4800 global attention calls and preserves
+all nine arrays bitwise against the preceding transition-fused route. The
+observed output layout is token-major in every call. Its matched E2E pair is
+**112.048548 s off -> 112.477773 s on** (**0.99618x**, 0.38% more time).
+Model calls are 88.035941 -> 87.814773 s, so the small forward reduction does
+not become an E2E gain. Unchanged Rust comparison gates pass. This candidate
+is retained as experimental evidence and is not selected for the maintained
+fast path. Microbenchmark percentages do not represent complete inference gains.
+[Gate first pair](../provenance/protenix_base_diffusion_gate_first_pair.json).

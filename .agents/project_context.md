@@ -3615,3 +3615,98 @@ requireactualo shape/stride/alias guards andsyntheticexacttests beforemodeltrial
 No newgatingkernelwritten. Biggerdeliverableremainsintegratingqualifiedroute
 into maintainedopt-inentry/profile anddirectoriginalTorchE2Erepeats; current
 fastestpathsfrozenexperimentalworkers, don'tclaimdefaultprofile~112s.
+
+## 2026-10-07 transition repetitions underway; attention gate kernel prepared
+
+Repeat scheduler2421662 stillLIVE confirmedelapsed04:15. Baselineindex0 and
+candidateindex1 terminal/perrunRustgatesPASS; candidateindex2 running; baseline
+index3pending. Journalintervalbaseline112.706/candidate112.127 includecontroller
+overhead; useinvocationelapsedinfinalreport. Baselinebacknear112.6s supports
+cautionaboutfirstOFF118.374outlier. Newaggregate onbothhosts
+/tmp/fireprot-aggregate-diffusion-transition.py copiedfromvalidatedlocalbias
+aggregatorwithpaths/descriptionupdated; additionallyrequiresallON30blockcounts
+200each/errornull. Awaitbenchmark.json succeeded thenaggregate/copyevidence.
+
+NewUNCOMMITTED sources experiments/protenix_base/diffusion_gate.cpp and
+screen_diffusion_gate.py. HandwrittenHIPvectorfloat4 kernel forglobaloutputshape
+[1,1000,16,48], supportsdense tokenmajorstrides768/48 orheadmajor48/48000.
+Fuses exactsigmoidgate*mappedattentionoutput into freshlinear_gbuffer; rejects
+null/misaligned/identicalpointers andunexpectedstrides atCABI. DoesNOTchange
+linear_g/linear_o. Microcloneofgateinputcommonbotharmsrepresentsfreshlinearoutput,
+4numericalchecks2layouts*2scales1/20,40timedalternatingmeasurementsperarm/layout;
+strictfillseed101,HIP7; sourceASTPASSbutNOTcompiledorGPUtested.
+
+Preparedremote rootoutputs/experiments/protenix-base-diffusion-gate-20261007,
+onlycpp/screenfiles; NO pid/outputyet. Launchscript/tmp/fireprot-launch-diffusion-gate.py
+onbothhosts assertspriortransitionbenchmarkphase succeeded beforelaunch, uses
+bufferedbridge/profileenv/PYTHONPATHroot/HIP7 andRust-ownednativebuild.
+DO NOT runmicro/buildbeforecurrentrepeatterminal. Nativec_abi
+base-diffusion-gate-v1, packagefireprot_base_diffusion_gate, -ffp-contract=off.
+Onmicrofailurepreservelog/receiptbeforefix; onmaterialwinpublishviaRustandonly
+thenmodelwrapperfulltrainedtrial. No modelgateadapterwrittenyet. No speedupclaim.
+
+Afterthiskerneldecision, prioritizepromotingqualifiedfastpathinto maintained
+opt-inBaseentry/profile anddirectnativeE2Erepetitions; fastest~112s stillfrozen
+workers, notpublicdefault. Needpreservelegacycoordinate1e-3 failures anduser
+0.1AalignedRMSDcriterionseparately, confidencevisible; no multiplyratios.
+Currentmaster405878f, onlynewgatefiles+thismemorydirty, docs/isauntouched.
+
+## 2026-10-07 transition repeated small gain; gate kernel micro passes
+
+Transitionrepeat2421662 TERMINAL SUCCESS. Aggregatevia
+/tmp/fireprot-aggregate-diffusion-transition.py: all6outputsall9bits, allON30*200
+calls, Lt524each, unchangedRustgatesPASS. E2Emedians112.610351267->112.040998359,
+1.005081648x/0.51%less. Baseline112.483-118.374,candidate111.951-112.386;
+pairedratios1.057377/1.005082/1.000863. Firstoutlierretained; finalpaironly.086%
+gain, notbroad5.7%. Evidenceprovenance/protenix_base_diffusion_transition_three_pairs.json.
+
+GateRustbuild/microPID2425335 TERMINAL SUCCESS. All4checks2layouts*scale1/20
+BITWISE. Commonfreshgateallocationincluded; standalonegate tokenmajor.05112->
+.03960ms, headmajor.07152->.04112ms. LinearprojectionsEXCLUDED; notE2E.
+Evidenceprovenance/protenix_base_diffusion_gate_screen.json. PublishedviaRust:
+runtime/kernels/protenix-base-diffusion-gate-20261007 manifest
+2de8bbf95c19e263f7a3aaf0a7953ef7ba33ea201e0a963e0b04d51d70df1509,
+libraryaf596ed23eb8cb0310b05d062bfea07f2926dfcb977d73bdc3d983b5ee7b7989,
+packagefireprot_base_diffusion_gate,c_abi base-diffusion-gate-v1.
+Root outputs/experiments/protenix-base-diffusion-gate-20261007 includes
+screen.json/screen.build.json/publication.json. Newcpp/screen/modeladapterlocal
+uncommitted; AST/diffchecksPASS. Newadapterdiffusion_attention_gate.py replaces
+24globalattention._wrap_up only; retainslinear_g/o, demands4800totalcalls,
+strides768/48or48/48000,FP32N1000heads16D48; overwritesfreshlineargbuffer,
+rejectscapture/grad/autocast. No maintainedpathpromotion.
+
+CURRENT LIVE fullgateONPID2426494, samegateroot/on-measurement/on-launch.log/on-pid.
+FrozenworkerclonedtransitionONworker, nests gate_install inside transition_install.
+Bothbiascaches+dualreuse+transitionfusion+scopedLt+bufferedbridgeON, graphOFF,
+HIP7N1000umemC10D200S1seed101timeout1800. Outputoutputs/protenix-base-diffusion-gate-on.
+OFFpreparedNOTlaunched. Onterminal requirebase-diffusion-gate.json24counts200each/
+errornull, all9bits vsoutputs/protenix-base-diffusion-transition-on. Onlythenlaunch
+OFFsameworker/profileexceptFIREPROT_BASE_DIFFUSION_GATE_MODE, samebundleenv.
+Needoff/onE2Ecomparebeforegainclaim; eventmicrodoesnotprovefullmodelgain.
+NootherGPUjob. READMEBaseguideupdatedthreepairresult/microqualuncommitted.
+GateON2426494 andOFF2427354 TERMINAL SUCCESS. All9arraysBITSvs transitionONanchor
+andcrossarm; RustgatesPASS. 24*200globalcalls allobservedo token-majorstride
+(768000,768,48,1), nothead-major. E2EOFF112.048547859->ON112.477773152s,
+0.99618391x/.38%slower; model88.035941213->87.814772557 improves.221s butfull
+invocationdoesnot. REJECTgatepromotion; source/library/micro retained.
+Evidenceprovenance/protenix_base_diffusion_gate_first_pair.json, aggregation
+/tmp/fireprot-diffusion-gate-pair.py onbothhosts. No GPUjobsactiveafterthispair.
+
+NEXT priority: maintained opt-in Base N1000 route, then directnativecomparison.
+Qualifiedselection: scopedLt + bufferedRustbridge + global/localbiascache +
+dualstorage + transitionfusion. NO graph ornewgatelibrary. Bothlastincremental
+winsare small (.71%dual singlepair,.51%transition3pairs), kernelphaseflattening;
+notcompletebecausemaintainedentry/directcurrentnativeE2E/secondinputqualpending.
+Promoteexperimentalhelpers to python/fireprot/adapters/protenix maintained
+modules with explicit opt-inworkercontext andpublishedprofile. Keeporiginal
+experimentalfilesasversionedevidence; no upstream checkoutmutations. Preserve
+shape/cycle/dtype/device/alias/version/countguards. Currenttransitionprototype
+hardcodes7979atoms: needderiveexpectedatomcountfromrequestfeatures andqualify
+5ZMW7711 beforegeneralN1000claim. BaseN600/nonBasefallbackmustremainusable;
+donot silentlyenableunsupportedshape. ExistingnativevsCK legacycoordinategate
+stillfails, user0.1Aalignedgate+confidenceassessmentmustremainseparate.
+Newuser-facingentrymustnotpointtofrozenexperimentalworkerpaths. Bridgecanbe
+published/copytopinnedruntimepath preservingqualifiedbufferedbinaryhash; leave
+historicaldefaultremoteCLI/bridgeuntoucheduntilqualifiedmigrationchosen.
+Currentuncommitted3gatefiles+3pairevidence/gatemicro/gatepair/docs/memory ready
+forcommit afterindex/gate. docs/isauntouched. Goalactive, noimpasse.

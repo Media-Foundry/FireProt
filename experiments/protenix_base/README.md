@@ -211,3 +211,16 @@ consume fresh gate/projection outputs in place. The N1000/7979-atom prototype
 requires 200 calls per block and rejects graph capture, autograd and autocast.
 The 16 synthetic shape/range checks and first full-model candidate preserve
 bitwise results; matched E2E qualification is recorded in the Base guide.
+
+`diffusion_gate.cpp` / `screen_diffusion_gate.py` screen a hand-written gfx90a
+FP32 gate/layout kernel. It overwrites only fresh gate-projection storage and
+supports the two dense layouts of `[1,1000,16,48]`. Four synthetic cases pass
+bitwise. Timing includes a common gate allocation but excludes linear projections.
+`diffusion_attention_gate.py` is the isolated full-model adapter: 24 blocks,
+200 calls each, explicit shape/layout/device checks, no autograd/autocast/capture.
+Use only the Rust-published `base-diffusion-gate-v1` bundle. The model trial must
+match all nine arrays before any E2E result is interpreted.
+
+The gate full-model pair passes bitwise checks at all 4800 global calls but does
+not improve E2E (112.049 s off versus 112.478 s on). It is not selected for the
+fast path; its forward-only reduction does not justify an E2E speedup claim.

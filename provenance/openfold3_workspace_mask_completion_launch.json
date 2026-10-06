@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "status": "controller_spawned_latest_remote_status_unobserved",
+  "controller_root": "/tmp/fireprot-mask-completion-v1",
+  "controller_pid": 2117145,
+  "existing_benchmark": {
+    "root": "/tmp/fireprot-mask-paired-v1",
+    "driver_pid": 2083396,
+    "scheduler_pid": 2083407,
+    "last_verified_stage": "baseline2 running; first four invocations measured and verified"
+  },
+  "archive": {
+    "path": "/home/husrcf/Code/fireprot/outputs/experiments/qk-softmax-local-20261006/mask-completion-controller-v1.tar.gz",
+    "sha256": "aa881cebd78a2c26444fecc324f47fd6f2c8f5b14974ac73417343e7426ed163",
+    "size": 7621
+  },
+  "artifacts": [
+    {
+      "path": "/tmp/fireprot-mask-completion-v1/controller.py",
+      "sha256": "f0966b3394a284d97df27a3c8df774464607cdb0727918d865cb145f96b530f8"
+    },
+    {
+      "path": "/tmp/fireprot-mask-completion-v1/prepare-native.py",
+      "sha256": "188171436bebbc90c07dbd1d48d033b1daf13c783ff44f26758f62162b16d156"
+    },
+    {
+      "path": "/tmp/fireprot-mask-completion-v1/native-driver.py",
+      "sha256": "1c34e44bddb59d364cc7258e8e6b89bc8e0d52e333ba6188d2d2038f00b1ab13"
+    },
+    {
+      "path": "/tmp/fireprot-mask-completion-v1/native-collect.py",
+      "sha256": "6642e0bd514f5cbdc7386f74764d115837758433ddae0b7c9b8bb737fcaa766d"
+    },
+    {
+      "path": "/tmp/fireprot-mask-completion-v1/native-archive.py",
+      "sha256": "3256b5962dcc5dab9f8085b02ce2a1352f7b08292a103a503210846c12fa7efc"
+    },
+    {
+      "path": "/tmp/fireprot-mask-paired-v1/collect.py",
+      "sha256": "d3fa15d870784cb641e5dd49b787dd12c6407b2ce84f17b6603e86efc4897392"
+    },
+    {
+      "path": "/tmp/fireprot-mask-paired-v1/archive.py",
+      "sha256": "4eebd88f932f5a9f54ab50c49b030adb0401ae3d664e3af56c890792b257e2de"
+    }
+  ],
+  "sequence": [
+    "Wait for existing incremental benchmark terminal receipt; never restart it",
+    "Require all six outputs exact, revalidate Rust comparison and native/D16 anchors",
+    "Archive complete incremental results",
+    "Only if median and p95 improve, prepare fresh direct original-Torch comparison",
+    "Inspect all requests, require idle GPU preflight and run three sequential AB/BA/AB pairs",
+    "Require exact arrays and full CIF bytes for every output, then archive direct comparison"
+  ],
+  "limits": [
+    "No completed benchmark or speedup claim in this launch record.",
+    "SSH connection timed out after controller spawn; inspect same PID/status before further action.",
+    "Any failure stops the controller; no automatic retry or restart.",
+    "Current model/kernel source is unchanged."
+  ]
+}

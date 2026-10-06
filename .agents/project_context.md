@@ -2046,3 +2046,45 @@ cited manifest unchanged since prior reanchor, dirtydigest2c6402b0053bf1b1d85ccb
 (only untrackedISA). Typed GitNexus status/context agree: sameHEAD,current
 schema4runner,incompleteReasons[],up-to-date. Plan digest remains6177e9b38a9535dde6ecc6a159e630986ed7a69760e2fe180ab38d76d8a9782f.
 Step5 still active; step6 pending; goal remains active, no plateau or blocker.
+
+## Guarded completion controller launched; SSH observation timeout (2026-10-06)
+
+Previous turn was progress (final CPU gates and verified live benchmark), pushed
+ea6f3e9. This turn first confirmed2083396/2083407 alive at34:52, baseline2 running
+after four measured+verified invocations. No concurrent GPU work or source edit.
+Read the frozen worker directly: native returns upstream forward before allHIP
+hooks; pair/atom cache scopes are separately conditional on their environment
+flags. Native direct-comparison profiles correctly disable both caches.
+
+Prepared and LAUNCHED detached completion controller2117145 in
+/tmp/fireprot-mask-completion-v1 onDiamondHill; local source
+/tmp/fireprot-mask-completion-v1.py. SSH returned the PID after verified upload
+and syntax checks. Subsequent status SSH stalled (localsession55965) and an
+independent no-ControlPath connection timed out (session9114 terminal255).
+This is an OBSERVATION failure, not benchmark/controller failure. Do not restart
+either. Re-poll2117145,2083396,2083407 and both roots' status/start/exit/journal.
+Controller status.json/controller.log are authoritative for follow-up stages.
+
+Controller waits on the existing driver and exit.json in30s intervals, with a
+7200s observation deadline that stops controller only, never kills/restarts the
+benchmark. After successful terminal receipt it runs existing collect.py and
+archive.py, writes archive-receipt.json, and only if exact acceptance plus faster
+median AND p95 are proven prepares /tmp/fireprot-mask-native-paired-v1. It then
+installs native driver/collector/archiver, validates all six requests via Rust
+inspect, requires all8GCDidle, and runs the new3pairdirect benchmark. After that
+it collects every native/candidate output against both historical native+D16
+anchors with all11bits/fullCIF and archives. Any failure stops with stage=failed;
+no automatic retries. Do not launch direct pairs manually while controller owns
+the sequence. Do not mutate scripts/deployment while controller is running.
+
+All exact local and remote helper pins plus full local source archive recorded
+in provenance/openfold3_workspace_mask_completion_launch.json. Archive
+outputs/experiments/qk-softmax-local-20261006/mask-completion-controller-v1.tar.gz
+is intentionally ignored. New native collector requires absence of HIPruntime
+and cache reports for originalnative, verifies fullworkspace/cacheaccounting only
+forcandidate. It explicitly reports no native instrumentation/peak data rather
+than inventing it. Native driver requires successful incremental receipt hash,
+terminal0,archive receipt and fresh output root before GPU preflight.
+
+Latest remote phase is not yet observed after spawn; no new E2E acceptance claim.
+Continue current plan steps5/6 and goal; no plateau, no blocking audit threshold.

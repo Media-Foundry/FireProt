@@ -88,6 +88,7 @@ Other starting points:
 
 | Workflow | Request to copy | DiamondHill profile |
 | --- | --- | --- |
+| Protenix Base N1000, experimental published route | `configs/requests/protenix-base-n1000-fireprot.json` | `configs/diamondhill/protenix-base-published.json` |
 | Protenix Mini N1000 | `configs/requests/protenix-n1000-fireprot.json` | `configs/diamondhill/protenix-fireprot.json` |
 | Protenix Mini N1536 | `configs/requests/protenix-n1536-fireprot.json` | `configs/diamondhill/protenix-fireprot.json` |
 | AtlasFold + AtlasLM-3B N1536 | `configs/requests/atlasfold-n1536-hip-fused.json` | `configs/diamondhill/atlasfold-all-published.json` |
@@ -167,6 +168,13 @@ the user-authorized 0.1 Å coordinate criterion; the old confidence gate still f
 This is numerical regression, not experimental structure accuracy. Base FP32,
 C10/D200/S1, seed101, N1000, strict determinism, HIP7, unflushed caches.
 See [scope, profiles and separate raw-native baseline](docs/protenix-base.md#full-ckhip-cycle-and-revised-coordinate-assessment-2026-10-07).
+
+The subsequent published-artifact experiment retains the identical HIP/CK
+binaries and avoids build-input scans during inference. Its first pair measures
+**146.265 -> 137.239 s (1.066x incremental)** with all nine arrays bitwise equal.
+Two further pairs are pending; this is not yet a repeated timing result. The
+experimental profile above pins both bundles. See
+[published Base deployment](docs/protenix-base.md#published-artifact-loading).
 
 ### Later OpenFold3 increments — separate baselines
 

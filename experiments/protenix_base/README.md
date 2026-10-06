@@ -52,3 +52,16 @@ remaining 198 steps replay. Each replay refreshes noisy coordinates and noise
 level; constants retain their original identities and must not mutate. The
 initial signature is deliberately limited to this N1000/7979-atom S1 case.
 This experiment does not imply support for arbitrary proteins or sample counts.
+
+## CK attention tile rescreen
+
+`screen_ck_tiles.py OUTPUT [SOURCE_NAME TILE_LABELS_JSON]` builds a standalone
+library through the Rust HIP build service. The exact N1000/head-last FP32 ABI
+in `ck_tiles.cpp` has four variants; `ck_tiles_wide.cpp` contains the larger-tile
+round. Only HIP6/7 are admitted by the screen. Seed101, strict determinism and
+memory filling are enabled. Random and large-bias outputs are checked against
+the maintained vector-bias CK operator before timing. Four warmup rounds precede
+16 measured rounds, with alternating variant order. Output allocation/filling
+is included; the bias is already contiguous. These are synthetic operator screens,
+not Base structural accuracy or E2E evidence. Raw Rust build receipts are retained
+beside `screen.json` in the experiment roots recorded in provenance.

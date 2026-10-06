@@ -2826,3 +2826,54 @@ trunk~1%singlepairnotrobust; diffusionnegative. Bothproof-of-conceptscomplete,
 noactiveGPUprocessfromthiscycle. Nextpriority remainingtrunkoperators (attention,
 multiplication,transition); goalnotplateauedoverall. Maintainmaster/HIP6or7,
 357.921s incrementalnativefastinitbaseline separatefrom~146sfullCK baseline.
+
+## 2026-10-07 CK tile rescreen and published artifact trial
+
+Previousgoalturn progress: graphproofscomplete, no graphpromotion; master3161a03.
+Two new synthetic CK vector-bias tile screens TERMINAL SUCCESS onHIP7:
+root outputs/experiments/protenix-base-ck-tiles-20261007 PID2337937;
+M128N32W4 20.0085ms; M64N32W4 26.6160; M64N64W4 22.1360; M128N64W4 20.9253.
+Wide root outputs/experiments/protenix-base-ck-tiles-wide-20261007 PID2339141;
+M128N32W4 20.0298ms; M256N32W8 21.8518; M128N128W4 23.5046; M256N64W8 32.6484.
+Allrandom/large-biascases pass2e-5abs/rel againstmaintainedCK;N32variantsbitwise.
+Alternatingvariantorder,4warmrounds16measured, strictFP32/memoryfill, seed101.
+Syntheticonly, outputallocationincluded, biasalreadycontiguous; no trained/E2E
+claim. Retaincurrenttile; no slowercandidate deservesmodeltrial. Rawbuildreceipts
+screen.build.json ineachroot; compactprovenance/protenix_base_ck_tiles{,_wide}.json.
+Newexperimentfiles ck_tiles.cpp,ck_tiles_wide.cpp,screen_ck_tiles.py uncommitted.
+
+NEXT live fullBase published-artifact trial PID2341331 under
+outputs/experiments/protenix-base-published-20261007. published-{request,profile,spec}.json,
+published-measurement/published-launch.log/published-pid. Output
+outputs/protenix-base-artifacts-published. HIP7 C10D200S1FP32seed101, sameworkerbinary,
+fullCK+fastinit. Changesonly4FIREPROT_*_BUNDLE envvars; no graph, no templateomission.
+SourcecontrolpreparedNOTlaunched. BeforemoreGPUwork poll2341331/receiptterminal.
+Rustpublishedsamebinarylibs to runtime/kernels/protenix-base-amd_extension-20261007
+manifest91193edfb1c1fbfb3ba95bf2c92ac360d7e04197de672e44d58298415d7a12f8,
+librarya544ef7a75ec3d4ed223ff9ef1ab8fe75ea542d5274b2e4b7ef7a84b6db16029;
+CK runtime/kernels/protenix-base-ck_attention-20261007
+manifestc855ec8cf65236dc42428f93cadff31f79cfcd0934fd2ca3e0bee45afbf41cb8,
+library6109cb8ef87d1549e7180ea7daf5322c3a06d10302c38d79b4182a3feb1d5628.
+publication.json pluslogs retainRustreceipts. Intendedremovecompilerinputscans,
+notalterGPUmath. Verifybothbuild.mode=published,1048CK+1048packedcalls,all9bits;
+thenlaunchsource-spec.json control. Usercoordinate0.1A policyunchanged; native
+comparisonlegacyconfidencefailstillseparate. No speedupclaim beforecomparison.
+Publishedcandidate2341331 TERMINAL SUCCESS137.23949901s/model112.447313437,
+all9arraysbits vsfullCK, bothbuild.mode=published,1048attention+1048mul unchanged.
+CURRENTsourcecontrolPID2342588,sameartifactexperimentroot/source-measurement,
+source-launch.log/source-pid; output outputs/protenix-base-artifacts-source.
+TwoadditionalRust-ownedpairs prepared repeat-spec.json (ABthenBA), NOTlaunched
+untilsourcecontrolterminalandfirstpairverified. CombinedwithinitialBA gives3pairs.
+Newconfig configs/diamondhill/protenix-base-published.json pinsbothpublished
+manifestsandfastinit1, templateomission0; firstcandidateexact, repetitionpending.
+Source2342588 TERMINAL SUCCESS146.264570738s/model121.883916005s. Firstpair
+published137.23949901s gives1.065761474x/6.17%lessE2E; all9bits exactbetweenarms,
+Rustcompare-runs unchangedgatespass. Evidenceprovenance/protenix_base_published_first_pair.json.
+CURRENT LIVE Rustbenchmark-pairs PID2344669, rootartifactexperiment/repeat-measurement,
+repeat-spec.json/repeat-launch.log/repeat-pid. TwoadditionalpairsABthenBA,4fresh
+requests source-r1/published-r1/source-r2/published-r2. WaitsamePID, neverrestart.
+Onterminal verifybenchmark.jsonsuccess,compareeachrepeatall9bitsandpublishedmodes;
+aggregateexistingfirstpair+2newpairs viaRustcompare-runs (3observationsperarm)
+using retainedaccepted/invocationpins. AllstrictgatesapplybetweenidenticalCKroutes.
+Do notreplace357.921nativefastinitbaselinewithoutlabeling. NootherGPUexperiment
+shouldoverlap orheavyremoteCPUbuildduringtimedruns. Workdirectlymaster.

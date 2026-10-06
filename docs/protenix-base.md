@@ -200,3 +200,54 @@ not promoted: it offers no observed E2E gain. This does not establish that all
 HIP Graph partitions are ineffective. [Denoiser receipts](../provenance/protenix_base_diffusion_graph.json).
 See
 [experimental entry points and constraints](../experiments/protenix_base/README.md).
+
+## CK tile rescreen (2026-10-07)
+
+The vector-bias kernel was rescreened under strict FP32 at N1000. Alternating
+variant order, four warmup rounds and 16 measured rounds per variant retained
+output allocation and deterministic memory filling. Bias was already contiguous.
+Random and large-bias cases pass 2e-5 absolute/relative agreement with maintained
+CK; this is a synthetic operator screen, not trained-model accuracy evidence.
+
+| M / N / waves | Median (ms) |
+| --- | ---: |
+| 128 / 32 / 4 (current) | 20.008 / 20.030 across the two rounds |
+| 64 / 32 / 4 | 26.616 |
+| 64 / 64 / 4 | 22.136 |
+| 128 / 64 / 4 | 20.925 |
+| 256 / 32 / 8 | 21.852 |
+| 128 / 128 / 4 | 23.505 |
+| 256 / 64 / 8 | 32.648 |
+
+Retain the current tile; no alternative is promoted. See
+[first round](../provenance/protenix_base_ck_tiles.json) and
+[larger tiles](../provenance/protenix_base_ck_tiles_wide.json).
+
+## Published artifact loading
+
+`configs/diamondhill/protenix-base-published.json` enables qualified fast
+initialization and pins the existing AMD operators and CK attention as published
+Rust-verified bundles. It retains template preparation and the original model
+workload. The libraries are byte-identical to those used by the full-CK baseline;
+publishing moves compiler-input inspection out of inference, while per-load
+manifest/library/receipt hashes and runtime compatibility are still checked.
+
+Copy `configs/requests/protenix-base-n1000-fireprot.json` with a fresh run ID and
+output directory, then use the published profile with Rust `infer`. The bundles
+are DiamondHill deployment assets under `runtime/kernels/`, not files shipped in
+Git. Rebuild/publish and update pins explicitly on another host; see
+[kernel publication](kernel-artifacts.md).
+
+The first candidate-then-control pair measures **146.264571 -> 137.239499 s**
+complete invocation time (**1.06576x**, 6.17% less time). Model-call timing is
+121.883916 -> 112.447313 s; that boundary includes lazy operator loading, so this
+is not a steady-state GPU compute improvement. Both published loaders are
+confirmed selected, with 1,048 CK attention and 1,048 packed multiplication calls.
+All nine arrays are bitwise equal and Rust paired comparison passes unchanged
+gates between the two loading routes. The earlier native-versus-CK confidence
+limitation still applies. [First-pair evidence](../provenance/protenix_base_published_first_pair.json).
+
+Two additional AB/BA pairs are running under Rust `benchmark-pairs`, with
+per-run reference checks and pair gates. Do not describe this first pair as a
+three-pair trend. All trials retain strict FP32 N1000 C10/D200/S1 seed101, HIP7,
+fresh processes and unflushed filesystem/compiled-kernel caches.

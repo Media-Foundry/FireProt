@@ -18,7 +18,7 @@ See the [Rust acceptance audit](docs/rust-acceptance.md).
 | Protenix Mini-ESM and Tiny-default v0.5.0 | `native`, `fireprot` | Mini-ESM N1000 with ESM2-3B; Tiny L124; model-specific gates |
 | AtlasFold 260703 **with AtlasLM-3B** | Native, chunked, HIP and fused HIP | N1000/N1536; exact public-output bytes; N1536 reference uses chunked native math |
 | OpenFold3 / OpenBind-0 | `native`, opt-in `hip_fused` | Strict deterministic FP32 N1000/N1536; all 11 arrays bitwise equal |
-| Protenix Base-default v0.5.0 | `native`, experimental `fireprot` | Strict N600 initialization: exact outputs; N1000 CK/HIP meets user 0.1 Å aligned-RMSD criterion, legacy confidence gate fails ([status](docs/protenix-base.md)) |
+| Protenix Base-default v0.5.0 | `native`, opt-in `fireprot` | Strict FP32 N1000 C10/D200/S1: maintained composition passes user 0.1 Å aligned-RMSD and summary-confidence criteria; legacy 0.001 Å coordinate gate fails ([status](docs/protenix-base.md)) |
 | OpenFold2, ESMFold and other models | Planned | No verified integration or speedup claim |
 
 Protenix and OpenFold3 are separate implementations. Precision, preprocessing,
@@ -99,8 +99,10 @@ Other starting points:
 The opt-in Base profile requires **N1000, FP32 C10/D200/S1** and uses maintained
 workers plus the published bundles and buffered bridge installed on DiamondHill.
 Both umem and 5ZMW outputs match their frozen optimized references bitwise
-through the Rust-selected maintained context. The direct native E2E series is
-still pending.
+through the Rust-selected maintained context. Three matched native comparisons
+measure **383.350 -> 112.022 s complete invocation medians (3.422x)** on the umem
+N1000 input, with shared fast initialization. Native-to-optimized outputs meet
+the explicit aligned-coordinate and summary-confidence criteria, not bitwise equality.
 See [Base entry and qualification](docs/protenix-base.md#maintained-n1000-optimization-entry).
 
 The Mini examples explicitly use **C4/D1/S1**; they are not the upstream Mini
@@ -143,6 +145,7 @@ warm or unflushed as specified in the linked evidence.
 | Model / length | Reference → optimized | Speedup | Timing boundary and evidence |
 | --- | ---: | ---: | --- |
 | Protenix Base, 600 aa, initialization only | 179.350 → 127.047 s | **1.412x** | Complete Rust invocation; one pair, strict deterministic C10/D200/S1; all 9 arrays exact ([details](docs/protenix-base.md#fast-construction-qualification)) |
+| Protenix Base, 1000 aa, maintained composition | 383.350 → 112.022 s | **3.422x** | Complete Rust invocation; three AB/BA/AB pairs, strict FP32 C10/D200/S1, shared fast initialization; explicit aligned-coordinate/summary-confidence policy ([details](docs/protenix-base.md#maintained-direct-native-three-pair-result)) |
 | Protenix Mini, 1000 aa | 82.074 → 27.949 s | **2.937x** | Historical worker request; three pairs [¹](docs/protenix-native-requests.md) |
 | Protenix Mini, 1536 aa | 177.345 → 45.596 s | **3.889x** | Historical worker request; three pairs [¹](docs/protenix-native-requests.md) |
 | AtlasFold + AtlasLM-3B, 1000 aa | 184.581 → 84.174 s | **2.193x** | Earlier packaged revision; one request pair [²](docs/atlasfold-performance.md#packaged-bias-reuse-and-batched-transpose) |
@@ -180,7 +183,7 @@ See [scope, profiles and separate raw-native baseline](docs/protenix-base.md#ful
 The historical 357.921 s control used FireProt dispatch with native Torch triangle
 operators and already omitted the all-valid mask's zero bias. It is not the same
 execution path as `backend=native`. The new maintained direct comparison uses
-the latter with shared fast initialization; its three-pair series is pending.
+the latter with shared fast initialization; its **3.422x** result is listed above.
 See the [baseline route audit](docs/protenix-base.md#strict-n1000-attention-isolation).
 
 The published-artifact route retains the identical HIP/CK binaries and avoids

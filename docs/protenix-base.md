@@ -711,3 +711,52 @@ study requires `installed=true`, `selected=1`, `recovered=0` and no construction
 errors in every run, in addition to output and alignment checks. A flag alone is
 not accepted as evidence of initialization parity.
 [Retained mismatch record](../provenance/protenix_base_native_study_initialization_mismatch.json).
+
+### Maintained direct native three-pair result
+
+Three complete AB/BA/AB pairs compare the maintained `native` entry against
+`configs/diamondhill/protenix-base-n1000-optimized.json`. Both arms select the
+qualified fast constructor, with no recovery or construction errors. Workload:
+Base-default v0.5.0, umem N1000/7979 atoms, FP32, C10/D200/S1, seed101, no MSA or
+templates, strict determinism with memory filling, HIP7. Every invocation starts
+a fresh process; filesystem and published-kernel caches are not flushed. Upstream
+source is pinned to `bb3be993`; this is that checkout's native Torch branch, not
+a claim about a separately measured unmodified upstream installation.
+
+| Pair | Native E2E (s) | Optimized E2E (s) |
+| --- | ---: | ---: |
+| 1 (AB) | 382.844251 | 112.639672 |
+| 2 (BA) | 383.350351 | 112.021993 |
+| 3 (AB) | 387.153919 | 111.644132 |
+| Median | **383.350351** | **112.021993** |
+
+Complete invocation speedup is **3.42210x**, or **70.78% less elapsed time**.
+Model-forward medians are **358.508248 -> 87.516323 s (4.09647x)**. Loading,
+initialization, feature preparation, serialization and parent/worker overhead
+remain included in complete invocation timing. These are direct measurements;
+no incremental ratios are multiplied together.
+
+All six runs reproduce their respective native/optimized prediction anchors in
+all nine arrays bitwise. Across arms, each pair has Kabsch-aligned all-atom RMSD
+**0.006099824 Å** and summary-confidence maximum absolute delta
+**0.0000495911**. These pass the explicit user coordinate criterion of 0.1 Å
+and unchanged summary-confidence criterion of 0.001. Atom identities and exact
+metadata arrays match. This is prediction regression, not experimental accuracy.
+
+The unchanged legacy comparison still fails its **0.001 Å coordinate gate**;
+its performance verdict remains null. The separate policy report above retains
+that failure. Cross-arm arrays are not bitwise equal: full confidence-array
+diagnostics include maximum PAE delta 0.040993 and PDE delta 0.125362, neither of
+which is the summary-confidence metric. The coordinate criterion is aligned
+RMSD, not a maximum per-atom error bound (raw maximum coordinate-component delta
+is 0.133721 Å). No generic threshold was changed.
+
+The first aggregation attempt (`final-v1`) rejected an undeclared bridge input:
+FireProt loads the pinned buffered Rust bridge; native does not. `final-v2`
+explicitly declares that expected artifact difference, retains the failed
+attempt, and passes Rust archive/condition authentication before numerical
+reporting. Measurements and outputs were not rerun or changed.
+
+[Complete three-pair evidence](../provenance/protenix_base_maintained_native_three_pairs.json).
+The composed HIP Graph follow-up remains a separate, unqualified experiment;
+Graph is not included in the result or maintained profile above.

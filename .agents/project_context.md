@@ -3971,3 +3971,62 @@ attributeallslownesstoitordescribeoldcontrolasidenticalnativeentry. Newlocal
 provenance/protenix_base_native_baseline_route_audit.json pinsbothrequest/execution,
 oldmanifestcountersandupstreamsourcehashes. README/Baseguideclarifybaseline.
 No directstudycontrolsmodified, noGPUoverlap; pendingdoc/evidencecommit.
+
+## 2026-10-07 two direct native pairs complete, last pair active
+
+Wrapper2442330confirmedLIVEelapsed16:44;index3native-r1TERMINALVERIFIED
+383.350351039s/all9bitsandconstructorselectionpass. Nativefirst382.844250605,
+second383.350351039; optimizedfirst112.639672091,second112.021993353. Thuscurrent
+native~383isreproducibleacrossfirsttworuns, notisolatedslowoutlier. Index4native-r2
+STARTED, finalindex5optimized-r2stillpending. Keepallmeasurements; finalthreepair
+aggregation/READMEratio/GraphGPUqualificationnotcomplete. Currentmasterf711328
+pushed, postcommitGitNexuscurrentanddetect_changesallcleanbeforethismemoryappend.
+No remotechangesorsync/GPUoverlap. SamepreparedGraphscript/bundlelocalonly.
+
+Local /tmp/fireprot-summarize-composed-graph.py nowprepared(ASTPASS),NOTexecuted
+ortransferred. ReadscompleteGraphdriver/order/control/sourcepins, checksG12off/on
+sameworkload/profilesexceptflag, actual280vs1048Pythoncontractionsandlogical1048,
+Lt140vs524each/no fallback, dualoneallocation, on4captures36replays. Rustcompare-npz
+rechecksall9exacttoanchor; compare-runsexpectedgraphflag/profilehashonly, unchanged
+gatesmustPASS. FreshTAGoutputs preserveallfailedreports. Scriptneedsrealartifact
+qualificationafterGraphstudy; doNOTtreatASTvalidationasperformance/correctness.
+
+## 2026-10-07 maintained direct native study COMPLETE: 3.42210x
+
+Wrapper2442330 TERMINAL SUCCESS(driverexit0), sixverifiedruns and3alignedchecks.
+NativeE2E[382.844250605,383.350351039,387.153919299]; optimized
+[112.639672091,112.021993353,111.644131692]. Medians383.350351039->112.021993353,
+3.4220989965x/70.77817%less. Modelmedians358.508248045->87.516323107,4.09647x.
+All6all9bitsvsownpredictionanchors; actualfastinitselected1/noerrors/norecovery.
+EachcrossarmallatomalignedRMSD.00609982394215158A;summaryconfmax4.959106445e-5,
+exactmetadata/CIFidentitiespass. UserpolicyPASS; genericlegacy.001AFAIL retained,
+performance null. FullconfidencearraysdiagnosticmaxPAE.0409927368/PDE.1253623962;
+NOTcrossarmbitwise. Rawmaxcoordinatecomponent.13372135A isNOTuserRMSDcriterion.
+
+Aggregatorfinal-v1FAILEDconditionsbeforemetrics: missingexpectedcandidateonly
+launch.inputs.rust-bridge. PreservedemptyJSON/stderr/spec. Addedexplicitdescriptor
+fromverifiedprofilepinnedbridge (baseline null), no gatechanges. final-v2SUCCESS
+on same6archives. Copiedfullsummaryto
+provenance/protenix_base_maintained_native_three_pairs.json. README/Baseguide
+updateddirect3.422xentryandcorrectnessscope, uncommitted. FreshGitNexusimpact
+summarizeLOW1caller afterdisambiguation; onlyscript__main__. localASTPASS, real
+sixrunaggregationvalidateschange. Needcommitdocs/evidence/aggregatorfix.
+
+Graph followup rootoutputs/experiments/protenix-base-composed-trunk-graph-20261007
+preparedusinglocalgenerator and4filestransferafterdirectterminal. Snapshothelpers
+insideRustfingerprintedworkerswithrelativeimports; maintainedremoteuntouched.
+Wrapper2456043TERMINALFAILURE: eagerOFF rejectedfirsttrunk signature;16dual
+projections/8MSAcontractionsalreadyran;onNEVERstarted. Alllogs/outputsretained.
+FailuregenericUnsupportedtrunkgraphinputsorstream; no guardsrelaxed. Addedlocal
+rejected_signature detailedmetadata totrunk_graph.py onlyexceptionbranch after
+freshindex/impact(noresolvedcallers, manuallyreviewedstack.forwardassignment).
+
+CURRENT LIVE diagnostic-onlyOFFwrapper2457206, root
+outputs/experiments/protenix-base-composed-trunk-graph-diagnostic-v2-20261007.
+Freshsnapshotwithdiagnostic-onlysource, oldrootunchanged; onlyOFFprepared; HIP7.
+Sameguardfailureexpectedbutnowbase-composed-trunk-graph.json records exact flags,
+shapes,strides,devices,stream,kwargs. Inspectwhen terminal beforefix; noGraphON.
+Local/tmp/fireprot-prepare-composed-graph-diagnostic-v2.py andsourcebundle
+/tmp/fireprot-composed-graph-source-diagnostic-v2. Sourceoriginlabela288ecd+diagnostics.
+No remoteactivejobsbeforelaunch, timeout1900 each1800. Goalactive: Graphqualification
+andfinalplateaudecisionpending; directREADMEresultnowcompleteawaitingcommit.

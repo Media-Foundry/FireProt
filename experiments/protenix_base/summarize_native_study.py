@@ -104,6 +104,9 @@ def summarize(study, executable, tag='final-v1'):
             invocation=pin(inv_path), accepted=pin(out/'accepted.json')))
     if profiles['native'] != profiles['optimized']:
         raise RuntimeError('Undeclared profile differences')
+    bridge_path = Path(profiles['optimized']['environment']['FIREPROT_BRIDGE_LIBRARY']).resolve()
+    bridge = dict(canonical_path=str(bridge_path), name='rust-bridge',
+                  sha256=pin(bridge_path)['sha256'])
     for rows in groups.values():
         rows.sort(key=lambda row: row['pair'])
     spec = dict(schema_version=1,
@@ -111,6 +114,7 @@ def summarize(study, executable, tag='final-v1'):
         expected_changes={
             'backend': dict(baseline='native', candidate='fireprot'),
             'launch.environment.FIREPROT_ENABLE_BASE_N1000_OPTIMIZATIONS': dict(baseline='0', candidate='1'),
+            'launch.inputs.rust-bridge': dict(baseline=None, candidate=bridge),
             'invocation.profile_sha256': dict(baseline=pin(study/'native-profile.json')['sha256'],
                                             candidate=pin(study/'optimized-profile.json')['sha256'])})
     for side, arm in [('baseline', 'native'), ('candidate', 'optimized')]:
@@ -124,6 +128,8 @@ def summarize(study, executable, tag='final-v1'):
     process = subprocess.run([str(executable), 'compare-runs', str(spec_path)], capture_output=True, text=True)
     comparison_path.write_text(process.stdout)
     (study/f'{tag}-legacy-stderr.log').write_text(process.stderr)
+    if not process.stdout.strip():
+        raise RuntimeError('Rust archive/condition comparison failed: ' + process.stderr.strip())
     comparison = json.loads(process.stdout)  # A condition/authentication failure is not a numerical report.
     if process.returncode not in (0, 1) or len(comparison['pairs']) != 3:
         raise RuntimeError('Rust archive/condition comparison failed')

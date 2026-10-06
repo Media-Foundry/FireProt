@@ -48,7 +48,8 @@ def main(controls_path, destination):
         with torch.inference_mode():
             split = OwnedScoreSoftmax()
             candidate = model_workspace.ModelWorkspaceFusion(control['fusion'],
-                microbatch=control.get('microbatch', 256))
+                microbatch=control.get('microbatch', 256),
+                allocation_policy=control.get('allocation_policy', 'ordinary'))
             measured_batches = tuple(b for b in (128, 256, 512, 1024) if b % candidate.microbatch == 0)
             report.update(microbatch=candidate.microbatch, retained_workspace_bytes=candidate.retained_bytes)
             previous = None
@@ -112,6 +113,9 @@ def main(controls_path, destination):
             del args
             report['workspace_before_close'] = candidate.manifest()
             r = report['workspace_before_close']
+            expected_releases = int(candidate.allocation_policy == 'release_cached_once')
+            if r['cache_release_attempts'] != expected_releases or r['cache_releases_completed'] != expected_releases:
+                raise RuntimeError('One-time cache release accounting failed')
             expected_calls = {str(b): 6 for b in measured_batches}
             if (r['allocations'] != 1 or r['successful_kernel_calls'] != sum(
                         6 * b // candidate.microbatch for b in measured_batches)

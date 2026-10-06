@@ -378,3 +378,26 @@ the pair mask; a CPU reproduction produces mask stride(1,N*N,N*N,N) and a
 noncontiguous outer slice. This is a plausible source of layout fallback, not
 an observed rejected-tensor trace. Do not broaden dispatch without a measured
 layout fixture and full probability/output gates.
+
+### Optional release of free cache before first allocation
+
+Hashed controls may select `allocation_policy: "release_cached_once"` instead
+of the default `"ordinary"`. After Rust reservation and stream/device binding,
+the owner calls `torch.cuda.empty_cache()` once before allocating scores with
+ordinary strict `torch.empty`. Live tensors, deterministic execution and memory
+filling remain intact. Subsequent calls reuse the same scores without another
+cache release. Unsupported inputs and an unused owner never trigger this action.
+A cache-release exception poisons the owner and propagates; cleanup still drains
+before releasing the conservative Rust charge. Manifests distinguish attempted
+and completed cache releases.
+
+This is an explicit allocation-policy experiment motivated by the synthetic
+segment reproduction and actual tuner OOMs. It is not a claimed model fix.
+All81 related CPU tests pass; the ordering regression test fails against the
+previous implementation. The capacity128 GPU qualification passes24 complete
+calls across B128/256/512/1024 with all probability/output bits, guards and
+release accounting unchanged. Exactly one cache release completes. See
+`provenance/openfold3_workspace_release_cache_qualification.json`.
+
+A fresh isolated N1536 trial is running with this option, unchanged capacity128
+and unchanged layout predicates. Model acceptance and E2E remain pending.

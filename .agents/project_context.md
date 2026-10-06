@@ -1768,3 +1768,58 @@ LocalONLY /tmp/fireprot-prepare-cap128-pairs-v1.py requiresbothgates+>1000calls;
 neveruploaded/executed. DoNOTlaunchyetmerelybecausecoveragegatepasses: resolve
 remainingOOM/layoutfirst. /tmp/fireprot-cap128-paired-v1 doesnotexist.
 AcceptedE2Eclaimsremainunchanged;keepgoalactive,substantialprogressnotplateau.
+
+## One-time cache release implemented and GPU-qualified (2026-10-06)
+
+Previous turn pushed8d616fb (capacity128 exact model gate and remaining issues).
+This turn is real progress: implemented an opt-in allocation policy, tested it,
+and launched a fresh model trial. No plateau or external blocker established.
+
+ModelWorkspaceFusion accepts allocation_policy='ordinary' (default) or
+'release_cached_once'. Hashed controls pass the option through load_workspace;
+qualifier honors the same field. Under the existing owner/stream/strict checks,
+_allocate reserves the Rust lease, binds device/stream, then optionally calls
+Torch empty_cache exactly once before ordinary strict torch.empty. Live tensors
+and memory filling remain intact. Counters distinguish attempts/completions.
+Failure propagates and poisons the owner without submission/fallback; close
+retains the existing conservative charge/drain rules. This is tensor-allocation
+policy within the current plan, not a new framework allocator service. No Rust
+or HIP math changes. Default and unused workspaces never release cache.
+
+81 related CPU tests pass. The new ordering test first failed against the old
+constructor (missing option), then passed. New tests cover no repeat release,
+reservation/binding order, unused/default behavior, invalid options and exact
+failure identity with no allocation. Current plan unchanged; reanchor snapshot
+/tmp/fireprot-allocation-policy-provenance.json. Impact class LOW (benchmark,
+qualifier, dispatcher), loader UNKNOWN/no indexed callers cross-checked by rg:
+worker overlay and dispatch tests. Existing benchmark keeps default ordinary.
+
+GPU root /tmp/fireprot-workspace-release-cache-v1, session66479 terminal0.
+Capacity128,24 complete calls,90 launches, all probability/output bits and guards
+pass; one cache release, one4.5GiB allocation, complete physical/Rust release.
+Source overlay SHA8d80f4e8983ca88ff903eb5803abe12801417248b9b4597295174c94caf30f4a.
+Evidence provenance/openfold3_workspace_release_cache_qualification.json.
+Archive workspace-release-cache-v1-qualification.tar.gz SHA
+9d0437493e8b6e8c9734a834361ba5ca9151c49e5316dcdee1575517565e739d,
+2585734bytes under usual durable archive root. No model fix or speedup claim yet.
+
+ACTIVE: /tmp/fireprot-model-release-cache-v1 on DiamondHill HIP7.
+Driver2060234, Rust child2060243, detached with start_new_session; poll actual
+PID/start/exit/log. Never restart for a transport/observation timeout.
+Output /media/IntelSSD/fireprot/outputs/model-release-cache-n1536-0.
+Prepared from exact cap128 model plus qualified model_workspace/dispatcher;
+all files bound in preparation.json. Local/remote preparer
+/tmp/fireprot-prepare-release-cache-model-v1.py. All8GCD idle before launch.
+StrictFP32 R3/D200/S1 seed101; same capacity128/layouts, only allocation policy
+changes. Scoped tuner observer remains enabled. collect.py1536 requires all11
+and complete CIF against native+D16, lease release and exactly one cache release.
+Run collector only after returncode0. Keep this diagnostic isolated; no other
+GPU job until terminal. Archive model before changing any deployment files.
+
+Next: inspect whether MSA/Pairformer recover1024 and whether OOM disappears.
+Then address ending-node transposed mask with explicitly qualified fixtures and
+normalization (or capture rejected metadata if needed). Current model still
+rejects noncontiguous masks; do not silently widen capabilities. N1000/pair
+preparers from preceding turn remain unrun and target the old implementation;
+prepare fresh roots after selecting the improved implementation. Accepted E2E
+claims unchanged. Keep goal active.

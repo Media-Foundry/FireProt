@@ -79,3 +79,14 @@ def test_hashed_control_selects_capacity_with_legacy_default(tmp_path, capacity)
     with patch('experiments.mfma_qk.workspace_dispatch.ModelWorkspaceFusion') as loader:
         load_workspace(p, hashlib.sha256(p.read_bytes()).hexdigest())
         loader.assert_called_once_with(control['fusion'], microbatch=256 if capacity is None else capacity)
+
+
+def test_hashed_control_selects_allocation_policy(tmp_path):
+    import hashlib
+    import json
+    control = {'fusion': {}, 'microbatch': 128, 'allocation_policy': 'release_cached_once'}
+    p = tmp_path / 'control.json'
+    p.write_text(json.dumps(control))
+    with patch('experiments.mfma_qk.workspace_dispatch.ModelWorkspaceFusion') as loader:
+        load_workspace(p, hashlib.sha256(p.read_bytes()).hexdigest())
+        loader.assert_called_once_with({}, microbatch=128, allocation_policy='release_cached_once')

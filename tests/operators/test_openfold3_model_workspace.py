@@ -232,3 +232,57 @@ def test_smaller_outer_batch_rejected_by_default_pool():
     mask = torch.empty(1, 1, 1, 1536, device='meta')
     bias = torch.empty(1, 4, 1536, 1536, device='meta')
     assert p.eligibility(q, q, q, mask, bias) == (False, 'unmeasured_outer_batch')
+
+
+def test_release_cached_policy_runs_once_after_reservation_before_allocation():
+    with patch('experiments.mfma_qk.model_workspace.WorkspaceFusion', FakePool):
+        p = ModelWorkspaceFusion({}, allocation_policy='release_cached_once')
+    observed = []
+    def release_cache():
+        r = p.manifest()
+        observed.append((r['lease']['state'], r['allocations'], p._pool._device.index))
+    with patch('torch.cuda.empty_cache', side_effect=release_cache) as release:
+        fake_call(p)
+        fake_call(p, 512)
+        release.assert_called_once_with()
+    assert observed == [('reserved', 0, 7)]
+    assert p.manifest()['cache_release_attempts'] == 1
+    assert p.manifest()['cache_releases_completed'] == 1
+    p.close()
+
+
+def test_default_and_unused_policy_never_release_cache():
+    with patch('torch.cuda.empty_cache') as release:
+        p = instance()
+        fake_call(p)
+        p.close()
+        with patch('experiments.mfma_qk.model_workspace.WorkspaceFusion', FakePool):
+            unused = ModelWorkspaceFusion({}, allocation_policy='release_cached_once')
+        unused.close()
+        release.assert_not_called()
+    assert unused.manifest()['cache_release_attempts'] == 0
+
+
+def test_cache_release_failure_poisoned_without_allocation_or_fallback():
+    with patch('experiments.mfma_qk.model_workspace.WorkspaceFusion', FakePool):
+        p = ModelWorkspaceFusion({}, allocation_policy='release_cached_once')
+    error = RuntimeError('allocator cache release failed')
+    with patch('torch.cuda.empty_cache', side_effect=error):
+        with pytest.raises(RuntimeError) as caught:
+            fake_call(p)
+    assert caught.value is error
+    r = p.manifest()
+    assert r['cache_release_attempts'] == 1 and r['cache_releases_completed'] == 0
+    assert r['allocations'] == r['successful_kernel_calls'] == 0
+    assert r['closed'] and r['lease']['state'] == 'failed'
+    assert r['lease']['charged_bytes'] == BYTES and r['lease']['committed_bytes'] == 0
+    p.close()
+    assert p.manifest()['lease']['charged_bytes'] == 0
+
+
+@pytest.mark.parametrize('policy', [None, True, 'always', 'release_cached'])
+def test_unknown_allocation_policy_rejected_before_loading(policy):
+    with patch('experiments.mfma_qk.model_workspace.WorkspaceFusion') as loader:
+        with pytest.raises(ValueError, match='allocation policy'):
+            ModelWorkspaceFusion({}, allocation_policy=policy)
+        loader.assert_not_called()

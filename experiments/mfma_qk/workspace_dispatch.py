@@ -14,7 +14,10 @@ def load_workspace(path, expected_sha256):
     if hashlib.sha256(data).hexdigest() != expected_sha256:
         raise ValueError('Workspace control file hash mismatch')
     control = json.loads(data)
-    return ModelWorkspaceFusion(control['fusion'], microbatch=control.get('microbatch', 256))
+    options = ({'allocation_policy': control['allocation_policy']}
+               if 'allocation_policy' in control else {})
+    return ModelWorkspaceFusion(control['fusion'], microbatch=control.get('microbatch', 256),
+                                **options)
 
 
 class WorkspaceDispatcher:

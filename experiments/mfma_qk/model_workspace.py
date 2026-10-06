@@ -17,9 +17,14 @@ SCORE_SHAPE = (256, 4, 1536, 1536)
 
 
 class ModelWorkspaceFusion:
-    def __init__(self, control, *, microbatch=256):
+    def __init__(self, control, *, microbatch=256, allocation_policy='ordinary'):
         if type(microbatch) is not int or microbatch not in (32, 128, 256):
             raise ValueError('Only explicitly qualified capacities32/128/256 are supported')
+        if type(allocation_policy) is not str or allocation_policy not in (
+                'ordinary', 'release_cached_once'):
+            raise ValueError('Unknown experimental allocation policy')
+        self.allocation_policy = allocation_policy
+        self.cache_release_attempts = self.cache_releases_completed = 0
         self.microbatch = microbatch
         self.score_shape = (microbatch, 4, 1536, 1536)
         self.retained_bytes = microbatch * 4 * 1536 * 1536 * 4
@@ -75,6 +80,13 @@ class ModelWorkspaceFusion:
         self._lease.reserve(query.device.index, stream)
         # Bind before allocation so interrupted initialization is also drained.
         self._pool._device, self._pool._stream = query.device, stream
+        if self.allocation_policy == 'release_cached_once':
+            # A retained pool can otherwise pin part of a much larger cached
+            # segment needed by subsequent upstream autotuning allocations.
+            # Preserve live tensors, the ordinary allocator and strict fill.
+            self.cache_release_attempts += 1
+            torch.cuda.empty_cache()
+            self.cache_releases_completed += 1
         self._pool._scores = torch.empty(self.score_shape, device=query.device, dtype=query.dtype)
         self._pool.allocations += 1
         self._lease.allocation_committed()
@@ -140,6 +152,9 @@ class ModelWorkspaceFusion:
     def manifest(self):
         return dict(policy_engine=identity, lease=json.loads(self._lease.manifest()),
                     microbatch=self.microbatch, retained_bytes=self.retained_bytes,
+                    allocation_policy=self.allocation_policy,
+                    cache_release_attempts=self.cache_release_attempts,
+                    cache_releases_completed=self.cache_releases_completed,
                     kernel=self._pool.receipt, allocations=self._pool.allocations,
                     successful_kernel_calls=self._pool.calls,
                     calls_by_batch=dict(self.calls_by_batch), closed=self._closed,

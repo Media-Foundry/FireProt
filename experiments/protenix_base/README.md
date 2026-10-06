@@ -297,3 +297,23 @@ The subsequent G48 candidate also preserves all nine arrays exactly. Capture
 cost drops to 7.098824 s, but E2E is 113.415506 s, which does not improve on the
 G12 observation. This is a single candidate, not a repeated speedup claim.
 [G48 evidence](../../provenance/protenix_base_composed_graph_g48_trial.json).
+
+## Base unused-template preprocessing candidate (unqualified)
+
+`unused_templates.py` extends the existing Mini guard only inside an isolated
+worker context. Wrap the complete worker `predict` call so it covers dataset
+construction, not just model forward. `FIREPROT_SKIP_UNUSED_TEMPLATES=0/1` remains
+the control/treatment switch. The maintained adapter remains unchanged.
+
+The candidate requires Base-default v0.5.0, FP32, configured and actual template
+use disabled, zero template blocks, and the already pinned `TemplateEmbedder`
+consumer hash. Other models delegate to their existing policy; the hook restores
+on exception. Source inspection confirms Base v0.5.0 uses zero template blocks
+and the consumer exits before reading template tensors. The consumer hash is
+`74cf338ebc53b572dc12d6519392a09972c2a807beb1017c7fe0773536e301e5`.
+
+Seventeen CPU checks cover the new guard and existing Mini behavior. No complete
+Base GPU trial or E2E result exists yet. Verify all nine prediction arrays before
+making a performance claim; unused features and preprocessing RNG behavior must
+not alter the prediction. Do not enable this candidate in the maintained profile
+before qualification.

@@ -4117,3 +4117,58 @@ review/commit instead ofrelyingonpreviousgraph. NoGPUrunlaunchedyet. G48evidence
 andREADMEcontrolscopependingcommitwiththesechanges. Needfrozennewworker/common
 profileAB/BA/AB sixruns withmode maintained/on;same4helperfiles/controls/pins,
 HIP7, all9anchorcheckeachbeforecontinuing. Noextraexpensivenativerunsneeded.
+
+## 2026-10-07 maintained-vs-G12 three-pair study LIVE
+
+Maintainedcontrolmode/tests/G48evidenceCOMMITTED/PUSHEDmaster35a6409.46CPUchecksPASS.
+Freshindexstatusup-to-date/current/incompleteReasons[]; highstagedgate6existing
+install/loadflowsreviewed(manualearlyreturntomaincontext,nograph setup), re-gated
+thencommitted. Postcommitindexrefresh/finaldetect_changesallclean.
+
+CURRENT LIVE wrapper2462871, root
+outputs/experiments/protenix-base-maintained-vs-graph-pairs-20261007.
+Preparedusing/tmp/fireprot-prepare-maintained-graph-pairs.py andsourcebundle
+/tmp/fireprot-composed-graph-source-maintained-pairs onbothhosts; frozenhelpers
+origin35a6409. All6controls/reference/sourcepinschecked, identicalscience/profiles
+exceptmode,6freshoutputs,noGPUactiveatlaunch. HIP7 C10D200S1N1000seed101FP32.
+Order maintained,on,on,maintained,maintained,on; eachRustmeasure1800,overall4000.
+Driverall9BITSanchorbeforeverified/next. Script/study-plan/frozen-origins/pid/log
+atroot; driver-statusonlyterminal. DoNOTeditremoteoroverlapGPU/builds.
+Outputsprotenix-base-maintained-graph-{mode}-{index}-g12. Profilesmodeonlyeacharm;
+measurement{mode}-{index}-measurement; seeplanratherthaninferfilenames.
+
+NewLOCAL /tmp/fireprot-summarize-maintained-graph-pairs.py (ASTPASS,NOTexecuted or
+transferred) authenticatesall6pins/journal/constructor/counts, maintainedcontext
+implementationvsgraph4captures36replays, all9exactanchorchecksagain, thenRust
+compare-runsunchangedgateswithonlymode/profilehashdeclared. FreshTAGdefaultfinal-v1.
+Requiresdriverexit0; fullsummarygives3pairmedians/modelmedians/pairedratios. Useonly
+whenall6terminal. GoalactiveuntilGraphstabledecisionandfinalREADMEplateauaudit.
+Currentheadline3.42210x belongsnoGraphmaintainedpath, donotmultiplyincrements.
+
+## 2026-10-07 Graph repeats underway; independent Base template candidate
+
+Wrapper2462871 confirmedLIVEelapsed04:28; maintainedindex0TERMINALVERIFIED
+112.761228699s, Graphindex1TERMINALVERIFIED113.684114227s (Graphslowerfirstpair),
+index2Graphstarted. Allcompletedall9bits. No remote changes/GPUoverlap.
+
+Read-onlyauditfoundunexploredCPUpreprocessingtransferfromMini: features.py supports
+onlyMini-default0.5; Base-default0.5 configalso template_embedder.n_blocks0,
+use_templatefalse. UpstreamTemplateEmbedder.forward guardexitbeforeinputreads;
+ASTsourcehash74cf338e... matchesverifiedMini consumerpin exactly. Nativeinference
+stillcallsmap_to_standard/assemble evenwithuse_templateFalse; skippingmayreduce
+~featureworkbutNOmeasuredBasegainyet. Datasetcreatesexistingdummyfeaturesfor{}.
+
+NewLOCALUNCOMMITTED experiments/protenix_base/unused_templates.py context wraps
+entireworkerpredict (beforefeatures), temporarilyextendsfeatures._supportedONLY
+Base-default0.5FP32/templateunused/zero blocks/verifiedsource/flag1. Othermodels
+useoriginalpredicate, exceptionrestoreshook. Newtests/adapters/
+test_protenix_base_template_experiment.py +existingtest_protenix_features.py:
+17CPUchecksPASS. No maintainedcodechange, no remote transfer/GPUrunyet.
+Needfreshindex/impactfeatures._supported+build_template_features reviewbefore
+commit/frozenworkerpreparation. AfterGraphrepeatsterminal, canqualifyseparately:
+clonemaintainedworker, wrap__main__ bundle=predict in unused_templates.install;
+keepnoGraphmaintainedprofile andonlyfeatureflag0/1diff. Bothoutputsall9bits to
+maintainedanchor; inspectfeature_preparation skip/nativecounts andE2E. Neither
+assumeignoredfeaturesnorCPUtestsprovepredictionRNGequivalence. Ifno materialgain,
+reject; ifgainrepeatandsecondinput5ZMWbeforepromotion. This closesremaining
+Mini-to-Base preprocessingcandidate beforedeclaringE2Eplateau.

@@ -4081,3 +4081,39 @@ nootherGPUactivebeforelaunch. Needterminalandallchecks thencompareG48/G12setup/E
 ifmaterialgainrepeatmatchedbestgraph/eager. CurrentG12onlymarginalandstill~112.9,
 notbetterthanmaintained~112median; doNOTmultiplyratiosinto3.422directresult.
 No maintainedsource/profilechangeswhilecandidateactive.
+
+## 2026-10-07 G48 trial complete; direct maintained-vs-Graph confirmation next
+
+G48wrapper2461333 TERMINAL SUCCESSdriverexit0. E2E113.415505891s, capture7.098824058s,
+firstreplaysubmit.000096581s,1capture9replays280Python1048logical;all9BITSanchor,
+Lt140incoming140outgoingnofallback;dual280pairs. Peakallocated11636760576.
+LowercapturecostthanG12(11.65)butnotlowerE2E(G12on112.869). Evidencecopiedlocal
+provenance/protenix_base_composed_graph_g48_trial.json,currentlyuncommitted.
+NO GPUjobsactiveafterthiscandidate. Masterd57b25b pushedG12docs/evidence; refreshed
+GitNexusfinalgatecleanbeforeG48record. Goalactive; Graphnotpromoted.
+
+Next meaningfulstep: repeatBESTG12 directlyagainstMAINTAINED eagerentry, notjust
+experimentaloffside-streamguardedcontrol. Prepare newfrozenworker/profile pair
+withsameallsourcefiles; addexperimental mode 'maintained' totrunk_graph.install
+that delegates to maintainedbase_n1000.install and returns BEFOREside-stream/
+graphwrappercreation; modeon unchanged. Both useflagBASE_N1000_OPTIMIZATIONS1.
+DeclareonlyFIREPROT_BASE_COMPOSED_GRAPH maintained/on +profilehashdifference.
+ThreeAB/BA/ABpairs(~12min), eachall9exacttooptimizedanchor before next, fullRust
+compare-runsconditions/gates. This testsactualentryE2Eandavoidsmistakingguard/
+streamcontrol overhead for a production gain. Do NOT rerun expensive nativearm.
+If Graphno stablegain, retaincurrentmaintained3.422xdirectresultanddocumentplateau.
+No suchmodeadded/runslaunchedyet; beforeeditinginstall freshindex/impact/manual
+callercheck (frozenworker explicit import). PreserveallG12/G48/failureartifacts.
+
+## 2026-10-07 preparing direct maintained-eager versus G12 repeats
+
+VerifiednoactiveGPUworker/measurebeforework. Newexperimentalmaintainedmode in
+trunk_graph.install delegates to maintainedbase_n1000.install beforeTorch/helper
+imports/side-stream/graphguards; requiresopt-inflag1. Added2CPUtests delegation+
+exceptionunwindanddisabledflagrejection;46targetedtestspass. Modesoff/onunchanged.
+Initialimpactinstallunknown0callers; manualfrozenworkerimportreviewed. Subsequent
+CLIstatussaidstale despiteHEADd57+runnercurrent, so refreshingindexbeforefinal
+review/commit instead ofrelyingonpreviousgraph. NoGPUrunlaunchedyet. G48evidence
+andREADMEcontrolscopependingcommitwiththesechanges. Needfrozennewworker/common
+profileAB/BA/AB sixruns withmode maintained/on;same4helperfiles/controls/pins,
+HIP7, all9anchorcheckeachbeforecontinuing. Noextraexpensivenativerunsneeded.

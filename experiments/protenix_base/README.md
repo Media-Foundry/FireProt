@@ -286,3 +286,14 @@ pass. E2E is 113.765412 s off and 112.868515 s on (1.00795x), including 11.65471
 capture cost. Four captures and 36 replays preserve all ten trunk passes. This
 single small gain does not qualify a stable speedup or maintained promotion.
 [G12 evidence](../../provenance/protenix_base_composed_graph_g12_first_pair.json).
+
+`FIREPROT_BASE_COMPOSED_GRAPH=maintained` delegates directly to the maintained
+Base context, before constructing the experimental side stream or trunk guards.
+It requires `FIREPROT_ENABLE_BASE_N1000_OPTIMIZATIONS=1`. This is the control for
+confirming production-entry gains; `off` remains the earlier side-stream control.
+All arms retain the same frozen worker sources and scientific workload.
+
+The subsequent G48 candidate also preserves all nine arrays exactly. Capture
+cost drops to 7.098824 s, but E2E is 113.415506 s, which does not improve on the
+G12 observation. This is a single candidate, not a repeated speedup claim.
+[G48 evidence](../../provenance/protenix_base_composed_graph_g48_trial.json).

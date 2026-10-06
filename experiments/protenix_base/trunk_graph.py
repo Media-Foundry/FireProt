@@ -166,6 +166,14 @@ def _trunk(model, output, contract, side):
 
 @contextmanager
 def install(model, output, request, data):
+    mode = os.environ.get('FIREPROT_BASE_COMPOSED_GRAPH', 'off')
+    if mode == 'maintained':
+        from fireprot.adapters.protenix.base_n1000 import FLAG, install as maintained
+        if os.environ.get(FLAG) != '1':
+            raise RuntimeError('Maintained control requires the composed Base opt-in')
+        with maintained(model, output, request, data):
+            yield
+        return
     import torch
     from fireprot.adapters.protenix.base_n1000 import validate_contract
     from fireprot.adapters.protenix.base_n1000 import global_bias, local_bias, transition
@@ -173,9 +181,8 @@ def install(model, output, request, data):
     import graph_dual_storage
 
     atoms = validate_contract(request, data)
-    mode = os.environ.get('FIREPROT_BASE_COMPOSED_GRAPH', 'off')
     if mode not in ('off', 'on'):
-        raise ValueError('Expected composed graph off/on')
+        raise ValueError('Expected composed graph maintained/off/on')
     group_size = int(os.environ.get('FIREPROT_BASE_GRAPH_GROUP_SIZE', '12'))
     contract = ReplayContract(mode == 'on', group_size)
     if (model.training or not torch.version.hip

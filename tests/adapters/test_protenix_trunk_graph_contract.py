@@ -82,3 +82,34 @@ def test_eager_control_keeps_complete_python_coverage():
 def test_unqualified_partitions_are_rejected(enabled, group):
     with pytest.raises(ValueError):
         ReplayContract(enabled, group)
+
+
+def test_maintained_control_delegates_and_unwinds_without_graph_setup(monkeypatch):
+    from contextlib import contextmanager
+    from fireprot.adapters.protenix import base_n1000
+    events = []
+    args = (object(), object(), object(), object())
+    @contextmanager
+    def maintained(*received):
+        assert received == args
+        events.append('entered')
+        try:
+            yield
+        finally:
+            events.append('exited')
+    monkeypatch.setenv('FIREPROT_BASE_COMPOSED_GRAPH', 'maintained')
+    monkeypatch.setenv(base_n1000.FLAG, '1')
+    monkeypatch.setattr(base_n1000, 'install', maintained)
+    with pytest.raises(ValueError, match='model failed'):
+        with module.install(*args):
+            assert events == ['entered']
+            raise ValueError('model failed')
+    assert events == ['entered', 'exited']
+
+
+def test_maintained_control_requires_enabled_optimization(monkeypatch):
+    monkeypatch.setenv('FIREPROT_BASE_COMPOSED_GRAPH', 'maintained')
+    monkeypatch.delenv('FIREPROT_ENABLE_BASE_N1000_OPTIMIZATIONS', raising=False)
+    with pytest.raises(RuntimeError, match='opt-in'):
+        with module.install(None, None, None, None):
+            pytest.fail('Disabled control was accepted')

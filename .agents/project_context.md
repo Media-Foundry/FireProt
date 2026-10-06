@@ -2578,3 +2578,53 @@ First N1000 native complete invocation measurement launched PID2289487 at
 outputs/experiments/protenix-base-first-20261006 on DiamondHill, output
 outputs/protenix-base-n1000-native. Check terminal result before any next GPU
 experiment. No Base GPU speedup or numerical agreement claimed yet.
+
+## 2026-10-06 Base first migration results and strict initialization qualification
+
+Base entry/config commit b7550f1 pushed on protenix-base-integration. GPU restriction
+is HIP6/7 only; every GPU run in this round used HIP7. User narrowed experiments:
+N1000 is sufficient; approximately N600 allowed; do not launch N1536 this round.
+All five GPU invocations and CPU initialization probe are now TERMINAL, no active
+experiment remains.
+
+Initial nondeterministic Base FP32 C10/D200/S1 seed101 N1000 pair completed.
+Native E2E419.05271204s/model349.312415634s, broad Mini HIP/CK transplant
+E2E185.191887449s/model115.086834583s. CK attention and packed multiplication each
+selected1048times. REJECTED: coordinate alignedRMSD0.0467942884A >1e-3 gate;
+confidence maxdelta0.000518799. Rust withholds performance verdict. Identical
+native repeat ALSO REJECTED: alignedRMSD0.00828346279A, so do NOT assign all error
+to CK. Initial native and candidate used upstream deterministic=False.
+Evidence provenance/protenix_base_first_transplant.json retains both failures.
+
+Base worker now MANDATES strict deterministic algorithms, warn_only=False and
+fill_uninitialized_memory=True, configdeterministic=True, for bothbackends;
+asserts contract at model boundary. Mini/Tiny behavior unchanged. Explicit input
+benchmarks/protenix/inputs/umem_L01000_prefix600.json is a 600residue prefix ofthe
+N1000 developmentcase; metadata records derivation, not scientificaccuracy set.
+
+CPU experiment experiments/protenix_base/check_initialization.py compared actual
+Base native vs deferredconstruction, strictcheckpointload, allstate tensors/all
+buffers and Python/NumPy/TorchCPURNG: EXACT. Native50.22233s vs3.63491s construction,
+1553deferredcalls/269132320uniformelements, no unsupportedinitializers. Extended
+construction._reason only to add Basev0.5 FP32, retaining fullcoveragecheck,
+sourcehashes/thread/RNGguards/native recovery. Tests now cover Base missing/full
+checkpoints;42focusedtests pass. All6Base requests pass Rustinspect.
+
+StrictN600 C10D200S1seed101 FP32 noMSA/templates, HIP7 serialnative->candidate pair:
+E2E179.349930964->127.046555968s=1.41168668129x, ONEPAIR only(insufficient_repeats),
+notsteady-state model speedup. All9arrays bitwise, rawcoords0/confidence0, CIFatom
+identitiesexact. Runtimefastconstruction selected1/recovery0/errors0, all1048calls
+per trianglefamily native. Profile configs/diamondhill/protenix-base-init-only.json
+explicitlydisables GPU substitutions, enablesfastinit, retains templates.
+Use configs/requests/protenix-base-n600-{native,fireprot}.json withfreshIDs/outputs.
+Qualifiedscopeisinitialization-only N600. Broadoperator profile remains experimental,
+strictN1000 operatorqualification OPEN; no accepted CK/GPUoperator speedup onBase.
+
+Durablearchive(all5GPUoutputs/controls/comparisons/CPUreceipt):
+/media/IntelSSD/fireprot/outputs/experiments/protenix-base-qualification-20261006.tar.gz
+SHA25639a2bd4260e632529ee5b9088323c2f3a1282f697be2f3ad9286c4b92fc0d20d.
+Evidence provenance/protenix_base_strict600_initialization.json and
+provenance/protenix_base_cpu_initialization.json. README/docs nowreportvalidated
+singlepair1.412x separatelyfromfailedbroadtransplant. Do nottransferthese
+numbers toN1000/N1536 ordefaultS5. Subsequentoperatorisolation needsstrictnative
+reference andpertrialcorrectnesschecks; no thresholdrelaxation authorized.

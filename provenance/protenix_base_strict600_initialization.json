@@ -1,0 +1,184 @@
+{
+  "treatment_description": "Strict deterministic Base, native construction versus checkpoint-covered RNG-preserving construction; GPU operators native",
+  "pairs": [
+    {
+      "baseline_run_id": "protenix-base-strict600-native",
+      "candidate_run_id": "protenix-base-strict600-fireprot",
+      "samples": [
+        {
+          "sample": 0,
+          "policy": "protenix-established-1e-3-v1",
+          "coordinates": {
+            "atom_count": 4770,
+            "raw_rmsd_angstrom": 0.0,
+            "aligned_rmsd_angstrom": 1.0139924900173891e-14,
+            "max_abs_coordinate_delta_angstrom": 0.0
+          },
+          "confidence": {
+            "numeric_leaf_count": 15,
+            "max_abs_delta": 0.0,
+            "mean_abs_delta": 0.0,
+            "missing_from_candidate": [],
+            "extra_in_candidate": []
+          },
+          "exact_arrays": {
+            "confidence.atom_is_polymer": true,
+            "confidence.atom_to_token_idx": true,
+            "confidence.token_asym_id": true,
+            "confidence.token_has_frame": true
+          },
+          "floating_confidence_diagnostics": {
+            "confidence.atom_plddt": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.contact_probs": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.token_pair_pae": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.token_pair_pde": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            }
+          },
+          "passed": true
+        }
+      ],
+      "cif_atom_identities_checked": true
+    }
+  ],
+  "correctness_passed": true,
+  "performance": {
+    "baseline": {
+      "count": 1,
+      "min": 179.349930964,
+      "median": 179.349930964,
+      "p95": 179.349930964,
+      "max": 179.349930964,
+      "mean": 179.349930964
+    },
+    "candidate": {
+      "count": 1,
+      "min": 127.046555968,
+      "median": 127.046555968,
+      "p95": 127.046555968,
+      "max": 127.046555968,
+      "mean": 127.046555968
+    },
+    "median_speedup": 1.4116866812916518,
+    "p95_speedup": 1.4116866812916518,
+    "paired_speedups": [
+      1.4116866812916518
+    ],
+    "paired_summary": {
+      "count": 1,
+      "min": 1.4116866812916518,
+      "median": 1.4116866812916518,
+      "p95": 1.4116866812916518,
+      "max": 1.4116866812916518,
+      "mean": 1.4116866812916518
+    },
+    "observed_trend": "insufficient_repeats",
+    "changes": {
+      "backend": {
+        "baseline": "native",
+        "candidate": "fireprot"
+      },
+      "launch.inputs.rust-bridge": {
+        "baseline": null,
+        "candidate": {
+          "canonical_path": "/media/IntelSSD/fireprot/target/release/lib_fireprot_bridge.so",
+          "name": "rust-bridge",
+          "sha256": "df7d1537c118d9ad495e820a17a8c9a5e98b8b4eb3bb0f1979317ab4fc23b3e6"
+        }
+      }
+    }
+  },
+  "exact_arrays": {
+    "coordinates": true,
+    "confidence.atom_plddt": true,
+    "confidence.token_pair_pde": true,
+    "confidence.token_pair_pae": true,
+    "confidence.contact_probs": true,
+    "confidence.token_has_frame": true,
+    "confidence.token_asym_id": true,
+    "confidence.atom_to_token_idx": true,
+    "confidence.atom_is_polymer": true
+  },
+  "construction": {
+    "enabled": true,
+    "installed": true,
+    "unavailable": null,
+    "contract": {
+      "scipy": "1.18.1",
+      "source_sha256": {
+        "initializer": "72e6ede89fb399efd49db04631802f05cce93eb6f81ee5cf16f11f5d55c1e14d",
+        "init_model": "14b306c00c2427536642f80f85a09f2a15b14b872e825614a186671b802d3c4a",
+        "load_checkpoint": "6da10f959743bb9ef95d4184f64b1def38df3b9874c02ec19021e1de991316ff",
+        "sampler": "bd951a20257379d57e1b9fd97844c7fae6eb6d1f0207f39572f5687fbbcd919a"
+      },
+      "model_sha256": "6628a5db11d411479f9046005ab5306ba9fb6180bb82190a877e961f1361cf23"
+    },
+    "counts": {
+      "attempted": 1,
+      "selected": 1,
+      "recovered": 0,
+      "native": 0,
+      "errors": 0
+    },
+    "native_reasons": {},
+    "records": [
+      {
+        "uniform_calls": 1553,
+        "uniform_elements": 269132320,
+        "native_initializer_calls": 0,
+        "initialization_ms": 4094.6725469548255,
+        "selected": true,
+        "missing_keys": [],
+        "checkpoint_and_recovery_ms": 1056.0708559351042
+      }
+    ]
+  },
+  "operator_selection_counts": [
+    {
+      "operation": "triangle_attention",
+      "implementation": "native",
+      "count": 1048
+    },
+    {
+      "operation": "triangle_multiplication",
+      "implementation": "native",
+      "count": 1048
+    }
+  ],
+  "workload": {
+    "model": "protenix_base_default_v0.5.0",
+    "length": 600,
+    "dtype": "float32",
+    "cycles": 10,
+    "diffusion_steps": 200,
+    "samples": 1,
+    "seed": 101,
+    "msa": false,
+    "templates": false,
+    "strict_deterministic": true,
+    "fill_uninitialized_memory": true,
+    "hip_device": 7
+  },
+  "scope": "Complete Rust invocation; one pair only; no steady-state model speedup claim",
+  "evidence_root": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-strict600-20261006",
+  "native_invocation_sha256": "97bdc2707e6d7d97294cb18d462b6cabea4e638701a32faee1b0a3fe6bac9c62",
+  "candidate_invocation_sha256": "1a59ab9994f31473474763af8cdadce8e3da4292881c369ef3939c822ea3c792",
+  "archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-qualification-20261006.tar.gz",
+    "sha256": "39a2bd4260e632529ee5b9088323c2f3a1282f697be2f3ad9286c4b92fc0d20d"
+  }
+}

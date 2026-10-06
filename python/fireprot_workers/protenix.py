@@ -79,6 +79,13 @@ def predict(request, channel):
         data_configs[key] = request['resources'][key]['path']
     inference_configs['load_checkpoint_dir'] = str(checkpoint.parent)
     inference_configs['sorted_by_ranking_score'] = False
+    base_enabled = workload['model_name'] == 'protenix_base_default_v0.5.0'
+    if base_enabled:
+        # Base C10/D200 native repeats exceed the numerical gate otherwise.
+        # This is mandatory for both backends of the Base worker contract.
+        inference_configs['deterministic'] = True
+        torch.use_deterministic_algorithms(True)
+        torch.utils.deterministic.fill_uninitialized_memory = True
 
     runtime_manifest = None
     kernel = 'torch'
@@ -106,6 +113,11 @@ def predict(request, channel):
     def capture(runner, data):
         nonlocal calls, model_seconds
         cfg = runner.model.configs
+        if base_enabled and (not cfg.deterministic
+                or not torch.are_deterministic_algorithms_enabled()
+                or torch.is_deterministic_algorithms_warn_only_enabled()
+                or not torch.utils.deterministic.fill_uninitialized_memory):
+            raise RuntimeError('Base requires strict deterministic execution with memory filling')
         if (cfg.model.N_cycle, cfg.sample_diffusion.N_step, cfg.sample_diffusion.N_sample, cfg.dtype) != (
                 workload['cycles'], workload['diffusion_steps'], workload['samples'], 'fp32'):
             raise RuntimeError('Protenix workload changed at the model boundary')

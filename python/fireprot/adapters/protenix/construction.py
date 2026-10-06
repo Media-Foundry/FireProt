@@ -1,4 +1,4 @@
-"""Opt-in checkpoint-covered Mini construction with native recovery and exact RNG advancement."""
+"""Opt-in checkpoint-covered Mini/Base construction with native recovery and exact RNG advancement."""
 from __future__ import annotations
 
 import contextlib
@@ -79,7 +79,8 @@ def _reason(runner: Any, layers: Any, primitives: Any, initializer: Any, sampler
         return "disabled"
     if threading.current_thread() is not threading.main_thread() or threading.active_count() != 1:
         return "requires_single_python_thread"
-    if getattr(runner.configs, "model_name", None) != "protenix_mini_default_v0.5.0":
+    if getattr(runner.configs, "model_name", None) not in (
+            "protenix_mini_default_v0.5.0", "protenix_base_default_v0.5.0"):
         return "unsupported_model"
     if getattr(runner.configs, "dtype", None) != "fp32":
         return "unsupported_dtype"

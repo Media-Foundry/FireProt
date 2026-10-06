@@ -59,16 +59,19 @@ def same_rng(a, b):
 
 
 @pytest.mark.parametrize("missing", [False, True])
-def test_checkpoint_and_rng_match_native(setup, missing):
+@pytest.mark.parametrize("model", ["protenix_mini_default_v0.5.0", "protenix_base_default_v0.5.0"])
+def test_checkpoint_and_rng_match_native(setup, missing, model):
     Runner, layers, primitives, original = setup
     before = c._capture_rng("cpu")
     reference = Runner(missing=missing)
+    reference.configs.model_name = model
     reference.init_model()
     reference.load_checkpoint()
     after = c._capture_rng("cpu")
     c._restore_rng(before)
     c._patch_runner(Runner, layers, primitives, truncnorm)
     candidate = Runner(missing=missing)
+    candidate.configs.model_name = model
     candidate.init_model()
     candidate.load_checkpoint()
     same_rng(after, c._capture_rng("cpu"))

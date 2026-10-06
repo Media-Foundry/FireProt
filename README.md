@@ -18,7 +18,7 @@ See the [Rust acceptance audit](docs/rust-acceptance.md).
 | Protenix Mini-ESM and Tiny-default v0.5.0 | `native`, `fireprot` | Mini-ESM N1000 with ESM2-3B; Tiny L124; model-specific gates |
 | AtlasFold 260703 **with AtlasLM-3B** | Native, chunked, HIP and fused HIP | N1000/N1536; exact public-output bytes; N1536 reference uses chunked native math |
 | OpenFold3 / OpenBind-0 | `native`, opt-in `hip_fused` | Strict deterministic FP32 N1000/N1536; all 11 arrays bitwise equal |
-| Protenix Base-default v0.5.0 | `native`, experimental `fireprot` | Strict CPU checkpoint load passed; GPU qualification in progress ([setup](docs/protenix-base.md)) |
+| Protenix Base-default v0.5.0 | `native`, experimental `fireprot` | Strict N600 initialization optimization: exact outputs; broad HIP/CK transplant unqualified ([status](docs/protenix-base.md)) |
 | OpenFold2, ESMFold and other models | Planned | No verified integration or speedup claim |
 
 Protenix and OpenFold3 are separate implementations. Precision, preprocessing,
@@ -133,6 +133,7 @@ warm or unflushed as specified in the linked evidence.
 
 | Model / length | Reference → optimized | Speedup | Timing boundary and evidence |
 | --- | ---: | ---: | --- |
+| Protenix Base, 600 aa, initialization only | 179.350 → 127.047 s | **1.412x** | Complete Rust invocation; one pair, strict deterministic C10/D200/S1; all 9 arrays exact ([details](docs/protenix-base.md#fast-construction-qualification)) |
 | Protenix Mini, 1000 aa | 82.074 → 27.949 s | **2.937x** | Historical worker request; three pairs [¹](docs/protenix-native-requests.md) |
 | Protenix Mini, 1536 aa | 177.345 → 45.596 s | **3.889x** | Historical worker request; three pairs [¹](docs/protenix-native-requests.md) |
 | AtlasFold + AtlasLM-3B, 1000 aa | 184.581 → 84.174 s | **2.193x** | Earlier packaged revision; one request pair [²](docs/atlasfold-performance.md#packaged-bias-reuse-and-batched-transpose) |

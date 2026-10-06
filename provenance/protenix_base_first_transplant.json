@@ -1,0 +1,154 @@
+{
+  "status": "rejected_correctness",
+  "workload": {
+    "model": "protenix_base_default_v0.5.0",
+    "length": 1000,
+    "cycles": 10,
+    "diffusion_steps": 200,
+    "samples": 1,
+    "seed": 101,
+    "dtype": "float32",
+    "msa": false,
+    "templates": false,
+    "hip_device": 7
+  },
+  "native_e2e_seconds": 419.05271204,
+  "candidate_e2e_seconds": 185.191887449,
+  "native_model_seconds": 349.3124156340491,
+  "candidate_model_seconds": 115.08683458308224,
+  "performance": null,
+  "comparison": [
+    {
+      "baseline_run_id": "protenix-base-n1000-native",
+      "candidate_run_id": "protenix-base-n1000-fireprot",
+      "samples": [
+        {
+          "sample": 0,
+          "policy": "protenix-established-1e-3-v1",
+          "coordinates": {
+            "atom_count": 7979,
+            "raw_rmsd_angstrom": 0.04679601199854614,
+            "aligned_rmsd_angstrom": 0.046794288427762294,
+            "max_abs_coordinate_delta_angstrom": 2.5512866973876953
+          },
+          "confidence": {
+            "numeric_leaf_count": 15,
+            "max_abs_delta": 0.000518798828125,
+            "mean_abs_delta": 3.9021670818328855e-05,
+            "missing_from_candidate": [],
+            "extra_in_candidate": []
+          },
+          "exact_arrays": {
+            "confidence.atom_is_polymer": true,
+            "confidence.atom_to_token_idx": true,
+            "confidence.token_asym_id": true,
+            "confidence.token_has_frame": true
+          },
+          "floating_confidence_diagnostics": {
+            "confidence.atom_plddt": {
+              "bitwise_equal": false,
+              "max_abs_delta": 0.00043454766273498535,
+              "passed": false
+            },
+            "confidence.contact_probs": {
+              "bitwise_equal": false,
+              "max_abs_delta": 6.109476089477539e-05,
+              "passed": false
+            },
+            "confidence.token_pair_pae": {
+              "bitwise_equal": false,
+              "max_abs_delta": 0.0800018310546875,
+              "passed": false
+            },
+            "confidence.token_pair_pde": {
+              "bitwise_equal": false,
+              "max_abs_delta": 0.15576934814453125,
+              "passed": false
+            }
+          },
+          "passed": false
+        }
+      ],
+      "cif_atom_identities_checked": true
+    }
+  ],
+  "operator_selection_counts": [
+    {
+      "operation": "triangle_attention",
+      "implementation": "amd-gfx90a-ck-tile-attention-f32-n1000",
+      "count": 1048
+    },
+    {
+      "operation": "triangle_multiplication",
+      "implementation": "amd-gfx90a-hip-triangle-packed-f32-n1000-c128",
+      "count": 1048
+    }
+  ],
+  "evidence_root": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-first-20261006",
+  "native_invocation_sha256": "8e7fb6564d5b4691dda8a4879b53b6467870c1741bf8eb3b90d0a97089f3432b",
+  "candidate_invocation_sha256": "79a6cd224214e648b391345058601e4005e060d0ef7d9ad94e35d8c186d8fbe9",
+  "interpretation": "Both native versus optimized and native repeat fail the fixed coordinate gate in upstream nondeterministic mode. No accepted speedup or isolated operator attribution.",
+  "native_repeat": {
+    "correctness_passed": false,
+    "pairs": [
+      {
+        "baseline_run_id": "protenix-base-n1000-native",
+        "candidate_run_id": "protenix-base-n1000-native-repeat",
+        "samples": [
+          {
+            "sample": 0,
+            "policy": "protenix-established-1e-3-v1",
+            "coordinates": {
+              "atom_count": 7979,
+              "raw_rmsd_angstrom": 0.008287035761516189,
+              "aligned_rmsd_angstrom": 0.008283462787045453,
+              "max_abs_coordinate_delta_angstrom": 0.14756298065185547
+            },
+            "confidence": {
+              "numeric_leaf_count": 15,
+              "max_abs_delta": 7.62939453125e-05,
+              "mean_abs_delta": 6.409486134847005e-06,
+              "missing_from_candidate": [],
+              "extra_in_candidate": []
+            },
+            "exact_arrays": {
+              "confidence.atom_is_polymer": true,
+              "confidence.atom_to_token_idx": true,
+              "confidence.token_asym_id": true,
+              "confidence.token_has_frame": true
+            },
+            "floating_confidence_diagnostics": {
+              "confidence.atom_plddt": {
+                "bitwise_equal": false,
+                "max_abs_delta": 0.00019085407257080078,
+                "passed": false
+              },
+              "confidence.contact_probs": {
+                "bitwise_equal": false,
+                "max_abs_delta": 1.055002212524414e-05,
+                "passed": false
+              },
+              "confidence.token_pair_pae": {
+                "bitwise_equal": false,
+                "max_abs_delta": 0.04732513427734375,
+                "passed": false
+              },
+              "confidence.token_pair_pde": {
+                "bitwise_equal": false,
+                "max_abs_delta": 0.15668869018554688,
+                "passed": false
+              }
+            },
+            "passed": false
+          }
+        ],
+        "cif_atom_identities_checked": true
+      }
+    ],
+    "invocation_sha256": "ac776e9e68f7766a83ccc75d2bfe89c16beb72af20ba3a6fe48dbf6cb0a3b8eb"
+  },
+  "archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-qualification-20261006.tar.gz",
+    "sha256": "39a2bd4260e632529ee5b9088323c2f3a1282f697be2f3ad9286c4b92fc0d20d"
+  }
+}

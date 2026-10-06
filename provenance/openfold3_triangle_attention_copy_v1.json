@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "scope": "Attention key copy only; synthetic copy and trained complete-attention replay, not E2E",
+  "remote_root": "/tmp/fireprot-triangle-attention-v1",
+  "screen": {
+    "correctness_passed": true,
+    "samples": [
+      {
+        "native_ms": 0.7693769931793213,
+        "hip_ms": 0.2647790014743805
+      },
+      {
+        "native_ms": 0.7717769742012024,
+        "hip_ms": 0.2591789960861206
+      },
+      {
+        "native_ms": 0.7709770202636719,
+        "hip_ms": 0.2652580142021179
+      }
+    ],
+    "calls": 29,
+    "shape": [
+      128,
+      4,
+      1536,
+      32
+    ],
+    "strides": [
+      196608,
+      32,
+      128,
+      1
+    ],
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850",
+    "seed": 101
+  },
+  "replay": {
+    "correctness_passed": true,
+    "results": [
+      {
+        "capture": "/media/IntelSSD/fireprot/outputs/triatt-profile-n1536-v1/trunk_pairformer-tri_att_end.pt",
+        "native_ms": 282.9952697753906,
+        "copy_ms": 276.8462219238281,
+        "speedup": 1.022211059297946,
+        "exact": true,
+        "samples_ms": {
+          "native": [
+            2890.620849609375,
+            283.1131896972656,
+            283.00457763671875,
+            283.0230407714844,
+            282.9859619140625,
+            282.87353515625,
+            282.93035888671875
+          ],
+          "copy": [
+            277.01348876953125,
+            276.8495178222656,
+            276.9017028808594,
+            276.79339599609375,
+            276.8429260253906,
+            276.8072509765625,
+            276.9062194824219
+          ]
+        },
+        "flags": {
+          "transpose_bias": true,
+          "chunk_size": 1024,
+          "use_deepspeed_evo_attention": false,
+          "use_cueq_triangle_kernels": false,
+          "use_triton_triangle_kernels": false,
+          "use_lma": false,
+          "inplace_safe": true
+        }
+      },
+      {
+        "capture": "/media/IntelSSD/fireprot/outputs/triatt-profile-n1536-v1/trunk_pairformer-tri_att_start.pt",
+        "native_ms": 272.86720275878906,
+        "copy_ms": 266.74786376953125,
+        "speedup": 1.0229405360657167,
+        "exact": true,
+        "samples_ms": {
+          "native": [
+            272.77410888671875,
+            272.8930969238281,
+            272.93292236328125,
+            272.84130859375,
+            272.74725341796875,
+            272.79229736328125,
+            272.91107177734375
+          ],
+          "copy": [
+            266.7218933105469,
+            266.78216552734375,
+            266.7483215332031,
+            266.7691345214844,
+            266.7474060058594,
+            266.7138366699219,
+            266.7188415527344
+          ]
+        },
+        "flags": {
+          "chunk_size": 1024,
+          "use_deepspeed_evo_attention": false,
+          "use_cueq_triangle_kernels": false,
+          "use_triton_triangle_kernels": false,
+          "use_lma": false,
+          "inplace_safe": true
+        }
+      }
+    ],
+    "calls": 168,
+    "key_signatures": {
+      "((128, 4, 1536, 32), (196608, 32, 128, 1))": 168
+    },
+    "control_sha256": "4f9163e64c524d0c8eb9e0931557b5aec0a7e5414a3672270ea2c84b3cdadc29",
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850",
+    "seed": 101
+  },
+  "cache_state": "First call per arm excluded; six measured repeats per arm in balanced order; checks outside timing; no cache flush"
+}

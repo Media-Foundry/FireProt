@@ -2337,3 +2337,52 @@ Local archive outputs/experiments/triangle-memory-local-20261006/launch-sources-
 contains preparer,controller,fullbuildreceipt and rawboundedprofilereports.
 Next poll originalPIDs, resolve any failures without restart, then N1000fallback,
 combinedmodel ifattentionwins, and fresh pairedE2E stableenvironment.
+
+## Both operator tracks pass; guarded combined E2E sequence launched (2026-10-06)
+
+Committed/pushed4cb966e with experimental source and operator evidence. Newbranch
+openfold3-triangle-memory-optimization. ISA PDF remains untracked. Force-index
+refresh fixed malformed BasicBlock IDs in an incremental detect_changes result;
+subsequent full staged gate was complete,33expected symbols,2expected processes.
+Typed schema4runner/indexcurrent proved. Never trust old MCP behind-count prose.
+
+Multiplication model2219704/2219713 TERMINAL SUCCESS. All11/fullCIF vs native,D16,
+latest exact. Selected430modulecalls,72fallbacks,7740HIPcopies,0copyfallbacks.
+Trunk tri_mul_out32.634s,in31.767s;Pairformer192.279s,trunk263.587s diagnostic.
+Recorded provenance/openfold3_triangle_copy_model_v1.json. No new E2E ratio.
+Attentioncontroller2226479 TERMINAL SUCCESS. Synthetic Kpack0.771->0.265ms,
+complete trained attention end282.995->276.846ms1.02221x,start272.867->266.748
+1.02294x. All14outputs per directionexact;168packcalls,actualshape128,4,1536,32
+stride196608,32,128,1. provenance/openfold3_triangle_attention_copy_v1.json.
+
+ACTIVE combined diagnostic2229872/Rust2229881 at
+/tmp/fireprot-triangle-combined-v1; status.json/driver.log authoritative.
+Frozen multiplicationmodel+newkey_scope replaces only WorkspaceFusion Kpacking,
+sourceSHA47d2efa63c4402367af9282f05411b2caa123dc9f8826b5314f82afae8cc966d.
+All11/CIF vs3anchors and >0mul/keydispatch gates retained. No arithmetic change.
+
+ACTIVE controller2235527 /tmp/fireprot-triangle-e2e-v1,waiting_combined_model.
+Fresh separately frozen worker shares both arms; removes diagnostic model_probe;
+FIREPROT_TRIANGLE_MEMORY=0/1 controls bothscopes. Otherworkspace/cache/D16flags
+identical. Expectedchanges onlythisflag+invocation.profileSHA. Aftercombinedgate:
+1 inspect7requests;2 N1000fixedscience fallback againstzero-masknative all11/CIF,
+   requiresmulaccepted0,copies0,keycalls0,nativefallback>0;
+3 verifyallfrozenfiles,idle8GCD,then Rust3AB/BA/ABincrementalN1536pairs;
+4 all6outputs all11/fullCIF versus native,D16,latest and nooperatorprofile;
+5 reverify frozenfiles,collectrealperformance and archive to durable usualroot
+   triangle-memory-e2e-v1.tar.gz. No automaticretry; anyfailure stopssequence.
+status.json/controller.log,{fallback-infer,benchmark}.stdout/stderr,paired-n1536/
+benchmark.json/order.jsonl and collected.json authoritative. Do not restart on
+SSHtimeout or launch competingGPUwork/heavybuild while sequence runs.
+Launchpins provenance/openfold3_triangle_combined_e2e_launch.json; localarchive
+outputs/experiments/triangle-memory-local-20261006/combined-and-e2e-launch-v1.tar.gz.
+Originalnative directratio remainsofficial1.499x; old2.043singlepair preliminary.
+Latestworkspace1.201x incremental; do not multiplyratios. No plateau established.
+
+User requested Protenix recap while workcontinues: docs/protenix-native-requests.md
+historicalMini-defaultv0.5FP32C4S1seed101threepairs N1000single-request82.074->27.949s
+2.937x/model3.312x;N1536177.345->45.596s3.889x/model4.432x. Explicitlyreported
+historicalHIP/SMImapping isolationlimitation,worker-timeboundary excludesparent
+preflight/startup,andsamecheckoutnativebaseline (notunmodifiedupstream). Do not
+silentlypromotehistoricalmeasurements tonewRustisolatedE2E. Ongoingtaskstillboth
+OpenFold3triangleoptimizations,notreplacedbyrecap.

@@ -375,3 +375,20 @@ This is an experimental complete-operator result, not a new model or E2E
 speedup. Full-model acceptance, N1000 fallback and paired E2E are separate
 requirements. Sources and reproduction commands are in
 `experiments/triangle_memory/README.md`.
+
+The multiplication-only full N1536 model gate subsequently passed all 11 arrays
+bitwise and full CIF bytes against all three anchors. It selected 430 supported
+module calls and submitted 7,740 exact copies; 72 other calls used native code.
+Its two trunk multiplication directions total 64.401 seconds in diagnostic
+stage events, versus 97.205 seconds in the earlier fine profile. This is a
+separate diagnostic observation, not a paired E2E claim. See
+`provenance/openfold3_triangle_copy_model_v1.json`.
+
+The independent attention key pack screen measured approximately 0.771 → 0.265
+ms including ordinary strict output allocation. Captured complete attention
+measured ending 282.995 → 276.846 ms (1.0222x) and starting
+272.867 → 266.748 ms (1.0229x), with all repeats bitwise equal. See
+`provenance/openfold3_triangle_attention_copy_v1.json`. QK+softmax and PV remain
+the primary attention targets; these small packing gains do not establish a
+performance plateau. Combined full-model, N1000 fallback and paired E2E gates
+are tracked separately by the guarded controller.

@@ -1,5 +1,33 @@
 # OpenFold3 / OpenBind-0 AMD performance work
 
+## Latest workspace increment (2026-10-06)
+
+Three isolated N1536 AB/BA/AB pairs compare the accepted D16/cache combination
+against qualified transposed-mask normalization and one retained 4.5 GiB HIP
+QK/softmax workspace. Both arms use the same frozen worker and Rust binaries,
+strict FP32 with memory filling, R3/four trunk passes, D200, S1 and seed101.
+Diagnostics are disabled; filesystem caches are not flushed.
+
+| Scope | Previous combination median | Workspace combination median | Speedup |
+| --- | ---: | ---: | ---: |
+| Complete invocation | 540.302 s | 449.723 s | 1.20141x |
+| Model forward | 445.333 s | 355.204 s | 1.25374x |
+
+Complete invocation time decreases by 16.76%. All six outputs match both the
+original-native and accepted-D16 anchors in all 11 arrays bitwise and complete
+CIF bytes. Every run retains the same 51,757,716,992-byte peak Torch allocation.
+The ordinary allocator is used without explicit cache release. Complete runtime,
+lease, cache and reference checks are in
+[`openfold3_workspace_mask_e2e_n1536.json`](../provenance/openfold3_workspace_mask_e2e_n1536.json).
+
+This is an incremental result, not the latest direct original-Torch speedup.
+The first subsequent direct comparison stopped because its treatment declaration
+omitted the native-versus-HIP difference in Rust bridge loading. Correcting that
+declaration in a separate retrospective audit passes the existing pair's Rust
+comparison and all 11 arrays; the failed benchmark remains unchanged. A fresh
+three-pair comparison must complete before publishing an updated direct ratio.
+Do not multiply this increment with historical benchmark ratios.
+
 ## Post-migration experiment (2026-10-05)
 
 Rust migration acceptance is complete. The subsequent

@@ -2088,3 +2088,69 @@ terminal0,archive receipt and fresh output root before GPU preflight.
 
 Latest remote phase is not yet observed after spawn; no new E2E acceptance claim.
 Continue current plan steps5/6 and goal; no plateau, no blocking audit threshold.
+
+## Network recovered; incremental result accepted; whole-model priority (2026-10-06)
+
+User resumed optimization and explicitly prioritizes OpenFold3's largest remaining
+whole-model costs, without fixating on Protenix issue354 or the current QK kernel.
+Use NEW latest-candidate stage shares before choosing the next implementation.
+No plateau established. Old native profile is not current hotspot attribution.
+
+Incremental /tmp/fireprot-mask-paired-v1 completed rc0 in2997.233s. All6 runs
+verified; collector and archive succeeded while SSH was unavailable. Three-pair
+E2E540.302281723 ->449.722786494s,1.201411843x; model445.333388089 ->355.204169396s,
+1.253739191x. All11 arrays/fullCIF match native+D16 for every output. Both arms'
+peak Torch allocation51757716992B. Evidence now tracked in
+provenance/openfold3_workspace_mask_e2e_n1536.json and docs/openfold3-performance.md.
+Remote collected SHA4e42adfa5a882f1f35220d4e26a2f74ac4e5f7dd8d3ac1da855dd3114edec5af;
+archive usualroot/mask-paired-v1-results.tar.gz SHA251343a481a26277d69674b767f08629cb696abee78f7772020a6dcd6d058d95,
+585228627B. This remains incremental, not direct originalTorch.
+
+Old controller2117145 and native-v1 driver are TERMINAL. Native-v1 completed
+two invocations then stopped at first pair validation: treatment omitted
+launch.inputs.rust-bridge (native null; HIP pinned bridge). Not a numerical
+failure. /tmp/fireprot-native-declaration-audit-v1 independently revalidates
+the two retained receipts with ONLY that declaration added: Rust comparison,
+all11 arrays pass. Original failed benchmark unchanged. This retrospective
+single pair is diagnostic, not accepted3pairE2E. Failed run+twooutputs+controller
+and audit archived to usualroot/mask-native-v1-declaration-failure.tar.gz SHA
+9cfd90a2d5d1c78f6406838308496b1e1406235d00359e397bf6337249db053c,106039006B.
+
+ACTIVE QUEUE2149322: /tmp/fireprot-mask-native-paired-v2 onDiamondHill.
+queue-status.json,queue.log,queue-start.json are authoritative. Verified live;
+idle wait completed and stage=benchmark, child driver2149830. It did not kill
+other jobs. The six-hour idle gate precedes fresh3 AB/BA/AB pairs with
+declared bridge addition; same frozen model worker, unchanged science/source.
+SpecSHAada748f0de84859ab4c37505f079ae6457ca1e26feeaf05fa4e15e4b23f0d70f.
+RunIDs mask-native-v2-e2e-n1536-{baseline|candidate}-{0|1|2}.
+Once started driver/start.json identifies actual driver/scheduler. Queue runs
+driver,collector,archive sequentially; any error is terminal, no automaticretry.
+Do not launch competing GPU work or change timed deployment. Allsix requests
+are inspected before waiting. Follow original-PID/receipt policy on timeouts.
+
+ACTIVE FOLLOW-UP2150203: /tmp/fireprot-latest-stage-profile-v1. Verified live;
+status.json currently waiting_direct_benchmark. This is a separately frozen copy
+of latest mask candidate, with existing model_probe adapted to GPU stage events
+only; dense Torch profiler disabled. Wraps run_trunk,_rollout,input/template/MSA/
+pairformer, sample_diffusion and aux_heads; timings inclusive/nested, never sum
+parents+children. Transport includes operator-profile.json in accepted artifacts.
+Request latest-stage-profile-n1536-0 inspected successfully, strictFP32R3D200S1
+seed101HIP7. No arithmetic or requested-work change. After native-v2 succeeds and
+GCDs idle, it runs one Rust-supervised diagnostic, checks all11/fullCIF against
+native,D16 AND latest candidate, then writes collected.json with stage totals.
+Never count instrumented duration as new E2E performance. If prior queue fails,
+follow-up also stops for investigation. No diagnostic GPU work has started yet.
+
+All new helper sources and exact local archive pins recorded in
+provenance/openfold3_mask_native_v2_and_profile_launch.json. Source archive under
+ignored outputs/experiments/qk-softmax-local-20261006. Local helpers:
+/tmp/fireprot-prepare-mask-native-pairs-v2.py, /tmp/fireprot-mask-native-v2-queue.py,
+/tmp/fireprot-mask-native-v2-{driver,collect,archive}.py,
+/tmp/fireprot-prepare-latest-stage-profile-v1.py and
+/tmp/fireprot-latest-stage-profile-driver-v1.py. No maintained model/kernel edits.
+
+Issue354 re-read publicly: body claims3.5x onMI300 from HIPfusedLayerNorm+ROCm
+Triton, lacks reproducible workload/timing details; GitHub API returned no
+comments. No author code used. Our LayerNorm6.3xoperator/1.079xmodel and
+OpenFold3softmax1.376xE2E support the general direction, not that specific claim.
+User explicitly says optimize the large remaining costs rather than this issue.

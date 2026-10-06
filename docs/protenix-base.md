@@ -318,6 +318,18 @@ verdict is preserved alongside these separate user-policy observations. This is
 not a repeated timing trend or a production promotion.
 [First pair](../provenance/protenix_base_torch_lt_first_pair.json).
 
+Three compatible pairs (BA/AB/BA, all invocation timeouts 1800 s) now measure
+complete invocation medians **133.855739 -> 131.122685 s**, **1.020843x** and
+**2.04% less time**. Every pair is faster (1.01546x–1.02084x). Model-call medians
+are 109.598212 -> 106.988373 s. All six runs match all nine arrays bitwise to
+their corresponding first-run route, and all candidates select 524 incoming and
+524 outgoing Lt contractions without fallback. These repeated timing observations
+use the separate user 0.1 Å coordinate criterion; the unchanged legacy comparison
+still rejects coordinate/confidence differences and withholds its performance
+verdict. No default-route promotion follows from this report.
+[Three-pair evidence](../provenance/protenix_base_torch_lt_three_pairs.json).
+
+
 A separate full-forward Torch BLAS-preference pair measures 133.003585 ->
 132.596816 s E2E (1.00307x, only 0.31% less time). Native-relative aligned RMSD
 is 0.047952 Å, and previous-CK-relative RMSD is 0.009690 Å. Both meet the user
@@ -359,3 +371,23 @@ Experimental metrics show very little change, but both absolute predictions have
 low structure agreement under this sequence-only setup. No claim of a generally
 accurate or independent test result follows from this single case.
 [Paired timing, numerical and experimental evidence](../provenance/protenix_base_5zmw_first_pair.json).
+
+## Triangle multiplication substage profile
+
+A scoped-Lt full-model run with `triangle_probe.py` preserves all nine arrays
+bitwise against the uninstrumented candidate. Inclusive GPU-event intervals are:
+
+| Substage | Calls | Total |
+| --- | ---: | ---: |
+| Packed BMM | 1048 | 8.355 s |
+| Dual projection and packing | 2096 | 6.105 s |
+| Triangle residual/gate fusion | 1048 | 1.780 s |
+| Packed output normalization | 1048 | 1.679 s |
+| Gate linear | 1048 | 1.358 s |
+| Output linear | 1048 | 1.341 s |
+| Input normalization | 1048 | 1.266 s |
+
+These include launch gaps, hooks and allocation effects; they are diagnostic
+intervals rather than attainable E2E savings. The next kernel target is the dual
+projection, which remains the largest measured non-BMM triangle substage.
+[Profile evidence](../provenance/protenix_base_triangle_profile.json).

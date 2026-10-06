@@ -112,3 +112,9 @@ cargo run --release -p fireprot-validation --example experimental_ca -- \
 
 This reports experimental CA RMSD/lDDT and verifies sequence/CIF/NPZ binding.
 It does not reinterpret native-model numerical parity as experimental accuracy.
+
+`triangle_probe.py` separates inclusive GPU-event intervals for triangle input
+normalization, dual projection, contraction, packed normalization, output linear,
+gate linear, and residual fusion. It eagerly loads the selected AMD extension
+and adds hooks/wrappers, so its E2E is not performance evidence. All nine output
+arrays must match the uninstrumented scoped-Lt anchor before interpreting timings.

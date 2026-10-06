@@ -3083,3 +3083,72 @@ NewRustexperimental_ca example testpasses andwrong-chain/tampered-inputnegative
 checks pass. NoGPUjobcurrentlylive. Candidateper-BMMLtremainsunpromoted; future
 workrepeatE2Etrend underexplicituser0.1Apolicyandretainconfidence, thencontinue
 profilingremainingattention/trunkhotspots. Nooverallplateauclaim.
+
+## 2026-10-07 scoped Torch Lt repetition and next triangle probe
+
+Master7ee9ec7 previously pushed; 5ZMW qualification complete. Only docs/isa was
+untracked initially. Started two additional matched umem N1000 pairs, same frozen
+TorchLt worker/profile and timeout1800 as original pair. Prepared request/specs
+in outputs/experiments/protenix-base-torch-lt-model-20261007:
+off-r1,on-r1,on-r2,off-r2. Originalpair was ON/OFF; next pairs OFF/ON,ON/OFF.
+Each new output must match all9arrays BITWISE against its original same-arm
+output (off or on); this preserves original user0.1A regression assessment.
+Generic old cross-arm0.001 gate still fails; do not reinterpret as passed.
+No scheduler: each Rust measure-inference is launched individually after previous
+terminal receipt and exact check. OnlyHIP7; no overlapping GPU jobs/builds.
+
+OFF-r1 PID2371101 TERMINAL SUCCESS133.92423798s. Rust compare-npz receipt
+same root/off-r1-exact.json passed vs outputs/protenix-base-torch-lt-off.
+CURRENT LIVE ON-r1 PID2372460, on-r1-measurement/on-r1-launch.log/on-r1-pid.
+Poll that PID/receipt; then compare all9bits to outputs/protenix-base-torch-lt-on
+before launching on-r2. After on-r2 exact check launch off-r2; aggregate only
+three corresponding pairs with identical1800timeout. No robustspeedupclaimyet.
+
+Prepared NEW uncommitted experiments/protenix_base/triangle_probe.py, ASTchecked,
+no model runyet. Events for dual_projection_tiled, packed_norm_vector,
+triangle_residual, packed_bmm plus triangle module layer_norm_in/linear_z/linear_g.
+Restores wrappers/hooks in finally. Eagerextensionload/eventoverheads diagnostic,
+not E2Espeedup. Must show all9arrays sameas scopedLt anchor before interpreting.
+Remote frozenworker+request/profile/spec ready, NOTlaunched, at
+outputs/experiments/protenix-base-triangle-profile-20261007. Copied sourceworker
+TorchLt snapshot, nested triangle_measure inside lt_install. Run ONLY after
+repetition jobs terminal, output outputs/protenix-base-triangle-profile.
+Purpose split remaining triangle cost; earlierBMM roughly10.4sof21.9s inclusive
+trianglecost, so optimizing onlyBMM overlooks projections/norm/gate/memory.
+No production source change, no overallplateauclaim. Activegoal continues.
+
+
+## 2026-10-07 scoped Torch Lt three pairs complete; triangle profile live
+
+ON-r1 PID2372460 TERMINAL SUCCESS131.303280918s, ON-r2 PID2373489 TERMINAL
+SUCCESS131.122685184s, OFF-r2 PID2374530 TERMINAL SUCCESS133.85573861s.
+All6outputs all9arraysbits torespectivefirstarm; all3ON524incoming/524outgoing,
+no fallback. ThreeBA/AB/BA matchedpairs, timeout1800all. E2Emedians133.85573861
+->131.122685184s,1.020843483x/2.04%less. Eachpair1.01546x,1.01996x,1.02084x.
+Modelmedians109.598211918->106.988372646s. OldRustcrossarm1e-3comparisonstill
+failscoordinate/confidenceandwithholdsperformance; preserved3paircomparison.
+User0.1Aalignedcriterionpassesallpairs; no defaultpromotion. Evidence
+provenance/protenix_base_torch_lt_three_pairs.json copied locally, uncommitted.
+Remote aggregation /tmp/fireprot-aggregate-torch-lt.py verifies receipts/binary,
+timeouts/all9exactandroutecounts, runsRustcompare-runs thenreports separate
+user-policy descriptive medians. No genericgaterelaxation.
+
+CURRENT LIVE triangleprofile PID2375680; root
+outputs/experiments/protenix-base-triangle-profile-20261007, measurement/launch.log/pid.
+Output outputs/protenix-base-triangle-profile. HIP7/FP32C10D200S1seed101,
+scopedLtON/publishedAMD+CK; wraps extension calls and module inputnorm/linear_z/g.
+WaitsamePID; require base-triangle-profile.json andcompareall9bits vs
+outputs/protenix-base-torch-lt-on. THEN interpret inclusiveeventrows; do notcall
+instrumentedE2Espeedup. No otherGPUjobs. Newprobe/3pairprovenance/docs remain
+uncommitted; master7ee9ec7. Userdocs/isa untouched. Goalactive, notplateaued.
+Triangleprofile2375680 TERMINAL SUCCESS; all9arraysBITS vs scopedLtON anchor.
+Evidence provenance/protenix_base_triangle_profile.json. Inclusiveeventtotals:
+packedBMM1048calls8355.046ms;dual_projection_tiled2096calls6104.667ms;
+triangle_residual1048calls1780.417ms;packed_norm_vector1679.220ms;
+linear_g1358.067ms;linear_z1341.198ms;layer_norm_in1266.008ms.
+NoGPUprocesslive. Nexttarget HIP dual_projection_tiled kernel (6.1s), rescreen
+rowtile/waves/LDSreuse with exactsameMFMA accumulationorder; must comparelogical
+paddedoutputs, include allocation/fill in relevantmicrobench, thenfulltrained
+E2Etrialonlyifwin. Existingkernel kernels/amd/fireprot_amd_ops.cu:787 uses
+R128/C128/K16/W8, paddedchannelstride rows+128. No candidatekernelwrittenyet.
+Thisturnmadeprogress:3pairLt trend andqualifiedprofile. Goalactive, notblocked.

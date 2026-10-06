@@ -628,3 +628,55 @@ not become an E2E gain. Unchanged Rust comparison gates pass. This candidate
 is retained as experimental evidence and is not selected for the maintained
 fast path. Microbenchmark percentages do not represent complete inference gains.
 [Gate first pair](../provenance/protenix_base_diffusion_gate_first_pair.json).
+
+## Maintained N1000 optimization entry
+
+The maintained package is `python/fireprot/adapters/protenix/base_n1000`.
+`FIREPROT_ENABLE_BASE_N1000_OPTIMIZATIONS=1` requests its complete composition;
+`0` (the default) preserves the existing worker path. The composition selects
+scoped triangle Lt, dual-projection storage reuse, global/local diffusion bias
+caches and HIP transition products. Graph and the rejected attention-gate kernel
+are excluded. The context is selected through the Rust capability registry;
+Python owns its tensor guards and temporary model hooks.
+
+Use a fresh copy of `configs/requests/protenix-base-n1000-fireprot.json`, updating
+`run_id` and `output_dir`, with the new DiamondHill profile:
+
+```bash
+scripts/infer.sh /tmp/my-base-request.json \
+  configs/diamondhill/protenix-base-n1000-optimized.json
+```
+
+This is an explicit Base FP32 N1000 C10/D200/S1 route. Unsupported models,
+workloads or token counts are rejected when it is enabled; use the ordinary
+profile for other buckets. Atom count is read from input features, rather than
+fixed to the 7979-atom performance example. Each component retains its coverage,
+input/version, stream and buffer-lifetime checks, and is restored on failure.
+`base-n1000-optimizations.json` records the chosen context and atom count;
+component records retain the detailed counters.
+
+The profile uses the existing published AMD/CK/dual bundles and a retained
+buffered bridge at
+`runtime/bridges/protenix-base-buffered-e8f166bb.so` (SHA256
+`e8f166bb0a7f13f2600702207a7d07660f5193dbcf0de177fddd21bdfb51f965`).
+This artifact is installed on DiamondHill. On another host, build the Rust bridge,
+set `FIREPROT_BRIDGE_LIBRARY` to that build's actual path, and qualify the changed
+artifact; do not treat a different build as this measured binary. Historical
+root CLI/bridge artifacts and experimental workers are preserved.
+
+The initial maintained-context runs match all nine arrays bitwise at both
+7979 atoms (umem, 112.637 s) and 7711 atoms (5ZMW, 113.527 s). Those runs preceded
+the final Rust-registry selection wiring. Its first run failed before model
+execution because of an incorrect registry method name; the failure was retained,
+the call corrected, and a real-registry test added. The corrected registry-mediated umem run now passes all nine arrays bitwise
+at 112.085780 s and records the selected Rust implementation. The registry-mediated 5ZMW repeat also passes all nine arrays bitwise at
+112.727518 s with 7711 atoms. The direct native E2E series is still pending. These timings
+are migration checks, not a new original-Torch speedup claim.
+
+[Promotion map](../provenance/protenix_base_promotion_map.json),
+[umem pilot](../provenance/protenix_base_maintained_umem.json),
+[5ZMW pilot](../provenance/protenix_base_maintained_5zmw.json).
+
+[Registry-mediated umem qualification](../provenance/protenix_base_maintained_registry_umem.json).
+
+[Registry-mediated 5ZMW qualification](../provenance/protenix_base_maintained_registry_5zmw.json).

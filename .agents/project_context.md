@@ -3710,3 +3710,80 @@ published/copytopinnedruntimepath preservingqualifiedbufferedbinaryhash; leave
 historicaldefaultremoteCLI/bridgeuntoucheduntilqualifiedmigrationchosen.
 Currentuncommitted3gatefiles+3pairevidence/gatemicro/gatepair/docs/memory ready
 forcommit afterindex/gate. docs/isauntouched. Goalactive, noimpasse.
+
+## 2026-10-07 maintained Base composition integration
+
+New maintainedpackage python/fireprot/adapters/protenix/base_n1000 has5helpers
+promotedfromqualifiedexperimentalversions:triangle_lt,dual_storage,global_bias,
+local_bias,transition. Environmentreadreplacedbyexplicitmodeargument(defaulton);
+transitionlocalatom_count nowpassedfromvalidatedinputfeatures;originalprototypes
+andprovenance/layout_path_map.json preserved. Mapping/sourcehashes innew
+provenance/protenix_base_promotion_map.json. New__init__.py explicitflag
+FIREPROT_ENABLE_BASE_N1000_OPTIMIZATIONS=0(default)/1; strictBaseFireProtFP32
+C10D200S1N1000contract,nonemptyatommap, ExitStackrestoresallhooks. Defaultoff
+returnsbeforeGPUimports. Workerprotenix.py wrapsoriginal_predictonly; fresh
+GitNexusimpactpredictreportedunknown/0resolved, manuallyreviewed__main__caller;
+localtypedindexmetaHEAD4d047dc/schema4current, staleMCPprosehintsignored.
+
+Newprofileconfigs/diamondhill/protenix-base-n1000-optimized.json usesmaintained
+rootpython, publishedAMD/CK/dual andnewruntime/bridges/protenix-base-buffered-e8f166bb.so.
+CopiedqualifiedB/buffered.so afterSHAverification e8f166bb0a7f13f2600702207a7d07660f5193dbcf0de177fddd21bdfb51f965;
+rootoldCLI/defaultbridge untouched. Targetedrsyncdryrunreviewedthenonlynewpackage,
+workerandprofiletransferred. Oldfrozenworkersnotmodified.
+
+InitialmaintainedUMEM2429457 TERMINAL112.637190625s/all9bitsvstransitionanchor;
+5ZMW2430326 TERMINAL113.527006311/all9bitsvsold5zmwoptimized. Counts7979/7711
+nowderivedfromfeatures. Evidenceprovenance/protenix_base_maintained_{umem,5zmw}.json.
+ThenwiredcompositionselectionthroughexistingRustregistry toretainpolicyboundary:
+operationprotenix_base_n1000_context,implementationamd-gfx90a-base-n1000-cached-v1,
+Pythonmetadata supports callback, contexttensorwork/stacksremainPython.
+
+Registryv1UMEM2431714 TERMINALFAILUREbeforemodelcomputation: mistakenlycalled
+registry.select instead ofexistingresolve. Preservedoutput/nativeERR/measurement
+andcopyofoldsourceatmaintainedroot/failed-registry-v1.py beforeoverwriting.
+Correctedresolve, addedREALRustregistrytest(fakehardwaremetadata only). That test
+alsofoundduplicateregistration; registrationnowcachedonce, testedmultiplequeries
+andCPUrejection. All32 targetedCPUtestsPASS:
+python -m pytest -q tests/adapters/test_protenix_base_n1000.py tests/workers/test_protenix.py.
+Testscoverdefaultoff,wrongmodels/dtype/cycles/steps/samples/backend/N,atomcount,
+exceptionunwind,invalidflag,capabilityrejectionandrealregistrybinding.
+
+Correctedregistryv2UMEM2433476 TERMINALSUCCESS112.085780s/all9bits vs frozen
+transitionON, selectedimplementationrecordpresent. Evidence
+provenance/protenix_base_maintained_registry_umem.json. Rootallmaintainedtrials:
+outputs/experiments/protenix-base-maintained-20261007.
+CURRENT LIVE 5ZMWregistryv2 PID2434640, same root/5zmw-registry-v2-measurement,
+5zmw-registry-v2-launch.log/5zmw-registry-v2-pid; output
+outputs/protenix-base-maintained-5zmw-registry-v2. HIP7N1000FP32C10D200S1seed101,
+onlyjob. Onterminal requireselectedimplementation,errornull,atom_count7711,
+all9bitsvsoutputs/protenix-base-5zmw-optimized, thenupdatequalificationdocs/map.
+Sourcepackage,worker/profile/tests/docs/map/3pilotprovenancefilesuncommitted.
+
+PreparedNOTLAUNCHED directnativestudy root
+outputs/experiments/protenix-base-maintained-native-pairs-20261007 via
+/tmp/fireprot-prepare-base-native-study.py (bothhosts). study-plan.json,sixpinned
+request/specfiles,native/optimizedprofiles,run.sh(checkedbash-n),anchors.sha256.
+AB/BA/AB order; sameoptimizedprofilebotharms exceptnewflag0/1 andbackendnative/
+fireprot, sharedfastinit andpinnedbufferedbridge,bundlesenvsame,maintainedworkers.
+EachinvocationRustmeasure-inference1800; serialshelldriverRustcompare-npz vsown
+anchorplusjqrequire9bitwise/passed; checksanchorSHAeveryrun. Nativeanchoroutputs/
+protenix-base-strict1000-init-control, optimizedanchoroutputs/protenix-base-maintained-umem.
+EachpairRustbase-drift checksuser0.1Aalignedcriterion, usingmatchingCIFpaths.
+Legacycompare-runsfixedgatesWILL remainseparateunchangedfailure; notbenchmark-pairs
+becauseitscross-arm1e-3gatewouldabortscientificallyauthorized0.1Astudy. No gate
+relaxation. ThesearepredictionreferencesNOTexperimentaltruth. Driver-status.json
+traprecordsfullcompletionexitcode;order.jsonlperrunstarted/verified. Needinspect
+run.sh/specsagainbeforelaunch; after5ZMWpassandcommitstartwithoveralltimeout7200
+anddetachedPID, nootherGPUjob; expect~24minfor3*(native~358+fast~112). Requireall6
+terminal/bitwiseanchorchecks+3alignedgates andfinalcondition/confidencecomparison
+beforeclaimingdirectE2E. Source/profilemustnotchangewhilethisstudyruns.
+5ZMWregistryv2 PID2434640 TERMINAL SUCCESS112.727518159s,selectedimplementation
+andatomcount7711correct, all9arraysBITSvsold5zmwoptimized. Evidence
+provenance/protenix_base_maintained_registry_5zmw.json. Bothfinalregistry-mediated
+GPUqualifications nowPASS; directstudyNOTYETstarted. All32CPUtestsPASS.
+CommitgateinitiallyHIGH47symbols12flowsbecausepublicProtenixpredictchanged;
+reviewedcontextactualcallscheck_request/runtimeinstall/manifest plus__main__
+callandnewcapture->contract/select/registerpaths. Existingpathsunchangedexcept
+explicitcontext(default0 returnsbeforeheavyimports); enabledpathstrictlylimited.
+Retained32tests/defaultoff/errorunwind/realRustpolicyand2fullGPUexactchecks address
+actualchange. Re-stage/re-gateafterdocs/evidenceupdatesbeforecommit. NoGPUlive.

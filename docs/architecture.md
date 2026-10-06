@@ -287,3 +287,15 @@ accepted archive. Failure, cancellation and timeout stop subsequent launches;
 remaining jobs are explicitly reported as skipped. This replaces the maintained
 Python smoke scheduler; historical scripts remain under `.agents/legacy_*` with
 recorded path/hash provenance. See [batch inference](batch-inference.md).
+
+### Base N1000 composed inference context
+
+An explicit profile switch wires the qualified Base N1000 building blocks into
+`python/fireprot/adapters/protenix/base_n1000`. The Rust capability registry
+selects `amd-gfx90a-base-n1000-cached-v1`; Python applies and restores the scoped
+model hooks and checks tensor identities, versions and buffer consumption.
+Scientific settings remain Base FP32 C10/D200/S1 with 1000 tokens. The original
+experimental implementations are retained as measured history, with a separate
+promotion map; `provenance/layout_path_map.json` remains unchanged. This context
+is opt-in and does not expand the supported workload of other adapters.
+See [integration and qualification status](protenix-base.md#maintained-n1000-optimization-entry).

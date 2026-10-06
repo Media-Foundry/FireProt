@@ -133,7 +133,9 @@ def predict(request, channel):
         channel.emit(dict(event='progress', stage='model'))
         torch.cuda.synchronize()
         begin = time.perf_counter()
-        result = original_predict(runner, data)
+        from fireprot.adapters.protenix.base_n1000 import install as base_optimizations
+        with base_optimizations(runner.model, output, request, data):
+            result = original_predict(runner, data)
         torch.cuda.synchronize()
         model_seconds += time.perf_counter() - begin
         if result['coordinate'].ndim != 3 or result['coordinate'].shape[0] != workload['samples']:

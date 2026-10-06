@@ -88,12 +88,20 @@ Other starting points:
 
 | Workflow | Request to copy | DiamondHill profile |
 | --- | --- | --- |
-| Protenix Base N1000, experimental published route | `configs/requests/protenix-base-n1000-fireprot.json` | `configs/diamondhill/protenix-base-published.json` |
+| Protenix Base N1000, opt-in composed route | `configs/requests/protenix-base-n1000-fireprot.json` | `configs/diamondhill/protenix-base-n1000-optimized.json` |
+| Protenix Base, earlier published route | `configs/requests/protenix-base-n1000-fireprot.json` | `configs/diamondhill/protenix-base-published.json` |
 | Protenix Mini N1000 | `configs/requests/protenix-n1000-fireprot.json` | `configs/diamondhill/protenix-fireprot.json` |
 | Protenix Mini N1536 | `configs/requests/protenix-n1536-fireprot.json` | `configs/diamondhill/protenix-fireprot.json` |
 | AtlasFold + AtlasLM-3B N1536 | `configs/requests/atlasfold-n1536-hip-fused.json` | `configs/diamondhill/atlasfold-all-published.json` |
 | OpenFold3 strict N1000 | `configs/requests/openfold3-n1000-hip-fused.json` | `configs/diamondhill/openfold3-hip-fused.json` |
 | OpenFold3 strict N1536 | `configs/requests/openfold3-n1536-hip-fused.json` | `configs/diamondhill/openfold3-hip-fused.json` |
+
+The opt-in Base profile requires **N1000, FP32 C10/D200/S1** and uses maintained
+workers plus the published bundles and buffered bridge installed on DiamondHill.
+Both umem and 5ZMW outputs match their frozen optimized references bitwise
+through the Rust-selected maintained context. The direct native E2E series is
+still pending.
+See [Base entry and qualification](docs/protenix-base.md#maintained-n1000-optimization-entry).
 
 The Mini examples explicitly use **C4/D1/S1**; they are not the upstream Mini
 D5 default. Review the workload before using an example as a scientific preset.

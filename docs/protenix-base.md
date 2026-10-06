@@ -161,3 +161,42 @@ Frozen profiles and receipts are retained in the evidence root recorded there;
 this experiment does not automatically enable fast initialization in the broad
 checked-in Base profile. The alternative native-BMM/HIP-softmax adapter remains
 an undeployed prototype; its synthetic screen is not model qualification.
+
+## Module profile and first HIP Graph experiment
+
+A frozen worker with temporary GPU event hooks reproduces all nine full-CK output
+arrays exactly. Inclusive module intervals are: trunk Pairformer **64.642 s**
+(10 calls), diffusion denoiser **25.846 s** (200 calls), MSA module **11.712 s**
+(10 calls). Within the trunk, triangle attention accounts for 30.525 s,
+triangle multiplication 21.879 s and pair transition 8.543 s. Parent/child
+intervals overlap and include CPU launch gaps; these are diagnostic timings,
+not an uninstrumented E2E result. [Profile](../provenance/protenix_base_stage_profile.json).
+
+The maintained Base route did not use graph capture. The first isolated HIP
+Graph experiment captures the complete 48-block trunk on the second actual
+cycle, after warming on the first, and replays with refreshed inputs for all
+remaining cycles. It preserves C10/D200/S1 and includes capture in E2E timing.
+
+| Full CK/HIP treatment | E2E (s) | Model (s) |
+| --- | ---: | ---: |
+| Graph off | 147.098 | 122.691 |
+| Pairformer graph on | 145.534 | 120.949 |
+
+One candidate-then-control pair measures **1.0107x**, only 1.06% less E2E time.
+All nine arrays match bitwise, including full confidence arrays. Rust paired
+comparison passes the unchanged numerical gates for graph-on versus graph-off;
+this does not change the separate native-versus-CK confidence result. Capture
+alone costs 7.675 s, with one capture and nine replays. Peak allocated memory is
+10,069,061,632 bytes. There is no repeated timing trend or production promotion.
+[Receipts](../provenance/protenix_base_recycle_graph.json).
+
+The subsequent denoiser graph experiment targets its 200 repetitions, retaining
+random augmentation/noise/sampler updates outside capture. It completed all 200 calls (one capture, 199 replays), and all nine arrays
+match its same-worker graph-off control and the earlier full-CK output bitwise.
+Rust paired comparison passes the unchanged gates. E2E is **145.258 -> 148.687 s**
+(off -> on), or **0.9769x**, 2.36% slower in this one candidate-then-control pair.
+Model time is 120.846 -> 123.636 s; capture costs 0.0953 s. This candidate is
+not promoted: it offers no observed E2E gain. This does not establish that all
+HIP Graph partitions are ineffective. [Denoiser receipts](../provenance/protenix_base_diffusion_graph.json).
+See
+[experimental entry points and constraints](../experiments/protenix_base/README.md).

@@ -2765,3 +2765,64 @@ User explicitly directs: afterthiscycle switchto master, setGitHubdefaultmaster,
 andworkdirectlythere consistently. Remote currently hasmain, nomaster; create
 masterfromcompletedcycle, retainhistory/otherbranches. This overrides routine
 featurebranch guidance. docs/isa remainsuser-owned/untracked. OnlyHIP6/7 allowed.
+
+## 2026-10-07 next cycle: profiling and user-requested HIP Graph
+
+Working/defaultbranch now master at05be488 (GitHubverified). Previouscycle made
+progress: twofullCKruns146.035/146.199s, all9arraysrepeatbits, usercoordinatepass.
+User explicitlyrequested graphcapture exploration. MaintainedBase path contains
+noCUDA/HIPGraph capture; onlyunusedupstreamtriattentionautotune exposesoption.
+Newisolatedexperiments stage_probe.py and recycle_graph.py, no productionedits.
+Rust-supervised HIP7 stageprobe PID2325607 TERMINAL SUCCESS, 146.412439305s
+instrumented invocation (NOT speedup); all9arraysbits vsfullCK baseline.
+Pairformer10calls64.6418s; diffusion200calls25.8461s; MSA10calls11.7120s.
+Nestedtrunk attention30.5245s, multiplication21.8787s, pairtransition8.5426s;
+GPUeventintervals includehostgaps andparent/childoverlap, do notsumallrows.
+Evidence provenance/protenix_base_stage_profile.json; fullprofile onDiamondHill
+outputs/protenix-base-stage-profile-v2/base-stage-profile.json. Experimentroot
+outputs/experiments/protenix-base-stage-profile-20261007. InitialPID2325295failed
+preflightmissingframeworksiblings beforeGPU; retainedfailedreceipt. v2 adds
+frameworkfireprot/kernels/runtime/target symlinks toexistingroot, newrunID.
+
+CURRENT graphON PID2328007, root outputs/experiments/protenix-base-recycle-graph-20261007,
+on-{request,profile,spec}.json/on-measurement/on-launch.log/on-pid. Snapshotpython
+workerinjectsgraph_install aroundactualmodelcall. Profileflag
+FIREPROT_BASE_RECYCLE_GRAPH=on. Onlytrunk48blockstack: firstactualcycleeager on
+sidestream, secondcapture+replay, remaining8replay, staticS/Zupdatedeverycycle.
+RNGcapturecheck, signatureguards, expected10calls/1capture/9replays, abortonerror.
+CompleteE2Eincludescapture, no reducedwork. OFFcontrolpreparedNOTlaunched;
+waitONterminal+correctness beforecontrol. LatestpollONlive01:57. Modeloutputs
+outputs/protenix-base-recycle-graph-on. Do notlaunchcompetingGPUwork/restart.
+
+GraphON2328007 TERMINAL SUCCESS:1capture/9replays/10calls, capture7.675233594s,
+E2E145.534203221s/model120.948504849s, peakallocated10069061632B,reserved15661531136B.
+All9arraysBITS vspriorfullCK; nativealignedRMSDunchanged0.0546879705055A. GraphOFF
+2330587 TERMINAL SUCCESS sameworkersnapshot147.097888197s/model122.691487418s;
+all9arraysbits ONvsOFF. Onepair1.01074445x only, no robusttrend/promotion.
+Evidence provenance/protenix_base_recycle_graph.json includesinvocationreceipts.
+
+NOW LIVE diffusiongraphON PID2332799, root outputs/experiments/protenix-base-diffusion-graph-20261007;
+on-{request,profile,spec}.json/on-measurement/on-launch.log/on-pid. D200S1C10,
+HIP7 fullCKwithoutrecyclegraph, frozenworkerinstallsnewdiffusion_graph.py.
+Onlydenoiser captured; sampler/randomaugmentation/noise/Eulerupdatesoutside.
+Firstactualstepwarm,secondcapture+replay,199replays expected. Staticx/noiselevel
+updated; fixedinputs identity/versionsguarded. RestrictedN1000/7979atomcase.
+OFFcontrolpreparedNOTlaunched. PollsamePIDreceipt; nooverlap/restart. Graphsource
+newfilesuncommitted; onfailurecapturediagnosticthenfixisolatednewroot, preservev1.
+DiffusionON2332799 TERMINAL SUCCESS E2E148.687373836/model123.635886643,
+1capture199replays200calls, capture0.095326059s, allocated9521970176B,
+reserved12245270528B. All9arraysbits vsfullCK; nativealignedRMSDunchanged.
+GraphONinvocationSHA148db206ce6cf3de70f7c0f7a28050264bbe30ca13a65a9588b0127d0c6e4d22.
+CURRENT LIVE diffusionOFF2335524, sameexperimentroot/off-measurement/off-launch.log,
+output outputs/protenix-base-diffusion-graph-off. Waitterminal, thencompare/preserve.
+Pairformergraph Rustcompare-runs passedunchangedgates ONvsOFF, onepairinsufficient
+repeats. Comparisonembeddedin provenance/protenix_base_recycle_graph.json.
+
+DiffusionOFF2335524 TERMINAL SUCCESS:145.257897318s/model120.845672093s.
+ON148.687373836s gives0.976934985x (2.36%slower), oneBApair. All9arraysbits
+OFFvsON; Rustcompare-runs correctnesspassed unchangedgates. Evidence
+provenance/protenix_base_diffusion_graph.json. Neithergraphcandidatepromoted:
+trunk~1%singlepairnotrobust; diffusionnegative. Bothproof-of-conceptscomplete,
+noactiveGPUprocessfromthiscycle. Nextpriority remainingtrunkoperators (attention,
+multiplication,transition); goalnotplateauedoverall. Maintainmaster/HIP6or7,
+357.921s incrementalnativefastinitbaseline separatefrom~146sfullCK baseline.

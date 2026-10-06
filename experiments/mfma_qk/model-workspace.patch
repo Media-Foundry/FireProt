@@ -1,0 +1,31 @@
+--- a/python/fireprot_workers/openfold3.py
++++ b/python/fireprot_workers/openfold3.py
+@@ -133,15 +133,25 @@
+         raise ValueError('Unsupported OpenFold3 worker backend')
+     from .owned_scores import OwnedScoreSoftmax as SoftmaxFP32
+     from fireprot.adapters.openfold3.attention import AttentionDispatcher, attention_scope
+-    dispatcher = AttentionDispatcher(SoftmaxFP32())
++    import torch
++    from contextlib import nullcontext
++    from experiments.mfma_qk.workspace_dispatch import WorkspaceDispatcher, load_workspace
++    workspace_mode = os.environ['FIREPROT_QK_WORKSPACE']
++    if workspace_mode not in ('0', '1'):
++        raise ValueError('FIREPROT_QK_WORKSPACE must be 0 or 1')
++    workspace = load_workspace(os.environ['FIREPROT_QK_WORKSPACE_CONTROL'],
++        os.environ['FIREPROT_QK_WORKSPACE_CONTROL_SHA256']) if workspace_mode == '1' else None
++    dispatcher = WorkspaceDispatcher(AttentionDispatcher(SoftmaxFP32()), workspace)
++    workspace_scope = workspace if workspace is not None else nullcontext()
++    torch.cuda.reset_peak_memory_stats()
+     from .confidence_chunk import confidence_chunk_cap
+     chunk_report = {}
+     try:
+-        with attention_scope(dispatcher), confidence_chunk_cap(model, chunk_report):
++        with workspace_scope, attention_scope(dispatcher), confidence_chunk_cap(model, chunk_report):
+             return forward(model, *args, **kwargs)
+     finally:
+         (output / 'operator-runtime.json').write_text(
+-            json.dumps(dict(**dispatcher.manifest(), experimental_owned_scores=dispatcher.kernel.experiment_manifest(), confidence_chunk_policy=chunk_report, chunk_tuners={name: module.chunk_size_tuner.cached_chunk_size for name, module in model.named_modules() if getattr(module, 'chunk_size_tuner', None) is not None}), indent=2) + '\n')
++            json.dumps(dict(**dispatcher.manifest(), torch_peak_allocated_bytes=torch.cuda.max_memory_allocated(), torch_peak_reserved_bytes=torch.cuda.max_memory_reserved(), experimental_owned_scores=dispatcher.kernel.experiment_manifest(), confidence_chunk_policy=chunk_report, chunk_tuners={name: module.chunk_size_tuner.cached_chunk_size for name, module in model.named_modules() if getattr(module, 'chunk_size_tuner', None) is not None}), indent=2) + '\n')
+ 
+ 
+ def check_determinism(torch, workload):

@@ -234,3 +234,26 @@ is not a model-memory measurement. No latency claim comes from this probe.
 Evidence: `provenance/openfold3_model_workspace_qualification.json`. The archive
 `model-workspace-v1-results.tar.gz` includes source and rebuilt framework
 binaries; SHA256 `678f049127c3502a0b04807b93b2fdc38e39e07de29ca86c85e358fc840dd4d9`.
+
+### Opt-in frozen-worker overlay
+
+`workspace_dispatch.py` composes a separate Rust operator registry around the
+accepted `AttentionDispatcher`; it does not replace its D16 or fallback policy.
+`model-workspace.patch` applies only to the frozen head16 worker whose SHA256 is
+`2ddc92f55f70e3b25b38e721fa71eb3f91a72720b0bf386f36fbfef6a357216e`.
+Apply it without fuzz to a fresh copy of that deployment. Both comparison arms
+must use the same patched worker and rebuilt framework binaries.
+
+Set `FIREPROT_QK_WORKSPACE` explicitly to `0` or `1`. The enabled arm loads the
+controls at `FIREPROT_QK_WORKSPACE_CONTROL` only after checking
+`FIREPROT_QK_WORKSPACE_CONTROL_SHA256`. Its context owns the workspace until
+forward completes or raises; runtime reporting occurs after cleanup. The report
+contains both registries, fallback reasons, workspace accounting, original cache
+and head-dimension counters, chunk tuner choices and Torch memory peaks.
+
+All51 related CPU tests pass, including cached selection with dynamic invocation
+failure, eligibility changes, untouched disabled dispatch and control-hash
+rejection. The initial test run caught a missing required `inplace=False` signature
+argument; the corrected code passed before deployment. Model acceptance and E2E
+performance remain separate gates. Concurrent correctness runs must not be used
+as isolated latency evidence.

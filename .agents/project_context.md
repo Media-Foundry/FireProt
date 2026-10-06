@@ -4339,3 +4339,56 @@ command absent, retried harmless aggregation with python3; no GPU rerun.
 Final direct-native generator remains /tmp/fireprot-prepare-base-final-native-study.py,
 not launched yet. Need commit/push promotion, then fresh final study3pairs with
 latest maintained profile, shared actual fastinit, noGraph HIP7. Goal active.
+
+## 2026-10-07 promotion committed; final direct-native three-pair study LIVE
+
+Promotion/docs/evidence/conditional actual-omission aggregator COMMITTED/PUSHED
+master1b1825ac6b0b6bab76056a688ff76d954b9c118a. Staged GitNexus gate MEDIUM,
+8 symbols/2 expected summarize pin/read flows, not partial/truncated; reviewed.
+Postcommit index refreshed with PDG, typed status up-to-date/current/incompleteReasons[];
+final detect_changes all clean before this append. 70 targeted CPU checks PASS.
+
+CURRENT LIVE wrapper2479402, root
+outputs/experiments/protenix-base-final-native-pairs-20261007.
+Authoritative ps confirmed timeout4000 live at00:16, journal native pair0 started.
+Prepared by /tmp/fireprot-prepare-base-final-native-study.py on both hosts;
+all6 spec/request/profile/reference/driver pins checked, output/measurement dirs
+fresh, AB/BA/AB order. HIP7 only FP32N1000C10D200S1seed101, published kernels,
+shared actual fastinit, candidate template omission, no Graph. Runtime profiles
+identical except Base composition0/1; backend native/fireprot differs. Each run
+must all9BITS match its respective qualified anchor, constructor selected1/no
+recovery/error, candidate skip1/native0+consumer hash; each completed pair runs
+aligned0.1A drift check before continuing. No competing GPU jobs at launch.
+Do NOT modify remote Python/profile or start GPU/build work while active.
+
+Remote Protenix Git HEAD is historical d3b4db6a because sync excludes Git metadata;
+all248 actual source files rehashed MATCH source manifest bb3be993 exactly.
+Use manifest verification for deployed source, not unsynchronized remote Git HEAD.
+Frozen CLI SHA dfbbe303... unchanged; maintained features SHA16cdca60229f... .
+
+Updated aggregator transferred with reviewed targeted rsync to
+experiments/protenix_base/summarize_native_study.py on remote. After driver-status
+exit0 and exact12 journal events, invoke python3 SCRIPT STUDY
+/media/IntelSSD/fireprot/target/release/fireprot final-v1. It verifies candidate
+actual omission when flag1, authenticates Rust conditions and archives, preserves
+legacy .001A gate failure separately from user .1A/summary .001 policy. Never
+relax generic gates. Copy final summary to new provenance filename, update README
+and Base guide direct ratio with actual latest medians, then completion audit.
+Latest published direct3.42210x still predates omission; donotmultiply1.01531.
+Need poll SAME2479402; observation timeout is not terminal. Goal remains active.
+
+## 2026-10-07 completion audit drafted while final native pairs run
+
+Previous goal turn classified progress: committed/pushed qualified feature change
+and launched a fresh direct-native study. Re-polled SAME2479402 twice, latest
+elapsed02:15 confirms live; journal only native pair0 started. No remote changes
+or competing GPU work. Final ratio remains unmeasured until all six complete.
+
+New docs/protenix-base-optimization-audit.md maps workload/entry/correctness/
+publication requirements to actual sources and separately records plateau evidence
+(CK scheduling, projection tiles/fusion, transition, gate, Graph, templates).
+It explicitly leaves final E2E/terminal authentication pending, distinguishes
+prediction parity from experimental accuracy, and does not claim global kernel
+optimality. Source/profile inspection confirms N1000 scope and preserved C10D200S1.
+Local documentation link checks PASS; corrected obsolete direct-series-pending
+sentence in Base entry history. No new runtime or kernel edits in this turn.

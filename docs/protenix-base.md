@@ -682,8 +682,9 @@ the final Rust-registry selection wiring. Its first run failed before model
 execution because of an incorrect registry method name; the failure was retained,
 the call corrected, and a real-registry test added. The corrected registry-mediated umem run now passes all nine arrays bitwise
 at 112.085780 s and records the selected Rust implementation. The registry-mediated 5ZMW repeat also passes all nine arrays bitwise at
-112.727518 s with 7711 atoms. The direct native E2E series is still pending. These timings
-are migration checks, not a new original-Torch speedup claim.
+112.727518 s with 7711 atoms. The completed direct native E2E series is recorded
+below. These entry timings are migration checks, not a new original-Torch
+speedup claim.
 
 [Promotion map](../provenance/protenix_base_promotion_map.json),
 [umem pilot](../provenance/protenix_base_maintained_umem.json),
@@ -845,3 +846,6 @@ hashes match. These are entry qualification runs, not a paired speedup.
 [Maintained-entry evidence](../provenance/protenix_base_maintained_templates_qualification.json).
 The 3.42210x direct-native series above predates this preprocessing increment
 and must not be relabeled as a measurement of the updated profile.
+
+See the [qualification and diminishing-returns audit](protenix-base-optimization-audit.md)
+for the remaining completion gate and the scope of rejected follow-up candidates.

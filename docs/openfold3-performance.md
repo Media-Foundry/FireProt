@@ -1,5 +1,35 @@
 # OpenFold3 / OpenBind-0 AMD performance work
 
+## Current whole-model bottlenecks (2026-10-06)
+
+The latest N1536 workspace candidate passes a coarse stage-event diagnostic
+under strict FP32/R3/D200/S1/seed101. All 11 output arrays and full CIF bytes
+match original native, accepted D16 and latest-workspace references.
+
+| Inclusive GPU stage | Seconds | Calls |
+| --- | ---: | ---: |
+| Trunk, including the following three sub-stages | 295.922 | 1 |
+| Pairformer stack | 221.906 | 4 |
+| Template embedding | 49.194 | 4 |
+| MSA module | 20.929 | 4 |
+| Diffusion sampling | 46.514 | 1 |
+| Confidence heads | 7.658 | 1 |
+
+Trunk accounts for approximately 85% of trunk plus rollout time; its Pairformer
+stack alone accounts for approximately 63%. These nested, instrumented intervals
+must not be added indiscriminately or interpreted as new E2E results. The next
+diagnostic splits Pairformer triangle multiplication, attention and transitions,
+and separately observes the template stack. Lack of template search does not
+justify omitting the template network: its source consumes the current pair
+representation and returns a learned update.
+
+The preceding direct three-pair E2E attempt stopped during its fourth invocation
+because the host library inventory changed. A fresh full inventory identifies
+only additions of libiperf/libsctp and a changed loader cache; no inventoried
+Torch or model files changed. The diagnostic uses the new pinned inventory and
+retains full numerical acceptance. The failed E2E run remains rejected.
+See [stage evidence](../provenance/openfold3_latest_stage_profile.json).
+
 ## Latest workspace increment (2026-10-06)
 
 Three isolated N1536 AB/BA/AB pairs compare the accepted D16/cache combination

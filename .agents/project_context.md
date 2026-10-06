@@ -2154,3 +2154,82 @@ Triton, lacks reproducible workload/timing details; GitHub API returned no
 comments. No author code used. Our LayerNorm6.3xoperator/1.079xmodel and
 OpenFold3softmax1.376xE2E support the general direction, not that specific claim.
 User explicitly says optimize the large remaining costs rather than this issue.
+
+
+## Native-v2 rejected for system drift; stage profiling now runs first (2026-10-06)
+
+User requested status. Authoritative remote results: native-v2 scheduler stopped
+at index3 baseline1; first3 runs succeeded. Supervisor for
+mask-native-v2-e2e-n1536-baseline-1 reports environment files or topology differ
+from pinned inventory after931.949s. No accepted result for that run. Existing
+firstpair950.335467275 ->465.143082332s (2.043103517x) remains preliminary only;
+three-pair direct result is NOT complete. Queue2149322 and follow-up2150203 are
+terminal, no active old scheduler. Profile-v1 never ran model inference.
+
+Independent Rust capture-environment at /tmp/fireprot-env-drift-audit-v1 records
+EXACTLY9 changed identities: /etc/ld.so.cache changed; libiperf.so.0/.0.0.0 and
+libsctp.so.1/.1.0.19 added through system-libraries and system-libraries-alias.
+No inventoried Torch/model files differ. This does not retroactively accept
+failed outputs or prove which process installed those libraries. Preserve old
+inventory; no guard relaxed. current.json and diff.json retain the audit.
+
+Additional controller-reporting bug: the script named queue.py shadows stdlib
+queue when Ubuntu apport handles its exception, re-importing the controller and
+overwriting status with AssertionError. queue.log retains original benchmark
+failure, and supervisor/journal establish the actual environment rejection.
+Future controllers must avoid stdlib module names and use main guards. No old
+controller was manually restarted; exception-hook import caused that trace.
+
+Prioritize actual remaining model hotspots, per user. Created fresh
+/tmp/fireprot-latest-stage-profile-v2 from prepared stage-v1 source, new request
+latest-stage-profile-n1536-v2, same strictFP32R3D200S1seed101HIP7 and arithmetic.
+Pinned fresh full inventory SHA1c0fd5dc9e729cccc2ae6273663f79c59b359c3bda7f5b1d7d78296a7a09bb2f
+at its environment.json; old inventory unchanged. Removed only prerequisite
+waiting on failed native comparison; all8GCD idle confirmed before inference.
+ACTIVE driver2186540, Rust child2186549; stage=infer and PID confirmed live.
+Root status.json,driver.log,infer.stdout,infer.stderr. Do not restart on timeout.
+Local preparer /tmp/fireprot-prepare-stage-profile-v2.py and launch receipt
+/tmp/fireprot-stage-profile-v2-launch.json. Existing driver retains all11 bits
+and fullCIF checks versus native,D16,latest anchors after inference, and writes
+collected.json stage totals only after success. Stage intervals are inclusive;
+no dense profiler or E2E gain claim. Next inspect this same run, rank measured
+latest-model stage costs, then pursue dominant operators. Direct paired E2E
+must eventually rerun under one stable pinned environment; do not delay hotspot
+analysis behind another long comparison first. No GPU work overlaps this profile.
+
+
+## Latest stage profile succeeds; Pairformer dominates (2026-10-06)
+
+User requested retry. Existing stage-v2 was already TERMINAL SUCCESS; do not
+rerun it. All11 arrays and fullCIF match native,D16,latest anchors. Coarse GPU
+inclusive totals: input3.68776s; template49.19386s/4calls; MSA20.92875s/4calls;
+Pairformer221.90618s/4calls; trunk295.92225s; diffusion46.51445s; auxheads7.65773s;
+rollout54.17223s includes diffusion+aux. Trunk ~85% of trunk+rollout, Pairformer
+~63%. Instrumented attribution only, NOT E2E. Collected record SHA
+dc87f812eab418a0cbc2fb42b0c58020cdc937a97782eabca38fe62660edc135 copied to
+provenance/openfold3_latest_stage_profile.json with fresh inventory and9 system
+identity changes. This does not accept the failed native-v2 E2E run.
+
+ACTIVE fine stage profile /tmp/fireprot-latest-stage-profile-v3, driver2194758,
+Rust child2194767; status=infer and actual driver confirmed live. Request
+latest-stage-profile-n1536-v3, same fixed science/source/environment. Frozen
+copy adds inclusive forward timers for tri_mul_out/in,tri_att_start/end,
+pair_transition,attn_pair_bias,single_transition plus MSA operations. Labels
+separate trunk_pairformer/template/MSA/confidence. Template pair embedder/stack
+also timed separately. First-call tensor metadata records shapes,strides,dtypes
+without tensor arithmetic, copies or scalar checks. No dense Torch profiler.
+Wrapper cleanup and full11/CIF gates unchanged. Outputs status/driverlog and
+collected.json in root. Local preparer /tmp/fireprot-prepare-stage-profile-v3.py;
+launch /tmp/fireprot-stage-profile-v3-launch.json. No concurrent GPU experiments.
+
+Source audit: external pairformer is core/model/latent/pairformer.py, not layers.
+PairFormerBlock contains pair_stack,attn_pair_bias,single_transition; PairBlock
+contains the five main triangle/transition targets. TemplateEmbedderAllAtom
+(core/model/latent/template_module.py) always computes template_pair_embedder
+using current z, runs template_pair_stack, sums/divides,ReLU,linear_t; there is
+no final template-absence zeroing in this function. Therefore no-template search
+alone does NOT justify skipping its49s or caching its whole output across cycles.
+Do not implement that shortcut without separate scientific/source/bitwise proof.
+Next use actual fine-stage totals to choose largest remaining operator, then
+profile that operator's GEMM/copy/norm/attention components. No new HIP kernel
+chosen yet; user explicitly prioritizes measured major costs.

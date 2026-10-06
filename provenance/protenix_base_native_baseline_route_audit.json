@@ -1,0 +1,80 @@
+{
+  "scope": "Read-only audit of historical initialization control versus maintained native route; no new timing ablation",
+  "runs": [
+    {
+      "run_id": "protenix-base-strict1000-init-control",
+      "backend": "fireprot",
+      "source": {
+        "root": "/media/IntelSSD/fireprot/Protenix",
+        "commit": "bb3be993b52713795796c72cf0a46ef8a7323442"
+      },
+      "request": {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-base-strict1000-init-control/request.json",
+        "sha256": "92b3522a876b2e8527f5d2fec1fb1fa7cbeb9b5e4e7e5aa9fdc7d236245d3b0e"
+      },
+      "execution": {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-base-strict1000-init-control/execution.json",
+        "sha256": "62c8af95269f3c82cbe7f1de2e53a869b4de5b64d042585c671054f3fbba960f"
+      },
+      "model_seconds": 333.30073498305865,
+      "operator_runtime": {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-base-strict1000-init-control/operator-runtime.json",
+        "sha256": "bd2015c4a936033cbca942d0cd519fbc40f69966b63a1579cbcb5685f15c70d7"
+      },
+      "selection_counts": [
+        {
+          "operation": "triangle_attention",
+          "implementation": "native",
+          "count": 1048
+        },
+        {
+          "operation": "triangle_multiplication",
+          "implementation": "native",
+          "count": 1048
+        }
+      ],
+      "hooks": {
+        "installed": true,
+        "enabled": false,
+        "hooks": [],
+        "qkv_projection": {
+          "enabled": false,
+          "counts": {
+            "n1000": 0,
+            "n1536": 0,
+            "fallback": 0
+          }
+        }
+      },
+      "amd_extension_loaded": false
+    },
+    {
+      "run_id": "protenix-base-current-fastinit-native-r0",
+      "backend": "native",
+      "source": {
+        "root": "/media/IntelSSD/fireprot/Protenix",
+        "commit": "bb3be993b52713795796c72cf0a46ef8a7323442"
+      },
+      "request": {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-base-current-fastinit-native-r0/request.json",
+        "sha256": "85955e4a982019d0d53c2948dd83c47e689dd639760fedd3f22f1c9edafa2806"
+      },
+      "execution": {
+        "path": "/media/IntelSSD/fireprot/outputs/protenix-base-current-fastinit-native-r0/execution.json",
+        "sha256": "8cd2db78ce144e23941279f4411bf4075a5767a43944f08263930b82f62db0fa"
+      },
+      "model_seconds": 358.5082480449928
+    }
+  ],
+  "source_files": [
+    {
+      "path": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/triangular.py",
+      "sha256": "675b8c2872caba78cc8a5ee66f5bada4013c1273203e89fa7053f27860da84a9"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/Protenix/protenix/model/triangular/layers.py",
+      "sha256": "c2a709d65ee40ab2fa7bdb100bccdd1f04f6b9036e7341a654510429f8f114ee"
+    }
+  ],
+  "finding": "The historical fireprot dispatch used native triangle implementations but omitted the all-valid mask bias. Native constructs that mask and _attention adds its zero bias. Thus the 357.921 s historical control and current native route are not identical execution paths. The time attributable to mask elision alone has not been measured."
+}

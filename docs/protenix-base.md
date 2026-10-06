@@ -107,6 +107,18 @@ maximum delta 0.00131607. Diagnostic invocation times are 430.648 s and
 The completed initialization-only control matches all nine native arrays exactly.
 Its invocation time is 357.921 s and model time is 333.301 s.
 
+**Historical baseline clarification:** that control's request selected `fireprot`
+with triangle acceleration disabled. Its manifest records 1048 native attention
+and 1048 native multiplication selections, disabled module hooks and no loaded
+AMD extension. However, the FireProt attention branch already omits the all-valid
+mask's zero bias; the `native` branch constructs the mask and adds its zero bias
+to the attention scores. It is therefore a Torch-computation control with mask
+elision, not an identical execution path to the maintained `native` entry. The
+new direct study uses `backend=native` with the explicit construction hook only.
+The isolated timing contribution of mask elision has not been measured; do not
+attribute the full difference between historical and current times to it.
+[Route audit](../provenance/protenix_base_native_baseline_route_audit.json).
+
 An experimental HIP bias/softmax kernel retaining native QK/PV arithmetic passes
 30 synthetic bitwise cases at N600/N1000. This establishes only an operator screen;
 trained-attention replay and complete model qualification remain outstanding.

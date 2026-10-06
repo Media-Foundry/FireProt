@@ -3918,3 +3918,56 @@ include3newmodules+diffusion_graph.pyidentityhelperinPYTHONPATH. Usemaintained
 publishedbundleprofile;graphofffirstmustall9bitsvsmaintainedanchor;thenonG12
 sameworker/profileexceptflag, fullcoverage+all9bitsandE2E. Recordcaptureandfirst
 replaysubmissiontime separately (instantiationmaybe deferred). No claims yet.
+
+ComposedGraphprototypeCOMMITTED/PUSHEDmastera288ecd. All44targetedCPUtestsPASS;
+postcommitindexrefreshandfinaldetect_changes(all)clean; onlyuserdocs/isauntracked.
+No experimentfiles syncedremote and no GraphGPUrun yet.
+
+Directstudy2442330 LIVE; nativeindex0 TERMINALVERIFIED, optimizedindex1 started.
+NativeE2E382.844250605s/model358.508248045s; all9arraysBITSvsnativeanchor. Actual
+constructionenabledinstalledtrue/selected1/recovered0/errors0, init3989.245ms,
+checkpoint1070.912ms. Thus currentnative~383 vs historical358 is MODELforward
+~358.5 vs333.3, not oldmissinginitializationhook. Preserveobservation; awaitall
+repeatsbeforeinterpretingvarianceorcurrentdirectratio. DoNOTdiscardorreplaceit.
+Studyroot/orderdriverasabove; wrapper2442330confirmedliveelapsed06:27. Index1
+RustmeasurePID2444964/worker2444966 observed; nooverlap/sourceschanged.
+
+## 2026-10-07 first corrected direct pair verified; graph deployment prepared locally
+
+Directwrapper2442330 confirmedLIVEelapsed08:35. Index0native382.844250605s,
+index1optimized112.639672091s bothTERMINALVERIFIED(all9bits/actualfastinitselected).
+Pair0alignedRMSD0.0060998239421515815A/gatePASS. Approx3.40xFIRSTPAIRonly, notfinal
+threepairclaim. Index2optimized-r1started;remainingnative-r1/native-r2/optimized-r2.
+No remote changes/builds/GPUoverlap. Keep samePID/study, preserveallobservations.
+
+LOCALONLY /tmp/fireprot-prepare-composed-graph.py prepared(ASTPASS), sourcebundle
+/tmp/fireprot-composed-graph-source-a288ecd with manifest and4files (trunk_graph,
+graph_dual_storage,graph_triangle_lt,diffusion_graph). NOTtransferred/executed.
+PreparationrequirespriorDIRECTdriver-statusexit0 andnoactiveworker/measureprocess.
+Createsfreshrootoutputs/experiments/protenix-base-composed-trunk-graph-20261007,
+copyrootpython/fireprot/kernels; snapshotworkerchangesbase_optimizationsimportto
+.fireprot_workers.trunk_graph(relative.trunk_graph actual). Copiesall4helpersinside
+python/fireprot_workers (Rust-fingerprinted source tree), rewritesonlyhelperimports
+torelativeinFROZENcopies; originsmanifestpinsoriginal+frozencopies. Maintainedremote
+workeruntouched. CreatesG12off/onprofiles,requests,specs,run.sh,study-plan,
+anchors.sha256. EachRustmeasure1800; serialoffthenonrequiresall9exactanchorbefore
+nextarm. PreparationdoesNOTlaunch. Futurelaunchonlyafterinspection/pinchecks and
+currentdirectstudyfinished. Use overalltimeout~4000/INT/kill60; then comparepair
+viaRustexpectedonlyFIREPROT_BASE_COMPOSED_GRAPHoff/on+profilehash. NoGraphperformance
+claimbeforeall9bitwise+completecoverage and E2E. Native-summaryaggregator keyformats
+spotcheckedagainstoldscopedLtRustreport; full6runaggregationstillpending.
+
+## 2026-10-07 historical native baseline route audit
+
+Directindex2optimized-r1 TERMINALVERIFIED112.021993353s/all9bits;index3native-r1
+nowrunning(samewrapper2442330). Importantnewfinding: oldstrict1000-init-control
+requestbackendwasFIREPROT withtriangleopsdisabled, notbackendnative. Itsmanifest
+1048nativeattention+1048nativemul, modulehooksdisabled, AMDextensionnotloaded.
+Upstreampinnedtriangular.py715 omitsallvalidmaskONLYfireprotbranch;nativeconstructs
+maskthenzeromaskbias. layers.py276_attentionaddsEVERYbiasinplace. Thus old357.921s
+controlTorchmathalreadyhaszerobiaselision; currentnativeactuallyretainsit. This
+explainsaKNOWNexecutionpathdifference; isolated25stimingshareNOTmeasured, don't
+attributeallslownesstoitordescribeoldcontrolasidenticalnativeentry. Newlocal
+provenance/protenix_base_native_baseline_route_audit.json pinsbothrequest/execution,
+oldmanifestcountersandupstreamsourcehashes. README/Baseguideclarifybaseline.
+No directstudycontrolsmodified, noGPUoverlap; pendingdoc/evidencecommit.

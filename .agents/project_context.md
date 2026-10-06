@@ -4244,3 +4244,98 @@ outputs/protenix-base-maintained-5zmw-registry-v2 orold5zmwoptimized (all9bits)
 beforepromotingfeatures.pyBaseguard andprofileflag1. Do not assumeperformance
 fromonepairormultiply2%into3.422headline. CurrentGraphdocscommit a82bbae pushed;
 newtemplatefirstpairdocs/evidence/memorydirty. Goalactiveuntilthesechecks/decision.
+
+Local /tmp/fireprot-summarize-base-template-three-pairs.py nowprepared(ASTPASS),
+NOTtransferred/executed. Requiresfirstdriver/repeat-statusexit0, pinsfirst/repeat
+plans/drivers/origins, checksbothjournals, combinesfirst2rows(pair0)andrepeat4rows
+(pair1/2), all6actualfastinit/featurecounts/consumer/context/Lt/dualguards, reruns
+Rustall9bitwiseanchorchecksandunchangedcompare-runsfor3pairs. FreshTAGthree-v1.
+Defaultscriptrootcurrentunused-templates20261007, expectedonlyfeatureflag0/1+
+profilehash. Needaftercompletion transfer/run/copyevidence,then5ZMWqual.
+Read-onlyverified5ZMWrequestsourceexistsatmaintained20261007/5zmw-request.json,
+inputhash938324d4... sourcebb3be993 BaseFP32C10D200S1seed101HIP7. Clonefreshoutput
+anduseSAMEon-profile oftemplateexperiment; anchor maintained-5zmw-registry-v2.
+No5ZMWjob/configcreatedyet. Rootmaster7407693pushed(firstpairdocs), postcommit
+indexrefresh/finalgatecleanbeforethisappend. Currenttemplate repeat2470512live.
+
+## 2026-10-07 template three-pair PASS; 5ZMW qualification LIVE
+
+Template repeat2470512 TERMINAL SUCCESS. Aggregator
+/tmp/fireprot-summarize-base-template-three-pairs.py three-v1SUCCESS; copied
+provenance/protenix_base_unused_templates_three_pairs.json. OFF
+[112.364168339,111.93632923,111.763280051], ON[110.163983404,110.272235805,110.248044419].
+Medians111.93632923->110.248044419,1.0153135125x; paired1.01997/1.01509/1.01374,
+allthreefaster. Modelmedians87.711947716->87.653227046 (preprocessinggain).
+All6all9BITSanchor/actualskipcounts/consumerpin andRustconditions/gatesPASS.
+Docsupdated3pairincrementalresult; NOTmultipliedintodirectnativeheadline3.422x.
+
+CURRENT LIVE 5ZMWwrapper2474958, root
+outputs/experiments/protenix-base-unused-templates-5zmw-20261007.
+Preparedusing/tmp/fireprot-prepare-template-5zmw.py (bothhosts), afterrepeatand
+aggregatecomplete/noGPUjobs. Samefrozenon-worker/profileas3pairs; fresh
+outputs/protenix-base-unused-templates-5zmw, HIP7 FP32N1000/7711atomsC10D200S1
+seed101, input938324d4... . plan.json/spec.json/request/profile/reference/run.sh/
+pid/launch.log/driver-status atroot; measure1800/overall1900. Pinnedreference
+outputs/protenix-base-maintained-5zmw-registry-v2/sample-0.npz; driverchecksall9
+bits, feature skip1/native0, contextatom_count7711/errornull. Singlequalification,
+notpaired5ZMWspeedup. Onterminal collectevidenceonlyifallchecksPASS.
+
+Nextafter5ZMWPASS: considerpromotingBase0.5 into maintainedfeatures._supported
+allowedmodels, keepingexplicitflag/source/dtype/templateuse/nblocks guards and
+Mini behavior; updateBaseoptimizedprofilefeatureflag1. Needfreshindex/impact
+beforeexistingfeature/testedits, CPUtestsparameterizedMini+Base+unsupportedBase1.0,
+maintainedUMEM/5ZMWqualificationbeforeclaimingnewentryresult. No promotioneditsyet.
+Currentmaster7407693; new3pairdocs/evidence/memoryuncommitted. Goalactive until
+qualification/promotion/finalE2Escope+plateaudecision. NooverlapGPU/builds.
+
+## 2026-10-07 template 5ZMW PASS; maintained promotion qualification LIVE
+
+5ZMW2474958 TERMINAL SUCCESSdriverexit0, E2E110.769354252/model88.075113835s.
+All9BITSmaintained5ZMWanchor;feature skip1/native0+consumerpinPASS; context7711.
+Copiedprovenance/protenix_base_unused_templates_5zmw.json. Notpairedspeedup.
+
+Newmaintainedsourcefeatures.py._supported addsBase-default0.5alongsideMini-default0.5;
+allotherguardsunchanged. BaseN1000optimizedprofilefeatureflag0->1. New7Baseguard
+CPUcases +existingtestsTOTAL70PASS (workers/Basecontext/Graph/featureexperiments).
+Freshindex/impact_supportedLOWdirectbuild_template_features reviewed. Targeted
+rsyncdryrunreviewedthenONLYfeatures.py+profiletransferredAFTER5ZMWterminal/noGPU.
+Frozenexperimentalworkersunchanged. Source/profile/tests/docs/evidenceUNCOMMITTED.
+
+CURRENT LIVE maintainedqualificationwrapper2476381 root
+outputs/experiments/protenix-base-maintained-templates-20261007. plan.json/run.sh/
+pid/launch.log/order.jsonl/driver-status. Samepublicrootworkers/profile,UMEMthen
+5ZMW freshoutputsprotenix-base-maintained-templates-{umem,5zmw}. BothHIP7FP32
+N1000C10D200S1seed101;atom7979/7711. EachRustmeasure1800,overall4000. Allsource/
+control/referencepinschecked,nootherGPUatlaunch. Driverall9BITSoldmaintainedanchors,
+actualtemplatecounts1/0andcontextatomcount/errornull beforeverified. DoNOTedit
+remotePython/profileoroverlapGPU/builds whileactive.
+
+NeedterminalbothPASS thenrecordmaintainedmigrationevidence,commitpromotionwith
+READMEscope. READMEalreadyclarifies3.422xdirectseriespredatesfeatureomission;
+latestincrement1.0153xseparate, donotmultiply. Considerfinaldirectnative3pairs
+usinglatestmaintainedprofileafterpromotionfixed/committed toreportupdatedentry
+E2E honestly (oldnativebaselinehasfeatureflag1ignoredbybackendnative; sharedfast
+constructoractualselectionmandatory). Canreuse native-study generator/aggregator
+withFRESHroot/outputnames andexplicitlatesttemplatecandidate scope; oldroots
+neveroverwrite. No finalstudy prepared/launchedyet. Goalactive; afterfinal
+entryqualification/E2E and documentedoperator/Graphplateau do completionaudit.
+
+## 2026-10-07 maintained template promotion qualified on both inputs
+
+Re-polled wrapper2476381: handle absent and driver-status exit0; exact journal
+contains both started/verified pairs. Independent aggregation re-authenticates
+plan/driver/features/spec/request/profile/reference/acceptance pins and reruns
+Rust compare-npz. Both all9 arrays bitwise, counts skip1/native0, consumer SHA
+74cf338e... and maintained context atom7979/7711 verified. UMEM E2E110.200394837;
+5ZMW111.005110345. Evidence provenance/protenix_base_maintained_templates_qualification.json.
+No paired speedup inferred from these two migration runs. 70 targeted CPU checks
+PASS again. README and guides now mark entry qualification complete.
+
+Fresh typed GitNexus status up-to-date/current/incompleteReasons[] at7407693;
+impact summarize LOW, sole direct file caller (__main__) reviewed. Added actual
+feature count/hash verification to direct-native aggregator only when candidate
+profile requests omission; historical flag0 remains supported. Remote python
+command absent, retried harmless aggregation with python3; no GPU rerun.
+Final direct-native generator remains /tmp/fireprot-prepare-base-final-native-study.py,
+not launched yet. Need commit/push promotion, then fresh final study3pairs with
+latest maintained profile, shared actual fastinit, noGraph HIP7. Goal active.

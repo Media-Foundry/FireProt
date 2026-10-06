@@ -815,7 +815,33 @@ unchanged. The first N1000 off/on pair measures **112.364168 -> 110.163983 s E2E
 anchor bitwise, and unchanged Rust comparison gates pass. The runtime reports
 one native template construction off and one skipped construction on.
 
-This is a single observation, not a stable gain or maintained-profile promotion.
-Two additional alternating pairs and second-input qualification are pending.
+This initial observation alone did not establish a stable gain or justify
+maintained-profile promotion; the subsequent qualification is recorded below.
 The direct-native 3.42210x result above does not include this candidate.
 [Template first-pair evidence](../provenance/protenix_base_unused_templates_first_pair.json).
+
+Three AB/BA/AB pairs subsequently pass all nine arrays bitwise and unchanged
+Rust gates. E2E medians are **111.936329 -> 110.248044 s (1.01531x)**; paired
+ratios are 1.01997x, 1.01509x and 1.01374x. Baselines span 111.763–112.364 s,
+candidates 110.164–110.272 s. Model-forward medians remain approximately
+87.712 versus 87.653 s, consistent with a preprocessing change. All enabled
+runs record one verified template omission; no GPU operators or cycles change.
+The second-input qualification is recorded below.
+[Three template pairs](../provenance/protenix_base_unused_templates_three_pairs.json).
+
+The isolated 5ZMW N1000/7711-atom qualification subsequently matches all nine
+arrays of its maintained optimized anchor bitwise. Actual feature counts are
+one omission and zero native template constructions, with the pinned consumer
+hash. Its 110.769354 s complete invocation is a migration check, not a paired
+5ZMW speedup claim. [5ZMW evidence](../provenance/protenix_base_unused_templates_5zmw.json).
+
+The maintained feature guard now admits Base-default v0.5.0 alongside Mini-default
+v0.5.0, preserving the explicit opt-in, FP32, disabled template use, zero-block
+and source-hash checks. The Base N1000 optimized profile enables the flag.
+Maintained-entry checks for both inputs pass: umem takes **110.200395 s** and
+5ZMW takes **111.005110 s**, with all nine arrays bitwise equal to their respective
+pre-promotion optimized anchors. Actual skip/native counts are 1/0 and consumer
+hashes match. These are entry qualification runs, not a paired speedup.
+[Maintained-entry evidence](../provenance/protenix_base_maintained_templates_qualification.json).
+The 3.42210x direct-native series above predates this preprocessing increment
+and must not be relabeled as a measurement of the updated profile.

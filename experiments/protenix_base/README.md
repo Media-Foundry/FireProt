@@ -310,7 +310,8 @@ suggestion of a production gain from the single experimental off/on pair.
 `unused_templates.py` extends the existing Mini guard only inside an isolated
 worker context. Wrap the complete worker `predict` call so it covers dataset
 construction, not just model forward. `FIREPROT_SKIP_UNUSED_TEMPLATES=0/1` remains
-the control/treatment switch. The maintained adapter remains unchanged.
+the control/treatment switch. The initial experiment left the maintained adapter
+unchanged; the qualified promotion is described below.
 
 The candidate requires Base-default v0.5.0, FP32, configured and actual template
 use disabled, zero template blocks, and the already pinned `TemplateEmbedder`
@@ -323,6 +324,22 @@ Seventeen CPU checks cover the new guard and existing Mini behavior. The first
 matched full-model pair subsequently passed all nine arrays bitwise against the
 maintained anchor and unchanged Rust gates. E2E is **112.364168 s off versus
 110.163983 s on (1.01997x)**; actual skip/native counts are 0/1 versus 1/0 and the
-consumer hash matches. This is one pair; repeated timing and a second input are
-pending. Do not enable this candidate in the maintained profile before those
-checks. [First-pair evidence](../../provenance/protenix_base_unused_templates_first_pair.json).
+consumer hash matches. This initial pair required repeated timing and a second
+input before promotion; both are now complete below. [First-pair evidence](../../provenance/protenix_base_unused_templates_first_pair.json).
+
+The completed AB/BA/AB repetitions preserve all nine arrays bitwise in all six
+runs and pass unchanged Rust comparison gates. E2E medians are
+**111.936329 -> 110.248044 s (1.01531x)**, with all three pairs faster. Actual
+skip counts and consumer hashes pass in every candidate. Second-input 5ZMW
+qualification is recorded below.
+[Three-pair evidence](../../provenance/protenix_base_unused_templates_three_pairs.json).
+
+The subsequent 5ZMW N1000/7711-atom trial also matches all nine arrays bitwise
+and reports the expected omission. Base support is now present in the maintained
+feature guard with unchanged restrictions. Formal maintained-entry checks pass
+for umem and 5ZMW, retaining all nine arrays bitwise and verifying actual omission.
+The entry timings are 110.200395 and 111.005110 s, respectively, not a paired
+speedup comparison.
+[Entry qualification](../../provenance/protenix_base_maintained_templates_qualification.json).
+The original experimental wrapper and evidence remain available for reproduction.
+[5ZMW qualification](../../provenance/protenix_base_unused_templates_5zmw.json).

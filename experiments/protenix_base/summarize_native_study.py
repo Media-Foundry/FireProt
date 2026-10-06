@@ -99,6 +99,12 @@ def summarize(study, executable, tag='final-v1'):
             context = read(out/'base-n1000-optimizations.json')
             if context['error'] is not None or context['implementation'] != 'amd-gfx90a-base-n1000-cached-v1':
                 raise RuntimeError('Incorrect maintained context')
+            if profile['environment'].get('FIREPROT_SKIP_UNUSED_TEMPLATES') == '1':
+                features = read(out/'operator-runtime.json')['feature_preparation']
+                if (features['counts'] != dict(skipped_templates=1, native_templates=0)
+                        or features['contract']['consumer_sha256'] !=
+                        '74cf338ebc53b572dc12d6519392a09972c2a807beb1017c7fe0773536e301e5'):
+                    raise RuntimeError('Unused-template omission was not verified')
         groups[arm].append(dict(pair=row['pair'], run_id=request['run_id'],
             e2e_seconds=elapsed, model_seconds=predictions['model_seconds'],
             invocation=pin(inv_path), accepted=pin(out/'accepted.json')))

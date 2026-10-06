@@ -103,6 +103,10 @@ through the Rust-selected maintained context. Three matched native comparisons
 measure **383.350 -> 112.022 s complete invocation medians (3.422x)** on the umem
 N1000 input, with shared fast initialization. Native-to-optimized outputs meet
 the explicit aligned-coordinate and summary-confidence criteria, not bitwise equality.
+That direct series predates unused-template omission. The updated profile enables
+this additional preprocessing change, whose separate three-pair experiment
+measures **111.936 -> 110.248 s (1.0153x incremental)** with identical outputs;
+maintained-entry qualification passes on both umem and 5ZMW. Do not multiply the ratios.
 See [Base entry and qualification](docs/protenix-base.md#maintained-n1000-optimization-entry).
 
 HIP Graph is **not enabled** in this profile. Three matched comparisons against

@@ -1,4 +1,4 @@
-"""Opt-in omission of template tensors unused by the verified Mini consumer."""
+"""Opt-in omission of templates unused by verified Mini/Base v0.5.0 consumers."""
 from __future__ import annotations
 import functools
 import hashlib
@@ -30,7 +30,7 @@ def _supported(configs: Any, use_template: bool) -> bool:
     if os.environ.get('FIREPROT_SKIP_UNUSED_TEMPLATES')!='1' or use_template:
         return False
     try:
-        return (configs.model_name=='protenix_mini_default_v0.5.0'
+        return (configs.model_name in {'protenix_mini_default_v0.5.0', 'protenix_base_default_v0.5.0'}
                 and configs.dtype=='fp32' and configs.use_template is False
                 and configs.model.template_embedder.n_blocks==0
                 and _verified_consumer())

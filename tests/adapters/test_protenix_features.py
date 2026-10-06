@@ -1,4 +1,4 @@
-"""Guard the omission of template tensors unused by Mini inference."""
+"""Guard the omission of template tensors unused by Mini and Base inference."""
 from types import SimpleNamespace as NS
 import pytest
 from fireprot.adapters.protenix import features
@@ -43,3 +43,31 @@ def test_native_exception_propagates(enabled):
     def native():raise ValueError('template error')
     with pytest.raises(ValueError,match='template error'):
         features.build_template_features(configs=config(),use_template=True,native=native)
+
+
+@pytest.mark.parametrize('reason', ['allowed', 'disabled', 'dtype', 'configured', 'actual', 'blocks', 'source'])
+def test_base_v05_requires_verified_unused_template_contract(enabled, monkeypatch, reason):
+    cfg = config()
+    cfg.model_name = 'protenix_base_default_v0.5.0'
+    if reason == 'disabled':
+        monkeypatch.setenv('FIREPROT_SKIP_UNUSED_TEMPLATES', '0')
+    elif reason == 'dtype':
+        cfg.dtype = 'bf16'
+    elif reason == 'configured':
+        cfg.use_template = True
+    elif reason == 'blocks':
+        cfg.model.template_embedder.n_blocks = 1
+    elif reason == 'source':
+        monkeypatch.setattr(features, '_verified_consumer', lambda: False)
+    sentinel = object()
+    calls = []
+    def native():
+        calls.append('native')
+        return sentinel
+    result = features.build_template_features(configs=cfg, use_template=reason == 'actual', native=native)
+    if reason == 'allowed':
+        assert result == {} and calls == []
+        assert features.manifest()['counts'] == dict(skipped_templates=1, native_templates=0)
+    else:
+        assert result is sentinel and calls == ['native']
+        assert features.manifest()['counts'] == dict(skipped_templates=0, native_templates=1)

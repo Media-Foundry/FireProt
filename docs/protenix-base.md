@@ -680,3 +680,22 @@ are migration checks, not a new original-Torch speedup claim.
 [Registry-mediated umem qualification](../provenance/protenix_base_maintained_registry_umem.json).
 
 [Registry-mediated 5ZMW qualification](../provenance/protenix_base_maintained_registry_5zmw.json).
+
+### Native initialization parity in direct comparisons
+
+The first maintained native study was stopped after discovering that the native
+worker did not install the fast-construction hook, even when its environment flag
+was set. Its first native invocation was 430.393 s and the completed optimized
+invocation 111.839 s; both reproduced their prediction anchors bitwise. These are
+retained observations with different initialization paths, not the intended
+shared-fast-init comparison. The next candidate was cancelled and the partial
+study is not a completed three-pair result.
+
+The native worker now installs only the qualified construction hook when
+`FIREPROT_ENABLE_FAST_MODEL_INIT=1`; it does not install accelerated GPU operators.
+Default native behavior with that flag absent or zero is unchanged. Both paths
+emit `construction-runtime.json` when construction reporting is active. The new
+study requires `installed=true`, `selected=1`, `recovered=0` and no construction
+errors in every run, in addition to output and alignment checks. A flag alone is
+not accepted as evidence of initialization parity.
+[Retained mismatch record](../provenance/protenix_base_native_study_initialization_mismatch.json).

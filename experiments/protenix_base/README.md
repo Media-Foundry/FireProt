@@ -224,3 +224,12 @@ match all nine arrays before any E2E result is interpreted.
 The gate full-model pair passes bitwise checks at all 4800 global calls but does
 not improve E2E (112.049 s off versus 112.478 s on). It is not selected for the
 fast path; its forward-only reduction does not justify an E2E speedup claim.
+
+`summarize_native_study.py STUDY CLI [TAG]` summarizes a completed direct native
+study. It checks the driver/control pins, exact per-arm output records, actual
+fast-construction selection, scientific settings and order. Rust `compare-runs`
+then authenticates archives/conditions and computes unchanged numerical and
+confidence diagnostics. Its legacy result remains intact; the user-authorized
+0.1-A aligned criterion is reported separately with descriptive timings. The
+script refuses incomplete studies, condition errors, confidence failures and
+report overwrites. It does not launch inference or modify acceptance thresholds.

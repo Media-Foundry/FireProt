@@ -3787,3 +3787,75 @@ callandnewcapture->contract/select/registerpaths. Existingpathsunchangedexcept
 explicitcontext(default0 returnsbeforeheavyimports); enabledpathstrictlylimited.
 Retained32tests/defaultoff/errorunwind/realRustpolicyand2fullGPUexactchecks address
 actualchange. Re-stage/re-gateafterdocs/evidenceupdatesbeforecommit. NoGPUlive.
+
+MaintainedintegrationCOMMITTED/PUSHEDmastera0e86fe. BothfinalregistryGPUchecks
+complete; source/profilefrozenfordirectstudy. Postcommitindexrefreshed andfinal
+all-diffgateclean(exceptuserdocs/isauntracked).
+CURRENT LIVE directnative/maintainedstudyPID2436859 (timeoutwrapper), confirmed
+launchedAFTERbothqualificationsandcommit. Root
+outputs/experiments/protenix-base-maintained-native-pairs-20261007,
+pid/launch.log/order.jsonl/driver-status.json attermination. Baselineindex0native
+currentlyrunning; sequence native-r0,optimized-r0,optimized-r1,native-r1,
+native-r2,optimized-r2. Preparedcontrolpinsscientificsettingscheckedidentical,
+profilesidenticalexceptopt-inflag; backenddiffdeclaredscientifictransaction.
+Rustmeasure-inferenceeach1800,overalltimeout7200INTthenkillafter60, serialshell
+callsRustcompare-npz+all9bitwisejqandRustbase-drift+.1Aalignedjqbeforecontinuing.
+DoNOTlaunchGPUjobs/heavyremoteCPUbuilds/editremotePython/profileduringstudy.
+Expected~24min. PollsamePID/order; missingwrapperorstatusmustinspectRustchildren
+andmeasurementsbeforeanyrestart. driver-status exit0 +sixinvocationexit0 +six
+exactchecks +threealignedgatesrequiredforcompletion; stillneedsfinalRust
+compare-runsconditions/summaryconfidence report (retainlegacycoordinatefail)
+andrecorduserpolicyseparatelybeforeE2Eclaim.
+
+Scriptreviewedhead/invocationpaths/CIFpaths, bash-nPASS, anchors.sha256verified.
+Studyplanstoredperjobpin/reference; sourcecommit a0e86fe, upstreambb3be993,
+Baseweight9ea20b0a...,N1000umeminputf4208459...,FP32C10D200S1seed101HIP7,
+sharedfastinit/nonflushedcaches. No newdirectspeedupclaimed. Userupdatedabout
+~24minandmaintainedentrycommit. LocalREADME/docsnowaccurate; remotePython/profile
+synced,butdoNOTsyncotherassetsmidtiming. Goalactive; optimizationkernelphase
+flattening, finaldirectevidence/READMEfinalizationremain.
+
+## 2026-10-07 direct native study stopped for actual initialization mismatch
+
+IMPORTANT supersedespriorLIVE2436859 entry. FirstnativeE2E430.392625852s/all9bits
+andfirstoptimized111.838676394s/all9bitscompleted; firstalignedpairpassed.
+Reasonnative430not358: maintainedworkeronlyruntime.install() onfireprotbackend,
+whichinstalledconstructionhook; nativeFIREPROT_ENABLE_FAST_MODEL_INIT=1 envwas
+IGNOREDbecausehookneverinstalled. Thisviolatedstudy'sSHAREDfastinitdescription.
+We sentSIGINTonlytostudyPGID2436859afterverifyingitsmembers. Bythenindex2optimized
+r1started; itwascancelled. Wrapper/bash/RustchildrenTERMINAL, driver-statusexit1,
+psshowedNO remainingfireprot_workers/measure-inference. Preservealloldreceipts,
+no restartatoldroot. Remote stopped-initialization-mismatch.json copiedto
+provenance/protenix_base_native_study_initialization_mismatch.json. Oldrawpair
+NOTa validshared-fastinitclaim, norcompletedthreepairresult.
+
+FIXlocal+remote workerprotenix.py: new_install_native_construction(backend)
+installs ONLY construction hookfornativewhenexplicitfastinitflag1. FireProt
+runtimeinstallunchanged. Bothactivepathswriteconstruction-runtime.json after
+inference, fromexistingconstruction.manifest. Defaultnativeflagabsent/0 unchanged.
+Added2CPUtests proveexplicitnativeopt-inandconstructor-only install; total34
+worker+basecontexttestsPASS. FreshGitNexusimpactpredict/readactualruntime45-46
+andconstruction.install214-244 verifiedcause; typedindexa0e86fe/schema4current.
+TargetedrsyncdryrunreviewedthenworkeronlysyncedAFTERallGPUchildrenstopped.
+Numericalimplementationnotchanged; actualnativefastpathstillneedsfullstudyqual.
+
+NewUNLAUNCHED root outputs/experiments/protenix-base-maintained-native-fastinit-pairs-20261007
+preparedvia/tmp/fireprot-prepare-base-native-fastinit-study.py (bothhosts).
+Freshoutputsprotenix-base-current-fastinit-{native,optimized}-r{0,1,2}; noGPUrunyet.
+SameAB/BA/AB controls/profiles/anchors asprior,butdriver ALSO jqchecksactual
+constructionenabled+installed,unavailablenull,selected1,recovered0,errors0 BEFORE
+perrunverifiedevent. Driverbodypinnedinstudy-plan.driver afterpreparation.
+run.shsyntaxchecked. Sourceprofileflagsunchangedbutworkerfixnowapplieshooknative.
+Needcommitfixthenlaunchonlyaftercheckingallcontrolpins/profiles/scientificsettings
+andnootherGPUjob. Overalltimeout7200INT/killafter60; eachRustinvocation1800.
+
+Newlocaluncommitted summarize_native_study.py (ASTvalid) preparesfinalRust
+comparison withdeclaredbackend/opt-in/profilehashchanges, readsall6checks,
+confidence<=.001anduseraligned<=.1, retainslegacyreport/performance-null failure
+andemitsseparatepolicytimings ONLYafterdriverexit0/fulljournal. Construction
+selectionanddriverpinchecked too. NOTexecutedoncompleteinputs yet; reviewandrun
+whennewstudycomplete. Copy scriptto/tmpremoteonlyaftercommit (notworkerpaths).
+ExpectedmayneedfreshreportTAGifRustconditiondiagnosticunexpected; neveroverwrite
+failedreport. Provisionaldocsupdatedmismatch/constructor reporting. No GPUlive.
+Worktreea0e86fe +worker/tests/aggregator/mismatchprovenance/docs/memorydirty.
+DoNOTclaimgoalcomplete: correctedshared-initdirectstudy/READMEfinalratio pending.

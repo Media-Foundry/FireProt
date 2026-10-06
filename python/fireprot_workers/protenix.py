@@ -56,6 +56,15 @@ def check_request(request):
     return name, checkpoint
 
 
+def _install_native_construction(backend):
+    """Honor the explicit initialization opt-in without installing GPU operators."""
+    if backend != 'native' or os.environ.get('FIREPROT_ENABLE_FAST_MODEL_INIT') != '1':
+        return None
+    from fireprot.adapters.protenix import construction
+    construction.install()
+    return construction.manifest
+
+
 def predict(request, channel):
     started = time.perf_counter()
     name, checkpoint = check_request(request)
@@ -88,11 +97,13 @@ def predict(request, channel):
         torch.utils.deterministic.fill_uninitialized_memory = True
 
     runtime_manifest = None
+    construction_manifest = _install_native_construction(request['backend'])
     kernel = 'torch'
     if request['backend'] == 'fireprot':
         from fireprot.adapters.protenix.runtime import install, manifest
         install('hipblas')
         runtime_manifest = manifest
+        from fireprot.adapters.protenix.construction import manifest as construction_manifest
         kernel = 'fireprot'
 
     from runner import batch_inference, inference
@@ -176,6 +187,9 @@ def predict(request, channel):
     structures = list((output / 'native').rglob('*.cif'))
     if errors or calls != 1 or len(predictions) != workload['samples'] or len(structures) != workload['samples']:
         raise RuntimeError('Incomplete Protenix inference; inspect native/ERR and worker logs')
+    if construction_manifest is not None:
+        (output / 'construction-runtime.json').write_text(
+            json.dumps(construction_manifest(), indent=2, allow_nan=False) + '\n')
     if runtime_manifest is not None:
         (output / 'operator-runtime.json').write_text(json.dumps(runtime_manifest(), indent=2, allow_nan=False) + '\n')
     return dict(schema_version=2, run_id=request['run_id'], seed=request['seed'], workload=workload,

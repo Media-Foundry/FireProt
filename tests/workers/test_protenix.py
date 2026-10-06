@@ -66,3 +66,29 @@ def test_default_variant_uses_its_own_checkpoint_and_no_language_model(tmp_path,
     r['checkpoints']['language_model'] = {'path': 'unused.pt'}
     with pytest.raises(ValueError, match='Unexpected Protenix checkpoint roles'):
         check_request(r)
+
+
+def test_native_fast_init_requires_explicit_opt_in(monkeypatch):
+    from python.fireprot_workers.protenix import _install_native_construction
+    monkeypatch.delenv('FIREPROT_ENABLE_FAST_MODEL_INIT', raising=False)
+    assert _install_native_construction('native') is None
+    monkeypatch.setenv('FIREPROT_ENABLE_FAST_MODEL_INIT', '0')
+    assert _install_native_construction('native') is None
+    monkeypatch.setenv('FIREPROT_ENABLE_FAST_MODEL_INIT', '1')
+    assert _install_native_construction('fireprot') is None  # Existing runtime owns this backend.
+
+
+def test_native_fast_init_installs_constructor_only(monkeypatch):
+    import sys
+    from types import SimpleNamespace
+    from fireprot.adapters import protenix as adapter
+    from python.fireprot_workers.protenix import _install_native_construction
+    calls = []
+    fake = SimpleNamespace(install=lambda: calls.append('construction'),
+                           manifest=lambda: {'counts': {'selected': 1}})
+    monkeypatch.setenv('FIREPROT_ENABLE_FAST_MODEL_INIT', '1')
+    monkeypatch.setitem(sys.modules, 'fireprot.adapters.protenix.construction', fake)
+    monkeypatch.setattr(adapter, 'construction', fake, raising=False)
+    report = _install_native_construction('native')
+    assert calls == ['construction']
+    assert report() == {'counts': {'selected': 1}}

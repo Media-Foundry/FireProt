@@ -30,6 +30,25 @@ Torch or model files changed. The diagnostic uses the new pinned inventory and
 retains full numerical acceptance. The failed E2E run remains rejected.
 See [stage evidence](../provenance/openfold3_latest_stage_profile.json).
 
+The finer diagnostic also passes all 11 arrays and full CIF bytes against the
+three references. Its 228.209-second Pairformer interval breaks down as follows:
+
+| Pairformer operation | Inclusive seconds |
+| --- | ---: |
+| Triangle attention, starting + ending | 110.790 |
+| Triangle multiplication, outgoing + incoming | 97.205 |
+| Pair transition | 13.798 |
+| Single attention with pair bias | 3.556 |
+| Single transition | 0.059 |
+
+Each leaf records 193 calls, including upstream tuning. Residual work and
+instrumentation prevent these rows from being an exact partition of the parent.
+The next targeted diagnostic captures one trained outgoing and incoming
+multiplication, including actual inputs, masks, weights and bounded Torch
+operator attribution. This prioritizes the remaining native multiplication cost
+alongside the already optimized attention path; no new kernel gain is claimed.
+See [fine-grained evidence](../provenance/openfold3_latest_pairformer_profile.json).
+
 ## Latest workspace increment (2026-10-06)
 
 Three isolated N1536 AB/BA/AB pairs compare the accepted D16/cache combination

@@ -2233,3 +2233,57 @@ Do not implement that shortcut without separate scientific/source/bitwise proof.
 Next use actual fine-stage totals to choose largest remaining operator, then
 profile that operator's GEMM/copy/norm/attention components. No new HIP kernel
 chosen yet; user explicitly prioritizes measured major costs.
+
+
+## Fine stage profile accepted; target native triangle multiplication (2026-10-06)
+
+User authorizes continuation. Polled existing v3 PIDs until terminal success;
+all11 arrays and fullCIF remain exact versus native,D16,latest. Evidence
+provenance/openfold3_latest_pairformer_profile.json; remote collected SHA
+331496414114ee840ab115f66d828cadff696e1eab2de8ea8e3e32c5ea67ca2e.
+Trunk Pairformer228.209s inclusive: tri_att_start54.0195,end56.7705 (110.790total);
+tri_mul_out48.8124,in48.3926 (97.205total); pair_transition13.7981;
+attn_pair_bias3.5557;single_transition0.0586. Each leaf193calls, including tuning.
+Other major observed template stack48.808s: attention11.5674+25.4130 and
+multiplication5.2013+5.2166. Trunk303.444, diffusion46.7685,confidence7.6650.
+Nested diagnostic events and profiler overhead are not new E2E claims.
+
+First next target is native triangle multiplication, which remains97s after
+multiple attention optimizations. Do not automatically implement moreQK tuning.
+Attention remains110.8s and will stay a major alternative based on actual
+remaining opportunities. Native source audit in
+core/model/layers/triangular_multiplicative_update.py found standard inference
+uses chunked projections/repeated norms and overwritten-z cache; also a distinct
+FusedTriangleMultiplicativeUpdate exists. Need actual runtime module type and
+operator attribution before selecting a rewrite. Do not assume standard versus
+fused from class names in docs. Preserve aliasing, GEMM shape/order and all bits.
+
+ACTIVE targeted diagnostic /tmp/fireprot-trimul-profile-v1 onDiamondHill,
+PID2202273, Rust child2202285. status=infer; actual PID confirmed live. Request
+trimul-profile-n1536-v1; same science/environment/workspacecandidate. Captures
+exactly ONE outgoing and ONE incoming trunk multiplication using Torch profiler,
+records stage-labelled operation shapes/self CPU/device attribution. First
+actual inputs/masks and module state_dict are saved to two CPU .pt files in
+requestoutput, with class_name stored as module_type, outgoing flag and actual
+forward flags. CPU copies preserve original tensors before inplace execution;
+snapshot overhead makes outer stage timing unsuitable for comparisons. Full
+model proceeds unchanged and all11/fullCIF checks still required versus three
+anchors. Driver pins both input artifacts only after all gates. No dense whole-
+trunk capture. Root status.json/driver.log/collected.json; no automaticretry.
+Local preparer /tmp/fireprot-prepare-trimul-profile-v1.py; launch receipt
+/tmp/fireprot-trimul-profile-v1-launch.json. No concurrent GPU workload launched.
+Next inspect bounded operation tables and runtime class, replay those captured
+trained operators, then plan/implement a qualified HIP/CK change for largest
+cost. Existing workspace plan does not authorize unplanned arithmetic rewrites;
+use a new focused plan after this operator evidence resolves the seam.
+
+Early read-only snapshot inspection (no GPU replay) confirms runtime classes
+TriangleMultiplicationIncoming and TriangleMultiplicationOutgoing, NOT fused
+variants. Both actual inputs are FP32 [1,1536,1536,128], contiguous strides
+[301989888,196608,128,1]. Flags inplace_safe=True,_add_with_inplace=True;
+cueq/tritonFalse. Six projection matrices128x128 and input/output norm vectors128.
+Saved files exist and Torch weights_only/mmap CPU read succeeds. Do not use their
+existence as completed diagnostic acceptance; fullmodel check remains pending.
+Possible follow-up seams are exact reuse of repeated input normalization and
+fusion of native-order pointwise gates with packing; preserve actual GEMM shapes
+and residual aliasing. Choose only after bounded operator table confirms cost.

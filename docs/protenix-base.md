@@ -544,3 +544,26 @@ inputs and retained bias versions remain guarded across replay. Peak allocated
 memory is 10,644,840,960 bytes. This single pair does not rule out other graph
 partitions or persistent multi-request reuse.
 [Cache-aware graph evidence](../provenance/protenix_base_cached_diffusion_graph.json).
+
+### Dual-projection storage combined with both bias caches
+
+On top of global/local bias caching, scoped Lt and buffered receipts, one
+matched pair measures **113.479850 -> 112.678684 s E2E** (**1.00711x**, 0.71%
+less time) when dual-projection storage reuse is enabled. Model calls are
+88.864033 -> 88.112038 s. All nine arrays remain bitwise equal and unchanged
+Rust comparison gates pass; the candidate records 2096 projections and 1048
+consumed pairs. Graph remains off. This modest incremental result is one pair,
+not a repeated combined trend or a direct comparison against original Torch.
+[Combined first pair](../provenance/protenix_base_combined_reuse_first_pair.json).
+
+### Diffusion profile after bias caching
+
+A qualified event probe on the eager cache route preserves all nine arrays
+bitwise. Across D200, inclusive denoiser time is 16.021 s, global transformer
+7.770 s, atom encoder 3.048 s (its transformer 1.803 s), and atom decoder 1.681 s.
+The encoder small MLP contributes only 0.309 s; its three static projections
+contribute approximately 0.041 s combined. Further memoization of those small
+modules is therefore deferred while global diffusion attention/transition costs
+are examined. Nested event intervals include host launch gaps and must not be
+summed into an E2E improvement claim.
+[Qualified profile](../provenance/protenix_base_diffusion_static_profile.json).

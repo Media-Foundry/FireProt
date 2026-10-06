@@ -3518,3 +3518,54 @@ Onterminal requireall9bitsvsoutputs/protenix-base-local-bias-on, dual2096/1048,
 global4800/4776local1200/1194,nofailures. OnlythenlaunchmatchedOFF. Nextmeasure
 whetherseparatelyqualifiedstoragegainstackswithcachegain; no combinedclaimyet.
 RootremoteRustCLI/bridgeunchanged. NootherGPUjob. docs/isauntouched; goalactive.
+
+## 2026-10-07 combined reuse first pair; cached diffusion profile live
+
+CombinedON2412262 andOFF2413517 TERMINAL SUCCESS. All9bitsagainstlocalcacheanchor
+andcrossarm; unchangedRustcompare-runsPASS. E2E113.479850396->112.678683511s,
+1.00711019x/0.71%less; model88.864033266->88.112037746. Onepaironly, no repeated
+combinedtrend/directoriginalratio. ONdual2096projection1048consumed; botharms
+global4800/4776hits/local1200/1194hits, allerrorsnull. Evidence
+provenance/protenix_base_combined_reuse_first_pair.json. Aggregator onbothhosts
+/tmp/fireprot-combined-reuse-pair.py; fullreceiptsroot combined-reuse-20261007.
+
+CURRENT LIVE diagnosticPID2414790, root
+outputs/experiments/protenix-base-diffusion-static-profile-20261007,
+measurement/launch.log/pid. Frozenworkerclonedlocal-bias-cache worker (bothbiasON,
+scopedLt/bufferedbridge; NOdualreuse orgraph), addsnewdiffusion_static_probe.py
+asbase_diffusion_static_probe.py andmeasurecontext innermost. Newlocalsource
+ASTPASS, stilluncommitted. HIP7N1000strictFP32C10D200S1seed101timeout1800.
+Selectedmodulesdenoiser/conditioning/globaltransformer/encoder/decoder plus
+encoderatom_transformer,small_mlp,linear_no_bias_cl/cm/s/r/q,layernorm_s;
+requires200calls each. Outputoutputs/protenix-base-diffusion-static-profile.
+Onterminal requirebase-diffusion-static-profile.json ANDall9bits vs
+outputs/protenix-base-local-bias-on; onlytheninterpretinclusiveoverlappingrows.
+NoE2Espeedupclaimforinstrumentedrun. No otherGPUjob.
+
+Nextpossibleoptimization ONLYifprofilewarrants: encoderstaticpairupdate still
+computeslinear_no_bias_s,cl,cm andsmall_mlp eachstep despitecachedattentionbias.
+Source transformer.py880-949 showsstaticc_laug usesfixeds_trunk; noisyr_lenters
+q_l separately. Couldauditinput/outputinvarianceforfourstaticmodules before
+memoization, withdenoisersources/atommap/weightsversions guarded andcachedoutput
+mutationchecks. DoNOTcachelinear_no_bias_r,q_l,adaptiveconditionorattention.
+No newmemoizationcodeyet. Avoidcopyingupstreamforwardbody; useisolatedmodule
+wrappersandretainlicenseboundaries. Currentmaster8f81f7b; newprofile/evidence/docs
+awaitcommit, docs/isa untouched. Goalactive, nextactionpollsamePID2414790.
+Staticprofile2414790 TERMINAL SUCCESS, all9bitsvsuninstrumentedlocalON. Evidence
+provenance/protenix_base_diffusion_static_profile.json; root summary.json.
+InclusiveD200denoiser16.021498s,globaltransformer7.769712,encoder3.048196,
+encodertransformer1.803023,decoder1.681288,conditioning.352574,smallMLP.309219,
+linearcl.024642/cm.008942/s.007036s. NestedrowsNOTadditive. StaticMLP/projections
+only~.35ssoDEFERmemoization; priorhypothesisoflargercostnotborneout.
+
+CURRENT LIVE deeperglobalprofilePID2416052, root
+outputs/experiments/protenix-base-diffusion-global-profile-20261007,
+measurement/launch.log/pid;outputoutputs/protenix-base-diffusion-global-profile.
+Frozenworkerclonedstaticprofileworker,switchesmeasureimporttobase_diffusion_global_probe.
+SameHIP7strictFP32N1000C10D200S1seed101,bothbiasON,scopedLt/buffered,no dual/graph.
+Newdiffusion_global_probe.py groups24blocksattention/adaNorm/QKV/O/gate/conditioned
+transition andwrapsF.scaled_dot_product_attention onlyqshape[1,16,1000,48];
+requires4800observationspergroup. NewcodeASTcheckedbutfullGPUprofileNOTYETqualified.
+Onterminal requirebase-diffusion-global-profile.json ANDall9bits vs localbiasON;
+onlytheninterpretrows. Failurecountsrecordinworkerlog; retainfailurebeforefix.
+No otherGPUjob. Source/evidence/docsbeingcommitted; no newoperator speedupclaim.

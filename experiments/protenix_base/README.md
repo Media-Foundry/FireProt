@@ -190,3 +190,16 @@ arrays are bitwise equal, including against the earlier eager-cache anchor.
 The matched E2E pair is 113.316 s off versus 113.569 s on (0.99777x).
 Model time is 88.918 versus 88.842 s. No useful gain was observed; graph remains
 disabled. Capture costs 0.0789 s, with one capture and 199 replays.
+
+`diffusion_static_probe.py` measures the denoiser, its conditioning/global
+transformer, atom encoder/decoder, and selected encoder projections/small MLP
+after bias caching. It requires 200 calls per selected module and checks for
+unclosed event intervals. Timing is inclusive, nested and instrumented. Require
+all nine output arrays to match the uninstrumented cache route before using the
+rows to choose further optimization targets.
+
+`diffusion_global_probe.py` drills into 24 cached global diffusion blocks:
+attention, adaptive normalization, Q/K/V/output/gate projections, conditioned
+transition, and the SDPA core at `[1,16,1000,48]`. It requires 4800 observations
+per group and restores hooks/SDPA dispatch on exit. Qualification against the
+uninstrumented cache output is required before interpreting its diagnostic rows.

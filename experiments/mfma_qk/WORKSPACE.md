@@ -358,3 +358,23 @@ cached segments before pool allocation avoids that synthetic failure. This does
 not prove the actual model pool has that placement or that cache release fixes
 model tuning. No allocator change has been promoted. See
 `provenance/openfold3_workspace_allocator_reproduction.json`.
+
+### Capacity128 model gate passed; remaining bottlenecks
+
+The isolated N1536 run passes all11 arrays and full CIF bytes against original
+native and accepted D16 references. One4.5GiB lease is fully released. Coverage
+rises to2,548 complete calls (B128:2,520;B256:18;B512:8;B1024:2), with2,604 kernel
+launches. MSA and Pairformer still reject chunk1024 with a36GiB allocation OOM
+and select512. Another2,546 calls report unsupported bias/mask layout, including
+the still-unresolved remaining B128 path. Peak Torch allocation is51,757,716,992
+bytes. The548.774-second driver duration is one diagnostic observation, not a
+paired E2E result. Evidence:
+`provenance/openfold3_workspace_cap128_model_gate.json`.
+
+This intermediate treatment remains experimental. N1000 fallback deployment
+is prepared but unrun; paired timing is deferred until the remaining allocation
+and layout issues are addressed. Upstream end-node triangle attention transposes
+the pair mask; a CPU reproduction produces mask stride(1,N*N,N*N,N) and a
+noncontiguous outer slice. This is a plausible source of layout fallback, not
+an observed rejected-tensor trace. Do not broaden dispatch without a measured
+layout fixture and full probability/output gates.

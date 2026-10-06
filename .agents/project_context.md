@@ -1731,3 +1731,40 @@ isolated3pairs withdiagnosticsoff;doNOTlauncholdv1paired28-calltreatment.
 IfsmallercapacitystillcausesOOM, consideractualsegmentdiagnostic orcontrolled
 allocationisolationtrial;syntheticpurgeisnotmodelproof. AcceptedE2Eunchanged:
 directnative1.499x;D16incrementalseparate1.162x. Keepgoalactive.
+
+## Capacity128 model complete; fix allocation and mask layout next (2026-10-06)
+
+Previous turn pushed7b6f0c5, evidence forcapacityGPUgates/tunerOOM/syntheticallocator.
+This turn polledsamePID untilterminal; driver2050018/CLI2050019 exit0 at548.7739s.
+All8GCDidleconfirmed. /tmp/fireprot-model-cap128-v1/collect.py1536 succeeds:
+all11arrays+completeCIFbytesexact againstoriginalnativeandacceptedD16. One4.5GiB
+lease released,2548fullcalls,2604kernelcalls. B1282520/B25618/B5128/B10242.
+MainMSA/Pairformerstill512;bothactualOOMtrying36GiB at1024 with15.77GiBallocated,
+33.53/33.52GiBreservedunallocated,and14.24GiBfree. Peakallocated51757716992bytes.
+Fallbackbias/masklayout2546,outerbatch384,qkvshape400,baseineligible6204.
+AcceptedOwnedScorefallbackB1282520 (halfremaining),B256402,B51214,B10248,B32192,
+B64192. No pairedE2Eclaim;singlediagnosticdurationisnotisolatedpairedspeedup.
+Evidence provenance/openfold3_workspace_cap128_model_gate.json. Archive
+model-cap128-v1-results.tar.gz SHAa88956b431289ceb47ccdb651fe4e67665a4b11df0c8bca9b0210fccff9f31b8,
+47732370bytesunderusualdurableroot;containsdeployment+completeoutputs+preparer.
+
+NEXT: resolveallocationandlayoutbeforepairedmeasurement. Upstream
+core/model/layers/triangular_attention.py transposesmaskforendnode,thencomputes
+(self.inf*(mask-1))[..., :,None,None,:]. CPUreproN1536/B128 yieldsstride
+(1,2359296,2359296,1536),noncontiguous;startnodecontiguous(1536,1536,1536,1).
+ModelWorkspaceFusion currentlyrejectsnoncontiguousmask,explainingaPLAUSIBLE
+remaininghalf,notyetprovenbyactualrejectedtensortrace. Needboundedmetadata
+observationorqualifiedupstream-equivalentfixture;normalizeonlyqualifiedmask
+layouts,checkallprobability/outputbits,thenmodelgate. Avoidblindwidening.
+Allocationnextoption:one-timeemptycachebeforefirstpool orisolatedpool;synthetic
+reproexistsbutmodelplacementnotobserved. Ordinarystrictfillmustremain. Plan
+scopeacceptsqualifiedcapacity/layoutandallocationrefinement;noarithmeticchange.
+
+PREPARED BUT NOT RUN: /tmp/fireprot-model-cap128-n1000-v1, requestoutput
+/media/IntelSSD/fireprot/outputs/model-cap128-n1000-0;local/remotepreparer
+/tmp/fireprot-prepare-cap128-fallback-v1.py. Holdsoldcapacity128implementation;
+ifimplementationchanges,preparefreshroot. NoactiveGPUjobnow.
+LocalONLY /tmp/fireprot-prepare-cap128-pairs-v1.py requiresbothgates+>1000calls;
+neveruploaded/executed. DoNOTlaunchyetmerelybecausecoveragegatepasses: resolve
+remainingOOM/layoutfirst. /tmp/fireprot-cap128-paired-v1 doesnotexist.
+AcceptedE2Eclaimsremainunchanged;keepgoalactive,substantialprogressnotplateau.

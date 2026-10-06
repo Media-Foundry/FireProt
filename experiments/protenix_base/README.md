@@ -158,4 +158,13 @@ performance claim.
 The audit retains original projections, checks 1194 later values bitwise, and
 verifies static `p_lm`, `c_l`, `s_trunk`, parameter versions and the execution stream.
 It runs on top of global bias caching, with its own mode and output record.
-The audit passes; cache-mode E2E and numerical qualification remain separate.
+The audit and first cache-mode pair pass: all nine arrays are bitwise equal,
+unchanged Rust gates pass, and complete invocation is 120.025 -> 112.687 s.
+Two further alternating pairs are required to assess repeatability.
+
+The existing graph experiments cannot be stacked with these wrappers unchanged:
+scoped Lt rejects capture, and bias coverage counters count Python executions
+rather than graph replays. A combined experiment must preserve the selected BLAS
+route, validate static-cache lifetimes/streams across capture, and distinguish
+logical model steps from eager/captured Python calls. Do not disable these checks
+just to make replay succeed.

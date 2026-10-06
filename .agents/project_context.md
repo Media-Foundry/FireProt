@@ -3419,3 +3419,31 @@ samelocalexperimentroot/on-measurement,on-launch.log/on-pid; output
 outputs/protenix-base-local-bias-on. Validatehits1194/created6/calls1200, global
 cachealsohits4776, all9predictionarraysbits toglobalONanchorbeforelaunchingOFF.
 OFFpreparedNOTlaunched. NootherGPUjobs. FastlocalE2E/resultstillpending.
+
+## 2026-10-07 local bias first pair passes; graph combination constraints
+
+Local ON2401548 and OFF2402623 TERMINAL SUCCESS. Matched E2E120.024906411 ->
+112.687053399s,1.06511709x/6.11%less, all9arraysBITWISE and unchanged Rust
+compare-runs gatesPASS. ON200denoiser/1200attention/6created/1194hits/errornull;
+globalcacheON inbotharms, bufferedbridge, no dualreuse. Evidence
+provenance/protenix_base_local_bias_first_pair.json; remote first-summary.json,
+compare.json/comparison.json at outputs/experiments/protenix-base-local-bias-cache-20261007.
+Aggregation/preparation script /tmp/fireprot-local-bias-pair.py onbothhosts.
+
+CURRENT LIVE repeat schedulerPID2404870 confirmedlive, sameexperimentroot;
+repeat-spec.json/repeat-measurement/repeat-launch.log/repeat-pid. Rustbenchmark-pairs
+runs2additionalpairsABthenBA afterfirstmanualBA, allinvocationtimeout1800,
+executiontimeout7200. Requestoutputs protenix-base-local-bias-{off,on}-r{1,2}.
+PollsamePID; don'trestart/overlapGPUjobs orheavyremoteCPUbuilds. HIP7only.
+Requireall6outputsall9bits andperpairRustgates; aggregate3pairswithfirstmanual
+on/off thenrepeat000/001 and003/002, retainallobservations. Repetitionnotyetclaimed.
+
+UseraskedHIPGraph: currentdefaultoff, oldPairformer1.0107x anddenoiser0.9769x
+singlepairsdocumented, all9bitsexact. Existingwrapperscannotnaivelystack:
+model_torch_lt.py rejects current_stream_capturing andexpects524each; cachehooks
+expect200Pythonconditioningcalls/4800or1200attentioncalls, butreplaybypasseshooks.
+Localcachealsofixesstreamownership. Neednewexplicitcomposedcapturecontractwith
+staticcachelifetime/version validation andlogicalstepcounts, preservingselected
+BLASroute; doNOTjustremoveguards. No newgraphtrialstarted. Firstfinishrepeat.
+Currentgoalprogress: localcachegain/fulloutputcorrectness, notplateaued.
+Master7242778 includespriorglobal/localaudits; thisappend/localpairdocsawaitcommit.

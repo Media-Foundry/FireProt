@@ -509,5 +509,9 @@ A separate audit of the six local atom-attention blocks also finds all 1194
 later biases bitwise equal to the first six. Static pair/trunk inputs and
 encoder/decoder parameter versions remain fixed; all nine predictions match
 the global-cache anchor. Retained local biases occupy 98,304,000 bytes.
-The full local-cache trial is pending; no local-cache speedup is claimed.
+The first full local-cache pair measures **120.024906 -> 112.687053 s E2E**
+(**1.06512x**, 6.11% less time), with global caching and buffered receipt reading
+enabled in both arms. All nine arrays remain bitwise equal and unchanged Rust
+comparison gates pass. This is one pair; two alternating repetitions are running.
+[Local first pair](../provenance/protenix_base_local_bias_first_pair.json).
 [Local audit](../provenance/protenix_base_local_bias_audit.json).

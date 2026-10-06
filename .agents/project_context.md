@@ -4215,3 +4215,32 @@ Afterdriverexit0, freshTAGfirst-v1 verifiescontrols, consumer/counts, Rustexact
 arrays+conditions/gates, emitsfirst-v1-summary.json. No performanceclaimyet.
 CurrentGraphdocs/evidence/memoryuncommitted; master6cafde8 pushed. Needindex/gate
 thencommitwhiletiming(remoteuntouched). NootherGPU/buildwhile2468516live.
+
+## 2026-10-07 unused-template first pair PASS; repetitions LIVE
+
+Templatewrapper2468516 TERMINAL SUCCESS. Aggregator/tmp/fireprot-summarize-base-
+template-pair.py first-v1SUCCESS; copiedevidence
+provenance/protenix_base_unused_templates_first_pair.json. OFFE2E112.364168339/
+model87.901271572; ON110.163983404/model87.474230924;1.019971908x onepairONLY.
+Bothall9BITSmaintainedanchorandRustgatesPASS. ActualfeaturecountsOFFskip0/native1,
+ONskip1/native0, consumerSHA74cf338e...matches. No GPUsemantic/RNGchangeobserved.
+Docsupdatedfirstpair, no maintainedpromotion; main3.422xdirectresultstillflag0.
+
+CURRENT LIVE template repeatwrapper2470512 same root
+outputs/experiments/protenix-base-unused-templates-20261007. repeat-plan.json,
+repeat-run.sh/repeat-pid/repeat-launch.log/repeat-status.json/repeat-order.jsonl.
+Samefrozenworker/profiles asfirstpair; new4requests indexed2-5:pair1ON/OFF,
+pair2OFF/ON, completingAB/BA/AB across6runs. HIP7only;allpinscheckedandnootherGPU
+jobbeforelaunch. Eachmeasure1800,overall4000; eachall9BITS+actualskipcounts before
+next. Outputsprotenix-base-unused-template-{on,off}-r{1,2}. Newmeasurements
+{mode}-r{pair}-measurement; referencesmaintainedumem. No remotesourcechanges.
+
+Needaggregatesixruns afterrepeat-statusexit0 plusfirstdriverexit0; authenticate
+bothfirststudyplan and repeatplan/driver/controlpins, combine firstrows(pair0)
+withrepeatrows(pair1/2), checkall9bits/counters/sourceconsumer andRustcompare-runs
+expectedonlyFIREPROT_SKIP_UNUSED_TEMPLATES0/1+profilehash. UsefreshTAG,e.gthree-v1.
+SixrunaggregatorNOTyetwritten. Onlyiftimingshold, qualify5ZMWsameflag1 against
+outputs/protenix-base-maintained-5zmw-registry-v2 orold5zmwoptimized (all9bits)
+beforepromotingfeatures.pyBaseguard andprofileflag1. Do not assumeperformance
+fromonepairormultiply2%into3.422headline. CurrentGraphdocscommit a82bbae pushed;
+newtemplatefirstpairdocs/evidence/memorydirty. Goalactiveuntilthesechecks/decision.

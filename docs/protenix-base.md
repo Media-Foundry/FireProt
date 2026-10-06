@@ -804,3 +804,18 @@ establish a gain over the maintained entry. The G48 candidate also failed to
 improve E2E. The direct-native **3.42210x** result remains the maintained result;
 these graph experiments do not increase it.
 [Three-pair graph evidence](../provenance/protenix_base_maintained_vs_graph_three_pairs.json).
+
+### Unused-template preprocessing: first Base pair
+
+An isolated worker extends Mini's existing unused-template guard to Base-default
+v0.5.0 only when template use is disabled, template blocks are zero, precision is
+FP32 and the consumer source hash matches. GPU operators and C10/D200/S1 remain
+unchanged. The first N1000 off/on pair measures **112.364168 -> 110.163983 s E2E
+(1.01997x)**. Both outputs match all nine arrays of the maintained prediction
+anchor bitwise, and unchanged Rust comparison gates pass. The runtime reports
+one native template construction off and one skipped construction on.
+
+This is a single observation, not a stable gain or maintained-profile promotion.
+Two additional alternating pairs and second-input qualification are pending.
+The direct-native 3.42210x result above does not include this candidate.
+[Template first-pair evidence](../provenance/protenix_base_unused_templates_first_pair.json).

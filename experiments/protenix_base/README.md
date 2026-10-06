@@ -305,7 +305,7 @@ two of three pairs favor eager. Graph is not promoted. This supersedes any
 suggestion of a production gain from the single experimental off/on pair.
 [Three-pair evidence](../../provenance/protenix_base_maintained_vs_graph_three_pairs.json).
 
-## Base unused-template preprocessing candidate (unqualified)
+## Base unused-template preprocessing candidate
 
 `unused_templates.py` extends the existing Mini guard only inside an isolated
 worker context. Wrap the complete worker `predict` call so it covers dataset
@@ -319,8 +319,10 @@ on exception. Source inspection confirms Base v0.5.0 uses zero template blocks
 and the consumer exits before reading template tensors. The consumer hash is
 `74cf338ebc53b572dc12d6519392a09972c2a807beb1017c7fe0773536e301e5`.
 
-Seventeen CPU checks cover the new guard and existing Mini behavior. No complete
-Base GPU trial or E2E result exists yet. Verify all nine prediction arrays before
-making a performance claim; unused features and preprocessing RNG behavior must
-not alter the prediction. Do not enable this candidate in the maintained profile
-before qualification.
+Seventeen CPU checks cover the new guard and existing Mini behavior. The first
+matched full-model pair subsequently passed all nine arrays bitwise against the
+maintained anchor and unchanged Rust gates. E2E is **112.364168 s off versus
+110.163983 s on (1.01997x)**; actual skip/native counts are 0/1 versus 1/0 and the
+consumer hash matches. This is one pair; repeated timing and a second input are
+pending. Do not enable this candidate in the maintained profile before those
+checks. [First-pair evidence](../../provenance/protenix_base_unused_templates_first_pair.json).

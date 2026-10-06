@@ -3,7 +3,7 @@ import threading
 
 import torch
 
-from experiments.mfma_qk.workspace_attention import WorkspaceFusion
+from experiments.mfma_qk.workspace_attention import WorkspaceFusion, bias_layout_supported
 from experiments.mfma_qk.probe_fusion import bitwise_mismatch_count
 
 
@@ -34,8 +34,7 @@ class MicrobatchFusion:
         if any(not t.is_cuda or t.device != query.device or t.dtype != torch.float32
                or t.requires_grad for t in tensors):
             raise ValueError('Expected inference FP32 tensors on one HIP device')
-        if not mask.is_contiguous() or not (bias.is_contiguous()
-                or bias.transpose(-1, -2).is_contiguous()):
+        if not mask.is_contiguous() or not bias_layout_supported(bias, normalize=True):
             raise ValueError('Unsupported mask/bias layout')
         if (not torch.is_inference_mode_enabled() or not torch.are_deterministic_algorithms_enabled()
                 or torch.is_deterministic_algorithms_warn_only_enabled()

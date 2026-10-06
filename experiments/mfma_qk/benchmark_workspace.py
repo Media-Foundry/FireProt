@@ -33,8 +33,11 @@ def operands(batch, seed, layout):
         mask[outer, ..., 1024 + (outer + seed) % 512:] = -float('inf')
     if seed == 103:
         mask[0].fill_(-float('inf'))
-    bias = torch.randn(1, 4, 1536, 1536, device='cuda') * 0.125
-    if layout == 'transposed':
+    if layout.startswith('head_last'):
+        bias = (torch.randn(1536, 1536, 4, device='cuda') * 0.125).permute(2, 0, 1).unsqueeze(0)
+    else:
+        bias = torch.randn(1, 4, 1536, 1536, device='cuda') * 0.125
+    if layout in ('transposed', 'head_last_transposed'):
         bias = bias.transpose(-1, -2)
     return q, k, v, mask, bias
 
@@ -52,14 +55,16 @@ def native(args):
     return reference(args)[1]
 
 
-def main(controls_path, destination, batch):
+def main(controls_path, destination, batch, bias_layouts='baseline'):
+    layouts = ('head_last', 'head_last_transposed') if bias_layouts == 'head-last' else ('contiguous', 'transposed')
     destination = Path(destination)
     destination.mkdir(parents=True, exist_ok=False)
     report = dict(completed=False, batch=batch, n=1536, heads=4, k=32,
         controls=pin(controls_path), source_pins=[pin(__file__), pin(workspace_attention.__file__),
             *[pin(sys.modules[obj.__module__].__file__) for obj in
               (PackedFusion, bitwise_mismatch_count, OwnedScoreSoftmax)], pin(softmax_fp32.__file__)],
-        qualification=[], guards=[], records=[], cold_workspace_calls=[],
+        qualification=[], guards=[], records=[], cold_workspace_calls=[], bias_layouts=list(layouts),
+        fresh_bias_normalization=bias_layouts == 'head-last',
         scope='Experimental retained workspace; complete attention only, no model/E2E acceptance',
         cache_state='Published kernels and warm allocator. Two private score workspaces persist across all arms. No cache flush; exact checks outside timing.',
         retained_workspace_bytes_per_arm=batch * 4 * 1536 * 1536 * 4,
@@ -79,6 +84,8 @@ def main(controls_path, destination, batch):
         os.environ['FIREPROT_SOFTMAX_FP32_BUNDLE'] = control['split_hip']['bundle']
         os.environ['FIREPROT_SOFTMAX_FP32_BUNDLE_SHA256'] = control['split_hip']['manifest_sha256']
         kernel = control['fusion']
+        if bias_layouts == 'head-last' and 'workspace_reference' not in control:
+            raise ValueError('Head-last comparison requires two normalized workspace arms')
         with torch.inference_mode():
             split = OwnedScoreSoftmax()
             fresh = PackedFusion(kernel, batch)
@@ -94,7 +101,7 @@ def main(controls_path, destination, batch):
             # Different seeds/layouts and poisoned previous scores exercise full overwrite.
             previous = {}
             for seed in (101, 102, 103):
-                for layout in ('contiguous', 'transposed'):
+                for layout in layouts:
                     args = operands(batch, seed, layout)
                     probability, expected = reference(args)
                     for name, pool in pools.items():
@@ -115,7 +122,7 @@ def main(controls_path, destination, batch):
                         if prior_checked:
                             exact(*previous[name])
                         previous[name] = (output.clone(), output)
-                        record = dict(arm=name, seed=seed, layout=layout, score_bits_exact=True,
+                        record = dict(arm=name, seed=seed, layout=layout, bias_strides=list(args[-1].stride()), score_bits_exact=True,
                             output_bits_exact=True, prior_result_unchanged=True if prior_checked else None,
                             allocations=pool.allocations, retained_bytes=pool.retained_bytes)
                         report['qualification'].append(record)
@@ -126,7 +133,7 @@ def main(controls_path, destination, batch):
                     del probability, expected, args
             previous.clear()
             del output
-            args = operands(batch, 101, 'contiguous')
+            args = operands(batch, 101, layouts[0])
             for name, pool in pools.items():
                 before = (pool.calls, pool.allocations, pool._scores.data_ptr())
                 errors = []
@@ -153,7 +160,7 @@ def main(controls_path, destination, batch):
                 report['guards'].append(dict(arm=name, thread_rejected=True, stream_rejected=True,
                     no_submission_or_reallocation=True))
             del args
-            for layout in ('contiguous', 'transposed'):
+            for layout in layouts:
                 args = operands(batch, 101, layout)
                 expected = native(args)
                 def split_call():
@@ -161,7 +168,8 @@ def main(controls_path, destination, batch):
                     scores = torch.einsum('...qc, ...kc->...qk', q, k)
                     return torch.einsum('...qk, ...kc->...qc', split(scores, [mask, bias]), v)
                 arms = dict(native=lambda: native(args), split_hip=split_call,
-                    fresh_fusion=lambda: fresh(*args))
+                    fresh_fusion=lambda: fresh(*args[:-1], args[-1].contiguous())
+                        if bias_layouts == 'head-last' else fresh(*args))
                 arms.update({name: (lambda pool=pool: pool(*args)) for name, pool in pools.items()})
                 for function in arms.values():
                     for _ in range(2):
@@ -203,7 +211,7 @@ def main(controls_path, destination, batch):
                 report['workspaces'][name]['released_bytes'] = released
             report['medians_seconds'] = {layout: {name: statistics.median(
                 r['seconds'] for r in report['records'] if r['layout'] == layout and r['arm'] == name)
-                for name in arms} for layout in ('contiguous', 'transposed')}
+                for name in arms} for layout in layouts}
         report['completed'] = True
     finally:
         for pool in pools.values():
@@ -216,5 +224,6 @@ if __name__ == '__main__':
     parser.add_argument('controls')
     parser.add_argument('destination')
     parser.add_argument('--batch', type=int, choices=(32, 256), default=32)
+    parser.add_argument('--bias-layouts', choices=('baseline', 'head-last'), default='baseline')
     args = parser.parse_args()
-    main(args.controls, args.destination, args.batch)
+    main(args.controls, args.destination, args.batch, args.bias_layouts)

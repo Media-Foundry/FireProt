@@ -1525,3 +1525,30 @@ resourcepolicy/registryboundary andcallbacklifecycleverification, modelmemory/
 chunk-tunerobservation, all11arrays+CIFgates thenisolatedpairedE2E. Do notclaim
 modelgainfromoperators. Frozenacceptedhead16worker/profile at
 /tmp/fireprot-head16-paired-v1; actualmodelmemoryheadroomstillunmeasured.
+
+## Real head-last bias layout accepted (2026-10-06)
+
+Previous turn made progress and pushed18819bb (microbatch). Historicalactual
+modeltrace biasstride[4,1,6144,4] wasoutsidepriorcontiguous/headfirst-transposed
+fixtures. Addedbias_layout_supported predicate: denseheadfirstalways; dense
+headlast andheadlasttranspose ONLYwhenexplicitnormalization enabled. Reject
+unresolvedneg/conj/overlapping/gappedlayouts; directWorkspace nowalsoplainTensor
+andlazyviewguards. MicrobatchnormalizesbeforeB256pool. NoHIParithmeticchange.
+BothbenchmarkCLIs add --bias-layouts head-last;freshfusionconversionincluded;
+directheadlastbenchmarkrequiresnormalizedreferencearm.19CPUtests pass.
+
+Root /tmp/fireprot-qk-headlast-v1, session68912 exits0. B32/B256each12fullscore+PV
+qualifications and100timedoutputs; B512/B1024each6qualifications and40timedoutputs.
+Allbits/previousresult/stride/releaseaccounting pass; directarmsrepeatthread/
+streamrejections. SourcearchiveSHA923596064094fd2cb30fe84f9126b5da1feba4c58cd792eca5e4b013f031c4d6.
+B256headlastsplit43.663->combined38.691ms,transposed43.998->39.016ms;
+B1024headlast174.044->154.595ms,transposed174.416->155.119ms. About11%warmgain.
+Evidence openfold3_qk_headlast_benchmark.json; archive qk-headlast-v1-results.tar.gz
+SHA2722f1a18d94292209c52f91a5bf5565b2fe64b0558c2a554798fa36b3c9210b.
+No activeGPUjobs. Stillno model/E2Eacceptance. Nextmodelintegration mustshareONE
+9GiBpool acrossB256/B512/B1024; do notinstantiatefixedbatchwrapperperoutershape
+andaccidentallyretain27GiB. Rust shouldownbudget/singlelease/lifecyclepolicy;
+Torch boundaryownstensorallocationandGPUcalls. PreserveD16/N1000/B64/native
+fallback andfrozenacceptedhead16baseline. Needoperatorcoverage/peak/tunercounters,
+11arrays+CIFmodelchecks, thenisolatedpairedE2E. GitNexusplan skillread; planning
+willpinthisacceptedlayoutstate andexistingRustregistry/bridgeextension patterns.

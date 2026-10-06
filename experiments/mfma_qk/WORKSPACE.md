@@ -153,3 +153,36 @@ Evidence: `provenance/openfold3_qk_microbatch_benchmark.json`, with both archive
 raw traces, full measurements and source pins. Successful archive
 `qk-microbatch-v2-results.tar.gz`, SHA256
 `916accf6a4e6eaa34f4258671a267092753bfe1d188da07df2003343e31cd502`.
+
+## Recorded model bias layout
+
+The historical model trace in `provenance/openfold3_attention_trace_n1536.json`
+records bias strides `[4,1,6144,4]`. New head-last tests reproduce those strides
+and the query/key transpose `[4,1,4,6144]`. `bias_layout_supported` accepts these
+dense layouts only when the caller normalizes bias before the packed ABI.
+Overlapping/gapped layouts and unresolved negative/conjugate views are rejected.
+The direct workspace also now rejects tensor subclasses and unresolved views.
+
+Use `--bias-layouts head-last` in either benchmark. Direct comparisons require
+both retained arms to normalize bias; fresh fusion explicitly normalizes inside
+its timed call too. Raw kernel arithmetic and its packed ABI are unchanged.
+All four batch sizes pass full probability/output checks, previous-result and
+release accounting; B32/B256 additionally repeat thread/stream rejection tests.
+All280 timed calls pass bitwise. Nineteen CPU rejection/layout tests pass.
+
+| Batch / bias | Split HIP (ms) | Combined workspace/microbatch (ms) |
+| --- | ---: | ---: |
+| 32 / head-last | 5.718 | 5.120 |
+| 32 / head-last transposed | 6.095 | 5.503 |
+| 256 / head-last | 43.663 | 38.691 |
+| 256 / head-last transposed | 43.998 | 39.016 |
+| 512 / head-last | 87.219 | 77.548 |
+| 512 / head-last transposed | 87.546 | 77.910 |
+| 1024 / head-last | 174.044 | 154.595 |
+| 1024 / head-last transposed | 174.416 | 155.119 |
+
+Bias conversion and output assembly costs remain included. These synthetic
+layout checks do not establish model memory or E2E benefit. Evidence:
+`provenance/openfold3_qk_headlast_benchmark.json`; successful archive
+`qk-headlast-v1-results.tar.gz`, SHA256
+`2722f1a18d94292209c52f91a5bf5565b2fe64b0558c2a554798fa36b3c9210b`.

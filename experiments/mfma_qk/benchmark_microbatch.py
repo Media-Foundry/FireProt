@@ -24,14 +24,15 @@ def reference(args, split):
     return probability, torch.einsum('...qk, ...kc->...qc', probability, v)
 
 
-def main(controls_path, destination, batch):
+def main(controls_path, destination, batch, bias_layouts='baseline'):
+    layouts = ('head_last', 'head_last_transposed') if bias_layouts == 'head-last' else ('contiguous', 'transposed')
     destination = Path(destination)
     destination.mkdir(parents=True, exist_ok=False)
     report = dict(completed=False, batch=batch, microbatch=256, n=1536, heads=4, k=32,
         controls=pin(controls_path), source_pins=[pin(__file__), pin(microbatch_attention.__file__),
             pin(workspace_attention.__file__), *[pin(sys.modules[x.__module__].__file__)
                 for x in (operands, exact, OwnedScoreSoftmax, trace_operations)], pin(softmax_fp32.__file__)],
-        qualification=[], records=[], seed=101, visible_device=os.environ.get('HIP_VISIBLE_DEVICES'),
+        qualification=[], records=[], seed=101, bias_layouts=list(layouts), visible_device=os.environ.get('HIP_VISIBLE_DEVICES'),
         scope='Full-batch native QK + accepted in-place HIP softmax + native PV reference; not an out-of-place Torch-softmax or model comparison',
         cache_state='One initialized B256 score workspace retained throughout warm timing in both arms; no cache flush; exact checks outside timing.')
     candidate = None
@@ -60,11 +61,11 @@ def main(controls_path, destination, batch):
             report['kernel_receipt'] = candidate._pool.receipt
             previous = None
             for seed in (101, 102, 103):
-                for layout in ('contiguous', 'transposed'):
+                for layout in layouts:
                     args = operands(batch, seed, layout)
                     if seed == 102:
                         args = (*args[:3], args[3][:1], args[4])
-                    if seed == 101 and layout == 'contiguous':
+                    if seed == 101 and layout == layouts[0]:
                         trace = destination / 'full-reference-trace.json'
                         with torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU,
                                 torch.profiler.ProfilerActivity.CUDA], record_shapes=True) as profiler:
@@ -96,13 +97,13 @@ def main(controls_path, destination, batch):
                         raise RuntimeError('Microbatch output layout differs from native PV')
                     exact(*previous)
                     previous = (actual.clone(), actual)
-                    report['qualification'].append(dict(seed=seed, layout=layout,
+                    report['qualification'].append(dict(seed=seed, layout=layout, bias_strides=list(args[-1].stride()),
                         mask_batch=args[3].shape[0], all_probability_bits_exact=True,
                         all_output_bits_exact=True, prior_result_unchanged=True,
                         output_strides=list(actual.stride())))
                     del probability, expected, args, actual
             del previous, first
-            for layout in ('contiguous', 'transposed'):
+            for layout in layouts:
                 args = operands(batch, 101, layout)
                 probability, expected = reference(args, split)
                 del probability
@@ -147,7 +148,7 @@ def main(controls_path, destination, batch):
             report['workspace']['released_bytes'] = released
             report['medians_seconds'] = {layout: {name: statistics.median(r['seconds'] for r in report['records']
                 if r['arm'] == name and r['layout'] == layout) for name in arms}
-                for layout in ('contiguous', 'transposed')}
+                for layout in layouts}
         report['completed'] = True
     finally:
         if candidate is not None:
@@ -160,5 +161,6 @@ if __name__ == '__main__':
     parser.add_argument('controls')
     parser.add_argument('destination')
     parser.add_argument('--batch', type=int, choices=(512, 1024), default=512)
+    parser.add_argument('--bias-layouts', choices=('baseline', 'head-last'), default='baseline')
     args = parser.parse_args()
-    main(args.controls, args.destination, args.batch)
+    main(args.controls, args.destination, args.batch, args.bias_layouts)

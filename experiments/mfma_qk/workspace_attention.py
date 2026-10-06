@@ -8,6 +8,17 @@ from experiments.mfma_qk.benchmark_attention import PackedFusion
 from experiments.mfma_qk.probe_fusion import validate_inputs
 
 
+def bias_layout_supported(bias, *, normalize):
+    """Only measured dense layouts; head-last storage requires normalization."""
+    if (type(bias) is not torch.Tensor or tuple(bias.shape) != (1, 4, 1536, 1536)
+            or bias.dtype != torch.float32 or bias.is_neg() or bias.is_conj()):
+        return False
+    if bias.is_contiguous() or bias.transpose(-1, -2).is_contiguous():
+        return True
+    return normalize and (bias.permute(0, 2, 3, 1).is_contiguous()
+        or bias.transpose(-1, -2).permute(0, 2, 3, 1).is_contiguous())
+
+
 class WorkspaceFusion(PackedFusion):
     """Reuse initialized private scores; only the independent PV result escapes."""
 
@@ -33,6 +44,11 @@ class WorkspaceFusion(PackedFusion):
                 or torch.is_deterministic_algorithms_warn_only_enabled()
                 or not torch.utils.deterministic.fill_uninitialized_memory):
             raise RuntimeError('Strict inference and uninitialized-memory filling must remain enabled')
+        tensors = (query, key, value, mask, bias)
+        if any(type(t) is not torch.Tensor for t in tensors):
+            raise ValueError('Only plain tensors are supported')
+        if any(t.is_neg() or t.is_conj() for t in tensors):
+            raise ValueError('Unresolved negative/conjugate tensor views are forbidden')
         if any(tuple(t.shape) != (self.batch, 4, 1536, 32) for t in (query, key, value)):
             raise ValueError('Workspace Q/K/V shape is fixed for its entire lifetime')
         if (tuple(mask.shape) not in ((1, 1, 1, 1536), (self.batch, 1, 1, 1536))
@@ -41,8 +57,7 @@ class WorkspaceFusion(PackedFusion):
         if any(not t.is_cuda or t.device != query.device or t.dtype != torch.float32
                or t.requires_grad for t in (query, key, value, mask, bias)):
             raise ValueError('Workspace accepts inference FP32 tensors on one HIP device')
-        if not mask.is_contiguous() or not (bias.is_contiguous()
-                or bias.transpose(-1, -2).is_contiguous()):
+        if not mask.is_contiguous() or not bias_layout_supported(bias, normalize=self.contiguous_bias):
             raise ValueError('Unsupported mask/bias layout')
 
     def __call__(self, query, key, value, mask, bias):

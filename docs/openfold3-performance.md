@@ -608,3 +608,40 @@ inputs to separate projections, workspace attention and PV costs.
 
 Evidence: `provenance/openfold3_post_norm_hotspots_20261007.json`. The hashed archive
 also preserves the rejected strided E2E series and its full outputs.
+
+
+## Fused triangle gates and channel packing: N1536 paired E2E
+
+The handwritten HIP kernel fuses projection sigmoid, projection multiplication,
+mask multiplication and channel-first packing. It preserves FP32 arithmetic order.
+Canonical LayerNorm output strides are used in both arms; this control is newer
+than the preceding normalization comparison, so their ratios must not be multiplied.
+
+Three AB/BA/AB pairs retain strict deterministic FP32 N1536, R3/four trunk passes,
+D200/S1, seed101, HIP7, fresh processes and unflushed caches. Only
+`FIREPROT_GATE_PACK=0/1` and the declared profile hash differ. No profiler runs
+inside either measured arm.
+
+| Pair | Baseline E2E (s) | Candidate E2E (s) | Speedup |
+| --- | ---: | ---: | ---: |
+| 1 | 351.629 | 348.149 | 1.0100x |
+| 2 | 352.949 | 350.103 | 1.0081x |
+| 3 | 354.483 | 348.258 | 1.0179x |
+
+Complete invocation medians are **352.949 → 348.258 s**, **1.0135x**,
+**1.33% less time**. Model-forward medians are **258.904 → 254.220 s**
+(**1.0184x**). All three E2E pairs are faster. All six outputs pass all 11
+bitwise array comparisons and complete CIF byte comparisons against the qualified
+model anchor. Candidate selection is confirmed by 430 accepted triangle modules
+and 5,160 fused calls, with 18 unsupported calls retaining native behavior.
+
+[Raw measurements, pins and archive receipt](../provenance/openfold3_gate_pack_e2e_n1536.json)
+include independent re-reading of current output arrays, CIFs and source pins.
+The archive is `openfold3-gate-pairs-epilogue-20261007.tar.gz`, SHA-256
+`63c213999cf40505d16d17ddff6498da1f44a7e1a340807afe371a05df40d18f`.
+It also retains subsequent epilogue operator experiments and their rejected
+launcher attempts; those are not part of this E2E treatment.
+
+This remains a frozen experimental deployment, not a maintained-profile default.
+A direct original-Torch comparison of the latest complete combination is still
+pending. See [kernel scope and frozen entry](../experiments/openfold3_gate/README.md).

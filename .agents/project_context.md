@@ -5210,3 +5210,149 @@ live56seconds withfirstbaselineinprogress. Localprepare/run
 operatorroot. NextcollectpairedE2E andarchive, donotmultiplyhistoricalincrements.
 Afterthiscycle nextpossibleoperator target is finaltriangle sigmoid/gated residual
 write fusion (UNIMPLEMENTED); preserveseparate rounding toavoidFMAchanges.
+
+## 2026-10-07 paired timing continues; residual epilogue screen queued
+
+Latestmaster d38df7b934568474fbe2c66ac6b529b329f51519 pushed; postcommitGitNexus
+index/runnercurrent, incompleteReasons[], finaldetectallclean. Gate sources and
+operator/fullmodel evidence now committed. User docs/isa remains untracked.
+
+Paired216757 stillLIVE, last11:56. Firstbaselineaccepted.json exists; global
+paired/benchmark.json is only written atterminal, so its currentabsence is NOT
+failure. measurement-000 andmeasurement-001 exist; no partialratio claimed.
+New collector /tmp/fireprot-collect-gate-pairs.py andpairedroot/collect.py freshly
+validateall6sourcepins/arrays/CIF/routecounts andRustperformance beforemedians.
+Baselinecopy430/18/7740/0; candidategate430/18/5160gatecalls,5160copies/1290fallbacks;
+normalization11202/7846/4730 andattentionkey5064/template27reused unchanged.
+
+NEW LIVE epilogue queue timeout229343, root
+/media/IntelSSD/fireprot/outputs/experiments/openfold3-epilogue-20261007.
+Currently waiting_for_pairs predecessor216757. MustpollSAMEbothhandles; doNOT
+manuallycollectpairs orlaunchscreen whilequeueowns these steps. Queuechecks
+predecessorPID+cwd+cmdline+boot, requires terminalsuccess AND PIDgone, SMI5idle;
+rechecksallscript/sourcepins, collectsverifiedpairedresults, thenRustHIPbuild
+withGPUhidden, then12 numericalcases onHIP7afterindependentPCI93/gfx90aprobe.
+No otherGPU/heavyremotebuild duringpairedtiming. Queuefilesimmutablewhilelive.
+
+Prototype /tmp/fireprot-of3-epilogue contains epilogue.cpp/runtime.py/build.py/
+screen.py/queue.py; persistedremote. Python syntaxpassed ONLY. HIP compilation,
+resources/numerical/performance/fullmodel allPENDING. Kernel fuses finalsigmoid,
+x*sigmoid(g), andoptionallyz+=product directlyinto stridedzslice. Uses
+#pragma clang fp contract(off) toretainseparate multiply/add rounding; native
+operandorder x*sigmoid thenz+product. HIP __fmul_rn header availabilitywasnot
+confirmed; do notclaimuseofthatintrinsic. Screen planned12cases: small/realshapes,
+random/extreme, addfalse/true; comparesENTIREpaddedstorage sooutside-slice writes
+fail. No alterationofexistinggate kernel orpairedworker. Futuretrainedreplay
+requires replacingonly chunked finalg_chunk.sigmoid_/x_chunk*=g/zupdate block,
+with originalview/aliasingcontract andexisting capabilityfallback preserved.
+
+Collector runs BEFORE queuedbuild; ifcollector/build/screenfails, inspectterminal
+reason and repair successoronly, neverrestartcompletedpairedbenchmark. A terminal
+screen with correctness_passedfalse means numericalrejection, not successfulop.
+Rawepilogueprototype hasnotbeenintegratedintorepo/archivedyet. Pairedarchive and
+publicationpendingterminalcollection. Overallgoalactive; globalplateaunotproven.
+
+## 2026-10-07 four-arm epilogue replay prepared and queued
+
+Paired216757 stillLIVE, last21:10; threeof6invocationscomplete. Actual completed
+invocationseconds: measurement000baseline0=351.629082030,
+measurement001candidate0=348.148546485,measurement002candidate1=350.102864205.
+No completed-series median orspeedupclaim. Currentfourthbaseline running.
+Numericalqueue229343 stillwaitingon216757; immutablequeueinputs unchanged.
+
+Four-arm trainedreplay preparedin/tmp/fireprot-of3-epilogue-replay andpersistedto
+outputs/experiments/openfold3-epilogue-replay-20261007. Source-pinned ASTextraction
+uses actualnativefileSHA612caf7abd07a86a7fdf4eda7e0a2170c04b407f9121fc286ab864a648db1ba7.
+CPUcheck proves generatedbaselineBYTEIDENTICALtoqualified copy substitutions in
+experiments/triangle_memory/replay.py; all4generatedfunctionscompile. Gateonly,
+epilogueonly,andcombined substitutions eachoccur exactlyonce. ThisisCPU/source
+validation ONLY, not numerical orperformance. Upstream filelocalcopy
+/tmp/fireprot-of3-native-trimul.py. No fullrepo sourcechanges inthisturn.
+
+NEW LIVE replayqueue240876 timeout11200, root
+/media/IntelSSD/fireprot/outputs/experiments/openfold3-epilogue-replay-20261007.
+Currentlywaiting_for_numerical_screen predecessor229343. Requiresparentterminal0
+ANDcorrectness_passedtrue ANDPIDgone, samebootandpinnedsourcebytes, SMI5idle.
+Thenrunsdriver.py to revalidatefrozenpostnormsources anddeviceidentity, setsHIP7,
+launchesbenchmark.py. NoGPUworkbeforepairedcompletion+numericalscreenpass.
+Localqueue/driver/benchmark/transform in/tmp/fireprot-of3-epilogue-replay;
+preparer/tmp/fireprot-prepare-epilogue-replay.py. PollSAME216757/229343/240876;
+doNOTmanuallycollect/build/screen/replay whilethesequeuesownsteps.
+
+Replay comparesbaseline,gatepack,epilogue,combined with2warm+8Latin/reverse-balanced
+timedsamples perarm/capture (80modulechecks). Freshnative moduleoutputreference,
+canonicalnorm inallarms; fullmodule includespacking/allocations, checksoutside
+GPUevents; unflushedcaches. Rehashes2trainedcapturebytesagainstqualifiedgate
+replaycapturepins beforeGPUtensorcreation. Recordsallarmnumericalfailures;
+correctness_passedfalse meansreject, evenifprocess exits0. Noautomaticfullmodel
+launch beyondthisreplay. Nextinspectnumericalcompiler/result, pairedcollector
+medians, thenchoosenextcandidateusingverifiedfulloperatorresults. Pairedarchive/
+publication and epilogueartifactsarchive remainpending.
+
+## 2026-10-07 gate paired E2E verified; epilogue exact; data-worker trial live
+
+Paired216757 TERMINAL0. Collector (owned by229343 queue) completed successfully:
+all6 currentarrays/all11bits/fullCIF/sourcepins/countspass. E2Emedians
+352.949171123 ->348.257930396,1.0134705926772885x,1.329154765%less time.
+Modelmedians258.904371057 ->254.220328252,1.0184251308194168x.
+AllthreeE2Epairsfaster1.00999727/1.00812992/1.01787462. Newlocalprovenance
+openfold3_gate_pack_e2e_n1536.json; README/performance/gateREADME updatedpendingcommit.
+Thisincrementisagainstcanonicalnorm+prioroptimizations, NOT directoriginalTorch.
+
+Queues229343/240876 nowTERMINALfailure BEFORE GPU epiloguework: queuedbuild
+Torchimportresolved localqueue.py instead ofstdlibqueue, re-executedcoordinator
+andfailed'Collection already exists'. Downstreamcorrectlyrefusedparentfailure.
+DoNOTrerunpaired/collector. Sources/failurelogs preserved. Avoid queue.py or
+inspect.py besidePythonexperimententrypoints. Fixednewdirectory
+openfold3-epilogue-v2-20261007 containsrun_experiment.py,noconflictingqueue.py.
+Numericalwrapper256079/child256681 terminal0;12casesexactentirestorage incl
+untouchedslice/signedzero/subnormal/nonfinite/addfalse/true. #pragma clang fp
+contract(off) compiles andpreservesseparateproduct/add; no intrinsicclaim.
+
+Four-armreplayNEW rootopenfold3-epilogue-replay-v2-20261007,wrapper257290 terminal0.
+All80fullmodulecalls exact(two warm/eightLatin+reversetimedsamples/capture/arm).
+Incoming mediansms baseline126.230049,gate116.201469,epilogue122.825230,
+combined112.740013. Outgoing133.024551,121.049664,129.590950,117.630695.
+Epilogueadds~3.4ms/operatorgainovergate but NO fullmodel/E2Equalificationyet.
+No automaticpromotion. Localnewprototypes /tmp/fireprot-of3-epilogue-v2 and
+/tmp/fireprot-of3-epilogue-replay-v2; originalswithfailurekept separately.
+
+Completedarchive /media/IntelSSD/fireprot/outputs/experiments/openfold3-gate-pairs-epilogue-20261007.tar.gz
+SHA63c213999cf40505d16d17ddff6498da1f44a7e1a340807afe371a05df40d18f size490666381.
+Includespairedsixoutputs/frozenworker,failedqueues,successfulv2epiloguebuild/
+12screens/80replaycalls,dependencygate-modelarchive. Localarchive/script
+/tmp/fireprot-gate-pairs-archive.json,/tmp/fireprot-archive-gate-pairs-epilogue.py.
+Remote scriptpairedroot/archive-completed.py. DoNOT archiveagain samefilename.
+
+Newread-onlynativecontrolaudit /tmp/fireprot-openfold3-native-control-audit.json:
+backendnativebypassesattention/confidencecap butoutercache/triangle/template/norm
+scopesneedexplicit0; finalfrozenworkerreaudit requiredbeforetrueoriginalbaseline.
+No newnativecomparisonrun. CPUauditunderlyingsource /tmp/fireprot-gate-pairs-worker.py.
+
+LargerpotentialE2Etarget: firstbaseline351.629082 total,supervisor333.539054,
+request293.289425,model257.389746. ~94soutsideforward, not allattributedtostartup.
+VerifiedupstreamDataModuleArg.num_workers default10; predictiondata_module_config
+passesitthrough; generate_dataloader usesnum_workers forpredict andforkserveron
+Linux. DataLoadergeneratorseedseparatefrommodelRankSpecificSeedCallback.
+Reducingworkersmuststillpassall11/CIF; noassumptionofsemanticparityorbenefityet.
+
+## Data-loader follow-up (2026-10-07)
+
+The zero-worker trial finished inference but failed exact-output validation:
+`outputs/experiments/openfold3-dataworkers0-model-20261007/driver-status.json`
+records exit 1. Nine of eleven arrays differ (raw coordinate maximum absolute
+error 50.008374691 Angstrom); it is not an accepted optimization. Its single
+345.634980388 s E2E / 257.813005604 s forward observation cannot establish a gain.
+Changing the process context may alter feature generation or RNG behavior;
+this is a hypothesis, not an established cause.
+
+The one-worker trial is now running under timeout PID 266370 in
+`outputs/experiments/openfold3-dataworkers1-model-20261007`. Its only treatment
+is runner `data_module_args.num_workers=1`, preserving a separate data worker.
+It retains the qualified gate/packing composition, strict FP32 N1536 R3/D200/S1,
+seed 101 and HIP device 7. Driver scripts are stored in the gate-model root;
+local copies are `/tmp/fireprot-{prepare,run}-dataworkers1-model.py`.
+Check this existing driver's status before starting another GPU task. Require
+all eleven arrays and complete CIF bytes to match before paired timing.
+The epilogue still needs full-model qualification, and the latest composition
+still needs a new direct comparison against original Torch.

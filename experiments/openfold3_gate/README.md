@@ -41,8 +41,7 @@ On HIP device7, strict FP32, seed101:
 These are operator measurements, not E2E speedups. Full-model strict N1536 R3/D200/S1, seed101, HIP7 qualification passes
 all 11 arrays and complete CIF bytes against the canonical-normalization anchor.
 There are 430 accepted triangle modules and 5,160 fused calls. One observation
-measures 346.785 s complete invocation and 252.692 s model forward; a paired E2E
-measurement is pending. See [qualification](../../provenance/openfold3_gate_pack_qualification.json). The simpler contiguous gate also passed but
+measures 346.785 s complete invocation and 252.692 s model forward; three paired E2E measurements are now complete (see below). See [qualification](../../provenance/openfold3_gate_pack_qualification.json). The simpler contiguous gate also passed but
 had smaller operator gains (126.251 → 120.539 ms; 133.044 → 127.438 ms in its
 separate comparison).
 
@@ -55,3 +54,21 @@ Raw builds, numerical screens and operator replays are in DiamondHill's
 The later model sources and outputs are in
 `openfold3-gate-model-20261007.tar.gz`, SHA-256
 `097f3f18e8e2aa83efead3f15fbf3538b7b7cb61805bc2676f28ce4862cde2f8`.
+
+## Three matched E2E pairs
+
+Strict FP32 N1536 R3/D200/S1, seed101, HIP7; fresh processes and unflushed caches,
+AB/BA/AB order. Both arms use canonical-layout HIP normalization and the prior
+workspace/cache/triangle/template combination; only projection gate/packing
+fusion differs. All six outputs match all 11 arrays and full CIF bytes.
+
+Complete invocation medians: **352.949 → 348.258 s (1.0135x, 1.33% less time)**.
+Model-forward medians: **258.904 → 254.220 s (1.0184x)**. All three E2E pairs are
+faster. This is an incremental comparison, not a direct original-Torch result.
+See [paired evidence](../../provenance/openfold3_gate_pack_e2e_n1536.json).
+
+The frozen profiles and paired inputs are on DiamondHill under
+`outputs/experiments/openfold3-gate-pairs-v2-20261007`; the pinned CLI path is in
+its `preparation.json`. Use fresh run/output identifiers for any new invocation.
+The source remains experimental and is not automatically enabled by maintained
+profiles.

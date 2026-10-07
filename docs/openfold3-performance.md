@@ -555,3 +555,27 @@ Evidence: `provenance/openfold3_norm_e2e_n1536.json`, including the hashed archi
 of all six outputs and frozen experiment sources. The kernel's rejected rounding
 variants and successful operator/model checks remain separately documented in
 [the normalization experiment](../experiments/openfold3_norm/README.md).
+
+
+## Direct strided normalization: no E2E benefit
+
+The subsequent HIP candidate reads three noncontiguous layouts directly, removing
+4,730 normalization input copies per model run. Operator and full-model numerical
+qualification pass, but three fresh AB/BA/AB pairs do not improve performance:
+
+| Scope | Preceding HIP normalization | Direct strided candidate | Ratio |
+| --- | ---: | ---: | ---: |
+| Complete invocation E2E median | 365.069 s | 368.236 s | 0.9914x |
+| Model-forward median | 261.807 s | 264.061 s | 0.9915x |
+
+All three candidate E2E observations are slower. All six outputs match all
+11 arrays bitwise and full CIF bytes, with unchanged N1536 strict FP32,
+R3/D200/S1, seed101 and HIP7. Only the strided dispatch flag and profile digest
+differ; filesystem caches are unflushed, processes fresh, and profiling disabled.
+
+This path is **not promoted**. The preceding normalization optimization remains
+the selected combination. The microbenchmark gain and eliminated copy count do
+not establish model E2E benefit. A new diagnostic targets the remaining large
+modules; these results do not establish an overall optimization plateau.
+Evidence: `provenance/openfold3_norm_strided_e2e_n1536.json`; see
+[the strided experiment](../experiments/openfold3_norm/STRIDED.md).

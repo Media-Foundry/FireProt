@@ -68,10 +68,30 @@ A single uninstrumented qualification observation measured 257.121 seconds model
 forward and 360.361 seconds complete invocation. These numbers are **not a paired
 speedup**. Evidence: `provenance/openfold3_norm_strided_model_n1536.json`.
 
-Three AB/BA/AB pairs are running under
+## Paired E2E: no improvement; not promoted
+
+Three AB/BA/AB pairs completed under
 `/media/IntelSSD/fireprot/outputs/experiments/openfold3-norm-strided-pairs-20261007`.
 Both arms share a frozen worker and retain all preceding optimizations. Only
-`FIREPROT_NORM_STRIDED` and the profile digest differ. The candidate must remove
-all 4,730 copies and preserve every output; the baseline must retain the copies.
-No maintained profile enables this hook. Other shapes, models and devices have
-not been qualified by these results.
+`FIREPROT_NORM_STRIDED` and the profile digest differ.
+
+| Scope | Copy + contiguous HIP median | Direct strided HIP median | Ratio |
+| --- | ---: | ---: | ---: |
+| Complete invocation E2E | 365.069 s | 368.236 s | 0.9914x |
+| Model forward | 261.807 s | 264.061 s | 0.9915x |
+
+E2E is 0.87% slower. Individual paired E2E ratios are 0.9974x, 0.9986x and
+0.9898x; all three candidates are slower. These observations establish no
+measured E2E benefit from this implementation; they do not isolate the cause or
+prove a general limit for strided normalization.
+
+All six outputs pass all 11 arrays bitwise and full CIF bytes. Each candidate
+removes all 4,730 copies; each baseline retains them. Scientific settings and
+strict deterministic filling remain unchanged. Processes are fresh, filesystem
+caches are unflushed and model profiling is disabled. Evidence:
+`provenance/openfold3_norm_strided_e2e_n1536.json`.
+
+**Do not promote this path.** Retain the preceding HIP normalization combination
+and profile its remaining hotspots. The isolated kernel and evidence remain for
+reproduction. No maintained profile enables this hook. Other shapes, models and
+devices have not been qualified by these results.

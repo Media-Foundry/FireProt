@@ -4800,3 +4800,93 @@ remotecopiesinprecedingstrided-modelroot. SMI5idle checkedbeforelaunch; allsix
 requests inspected. Next authenticate/collectpairedresults; integrate qualified
 stridedprototype sources+operator/fullmodel evidence fromarchived/remote artifacts
 into repo, thenfreshhotspotselection. No new E2Eclaimyet; maintainedpromotionpending.
+
+## 2026-10-07 strided sources published; post-pair diagnostic queued
+
+Master pushed ebc3e44d63bbd40b08bbeb714284a396de4b8395. Qualified strided kernel,
+build/screen/model scope and STRIDED.md are under experiments/openfold3_norm;
+operator and fullmodel provenance published. HIP kernel, build recipe, shared
+helpers and modelscope hashes match executed bytes. Screen publication changes
+helper import wiring only; CPU imports pass. No maintained-profile promotion.
+Local GitNexus incremental DB reached16GiB duringrefresh. Explicit --force full
+rebuild succeeded, compacted DBto274MiB. Postcommit index-current at ebc3e44,
+runnercurrent,incompleteReasons[], finaldetectallclean. Future ordinaryanalyze
+canbeused; rerun--forceifincrementalbloatreturns. No GitNexussourcechanges.
+
+Stridedpairs PID121367 stillLIVE last14:53, secondcandidate running. Firstpair
+actualinvocation362.900108031 baseline vs363.842374558 candidate; model260.743900671
+vs260.547456001. Firstpair passes unchangedgates but NO observedE2Egain yet.
+Do not infer gain fromremovedcopycount. Collectorprepared
+/tmp/fireprot-collect-strided-pairs.py andfrozenroot/collect.py; all6currentarrays/
+fullCIF/pins/copycounts rechecked onterminalsuccess, no partialresultpublication.
+
+NEW LIVE postpairqueue PID140539 timeout10900; root
+/media/IntelSSD/fireprot/outputs/experiments/openfold3-post-norm-profile-queue-20261007.
+Currentlywaiting_for_pairs predecessor121367. Sourcehashespinned,bootchecked;
+onlyafterpairsTERMINAL0andPIDgone,SMI5idle: collectall6,preparefreshstageprofile,
+thenrunonefullmodeldiagnostic onHIP7. Keepsallscientificsettings; requiresall11bits/
+fullCIFandactualnormcounts. UsesarmwithfasterobservedE2EmedianforDIAGNOSTIC,not
+maintainedpromotion. OldstageprobeSHA
+67fe7a78d841bc14d47568ef019c0247f2741a0625bcd2c444e740eb752b12c1.
+Nextprofileroot /media/IntelSSD/fireprot/outputs/experiments/openfold3-post-norm-hotspots-20261007;
+outputoutputs/openfold3-post-norm-hotspots-n1536. InclusiveGPUmoduleevents, no
+Kineto, noinstrumentedE2Eclaim. Queuechecksfullprofileoutputnumericparity.
+Local /tmp/fireprot-post-norm-queue.py,
+/tmp/fireprot-prepare-post-norm-profile.py,/tmp/fireprot-run-post-norm-profile.py.
+Remoteprofilepreparation/runner in stridedpairsroot, queue driver inqueueroot.
+PollSAME121367and140539; do notmanuallycollectorlaunchprofilewhilequeueownssteps.
+Ifqueuedstepfails, inspectterminalreason andrepair withoutrestartingbenchmarks.
+
+## 2026-10-07 queued profiler preparation corrected before execution
+
+IMPORTANT current queue PID153902, root
+outputs/experiments/openfold3-post-norm-profile-queue-v2-20261007.
+Old queue140539 was deliberately SIGTERM'd WHILE waiting_for_pairs, after proving
+its stage and matching /proc command; it is gone, no GPU/profile step ran. Receipt
+oldroot/cancelled-for-preparation-fix.json. Actual pairedPID121367 uninterrupted,
+last27:54 thirdbaseline running (4/6 completed). Secondpair officialE2E baseline
+367.711244813 vs candidate368.235660590; firstpair362.900108031 vs363.842374558.
+Both completed pairs exact but no E2Egain. Wait remainingpair before conclusion.
+
+Reason forqueuefix: frozenworker already imports model_probe insideforward, unused.
+Oldprepare assertedimportabsent andwouldfailafterpairs. v2preparer permits existing
+import; actualworkercontextinsertion syntax checked without GPU. Queue153902 pins
+newpreparer andsamecollector/profiledriver,boot/terminal/idlechecks unchanged.
+Local /tmp/fireprot-prepare-post-norm-profile-v2.py, /tmp/fireprot-post-norm-queue-v2.py.
+Remotev2preparer in stridedpairsroot; newqueue/driver.py. PollSAME121367/153902;
+do not manually collect/profile whilequeueownssteps.
+
+New profilecollector /tmp/fireprot-collect-post-norm-profile.py; remotecopyat
+OLDqueueroot/collect-profile.py (not automatically executed). Runafterprofilestatus0.
+Checks allsourcepins/currentarrays/fullCIF, totalsrun_trunkcalls1 (contains4passes),
+pairformer_stackcalls4, andstageevents/normcounts; outputsprofileroot/collected.json.
+Do not sum inclusive parentandchildGPUtimes. No instrumentedE2Eclaim.
+
+Future originalTorch comparison caveat: forward_with_backend(native) bypasses
+attention/workspace, BUT pair_cache/atom_cache/triangle/template/norm scopes wrap
+outside it in forward. Thus backend=native alone DOES NOT disable optimizations.
+Explicitly zero relevant profile flags for a genuine original path; verify no
+operator/cache selection artifacts. No neworiginalTorchspeedup claimed yet.
+
+## 2026-10-07 strided E2E complete: reject; post-normalization profile live
+
+PairedPID121367 TERMINAL0. Collector completed and freshly re-read all six
+arrays/fullCIF/pins/counts. All11 bits and completeCIFexact. Actual baseline
+E2Emedian365.068917259 vs strided368.235660590 (0.991400226x); modelmedians
+261.806940818 vs264.060917817 (0.991464178x). AllthreepairedE2Es slower
+0.997410234/0.998575869/0.989765533. Candidatecopies0/strided4730 verified but no
+E2Egain. Decision: do notpromote, retain preceding HIPnorm+contiguouscopies.
+No overallplateauclaim. Rawpairedroot/collected.json; localprovenance
+openfold3_norm_strided_e2e_n1536.json addsdecision. STRIDED.md/normREADME/perfdoc
+updated locallypendingcommit; evidencearchivefortheseoutputs stillpending.
+
+CURRENT LIVE queue153902; stageprofile childtimeout161348. Root
+outputs/experiments/openfold3-post-norm-hotspots-20261007; selected_armbaseline
+fromobservedpairedmedians. Originalrun settings strictN1536R3D200S1seed101HIP7.
+Queuev2owns invocation; do notstartanotherGPUjob. Requiresall11bits/fullCIFand
+norm11202accepted/7846fallback/4730copies/0strided. PollSAME153902 and child161348.
+Onsuccess run /tmp/fireprot-collect-post-norm-profile.py (remoteOLDqueueroot
+collect-profile.py), then archive via /tmp/fireprot-archive-strided-completed.py
+(remotenewqueuev2root/archive-completed.py). Archiveonlyafterqueueexit toavoidIO
+competition; itincludesmodel/pairs/profileandall8outputsplusdependencyarchivepin.
+Thenpublishupdatedhotspots andchoosebottleneck-driven nextkernelwork.

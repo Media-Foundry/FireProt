@@ -1,0 +1,547 @@
+{
+  "scope": "Experimental OpenFold3 FP32 gate and channel packing; operator gains and full-model parity; paired E2E pending",
+  "operator_numerical": {
+    "correctness_passed": true,
+    "checks": [
+      {
+        "shape": [
+          1,
+          17,
+          31,
+          128
+        ],
+        "variant": "random",
+        "exact": true,
+        "max_abs_finite_delta": 0.0
+      },
+      {
+        "shape": [
+          1,
+          17,
+          31,
+          128
+        ],
+        "variant": "extreme",
+        "exact": true,
+        "max_abs_finite_delta": 0.0
+      },
+      {
+        "shape": [
+          1,
+          17,
+          31,
+          128
+        ],
+        "variant": "strided_mask",
+        "exact": true,
+        "max_abs_finite_delta": 0.0
+      },
+      {
+        "shape": [
+          1,
+          256,
+          1536,
+          128
+        ],
+        "variant": "random",
+        "exact": true,
+        "max_abs_finite_delta": 0.0
+      },
+      {
+        "shape": [
+          1,
+          256,
+          1536,
+          128
+        ],
+        "variant": "extreme",
+        "exact": true,
+        "max_abs_finite_delta": 0.0
+      },
+      {
+        "shape": [
+          1,
+          256,
+          1536,
+          128
+        ],
+        "variant": "strided_mask",
+        "exact": true,
+        "max_abs_finite_delta": 0.0
+      },
+      {
+        "shape": [
+          1,
+          1536,
+          256,
+          128
+        ],
+        "variant": "random",
+        "exact": true,
+        "max_abs_finite_delta": 0.0
+      },
+      {
+        "shape": [
+          1,
+          1536,
+          256,
+          128
+        ],
+        "variant": "extreme",
+        "exact": true,
+        "max_abs_finite_delta": 0.0
+      },
+      {
+        "shape": [
+          1,
+          1536,
+          256,
+          128
+        ],
+        "variant": "strided_mask",
+        "exact": true,
+        "max_abs_finite_delta": 0.0
+      }
+    ],
+    "seed": 101,
+    "strict": true,
+    "hip_device": 7,
+    "library_sha256": "b7a980bf469a0f13581985033f904541cae5783eab01d4579054588e75c3614c"
+  },
+  "operator_replay": {
+    "records": [
+      {
+        "capture": {
+          "path": "/media/IntelSSD/fireprot/outputs/trimul-profile-n1536-v1/trunk_pairformer-tri_mul_in.pt",
+          "sha256": "65d77b65095932a3107d0e518ad86e32bc48b62d61bc3a810142af7dac0cdf88"
+        },
+        "flags": {
+          "inplace_safe": true,
+          "_add_with_inplace": true,
+          "use_cueq_triangle_kernels": false,
+          "use_triton_triangle_kernels": false
+        },
+        "checks": {
+          "baseline": [
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            }
+          ],
+          "gate": [
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            }
+          ]
+        },
+        "samples_ms": {
+          "baseline": [
+            126.35443115234375,
+            126.402587890625,
+            126.3345947265625,
+            126.40531158447266,
+            126.2955551147461,
+            126.35699462890625,
+            126.2373046875,
+            126.36659240722656
+          ],
+          "gate": [
+            116.27560424804688,
+            116.16552734375,
+            116.24105072021484,
+            116.25257110595703,
+            116.2444076538086,
+            116.09783172607422,
+            116.15863800048828,
+            116.14904022216797
+          ]
+        },
+        "medians_ms": {
+          "baseline": 126.355712890625,
+          "gate": 116.20328903198242
+        }
+      },
+      {
+        "capture": {
+          "path": "/media/IntelSSD/fireprot/outputs/trimul-profile-n1536-v1/trunk_pairformer-tri_mul_out.pt",
+          "sha256": "6a08759df79a9e42e57cc9f556dfa565f7c4f0928fdffb8e5407b19c43a91a5c"
+        },
+        "flags": {
+          "inplace_safe": true,
+          "_add_with_inplace": true,
+          "use_cueq_triangle_kernels": false,
+          "use_triton_triangle_kernels": false
+        },
+        "checks": {
+          "baseline": [
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            }
+          ],
+          "gate": [
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            }
+          ]
+        },
+        "samples_ms": {
+          "baseline": [
+            133.10214233398438,
+            133.15814208984375,
+            133.01637268066406,
+            132.9720458984375,
+            133.04629516601562,
+            133.05332946777344,
+            133.1277313232422,
+            133.0859832763672
+          ],
+          "gate": [
+            121.0481185913086,
+            121.12844848632812,
+            120.91770935058594,
+            121.0093994140625,
+            120.92779541015625,
+            121.11788940429688,
+            120.97660064697266,
+            120.97820281982422
+          ]
+        },
+        "medians_ms": {
+          "baseline": 133.0696563720703,
+          "gate": 120.99380111694336
+        }
+      }
+    ],
+    "correctness_passed": true,
+    "script": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-gate-pack-20261007/benchmark.py",
+      "sha256": "cabe14a278409bbee34c01f2d7dd03386039454c1cfc8a105042786ac7c60ab0"
+    },
+    "screen": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-gate-pack-20261007/screen.py",
+      "sha256": "dfc25ee474f1223bc76046b06f745acea55cdd24fe7d2625178daeab63869f4a"
+    },
+    "gate_library": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-gate-pack-20261007/cache/rust-v1/fireprot_of3_gate_pack_v1_b0bd893823023ab6e3a9b35d04f63b3e574d4c47a5d87ac9060dd4df601cde8a/fireprot_of3_gate_pack_v1_b0bd893823023ab6e3a9b35d04f63b3e574d4c47a5d87ac9060dd4df601cde8a.so",
+      "sha256": "b7a980bf469a0f13581985033f904541cae5783eab01d4579054588e75c3614c"
+    },
+    "gate_calls": 240,
+    "library": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-post-norm-hotspots-20261007/python/fireprot_workers/triangle_memory/copy.so",
+      "sha256": "e4ae99d240a91fb7ec0c82b74ba41ba6744e01470b2122fd8e9525d80c357685"
+    },
+    "strict": true,
+    "hip_device": 7,
+    "seed": 101,
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850",
+    "scope": "Trained full triangle multiplication replay; two warmup and eight balanced timed samples per arm/capture; unflushed caches; no E2E claim",
+    "copies": 600,
+    "fallbacks": 60
+  },
+  "model": {
+    "correctness_passed": true,
+    "all11_exact": true,
+    "full_cif_exact": true,
+    "scope": "Fused FP32 triangle projection sigmoid/multiply/mask/channel packing; full-model numerical qualification, not a paired speedup",
+    "request": {
+      "schema_version": 1,
+      "run_id": "openfold3-gate-pack-n1536",
+      "workload": {
+        "model": "openfold3",
+        "model_name": "openbind-0",
+        "recycles": 3,
+        "diffusion_steps": 200,
+        "samples": 1,
+        "precision": "float32",
+        "deterministic": true
+      },
+      "backend": "hip_fused",
+      "seed": 101,
+      "hip_device": 7,
+      "source": {
+        "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+        "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+      },
+      "checkpoints": {
+        "model": {
+          "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+          "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+        }
+      },
+      "resources": {},
+      "input": {
+        "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+        "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+      },
+      "output_dir": "/media/IntelSSD/fireprot/outputs/openfold3-gate-pack-n1536"
+    },
+    "invocation_seconds": 346.785288351,
+    "model_seconds": 252.69155271399723,
+    "normalization_counts": {
+      "accepted": 11202,
+      "fallback": 7846,
+      "contiguous_copies": 4730
+    },
+    "source_preparation": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-gate-model-20261007/preparation.json",
+      "sha256": "dbf881ab4a71804a86d9fe08f84a4576047fbf6dc383e396ad10044ce90408a3"
+    },
+    "gate": {
+      "accepted": 430,
+      "fallback": 18,
+      "gate_calls": 5160,
+      "copies": 5160,
+      "copy_fallbacks": 1290,
+      "library_sha256": "b7a980bf469a0f13581985033f904541cae5783eab01d4579054588e75c3614c"
+    },
+    "changed_sources": [
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-gate-model-20261007/python/fireprot_workers/gate_experiment/runtime.py",
+        "sha256": "368a074bb67d3f7589e76e8a5585ce1bdabd6128888d1a237743ad5157412af5"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-gate-model-20261007/python/fireprot_workers/gate_experiment/model_scope.py",
+        "sha256": "aa3d8d4dc4e911b7104dcacd1ac0996cd980c7ce0772f59f65de8d9c2fa35047"
+      }
+    ],
+    "gate_library": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-gate-model-20261007/gate.so",
+      "sha256": "b7a980bf469a0f13581985033f904541cae5783eab01d4579054588e75c3614c"
+    },
+    "invocation": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-gate-model-20261007/measurement/invocation.json",
+      "sha256": "d7440cb5d0d43069cecbf2a24fd06cffc27c1af7e24e4da124dd82284512285f"
+    },
+    "output_npz": {
+      "path": "/media/IntelSSD/fireprot/outputs/openfold3-gate-pack-n1536/sample-0.npz",
+      "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+    },
+    "output_cif": {
+      "path": "/media/IntelSSD/fireprot/outputs/openfold3-gate-pack-n1536/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+      "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+    },
+    "reference_npz": {
+      "path": "/media/IntelSSD/fireprot/outputs/openfold3-canonical-norm-n1536/sample-0.npz",
+      "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+    },
+    "reference_cif": {
+      "path": "/media/IntelSSD/fireprot/outputs/openfold3-canonical-norm-n1536/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+      "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+    },
+    "operator_qualification": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-gate-pack-20261007/benchmark/report.json",
+      "sha256": "723a6c6bbf2056f4c7f55f975bdbca41848578b978c3ee992e36c207372e7e2f"
+    },
+    "regression": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-canonical-source-20261007/layout-regression/result.json",
+      "sha256": "9b420ea62b45860aeb29745a935586e77f1c323b01682cf48e17db6df1517dd1"
+    },
+    "regression_result": {
+      "discriminates": true,
+      "records": [
+        {
+          "label": "old",
+          "returncode": 1,
+          "log": "F\n======================================================================\nFAIL: test_sliced_singleton_batch_has_native_output_strides (__main__.OutputLayout.test_sliced_singleton_batch_has_native_output_strides)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/pc/anaconda3/envs/BIO/lib/python3.12/site-packages/torch/utils/_contextlib.py\", line 124, in decorate_context\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/media/IntelSSD/fireprot/outputs/experiments/openfold3-canonical-source-20261007/layout-regression/old/test_output_layout.py\", line 33, in test_sliced_singleton_batch_has_native_output_strides\n    self.assertEqual(actual.stride(), expected.stride())\nAssertionError: Tuples differ: (7680, 640, 128, 1) != (1280, 640, 128, 1)\n\nFirst differing element 0:\n7680\n1280\n\n- (7680, 640, 128, 1)\n?  ^^\n\n+ (1280, 640, 128, 1)\n?  ^^\n\n\n----------------------------------------------------------------------\nRan 1 test in 1.070s\n\nFAILED (failures=1)\n"
+        },
+        {
+          "label": "fixed",
+          "returncode": 0,
+          "log": ".\n----------------------------------------------------------------------\nRan 1 test in 1.077s\n\nOK\n"
+        }
+      ]
+    },
+    "collector": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-gate-model-20261007/collect.py",
+      "sha256": "7fd8687cbc5b145eb5e6c523bdddd342011ff2927fb9c11dc0da828b1a5dce34"
+    }
+  },
+  "archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-gate-model-20261007.tar.gz",
+    "sha256": "097f3f18e8e2aa83efead3f15fbf3538b7b7cb61805bc2676f28ce4862cde2f8",
+    "size": 49453376,
+    "roots": [
+      "outputs/experiments/openfold3-gate-model-20261007",
+      "outputs/openfold3-gate-pack-n1536",
+      "outputs/experiments/openfold3-gate-pack-20261007/model_scope.py",
+      "outputs/experiments/openfold3-gate-pack-20261007/fireprot-prepare-gate-model.py",
+      "outputs/experiments/openfold3-gate-pack-20261007/fireprot-run-gate-model.py"
+    ],
+    "dependency_archive": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qk-layout-gate-followups-20261007.tar.gz",
+      "sha256": "9aed59a6554343c2244946dffb45a5359536d2ffdbf2b56376725c4c1b858903",
+      "size": 64045792,
+      "roots": [
+        "outputs/experiments/openfold3-canonical-model-20261007",
+        "outputs/experiments/openfold3-canonical-norm-20261007",
+        "outputs/experiments/openfold3-canonical-source-20261007",
+        "outputs/experiments/openfold3-first-divergence-20261007",
+        "outputs/experiments/openfold3-gate-fusion-20261007",
+        "outputs/experiments/openfold3-gate-fusion-replay-v2-20261007",
+        "outputs/experiments/openfold3-gate-pack-20261007",
+        "outputs/experiments/openfold3-pv-lt-20261007",
+        "outputs/experiments/openfold3-qk-half-tile-20261007",
+        "outputs/experiments/openfold3-qk-half-tile-benchmark-20261007",
+        "outputs/experiments/openfold3-qk-half-tile-v2-20261007",
+        "outputs/experiments/openfold3-qk-reuse-sweep-20261007",
+        "outputs/experiments/openfold3-qk-wide-tile-20261007",
+        "outputs/experiments/openfold3-qk-wide-tile-v2-20261007",
+        "outputs/experiments/openfold3-triatt-components-20261007",
+        "outputs/experiments/openfold3-triatt-components-v2-20261007",
+        "outputs/experiments/openfold3-trimul-chunks-20261007",
+        "outputs/experiments/openfold3-trimul-copy-screen-20261007",
+        "outputs/experiments/openfold3-trimul-norm-audit-20261007",
+        "outputs/openfold3-canonical-norm-n1536"
+      ],
+      "scope": "Raw completed QK, PV, layout and gate experiments including rejected candidates; trained captures, checkpoints and external baseline assets remain dependencies"
+    }
+  }
+}

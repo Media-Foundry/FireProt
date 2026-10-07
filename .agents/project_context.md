@@ -5167,3 +5167,46 @@ from successful replay transformation with correctedindentation. Prep/driver loc
 /tmp/fireprot-{prepare,run}-gate-model.py; remotegate-pack root.
 Ifpasses, measure paired E2E against canonicalbaseline beforeclaiming benefit.
 Fullmodelgatearchive/publication and operator source integration stillpending.
+
+## 2026-10-07 gate+packing full model passed; three paired E2E runs live
+
+Canonical-layout fix committed/pushed3bd6b9fc7dcadeca11122bce283b9a0122ebca25.
+Postcommitindexcurrent/runnercurrent/incompleteReasons[], detectallclean.
+The gate model208798/208799/208800 is TERMINAL0: all11arrays and fullCIFexact,
+430accepted/18fallbacktrianglemodules,5160gatecalls,5160copycalls/1290copyfallbacks;
+normalizationcountsunchanged. Freshcollector independently rehashedpins and
+rechecked currentarrays/CIF. Single E2E346.785288351s/model252.691552714s,
+notpairedgain. Qualifiedsource now copied locallytoexperiments/openfold3_gate
+(gate.cpp/build.py/runtime.py/model_scope.py/screen.py), README+provenance
+openfold3_gate_pack_qualification.json; pendingcommit. Kernel/runtime/modelscope
+bytesmatch executedqualified sources. Modelscope is for frozenworkerpackage,
+not automaticallywired into maintainedprofiles. Comparison script/rawreports
+stay in archived experimentdirs.
+
+Gate model durable archive:
+/media/IntelSSD/fireprot/outputs/experiments/openfold3-gate-model-20261007.tar.gz
+SHA097f3f18e8e2aa83efead3f15fbf3538b7b7cb61805bc2676f28ce4862cde2f8 size49453376.
+Includes frozenmodel/output andmodelpreparation/drivers, depends on prior
+9aed59a6 archive foroperatorbuilds/replays. Canonical andoperator archivealreadydone.
+
+First pairedpreparer failed its compile assertion beforeanyGPUjob because import
+insertion was insideforward andmultiline replacement indentationwrong. Preserve
+incompleteoutputs/experiments/openfold3-gate-pairs-20261007; no benchmarkranthere.
+Fixedpreparer createsNEW root openfold3-gate-pairs-v2-20261007. Sixrequestsinspect
+andallsource/reference/operatorpinsverified; sourcechoice is localalias inside
+forward: gate_triangle_scope vsbaseline_triangle_scope controlledsolelyby
+FIREPROT_GATE_PACK0/1 (plusprofilehash declaredtreatment). Shared canonicalnorm
+andallpreviouscache/attention/template changes. No profiler; strictFP32N1536
+R3D200S1seed101HIP7only; Rustsupervisor monitors physicalGPU.
+
+CURRENT LIVE timeout216757 ('timeout10900 python3driver.py'); root
+/media/IntelSSD/fireprot/outputs/experiments/openfold3-gate-pairs-v2-20261007.
+ThreeAB/BA/AB pairs; driver requiresall6all11bits/fullCIFvsgate-model anchor,
+normalizationcountssame, baseline triangle-copy430accepted/18fallback andno
+ gate-fusion.json; candidategate430/18/5160 andno triangle-copy.json.
+NoGPU/heavyremotebuildwhilelive; pollSAME216757 androotdriver-status. Lastconfirmed
+live56seconds withfirstbaselineinprogress. Localprepare/run
+/tmp/fireprot-{prepare,run}-gate-pairs-v2.py; copiesrootprepare.py/driver.py and
+operatorroot. NextcollectpairedE2E andarchive, donotmultiplyhistoricalincrements.
+Afterthiscycle nextpossibleoperator target is finaltriangle sigmoid/gated residual
+write fusion (UNIMPLEMENTED); preserveseparate rounding toavoidFMAchanges.

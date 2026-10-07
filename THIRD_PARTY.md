@@ -42,7 +42,9 @@ grant does not replace CK's existing MIT license.
 ## PyTorch: BSD-style notices
 
 The handwritten FP32 softmax follows PyTorch's persistent-softmax evaluation
-order. The [PyTorch copyright and BSD notice](licenses/PyTorch-BSD.txt) is retained
+order. The experimental C128 normalization in `experiments/openfold3_norm` follows
+the corresponding Welford evaluation order. The
+[PyTorch copyright and BSD notice](licenses/PyTorch-BSD.txt) is retained
 alongside that attribution. The kernels are handwritten FireProt code; referencing
 the evaluation order does not relicense PyTorch itself. Installed PyTorch and
 its bundled libraries carry additional notices in their own distributions.

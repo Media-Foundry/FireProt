@@ -4585,3 +4585,64 @@ uses256threads/row, four-value perlane Welford and inter-wave empty reductions.
 A multirowHIP kernel preservingthatorder may improve triangle normalization;
 not implemented/measured yet. Previous Protenix mean/squaresum kernel would
 changeWelford and cannot be blindlyused forOF3 strictbitwisegate.
+
+## 2026-10-07 active OpenFold3 goal; norm prototype and transient SSH failure
+
+Previous goal turn made progress: exact template reuse model/guard qualification
+committed/pushed c76170b. Postcommit index current, no incompleteReasons and final
+GitNexus detect_changes clean except untouched user docs/isa. Active goal is now
+'consistently optimize the openfold3 optimization'; no completion claimed.
+
+Re-polled SAME E2E wrapper2543911 LIVE at elapsed12:34. Baseline0 complete and
+verified at order offset420.875s; candidate0 started. No other benchmark restarted.
+Subsequent .5 SSH timeout twice and .9 fallback timeout once. These are observation
+failures, NOT terminal evidence. Do not relaunch. Need retry .5 and inspect SAME
+PID plus order/driver-status. Last actual live observation is authoritative;
+no complete first-pair ratio or three-pair median yet.
+
+New unqualified local prototype experiments/openfold3_norm/{norm.cpp,build.py,
+screen.py,README.md}: handwritten WelfordC128, four wave64/eight subwave32 rows
+per256threadblock, retains native empty-state merges and affine operation order.
+Local Rust-owned HIP build succeeded with HIP_VISIBLE_DEVICES empty, receipt
+/tmp/fireprot-of3-norm128-local-build-v1/build.json, librarySHA
+8d918fe24e6567dbbd8e25daab12ec2c3426850d2591581e0e035444b9732a3f.
+No localGPU used; localTorch2.9.1HIP7.2 vs compilerHIP7.14. No remote deployment,
+GPU test or performance claim; source and screen syntax pass. Do not run remote
+build or GPU screen until E2E wrapper truly terminal. Screen covers output+mean+
+rstd exactness, random/constant/lowvariance/large/signedzero/tail/affine variants,
+then optional realcapturedattentionz/weights at triatt-profile-n1536-v1. Onlyexact
+variants timed, includingstrictoutputallocation. Fullmodelparity/E2Estillneeded.
+
+## 2026-10-07 host reboot recovered; fresh E2E handle15499
+
+User requested wait120s; waited two60s sleeps, .5 SSH recovered. Confirmed actual
+host reboot: bootIDafbe7b4e-c398-45b8-86ad-45cded194221, uptime2min; old2543911
+absent and GPUidle. Old firstpair has invocation420.113059237/386.645935697s but
+candidate predictions.json/template-reuse.json/sample-0.npz are EMPTY afterboot.
+Do NOT use that pair as speedup evidence. accepted.json hash survives, but its
+referenced output bytes do not; old run preserved with interruption.json.
+
+Reboot cleaned /tmp frozen CLI/bridge/libraries/controls. Restored496 files from
+5 SHA-verified archives into runtime/recovered-openfold3-20261007. Temporary
+compatibility aliases recreated only to authenticate prior pins; ALL prior
+frozen pins/reference/CLI now match. New environment capture byte-identical old.
+Recovery evidence provenance/openfold3_reboot_recovery_20261007.json. Script
+persisted runtime/recovered-openfold3-20261007/recovery.py; receipt.json records
+all recovered hashes. Oldpreparation at /tmp helper local still available.
+
+CURRENT LIVE wrapper15499, root
+/media/IntelSSD/fireprot/outputs/experiments/openfold3-template-pairs-recovery1-20261007.
+Fresh Rust AB/BA/AB with runIDs template-pairs-r1-n1536-{arm}-{i}, HIP7 only.
+Last live1:30 firstbaseline0started; no runtimeerror. New profile uses persistent
+CLI/bridge/control/bundle/probe paths, worker hardcodedcopylibraries relocated to
+persistent recoveredpath, same bytes/arithmetic. Newcontrols only relocates paths,
+allmanifest/numericalscreenSHAchecked beforelaunch. environment unchanged. New
+prepare.py persisted alongsidefrozen worker. driver-statusonlyterminal. Do NOT
+launch GPU or remoteheavybuild/editfrozen while active; poll SAME15499. Must
+collectnew3pairs and gates, not salvage damagedoldfirstpair.
+
+Normprototype still LOCAL ONLY/GPUUNVERIFIED. Buildsuccess syntaxchecks described
+above; local source and README pendingcommit with explicitunqualifiedstatus.
+Currentgoalturnprogress: newHIPprototype compiled, actualhostreboot identified,
+archive recoveryverified, measuredjob restarted onlyafterauthoritativeterminal.
+Goalactive; no plateau/completion evidence yet.

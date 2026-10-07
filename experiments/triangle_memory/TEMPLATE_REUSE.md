@@ -52,7 +52,7 @@ Rust owns model invocation, GPU isolation and output acceptance.
 ## Paired timing
 
 The fresh timing deployment is
-`/media/IntelSSD/fireprot/outputs/experiments/openfold3-template-pairs-20261007`.
+`/media/IntelSSD/fireprot/outputs/experiments/openfold3-template-pairs-recovery1-20261007`.
 It uses one shared frozen worker, no model profiler, and only changes
 `FIREPROT_TEMPLATE_REUSE=0/1` plus the corresponding profile digest. Rust
 `benchmark-pairs` executes AB/BA/AB with fresh processes and unflushed caches.
@@ -62,3 +62,10 @@ incremental improvement, not a direct original-Torch ratio.
 
 Do not overlap the live timing job with another GPU experiment or heavy remote
 build. The maintained profiles do not enable this experiment.
+
+The preceding `openfold3-template-pairs-20261007` deployment was interrupted by
+a host reboot. Its first candidate's NPZ and metadata were empty after recovery,
+so its timing is not accepted as paired speedup evidence. Required binaries and
+controls were restored from SHA256-verified archives; the environment inventory
+is unchanged. The new deployment uses persistent CLI/library/control paths.
+See `provenance/openfold3_reboot_recovery_20261007.json` at the repository root.

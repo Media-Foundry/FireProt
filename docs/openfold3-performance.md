@@ -525,3 +525,33 @@ Evidence: `provenance/openfold3_template_reuse_e2e_n1536.json` and
 This is an incremental result, not a fresh original-Torch comparison. Do not
 multiply historical ratios. N1000 eligibility and maintained-profile promotion
 are not established by this N1536 experiment.
+
+
+## Exact HIP C128 LayerNorm: accepted incremental E2E
+
+Three fresh AB/BA/AB pairs compare the qualified template-reuse combination
+with the same combination plus the exact Welford HIP normalization kernel.
+
+| Scope | Previous combination median | HIP normalization median | Speedup |
+| --- | ---: | ---: | ---: |
+| Complete Rust invocation E2E | 391.162 s | 364.159 s | **1.0742x** |
+| Model forward | 287.825 s | 260.434 s | **1.1052x** |
+
+E2E time decreases by 6.90%. Individual pair ratios are 1.0624x, 1.0805x and
+1.0675x. Candidate E2E observations span 363.943–366.417 seconds. These three
+repetitions do not establish production tail latency or a direct speedup against
+original Torch; historical incremental ratios must not be multiplied.
+
+All six runs pass unchanged Rust comparison gates. All 11 arrays and complete
+CIF bytes also match the qualified template-reuse anchor, re-read after completion.
+Each candidate selects 11,202 normalization calls and preserves 7,846 native
+fallbacks; 4,730 noncontiguous-input copies remain. FP32 strict determinism with
+memory filling, N1536, R3/four trunk passes, D200/S1, seed101 and HIP7/PCI93 are
+unchanged. Processes are fresh, filesystem caches are unflushed, and model
+profiling is disabled. The declared treatment is `FIREPROT_NORM128` and its profile
+digest only. The maintained profile does not yet enable this experimental hook.
+
+Evidence: `provenance/openfold3_norm_e2e_n1536.json`, including the hashed archive
+of all six outputs and frozen experiment sources. The kernel's rejected rounding
+variants and successful operator/model checks remain separately documented in
+[the normalization experiment](../experiments/openfold3_norm/README.md).

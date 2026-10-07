@@ -4734,3 +4734,45 @@ Formaltemplate3pairdocpublication+qualifiednormsource/evidence stilllocalpending
 commit; allrecordednumericalchecks/syntax/docslinks passed. Modelscope nowverified.
 No maintainedscopepromotion orfinalnativeTorchratio claimed. Goalactive; next
 stepscollectnormpairedE2E, then continuehotspot/initializationinvestigation.
+
+## 2026-10-07 normalization E2E complete; strided model trial live
+
+Norm paired PID74134 TERMINAL0. Three AB/BA/AB pairs re-read all11 bits/fullCIF
+against template-pairs-r1-n1536-candidate-0. Complete invocation medians
+391.161906097 -> 364.159347770 (1.074150392x); model287.825230250 ->
+260.433601489 (1.105177015x). All six qualify. Note earlier commentary387.71/
+364.75 used journal offsets, NOT invocation times; corrected official firstpair
+386.877629842/364.159347770. Candidate1 363.943045050, candidate2 366.417228946.
+provenance/openfold3_norm_e2e_n1536.json + README/performance/norm notes now local
+pending git gates/commit. Master pushed b303bb0. User docs/isa remains untracked.
+Archive /media/IntelSSD/fireprot/outputs/experiments/openfold3-norm-series-20261007.tar.gz
+SHA f4489b27fbfd09a294835d7a30ef898870be47f645076eade2995256d694cc27 size458085545.
+Archive includes six outputs, both experiment directories and strided library;
+completed before the later model-scope preparation. Raw archive receipt in pairedroot.
+
+New strided operator root outputs/experiments/openfold3-norm-strided-20261007.
+Initial queued PID98380 failed before any build/screen because SMI idle sentinel
+was string 'No running processes detected', not emptylist. driver-v2 PID112439
+TERMINAL0; preserves rejected wrapper receipt. All25 numerical tests output/mean/
+rstd exact. Real captures columnchunk copy+HIP0.909ms vsstrided0.508-0.511ms;
+transpose12ms vs10.2ms; narrowtransposed2.02ms vs1.73-1.76ms. Dense slower2.86vs2.70
+and densechunk0.50vs0.464: retain original HIP on contiguous input. No E2Eclaim.
+Library88d43a5129b3e0abb2ecfcc321a9e8bf29e00f409a611ec0f1adca542511e65e under
+runtime/torch_extensions/rust-v1/fireprot_of3_welford128_strided_v1_3c8883fea17957663e043d33d23f85c4dfa42d1af95fd72dd03344436b6cc3ff/.
+Local prototype /tmp/fireprot-norm-strided-prototype contains norm_strided.cpp,
+screen_strided.py,norm_helpers.py,captures.json,build.py,model_scope.py,drivers.
+Sources not yet integrated into repository; remote screen/build frozen and archived.
+
+CURRENT LIVE PID114134 timeout2000; root
+/media/IntelSSD/fireprot/outputs/experiments/openfold3-norm-strided-model-20261007.
+Output outputs/openfold3-norm-strided-model-n1536. StrictN1536R3D200S1seed101HIP7.
+Copies qualified normpairs candidateworker; baseline contiguous norm preserved;
+strided only three measured noncontiguous shape/stride signatures. Requires all11
+bits/fullCIF vs norm-pairs-n1536-candidate-0 plus counts11202accepted/7846fallback/
+4730strided_calls/0contiguous_copies. No profiler. Poll SAME114134; no GPU/build
+competition. Preparelocal /tmp/fireprot-prepare-strided-model.py; driverlocal
+/tmp/fireprot-run-strided-model.py. Remote copies in strided operatorroot. Source
+pins checked, request inspected, SMI5idle before launch. No maintained promotion.
+Next: authenticate fullmodel trial, ifpasses uninstrumented paired E2E; archive
+and integrate qualified strided source/receipts. Commit pending norm docs/evidence
+with GitNexus current-index and staged detect_changes gates. Goal active.

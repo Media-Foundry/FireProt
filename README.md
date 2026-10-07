@@ -236,6 +236,7 @@ profile's default. See [cache results](docs/protenix-base.md#static-diffusion-bi
 | Retained workspace/mask handling vs D16/cache combination | 540.302 → 449.723 s | **1.2014x** |
 | Triangle multiplication copies + attention K packing vs workspace | 452.471 → 416.226 s | **1.0871x** |
 | Identical template-slot reuse vs triangle-memory combination | 419.239 → 387.985 s | **1.0806x** |
+| Exact HIP C128 LayerNorm vs template-reuse combination | 391.162 → 364.159 s | **1.0742x** |
 
 Each row has three pairs under the same strict R3/D200/S1 contract. The
 triangle comparison also reduces model forward time **356.595 → 321.699 s

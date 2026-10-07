@@ -79,11 +79,14 @@ contiguous-input copies. Its single model-forward observation is 260.607 seconds
 the 355.960-second full invocation is a qualification observation, not a paired
 speedup. Evidence: `provenance/openfold3_norm_model_n1536.json`.
 
-A fresh, uninstrumented AB/BA/AB comparison is running at
+The uninstrumented AB/BA/AB comparison completed at
 `/media/IntelSSD/fireprot/outputs/experiments/openfold3-norm-pairs-20261007`.
-Both arms retain template reuse and the prior qualified combination; only
-`FIREPROT_NORM128` and the profile digest differ. Do not overlap its GPU or
-remote-build workload. Maintained-profile promotion remains pending.
+All six runs pass all 11 array bits and full CIF bytes. E2E medians are
+391.162 -> 364.159 seconds (1.0742x incremental); model medians are
+287.825 -> 260.434 seconds (1.1052x). Both arms retain template reuse and the
+prior qualified combination; only `FIREPROT_NORM128` and the profile digest differ.
+Evidence: `provenance/openfold3_norm_e2e_n1536.json`. Maintained-profile promotion
+remains pending.
 
 The screen compares output, mean and reciprocal standard deviation **bitwise**
 against native Torch. Inputs cover row tails, random values, plain/scale/bias

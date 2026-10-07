@@ -62,8 +62,28 @@ def elapsed(function):
     return start.elapsed_time(end)
 
 
+def verified_captures(directory, manifest=None):
+    manifest = Path(manifest) if manifest else Path(__file__).with_name('captures.json')
+    pins = json.loads(manifest.read_text())
+    paths = sorted(Path(directory).glob('trunk_pairformer-tri_att_*.pt'))
+    if len(pins) != 2 or {p.name for p in paths} != set(pins):
+        raise ValueError('Both pinned trained attention captures are required')
+    for path in paths:
+        expected = pins[path.name]
+        if path.stat().st_size != expected['size']:
+            raise ValueError(f'Trained capture size differs: {path.name}')
+        digest = hashlib.sha256()
+        with path.open('rb') as stream:
+            for chunk in iter(lambda: stream.read(4 * 1024 * 1024), b''):
+                digest.update(chunk)
+        if digest.hexdigest() != expected['sha256']:
+            raise ValueError(f'Trained capture hash differs: {path.name}')
+    return paths, pins
+
+
 @torch.inference_mode()
 def main(build, destination, captures=None):
+    capture_paths, capture_pins = verified_captures(captures) if captures else ([], {})
     if 'gfx90a' not in torch.cuda.get_device_properties(0).gcnArchName:
         raise RuntimeError('This experiment only supports gfx90a')
     torch.use_deterministic_algorithms(True)
@@ -103,7 +123,7 @@ def main(build, destination, captures=None):
             check('signed-zero', x, weight, bias)
 
     if captures:
-        for capture in sorted(Path(captures).glob('trunk_pairformer-tri_att_*.pt')):
+        for capture in capture_paths:
             snap = torch.load(capture, map_location='cpu', weights_only=True, mmap=True)
             x = snap['z'].cuda().contiguous()
             weight = snap['state_dict']['layer_norm.weight'].cuda()
@@ -134,6 +154,7 @@ def main(build, destination, captures=None):
             medians_ms={n: statistics.median(v) for n, v in samples.items()}))
         del x, weight, bias, reference
     result = dict(schema_version=1, passed_widths=passed, checks=checks, timing=timing,
+        trained_capture_pins=capture_pins, trained_capture_count=len(capture_paths),
         library_sha256=receipt['library_sha256'], torch=str(torch.__version__),
         hip=torch.version.hip, seed=101, strict=True,
         scope='Operator output, mean and rstd bits; complete allocation-inclusive operator timing')

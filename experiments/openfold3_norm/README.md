@@ -44,7 +44,12 @@ This does not qualify the library against DiamondHill's installed Torch.
 The screen compares output, mean and reciprocal standard deviation **bitwise**
 against native Torch. Inputs cover row tails, random values, plain/scale/bias
 variants, constant and low-variance rows, large values, signed zero and retained
-trained triangle-attention inputs. Only variants passing these checks are timed.
+trained triangle-attention inputs. When a capture directory is supplied, both
+files in `captures.json` must match their recorded sizes and SHA256 hashes before
+GPU execution. An empty, incomplete or corrupt directory is an error. Omitting
+the directory explicitly gives synthetic-only coverage, recorded in the report.
+`python experiments/openfold3_norm/test_captures.py` checks the capture guards
+without using a GPU. Only variants passing the numerical checks are timed.
 Timing includes ordinary strict output allocation and alternates call order.
 Neither operator correctness nor an operator speedup establishes model parity
 or E2E benefit. Full-model gates and a fresh paired comparison remain required

@@ -4646,3 +4646,15 @@ above; local source and README pendingcommit with explicitunqualifiedstatus.
 Currentgoalturnprogress: newHIPprototype compiled, actualhostreboot identified,
 archive recoveryverified, measuredjob restarted onlyafterauthoritativeterminal.
 Goalactive; no plateau/completion evidence yet.
+
+## 2026-10-07 norm trained-input guard strengthened while pairs remain live
+
+Previous turn progress: recovery and HIPprototype committed/pushed4e290e8; goal
+stillactive. This turn re-polled SAME15499 LIVE. No competing GPU/build. Norm
+screen previously could silently skip an empty capture directory; now requires
+exacttwo filenames,size,SHA256 from captures.json derived from historical
+provenance/openfold3_triangle_triatt_profile.json beforeGPU execution. Report
+records capturepins/count; omitted argument explicitly synthetic-only. CPUtest
+passes validinput plusmissing/same-size-corrupt/truncated rejection. Numerical
+HIPkernelstillunqualified; no GPUtest/dispatchchange. Need pending E2E completes
+before norm GPU screen. Preserve strict all11/CIF gate and previousmeasuredE2E.

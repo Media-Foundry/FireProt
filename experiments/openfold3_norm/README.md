@@ -101,3 +101,7 @@ Timing includes ordinary strict output allocation and alternates call order.
 Neither operator correctness nor an operator speedup establishes model parity
 or E2E benefit. Full-model gates and a fresh paired comparison remain required
 before any model integration is accepted.
+
+The subsequent [direct strided-input experiment](STRIDED.md) removes input copies
+for three measured layouts. Operator and full-model qualification pass; its
+paired E2E result remains pending.

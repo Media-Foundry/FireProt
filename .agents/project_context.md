@@ -4776,3 +4776,27 @@ pins checked, request inspected, SMI5idle before launch. No maintained promotion
 Next: authenticate fullmodel trial, ifpasses uninstrumented paired E2E; archive
 and integrate qualified strided source/receipts. Commit pending norm docs/evidence
 with GitNexus current-index and staged detect_changes gates. Goal active.
+
+## 2026-10-07 strided normalization model passed; paired trial running
+
+Committed/pushed norm E2E docs/evidence as51e092c616139793f9d9d7b9d0406c163617e3ac.
+Postcommit GitNexus index-current, runner-current, incompleteReasons[], final
+all-change gate clean (only user docs/isa untracked before this journal entry).
+Strided fullmodelPID114134 TERMINAL0: all11bits/fullCIFexact vs norm-pairs
+candidate0; model257.120749320s singleobservation, not pairedspeedup. Counts
+11202accepted/7846fallback/4730strided_calls/0contiguous_copies. Before pairing,
+preparation rehashed allsource/CLI/reference/operatorpins, reran compare-npz
+all11exact and compared current completeCIF. No reduction/precision changes.
+
+CURRENT LIVE PID121367 timeout10900. Root
+/media/IntelSSD/fireprot/outputs/experiments/openfold3-norm-strided-pairs-20261007.
+ThreeAB/BA/AB pairs with shared frozenworker; onlyFIREPROT_NORM_STRIDED0/1and
+profiledigest differ. BotharmsHIPWelford+allpriorcache/template/trianglechanges.
+Baselinecopies4730/strided0; candidatescopies0/strided4730 required, all11bits/
+fullCIFagainststridedfullmodelanchor. StrictN1536R3D200S1seed101HIP7only,noprofiler.
+NeedpollSAME121367; nooverlappingGPU/build. Localprepare
+/tmp/fireprot-prepare-strided-pairs.py;driver/tmp/fireprot-run-strided-pairs.py;
+remotecopiesinprecedingstrided-modelroot. SMI5idle checkedbeforelaunch; allsix
+requests inspected. Next authenticate/collectpairedresults; integrate qualified
+stridedprototype sources+operator/fullmodel evidence fromarchived/remote artifacts
+into repo, thenfreshhotspotselection. No new E2Eclaimyet; maintainedpromotionpending.

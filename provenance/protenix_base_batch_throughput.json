@@ -1,0 +1,659 @@
+{
+  "scope": "Two independent fresh-process requests on one GCD, serial versus concurrent; includes Python startup and model loading, excludes maintained Rust preflight. Not a tensor-batched model or maintained E2E receipt.",
+  "plan": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-cu-batch-20261007/batch-study/plan.json",
+    "sha256": "ca73e8d760c6ad06c05bba43235fe2981e18f6b1eabfb98d929136588002243c"
+  },
+  "pins": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-cu-batch-20261007/batch-study/pins.json",
+    "sha256": "a4c734c76bba29e9e8937517fb3977a49dee1734a73df35455be4d6ba8c29533"
+  },
+  "driver_status": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-cu-batch-20261007/batch-study/driver-status.json",
+    "sha256": "d24219f6de94b955cf36d25bd2aca88e2d35eef45b9317b7083f55ec8fe9653c"
+  },
+  "physical_device": {
+    "pci_address": "0000:93:00.0",
+    "architecture": "gfx90a"
+  },
+  "science": {
+    "schema_version": 1,
+    "workload": {
+      "model": "protenix",
+      "model_name": "protenix_base_default_v0.5.0",
+      "cycles": 10,
+      "diffusion_steps": 200,
+      "samples": 1,
+      "precision": "float32"
+    },
+    "backend": "fireprot",
+    "seed": 101,
+    "hip_device": 7,
+    "source": {
+      "root": "/media/IntelSSD/fireprot/Protenix",
+      "commit": "bb3be993b52713795796c72cf0a46ef8a7323442"
+    },
+    "checkpoints": {
+      "model": {
+        "path": "/media/IntelSSD/fireprot/runtime/checkpoint/protenix_base_default_v0.5.0.pt",
+        "sha256": "9ea20b0aba42f2256711da1d0cd081510a4b291e64375bff6b70ced70b87a5f1"
+      }
+    },
+    "resources": {
+      "ccd_components_file": {
+        "path": "/media/IntelSSD/fireprot/runtime/common/components.cif",
+        "sha256": "bb31ae5cf6c8bc669924313077cb4231ee5ffefd3a20118cd14f3ec89f8bb6a5"
+      },
+      "ccd_components_rdkit_mol_file": {
+        "path": "/media/IntelSSD/fireprot/runtime/common/components.cif.rdkit_mol.pkl",
+        "sha256": "d1cfb71f5993a3ebea7c47877022d7f597bbfbaf86e28a4770e957da6c50cd35"
+      },
+      "pdb_cluster_file": {
+        "path": "/media/IntelSSD/fireprot/runtime/common/clusters-by-entity-40.txt",
+        "sha256": "1ab4af905e75b382eda8dec59917dc3608bee0729e36b9e71baf860bbe86850c"
+      },
+      "obsolete_release_data_csv": {
+        "path": "/media/IntelSSD/fireprot/runtime/common/obsolete_release_date.csv",
+        "sha256": "a4f3f63ac5d7eebd78b07995cc669b9eccd6f5d8813c9492c9df02868893cf33"
+      }
+    },
+    "input": {
+      "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+      "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+    }
+  },
+  "groups": [
+    {
+      "mode": "serial",
+      "name": "0-serial",
+      "wall_seconds": 211.595585169,
+      "proteins_per_hour": 34.02717497271698,
+      "monitor_samples": 377,
+      "members": [
+        {
+          "run_id": "protenix-base-batch-0-serial-0",
+          "request": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-cu-batch-20261007/batch-study/protenix-base-batch-0-serial-0.json",
+            "sha256": "be1294a6b3f50af661f78805e362a8339dcfb35893bcde1596c6ebd9f7ffc0b1"
+          },
+          "elapsed_seconds": 105.573255047,
+          "model_seconds": 86.86104717699345,
+          "request_seconds": 100.90673313394655,
+          "memory": {
+            "peak_allocated_bytes": 11635223552,
+            "peak_reserved_bytes": 11777605632
+          },
+          "exact": {
+            "confidence.atom_is_polymer": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.atom_plddt": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.atom_to_token_idx": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.contact_probs": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.token_asym_id": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.token_has_frame": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.token_pair_pae": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.token_pair_pde": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "coordinates": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            }
+          },
+          "summary_confidence_exact": true,
+          "drift": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-cu-batch-20261007/batch-study/aligned-protenix-base-batch-0-serial-0.json",
+            "sha256": "23645ee36a471913644003d7affa7a70c4f09b7544f8a66221d171b088312575"
+          },
+          "aligned_rmsd_angstrom": 1.4940300026711191e-12
+        },
+        {
+          "run_id": "protenix-base-batch-0-serial-1",
+          "request": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-cu-batch-20261007/batch-study/protenix-base-batch-0-serial-1.json",
+            "sha256": "e1cf9608445e2fa819be488200a53d05dca30dfa88b3ce425bd91c78014e84f9"
+          },
+          "elapsed_seconds": 105.770797568,
+          "model_seconds": 86.74860568309668,
+          "request_seconds": 100.79570729611441,
+          "memory": {
+            "peak_allocated_bytes": 11635223552,
+            "peak_reserved_bytes": 11777605632
+          },
+          "exact": {
+            "confidence.atom_is_polymer": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.atom_plddt": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.atom_to_token_idx": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.contact_probs": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.token_asym_id": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.token_has_frame": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.token_pair_pae": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.token_pair_pde": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "coordinates": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            }
+          },
+          "summary_confidence_exact": true,
+          "drift": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-cu-batch-20261007/batch-study/aligned-protenix-base-batch-0-serial-1.json",
+            "sha256": "23645ee36a471913644003d7affa7a70c4f09b7544f8a66221d171b088312575"
+          },
+          "aligned_rmsd_angstrom": 1.4940300026711191e-12
+        }
+      ]
+    },
+    {
+      "mode": "concurrent",
+      "name": "1-concurrent",
+      "wall_seconds": 194.43567246,
+      "proteins_per_hour": 37.03024197620532,
+      "monitor_samples": 342,
+      "members": [
+        {
+          "run_id": "protenix-base-batch-1-concurrent-1",
+          "request": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-cu-batch-20261007/batch-study/protenix-base-batch-1-concurrent-1.json",
+            "sha256": "66732998e8dfd6da9d7e4625558e7922b58e398ffe72ac36baa24a7a356efb63"
+          },
+          "elapsed_seconds": 192.749819271,
+          "model_seconds": 173.65384083392564,
+          "request_seconds": 187.7429214749718,
+          "memory": {
+            "peak_allocated_bytes": 11635223552,
+            "peak_reserved_bytes": 11777605632
+          },
+          "exact": {
+            "confidence.atom_is_polymer": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.atom_plddt": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.atom_to_token_idx": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.contact_probs": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.token_asym_id": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.token_has_frame": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.token_pair_pae": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.token_pair_pde": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "coordinates": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            }
+          },
+          "summary_confidence_exact": true,
+          "drift": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-cu-batch-20261007/batch-study/aligned-protenix-base-batch-1-concurrent-1.json",
+            "sha256": "23645ee36a471913644003d7affa7a70c4f09b7544f8a66221d171b088312575"
+          },
+          "aligned_rmsd_angstrom": 1.4940300026711191e-12
+        },
+        {
+          "run_id": "protenix-base-batch-1-concurrent-0",
+          "request": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-cu-batch-20261007/batch-study/protenix-base-batch-1-concurrent-0.json",
+            "sha256": "acd8a861464f3bc953d14210a61e8806028d5407e79912fd7f35052061c5979d"
+          },
+          "elapsed_seconds": 194.435079446,
+          "model_seconds": 174.39519128401298,
+          "request_seconds": 188.99917786195874,
+          "memory": {
+            "peak_allocated_bytes": 11635223552,
+            "peak_reserved_bytes": 11777605632
+          },
+          "exact": {
+            "confidence.atom_is_polymer": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.atom_plddt": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.atom_to_token_idx": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.contact_probs": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.token_asym_id": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.token_has_frame": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.token_pair_pae": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.token_pair_pde": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "coordinates": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            }
+          },
+          "summary_confidence_exact": true,
+          "drift": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-cu-batch-20261007/batch-study/aligned-protenix-base-batch-1-concurrent-0.json",
+            "sha256": "23645ee36a471913644003d7affa7a70c4f09b7544f8a66221d171b088312575"
+          },
+          "aligned_rmsd_angstrom": 1.4940300026711191e-12
+        }
+      ]
+    },
+    {
+      "mode": "concurrent",
+      "name": "2-concurrent",
+      "wall_seconds": 192.33507523,
+      "proteins_per_hour": 37.43466963261915,
+      "monitor_samples": 338,
+      "members": [
+        {
+          "run_id": "protenix-base-batch-2-concurrent-1",
+          "request": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-cu-batch-20261007/batch-study/protenix-base-batch-2-concurrent-1.json",
+            "sha256": "f80b2a9005692d77fbd169e16afa22d3d406133e7b4dae190083e8e2cece3cb2"
+          },
+          "elapsed_seconds": 190.661209112,
+          "model_seconds": 171.3660017310176,
+          "request_seconds": 185.58970116695855,
+          "memory": {
+            "peak_allocated_bytes": 11635223552,
+            "peak_reserved_bytes": 11777605632
+          },
+          "exact": {
+            "confidence.atom_is_polymer": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.atom_plddt": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.atom_to_token_idx": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.contact_probs": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.token_asym_id": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.token_has_frame": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.token_pair_pae": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.token_pair_pde": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "coordinates": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            }
+          },
+          "summary_confidence_exact": true,
+          "drift": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-cu-batch-20261007/batch-study/aligned-protenix-base-batch-2-concurrent-1.json",
+            "sha256": "23645ee36a471913644003d7affa7a70c4f09b7544f8a66221d171b088312575"
+          },
+          "aligned_rmsd_angstrom": 1.4940300026711191e-12
+        },
+        {
+          "run_id": "protenix-base-batch-2-concurrent-0",
+          "request": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-cu-batch-20261007/batch-study/protenix-base-batch-2-concurrent-0.json",
+            "sha256": "85bba332c766d87b788cfab377eed00bffbe814bc729a9022d96723b6788d5d5"
+          },
+          "elapsed_seconds": 192.334303101,
+          "model_seconds": 172.05956650001463,
+          "request_seconds": 186.96029719209764,
+          "memory": {
+            "peak_allocated_bytes": 11635223552,
+            "peak_reserved_bytes": 11777605632
+          },
+          "exact": {
+            "confidence.atom_is_polymer": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.atom_plddt": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.atom_to_token_idx": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.contact_probs": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.token_asym_id": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.token_has_frame": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.token_pair_pae": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.token_pair_pde": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "coordinates": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            }
+          },
+          "summary_confidence_exact": true,
+          "drift": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-cu-batch-20261007/batch-study/aligned-protenix-base-batch-2-concurrent-0.json",
+            "sha256": "23645ee36a471913644003d7affa7a70c4f09b7544f8a66221d171b088312575"
+          },
+          "aligned_rmsd_angstrom": 1.4940300026711191e-12
+        }
+      ]
+    },
+    {
+      "mode": "serial",
+      "name": "3-serial",
+      "wall_seconds": 211.762358261,
+      "proteins_per_hour": 34.00037692782917,
+      "monitor_samples": 378,
+      "members": [
+        {
+          "run_id": "protenix-base-batch-3-serial-0",
+          "request": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-cu-batch-20261007/batch-study/protenix-base-batch-3-serial-0.json",
+            "sha256": "90afe8bee39b4af8fa5d4b64bdfb157013235ee38998d3b8aab736ae04558b5d"
+          },
+          "elapsed_seconds": 105.836536555,
+          "model_seconds": 86.70930257800501,
+          "request_seconds": 100.88767019100487,
+          "memory": {
+            "peak_allocated_bytes": 11635223552,
+            "peak_reserved_bytes": 11777605632
+          },
+          "exact": {
+            "confidence.atom_is_polymer": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.atom_plddt": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.atom_to_token_idx": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.contact_probs": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.token_asym_id": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.token_has_frame": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.token_pair_pae": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.token_pair_pde": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "coordinates": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            }
+          },
+          "summary_confidence_exact": true,
+          "drift": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-cu-batch-20261007/batch-study/aligned-protenix-base-batch-3-serial-0.json",
+            "sha256": "23645ee36a471913644003d7affa7a70c4f09b7544f8a66221d171b088312575"
+          },
+          "aligned_rmsd_angstrom": 1.4940300026711191e-12
+        },
+        {
+          "run_id": "protenix-base-batch-3-serial-1",
+          "request": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-cu-batch-20261007/batch-study/protenix-base-batch-3-serial-1.json",
+            "sha256": "1c73b7a6d010b0ad8509cfd83105e80bbf164d6044689d707fffaca92cf6673c"
+          },
+          "elapsed_seconds": 105.673841241,
+          "model_seconds": 86.84584735694807,
+          "request_seconds": 100.91808005003259,
+          "memory": {
+            "peak_allocated_bytes": 11635223552,
+            "peak_reserved_bytes": 11777605632
+          },
+          "exact": {
+            "confidence.atom_is_polymer": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.atom_plddt": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.atom_to_token_idx": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.contact_probs": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.token_asym_id": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.token_has_frame": {
+              "bitwise_equal": true,
+              "max_abs_delta": null,
+              "passed": true
+            },
+            "confidence.token_pair_pae": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "confidence.token_pair_pde": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            },
+            "coordinates": {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0,
+              "passed": true
+            }
+          },
+          "summary_confidence_exact": true,
+          "drift": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/protenix-base-cu-batch-20261007/batch-study/aligned-protenix-base-batch-3-serial-1.json",
+            "sha256": "23645ee36a471913644003d7affa7a70c4f09b7544f8a66221d171b088312575"
+          },
+          "aligned_rmsd_angstrom": 1.4940300026711191e-12
+        }
+      ]
+    }
+  ],
+  "group_wall_medians": {
+    "serial": 211.678971715,
+    "concurrent": 193.385373845
+  },
+  "throughput_speedup": 1.094596594904134,
+  "paired_speedups": [
+    1.088254961097893,
+    1.10100748918401
+  ],
+  "per_request_latency_medians": {
+    "serial": 105.72231940450001,
+    "concurrent": 192.542061186
+  },
+  "model_seconds_medians": {
+    "serial": 86.79722652002238,
+    "concurrent": 172.85670366697013
+  },
+  "all_eight_exact": true,
+  "summary_confidence_exact": true,
+  "cif_binding_checked": true
+}

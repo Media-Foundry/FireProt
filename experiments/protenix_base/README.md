@@ -360,3 +360,38 @@ The completed `final-v1` aggregation uses `summarize_native_study.py`; invocatio
 profile, source and output identities remain pinned. This is a direct measurement,
 not an accumulated incremental ratio.
 [Final evidence](../../provenance/protenix_base_final_native_three_pairs.json).
+
+## Hardware utilization and same-GCD concurrency
+
+See [the hardware investigation](../../docs/protenix-base-hardware.md) for
+rocprofv3 traces, sampled counters and empirical bandwidth/FP32 GEMM references.
+These diagnostic times are separate from the maintained uninstrumented E2E
+series. Both profiled predictions must reproduce the maintained anchor exactly.
+
+`batch_throughput.rs` is an isolated Rust experiment runner. Build against the
+matching local serde_json dependency, for example on the recorded DiamondHill
+checkout:
+
+```bash
+rustc --edition=2021 experiments/protenix_base/batch_throughput.rs \
+  --extern serde_json=target/release/deps/libserde_json-cceb10acde35fd52.rlib \
+  -L dependency=target/release/deps -o /tmp/fireprot-batch-throughput
+/tmp/fireprot-batch-throughput /absolute/path/to/fresh-plan.json
+```
+
+The plan pins deployment inputs separately and supplies `python`, `member`,
+`cwd`, `environment`, `cli`, prediction references, a fresh result directory and
+four groups (`serial`, `concurrent`, `concurrent`, `serial`), with two fresh
+request paths and stdout/stderr paths per group. `batch_member.py` invokes the
+unchanged maintained predictor, but does not create a maintained acceptance
+receipt. Scientific settings remain FP32 N1000 C10/D200/S1 seed101 on HIP7.
+The runner checks the recorded HIP7 PCI mapping, rejects unrelated GPU PIDs,
+and validates all nine arrays plus summary confidence exactly after each group.
+Use only the qualified mapping in this experiment; it is not a portable queue
+scheduler. Results measure controlled multi-process concurrency, not a model
+with an added tensor batch dimension. Production isolation is unchanged.
+
+The completed eight-request concurrency study improves throughput 1.09460x,
+while median request latency rises from105.722 to192.542s. All arrays, summary
+confidence and CIF/NPZ bindings pass. The user closed this direction; no batching
+route is promoted. [Evidence](../../provenance/protenix_base_batch_throughput.json).

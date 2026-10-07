@@ -4482,3 +4482,24 @@ Prepare script /tmp/fireprot-prepare-batch-study.py onbothhosts. Hardwareaggrega
 Docs/protenix-base-hardware.md draftedwithhardwarefindings andpendingbatchresult.
 Potentialresult: coreBMMcompute-bound,CK/projectionnotHBMsaturated; memorykernels
 streamingbound, diffusionattentionunderfilled. Awaitbatchbeforeclaimingbenefit.
+
+## 2026-10-07 Base hardware/batch direction closed; move to OpenFold3
+
+User explicitly requested stop digging CU/batch and switch to OpenFold optimization.
+Interpret OpenFold as OpenFold3/OpenBind-0, the existing optimized adapter (not
+future OpenFold2). No further Base batch trials or promotion. PreferredSSH .5;
+HIP6/7only. Batch wrapper2519608 TERMINALSUCCESS exit0; aggregator
+/tmp/fireprot-summarize-batch.py completed summary-v1 plus8independent Rust
+CIFbinding/alignmentchecks. All8all9arrays exact, summaryconfidenceexact, CIF
+atomidentities/bindingspass, allmaintainedcontexts/construction/templateactual
+countsverified. Localprovenance/protenix_base_batch_throughput.json copied.
+Two-request wallmedians211.678971715(serial)->193.385373845(concurrent),
+throughput1.0945965949x;paired1.08825496/1.10100749. Perrequestlatency105.7223194
+->192.5420612;model86.79722652->172.85670367s. Independentfreshprocessscope
+excludesmaintainedRustpreflight andisNOTtensorbatching. GPUcomputethroughput
+roughlyflat; smallgainconsistentwithhost/loadingoverlap. Hardwaredocsupdated
+complete/closeddecision; maintainedBaseE2E3.471634xunchanged. Needcommit/push
+newbatchsources/hardwaredocs/evidence withGitNexusgates; noGPUjobcurrentlyactive.
+OpenFold3 next: re-anchor latesttriangle-memory combo N1536E2E416.226/model321.699,
+notolderpublishedprofile. Lastfullprofilepredatestriangle-memory, so refresh
+hotspotprofile on actualfastestfrozenworker before selectingnewkernel work.

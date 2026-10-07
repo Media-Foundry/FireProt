@@ -6,8 +6,11 @@ File existence and byte size have been checked. AtlasFold and AtlasLM full
 SHA-256 hashes were also computed during baseline setup; publisher authenticity
 has not been independently verified in this task.
 
-Host: `pc@10.120.16.9`. FireProt workspace: `/media/IntelSSD/fireprot`.
-The user authorizes physical GPU/GCD indices **0 through 7** for this work.
+Preferred SSH endpoint: `pc@10.120.16.5` (updated 2026-10-07).
+`10.120.16.9` is another interface on the same DiamondHill host; hostname and
+boot identity were checked before switching. FireProt workspace: `/media/IntelSSD/fireprot`.
+The current user restriction is **HIP_VISIBLE_DEVICES=6 or 7**; it supersedes
+the earlier authorization to use all eight GCDs.
 Check device occupancy before execution and monitor benchmark isolation.
 
 | Model | Bytes | Absolute path |

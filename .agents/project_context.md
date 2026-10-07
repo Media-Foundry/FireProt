@@ -4434,3 +4434,51 @@ notglobaloptimality; no unsupportedworkload or experimentalaccuracyclaims.
 Remaining: commit/push final docs/evidence, refreshindex/finalgate, verifyremote
 noactivejobs andfinalrepositorycondition, then completionaudit/status. Master
 andGitHubdefaultmasterverified; userdocs/isa remainsuntoucheduntracked.
+
+## 2026-10-07 preferred SSH interface and new CU/batch investigation
+
+User now prefers pc@10.120.16.5 for DiamondHill; .9 is another interface.
+Both returned hostnameDiamondHill and boot_id2239217e-fa3c-4c2a-9a99-7009ecbaa73f,
+and .5 sees SAME live batch PID2519608. Future SSH/rsync use .5. Updated sync
+script and checkpoint guide; latter nowcorrects obsoleteall8 authorization to
+latest HIP_VISIBLE_DEVICES6or7. No fullsource sync run; onlysyntaxcheckneeded.
+
+Previous Base optimization goal completed atmasterbe976e7, directN1000 latest
+381.967820->110.025357s/3.471634x, model357.794972->86.894094/4.117598x; repeated
+userreport nowdelivered. NEW usertask: profileCU saturation/memoryvscompute and
+assessbatchthroughput. OnlyHIP7 used. Maintainedruntime/config unchanged.
+
+Experimentroot outputs/experiments/protenix-base-cu-batch-20261007 onDiamondHill.
+Tracewrapper2515531 andcounterwrapper2516990 TERMINALSUCCESS/all9bitwiseanchor.
+Usedrocprofv3 explicitprofileinjection (sameworkerPID; no supervisorweakening),
+SDK1.3.5core10.0 ROCmTorch7.14. Basicprobe passed. Counterskerneloccurrences10-12,
+88dispatches/all9metrics; profilerfinalizationwarned77outstandingkernels, documented
+as samplecoverage, notfullcountertimeline. Localprovenance/protenix_base_hardware_profile.json
+newuntracked copiedfromhardware-summary-v1.json. Trace537608dispatches,sum84.419s,
+union84.416s over106.231s=79.46% (instrumentedwholekernelspan, NOTmodelutilization).
+HIP7Agent9/PCI0000:93:00.0/SMI5 has104CU. SDK SIMD_UTILIZATION expression
+SQ_BUSY_CU_CYCLES/GRBM_COUNT/104 (noadditional4) giveshotkernels99-99.8%active.
+CKMFMA75.05%,waveoccup49.18%,HBM482GB/s;LtBMM98.65-98.86%MFMA,24-36%occup,
+HBM290-302GB/s; dual70.56%MFMA415GB/s;QKV73.03%/720GB/s;transition68.02%/408.
+LayerNorm~1398-1403GB/s,residual1216; diffusionattn61.5%active/19.5%MFMA/7.7%occup.
+EmpiricalHIP7copy1249.57GB/s, FP32square8192hipblas36.879TFLOPS/hipblaslt35.485.
+Metrics/roofreferencescalibration.json inroot, noGPUoverlap.
+
+CURRENT LIVE batch wrapper2519608; batch-study underroot, pid/run.sh/plan.json/
+pins.json/launch.log/driver-status. Rustexecutable root/batch-throughput owns
+4groups serial/concurrent/concurrent/serial, twoindependentfreshprocesses each,
+allHIP7,N1000C10D200S1FP32seed101. Pythonmembercallsunchangedpredict; Rustcohort
+monitorallowsonlylaunchedPIDs onSMI5/PCI93, checksall9bits andsummaryconfidence
+exactaftereachgroup. Thisis controlledmultiprocessconcurrency, NOTtensorbatching
+andNOTmaintainedRustinferE2E (excludespreflight). No acceptance receipts forged.
+CompiledRustlocally/remotelywithserde_jsonrlib; sourcesnewuntracked:
+experiments/protenix_base/batch_throughput.rs,batch_member.py. DoNOTeditremotesources
+orstartGPU/build whilelive. Group0serialcompleted211.595585s for2requests, member
+105.573/105.771s,bothgatesPASS. Group1concurrentbothchildren2522984/2522985live
+atlastpoll (groupelapsed1:07;wrapper4:26). Needall4groups +8exact/summary checks,
+thenindependentCIFbinding/alignmentchecks, aggregate throughput andlatencies.
+Prepare script /tmp/fireprot-prepare-batch-study.py onbothhosts. Hardwareaggregator
+/tmp/fireprot-summarize-hardware.py onbothhosts. Calibration/tmp/fireprot-roof-calibrate.py.
+Docs/protenix-base-hardware.md draftedwithhardwarefindings andpendingbatchresult.
+Potentialresult: coreBMMcompute-bound,CK/projectionnotHBMsaturated; memorykernels
+streamingbound, diffusionattentionunderfilled. Awaitbatchbeforeclaimingbenefit.

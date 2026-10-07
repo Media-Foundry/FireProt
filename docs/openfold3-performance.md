@@ -449,3 +449,47 @@ and 5,064 key packs; N1000 native fallback separately passes.
 This is **incremental**, not a direct original-Torch ratio. Do not multiply
 historical improvements into a new direct E2E claim. Complete evidence:
 `provenance/openfold3_triangle_memory_e2e_n1536.json`.
+
+## Latest combination: refreshed hotspot profile (2026-10-07)
+
+The accepted triangle-memory combination was profiled again on HIP7 with the
+same strict FP32 N1536, R3/four trunk passes, D200/S1 and seed101 workload.
+All 11 arrays and the complete CIF match its qualified reference exactly;
+frozen input/source/library pins were rechecked. The environment inventory
+matches the preceding accepted deployment.
+
+| Inclusive diagnostic boundary | Seconds |
+| --- | ---: |
+| Trunk, including all four passes | 262.373 |
+| Pairformer stack | 190.612 |
+| Pairformer triangle attention, both directions | 105.698 |
+| Pairformer triangle multiplication, both directions | 65.081 |
+| Template embedder | 49.415 |
+| MSA module | 18.466 |
+| Diffusion sampling | 46.465 |
+| Confidence heads | 6.891 |
+
+These GPU event intervals overlap hierarchically and include native tuning calls;
+**do not add the rows or treat this instrumented run as a new E2E comparison**.
+The previously accepted uninstrumented E2E median remains 416.226 seconds.
+Evidence: `provenance/openfold3_current_hotspots_20261007.json`.
+
+Template-stack inputs have four slots, each with 1536-by-1536 pair features.
+The next bounded experiment checks whether actual slot tensors and masks are
+bitwise identical before reusing a native block's result. It retains all four
+output slots and the native final normalization/reduction. No-template input
+alone is insufficient to skip the network: it also consumes the evolving pair
+representation. Distinct slots and unsupported calls must use native execution.
+The first full-model diagnostic qualification passed all 11 arrays and complete
+CIF bytes. Nine block calls reused three slots each; no distinct or unsupported
+call was selected. Template-embedder events decreased from 49.415 to 14.192
+seconds. Other stage times varied, so this is a diagnostic stage comparison,
+not an E2E speedup. A separate guard screen verifies different masks and
+signed-zero input differences fall back, training/non-inplace calls fall back,
+and the original method and output aliasing are preserved.
+
+Evidence: `provenance/openfold3_template_reuse_model_20261007.json` and
+`provenance/openfold3_template_reuse_guard_screen.json`. Sources and reproduction
+details are in [the experiment notes](../experiments/triangle_memory/TEMPLATE_REUSE.md).
+The implementation is not enabled by the maintained profile. An uninstrumented
+AB/BA/AB E2E comparison is running; no new E2E speedup is accepted yet.

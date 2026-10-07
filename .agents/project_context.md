@@ -4503,3 +4503,85 @@ newbatchsources/hardwaredocs/evidence withGitNexusgates; noGPUjobcurrentlyactive
 OpenFold3 next: re-anchor latesttriangle-memory combo N1536E2E416.226/model321.699,
 notolderpublishedprofile. Lastfullprofilepredatestriangle-memory, so refresh
 hotspotprofile on actualfastestfrozenworker before selectingnewkernel work.
+
+## 2026-10-07 OpenFold3 latest-combination stage profile LIVE
+
+BaseCU/batchclosure COMMITTED/PUSHEDmasterdefefc2; postcommitGitNexus typedindex
+up-to-date/current/noincompleteReasons andfinaldetect_changesclean beforethisappend.
+No furtherBaseexperiments. NewOpenFold3request authorized byuser; onlyHIP7.
+
+CURRENT LIVE wrapper2527534, root
+/media/IntelSSD/fireprot/outputs/experiments/openfold3-current-hotspots-20261007.
+Frozen copy of /tmp/fireprot-triangle-e2e-v1/{python,fireprot,kernels,licenses,...},
+actualfastesttriangle-memorycombo. Onlyfrozenworkerfinalnullcontext changed to
+model_probe(model,'openfold3',output), probe copiedfromqualifiedstage-profile-v3.
+Scopes retaincondition/atomcache, D16, workspace, trianglecopies/keypacking.
+OldabsoluteHIPcopylibraries andcontrols retainedunchanged, frozenoldRustCLI/bridge.
+Environmentrecapturedwithsameinventoryspec: content EXACTLYequaloldinventory,
+so nohostlibrarydrift. SourceOpenFold3pin7de748b7...; weightsOpenBind0bd43301c...;
+N1536input5fa81bf... strictFP32R3D200S1seed101HIP7. Allpreparation/frozen/source/
+reference/CLI/spec pinsverified, nootherGPUjobsatlaunch. driverRustmeasure1800,
+timeout1900; all11bitwiseandfullCIFagainsttriangle-e2e-n1536-candidate-0 required.
+Outputoutputs/openfold3-current-hotspots-n1536. driver-statusonlyterminal,
+operator-profile.json diagnostics; timesinclusiveoverlap,notnewE2Emeasurement.
+Prepare script /tmp/fireprot-prepare-openfold3-current-profile.py onbothhosts.
+DoNOTeditfrozenfiles oroverlapGPU/build; pollSAME2527534. Nextaggregatefreshstages,
+inspectactualhotspots, then choose optimization withstrict11array/CIFparity.
+Read-onlyupstreamtemplate_module.py locatedatOpenFold3/core/model/latent; cannot
+omittemplate networkjustbecauseuse_templatesFalse: learnedpairupdateusesz.
+
+## 2026-10-07 OpenFold3 hotspot refresh passed; duplicate-template trial live
+
+Previous wrapper2527534 terminal exit0. All11 arrays and fullCIF exact; frozen
+preparation, CLI and reference pins rehashed. Local evidence now
+provenance/openfold3_current_hotspots_20261007.json. Inclusive diagnostics:
+trunk262.373s, pairformer190.612, triangle attention105.698, multiplication65.081,
+template49.415, MSA18.466, diffusion46.465, confidence6.891. These overlap and
+include tuning; published uninstrumented E2E416.226s remains unchanged.
+Actual template-stack shape[1,4,1536,1536,64]. Fresh candidate experimental file
+experiments/triangle_memory/template_reuse.py guards identical input/mask bits,
+FP32/inference/strict/shape/inplace, computes one native block slot and copies to
+other3; stack final LayerNorm and four-slot sum stay original. Distinct or
+unsupported calls fallback. Source-pinned upstream template module, no upstream
+or maintained runtime change. No claim that no-template allows skipping network.
+
+CURRENT LIVE wrapper2535783 (shell parent2535782), remote root
+/media/IntelSSD/fireprot/outputs/experiments/openfold3-template-reuse-20261007.
+Outputoutputs/openfold3-template-reuse-n1536. Same frozen latest combination plus
+newscope and stageevents; HIP7only FP32N1536R3D200S1seed101. Onlyjobatlaunch.
+Prepare script /tmp/fireprot-prepare-template-reuse.py onbothhosts. run.sh terminal
+writes driver-status; require all11 bits/fullCIFagainsttriangle-e2e candidate0.
+Do NOT overlap GPU/build or edit frozen source; poll SAME2535783. Need inspect
+actual eligible/distinct/unsupported counts and all output gates before any
+uninstrumented paired E2E. Newscope and report/docs are local uncommitted.
+
+## 2026-10-07 template reuse model and guards passed; E2E pairs live
+
+Wrapper2535783 TERMINAL exit0. Rehashed frozen source/CLI/reference and upstream
+module pins; all11 arrays bitwise and fullCIF match accepted triangle-memory
+anchor. Nine eligible calls,27reusedslots, zero distinct/unsupported. Template
+inclusive49.414924->14.191791s; other stages vary, NOT E2E claim. Evidence copied
+provenance/openfold3_template_reuse_model_20261007.json. Separate GPU guard screen
+passed identical slot/alias, signed-zero difference fallback, distinctmask
+fallback, training/noninplace fallback and method restoration. Screen result
+provenance/openfold3_template_reuse_guard_screen.json. No maintained promotion.
+
+CURRENT LIVE wrapper2543911; remote root
+/media/IntelSSD/fireprot/outputs/experiments/openfold3-template-pairs-20261007.
+Rust benchmark-pairs AB/BA/AB, six fresh processes strictFP32N1536R3D200S1seed101,
+HIP7only; reference includes triangle-memory. Shared frozen worker, no profile;
+only FIREPROT_TEMPLATE_REUSE0/1 and profile digest differ. Frozen pins checked and
+HIP7/SMI5idle atlaunch. Prepare /tmp/fireprot-prepare-template-pairs.py bothhosts.
+run.sh writesdriver-status onterminal, then exactall11/fullCIF checks6against
+triangle-e2e-n1536-candidate-0. paired/order.jsonl tracks progress; benchmark.json
+onlyatcompletion. Do NOT restart onobservationtimeout, editfrozenfiles or overlap
+GPU/build. Need collect actual counters(candidate9/27), confirm no diagnostic
+profile, authenticateRust condition comparison and report medians onlyafterend.
+
+Nextkernel hypothesis: PyTorch actualbuild source /home/pc/pytorch HEAD
+78258b9de6f4e44e7b8df165d4651bf2e14acf62 matches installedTorch; source
+aten/src/ATen/native/cuda/layer_norm_kernel.cu unmodified. FP32C128aligned path
+uses256threads/row, four-value perlane Welford and inter-wave empty reductions.
+A multirowHIP kernel preservingthatorder may improve triangle normalization;
+not implemented/measured yet. Previous Protenix mean/squaresum kernel would
+changeWelford and cannot be blindlyused forOF3 strictbitwisegate.

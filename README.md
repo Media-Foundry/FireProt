@@ -23,7 +23,7 @@ See the [Rust acceptance audit](docs/rust-acceptance.md).
 
 Protenix and OpenFold3 are separate implementations. Precision, preprocessing,
 recycles, diffusion steps, samples and language-model work remain model-specific.
-The latest OpenFold3 workspace/cache/triangle combination is an **experiment with
+The latest OpenFold3 workspace/cache/triangle/template combination is an **experiment with
 frozen deployment artifacts**, not automatically enabled by the maintained profile.
 
 ## Build
@@ -235,11 +235,15 @@ profile's default. See [cache results](docs/protenix-base.md#static-diffusion-bi
 | D16 coverage vs combined reuse | 628.689 → 540.848 s | **1.1624x** |
 | Retained workspace/mask handling vs D16/cache combination | 540.302 → 449.723 s | **1.2014x** |
 | Triangle multiplication copies + attention K packing vs workspace | 452.471 → 416.226 s | **1.0871x** |
+| Identical template-slot reuse vs triangle-memory combination | 419.239 → 387.985 s | **1.0806x** |
 
-Each row has three pairs under the same strict R3/D200/S1 contract. The latest
+Each row has three pairs under the same strict R3/D200/S1 contract. The
 triangle comparison also reduces model forward time **356.595 → 321.699 s
 (1.1085x)**; all six outputs match all 11 arrays and full CIF bytes against the
 native, D16 and workspace anchors. N1000 fallback passes separately.
+The later template comparison reduces model forward **323.661 → 291.027 s
+(1.1121x)**; all six outputs match all 11 arrays and full CIF bytes against the
+qualified triangle-memory anchor. Its scope is N1536 and it remains experimental.
 See [complete evidence and reproduction scope](docs/openfold3-performance.md).
 
 **Do not multiply these incremental ratios into an original-Torch speedup.**

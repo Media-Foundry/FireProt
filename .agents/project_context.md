@@ -4658,3 +4658,79 @@ records capturepins/count; omitted argument explicitly synthetic-only. CPUtest
 passes validinput plusmissing/same-size-corrupt/truncated rejection. Numerical
 HIPkernelstillunqualified; no GPUtest/dispatchchange. Need pending E2E completes
 before norm GPU screen. Preserve strict all11/CIF gate and previousmeasuredE2E.
+
+## 2026-10-07 template E2E complete; HIP normalization model gate live
+
+SAME wrapper15499 terminal exit0; collector at recovered-pairs-root/collect.py
+completed with all frozen pins, Rust benchmark/comparison, 6 exactall11/fullCIF
+checks against triangle-memory anchor. Evidence local
+provenance/openfold3_template_reuse_e2e_n1536.json. E2Emedians419.239143733->
+387.984735169s,1.080555769x,7.455%less; model323.661357742->291.027215039s,
+1.112134333x. Paired1.08056/1.05435/1.10963. All candidates9eligible/27reusedslots;
+copy430/7740 andkey5064 retained; nativefallback counts72baseline/18candidate
+because repeated C64 template work is removed. No scientificsettingchange.
+Archive outputs/experiments/openfold3-template-pairs-recovery1-20261007.tar.gz
+SHA777d45a6dd3abaa3c6f6d1057822f19e5585d737f615984cb396943902ba321d.
+Includes recovereddependencies plus all6outputs; fsynced. Damagedoldseriesexcluded.
+README/performanceguide/experimentguide updated completedincrement, not direct
+originalTorch ratio. Three observations do not establish productiontail latency.
+
+Operatornorm trials now completed, HIP7only, afterE2Eended. Root outputs/experiments/
+openfold3-norm-20261007 v1:24checks; allstatistics/trainedinputs exact, only bias-only
+outputfails4.768e-7. Firstshellwrapper EXITtrap hadquotingerror, screen JSONcompleted
+withpassed_widths[]/no timing; no successreceiptclaimed. v2(rootopenfold3-norm-v2-
+20261007,wrapper60450) samebiasfailure despiteexpression rewrite. Pointwise
+roundingdiagnostic: native==addcmul, candidate==separate multiply/add;37250/131072
+differ. Explicitfmaf fixesbranch in v3, wrapper62666 terminal0, all24 checks exact,
+passedwidths[64,32], pluslargeoutputchecks. Rust-ownedbuild, memoryfill/FP32strict.
+M393216 Torch2.125403ms vsW64 1.007742 vsW32 .464152. M2359296 Torch12.634741 vs
+W64 5.955017 vsW32 2.705953 (~4.67x operator). Eightbalancedforward/reverseorder
+observations includingoutputallocation. Evidenceprovenance/openfold3_norm_operator_screen.json
+recordsall3trials/rejections/pins, noE2Eclaim. QualifiedlibrarySHA
+a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a
+runtime/torch_extensions/rust-v1/fireprot_of3_welford128_v1_c7a1740414e6c7729a29ca7798d414d891cd55814ff14b41171f5b8cef5aac3b/...
+
+CURRENT LIVE wrapper65113; root
+/media/IntelSSD/fireprot/outputs/experiments/openfold3-norm-model-20261007.
+Outputoutputs/openfold3-norm-model-n1536. Frozenlatesttemplatecandidate plusnew
+norm_scope. Librarycopiednorm.so pinned. Newexperiments/openfold3_norm/model_scope.py
+wrapsonlyupstreamLayerNorm C128, M393216or2359296,eps1e-5,strictFP32inference;
+retainsnativecontiguousconversion, fallbackothers. UsesW32. SourceSHA
+normalization.py e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79.
+Driverrequiresall11bits/fullCIFagainsttemplate-pairs-r1-n1536-candidate-0 andpositive
+actualnormcalls. R3D200S1seed101HIP7. No concurrentGPU/build. Lastverifiedlive3:04,
+noerror. NeedpollSAME65113, authenticateactualcounts+fullgate before pairedE2E.
+Prepare /tmp/fireprot-prepare-norm-model.py local; remote savedv3root/prepare-model.py.
+Driverlocal/tmp/fireprot-run-norm-model.py andfrozenroot/driver.py. No maintained
+promotion. LocalCPPfix/notes/modelscope/evidence pendingcommit. CPUcaptureguardtest,
+Python syntax and all recordedtemplate/lastnorm operatorgates pass.
+
+Timinggap observation forfuturestartupdiagnostic: firsttemplatepair model323.661/
+291.027,request360.256/329.352,E2E419.239/387.985. Requestoutsidedelta58-59s;
+candidatesupervisor369.843s,thus~40.5swithinsupervisionoutsiderequest. These are
+boundary differences, not isolated initialization/import measurements. Profile
+beforeoptimizing; do not bypass source/weight/environment verification.
+
+## 2026-10-07 normalization full-model passed; new E2E pairs live
+
+Wrapper65113 TERMINAL0. Rehashed all frozen/source/CLI/reference/operator pins;
+all11arrays and fullCIF exact vs template-pairs-r1-n1536-candidate-0. Actual
+normalization11202accepted/7846fallback/4730contiguouscopies. Singlemodel260.606504s,
+fullinvocation355.960196s; qualificationobservation,NOTpairedspeedup. Persisted
+provenance/openfold3_norm_model_n1536.json; outputfilesystemsynccompleted.
+
+CURRENT LIVE wrapper74134; root
+/media/IntelSSD/fireprot/outputs/experiments/openfold3-norm-pairs-20261007.
+Rustbenchmark-pairs AB/BA/AB, strictFP32N1536R3D200S1seed101HIP7only. Sharedfrozen
+worker inclnormalizationcontextconditionalonFIREPROT_NORM1280/1; botharmsretain
+allpriortriangle-memory/templatecache. Newprofilehashdeclaredtreatment. Allsix
+requests inspected; nootherGPUjobatlaunch. Driver.py subprocessargs (no shell
+trap); terminaldriver-statusrequires6all11bits/fullCIFagainsttemplatecandidate0,
+candidatenormselectedpositive/baselinefileabsent. NeedpollSAME74134, noGPU/heavy
+build orfrozeneditswhilelive. Preparelocal/tmp/fireprot-prepare-norm-pairs.py,
+remotepersistednorm-modelroot/prepare-pairs.py. Driverlocal/tmp/fireprot-run-norm-pairs.py.
+
+Formaltemplate3pairdocpublication+qualifiednormsource/evidence stilllocalpending
+commit; allrecordednumericalchecks/syntax/docslinks passed. Modelscope nowverified.
+No maintainedscopepromotion orfinalnativeTorchratio claimed. Goalactive; next
+stepscollectnormpairedE2E, then continuehotspot/initializationinvestigation.

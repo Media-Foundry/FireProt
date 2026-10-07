@@ -1,6 +1,6 @@
 # Exact duplicate-template block reuse
 
-Status: full N1536 model and guard checks passed; paired E2E measurement pending.
+Status: full N1536 model, guard checks and three paired E2E comparisons passed.
 This is an experimental execution optimization, not a scientific setting change.
 
 ## Contract
@@ -60,8 +60,11 @@ All six runs must pass the original strict array/CIF gates. The reference arm
 already includes the accepted triangle-memory combination; this measures an
 incremental improvement, not a direct original-Torch ratio.
 
-Do not overlap the live timing job with another GPU experiment or heavy remote
-build. The maintained profiles do not enable this experiment.
+The completed E2E medians are **419.239 → 387.985 seconds (1.0806x)**;
+model-forward medians are **323.661 → 291.027 seconds (1.1121x)**.
+All six outputs match all 11 arrays and full CIF bytes against the qualified
+triangle-memory anchor. The maintained profiles do not enable this experiment.
+See `provenance/openfold3_template_reuse_e2e_n1536.json` for all observations.
 
 The preceding `openfold3-template-pairs-20261007` deployment was interrupted by
 a host reboot. Its first candidate's NPZ and metadata were empty after recovery,

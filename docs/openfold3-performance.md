@@ -471,7 +471,7 @@ matches the preceding accepted deployment.
 
 These GPU event intervals overlap hierarchically and include native tuning calls;
 **do not add the rows or treat this instrumented run as a new E2E comparison**.
-The previously accepted uninstrumented E2E median remains 416.226 seconds.
+The starting combination's earlier uninstrumented E2E median was 416.226 seconds.
 Evidence: `provenance/openfold3_current_hotspots_20261007.json`.
 
 Template-stack inputs have four slots, each with 1536-by-1536 pair features.
@@ -491,5 +491,37 @@ and the original method and output aliasing are preserved.
 Evidence: `provenance/openfold3_template_reuse_model_20261007.json` and
 `provenance/openfold3_template_reuse_guard_screen.json`. Sources and reproduction
 details are in [the experiment notes](../experiments/triangle_memory/TEMPLATE_REUSE.md).
-The implementation is not enabled by the maintained profile. An uninstrumented
-AB/BA/AB E2E comparison is running; no new E2E speedup is accepted yet.
+The implementation is not enabled by the maintained profile. Its completed
+uninstrumented comparison is described below.
+
+## Identical template-slot reuse: accepted incremental E2E
+
+Three fresh AB/BA/AB pairs compare the accepted triangle-memory combination with
+the same combination plus exact duplicate-template block reuse:
+
+| Scope | Previous combination median | Template reuse median | Speedup |
+| --- | ---: | ---: | ---: |
+| Complete Rust invocation E2E | 419.239 s | 387.985 s | **1.0806x** |
+| Model forward | 323.661 s | 291.027 s | **1.1121x** |
+
+Complete E2E time decreases by 7.45%. Individual pair ratios are 1.0806x,
+1.0543x and 1.1096x. The three candidate observations span 379.140–395.816
+seconds; three repetitions do not establish production tail latency.
+
+All six outputs match all 11 arrays bitwise and complete CIF bytes against the
+qualified triangle-memory anchor. Each candidate records nine eligible block
+calls and 27 reused slots. The original four-slot normalization/reduction,
+FP32 strict determinism with memory filling, N1536, R3/four trunk passes,
+D200/S1, seed101 and HIP7/PCI93 remain fixed. Processes are fresh, filesystem
+caches are unflushed, and model profiling is disabled. Rust verifies the declared
+treatment, run order, device isolation and pair/reference comparisons.
+
+A preceding series was interrupted by a host reboot and has damaged output
+files; it is excluded. The replacement series uses persistent dependency paths
+restored from hash-verified archives and an identical environment inventory.
+Evidence: `provenance/openfold3_template_reuse_e2e_n1536.json` and
+`provenance/openfold3_reboot_recovery_20261007.json`.
+
+This is an incremental result, not a fresh original-Torch comparison. Do not
+multiply historical ratios. N1000 eligibility and maintained-profile promotion
+are not established by this N1536 experiment.

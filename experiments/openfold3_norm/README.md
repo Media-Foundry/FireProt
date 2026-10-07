@@ -1,7 +1,7 @@
 # OpenFold3 C128 Welford experiment
 
-Status: local HIP compilation passed; GPU correctness and speed are **unverified**.
-No model dispatch or maintained execution profile uses these candidates.
+Status: operator and full N1536 model correctness passed; paired E2E measurement
+is running. No maintained execution profile enables these candidates.
 
 The installed DiamondHill Torch reports commit
 `78258b9de6f4e44e7b8df165d4651bf2e14acf62`. Its matching source checkout is
@@ -40,6 +40,50 @@ Do not run a remote build or screen while the template E2E pairs are active.
 The local compile used the available HIP 7.14 compiler with GPU visibility
 empty; its receipt is `/tmp/fireprot-of3-norm128-local-build-v1/build.json`.
 This does not qualify the library against DiamondHill's installed Torch.
+
+## Qualified operator screen
+
+The third frozen candidate, built through the Rust HIP service on DiamondHill,
+passes all 24 input/width combinations, including both pinned trained inputs.
+Outputs, means and reciprocal standard deviations are bitwise equal to native
+Torch. Large-shape outputs are also checked before timing. FP32, deterministic
+algorithms and uninitialized-memory filling remain enabled.
+
+| Rows / C128 | Torch | Wave64 candidate | 32-lane candidate |
+| --- | ---: | ---: | ---: |
+| 393,216 | 2.125 ms | 1.008 ms | **0.464 ms** |
+| 2,359,296 | 12.635 ms | 5.955 ms | **2.706 ms** |
+
+These are complete allocation-inclusive operator medians over eight observations
+per variant with alternating order. They are not model or E2E speedups.
+Evidence: `provenance/openfold3_norm_operator_screen.json` at the repository root.
+
+The first two candidates failed the bias-only output check by up to
+4.768e-7 while statistics and other cases matched. A pointwise diagnostic showed
+native Torch matched fused `addcmul`, while the candidate matched separate
+multiply/add. Explicit `fmaf` in that branch fixes the discrepancy; the rejected
+screens remain in the evidence. The first shell wrapper also had an EXIT-trap
+quoting error; its completed screen still records no passing variant and no
+timing. Subsequent wrappers use direct subprocess arguments and durable JSON
+status records.
+
+`model_scope.py` is an experimental full-model hook restricted to the two measured
+row counts, C128, the pinned upstream normalization source, FP32 and strict
+inference. It preserves the native contiguous-input conversion and falls back
+for unmatched calls.
+
+The complete OpenBind-0 N1536 R3/D200/S1 seed101 qualification passes all 11
+arrays bitwise and full CIF bytes against the accepted template-reuse output.
+It selects 11,202 normalization calls, with 7,846 native fallbacks and 4,730
+contiguous-input copies. Its single model-forward observation is 260.607 seconds;
+the 355.960-second full invocation is a qualification observation, not a paired
+speedup. Evidence: `provenance/openfold3_norm_model_n1536.json`.
+
+A fresh, uninstrumented AB/BA/AB comparison is running at
+`/media/IntelSSD/fireprot/outputs/experiments/openfold3-norm-pairs-20261007`.
+Both arms retain template reuse and the prior qualified combination; only
+`FIREPROT_NORM128` and the profile digest differ. Do not overlap its GPU or
+remote-build workload. Maintained-profile promotion remains pending.
 
 The screen compares output, mean and reciprocal standard deviation **bitwise**
 against native Torch. Inputs cover row tails, random values, plain/scale/bias

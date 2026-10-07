@@ -80,7 +80,8 @@ __global__ void normalize(const float* __restrict__ x,
             float v = inverse * (a[i] - mean);
             if (weight && bias) v = w[i] * v + b[i];
             else if (weight) v = w[i] * v;
-            else if (bias) v = v + b[i];
+            // Keep the native bias-only FMA even when CSE hoists the multiply.
+            else if (bias) v = fmaf(inverse, a[i] - mean, b[i]);
             o[i] = v;
         }
         reinterpret_cast<float4*>(y + row * 128)[lane] = result;

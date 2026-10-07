@@ -4890,3 +4890,46 @@ collect-profile.py), then archive via /tmp/fireprot-archive-strided-completed.py
 (remotenewqueuev2root/archive-completed.py). Archiveonlyafterqueueexit toavoidIO
 competition; itincludesmodel/pairs/profileandall8outputsplusdependencyarchivepin.
 Thenpublishupdatedhotspots andchoosebottleneck-driven nextkernelwork.
+
+## 2026-10-07 latest hotspots complete; QK scheduling sweep live
+
+Latestcommitted/pushedHEAD93e1e486da7526ab0c98594b3951e02f415febbf; postcommit
+GitNexusindexcurrent/runnercurrent/incompleteReasons[], finaldetectallclean.
+Queue153902/profile161348 TERMINAL0. Collector passesfreshpins/all11/fullCIF.
+Postnormbaseline diagnostic: run_trunk203.470125s, pairformer169.991555s,
+trunktriatt101.772243s (start49.786770/end51.985473), trimul50.238590s,
+pairtransition13.502159s, templates12.826254s, MSA16.407269s, diffusion44.345363s,
+confidence6.322280s. Inclusiveoverlap/noprofileE2Eclaim. Newlocalprovenance
+openfold3_post_norm_hotspots_20261007.json and perfdocpendingcommit.
+Completedarchive /media/IntelSSD/fireprot/outputs/experiments/openfold3-strided-and-postnorm-20261007.tar.gz
+SHA2e52f7537943f63f189525c56442ac6c4bb290418a001b22a7648f6071ce1a42 size550620385.
+Containsstridedmodel/all6pairs/profile/queues/outputs anddependencyarchivepin;
+localstridedE2Eprovenance nowaddsarchive (pendingcommit).
+
+Triattcomponentreplay root outputs/experiments/openfold3-triatt-components-20261007
+PID168785 failedbeforecandidate: native chunk1024 reference OOM allocating36GiB
+softmax probabilityon63.98GiBcard (scoresalready36GiB). Preservedfailure. v2root
+openfold3-triatt-components-v2-20261007 PID169933 TERMINAL0. NativeREFERENCEonly
+useschunk256; candidatekeepscapturedchunk1024; bothtrainedstart/endoutputsbitexact.
+Currentworkspace/norm/keypacking actuallyselected; warm2thenoneKineto+GPUevents.
+End: normalization11.98ms (includestransposecopy), QKV10.56ms, PV75.55ms,
+workspace225.52ms; QKsoftmaxGPUkernels144.14ms. Start: norm2.827,QKV10.54,PV75.09,
+workspace358.10ms. Instrumentedreplaysarenotstablelatencyclaims; ROCTracer emitted
+duplicateflowstartwarnings. Rawtracesretained; unprofiledtimingrequired. Local
+provenance/openfold3_triatt_components_postnorm.json createdpendingcommit. Local
+/tmp/fireprot-triatt-components-v2.py,/tmp/fireprot-run-triatt-components-v2.py.
+Nexttarget QK+softmax itself, not peripheralprojection/copies.
+
+CURRENT LIVE PID171387 timeout3600; root
+/media/IntelSSD/fireprot/outputs/experiments/openfold3-qk-reuse-sweep-20261007.
+Threeblockinterleavevariants1/4/16versusaccepted8; basedonEXACTcombined-v12
+sourcefromruntime/recovered-openfold3-20261007/fireprot-qk-softmax-combined-v12.
+Floatingbodybyteidentical; onlyintegerblockmappingchanges. CPUenumerationbijective
+forB1,7,8,9,32,64,128,256,512,1024,1536. Local/tmp/fireprot-qk-reuse-sweep holds
+baseline.cpp,variantdirs,mapping.json,build.py,driver.py. Driverpinsallsource,
+checksbaselineSHA,buildsviaRust, publish-kernelwithpersistentrecoveredCLI,
+then21packedchecksperB32/B128eachvariant (nonfinite/subnormal/signedzeroincluded).
+GPUHIP7/PCI93/SMI5only;buildHIPempty;serial,nootherGPU/build. ThisisNUMERICALONLY,
+notperfclaim. PollSAME171387,checkdriver-status andvariantprobes. Nextinspect
+code-objectresources, benchmarkcompleteattention/realcapturesagainst8including
+packing/PV/strictallocation and balancedorder. Onlypromotewithfullmodel/E2E.

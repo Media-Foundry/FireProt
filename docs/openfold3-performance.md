@@ -579,3 +579,32 @@ not establish model E2E benefit. A new diagnostic targets the remaining large
 modules; these results do not establish an overall optimization plateau.
 Evidence: `provenance/openfold3_norm_strided_e2e_n1536.json`; see
 [the strided experiment](../experiments/openfold3_norm/STRIDED.md).
+
+
+## Post-normalization hotspot diagnostic
+
+After rejecting the strided candidate, a fresh full-model diagnostic retains the
+preceding HIP normalization path. It passes all 11 arrays bitwise and full CIF
+bytes with the same strict N1536 R3/D200/S1 seed101 contract on HIP7.
+
+| Inclusive GPU region | Seconds |
+| --- | ---: |
+| Complete trunk | 203.470 |
+| Trunk pairformer | 169.992 |
+| Trunk triangle attention, start + end | 101.772 |
+| Trunk triangle multiplication, outgoing + incoming | 50.239 |
+| Trunk pair transition | 13.502 |
+| Template embedder | 12.826 |
+| MSA module | 16.407 |
+| Diffusion sampling | 44.345 |
+| Confidence heads | 6.322 |
+
+Parent regions include their child regions: **do not sum these rows**. Timing
+instrumentation changes execution overhead; this is not an E2E comparison or a
+measured speedup against the older profile. The pairformer runs four passes;
+`run_trunk` wraps them in one call. Triangle attention remains the largest named
+trunk component. The next diagnostic replays the two retained trained attention
+inputs to separate projections, workspace attention and PV costs.
+
+Evidence: `provenance/openfold3_post_norm_hotspots_20261007.json`. The hashed archive
+also preserves the rejected strided E2E series and its full outputs.

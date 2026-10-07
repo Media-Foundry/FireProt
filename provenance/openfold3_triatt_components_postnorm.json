@@ -1,0 +1,308 @@
+{
+  "schema_version": 1,
+  "correctness_passed": true,
+  "scope": "Two real trained triangle-attention captures on the accepted HIP normalization/workspace path; inclusive GPU events and one warmed Kineto trace per capture; native reference uses chunk256 to avoid OOM; candidate retains captured flags; diagnostic only, not E2E or speedup",
+  "seed": 101,
+  "strict": true,
+  "hip_device": 7,
+  "captures": {
+    "trunk_pairformer-tri_att_end.pt": {
+      "sha256": "723e5eb4049b94b5fedb0e7a4abe45ef4b6e77594060bc546ea47d7c647c04aa",
+      "size": 1217732181
+    },
+    "trunk_pairformer-tri_att_start.pt": {
+      "sha256": "3ec48e6a6a1780457fe7d7ef6449993f97f267515b780f23b8964a365416c559",
+      "size": 1217732213
+    }
+  },
+  "script": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-triatt-components-v2-20261007/replay.py",
+    "sha256": "e2414300209e688246b37e48a0bb1ed55317b43d0f2907c3a05478cf4f5ac2cf"
+  },
+  "raw_report": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-triatt-components-v2-20261007/screen/report.json",
+    "sha256": "914ee5034f2d92413e5baa894ff6e85f1e645726b92cf4f4e6f5169ca499ca46"
+  },
+  "observations": [
+    {
+      "capture": {
+        "path": "/media/IntelSSD/fireprot/outputs/triatt-profile-n1536-v1/trunk_pairformer-tri_att_end.pt",
+        "sha256": "723e5eb4049b94b5fedb0e7a4abe45ef4b6e77594060bc546ea47d7c647c04aa"
+      },
+      "flags": {
+        "transpose_bias": true,
+        "chunk_size": 1024,
+        "use_deepspeed_evo_attention": false,
+        "use_cueq_triangle_kernels": false,
+        "use_triton_triangle_kernels": false,
+        "use_lma": false,
+        "inplace_safe": true
+      },
+      "reference_flags": {
+        "transpose_bias": true,
+        "chunk_size": 256,
+        "use_deepspeed_evo_attention": false,
+        "use_cueq_triangle_kernels": false,
+        "use_triton_triangle_kernels": false,
+        "use_lma": false,
+        "inplace_safe": true
+      },
+      "starting": true,
+      "all_output_bits_equal": true,
+      "component_totals": {
+        "normalization": {
+          "calls": 1,
+          "inclusive_ms": 11.980425834655762
+        },
+        "pair_bias_projection": {
+          "calls": 1,
+          "inclusive_ms": 1.4484540224075317
+        },
+        "linear_q": {
+          "calls": 2,
+          "inclusive_ms": 2.9106669425964355
+        },
+        "linear_k": {
+          "calls": 2,
+          "inclusive_ms": 2.920908033847809
+        },
+        "linear_v": {
+          "calls": 2,
+          "inclusive_ms": 2.92378693819046
+        },
+        "prepare_qkv": {
+          "calls": 2,
+          "inclusive_ms": 10.560770034790039
+        },
+        "PV": {
+          "calls": 12,
+          "inclusive_ms": 75.5495252609253
+        },
+        "workspace_subbatch": {
+          "calls": 12,
+          "inclusive_ms": 225.51724433898926
+        },
+        "model_workspace": {
+          "calls": 2,
+          "inclusive_ms": 228.87652587890625
+        },
+        "linear_g": {
+          "calls": 2,
+          "inclusive_ms": 2.9537079334259033
+        },
+        "linear_o": {
+          "calls": 2,
+          "inclusive_ms": 2.9468279480934143
+        },
+        "gating_and_output": {
+          "calls": 2,
+          "inclusive_ms": 13.394000053405762
+        }
+      },
+      "trace": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-triatt-components-v2-20261007/screen/trunk_pairformer-tri_att_end/trace.json",
+        "sha256": "5639912099ee0c8dca85ef8d8e736c028d2cece668ca94aa3b6fc9f2db17956f"
+      },
+      "top_kernels": [
+        [
+          "void qk_softmax<true>(float const*, float const*, float const*, float const*, float*, long, long, long, long, long) [clone .kd]",
+          {
+            "calls": 12,
+            "total_us": 144140.76499999998
+          }
+        ],
+        [
+          "Cijk_Ailk_Bljk_SB_MT32x64x32_MI16x16x4x1_SE_1LDSB0_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS0_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA2_GLVWB2_GRPM1_GRVW2_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB2_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS0_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS0_SU0_SUM0_SUS0_SCIUI1_SPO0_SRVW2_SSO0_SVW4_SNLL0_TSGRA0_TSGRB0_TT1_32_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW1_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM15.kd",
+          {
+            "calls": 12,
+            "total_us": 72625.088
+          }
+        ],
+        [
+          "Cijk_Alik_Bljk_SB_MT64x64x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS0_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS1_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA128_LBSPPB128_LPA8_LPB8_LDL1_LRVW4_LWPMn1_LDW0_FMA_MIAV1_MO40_MMFGLC_NTA0_NTB0_NTC3_NTD3_NEPBS1_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO1_SRVW0_SSO4_SVW1_SNLL0_TSGRA0_TSGRB0_TT2_32_TLDS1_UMLDSA1_UMLDSB1_USFGROn1_VAW1_VSn1_VW1_VWB1_VFLRP0_WSGRA0_WSGRB1_WG32_8_1_WGM8.kd",
+          {
+            "calls": 11,
+            "total_us": 15995.063
+          }
+        ],
+        [
+          "void at::native::elementwise_kernel_manual_unroll<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}) [clone .kd]",
+          {
+            "calls": 31,
+            "total_us": 15042.739
+          }
+        ],
+        [
+          "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<float>, std::array<char*, 1ul> >(int, at::native::FillFunctor<float>, std::array<char*, 1ul>) [clone .kd]",
+          {
+            "calls": 44,
+            "total_us": 5239.384
+          }
+        ],
+        [
+          "void at::native::elementwise_kernel_manual_unroll<128, 4, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}) [clone .kd]",
+          {
+            "calls": 2,
+            "total_us": 3106.183
+          }
+        ],
+        [
+          "pack_key(unsigned int const*, unsigned int*, long, long, long) [clone .kd]",
+          {
+            "calls": 12,
+            "total_us": 2070.991
+          }
+        ],
+        [
+          "void at::native::(anonymous namespace)::CatArrayBatchedCopy_contig<at::native::(anonymous namespace)::OpaqueType<4u>, unsigned int, 4, 128, 1>(at::native::(anonymous namespace)::OpaqueType<4u>*, at::native::(anonymous namespace)::CatArrInputTensorMetadata<at::native::(anonymous namespace)::OpaqueType<4u>, unsigned int, 128, 1>, at::native::(anonymous namespace)::TensorSizeStride<unsigned int, 4u>, int, unsigned int) [clone .kd]",
+          {
+            "calls": 2,
+            "total_us": 2039.641
+          }
+        ]
+      ]
+    },
+    {
+      "capture": {
+        "path": "/media/IntelSSD/fireprot/outputs/triatt-profile-n1536-v1/trunk_pairformer-tri_att_start.pt",
+        "sha256": "3ec48e6a6a1780457fe7d7ef6449993f97f267515b780f23b8964a365416c559"
+      },
+      "flags": {
+        "chunk_size": 1024,
+        "use_deepspeed_evo_attention": false,
+        "use_cueq_triangle_kernels": false,
+        "use_triton_triangle_kernels": false,
+        "use_lma": false,
+        "inplace_safe": true
+      },
+      "reference_flags": {
+        "chunk_size": 256,
+        "use_deepspeed_evo_attention": false,
+        "use_cueq_triangle_kernels": false,
+        "use_triton_triangle_kernels": false,
+        "use_lma": false,
+        "inplace_safe": true
+      },
+      "starting": true,
+      "all_output_bits_equal": true,
+      "component_totals": {
+        "normalization": {
+          "calls": 1,
+          "inclusive_ms": 2.826988935470581
+        },
+        "pair_bias_projection": {
+          "calls": 1,
+          "inclusive_ms": 1.4719740152359009
+        },
+        "linear_q": {
+          "calls": 2,
+          "inclusive_ms": 2.9135470390319824
+        },
+        "linear_k": {
+          "calls": 2,
+          "inclusive_ms": 2.911467969417572
+        },
+        "linear_v": {
+          "calls": 2,
+          "inclusive_ms": 2.9127480387687683
+        },
+        "prepare_qkv": {
+          "calls": 2,
+          "inclusive_ms": 10.539170980453491
+        },
+        "PV": {
+          "calls": 12,
+          "inclusive_ms": 75.08953332901001
+        },
+        "workspace_subbatch": {
+          "calls": 12,
+          "inclusive_ms": 358.1002960205078
+        },
+        "model_workspace": {
+          "calls": 2,
+          "inclusive_ms": 360.5657043457031
+        },
+        "linear_g": {
+          "calls": 2,
+          "inclusive_ms": 2.9113080501556396
+        },
+        "linear_o": {
+          "calls": 2,
+          "inclusive_ms": 2.930028021335602
+        },
+        "gating_and_output": {
+          "calls": 2,
+          "inclusive_ms": 13.22504186630249
+        }
+      },
+      "trace": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-triatt-components-v2-20261007/screen/trunk_pairformer-tri_att_start/trace.json",
+        "sha256": "db79607cb6274169f15dcc94460e285e2d1a84d195fdc4671995571af63c638d"
+      },
+      "top_kernels": [
+        [
+          "void qk_softmax<true>(float const*, float const*, float const*, float const*, float*, long, long, long, long, long) [clone .kd]",
+          {
+            "calls": 12,
+            "total_us": 144562.517
+          }
+        ],
+        [
+          "Cijk_Ailk_Bljk_SB_MT32x64x32_MI16x16x4x1_SE_1LDSB0_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS0_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS0_EMLL0_FL0_GLVWA2_GLVWB2_GRPM1_GRVW2_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA0_LBSPPB128_LPA0_LPB2_LDL1_LRVW2_LWPMn1_LDW0_MAC_MIAV0_MO40_MMFGLC_NTA0_NTB0_NTC0_NTD0_NEPBS0_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS0_SU0_SUM0_SUS0_SCIUI1_SPO0_SRVW2_SSO0_SVW4_SNLL0_TSGRA0_TSGRB0_TT1_32_TLDS1_UMLDSA0_UMLDSB1_USFGROn1_VAW1_VSn1_VW1_VWB1_VFLRP0_WSGRA1_WSGRB1_WG32_8_1_WGM15.kd",
+          {
+            "calls": 12,
+            "total_us": 71822.37800000001
+          }
+        ],
+        [
+          "Cijk_Alik_Bljk_SB_MT64x64x32_MI16x16x4x1_SN_1LDSB1_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS0_ASE_ASGT_ASLT_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DVO0_ETSP_EPS1_EMLL0_FL0_GLVWA4_GLVWB4_GRPM1_GRVW4_GSU1_GSUASB_GLS0_ISA90a_IU1_K1_KLA_LBSPPA128_LBSPPB128_LPA8_LPB8_LDL1_LRVW4_LWPMn1_LDW0_FMA_MIAV1_MO40_MMFGLC_NTA0_NTB0_NTC3_NTD3_NEPBS1_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR2_PLR9_SIA3_SS1_SU32_SUM0_SUS256_SCIUI1_SPO1_SRVW0_SSO4_SVW1_SNLL0_TSGRA0_TSGRB0_TT2_32_TLDS1_UMLDSA1_UMLDSB1_USFGROn1_VAW1_VSn1_VW1_VWB1_VFLRP0_WSGRA0_WSGRB1_WG32_8_1_WGM8.kd",
+          {
+            "calls": 11,
+            "total_us": 15942.263999999997
+          }
+        ],
+        [
+          "void at::native::elementwise_kernel_manual_unroll<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}) [clone .kd]",
+          {
+            "calls": 28,
+            "total_us": 5854.427000000001
+          }
+        ],
+        [
+          "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<float>, std::array<char*, 1ul> >(int, at::native::FillFunctor<float>, std::array<char*, 1ul>) [clone .kd]",
+          {
+            "calls": 41,
+            "total_us": 4399.72
+          }
+        ],
+        [
+          "void at::native::elementwise_kernel_manual_unroll<128, 4, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}) [clone .kd]",
+          {
+            "calls": 2,
+            "total_us": 3059.303
+          }
+        ],
+        [
+          "pack_key(unsigned int const*, unsigned int*, long, long, long) [clone .kd]",
+          {
+            "calls": 12,
+            "total_us": 2095.791
+          }
+        ],
+        [
+          "void at::native::(anonymous namespace)::CatArrayBatchedCopy_contig<at::native::(anonymous namespace)::OpaqueType<4u>, unsigned int, 4, 128, 1>(at::native::(anonymous namespace)::OpaqueType<4u>*, at::native::(anonymous namespace)::CatArrInputTensorMetadata<at::native::(anonymous namespace)::OpaqueType<4u>, unsigned int, 128, 1>, at::native::(anonymous namespace)::TensorSizeStride<unsigned int, 4u>, int, unsigned int) [clone .kd]",
+          {
+            "calls": 2,
+            "total_us": 1987.6419999999998
+          }
+        ]
+      ]
+    }
+  ],
+  "limits": [
+    "Two selected trained operator inputs, not an E2E result or full workload distribution.",
+    "Native reference uses chunk256 after chunk1024 exhausted memory; candidate preserves captured flags, and outputs match bitwise.",
+    "Inclusive GPU component intervals overlap. Kineto overhead and ROCTracer duplicate-flow warnings preclude treating these observations as uninstrumented latency.",
+    "Raw traces retain all events; top kernel records identify a next investigation target, not an accepted optimization."
+  ]
+}

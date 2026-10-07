@@ -1,0 +1,790 @@
+{
+  "original_driver_status": {
+    "exit_code": 1,
+    "error": "KeyError('data_module_args')"
+  },
+  "verification": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-epilogue-model-20261007/verified-status.json",
+    "sha256": "dfa146c956985f892e39f4bb214c35c725a0c4f8881546c91f10981154473ef5"
+  },
+  "correctness_passed": true,
+  "all11_exact": true,
+  "full_cif_exact": true,
+  "scope": "Fused FP32 output sigmoid/multiply/residual writeback added to qualified projection gate/packing; full-model numerical qualification, not a paired speedup",
+  "request": {
+    "schema_version": 1,
+    "run_id": "openfold3-epilogue-n1536",
+    "workload": {
+      "model": "openfold3",
+      "model_name": "openbind-0",
+      "recycles": 3,
+      "diffusion_steps": 200,
+      "samples": 1,
+      "precision": "float32",
+      "deterministic": true
+    },
+    "backend": "hip_fused",
+    "seed": 101,
+    "hip_device": 7,
+    "source": {
+      "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+      "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+    },
+    "checkpoints": {
+      "model": {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+        "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+      }
+    },
+    "resources": {},
+    "input": {
+      "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+      "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+    },
+    "output_dir": "/media/IntelSSD/fireprot/outputs/openfold3-epilogue-n1536"
+  },
+  "invocation_seconds": 349.815232659,
+  "model_seconds": 255.06296260899762,
+  "normalization_counts": {
+    "accepted": 11202,
+    "fallback": 7846,
+    "contiguous_copies": 4730
+  },
+  "source_preparation": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-epilogue-model-20261007/preparation.json",
+    "sha256": "8c7cdb89d7f3fa69d235bc7b9c900cfac679fe2c9593a46bc24d3757e21ba526"
+  },
+  "gate": {
+    "accepted": 430,
+    "fallback": 18,
+    "gate_calls": 5160,
+    "epilogue_calls": 2580,
+    "epilogue_library_sha256": "b1e0626104a0282997084366a7836181aaa982cc9a6aa84f277e23913dcc7623",
+    "copies": 5160,
+    "copy_fallbacks": 1290,
+    "library_sha256": "b7a980bf469a0f13581985033f904541cae5783eab01d4579054588e75c3614c"
+  },
+  "changed_sources": [
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-epilogue-model-20261007/python/fireprot_workers/gate_experiment/runtime.py",
+      "sha256": "368a074bb67d3f7589e76e8a5585ce1bdabd6128888d1a237743ad5157412af5"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-epilogue-model-20261007/python/fireprot_workers/gate_experiment/model_scope.py",
+      "sha256": "13b5dd9b20a21ad899c054c2815dd50662319e47cdf5e9209f2747a2b154dee3"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-epilogue-model-20261007/python/fireprot_workers/gate_experiment/epilogue_runtime.py",
+      "sha256": "6ee0698ab0c4fa26bd3fa57ea752d7417c4f9945acc49508a626b9069fd753f1"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-epilogue-model-20261007/python/fireprot_workers/gate_experiment/transform.py",
+      "sha256": "9f502f5e935715a47c469123e599688c9c356c6bda416110a477faa7bebf6f08"
+    }
+  ],
+  "gate_library": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-epilogue-model-20261007/gate.so",
+    "sha256": "b7a980bf469a0f13581985033f904541cae5783eab01d4579054588e75c3614c"
+  },
+  "epilogue_library": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-epilogue-model-20261007/epilogue.so",
+    "sha256": "b1e0626104a0282997084366a7836181aaa982cc9a6aa84f277e23913dcc7623"
+  },
+  "invocation": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-epilogue-model-20261007/measurement/invocation.json",
+    "sha256": "e8e9cb5c18074db264066d25f0f6f5e065db3b4f0bd6554086df12948e9e2caf"
+  },
+  "output_npz": {
+    "path": "/media/IntelSSD/fireprot/outputs/openfold3-epilogue-n1536/sample-0.npz",
+    "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+  },
+  "output_cif": {
+    "path": "/media/IntelSSD/fireprot/outputs/openfold3-epilogue-n1536/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+    "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+  },
+  "reference_npz": {
+    "path": "/media/IntelSSD/fireprot/outputs/openfold3-gate-pack-n1536/sample-0.npz",
+    "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+  },
+  "reference_cif": {
+    "path": "/media/IntelSSD/fireprot/outputs/openfold3-gate-pack-n1536/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+    "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+  },
+  "operator_qualification": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-epilogue-replay-v2-20261007/benchmark/report.json",
+    "sha256": "705075258e474ce4f2781c3cc95977b71b3b735a8dc146eb652c35aea69a0579"
+  },
+  "regression": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-canonical-source-20261007/layout-regression/result.json",
+    "sha256": "9b420ea62b45860aeb29745a935586e77f1c323b01682cf48e17db6df1517dd1"
+  },
+  "regression_result": {
+    "discriminates": true,
+    "records": [
+      {
+        "label": "old",
+        "returncode": 1,
+        "log": "F\n======================================================================\nFAIL: test_sliced_singleton_batch_has_native_output_strides (__main__.OutputLayout.test_sliced_singleton_batch_has_native_output_strides)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/pc/anaconda3/envs/BIO/lib/python3.12/site-packages/torch/utils/_contextlib.py\", line 124, in decorate_context\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/media/IntelSSD/fireprot/outputs/experiments/openfold3-canonical-source-20261007/layout-regression/old/test_output_layout.py\", line 33, in test_sliced_singleton_batch_has_native_output_strides\n    self.assertEqual(actual.stride(), expected.stride())\nAssertionError: Tuples differ: (7680, 640, 128, 1) != (1280, 640, 128, 1)\n\nFirst differing element 0:\n7680\n1280\n\n- (7680, 640, 128, 1)\n?  ^^\n\n+ (1280, 640, 128, 1)\n?  ^^\n\n\n----------------------------------------------------------------------\nRan 1 test in 1.070s\n\nFAILED (failures=1)\n"
+      },
+      {
+        "label": "fixed",
+        "returncode": 0,
+        "log": ".\n----------------------------------------------------------------------\nRan 1 test in 1.077s\n\nOK\n"
+      }
+    ]
+  },
+  "collector": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-gate-model-20261007/fireprot-collect-epilogue-model.py",
+    "sha256": "2bf15a321f4a2df5f18f2f39887c450c96facef30df11b22c25bff88fe7cb904"
+  },
+  "archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-epilogue-model-dataworkers-20261007.tar.gz",
+    "sha256": "7eee4f1d7d3fdcb483f01169074f801149929ef074a082d3ae904909a8ed55f5",
+    "size": 153687155,
+    "roots": [
+      "outputs/experiments/openfold3-dataworkers0-model-20261007",
+      "outputs/openfold3-dataworkers0-n1536",
+      "outputs/experiments/openfold3-dataworkers1-model-20261007",
+      "outputs/openfold3-dataworkers1-n1536",
+      "outputs/experiments/openfold3-epilogue-model-20261007",
+      "outputs/openfold3-epilogue-n1536",
+      "outputs/experiments/openfold3-gate-model-20261007/fireprot-archive-epilogue-model.py",
+      "outputs/experiments/openfold3-gate-model-20261007/fireprot-collect-dataworkers.py",
+      "outputs/experiments/openfold3-gate-model-20261007/fireprot-collect-epilogue-model.py",
+      "outputs/experiments/openfold3-gate-model-20261007/fireprot-collect-epilogue-pairs.py",
+      "outputs/experiments/openfold3-gate-model-20261007/fireprot-epilogue-model-scope.py",
+      "outputs/experiments/openfold3-gate-model-20261007/fireprot-prepare-dataworkers0-model.py",
+      "outputs/experiments/openfold3-gate-model-20261007/fireprot-prepare-dataworkers1-model.py",
+      "outputs/experiments/openfold3-gate-model-20261007/fireprot-prepare-epilogue-model.py",
+      "outputs/experiments/openfold3-gate-model-20261007/fireprot-prepare-epilogue-pairs.py",
+      "outputs/experiments/openfold3-gate-model-20261007/fireprot-run-dataworkers0-model.py",
+      "outputs/experiments/openfold3-gate-model-20261007/fireprot-run-dataworkers1-model.py",
+      "outputs/experiments/openfold3-gate-model-20261007/fireprot-run-epilogue-model.py",
+      "outputs/experiments/openfold3-gate-model-20261007/fireprot-run-epilogue-pairs.py",
+      "outputs/experiments/openfold3-gate-model-20261007/fireprot-verify-epilogue-model.py"
+    ],
+    "dependency_archive": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-gate-pairs-epilogue-20261007.tar.gz",
+      "sha256": "63c213999cf40505d16d17ddff6498da1f44a7e1a340807afe371a05df40d18f"
+    },
+    "scope": "Full-model epilogue qualification, zero-worker rejection and one-worker numerical qualification; no paired performance result"
+  },
+  "operator_replay": {
+    "correctness_passed": true,
+    "records": [
+      {
+        "capture": {
+          "path": "/media/IntelSSD/fireprot/outputs/trimul-profile-n1536-v1/trunk_pairformer-tri_mul_in.pt",
+          "sha256": "65d77b65095932a3107d0e518ad86e32bc48b62d61bc3a810142af7dac0cdf88"
+        },
+        "flags": {
+          "inplace_safe": true,
+          "_add_with_inplace": true,
+          "use_cueq_triangle_kernels": false,
+          "use_triton_triangle_kernels": false
+        },
+        "orders": [
+          [
+            "baseline",
+            "gate",
+            "epilogue",
+            "combined"
+          ],
+          [
+            "gate",
+            "epilogue",
+            "combined",
+            "baseline"
+          ],
+          [
+            "epilogue",
+            "combined",
+            "baseline",
+            "gate"
+          ],
+          [
+            "combined",
+            "baseline",
+            "gate",
+            "epilogue"
+          ],
+          [
+            "combined",
+            "epilogue",
+            "gate",
+            "baseline"
+          ],
+          [
+            "baseline",
+            "combined",
+            "epilogue",
+            "gate"
+          ],
+          [
+            "gate",
+            "baseline",
+            "combined",
+            "epilogue"
+          ],
+          [
+            "epilogue",
+            "gate",
+            "baseline",
+            "combined"
+          ]
+        ],
+        "samples_ms": {
+          "baseline": [
+            126.31685638427734,
+            126.25685119628906,
+            126.38357543945312,
+            126.10468292236328,
+            126.2032470703125,
+            126.16931915283203,
+            126.37333679199219,
+            126.07059478759766
+          ],
+          "gate": [
+            116.20699310302734,
+            116.17481994628906,
+            116.26427459716797,
+            116.27931213378906,
+            116.1959457397461,
+            116.15562438964844,
+            116.16410064697266,
+            116.22537994384766
+          ],
+          "epilogue": [
+            122.82810974121094,
+            122.75355529785156,
+            122.85659790039062,
+            122.82794952392578,
+            122.79291534423828,
+            122.822509765625,
+            122.77995300292969,
+            122.87210845947266
+          ],
+          "combined": [
+            112.90369415283203,
+            112.67888641357422,
+            112.85009765625,
+            112.63359832763672,
+            112.70144653320312,
+            112.80577850341797,
+            112.77745819091797,
+            112.70256805419922
+          ]
+        },
+        "checks": {
+          "baseline": [
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            }
+          ],
+          "gate": [
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            }
+          ],
+          "epilogue": [
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            }
+          ],
+          "combined": [
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            }
+          ]
+        },
+        "medians_ms": {
+          "baseline": 126.23004913330078,
+          "gate": 116.20146942138672,
+          "epilogue": 122.82522964477539,
+          "combined": 112.7400131225586
+        }
+      },
+      {
+        "capture": {
+          "path": "/media/IntelSSD/fireprot/outputs/trimul-profile-n1536-v1/trunk_pairformer-tri_mul_out.pt",
+          "sha256": "6a08759df79a9e42e57cc9f556dfa565f7c4f0928fdffb8e5407b19c43a91a5c"
+        },
+        "flags": {
+          "inplace_safe": true,
+          "_add_with_inplace": true,
+          "use_cueq_triangle_kernels": false,
+          "use_triton_triangle_kernels": false
+        },
+        "orders": [
+          [
+            "baseline",
+            "gate",
+            "epilogue",
+            "combined"
+          ],
+          [
+            "gate",
+            "epilogue",
+            "combined",
+            "baseline"
+          ],
+          [
+            "epilogue",
+            "combined",
+            "baseline",
+            "gate"
+          ],
+          [
+            "combined",
+            "baseline",
+            "gate",
+            "epilogue"
+          ],
+          [
+            "combined",
+            "epilogue",
+            "gate",
+            "baseline"
+          ],
+          [
+            "baseline",
+            "combined",
+            "epilogue",
+            "gate"
+          ],
+          [
+            "gate",
+            "baseline",
+            "combined",
+            "epilogue"
+          ],
+          [
+            "epilogue",
+            "gate",
+            "baseline",
+            "combined"
+          ]
+        ],
+        "samples_ms": {
+          "baseline": [
+            133.04391479492188,
+            132.94374084472656,
+            133.0304718017578,
+            133.1085662841797,
+            133.0186309814453,
+            133.13592529296875,
+            132.99911499023438,
+            132.90390014648438
+          ],
+          "gate": [
+            120.9727783203125,
+            121.05294036865234,
+            121.06990814208984,
+            121.02910614013672,
+            121.04638671875,
+            121.05902862548828,
+            121.17504119873047,
+            120.94606018066406
+          ],
+          "epilogue": [
+            129.5647735595703,
+            129.65567016601562,
+            129.53948974609375,
+            129.60653686523438,
+            129.6059112548828,
+            129.62062072753906,
+            129.57598876953125,
+            129.56829833984375
+          ],
+          "combined": [
+            117.59988403320312,
+            117.70597839355469,
+            117.65525817871094,
+            117.75286102294922,
+            117.5867691040039,
+            117.59844970703125,
+            117.60613250732422,
+            117.66966247558594
+          ]
+        },
+        "checks": {
+          "baseline": [
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            }
+          ],
+          "gate": [
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            }
+          ],
+          "epilogue": [
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            }
+          ],
+          "combined": [
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "exact": true,
+              "max_abs_delta": 0.0
+            }
+          ]
+        },
+        "medians_ms": {
+          "baseline": 133.02455139160156,
+          "gate": 121.04966354370117,
+          "epilogue": 129.59095001220703,
+          "combined": 117.63069534301758
+        }
+      }
+    ],
+    "pins": [
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-canonical-source-20261007/screen.py",
+        "sha256": "dc842fcf94631e5e4e1ed7781fdfc25cfd5da72e39e077f8422178a591a3740c"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-post-norm-hotspots-20261007/python/fireprot_workers/triangle_memory/copy.so",
+        "sha256": "e4ae99d240a91fb7ec0c82b74ba41ba6744e01470b2122fd8e9525d80c357685"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-epilogue-replay-v2-20261007/benchmark.py",
+        "sha256": "01ab7e73982b5bcbbfb92f91ae710173c08d452bfaf8e3f0ff75dfe2070d336a"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-epilogue-replay-v2-20261007/transform.py",
+        "sha256": "9f502f5e935715a47c469123e599688c9c356c6bda416110a477faa7bebf6f08"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-gate-pack-20261007/cache/rust-v1/fireprot_of3_gate_pack_v1_b0bd893823023ab6e3a9b35d04f63b3e574d4c47a5d87ac9060dd4df601cde8a/fireprot_of3_gate_pack_v1_b0bd893823023ab6e3a9b35d04f63b3e574d4c47a5d87ac9060dd4df601cde8a.so",
+        "sha256": "b7a980bf469a0f13581985033f904541cae5783eab01d4579054588e75c3614c"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-gate-pack-20261007/runtime.py",
+        "sha256": "368a074bb67d3f7589e76e8a5585ce1bdabd6128888d1a237743ad5157412af5"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-gate-pack-20261007/build/build.json",
+        "sha256": "fdf56bc0ff30d18b05e191770b79a9aecd685dd20adcfdc03c62fe78b28c172a"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-epilogue-v2-20261007/cache/rust-v1/fireprot_of3_epilogue_v1_68edc4211d3e9d093e18c9137d64d3f967e85a63526f4d46d7b01517d47bf34f/fireprot_of3_epilogue_v1_68edc4211d3e9d093e18c9137d64d3f967e85a63526f4d46d7b01517d47bf34f.so",
+        "sha256": "b1e0626104a0282997084366a7836181aaa982cc9a6aa84f277e23913dcc7623"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-epilogue-v2-20261007/runtime.py",
+        "sha256": "6ee0698ab0c4fa26bd3fa57ea752d7417c4f9945acc49508a626b9069fd753f1"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-epilogue-v2-20261007/build/build.json",
+        "sha256": "60ccd6b47d107ff09b8a919006ea191541dbbda4dd9e79b550a417d31a11a147"
+      },
+      {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3/openfold3/core/model/layers/triangular_multiplicative_update.py",
+        "sha256": "612caf7abd07a86a7fdf4eda7e0a2170c04b407f9121fc286ab864a648db1ba7"
+      }
+    ],
+    "gate_calls": 480,
+    "epilogue_calls": 240,
+    "strict": true,
+    "seed": 101,
+    "hip_device": 7,
+    "scope": "Full trained triangle operators; two warmups/eight balanced samples per arm/capture; unflushed caches; no E2E claim"
+  },
+  "decision": "Full-model numerical qualification passes. A three-pair incremental E2E comparison is running; no additional E2E gain is claimed."
+}

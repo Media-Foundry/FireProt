@@ -5346,13 +5346,32 @@ error 50.008374691 Angstrom); it is not an accepted optimization. Its single
 Changing the process context may alter feature generation or RNG behavior;
 this is a hypothesis, not an established cause.
 
-The one-worker trial is now running under timeout PID 266370 in
-`outputs/experiments/openfold3-dataworkers1-model-20261007`. Its only treatment
-is runner `data_module_args.num_workers=1`, preserving a separate data worker.
-It retains the qualified gate/packing composition, strict FP32 N1536 R3/D200/S1,
-seed 101 and HIP device 7. Driver scripts are stored in the gate-model root;
-local copies are `/tmp/fireprot-{prepare,run}-dataworkers1-model.py`.
-Check this existing driver's status before starting another GPU task. Require
-all eleven arrays and complete CIF bytes to match before paired timing.
-The epilogue still needs full-model qualification, and the latest composition
-still needs a new direct comparison against original Torch.
+The one-worker trial finished with all eleven arrays and full CIF exact.
+E2E 351.664853578 s; forward 257.647426726 s. It has no paired speedup claim;
+the default remains ten. Both loader trials are recorded in
+`provenance/openfold3_dataworkers_n1536.json`.
+
+The added output epilogue passed full-model qualification: all eleven arrays
+and full CIF exact; 2,580 fused calls, 430 accepted modules, 18 native fallbacks.
+Single E2E 349.815232659 s / forward 255.062962609 s. No E2E benefit claim yet.
+Original model driver 271306 is terminal with a collector-only KeyError for
+implicit `data_module_args`; separate `verified-status.json` passes full config,
+all output and route checks. Preserve both records. Evidence is in
+`provenance/openfold3_epilogue_model_n1536.json`.
+
+Completed model/loader archive:
+`outputs/experiments/openfold3-epilogue-model-dataworkers-20261007.tar.gz`, SHA
+`7eee4f1d7d3fdcb483f01169074f801149929ef074a082d3ae904909a8ed55f5`,
+153687155 bytes. It depends on the earlier paired/epilogue operator archive.
+
+CURRENT LIVE: timeout PID 279001 runs three epilogue AB/BA/AB E2E pairs in
+`outputs/experiments/openfold3-epilogue-pairs-20261007`. HIP7 only, strict FP32
+N1536 R3/D200/S1 seed101. Shared frozen worker, default ten data workers,
+only FIREPROT_EPILOGUE=0/1 plus declared profile hash differ. Baseline retains
+qualified gate/packing; candidate adds epilogue. Expected 2,580 epilogue calls
+only on candidate. Both arms must retain all eleven arrays/full CIF exactly.
+Local scripts `/tmp/fireprot-{prepare,run,collect}-epilogue-pairs.py`; deployed
+in the old gate-model experiment root. Collector is not yet executed. Poll
+existing driver/paired benchmark; do not restart or run concurrent GPU work,
+builds or archive compression. A new direct original-Torch comparison of the
+latest composition remains outstanding. No epilogue maintained promotion yet.

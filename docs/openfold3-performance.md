@@ -645,3 +645,46 @@ launcher attempts; those are not part of this E2E treatment.
 This remains a frozen experimental deployment, not a maintained-profile default.
 A direct original-Torch comparison of the latest complete combination is still
 pending. See [kernel scope and frozen entry](../experiments/openfold3_gate/README.md).
+
+
+## Output epilogue and data-loader follow-ups
+
+The output epilogue combines sigmoid, projection multiplication and residual
+writeback in one handwritten HIP kernel. Multiplication and addition retain
+separate FP32 rounding (`#pragma clang fp contract(off)`). It writes directly
+into the original strided destination. Twelve numerical cases check the entire
+backing storage, including untouched slices and extreme values. All pass.
+
+Four-arm trained-module replay passes all 80 comparisons (two warmups and eight
+balanced timed calls per arm and capture). Against the already qualified
+projection gate/packing route, adding the epilogue changes median triangle
+multiplication time from **116.201 to 112.740 ms** for incoming and
+**121.050 to 117.631 ms** for outgoing updates. These are operator measurements.
+
+Full-model qualification also passes all eleven arrays bitwise and complete CIF
+bytes under strict FP32 N1536 R3/D200/S1, seed101, HIP7. The worker records 2,580
+fused epilogue calls, 430 accepted triangle modules and 18 native fallbacks.
+The single observation is **349.815 s complete invocation / 255.063 s forward**;
+it does not establish an E2E speedup. A separate three-pair AB/BA/AB experiment
+is running in `outputs/experiments/openfold3-epilogue-pairs-20261007`, using
+`FIREPROT_EPILOGUE=0/1` on shared frozen sources. No maintained default changes.
+
+The first post-run collector incorrectly expected the default data-worker count
+to be explicit in `runner.json` and raised `KeyError('data_module_args')` after
+array/CIF checks. A separate verifier reread all outputs and pins, compared the
+entire runner configuration with the qualified anchor, and checked route counts.
+The original failure is preserved; inference was not rerun or changed.
+See [full-model and operator evidence](../provenance/openfold3_epilogue_model_n1536.json).
+
+A separate loader experiment changes only the number of data workers from the
+upstream default of ten. Zero workers fails nine of eleven exact-array checks
+and is rejected. One worker passes every array and the complete CIF, but its
+single **351.665 s invocation / 257.647 s forward** observation provides no
+confirmed performance improvement. The default remains ten. A changed RNG or
+feature-generation context is a possible explanation for the zero-worker
+mismatch, not an established diagnosis.
+See [both loader trials](../provenance/openfold3_dataworkers_n1536.json).
+
+These full outputs, frozen workers and scripts are archived on DiamondHill in
+`openfold3-epilogue-model-dataworkers-20261007.tar.gz`, SHA-256
+`7eee4f1d7d3fdcb483f01169074f801149929ef074a082d3ae904909a8ed55f5`.

@@ -1,0 +1,128 @@
+{
+  "correctness_passed": true,
+  "all11_exact": true,
+  "full_cif_exact": true,
+  "scope": "Canonical singleton strides for experimental HIP LayerNorm output; full-model numerical qualification, not a paired speedup",
+  "request": {
+    "schema_version": 1,
+    "run_id": "openfold3-canonical-norm-n1536",
+    "workload": {
+      "model": "openfold3",
+      "model_name": "openbind-0",
+      "recycles": 3,
+      "diffusion_steps": 200,
+      "samples": 1,
+      "precision": "float32",
+      "deterministic": true
+    },
+    "backend": "hip_fused",
+    "seed": 101,
+    "hip_device": 7,
+    "source": {
+      "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+      "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+    },
+    "checkpoints": {
+      "model": {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+        "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+      }
+    },
+    "resources": {},
+    "input": {
+      "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+      "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+    },
+    "output_dir": "/media/IntelSSD/fireprot/outputs/openfold3-canonical-norm-n1536"
+  },
+  "invocation_seconds": 351.033575462,
+  "model_seconds": 257.84747832799985,
+  "normalization_counts": {
+    "accepted": 11202,
+    "fallback": 7846,
+    "contiguous_copies": 4730
+  },
+  "source_preparation": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-canonical-model-20261007/preparation.json",
+    "sha256": "9118e5cb815922c6aa67fd4aa92391b70cc94b0bcdfd89764283e73485395ab0"
+  },
+  "changed_source": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-canonical-model-20261007/python/fireprot_workers/norm_experiment/screen.py",
+    "sha256": "dc842fcf94631e5e4e1ed7781fdfc25cfd5da72e39e077f8422178a591a3740c"
+  },
+  "invocation": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-canonical-model-20261007/measurement/invocation.json",
+    "sha256": "428260e10ecac0c3be0525a42eeadaa0572e56eb8e47584c0b475115f10aa298"
+  },
+  "output_npz": {
+    "path": "/media/IntelSSD/fireprot/outputs/openfold3-canonical-norm-n1536/sample-0.npz",
+    "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+  },
+  "output_cif": {
+    "path": "/media/IntelSSD/fireprot/outputs/openfold3-canonical-norm-n1536/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+    "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+  },
+  "reference_npz": {
+    "path": "/media/IntelSSD/fireprot/outputs/norm-pairs-n1536-candidate-0/sample-0.npz",
+    "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+  },
+  "reference_cif": {
+    "path": "/media/IntelSSD/fireprot/outputs/norm-pairs-n1536-candidate-0/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+    "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+  },
+  "operator_qualification": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-canonical-source-20261007/benchmark/report.json",
+    "sha256": "d0cc9f8ed5df3f6820dfc8fb69a9569fbd1743a8728f683a24b340084e738c8b"
+  },
+  "regression": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-canonical-source-20261007/layout-regression/result.json",
+    "sha256": "9b420ea62b45860aeb29745a935586e77f1c323b01682cf48e17db6df1517dd1"
+  },
+  "regression_result": {
+    "discriminates": true,
+    "records": [
+      {
+        "label": "old",
+        "returncode": 1,
+        "log": "F\n======================================================================\nFAIL: test_sliced_singleton_batch_has_native_output_strides (__main__.OutputLayout.test_sliced_singleton_batch_has_native_output_strides)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/pc/anaconda3/envs/BIO/lib/python3.12/site-packages/torch/utils/_contextlib.py\", line 124, in decorate_context\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/media/IntelSSD/fireprot/outputs/experiments/openfold3-canonical-source-20261007/layout-regression/old/test_output_layout.py\", line 33, in test_sliced_singleton_batch_has_native_output_strides\n    self.assertEqual(actual.stride(), expected.stride())\nAssertionError: Tuples differ: (7680, 640, 128, 1) != (1280, 640, 128, 1)\n\nFirst differing element 0:\n7680\n1280\n\n- (7680, 640, 128, 1)\n?  ^^\n\n+ (1280, 640, 128, 1)\n?  ^^\n\n\n----------------------------------------------------------------------\nRan 1 test in 1.070s\n\nFAILED (failures=1)\n"
+      },
+      {
+        "label": "fixed",
+        "returncode": 0,
+        "log": ".\n----------------------------------------------------------------------\nRan 1 test in 1.077s\n\nOK\n"
+      }
+    ]
+  },
+  "collector": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-canonical-model-20261007/collect.py",
+    "sha256": "726b30f29fb4e2e6ff7ea429a7fa650d4d2fa5505530107554b1da575be7149a"
+  },
+  "archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qk-layout-gate-followups-20261007.tar.gz",
+    "sha256": "9aed59a6554343c2244946dffb45a5359536d2ffdbf2b56376725c4c1b858903",
+    "size": 64045792,
+    "roots": [
+      "outputs/experiments/openfold3-canonical-model-20261007",
+      "outputs/experiments/openfold3-canonical-norm-20261007",
+      "outputs/experiments/openfold3-canonical-source-20261007",
+      "outputs/experiments/openfold3-first-divergence-20261007",
+      "outputs/experiments/openfold3-gate-fusion-20261007",
+      "outputs/experiments/openfold3-gate-fusion-replay-v2-20261007",
+      "outputs/experiments/openfold3-gate-pack-20261007",
+      "outputs/experiments/openfold3-pv-lt-20261007",
+      "outputs/experiments/openfold3-qk-half-tile-20261007",
+      "outputs/experiments/openfold3-qk-half-tile-benchmark-20261007",
+      "outputs/experiments/openfold3-qk-half-tile-v2-20261007",
+      "outputs/experiments/openfold3-qk-reuse-sweep-20261007",
+      "outputs/experiments/openfold3-qk-wide-tile-20261007",
+      "outputs/experiments/openfold3-qk-wide-tile-v2-20261007",
+      "outputs/experiments/openfold3-triatt-components-20261007",
+      "outputs/experiments/openfold3-triatt-components-v2-20261007",
+      "outputs/experiments/openfold3-trimul-chunks-20261007",
+      "outputs/experiments/openfold3-trimul-copy-screen-20261007",
+      "outputs/experiments/openfold3-trimul-norm-audit-20261007",
+      "outputs/openfold3-canonical-norm-n1536"
+    ],
+    "scope": "Raw completed QK, PV, layout and gate experiments including rejected candidates; trained captures, checkpoints and external baseline assets remain dependencies"
+  }
+}

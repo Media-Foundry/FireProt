@@ -4933,3 +4933,237 @@ GPUHIP7/PCI93/SMI5only;buildHIPempty;serial,nootherGPU/build. ThisisNUMERICALONL
 notperfclaim. PollSAME171387,checkdriver-status andvariantprobes. Nextinspect
 code-objectresources, benchmarkcompleteattention/realcapturesagainst8including
 packing/PV/strictallocation and balancedorder. Onlypromotewithfullmodel/E2E.
+
+## 2026-10-07 QK reuse sweep numerical and operator timing complete
+
+Masterpushed282634f4896e34ecf3ed894029e0f362a7940ebb (hotspot/component evidence).
+PostcommitGitNexuscurrent/runnercurrent/incompleteReasons[], finalallgateclean.
+NumericalPID171387 TERMINAL0, all3variants groups1/4/16 each21exactpackedcases at
+B32andB128 =>126passes, samefloatbodyonlyintegerschedulingchanged. Published
+bundles/controlpins recordedroot/driver-status.json. Numericalscreen no perfclaim.
+BalancedrealTriangleAttention benchmarkPID175422 TERMINAL0. Rootsameqk-reuse-sweep;
+benchmark/report.json alloutputsbitexactvsnativechunk256; candidatecapturedflags
+chunk1024unchanged. Eacharmwarm2, eightbalancedGPUeventsamples/capture, noKineto.
+Fourworkspacearms retainedsimultaneously; inputclone/exactcheckoutsideinterval,
+actualnormalization/QKV/packing/scoreallocation/PV/output inside fullmoduleinterval.
+End mediansms: reuse8=267.037887573, reuse1=282.674591064,
+reuse4=266.189346313, reuse16=270.396957397.
+Start: reuse8=256.957672119,reuse1=273.488677979,reuse4=256.204315186,
+reuse16=260.146484375. Only~0.3%operatorgainfor4; no E2E orpromotionclaim.
+Do notspendfull3modelpairssolelyonthissmallvariant. Newdiagnosticbenchmark source
+/tmp/fireprot-qk-reuse-benchmark.py and/tmp/fireprot-run-qk-reuse-benchmark.py;
+remote benchmark.py/benchmark-driver.py inroot. Capturecorrectness includesall80
+calls(4arms*(2warm+8timed)*2captures). Rootnotarchivedyet, noGPUjobnow.
+Next archive/collectsweep (includingresourceinspection if useful), thenexplore
+1024thread16querytile'sbarrier/residencycost. CandidateideaUNIMPLEMENTED:
+512threads/8queries,12bands*128keys,discardduplicatedMFMAqueryrows8..15;
+keep8Kfragments/order, mapvalues[band*2+j], j<2, N1536softmaxorderunchanged.
+LDS8*128=4KiB, gridx192, mappingheadquerycount192 ->reuse8group6144; queryoperand
+coordinate&7 duplicatesupper8rows, onlylower8store. DoublesMFMAworkbutallows
+independentblocks/barriers; hypothesisrequirescompile/resources/exactscreen/timing.
+Do notclaimgain. Existingfullsourcebaseline in/tmp/fireprot-qk-reuse-sweep/baseline.cpp
+andremote recoveredcombined-v12. Allrawmathpatchesdocumentedinexperiments/mfma_qk.
+
+## 2026-10-07 half-query tile rejected after exact checks and timing
+
+CURRENT noGPUjob. Halfv1 PID178022, halfv2 PID179430, benchmarkPID181908 allTERMINAL0.
+Roots outputs/experiments/openfold3-qk-half-tile-20261007,
+openfold3-qk-half-tile-v2-20261007,openfold3-qk-half-tile-benchmark-20261007.
+Local /tmp/fireprot-qk-half-tile and-v2 containbaseline,mapping,build,driver,
+resources_probe.py andcandidatefolder. Do NOT namehelperinspect.py (stdlibshadow);
+renamedbeforelaunch,noGPUfailurefromthat. One shellpreparationcommand quoting
+failedbeforeexecution; repairedwithlocalPythonfiles, no experiment rerun.
+
+Both512thread8queryversionspass21packedrecords B32andB128 (84total across2variants).
+v1 retains4KiBLDSandconditionalcoordinate<8stores: softmax130VGPR31SGPR;
+v2usesfull16x1288KiBLDSandunbranchedstores,upper8rowsunused:60VGPR34SGPR.
+No spills/privatebytes both. Both96MFMAand23barriers vsbaseline48/11.
+Fullrealtriangleattention benchmark3arms,2warm+12balancedtimedsampleseach/capture,
+all84fullmodulecallsbitexact vsnativechunk256; candidatecapturedchunk1024unchanged.
+Endmsbaseline267.007584,v1=398.435059,v2=298.202957.
+Startmsbaseline256.985535,v1=388.231277,v2=288.187302. REJECTboth; no E2Etrialneeded.
+Benchmarkreportroot/benchmark/report.json; qualification.json aggregatestrue
+completedprobes, notafaked GPUreceipt. Local /tmp/fireprot-qk-half-benchmark.py,
+/tmp/fireprot-run-qk-half-benchmark.py,/tmp/fireprot-prepare-qk-half-benchmark.py.
+
+ResourceboundruntimeoccupancyqueriedviaHIPmoduleAPIonHIP7,nokernellaunch:
+baseline1024threads max2blocks/CU=32waves;v1 512threadsmax1block=8waves;
+v2 512threadsmax4blocks=32waves. Thusno wave-residencyupperboundgainforv2;
+DO NOTcallthese measuredCUutilization/counters. Evidencebenchmarkroot/occupancy.json;
+script/tmp/fireprot-qk-occupancy.py andremoteroot/occupancy.py. Usesarchivedactual
+HSACOsandrecordstheirSHA. Allperformanceandoccupancyrootsstillneedcollection/archive.
+Reusegroup1/4/16sweepalsoawaitsarchive/publication (priornotehasmedians).
+
+NextideaUNIMPLEMENTED:32querytile/1024threads,2independentMFMAaccumulators perwave
+reuseeachKfragmentacrosstwoquerygroups,32x256LDS32KiB,16wavesconsume2rows/wave;
+values[2][32],same24scoreelements/row andsameWelford? NO: sameSOFTMAXordering;
+noLayerNormchange. Gridquerytiles48,mappingreuse8group1536;querystarttile*32;
+queryvectorscoordandcoord+16;inputN1536divisible32. MoreVGPRmayreduceoccupancy,
+so compile/resourcesbeforedeciding. Unlikehalf-tile, no redundantMFMA:2xoutputs
+for2xcompute andKloadsreused. Needexactpackedtests/trainedfulloperator timing,
+thenfullmodel/E2Eonlyifmaterialgain. Baseline acceptedcombined-v12source copiedin
+/tmp/fireprot-qk-reuse-sweep/baseline.cpp. Goalnotcomplete/globalplateaunotproven.
+
+## 2026-10-07 wide QK rejected; PV backend screen rejected
+
+Wide-query QK v1/v2 and v2 full-attention timing are terminal. Roots:
+outputs/experiments/openfold3-qk-wide-tile-20261007 and
+openfold3-qk-wide-tile-v2-20261007. Both pass 42 packed numerical records.
+V1 (32 queries, 1024 threads, 32 KiB LDS) spills 56 VGPRs / 228 private
+bytes per thread; no timing trial. Moving mask/bias additions into each completed
+band retains output arithmetic order and removes spills in v2 (actual remote
+95 VGPRs / 34 SGPRs). Full trained attention, two warmups and eight balanced
+samples per capture: end baseline267.757950 vs candidate293.721268 ms;
+start257.019058 vs283.115570 ms. All40 full-module outputs exact. Reject;
+no full-model/E2E trial. Local compile-only scheduling variants under
+/tmp/fireprot-qk-wide-scheduling are not GPU-qualified. Raw archives still pending.
+
+Network wait120 completed; endpoint10.120.16.5 recovered without restarting jobs.
+PV-only Torch hipBLASLt preference screen completed terminal0 at
+outputs/experiments/openfold3-pv-lt-20261007. Scripts/pinned deployment and raw
+report remain there; local copy /tmp/fireprot-of3-pv-lt. Trained N1536 full
+attention with accepted norm/key-pack/QK/workspace scopes, HIP7, strictFP32,
+seed101, two warmups/eight balanced samples each arm/capture, no profiler.
+End nativePV267.813919 vs Lt269.828644 ms; start256.983368 vs258.790466 ms.
+Native arm bitwise exact, Lt arm fails bits: maxabs4.1961669921875e-05 and
+0.00010633468627929688 respectively. Reject/no promotion/no E2E gain.
+Recorded tensor examples are native-reference chunk256 only (first4 calls);
+not evidence of the Lt kernel name. Backend preference is scoped to the PV
+expression, but internal algorithm identity was not profiled. Do not claim it.
+
+Next experiment CURRENT LIVE child190424 (wrapper190413), root
+outputs/experiments/openfold3-trimul-chunks-20261007. Tests native chunk256
+against copy-patched/HIP-normalized full triangle multiplication with chunk
+256/128/384/512/768 on two trained captures. StrictFP32 HIP7, two warmups/four
+balanced timed samples. Records numerical failures instead of weakening gates;
+terminal exit0 means screen completed, not all candidates qualified. Check
+report per-arm bitwise results and driver correctness_passed separately.
+Local scripts /tmp/fireprot-of3-trimul-chunks; no maintained source changes.
+
+## 2026-10-07 triangle chunk screen exposed a composition discrepancy
+
+All latest GPU jobs TERMINAL, no live job. Chunk screen190424 completed;
+copy-only screen191403 at outputs/experiments/openfold3-trimul-copy-screen-20261007
+and per-normalization audit192158 at openfold3-trimul-norm-audit-20261007 also
+completed. Local script/report copies /tmp/fireprot-of3-trimul-{chunks,copy-screen,norm-audit}.
+Captured flags omit _inplace_chunk_size; upstream default verified256.
+
+Combined copy+HIPnorm chunk256 fails full-module bits vs fresh native reference,
+maxabs0.0001220703125 on BOTH trained captures. Chunk128 passes but ~242/244ms,
+versus combined256~127.54/135.01ms; chunks384/512/768 slower and nonexact.
+No candidate promoted. The copy-only isolation at256 is exact on both;128 also
+exact, largerchunksnonexact. Copy-only timing has just one sample, not a perfclaim.
+
+IMPORTANT follow-up normalization audit compares EVERY layer_norm_in/out output
+against its original method on the SAME input within the candidate execution.
+ALL these local outputs are bitwise exact, yet final triangle output differs
+from the earlier native module reference. Thus do NOT blame Welford arithmetic
+or claim a failing normalization tensor was saved: the save-on-local-failure
+branch never fired. Difference arises elsewhere in composition/execution;
+allocation/layout-dependent downstream GEMM selection or baseline variability
+remain hypotheses only. Audit instrumentation timings invalid for performance.
+Previous qualified full-model11array/fullCIF results remain evidence for their
+measured workload, not universal tensor guarantees.
+
+NEXT: localize FIRST divergent projection/contraction using reference versus
+candidate intermediate hooks, also repeat unchanged native module in same
+process to check baseline stability. Record input/output strides and pointer
+alignment and compare equal inputs at the first divergent operator. Avoid
+prematurely changing norm arithmetic. Keep strict gates and do not claim new
+E2E speedup. PV preference and all new QK/triangle roots await durable archive
+and publication; .agents journal uncommitted. Master remains282634f4896e34ecf3ed894029e0f362a7940ebb.
+
+## 2026-10-07 first divergence localized; canonical norm model qualification live
+
+First-divergence audit child193154 TERMINAL0 at
+outputs/experiments/openfold3-first-divergence-20261007. Native repeat and
+copy-only paths both exact on both captures. First copy+norm mismatch is
+linear_a_g (index1), with BITWISE IDENTICAL inputs but singleton batch stride
+301989888 instead of native50331648, shape[1,256,1536,128]. Both have alignment0
+mod4096. Projection maxabs1.33514404296875e-05 incoming /1.52587890625e-05 outgoing.
+Norm outputs themselves match; layout-mediated downstream behavior is supported.
+
+Canonical metadata-only normalization-output view restored exact chunk256/128
+full-module results; largerchunksstillnonexact/slower. Root
+outputs/experiments/openfold3-canonical-norm-20261007 child193922 terminal0.
+Then actual source change Kernel.__call__ allocates torch.empty(x.shape,...)
+instead of empty_like (canonical singleton strides, no extra copy). Source replay
+root openfold3-canonical-source-20261007 TERMINAL0 correctness_passedtrue;
+12 trainedfullmodulecalls(two warm/four timed on eachcapture) chunk256 exact.
+Local source experiments/openfold3_norm/screen.py modified; README notes pending
+fullmodel qualification; new test_output_layout.py detects exact values+native
+strides on small sliced singleton input. TEST NOT YET RUN (GPU model owns7).
+Test deployed canonical-source root; original-screen expected failure and fixed
+screen success should be recorded after modeljob. No arithmetic/kernel change.
+
+GitNexus beforeedit currentHEAD282634f index/runnercurrent/incompleteReasons[].
+Context resolved Method:experiments/openfold3_norm/screen.py:Kernel.__call__#4;
+impact found0resolvedcallers (UNKNOWN; textcheckedmodel_scope/model_scope_strided/
+screen_strided imports). Initial name-only Kernel.__call__ target notfound,
+correctedtoUID. Afteredit analyze--index-only--pdg succeeded; followed required
+query after rg hook. Newtest added afterwards, so finalrefresh required before
+commit gates. No commitsyet; docs/isa remains user-owned. MCP staleness prose
+wrong42commitsbehind; CLI typedreceiptcurrent. No graphfailure.
+
+CURRENT LIVE fullmodel qualification wrapper195559 /timeout195560 /driver195561 /
+measure195562 /infer195563 /worker195573. Root
+/media/IntelSSD/fireprot/outputs/experiments/openfold3-canonical-model-20261007.
+Output /media/IntelSSD/fireprot/outputs/openfold3-canonical-norm-n1536.
+StrictN1536R3D200S1seed101HIP7, no profiler; exactscreen.py source deployed in a
+fresh copy of qualified normpairs frozenworker. Other source/artifacts unchanged;
+preparation rehashes baselinepins and CLI inspect passes. No modified maintained
+profile. Driver compare-npz all11bitwise and fullCIF againstnorm-pairs-candidate0,
+counts11202accepted/7846fallback/4730copies. Source modifiesoutputlayout only;
+fullmodel resultpending. Poll SAME handles/root; no concurrentGPU/heavybuild.
+Preparation local /tmp/fireprot-prepare-canonical-model.py,driver
+/tmp/fireprot-run-canonical-model.py, remote copies in canonical-source root.
+Needcollect/gate/archive; earlier QK/PV/chunk rootsstillawaitarchive/publication.
+
+## 2026-10-07 canonical layout qualified; gate+packing candidate improves operator
+
+Canonical model195560/195573 TERMINAL0: all11arrays/fullCIFexact, normcounts
+11202accepted/7846fallback/4730copies. Fresh collector rehashed sourcepins and
+reran compare-npz/currentCIF. Single E2E351.033575462s, model257.847478328s;
+NOT a paired speedup. Local provenance/openfold3_norm_canonical_layout.json.
+Regression test proven discriminating: oldscreenfails stride(7680,640,128,1)
+versusnative(1280,640,128,1); fixedscreenpasses. Rawlogs canonical-source root
+layout-regression/result.json. README pending statement replaced with qualification.
+
+Completed durable archive (before gate model preparation):
+/media/IntelSSD/fireprot/outputs/experiments/openfold3-qk-layout-gate-followups-20261007.tar.gz
+SHA9aed59a6554343c2244946dffb45a5359536d2ffdbf2b56376725c4c1b858903 size64045792.
+Includes20roots listedarchive.json: completed QK variants, PV, triangle chunks,
+firstdivergence/canonical sources/model/output, gate operator builds/screens/replays
+and both componentprofiles. Captures/checkpoints/externalbaselines remain pinned
+externaldependencies. Later gate model scope/preparation additions are NOT covered;
+archive this later model separately. Earlier archive-pending journal notes superseded.
+
+New handwritten HIP gate fusion: sigmoid(linear_g) * linear_p * mask in one
+kernel, exactoriginalFP32operationorder. Rootopenfold3-gate-fusion-20261007;
+all9operatorcases bitexact(random/extreme/nonfinite/stridedmask at small and real
+shapes). First fullreplay fails BEFORE any moduleexecution due source-dedent
+pattern indentation assertion; preservedfailure. Correctedreplayroot
+openfold3-gate-fusion-replay-v2-20261007 terminal0: all40fullmodulecalls exact,
+twowarm/eightbalancedtimedsamples perarm/capture. Baselinecanonicalnorm+copy:
+in126.250946 ->120.538685ms; out133.043861 ->127.438160ms. No E2Eclaim.
+
+Furthergate+packing uses32rowx128channelLDStranspose (padded132width), writing
+channel-first physicalstorage directly. Rootopenfold3-gate-pack-20261007.
+All9operatorcases exact; completeattention? NO: full TRIANGLE MULTIPLICATION
+replay all40calls exact. In126.355713 ->116.203289ms; out133.069656 ->120.993801ms.
+LibrarySHA b7a980bf469a0f13581985033f904541cae5783eab01d4579054588e75c3614c.
+Source/build/numerical/fullmodule artifacts archived above. Local prototypes
+/tmp/fireprot-of3-gate-fusion and /tmp/fireprot-of3-gate-pack. Not yet repo source.
+
+CURRENT LIVE gate model wrapper208797/timeout208798/driver208799/measure208800.
+Root outputs/experiments/openfold3-gate-model-20261007; output
+outputs/openfold3-gate-pack-n1536. Fresh frozencanonicalworker, import swaps only
+triangle_scope togate_experiment; sameoldcapabilityexactN1536chunk256/c128 mask
+semantics andnativefallback. Gate librarypinned, newmoduleprofile/sourcepins.
+StrictFP32N1536R3D200S1seed101HIP7, no profiler. Driver requiresall11/fullCIFvs
+canonicalmodel, normcountsunchanged, gateaccepted430/fallback18/calls5160.
+Poll SAME handles/driver-status; do notlaunchGPU/buildwhilelive. Modelscope copied
+from successful replay transformation with correctedindentation. Prep/driver local
+/tmp/fireprot-{prepare,run}-gate-model.py; remotegate-pack root.
+Ifpasses, measure paired E2E against canonicalbaseline beforeclaiming benefit.
+Fullmodelgatearchive/publication and operator source integration stillpending.

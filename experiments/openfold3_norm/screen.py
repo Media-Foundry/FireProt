@@ -34,7 +34,10 @@ class Kernel:
                 or parameter.device != x.device or not parameter.is_contiguous()
                 or parameter.data_ptr() % 16):
                 raise ValueError('Expected aligned contiguous FP32 affine parameters')
-        out = torch.empty_like(x)
+        # Native LayerNorm returns canonical contiguous strides, including
+        # singleton dimensions. empty_like can preserve a sliced batch stride;
+        # equal values then take a different downstream Linear execution path.
+        out = torch.empty(x.shape, device=x.device, dtype=x.dtype)
         rows = x.numel() // 128
         mean = torch.empty(rows, device=x.device, dtype=x.dtype) if stats else None
         inverse = torch.empty_like(mean) if stats else None

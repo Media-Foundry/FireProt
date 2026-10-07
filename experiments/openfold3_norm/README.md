@@ -106,3 +106,33 @@ The subsequent [direct strided-input experiment](STRIDED.md) removes input copie
 for three measured layouts. Operator and full-model qualification pass, but
 three paired E2E runs show no benefit (365.069 -> 368.236 s). This later path
 is not promoted; retain the preceding contiguous HIP implementation.
+
+## Canonical output layout regression (2026-10-07)
+
+LayerNorm output values alone are insufficient for composition parity. In trained
+N1536 triangle-multiplication replays, `empty_like` preserved the input's singleton
+batch stride: `[301989888, 196608, 128, 1]` for `[1, 256, 1536, 128]`.
+Native LayerNorm returned `[50331648, 196608, 128, 1]`. Both tensors are contiguous
+by Torch's definition, and every normalization output compared bitwise equal on
+identical inputs. Nevertheless, the first subsequent `linear_a_g` output differed
+(up to 1.52587890625e-05); the complete triangle output differed by
+0.0001220703125. Unchanged native repeats and copy-only replays were exact.
+
+Returning canonical strides without changing values restored exact full triangle
+outputs in both incoming and outgoing captures. `Kernel.__call__` now allocates
+with `torch.empty(shape, device=..., dtype=...)`, matching native output strides
+without an additional copy. The changed source passed twelve trained full-module
+calls at chunk256. Larger chunk384/512/768 candidates remained slower and
+nonexact; chunk128 was exact but slower. Keep chunk256.
+
+`test_output_layout.py` directly checks both values and the native stride contract
+on a contiguous slice with a noncanonical singleton stride. It requires an
+explicit `FIREPROT_TEST_NORM_LIBRARY` and HIP device6/7; it never builds a library.
+The regression fails against the old allocation and passes with this change.
+Full-model N1536 strict FP32 R3/D200/S1, seed101, HIP7 qualification passes all
+11 arrays and complete CIF bytes against the qualified normalization anchor.
+The single observation is 351.034 s complete invocation and 257.847 s model
+forward; this is not a paired speedup result. See
+[qualification and archive](../../provenance/openfold3_norm_canonical_layout.json).
+Previously published E2E comparisons describe their frozen source, not this
+revision; maintained profiles are not automatically updated.

@@ -318,3 +318,31 @@ layout differences from being hidden as protected-input changes. Route/runner
 and optimization receipts are sealed with outputs, and the collector checks their
 current bytes. Twelve CPU tests pass; no routed GPU qualification or new direct
 ratio exists yet. See the [workflow and evidence boundary](../../docs/openfold3-deployment-audit.md#frozen-direct-native-comparison-workflow).
+
+
+## Pending hardware diagnostics
+
+`hardware_profile.py trace` and `hardware_profile.py counters` prepare two
+separate diagnostic profiles around the exact HIP-packing model worker. The
+serial coordinator waits for the direct-native study to succeed and verifies
+that physical SMI5 is idle before each run. Requests retain HIP7, strict FP32,
+N1536, R3/four trunk passes, D200/S1 and seed101. Neither the existing E2E profiles
+nor their scientific settings are modified.
+
+The script obtains the installed rocprofv3 injection environment, applies it to
+the Rust-supervised worker profile, and pins profiler libraries/configuration.
+The ordinary full environment inventory remains present. The trace collects all
+kernel dispatches. The counter run samples kernel occurrences10–12 for QKV,
+GEMM, normalization, softmax, packing, gate and copy families, requesting
+`GRBM_COUNT`, `GRBM_GUI_ACTIVE`, `SQ_BUSY_CU_CYCLES`, `MeanOccupancyPerCU`,
+`OccupancyPercent`, `MfmaUtil`, `VALUBusy`, `FetchSize` and `WriteSize`.
+
+Both runs must preserve all11 arrays, full CIF bytes and the qualified dispatch
+receipts. Raw CSV files and their hashes are retained. Per-grid coverage and
+metric completeness must be examined before any hardware conclusion. Counter
+sampling is not a complete model timeline, and instrumented times are not E2E
+performance measurements. No OpenFold3 hardware result is available yet.
+
+Coordinator: `outputs/experiments/openfold3-hardware-followup-20261010`.
+The script has passed syntax inspection; GPU profiling remains pending behind
+the current incremental and direct-native timing jobs.

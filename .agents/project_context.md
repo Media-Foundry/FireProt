@@ -6069,3 +6069,27 @@ Forward baseline241.733549019 ->candidate233.159511670s (singlepaironly).
 Request270.336135037 ->262.282754763s; supervisor309.506804704 ->302.390554898s.
 These timing-boundary deltas locate remaining overhead but are NOT a startup
 profile or proof of where that CPU/I/O time is spent. Needprofilebeforeattribution.
+
+
+## Serial hardware diagnosis queued (2026-10-10)
+
+Previous goalturn was verifiedwait: live783467/783478/795488; firsttwo pair-checks
+passed. Pair1 baseline331.932364033/candidate323.497999927 (1.02607238409x).
+Currentturn continues existingthirdpair; no duplicateGPUworkloads.
+
+New experiments/openfold3_diffusion/hardware_profile.py clonedthe knownSDK1.3.5
+Baseprofiling injection procedure toexactOpenFold3 HIPpackmodel. Two modestrace/
+counters; preservefullenvironmentinventory, runtimeworkerPID throughprofileenv,
+HIP7/strictN1536R3D200S1seed101, all11/fullCIFexact+unchangedglobal/norm/QKV/gate
+receipts. Pins SDKlibs/config andrawCSV; no E2Etimingclaim/inferredboundyet.
+Counterregexqkv_softmax|Cijk_|norm|softmax|pack_h16|gate|copy, occurrences10-12,
+9knownSDKmetrics GRBM_COUNT,GRBM_GUI_ACTIVE,SQ_BUSY_CU_CYCLES,MeanOccupancyPerCU,
+OccupancyPercent,MfmaUtil,VALUBusy,FetchSize,WriteSize. Coverageanalysisstillneeded.
+
+Hardwarefollowup deployed outputs/experiments/openfold3-hardware-followup-20261010;
+local/tmp/fireprot-of3-hardware-followup-20261010 contains frozenprofile+driver+
+launchpins. Stagewaiting_for_direct_native_study; requires nativefollowup exit0,
+then idleSMI5 andtrace/counters sequential. Bothmodel gates required. Syntaxchecked
+only; no GPUresult yet. This queue must not overlap timing or an archive/build.
+Historical Basehardware metrics are not OpenFold3 measurements. OldQK half-tile,
+indexwidth andunroll8 trials already rejected; avoidblind repeats withoutcounters.

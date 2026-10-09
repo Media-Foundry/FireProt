@@ -5625,3 +5625,30 @@ Latest paired measurement000 baseline0=341.625921611s; only one completed
 invocation seen at10min; this is not a speedup result. Coordinator648410,
 child649275, unrollqueue653434, QKqueue657408 all revalidated live. Observe these
 existing handles; do not restart or overlap any new GPU/build/archive work.
+
+## Qualified-source integration audit (2026-10-10)
+
+Previous goal turn was progress (local scheduling/index-width candidates and
+serial GPU queues). This turn revalidated all four existing handles live and
+observed first paired result: baseline0 E2E341.625921611/model254.552379405;
+candidate0 E2E364.559315330/model277.183544621. Candidate slower in first pair,
+mostly inside model; do not discard or attribute to external load without proof.
+Remaining two pairs continue unchanged. Last child649275 still live at15min;
+653434 and657408 wait on their pinned predecessors. No current blocker.
+
+Read-only integration audit maps qualified isolated-data frozen source to current
+repo in provenance/openfold3_qualified_source_map_20261010.json and
+ docs/openfold3-deployment-audit.md. Most helper sources already identical; real
+integration differences: maintained attention lacks frozen D16 selector/counters,
+worker composition absent, artifact roots/import mappings, and transport omits
+new gate/key/data/QKV diagnostics from completed artifact hashes (collectors
+check them separately). Do not copy unrelated frozen Protenix drift. A new
+maintained entry still requires exact whole-model and paired timing gates.
+No maintained profile or active frozen source was changed by this audit.
+
+Direct-native control correction: isolated-data standalone model and derived
+QKV-model/pairs workers enable data isolation unconditionally. Merely setting
+FIREPROT_ISOLATED_DATA=0 does NOT disable it there. Original isolated-data paired
+worker does read the flag. Future direct-original comparison needs audited
+conditional data scope/num_workers configuration plus all outer optimization
+flags0 and backendnative. Do not reuse prior flag-only advice blindly.

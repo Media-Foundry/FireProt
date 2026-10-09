@@ -757,7 +757,58 @@ complete CIF bytes. CPU regression coverage confirms parent-state restoration on
 success and dataset failure, including Lightning's wrapped batch sampler.
 A single observation is **351.541 s E2E / 256.046 s forward**, with 15.877 s inside
 the isolated CPU preparation context. No stable speedup is inferred from this
-observation. Three matched pairs are running separately with the same audited
-2026-10-09 environment in both arms.
+observation. Three matched pairs are now complete with the same audited
+2026-10-09 environment in both arms (results below).
 See [experimental implementation](../experiments/openfold3_data/README.md) and
 [qualification](../provenance/openfold3_isolated_data_n1536.json).
+
+
+## Isolated data preparation: three-pair N1536 E2E result
+
+Strict deterministic FP32 N1536 R3/D200/S1, seed101, HIP7, fresh processes,
+unflushed caches, AB/BA/AB order. Both arms use the qualified gate/packing
+composition and the same newly audited environment. Only isolated single-item
+CPU preparation differs; no GPU operator changes enter this comparison.
+
+| Pair | Ten-worker baseline E2E (s) | Isolated preparation E2E (s) | Ratio |
+| --- | ---: | ---: | ---: |
+| 1 | 349.126 | 341.782 | 1.0215x |
+| 2 | 349.971 | 339.599 | 1.0305x |
+| 3 | 351.146 | 344.159 | 1.0203x |
+
+Complete invocation medians: **349.971 → 341.782 s**, **1.0240x**, **2.34% less
+time**. Model-forward medians: **254.622 → 254.178 s**. Every pair improves in
+complete invocation time. All six outputs match all eleven arrays bitwise and
+complete CIF bytes against the qualified model anchor. Independent collection
+rechecks current arrays, files and source pins.
+
+**Decision: retain the isolated single-item route in the frozen experimental
+composition.** Maintained defaults are not changed. This result is incremental,
+with no new direct-original ratio inferred from older measurements.
+[Raw results and pins](../provenance/openfold3_isolated_data_e2e_n1536.json) include
+the archive `openfold3-isolated-data-pairs-20261009.tar.gz`, SHA-256
+`ea825abf416ab4745fe920d7328839d608e77672c3eca616affbed8c08e1449d`.
+
+## Exact QK/softmax/PV fusion replay (2026-10-10)
+
+Native PV reduction order was reconstructed and tested independently: even/odd
+K8 is the only passing hypothesis across six bounded synthetic cases and four
+full-output B128/B512 cases. Both initial and 32-bit-index fusion then passed
+eight packed QK/softmax/PV cases in ordinary and probability-capture modes.
+
+Complete trained TriangleAttention replay includes canonical normalization,
+Q/K/V packing, strict allocation, output gating and projection. With two warmups
+and twelve balanced samples for each of three arms on each of two captures:
+
+| Direction | Qualified baseline | Initial fusion | Index32 fusion | Index32 speedup |
+| --- | ---: | ---: | ---: | ---: |
+| Ending | 267.045 ms | 357.777 ms | 258.433 ms | 1.0333x |
+| Starting | 256.973 ms | 347.628 ms | 248.387 ms | 1.0346x |
+
+All 84 calls match native trained outputs bitwise. N1536, strict FP32, seed101,
+HIP7, unflushed caches. Existing retained-score allocation and Rust leases are
+shared across arms; fused kernels leave that score storage unused. The initial
+fusion is rejected. The index32 kernel advances to full-model qualification.
+These are module timings, not E2E speedups; no recycles or diffusion steps change.
+See [implementation and limitations](../experiments/mfma_qkv/README.md) and
+[pinned replay evidence](../provenance/openfold3_qkv_replay_20261010.json).

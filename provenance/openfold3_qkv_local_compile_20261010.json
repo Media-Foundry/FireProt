@@ -1,0 +1,228 @@
+{
+  "scope": "Local compile and static AMD metadata only; no GPU execution or performance claim",
+  "compiler_version": "HIP version: 7.14.60850-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 46fcb339fb61119b337f973c7ca9e710a319fdd0+PATCHED:440716f8b87be9d8e20ed910e10e5b6d14d57cf6)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-7.14/lib/llvm/bin\n",
+  "compiler": {
+    "path": "/opt/rocm/core-7.14/bin/hipcc",
+    "sha256": "d92839ed940e685fd15b8c60744d9f30efa65102e49e0babd655045219be371d"
+  },
+  "arguments": [
+    "--genco",
+    "--offload-arch=gfx90a",
+    "-O3",
+    "-std=c++17"
+  ],
+  "environment": {
+    "HIP_VISIBLE_DEVICES": "",
+    "removed": [
+      "CUDA_VISIBLE_DEVICES",
+      "ROCR_VISIBLE_DEVICES"
+    ]
+  },
+  "records": [
+    {
+      "variant": "pv",
+      "source": {
+        "path": "experiments/mfma_pv/pv_probe.cpp",
+        "sha256": "e406b7c41ba5f4f1b7564e133a4bc9296126f5bee35f0ec7b695032d2f641ace"
+      },
+      "bundle": {
+        "path": "/tmp/fireprot-qkv-local-20261009/pv.co",
+        "sha256": "310a97de909407d4bb96ae1d129604fb4ee401c96f9d25d7a61f39392d136180"
+      },
+      "hsaco": {
+        "path": "/tmp/fireprot-qkv-local-20261009/pv.hsaco",
+        "sha256": "72ff4217e64597ec3bc4f54df72dc25e2507a69efe0857ab67b1c27865d2d411"
+      },
+      "notes": {
+        "path": "/tmp/fireprot-qkv-local-20261009/pv.notes",
+        "sha256": "2293602b39d5b22cd0b795c25662048f607a5334511eccaba702bca489a0e223"
+      },
+      "kernels": [
+        {
+          "name": "_Z8pv_probeILi0EEvPKfS1_Pf",
+          "lds_bytes": 0,
+          "scratch_bytes": 0,
+          "sgpr": 20,
+          "vgpr": 13,
+          "wavefront": 64
+        },
+        {
+          "name": "_Z8pv_probeILi1EEvPKfS1_Pf",
+          "lds_bytes": 0,
+          "scratch_bytes": 0,
+          "sgpr": 20,
+          "vgpr": 17,
+          "wavefront": 64
+        },
+        {
+          "name": "_Z8pv_probeILi2EEvPKfS1_Pf",
+          "lds_bytes": 0,
+          "scratch_bytes": 0,
+          "sgpr": 20,
+          "vgpr": 17,
+          "wavefront": 64
+        }
+      ]
+    },
+    {
+      "variant": "qkv",
+      "source": {
+        "path": "experiments/mfma_qkv/qkv_fused.cpp",
+        "sha256": "d25321c4bbe1975268d23beda55c747ed7b26c8f2cec6cab0e8b3eea9eb86a95"
+      },
+      "bundle": {
+        "path": "/tmp/fireprot-qkv-local-20261009/qkv.co",
+        "sha256": "8dcec6e1d6b184fb387916f861e04d6e8ca4d5a716d725425d4ca2a6066f911f"
+      },
+      "hsaco": {
+        "path": "/tmp/fireprot-qkv-local-20261009/qkv.hsaco",
+        "sha256": "b619d640dd8e323612e8e41352fae4081dfef800c72b7869630155177234e82a"
+      },
+      "notes": {
+        "path": "/tmp/fireprot-qkv-local-20261009/qkv.notes",
+        "sha256": "70976c864012e24547fd5eebe639931d4f786e7717858aa43638659dd68407ae"
+      },
+      "kernels": [
+        {
+          "name": "_Z11qkv_softmaxILb1EEvPKfS1_S1_S1_S1_PfS2_lllll",
+          "lds_bytes": 16384,
+          "scratch_bytes": 0,
+          "sgpr": 47,
+          "vgpr": 68,
+          "wavefront": 64
+        },
+        {
+          "name": "_Z11qkv_softmaxILb0EEvPKfS1_S1_S1_S1_PfS2_lllll",
+          "lds_bytes": 16384,
+          "scratch_bytes": 0,
+          "sgpr": 42,
+          "vgpr": 68,
+          "wavefront": 64
+        }
+      ]
+    },
+    {
+      "variant": "qkv-prefetch1",
+      "source": {
+        "path": "/tmp/fireprot-qkv-local-20261009/qkv-prefetch1.cpp",
+        "sha256": "31ff1937372023711074648ecfa29b60f57f9f3e3c982f251db627ac665555a9"
+      },
+      "bundle": {
+        "path": "/tmp/fireprot-qkv-local-20261009/qkv-prefetch1.co",
+        "sha256": "26a1d80af1bf08f46c4694c48f464dd9c1160d1bcac1b0a95f671867214661f3"
+      },
+      "hsaco": {
+        "path": "/tmp/fireprot-qkv-local-20261009/qkv-prefetch1.hsaco",
+        "sha256": "ad925541a88fb190c8295ce992916cfa7b7467e50bad29fa4995e1929d48a794"
+      },
+      "notes": {
+        "path": "/tmp/fireprot-qkv-local-20261009/qkv-prefetch1.notes",
+        "sha256": "2baa32ab52ea87aff31c3a9b74feee02bb3b6f600565731819f18f16e3466e65"
+      },
+      "kernels": [
+        {
+          "name": "_Z11qkv_softmaxILb1EEvPKfS1_S1_S1_S1_PfS2_lllll",
+          "lds_bytes": 16384,
+          "scratch_bytes": 0,
+          "sgpr": 45,
+          "vgpr": 66,
+          "wavefront": 64
+        },
+        {
+          "name": "_Z11qkv_softmaxILb0EEvPKfS1_S1_S1_S1_PfS2_lllll",
+          "lds_bytes": 16384,
+          "scratch_bytes": 0,
+          "sgpr": 41,
+          "vgpr": 66,
+          "wavefront": 64
+        }
+      ]
+    },
+    {
+      "variant": "qkv-prefetch2",
+      "source": {
+        "path": "/tmp/fireprot-qkv-local-20261009/qkv-prefetch2.cpp",
+        "sha256": "17b8028c7b06440f2bd0a75768ded0de86e5c9fd20b278026369ee6e0ee02acb"
+      },
+      "bundle": {
+        "path": "/tmp/fireprot-qkv-local-20261009/qkv-prefetch2.co",
+        "sha256": "737d05ddfa9a0e746adf0a931bc32887c341b7dcc8cd3eb01af21c6937ecc607"
+      },
+      "hsaco": {
+        "path": "/tmp/fireprot-qkv-local-20261009/qkv-prefetch2.hsaco",
+        "sha256": "55661895e755d8a897aa784a3b5b2767a10305f70dffb1427b58d25ba8c82149"
+      },
+      "notes": {
+        "path": "/tmp/fireprot-qkv-local-20261009/qkv-prefetch2.notes",
+        "sha256": "48c28d1a16b06c3182a3a72f9d75eb07e6fe6f82a6b51f2d483c177a60d55164"
+      },
+      "kernels": [
+        {
+          "name": "_Z11qkv_softmaxILb1EEvPKfS1_S1_S1_S1_PfS2_lllll",
+          "lds_bytes": 16384,
+          "scratch_bytes": 0,
+          "sgpr": 47,
+          "vgpr": 68,
+          "wavefront": 64
+        },
+        {
+          "name": "_Z11qkv_softmaxILb0EEvPKfS1_S1_S1_S1_PfS2_lllll",
+          "lds_bytes": 16384,
+          "scratch_bytes": 0,
+          "sgpr": 42,
+          "vgpr": 68,
+          "wavefront": 64
+        }
+      ]
+    },
+    {
+      "variant": "qkv-index32",
+      "source": {
+        "path": "/tmp/fireprot-qkv-local-20261009/qkv-index32.cpp",
+        "sha256": "12467c8bb72ab7786039a864bc463a4cac5750ad0ba9fc8778eb1b0dd7bc8a24"
+      },
+      "bundle": {
+        "path": "/tmp/fireprot-qkv-local-20261009/qkv-index32.co",
+        "sha256": "3b7b1239ae14436c335a4ec424a0ac7ad36813e56da284951db0320c263cce44"
+      },
+      "hsaco": {
+        "path": "/tmp/fireprot-qkv-local-20261009/qkv-index32.hsaco",
+        "sha256": "46272f7dd8ceb4aa7c1d10348a97d0e60259c158f720888e265961664b983812"
+      },
+      "notes": {
+        "path": "/tmp/fireprot-qkv-local-20261009/qkv-index32.notes",
+        "sha256": "b58cd908454e7abcfebec6226b0e174ac244be78fee59b4634455c9163215be3"
+      },
+      "kernels": [
+        {
+          "name": "_Z11qkv_softmaxILb1EEvPKfS1_S1_S1_S1_PfS2_iiiii",
+          "lds_bytes": 16384,
+          "scratch_bytes": 0,
+          "sgpr": 38,
+          "vgpr": 55,
+          "wavefront": 64
+        },
+        {
+          "name": "_Z11qkv_softmaxILb0EEvPKfS1_S1_S1_S1_PfS2_iiiii",
+          "lds_bytes": 16384,
+          "scratch_bytes": 0,
+          "sgpr": 35,
+          "vgpr": 58,
+          "wavefront": 64
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "DiamondHill binaries must be built and qualified separately.",
+    "VGPR metadata does not establish measured occupancy or speed.",
+    "The .co files are offload bundles; separate .hsaco files were extracted before inspection."
+  ],
+  "archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/fireprot-qkv-local-compile-20261010.tar.gz",
+    "sha256": "249b8d1ab3bea59862d150246f0f6d0bace06e366e450ace73537da3a0fd9838",
+    "size": 131801,
+    "local_path": "/tmp/fireprot-qkv-local-compile-20261010.tar.gz"
+  },
+  "source_repository_commit": "5ba0bde62bf0c3610615e94822f2fa2609156864"
+}

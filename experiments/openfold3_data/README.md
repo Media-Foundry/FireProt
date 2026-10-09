@@ -32,7 +32,7 @@ qualified gate/packing composition, default unchanged model execution:
 - The single data-preparation call records base seed `302501347963651595`,
   worker ID 0, one CPU thread and restoration of parent strict mode/128 threads.
 - One observation is 351.541 s complete invocation / 256.046 s model forward;
-  it establishes no E2E speedup. Three AB/BA/AB pairs are running separately.
+  it is not used as a speedup comparison. Three matched pairs are now complete.
 
 `test_scope.py` is a CPU regression for parent-state restoration on both success
 and a dataset exception. It also covers Lightning-style batch samplers whose
@@ -49,3 +49,19 @@ Frozen paired entry: DiamondHill
 CLI pinned in `preparation.json`. Only `FIREPROT_ISOLATED_DATA=0/1` and the
 associated profile hash differ. Both profiles use the same newly audited
 2026-10-09 environment inventory. Use fresh output identifiers for reruns.
+
+
+## Three matched E2E pairs
+
+Strict N1536 FP32 R3/D200/S1, seed101, HIP7, fresh processes and unflushed caches;
+shared gate/packing source and the same audited 2026-10-09 environment in both
+arms. The only declared treatment is `FIREPROT_ISOLATED_DATA=0/1` plus its profile
+hash. Complete invocation medians are **349.971 → 341.782 s (1.0240x)**,
+**2.34% less time**. All three pairs improve; all six outputs pass eleven bitwise
+array checks and complete CIF byte comparisons. Model-forward medians are
+254.622 → 254.178 s, so the E2E improvement is primarily outside forward.
+
+Retain this route in the frozen single-item experimental composition. Maintained
+profiles and broader input support remain unchanged. This is an incremental
+comparison, not a new direct original-Torch result.
+See [paired evidence and durable archive](../../provenance/openfold3_isolated_data_e2e_n1536.json).

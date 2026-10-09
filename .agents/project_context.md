@@ -5494,3 +5494,47 @@ At the latest read, isolated-data E2E measurements 000..003 completed:
 349.971491766 (baseline1). Both complete pair checks passed. These are partial
 observations, not a final median/speedup selection. Paired PID607660 still live;
 PV queue617750 waiting; fusion queue628440 waiting. Poll all existing handles.
+
+## Completed data pairs and fusion numerical gates (2026-10-10)
+
+Supersedes the queued status above: isolated-data PID607660, PV617750,
+fusion628440 and index32 PID638555 all finished successfully. Do not restart.
+Three AB/BA/AB pairs: 349.971491766 -> 341.782122796 s E2E medians,
+1.02396078795x, all six outputs/all 11 arrays/full CIF exact. Retain isolated
+data preparation in the experimental best composition. Archive SHA
+ea825abf416ab4745fe920d7328839d608e77672c3eca616affbed8c08e1449d
+at outputs/experiments/openfold3-isolated-data-pairs-20261009.tar.gz.
+This is incremental, not a new direct original-Torch comparison.
+
+PV order 1 uniquely passes all bounded cases and full B128/B512 random/probability
+outputs. Initial fusion and index32 both pass eight packed cases x two templates,
+including probability bits and guards. Synthetic only. Evidence is recorded in
+provenance/openfold3_qkv_synthetic_20261010.json. Local compile resource evidence
+is separate: normal fusion 68 VGPR, index32 58 VGPR, 16 KiB LDS, zero scratch;
+these are not occupancy/performance measurements.
+
+CURRENT: complete trained TriangleAttention three-arm replay running under
+outputs/experiments/openfold3-qkv-replay-20261010, driver shell643226, worker643321.
+Local sources /tmp/fireprot-of3-qkv-replay-20261010. Baseline, initial fusion,
+index32; canonical HIP normalization and K packing shared; same retained score
+workspace/Rust leases; two warmups and twelve balanced samples per capture/arm;
+all calls exact against native trained outputs. Source pins and current full
+environment inventory verified before launch, HIP7/PCI93/SMI5. Check terminal
+receipt before any further GPU work. No new model or E2E result yet.
+
+Replay worker643321 finished0: all84 full trained calls exact. End baseline
+267.045303345 ms / initial357.776504517 / index32 258.432830811; start baseline
+256.973297119 / initial347.627792358 / index32 248.387313843. Reject initial
+fusion; index32 is 1.0333x/1.0346x at module level. No E2E claim. Source/scripts
+now under experiments/mfma_qkv, evidence openfold3_qkv_replay_20261010.json.
+
+CURRENT full-model trial: timeout PID644920, root
+outputs/experiments/openfold3-qkv-model-20261010; output
+outputs/openfold3-qkv-index32-n1536-20261010. Frozen source copies qualified
+isolated-data worker, inserts qkv_scope after HIP key_scope, enables
+FIREPROT_QKV_INDEX32=1, pins library SHA
+4bafb83b9056d8f80d5215bb2ae3a204b3baef5abbb61a0bbd32b829fc2eeab0.
+Rust measure-inference followed by exact11/fullCIF/count/runner checks.
+Reference is qualified isolated-data model output. Prep/run scripts in
+/tmp/fireprot-{prepare,run}-qkv-model-20261010.py and remote replay root.
+Physical GPU idle verified before launch. No simultaneous benchmark/archive.

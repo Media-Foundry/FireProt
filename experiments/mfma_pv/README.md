@@ -1,7 +1,8 @@
 # OpenFold3 PV accumulation-order probe
 
-Status: prepared and queued after the isolated-data E2E series; **not yet run**.
-No numerical acceptance, fused-attention implementation or performance claim.
+Status: GPU numerical screen passed on HIP7. Only order 1 (even then odd
+within each K8 group) passed all six bounded cases and all four full-output
+B128/B512 random/probability checks. No model or performance claim.
 
 The current attention path materializes FP32 probabilities between QK/softmax
 and PV. A future fusion must preserve the softmax results and native PV reduction
@@ -25,8 +26,8 @@ subnormal, signed-zero and nonfinite inputs. Untouched destination rows must
 retain their sentinel. Only hypotheses passing every bounded case proceed to
 all output rows at B128/B512 on random/probability inputs.
 
-Passing this screen would establish only those synthetic PV comparisons. It
-would not establish arbitrary-input equivalence, full attention or model parity.
+This screen establishes only those synthetic PV comparisons. It does not
+establish arbitrary-input equivalence, full attention or model parity.
 The probe is deliberately untuned and must not be benchmarked as a candidate
 inference implementation.
 

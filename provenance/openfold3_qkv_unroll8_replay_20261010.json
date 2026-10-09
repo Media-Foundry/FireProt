@@ -1,0 +1,868 @@
+{
+  "schema_version": 1,
+  "decision": "Reject unroll8 relative to the qualified unroll4 winner at module latency; no full-model or E2E trial",
+  "synthetic": {
+    "completed": true,
+    "correctness_passed": true,
+    "scope": "Packed synthetic probabilities and PV outputs only; no performance/model qualification",
+    "seed": 101,
+    "strict": true,
+    "hip_device": 7,
+    "library_sha256": "3d4884c8b62ec36012724449a3562f6de7ea8a0fd06689eff602e72931f897bb",
+    "records": [
+      {
+        "case": "random",
+        "batch": 32,
+        "checks": [
+          {
+            "capture_probabilities": false,
+            "output_mismatches": 0,
+            "probability_mismatches": null,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          },
+          {
+            "capture_probabilities": true,
+            "output_mismatches": 0,
+            "probability_mismatches": 0,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          }
+        ]
+      },
+      {
+        "case": "random",
+        "batch": 128,
+        "checks": [
+          {
+            "capture_probabilities": false,
+            "output_mismatches": 0,
+            "probability_mismatches": null,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          },
+          {
+            "capture_probabilities": true,
+            "output_mismatches": 0,
+            "probability_mismatches": 0,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          }
+        ]
+      },
+      {
+        "case": "transposed_bias",
+        "batch": 128,
+        "checks": [
+          {
+            "capture_probabilities": false,
+            "output_mismatches": 0,
+            "probability_mismatches": null,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          },
+          {
+            "capture_probabilities": true,
+            "output_mismatches": 0,
+            "probability_mismatches": 0,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          }
+        ]
+      },
+      {
+        "case": "masked",
+        "batch": 128,
+        "checks": [
+          {
+            "capture_probabilities": false,
+            "output_mismatches": 0,
+            "probability_mismatches": null,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          },
+          {
+            "capture_probabilities": true,
+            "output_mismatches": 0,
+            "probability_mismatches": 0,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          }
+        ]
+      },
+      {
+        "case": "cancellation",
+        "batch": 32,
+        "checks": [
+          {
+            "capture_probabilities": false,
+            "output_mismatches": 0,
+            "probability_mismatches": null,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          },
+          {
+            "capture_probabilities": true,
+            "output_mismatches": 0,
+            "probability_mismatches": 0,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          }
+        ]
+      },
+      {
+        "case": "subnormal",
+        "batch": 32,
+        "checks": [
+          {
+            "capture_probabilities": false,
+            "output_mismatches": 0,
+            "probability_mismatches": null,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          },
+          {
+            "capture_probabilities": true,
+            "output_mismatches": 0,
+            "probability_mismatches": 0,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          }
+        ]
+      },
+      {
+        "case": "signed_zero",
+        "batch": 32,
+        "checks": [
+          {
+            "capture_probabilities": false,
+            "output_mismatches": 0,
+            "probability_mismatches": null,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          },
+          {
+            "capture_probabilities": true,
+            "output_mismatches": 0,
+            "probability_mismatches": 0,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          }
+        ]
+      },
+      {
+        "case": "nonfinite",
+        "batch": 32,
+        "checks": [
+          {
+            "capture_probabilities": false,
+            "output_mismatches": 0,
+            "probability_mismatches": null,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          },
+          {
+            "capture_probabilities": true,
+            "output_mismatches": 0,
+            "probability_mismatches": 0,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          }
+        ]
+      }
+    ]
+  },
+  "replay": {
+    "correctness_passed": true,
+    "fusion_calls": {
+      "unroll8": 336,
+      "unroll4": 336
+    },
+    "pins": [
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-template-pairs-recovery1-20261007/controls.json",
+        "sha256": "e7d17fc7b93b3ba251b2fe8ae8bc7c7bab2abbb58d94b52edf9a3a45f0f0898a"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-canonical-source-20261007/screen.py",
+        "sha256": "dc842fcf94631e5e4e1ed7781fdfc25cfd5da72e39e077f8422178a591a3740c"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll8-20261010/benchmark.py",
+        "sha256": "c4613aaf1846b866ac1444ef3ddda6c266f51c86d67eb867a2ab30958a52d833"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll8-20261010/screen.json",
+        "sha256": "7ca8ea9fe77e112942bb9af1519fbca892012037b659b6816ce413c8f5200a54"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll8-20261010/build/build.json",
+        "sha256": "adbd655639fa887f5102a4b4254e009ab15baab38eb1142c2975de1e89286ae7"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll8-20261010/cache/rust-v1/fireprot_of3_qkv_unroll8_v1_3b762f970fcd31d08d227f34dc2b764b32537ee347158f732d55db312d6c9d58/fireprot_of3_qkv_unroll8_v1_3b762f970fcd31d08d227f34dc2b764b32537ee347158f732d55db312d6c9d58.so",
+        "sha256": "3d4884c8b62ec36012724449a3562f6de7ea8a0fd06689eff602e72931f897bb"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll4-20261010/screen.json",
+        "sha256": "2d78b74b7cabd8df02580a3d258f787246647f8698f445a4c5e9f356dd02442d"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll4-20261010/build/build.json",
+        "sha256": "b44cb1a017638df4ec80845e91a179ed34823641ae85d8b49fbaeab133cca91b"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll4-20261010/cache/rust-v1/fireprot_of3_qkv_unroll4_v1_048e4206f1b8c074bd39931e520ac657497663ffb3153ebe03c223ebb4786a6e/fireprot_of3_qkv_unroll4_v1_048e4206f1b8c074bd39931e520ac657497663ffb3153ebe03c223ebb4786a6e.so",
+        "sha256": "80a619ecf7206d729b6f4a6ae95e2009f8c7cced8b0a042555e5893aedbccb3e"
+      }
+    ],
+    "capture_pins": {
+      "trunk_pairformer-tri_att_end.pt": {
+        "sha256": "723e5eb4049b94b5fedb0e7a4abe45ef4b6e77594060bc546ea47d7c647c04aa",
+        "size": 1217732181
+      },
+      "trunk_pairformer-tri_att_start.pt": {
+        "sha256": "3ec48e6a6a1780457fe7d7ef6449993f97f267515b780f23b8964a365416c559",
+        "size": 1217732213
+      }
+    },
+    "scope": "Complete trained TriangleAttention; two warmups and twelve balanced samples per arm/capture; canonical HIP normalization, HIP K packing, strict allocations, same retained score workspace; probabilities unused by fused arms; no model/E2E claim; exact checks between timings affect cache state",
+    "strict": true,
+    "seed": 101,
+    "hip_device": 7
+  },
+  "records": [
+    {
+      "capture": {
+        "path": "/media/IntelSSD/fireprot/outputs/triatt-profile-n1536-v1/trunk_pairformer-tri_att_end.pt",
+        "sha256": "723e5eb4049b94b5fedb0e7a4abe45ef4b6e77594060bc546ea47d7c647c04aa"
+      },
+      "flags": {
+        "transpose_bias": true,
+        "chunk_size": 1024,
+        "use_deepspeed_evo_attention": false,
+        "use_cueq_triangle_kernels": false,
+        "use_triton_triangle_kernels": false,
+        "use_lma": false,
+        "inplace_safe": true
+      },
+      "reference_flags": {
+        "transpose_bias": true,
+        "chunk_size": 256,
+        "use_deepspeed_evo_attention": false,
+        "use_cueq_triangle_kernels": false,
+        "use_triton_triangle_kernels": false,
+        "use_lma": false,
+        "inplace_safe": true
+      },
+      "exact": true,
+      "checks": {
+        "baseline": [
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          }
+        ],
+        "unroll8": [
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          }
+        ],
+        "unroll4": [
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          }
+        ]
+      },
+      "samples_ms": {
+        "baseline": [
+          267.26104736328125,
+          267.2858581542969,
+          267.539306640625,
+          267.2647399902344,
+          267.45416259765625,
+          267.3796081542969,
+          267.321533203125,
+          267.2498474121094,
+          267.1919250488281,
+          267.36346435546875,
+          267.368896484375,
+          267.31353759765625
+        ],
+        "unroll8": [
+          257.96441650390625,
+          258.005859375,
+          323.3933410644531,
+          257.74908447265625,
+          304.83526611328125,
+          257.6944885253906,
+          257.7114562988281,
+          257.92218017578125,
+          258.1346740722656,
+          258.0322570800781,
+          257.85723876953125,
+          257.7633056640625
+        ],
+        "unroll4": [
+          293.9919128417969,
+          240.07469177246094,
+          238.94300842285156,
+          238.9573974609375,
+          241.86203002929688,
+          241.73643493652344,
+          240.77099609375,
+          240.6522674560547,
+          238.85020446777344,
+          240.92813110351562,
+          243.36314392089844,
+          240.40237426757812
+        ]
+      },
+      "medians_ms": {
+        "baseline": 267.3175354003906,
+        "unroll8": 257.94329833984375,
+        "unroll4": 240.71163177490234
+      },
+      "orders": [
+        [
+          "baseline",
+          "unroll8",
+          "unroll4"
+        ],
+        [
+          "unroll8",
+          "unroll4",
+          "baseline"
+        ],
+        [
+          "unroll4",
+          "baseline",
+          "unroll8"
+        ],
+        [
+          "unroll4",
+          "unroll8",
+          "baseline"
+        ],
+        [
+          "baseline",
+          "unroll4",
+          "unroll8"
+        ],
+        [
+          "unroll8",
+          "baseline",
+          "unroll4"
+        ],
+        [
+          "baseline",
+          "unroll8",
+          "unroll4"
+        ],
+        [
+          "unroll8",
+          "unroll4",
+          "baseline"
+        ],
+        [
+          "unroll4",
+          "baseline",
+          "unroll8"
+        ],
+        [
+          "unroll4",
+          "unroll8",
+          "baseline"
+        ],
+        [
+          "baseline",
+          "unroll4",
+          "unroll8"
+        ],
+        [
+          "unroll8",
+          "baseline",
+          "unroll4"
+        ]
+      ]
+    },
+    {
+      "capture": {
+        "path": "/media/IntelSSD/fireprot/outputs/triatt-profile-n1536-v1/trunk_pairformer-tri_att_start.pt",
+        "sha256": "3ec48e6a6a1780457fe7d7ef6449993f97f267515b780f23b8964a365416c559"
+      },
+      "flags": {
+        "chunk_size": 1024,
+        "use_deepspeed_evo_attention": false,
+        "use_cueq_triangle_kernels": false,
+        "use_triton_triangle_kernels": false,
+        "use_lma": false,
+        "inplace_safe": true
+      },
+      "reference_flags": {
+        "chunk_size": 256,
+        "use_deepspeed_evo_attention": false,
+        "use_cueq_triangle_kernels": false,
+        "use_triton_triangle_kernels": false,
+        "use_lma": false,
+        "inplace_safe": true
+      },
+      "exact": true,
+      "checks": {
+        "baseline": [
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          }
+        ],
+        "unroll8": [
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          }
+        ],
+        "unroll4": [
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          },
+          {
+            "bitwise_equal": true,
+            "max_abs_delta": 0.0
+          }
+        ]
+      },
+      "samples_ms": {
+        "baseline": [
+          257.10205078125,
+          257.0516357421875,
+          257.0375671386719,
+          257.0196533203125,
+          257.0612487792969,
+          257.0103759765625,
+          256.89324951171875,
+          257.1798095703125,
+          256.8948669433594,
+          257.183349609375,
+          256.8194885253906,
+          257.0014343261719
+        ],
+        "unroll8": [
+          247.67933654785156,
+          247.6830291748047,
+          247.68991088867188,
+          267.1993408203125,
+          247.73757934570312,
+          247.66285705566406,
+          247.5934295654297,
+          247.6830291748047,
+          247.68606567382812,
+          247.5929412841797,
+          247.5692596435547,
+          247.47006225585938
+        ],
+        "unroll4": [
+          230.84912109375,
+          228.35040283203125,
+          228.34463500976562,
+          229.82400512695312,
+          229.06544494628906,
+          230.7828826904297,
+          280.8934020996094,
+          229.71632385253906,
+          229.04672241210938,
+          229.62367248535156,
+          288.1364440917969,
+          232.35536193847656
+        ]
+      },
+      "medians_ms": {
+        "baseline": 257.0286102294922,
+        "unroll8": 247.68118286132812,
+        "unroll4": 229.7701644897461
+      },
+      "orders": [
+        [
+          "baseline",
+          "unroll8",
+          "unroll4"
+        ],
+        [
+          "unroll8",
+          "unroll4",
+          "baseline"
+        ],
+        [
+          "unroll4",
+          "baseline",
+          "unroll8"
+        ],
+        [
+          "unroll4",
+          "unroll8",
+          "baseline"
+        ],
+        [
+          "baseline",
+          "unroll4",
+          "unroll8"
+        ],
+        [
+          "unroll8",
+          "baseline",
+          "unroll4"
+        ],
+        [
+          "baseline",
+          "unroll8",
+          "unroll4"
+        ],
+        [
+          "unroll8",
+          "unroll4",
+          "baseline"
+        ],
+        [
+          "unroll4",
+          "baseline",
+          "unroll8"
+        ],
+        [
+          "unroll4",
+          "unroll8",
+          "baseline"
+        ],
+        [
+          "baseline",
+          "unroll4",
+          "unroll8"
+        ],
+        [
+          "unroll8",
+          "baseline",
+          "unroll4"
+        ]
+      ]
+    }
+  ],
+  "source_reports": [
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll8-20261010/screen.json",
+      "sha256": "7ca8ea9fe77e112942bb9af1519fbca892012037b659b6816ce413c8f5200a54"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll8-20261010/benchmark/report.json",
+      "sha256": "aa85a1551489a54b1954582961bf6877707f0e58f108155be6e5057d25992106"
+    }
+  ]
+}

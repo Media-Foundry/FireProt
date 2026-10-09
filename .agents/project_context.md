@@ -5784,3 +5784,31 @@ probe is in repo; no maintained default changed. No result yet. Inspect queue
 Unroll4 paired first result observed during this turn: baseline0 E2E339.417633232,
 candidate0 329.915480453 (~1.0288x); Rust pair-check-000 correctness_passed=true.
 Only first pair is complete; do not report a final median or stable gain yet.
+
+
+## Unroll4 E2E accepted, unroll8 rejected, diffusion profile active (2026-10-10)
+
+Coordinator685102 and paired690424 finished0; collected.json exists and was
+independently checked locally (six complete outputs, all11/fullCIF exact).
+Medians345.752828869 ->330.998593305 s E2E (1.04457491924x), model254.904648186
+->243.406796663 (1.04723718352x). Pair ratios1.0288/1.0446/1.0256. Retain
+unroll4 in the experimental best composition; no maintained promotion or new
+original-Torch ratio. Provenance openfold3_qkv_unroll4_e2e_n1536.json.
+
+Unroll8 queue688389 finished0: synthetic8x2 and84 trainedcalls exact, but slower
+than unroll4 (ending257.943/240.712, starting247.681/229.770 ms). Rejectunroll8
+at module gate; no fullmodel trial. Provenance openfold3_qkv_unroll8_replay_20261010.json.
+
+Network: 10.120.16.5 timed out after120s retry; same-host old endpoint10.120.16.9
+worked, hostnameDiamondHill, boot_idafbe7b4e-c398-45b8-86ad-45cded194221.
+Prefer.5 when healthy; .9 can inspect existing jobs without restarting them.
+CURRENT diffusion coordinator701093 confirmedlive, stageprofile child718563,
+rootoutputs/experiments/openfold3-diffusion-profile-20261010. No other GPU/build/
+archive until it is terminal. Previous turn was verified wait followed by a
+transient connection failure; this turn obtained new terminal evidence. Goalactive.
+
+Read-only source audit points to repeated DiffusionTransformer.layer_norm_z and
+per-block attention_pair_bias.linear_z for global/local stacks. Fixedinputs may
+allow rollout-local reuse, but actual profile cost, consumer immutability and
+retained memory must be checked before implementing. Time-dependent s/a remain
+native. Local source snapshot /tmp/fireprot-openfold3-diffusion-sources-20261010.txt.

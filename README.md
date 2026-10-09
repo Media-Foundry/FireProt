@@ -239,6 +239,7 @@ profile's default. See [cache results](docs/protenix-base.md#static-diffusion-bi
 | Exact HIP C128 LayerNorm vs template-reuse combination | 391.162 → 364.159 s | **1.0742x** |
 | Fused triangle gates/packing vs canonical-layout HIP normalization combination | 352.949 → 348.258 s | **1.0135x** |
 | Isolated single-item data preparation vs gate/packing combination | 349.971 → 341.782 s | **1.0240x** |
+| QK-softmax-PV fusion with PV-unroll4 vs isolated-data combination | 345.753 → 330.999 s | **1.0446x** |
 
 Each row has three pairs under the same strict R3/D200/S1 contract. The
 triangle comparison also reduces model forward time **356.595 → 321.699 s

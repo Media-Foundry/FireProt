@@ -842,8 +842,7 @@ remaining pair ratios are only1.0023x and1.0041x. No observations are excluded.
 replay gain did not produce a stable E2E improvement; retain the isolated-data
 baseline. The first slowdown occurred inside model forward with the same peak
 allocated/reserved memory. Available records do not establish its cause.
-The separately queued PV-unroll4 and QK-only-index32 experiments are still
-unqualified for full-model/E2E use.
+Subsequent PV scheduling and the QK-only control are evaluated separately below.
 
 [Paired evidence](../provenance/openfold3_qkv_e2e_n1536.json) includes the six raw
 measurements and refreshed output/source checks. This is not an original-Torch
@@ -859,11 +858,38 @@ are bitwise exact, including two warmups plus12/16 balanced samples respectively
 
 The four-arm control shows that QK-only index32 is slower:271.389/261.595 ms,
 despite reduced local register counts. Reject that control. Unroll4 advances to
-whole-model qualification and paired E2E; its approximately1.11x module gain
-is not yet an E2E result. [Details and evidence](../experiments/mfma_qkv/README.md#pv-unroll4-and-qk-only-control-results).
+whole-model qualification and paired E2E; the final E2E result is below. [Details and evidence](../experiments/mfma_qkv/README.md#pv-unroll4-and-qk-only-control-results).
 
 Unroll4 subsequently passed the full-model gate with5,064 calls, all11 arrays
 bitwise equal and full CIF bytes equal. Strict N1536 R3/D200/S1 seed101 on HIP7;
 single invocation 333.859071 s, model forward241.828975 s. Three paired E2E
-runs are now underway. [Qualification evidence](../provenance/openfold3_qkv_unroll4_model_n1536.json);
-this is not yet a stable whole-model speedup claim.
+runs subsequently completed. [Qualification evidence](../provenance/openfold3_qkv_unroll4_model_n1536.json).
+
+
+## PV-unroll4: accepted incremental N1536 E2E
+
+Three AB/BA/AB pairs use the qualified isolated-data composition in both arms;
+only the fusion flag and profile digest differ. Strict deterministic FP32,
+N1536, R3/four trunk passes, D200/S1, seed101, HIP7/PCI93/SMI5, fresh processes
+and unflushed caches. All six outputs match all 11 arrays bitwise and complete
+CIF bytes. Every candidate executes 5,064 fused calls without bounded-batch
+fallback; normalization, gate and template-reuse counts are unchanged.
+
+| Measurement | Baseline median | Unroll4 median | Speedup |
+| --- | ---: | ---: | ---: |
+| Complete invocation | 345.752829 s | 330.998593 s | 1.0446x |
+| Model forward | 254.904648 s | 243.406797 s | 1.0472x |
+
+Individual E2E pairs are 339.417633 ->329.915480, 345.752829 ->330.998593
+and 347.449672 ->338.770763 seconds: 1.0288x, 1.0446x and 1.0256x.
+No observation is discarded. **Retain unroll4 in the experimental composition.**
+Complete invocation median falls by 4.27%; maintained deployment integration
+and a fresh direct-original-Torch comparison remain pending.
+[Full paired evidence](../provenance/openfold3_qkv_unroll4_e2e_n1536.json).
+
+The next unroll8 screen passes eight cases in both templates and all84 trained
+module calls, but loses to unroll4: ending257.943 versus240.712 ms,
+starting247.681 versus229.770 ms. Reject unroll8 at module latency; no unroll8
+full-model/E2E claim. This closes the current tested loop-unroll sweep, without
+claiming that all attention optimization opportunities are exhausted.
+[Unroll8 evidence](../provenance/openfold3_qkv_unroll8_replay_20261010.json).

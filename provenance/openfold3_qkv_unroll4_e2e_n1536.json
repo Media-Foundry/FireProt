@@ -1,0 +1,814 @@
+{
+  "schema_version": 1,
+  "correctness_passed": true,
+  "scope": "Qualified gate/packing/isolated-data versus index32/unroll4 QK-softmax-PV fusion; not direct original Torch",
+  "workload": {
+    "n": 1536,
+    "precision": "float32",
+    "strict": true,
+    "recycles": 3,
+    "trunk_passes": 4,
+    "diffusion_steps": 200,
+    "samples": 1,
+    "seed": 101,
+    "hip_device": 7
+  },
+  "performance": {
+    "baseline": {
+      "count": 3,
+      "min": 339.417633232,
+      "median": 345.752828869,
+      "p95": 347.449672469,
+      "max": 347.449672469,
+      "mean": 344.20671152333335
+    },
+    "candidate": {
+      "count": 3,
+      "min": 329.915480453,
+      "median": 330.998593305,
+      "p95": 338.770763397,
+      "max": 338.770763397,
+      "mean": 333.2282790516667
+    },
+    "median_speedup": 1.0445749192366043,
+    "p95_speedup": 1.02561882550009,
+    "paired_speedups": [
+      1.0288017790676351,
+      1.0445749192366043,
+      1.02561882550009
+    ],
+    "paired_summary": {
+      "count": 3,
+      "min": 1.02561882550009,
+      "median": 1.0288017790676351,
+      "p95": 1.0445749192366043,
+      "max": 1.0445749192366043,
+      "mean": 1.0329985079347765
+    },
+    "observed_trend": "faster_median_and_p95",
+    "changes": {
+      "invocation.profile_sha256": {
+        "baseline": "263bd6a575a4a41b62751cf22c16ce3834626c1246d5d26e54c5370529eada8d",
+        "candidate": "274d169b4d9d06be1a648978590a08b73ac35c84900d6d616f519479f8dfc51e"
+      },
+      "launch.environment.FIREPROT_QKV_INDEX32": {
+        "baseline": "0",
+        "candidate": "1"
+      }
+    }
+  },
+  "model_medians": {
+    "baseline": 254.90464818599867,
+    "candidate": 243.40679666301003
+  },
+  "model_speedup": 1.047237183515903,
+  "runs": [
+    {
+      "arm": "baseline",
+      "pair": 0,
+      "e2e_seconds": 339.417633232,
+      "model_seconds": 252.82301465500495,
+      "request_seconds": 281.37941650199355,
+      "supervisor_seconds": 321.743905849,
+      "output_dir": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-baseline-0",
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "normalization": {
+        "source_sha256": "e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79",
+        "library_sha256": "a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a",
+        "counts": {
+          "accepted": 11202,
+          "fallback": 7846,
+          "contiguous_copies": 4730
+        },
+        "signatures": {
+          "((1, 1536, 1536, 128), (301989888, 196608, 128, 1))": 434,
+          "((1, 256, 1536, 128), (301989888, 196608, 128, 1))": 3225,
+          "((1, 1536, 256, 128), (50331648, 32768, 128, 1))": 2580,
+          "((1, 1536, 256, 128), (301989888, 196608, 128, 1))": 3870,
+          "((1, 256, 1536, 128), (150994944, 128, 98304, 1))": 645,
+          "((1, 1536, 1536, 128), (301989888, 128, 196608, 1))": 215,
+          "((1, 1, 1536, 1536, 128), (301989888, 301989888, 196608, 128, 1))": 203,
+          "((256, 1536, 128), (196608, 128, 1))": 30
+        },
+        "width": 32
+      },
+      "full_cif_bytes_equal": true,
+      "template_reuse": {
+        "source_sha256": "f75d982e7c94462a0276b22c860c69676baab003556d2c665a5ab9db7bbb9d63",
+        "counts": {
+          "eligible": 9,
+          "distinct": 0,
+          "unsupported": 0,
+          "reused_slots": 27
+        },
+        "policy": "Bitwise-identical input slots and masks; native final reduction"
+      },
+      "triangle_operator": {
+        "accepted": 430,
+        "fallback": 18,
+        "gate_calls": 5160,
+        "copies": 5160,
+        "copy_fallbacks": 1290,
+        "library_sha256": "b7a980bf469a0f13581985033f904541cae5783eab01d4579054588e75c3614c"
+      },
+      "triangle_key_copy": {
+        "calls": 5064
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-baseline-0/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-baseline-0/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-baseline-0/accepted.json",
+        "sha256": "de2ce4ee4f28cb093e3402186f0aee4938d9956d22c172d29515d311ac90bcbb"
+      }
+    },
+    {
+      "arm": "candidate",
+      "pair": 0,
+      "e2e_seconds": 329.915480453,
+      "model_seconds": 243.40679666301003,
+      "request_seconds": 272.8544188689848,
+      "supervisor_seconds": 312.269970756,
+      "output_dir": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-candidate-0",
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "normalization": {
+        "source_sha256": "e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79",
+        "library_sha256": "a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a",
+        "counts": {
+          "accepted": 11202,
+          "fallback": 7846,
+          "contiguous_copies": 4730
+        },
+        "signatures": {
+          "((1, 1536, 1536, 128), (301989888, 196608, 128, 1))": 434,
+          "((1, 256, 1536, 128), (301989888, 196608, 128, 1))": 3225,
+          "((1, 1536, 256, 128), (50331648, 32768, 128, 1))": 2580,
+          "((1, 1536, 256, 128), (301989888, 196608, 128, 1))": 3870,
+          "((1, 256, 1536, 128), (150994944, 128, 98304, 1))": 645,
+          "((1, 1536, 1536, 128), (301989888, 128, 196608, 1))": 215,
+          "((1, 1, 1536, 1536, 128), (301989888, 301989888, 196608, 128, 1))": 203,
+          "((256, 1536, 128), (196608, 128, 1))": 30
+        },
+        "width": 32
+      },
+      "full_cif_bytes_equal": true,
+      "template_reuse": {
+        "source_sha256": "f75d982e7c94462a0276b22c860c69676baab003556d2c665a5ab9db7bbb9d63",
+        "counts": {
+          "eligible": 9,
+          "distinct": 0,
+          "unsupported": 0,
+          "reused_slots": 27
+        },
+        "policy": "Bitwise-identical input slots and masks; native final reduction"
+      },
+      "triangle_operator": {
+        "accepted": 430,
+        "fallback": 18,
+        "gate_calls": 5160,
+        "copies": 5160,
+        "copy_fallbacks": 1290,
+        "library_sha256": "b7a980bf469a0f13581985033f904541cae5783eab01d4579054588e75c3614c"
+      },
+      "triangle_key_copy": {
+        "calls": 5064
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-candidate-0/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-candidate-0/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-candidate-0/accepted.json",
+        "sha256": "ed3c7c7b6c236dcdee0a9f022b436a06ab5ec8ab42706e80b0d8306572136a41"
+      }
+    },
+    {
+      "arm": "candidate",
+      "pair": 1,
+      "e2e_seconds": 330.998593305,
+      "model_seconds": 242.8185660559975,
+      "request_seconds": 273.23128676897613,
+      "supervisor_seconds": 313.364988323,
+      "output_dir": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-candidate-1",
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "normalization": {
+        "source_sha256": "e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79",
+        "library_sha256": "a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a",
+        "counts": {
+          "accepted": 11202,
+          "fallback": 7846,
+          "contiguous_copies": 4730
+        },
+        "signatures": {
+          "((1, 1536, 1536, 128), (301989888, 196608, 128, 1))": 434,
+          "((1, 256, 1536, 128), (301989888, 196608, 128, 1))": 3225,
+          "((1, 1536, 256, 128), (50331648, 32768, 128, 1))": 2580,
+          "((1, 1536, 256, 128), (301989888, 196608, 128, 1))": 3870,
+          "((1, 256, 1536, 128), (150994944, 128, 98304, 1))": 645,
+          "((1, 1536, 1536, 128), (301989888, 128, 196608, 1))": 215,
+          "((1, 1, 1536, 1536, 128), (301989888, 301989888, 196608, 128, 1))": 203,
+          "((256, 1536, 128), (196608, 128, 1))": 30
+        },
+        "width": 32
+      },
+      "full_cif_bytes_equal": true,
+      "template_reuse": {
+        "source_sha256": "f75d982e7c94462a0276b22c860c69676baab003556d2c665a5ab9db7bbb9d63",
+        "counts": {
+          "eligible": 9,
+          "distinct": 0,
+          "unsupported": 0,
+          "reused_slots": 27
+        },
+        "policy": "Bitwise-identical input slots and masks; native final reduction"
+      },
+      "triangle_operator": {
+        "accepted": 430,
+        "fallback": 18,
+        "gate_calls": 5160,
+        "copies": 5160,
+        "copy_fallbacks": 1290,
+        "library_sha256": "b7a980bf469a0f13581985033f904541cae5783eab01d4579054588e75c3614c"
+      },
+      "triangle_key_copy": {
+        "calls": 5064
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-candidate-1/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-candidate-1/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-candidate-1/accepted.json",
+        "sha256": "a512904f5130341b21d16a72463e2e070b12bbbd38dc446628bf0cfed2a9deec"
+      }
+    },
+    {
+      "arm": "baseline",
+      "pair": 1,
+      "e2e_seconds": 345.752828869,
+      "model_seconds": 254.90464818599867,
+      "request_seconds": 285.6110756889975,
+      "supervisor_seconds": 326.960749886,
+      "output_dir": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-baseline-1",
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "normalization": {
+        "source_sha256": "e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79",
+        "library_sha256": "a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a",
+        "counts": {
+          "accepted": 11202,
+          "fallback": 7846,
+          "contiguous_copies": 4730
+        },
+        "signatures": {
+          "((1, 1536, 1536, 128), (301989888, 196608, 128, 1))": 434,
+          "((1, 256, 1536, 128), (301989888, 196608, 128, 1))": 3225,
+          "((1, 1536, 256, 128), (50331648, 32768, 128, 1))": 2580,
+          "((1, 1536, 256, 128), (301989888, 196608, 128, 1))": 3870,
+          "((1, 256, 1536, 128), (150994944, 128, 98304, 1))": 645,
+          "((1, 1536, 1536, 128), (301989888, 128, 196608, 1))": 215,
+          "((1, 1, 1536, 1536, 128), (301989888, 301989888, 196608, 128, 1))": 203,
+          "((256, 1536, 128), (196608, 128, 1))": 30
+        },
+        "width": 32
+      },
+      "full_cif_bytes_equal": true,
+      "template_reuse": {
+        "source_sha256": "f75d982e7c94462a0276b22c860c69676baab003556d2c665a5ab9db7bbb9d63",
+        "counts": {
+          "eligible": 9,
+          "distinct": 0,
+          "unsupported": 0,
+          "reused_slots": 27
+        },
+        "policy": "Bitwise-identical input slots and masks; native final reduction"
+      },
+      "triangle_operator": {
+        "accepted": 430,
+        "fallback": 18,
+        "gate_calls": 5160,
+        "copies": 5160,
+        "copy_fallbacks": 1290,
+        "library_sha256": "b7a980bf469a0f13581985033f904541cae5783eab01d4579054588e75c3614c"
+      },
+      "triangle_key_copy": {
+        "calls": 5064
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-baseline-1/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-baseline-1/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-baseline-1/accepted.json",
+        "sha256": "223fa5d4f3a2b21f112c2b512f8a51fadc1278b8bf2426e4494c8da96c8e3404"
+      }
+    },
+    {
+      "arm": "baseline",
+      "pair": 2,
+      "e2e_seconds": 347.449672469,
+      "model_seconds": 257.2140933019982,
+      "request_seconds": 288.0011753749859,
+      "supervisor_seconds": 329.113148414,
+      "output_dir": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-baseline-2",
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "normalization": {
+        "source_sha256": "e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79",
+        "library_sha256": "a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a",
+        "counts": {
+          "accepted": 11202,
+          "fallback": 7846,
+          "contiguous_copies": 4730
+        },
+        "signatures": {
+          "((1, 1536, 1536, 128), (301989888, 196608, 128, 1))": 434,
+          "((1, 256, 1536, 128), (301989888, 196608, 128, 1))": 3225,
+          "((1, 1536, 256, 128), (50331648, 32768, 128, 1))": 2580,
+          "((1, 1536, 256, 128), (301989888, 196608, 128, 1))": 3870,
+          "((1, 256, 1536, 128), (150994944, 128, 98304, 1))": 645,
+          "((1, 1536, 1536, 128), (301989888, 128, 196608, 1))": 215,
+          "((1, 1, 1536, 1536, 128), (301989888, 301989888, 196608, 128, 1))": 203,
+          "((256, 1536, 128), (196608, 128, 1))": 30
+        },
+        "width": 32
+      },
+      "full_cif_bytes_equal": true,
+      "template_reuse": {
+        "source_sha256": "f75d982e7c94462a0276b22c860c69676baab003556d2c665a5ab9db7bbb9d63",
+        "counts": {
+          "eligible": 9,
+          "distinct": 0,
+          "unsupported": 0,
+          "reused_slots": 27
+        },
+        "policy": "Bitwise-identical input slots and masks; native final reduction"
+      },
+      "triangle_operator": {
+        "accepted": 430,
+        "fallback": 18,
+        "gate_calls": 5160,
+        "copies": 5160,
+        "copy_fallbacks": 1290,
+        "library_sha256": "b7a980bf469a0f13581985033f904541cae5783eab01d4579054588e75c3614c"
+      },
+      "triangle_key_copy": {
+        "calls": 5064
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-baseline-2/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-baseline-2/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-baseline-2/accepted.json",
+        "sha256": "a29eacd2798c144b836571fd1957eb70fa2a75588b0a21453ae6772f2dc93b9a"
+      }
+    },
+    {
+      "arm": "candidate",
+      "pair": 2,
+      "e2e_seconds": 338.770763397,
+      "model_seconds": 248.13379842002178,
+      "request_seconds": 278.63788413102156,
+      "supervisor_seconds": 319.971550241,
+      "output_dir": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-candidate-2",
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "normalization": {
+        "source_sha256": "e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79",
+        "library_sha256": "a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a",
+        "counts": {
+          "accepted": 11202,
+          "fallback": 7846,
+          "contiguous_copies": 4730
+        },
+        "signatures": {
+          "((1, 1536, 1536, 128), (301989888, 196608, 128, 1))": 434,
+          "((1, 256, 1536, 128), (301989888, 196608, 128, 1))": 3225,
+          "((1, 1536, 256, 128), (50331648, 32768, 128, 1))": 2580,
+          "((1, 1536, 256, 128), (301989888, 196608, 128, 1))": 3870,
+          "((1, 256, 1536, 128), (150994944, 128, 98304, 1))": 645,
+          "((1, 1536, 1536, 128), (301989888, 128, 196608, 1))": 215,
+          "((1, 1, 1536, 1536, 128), (301989888, 301989888, 196608, 128, 1))": 203,
+          "((256, 1536, 128), (196608, 128, 1))": 30
+        },
+        "width": 32
+      },
+      "full_cif_bytes_equal": true,
+      "template_reuse": {
+        "source_sha256": "f75d982e7c94462a0276b22c860c69676baab003556d2c665a5ab9db7bbb9d63",
+        "counts": {
+          "eligible": 9,
+          "distinct": 0,
+          "unsupported": 0,
+          "reused_slots": 27
+        },
+        "policy": "Bitwise-identical input slots and masks; native final reduction"
+      },
+      "triangle_operator": {
+        "accepted": 430,
+        "fallback": 18,
+        "gate_calls": 5160,
+        "copies": 5160,
+        "copy_fallbacks": 1290,
+        "library_sha256": "b7a980bf469a0f13581985033f904541cae5783eab01d4579054588e75c3614c"
+      },
+      "triangle_key_copy": {
+        "calls": 5064
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-candidate-2/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-candidate-2/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/qkv-unroll4-pairs-n1536-candidate-2/accepted.json",
+        "sha256": "622ab59c2b2610ce7721b11e6ce0d4ba7b4a04b93de3f8e1414634eebcf2b1a6"
+      }
+    }
+  ],
+  "benchmark": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll4-pairs-20261010/paired/benchmark.json",
+    "sha256": "c5dcf90aa60258f662d501c4eff1084fe5a41d39cb2a12d7056e5900085d5142"
+  },
+  "comparison": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll4-pairs-20261010/paired/comparison.json",
+    "sha256": "2b7c7e021d6429b08b84b5b38ce88005607da5ce9b5e2e0b3c53d419e6fe8a5c"
+  },
+  "preparation": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll4-pairs-20261010/preparation.json",
+    "sha256": "0d932250f4134c7b42b8ce3fd3d41b43684ebfc0200e74c6ec3cafc938f96221"
+  },
+  "collector": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll4-followup-20261010/collect_pairs.py",
+    "sha256": "290db4e676d77bae9b3a3b535d40d98ae23305b82b7cd9f50923e0e64def9a99"
+  },
+  "limits": [
+    "Fresh processes and unflushed caches; AB/BA/AB; three observations per arm.",
+    "Only this uninterrupted QKV-fusion AB/BA/AB series is included.",
+    "Strict all11 arrays and full CIF bytes match the qualified isolated-data model anchor.",
+    "No maintained-profile promotion or other-workload claim."
+  ],
+  "decision": "Retain PV-unroll4 in the qualified experimental N1536 composition; maintained integration and direct-original comparison remain pending",
+  "source_report": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll4-pairs-20261010/collected.json",
+    "sha256": "d0ef614ae457282b6f66a35b644793c69e32c51206fa4ca413978f4ba47e6d1a"
+  }
+}

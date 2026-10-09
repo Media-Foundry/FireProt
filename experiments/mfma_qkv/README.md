@@ -194,8 +194,7 @@ Unroll4 consistently improves the complete module by about1.11x. Its subsequent
 whole-model qualification passed:5,064 fused calls, all11 arrays and full CIF
 bytes exact, unchanged gate/normalization counts, strict N1536 R3/D200/S1
 seed101 on HIP7. The single invocation took 333.859071 s and model forward
-241.828975 s. Three matched E2E pairs are running; this single observation is
-not a new speedup ratio. See [model evidence](../../provenance/openfold3_qkv_unroll4_model_n1536.json).
+241.828975 s. Three matched E2E pairs subsequently passed; results are below. See [model evidence](../../provenance/openfold3_qkv_unroll4_model_n1536.json).
 
 Evidence: [unroll4 replay](../../provenance/openfold3_qkv_unroll4_replay_20261010.json),
 [QK-only control](../../provenance/openfold3_qk_index32_replay_20261010.json).
@@ -204,6 +203,31 @@ The completed first QKV family is preserved in a
 
 `unroll8.patch` is a further scheduling candidate against the same frozen index32
 source. Local compilation reports58 VGPR for ordinary output,77 for probability
-capture,16KiB LDS and zero scratch. It has no GPU result. Its numerical/module
-screen is queued only after the unroll4 model and paired E2E gates complete.
+capture,16KiB LDS and zero scratch. Its numerical/module screen completed after
+the unroll4 model and paired E2E gates; the measured rejection is below.
 See [local unroll8 evidence](../../provenance/openfold3_qkv_unroll8_local_20261010.json).
+
+
+## Final unroll4 E2E and unroll8 decision
+
+Unroll4 passes three AB/BA/AB N1536 pairs, with all11 arrays and full CIF bytes
+exact in all six runs. Complete invocation medians345.752829 ->330.998593 s
+(1.0446x); model254.904648 ->243.406797 s (1.0472x). Every pair improves.
+Retain this fusion in the qualified experimental composition. The maintained
+profile is not yet promoted; this is an incremental comparison against shared
+isolated-data/gate/norm/cache optimizations, not original Torch.
+[Paired evidence](../../provenance/openfold3_qkv_unroll4_e2e_n1536.json).
+
+Unroll8 passes synthetic8x2 and84 complete trained calls (two warmups plus12
+balanced samples per arm/capture). Ending/starting module medians:
+
+| Arm | Ending | Starting |
+| --- | ---: | ---: |
+| Baseline | 267.318 ms | 257.029 ms |
+| Unroll8 | 257.943 ms | 247.681 ms |
+| Unroll4 | 240.712 ms | 229.770 ms |
+
+Reject unroll8 relative to unroll4. Keep all samples, including the slower
+observations; register counts do not explain these measured latencies alone.
+Strict FP32, seed101, HIP7, unflushed caches and exact checks between samples.
+[Unroll8 evidence](../../provenance/openfold3_qkv_unroll8_replay_20261010.json).

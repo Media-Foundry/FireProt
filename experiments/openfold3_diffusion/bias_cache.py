@@ -45,16 +45,24 @@ def exact(a, b):
             and torch.equal(a.contiguous().view(torch.int32), b.contiguous().view(torch.int32)))
 
 
+def pack_projection(value):
+    """Keep logical [..., N, N, H] values, store the eventual bias head first."""
+    axes = list(range(value.ndim - 3))
+    bias = value.permute(*axes, -1, -3, -2).contiguous()
+    return bias.permute(*axes, -2, -1, -3)
+
+
 @contextmanager
-def global_bias_cache(sample, output, verify=False):
+def global_bias_cache(sample, output, verify=False, pack_bias=False):
     transformer = validate_sources(sample)
     diffusion = sample.diffusion_module
     targets = [("normalization", transformer.layer_norm_z)] + [
         (f"projection.{i}", block.attention_pair_bias.linear_z)
         for i, block in enumerate(transformer.blocks)
     ]
-    report = dict(schema_version=1, verify=verify, scopes=[],
-                  scope="Global diffusion transformer only; original output layouts",
+    report = dict(schema_version=1, verify=verify, pack_bias=pack_bias, scopes=[],
+                  scope="Global diffusion transformer only; " + (
+                      "head-contiguous projected bias" if pack_bias else "original output layouts"),
                   limits=["Timing mode requires source-pinned immutable inputs and parameters.",
                           "Identity checks do not detect in-place inference tensor mutation.",
                           "Verification mode is diagnostic and cannot establish performance."])
@@ -126,7 +134,8 @@ def global_bias_cache(sample, output, verify=False):
                 entry = None
             if entry is None:
                 native = original(value)
-                entry = dict(key=key, value=native, owners=(value, parameters))
+                retained = pack_projection(native) if pack_bias and name.startswith("projection.") else native
+                entry = dict(key=key, value=retained, owners=(value, parameters))
                 cache[name] = entry
                 record["misses"] += 1
                 if verify:

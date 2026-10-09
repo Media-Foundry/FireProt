@@ -5839,3 +5839,34 @@ No GPU acceptance yet. Read current receipts/handles; do not relaunch/overwrite.
 No otherGPU/heavy archive while this coordinator runs. Earlier allqueues terminal.
 Archives for unroll4model/pairs,unroll8,profile/currentcache remainpending until
 allnewGPUworkends. Sourcefileincludeschecks; don'teditdeployedbytes in place.
+
+
+## Global reuse recomputation passed; packed layout queued (2026-10-10)
+
+Previous goal turn was progress (accepted unroll4 E2E, profiled diffusion,
+launched globalcache). This turn global verified child725432 finished0:
+all200steps,25misses/4975hits,4975native checks+5000consumer checks,all11/fullCIFexact.
+No fallback/invalidation;4.5GiBretainedresults. Wholemodelpeakallocated51757716992,
+reserved57139003392; doesnotmeasureisolatedcacheoverhead. Evidence
+provenance/openfold3_global_bias_verified_n1536.json. Diagnostic time notspeedup.
+CURRENT timeout725420 nowstage model_cache child730200; bothconfirmedlive.
+Frozenoriginalsource remainsSHA3d5e6d8e...; don'teditthatcopy orreruncollector.
+
+NEW queued timeoutPID732542 in outputs/experiments/openfold3-packed-bias-followup-20261010,
+script run_after_cache.py; local /tmp/fireprot-of3-packed-bias-20261010.
+Waits for725420terminal0 andbothverified/cacheall11/fullCIF receipts, fullinventory/
+GPUidle, fourcaseGPUadd-layoutscreen thenpackedverified andpackedcachemodels.
+UsesHIP7only; nootherGPU/build/archiveuntilqueueends. Modelroots
+openfold3-packed-bias-{verified,cache}-20261010, outputs
+openfold3-packed-bias-{verified,cache}-n1536-20261010. No new paired E2E scheduledyet.
+
+Repo bias_cache.py adds optional pack_bias=False; currentqueuedpackingcopySHA
+3d8e8436a6a4757e0d1f8b8ab6b7b4109cfe4a4b3af1434c0eac7b70ac9a735f.
+Onlyprojectionmisses usepermute/contiguous/inversepermute, preserveslogicalbits,
+returnsheadcontiguousbiasafterupstreampermute. Expectedprojectionstrides[-3:]
+[1536,1,2359296];same4.5GiBretainedstorage. Tests9pass includingpackedstrides and
+specialbits; fullGPUgatespending. Original activecompute-cacheusesoldfrozenbytes.
+GitNexusimpactunknown(noindexedcallers), textauditfoundonlyexperimenttests plus
+explicitfrozenworker injection; defaultfalsepreservescallers. No maintainedchange.
+Nextobserve725420 and732542, collectrealqualification, thenpreparematchedE2E
+forqualifiedwinner. Archivesnewunroll4/unroll8/profile/cachefamily remainpending.

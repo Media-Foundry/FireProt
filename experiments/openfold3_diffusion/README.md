@@ -94,3 +94,37 @@ start from the qualified unroll4 composition on HIP7. No E2E ratio exists yet.
 The projected bias is currently a permuted view after `linear_z`; packing it
 for the later addition is a separate candidate, requiring separate bitwise and
 performance checks. No layout optimization is enabled by this cache experiment.
+
+
+## Global reuse verification and packing follow-up
+
+The first N1536 diagnostic passes all200 steps:25 initial entries,4975 native
+recomputation comparisons and5000 checks after denoiser consumers. All11 model
+arrays and complete CIF bytes equal the qualified unroll4 anchor. No fallback
+or invalidation occurred. The native output layouts were preserved. This run
+contains redundant work and cannot establish a speedup.
+[Verification evidence](../../provenance/openfold3_global_bias_verified_n1536.json).
+The compute-skipping model gate is running under the original frozen source.
+
+`pack_bias=True` is a separate opt-in candidate. At each projection cache miss,
+it copies the native `[...,N,N,H]` result into head-first storage and restores
+the logical shape as a view. Upstream's subsequent permutation then produces a
+contiguous `[...,H,N,N]` bias. No floating-point arithmetic is introduced, and
+the normalized pair retains its original layout. The cache size remains4.5GiB.
+This targets the sampled strided bias addition; its actual benefit requires
+measurement. Default `pack_bias=False` preserves the previous experiment.
+
+`benchmark_bias_layout.py OUTPUT` screens random, masked-score, cancellation
+and special-bit cases on GPU, with112 exact checks. It times only the in-place
+bias addition (two warmups/twelve alternating samples per arm/case); packing,
+score reset and checks are outside timing. It does not model complete attention
+or establish E2E improvement. Nine CPU tests now pass, including packed cache
+values/strides and bit preservation for signed zero, infinities and a NaN payload.
+
+The serial coordinator
+`outputs/experiments/openfold3-packed-bias-followup-20261010/run_after_cache.py`
+waits for both original-layout full-model qualifications, verifies the complete
+environment and idle HIP7/PCI93/SMI5, screens the layout, and only then runs
+packed recomputation and compute-skipping whole-model gates. It stops on a
+failed prerequisite or a layout screen with no measured improvement. No packed
+GPU result or E2E claim is available yet.

@@ -117,3 +117,26 @@ def test_source_guard_rejects_standin(tmp_path):
     with pytest.raises(RuntimeError, match="source mismatch"):
         with cache.global_bias_cache(Sample().eval(), tmp_path):
             pass
+
+
+@pytest.mark.parametrize("verify", [False, True])
+def test_packed_cache_preserves_values_and_changes_bias_stride(tmp_path, setup, verify):
+    sample, z = setup
+    with torch.inference_mode():
+        expected = sample._sample_rollout(z)
+        with cache.global_bias_cache(sample, tmp_path, verify=verify, pack_bias=True) as report:
+            actual = sample._sample_rollout(z)
+    assert all(cache.exact(a, b) for a, b in zip(actual, expected))
+    record = report["scopes"][0]
+    assert record["misses"] == 25 and record["hits"] == 50
+    assert record["entries"]["projection.0"]["strides"][-3:] == [3, 1, 9]
+    assert report["pack_bias"]
+
+
+def test_packing_preserves_float_bits():
+    raw = torch.tensor([0, -2147483648, 2139095040, -8388608, 2143289345, 1065353216],
+                       dtype=torch.int32).reshape(1, 1, 1, 2, 3)
+    value = raw.view(torch.float32)
+    packed = cache.pack_projection(value)
+    assert cache.exact(value, packed)
+    assert packed.permute(0, 1, 4, 2, 3).is_contiguous()

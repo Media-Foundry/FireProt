@@ -1,8 +1,10 @@
 # OpenFold3 qualified-source deployment audit
 
-Status: source audit, 2026-10-10. No maintained-profile promotion or new GPU
-qualification. The current stable experimental composition is the independently
-qualified isolated-data series; QKV fusion is still undergoing paired timing.
+Status: source audit, 2026-10-10. The inventory below covers the frozen
+isolated-data series. Unroll4 QKV fusion has since passed paired E2E; packed global
+diffusion bias reuse has passed whole-model gates and is undergoing paired E2E.
+Those later files are not implicitly covered by the older inventory. No
+maintained-profile promotion has occurred.
 
 ## Evidence boundary
 
@@ -43,3 +45,45 @@ standalone model worker audited here always sets `num_workers=0` and enters the
 isolated RNG scope. A future original-Torch control must use an explicitly
 conditional/verified worker. Setting a flag that its source never reads is not
 a native baseline.
+
+
+## Direct-native entry preparation
+
+The maintained `python/fireprot_workers/openfold3.py` has SHA-256
+`c30ab522f9a18cb5fa0f21a182d5d2ac33e85173becb4676489485f6eb7d140e`.
+Its native branch directly calls the captured upstream forward. It neither sets
+`data_module_args.num_workers=0` nor installs pair/atom/template/bias caches,
+normalization, gates, workspace or QKV scopes around native prediction. The
+ordinary CLI configuration and output serialization are retained. This is a
+source audit, not a new native performance measurement.
+
+`experiments/openfold3_diffusion/native_router.py` prepares a common worker entry
+for a later direct comparison. It is currently **unconnected to GPU execution**.
+A frozen tree must contain:
+
+| Worker-package file | Required contents |
+| --- | --- |
+| `openfold3.py` | The comparison router |
+| `openfold3_reference.py` | Exact bytes of the audited maintained worker above |
+| `openfold3_optimized.py` | One separately qualified optimized worker |
+| `openfold3_routes.json` | Schema1; `workers` entries for `native` and `hip_fused`, each with fixed module name and SHA-256 |
+
+Both arms share that tree. The router uses the request backend, verifies the
+selected file digest and import origin, and lazily imports only that worker.
+The native digest is also fixed in code, so a manifest cannot silently relabel
+an optimized worker as the reference. The original request and channel are
+forwarded without rewriting. A successful call writes `openfold3-route.json`
+identifying the actual selected source. Five CPU tests exercise real imports,
+unselected-module exclusion, source corruption and the fixed reference pin.
+They do not establish model correctness or performance.
+
+Before a direct-original claim, preparation must pin the complete shared tree,
+include the route receipt and newer optimization sidecars in completed artifact
+hashes, disable baseline optimization flags, and declare all actual backend/
+profile/environment/bridge differences to Rust paired validation. Native data
+preparation must retain its upstream defaults; an optimized worker with
+unconditional data isolation is still unsuitable for that branch. Verify both
+routes on the full workload, including all11 arrays and complete CIF bytes,
+then run fresh matched E2E. The result will compare the pinned upstream native
+Torch route under the common FireProt launcher with the selected composition;
+it will not measure an unwrapped standalone upstream CLI.

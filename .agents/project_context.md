@@ -5951,3 +5951,32 @@ Screenqueueusespairedoutput/request.json forsource.root; actualcurrentrequest
 keys/sourceverifiedcompatible. Allpreparedscriptscheckedsyntax. Source/prep/run/
 benchmarkpins inremote launch.json. No maintainedprofilepromotion. Next inspect
 existingpairs,softmaxqueue; newfamilyarchivepending afterallGPUtasksend.
+
+
+## Direct-native route prepared locally while packed E2E runs (2026-10-10)
+
+Previous goalturnprogress(packedmodelgates,globalsoftmaxcandidate+queue). Current
+paired737448/745651 andsuccessor750495 revalidatedlive. Firstpair completed:
+baseline0E2E328.562508105,candidate0 320.447456840 (~1.0253x), pair-check000true.
+No finalmedianyet. Continueexistinghandles; noextraGPU/build/archive.
+
+Read-onlynativeaudit found maintained python/fireprot_workers/openfold3.py SHA
+c30ab522f9a18cb5fa0f21a182d5d2ac33e85173becb4676489485f6eb7d140e. Nativeearly
+return invokesoriginalforward, nooutercache/isolateddata injection; configkeeps
+upstreamdatamoduledefaults. New experiments/openfold3_diffusion/native_router.py
+isLOCALONLY/unconnected: commonworkerentry choosesbackend-specific module,
+lazyimportsone, sourcehash+originchecks, hardpinnednativeSHA, forwardsrequest
+unchanged, emitsopenfold3-route.json onsuccess. CPUtests5pass(actualimports,
+unselectedmodule exclusion,tamperchecks,referencepin). No GPUclaim/newnativejob.
+Futurepreparer mustcopyexactnativeworker andqualifiedoptimizedworker intoone
+sharedtree, routerasopenfold3.py, manifestopenfold3_routes.json; route+newsidecars
+mustbehashedincompletedtransportoutputs, baselineflagsdisabled andRustexpected
+backend/environment/bridge differencesdeclared. Bothroutesneedfullworkloadgates
+andfreshmatchedE2E. Neverreuserawflag-onlyadviceunconditionaldataworker.
+Docs/openfold3-deployment-audit.md updated withconcretesourcepin/routercontract.
+
+Biaslayout qualification notes: originalcacheprojection0 strides
+[37748736,37748736,24576,16,1], packed[37748736,37748736,1536,1,2359296];
+packingreallychangeslayout. Isolatedadd~7x doesnotpredictwholemodelgain. Single
+originalcache323.335vspacked321.920 notmatched; currentfirstcombinedpair~2.53%.
+No cause claimed for gap between isolatedkernel andoverallgains.

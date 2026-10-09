@@ -979,3 +979,18 @@ gates must pass before the fresh direct-native pairs run. **No new direct-native
 speedup is available yet; do not combine older native timings with these results.**
 
 [Complete paired evidence](../provenance/openfold3_hip_bias_pack_e2e_n1536.json).
+
+
+## Latest direct-native entry qualification
+
+Both routes now preserve all 11 arrays bitwise and complete CIF bytes, including
+the unchanged native worker with upstream data-module defaults. Qualification
+observations are966.949545 s native and321.596325 s optimized complete invocation;
+model forward is872.441172 and233.799366 s respectively. Strict FP32 N1536,
+R3/four trunk passes, D200/S1, seed101, HIP7, fresh processes and unflushed caches.
+These individual observations do not replace a repeated direct-native study.
+
+Three fresh AB/BA/AB comparisons have started. Their results will establish the
+new direct ratio independently of earlier incremental experiments. The historical
+1.499x direct comparison remains labeled as its earlier composition until the
+new study completes. [Routed qualification evidence](../provenance/openfold3_direct_native_routes_n1536.json).

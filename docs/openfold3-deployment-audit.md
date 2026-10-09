@@ -60,8 +60,8 @@ ordinary CLI configuration and output serialization are retained. This is a
 source audit, not a new native performance measurement.
 
 `experiments/openfold3_diffusion/native_router.py` prepares a common worker entry
-for a later direct comparison. It is currently **unqualified through GPU execution**; the gated follow-up
-coordinator described below waits for the incremental E2E decision.
+for a later direct comparison. Both routes now pass strict full-model qualification; the gated follow-up
+coordinator is executing the fresh three-pair direct-native study.
 A frozen tree must contain:
 
 | Worker-package file | Required contents |
@@ -95,10 +95,10 @@ it will not measure an unwrapped standalone upstream CLI.
 ## Frozen direct-native comparison workflow
 
 The experimental preparation/qualification/collection scripts now make the
-router usable in a bounded follow-up study. They have **not yet produced a
-new direct-native result**. The coordinator waits for the HIP packing study to
-finish and requires all three incremental pairs to be faster before preparing
-this candidate's direct comparison.
+router usable in a bounded follow-up study. They have **not yet produced a completed three-pair
+direct-native result**. The HIP packing study passed all three incremental pairs;
+the coordinator then prepared and qualified both routes before starting the
+new direct comparison.
 
 `prepare_native_comparison.py PAIRED_ROOT DESTINATION OUTPUT_ROOT REFERENCE_WORKER`
 validates six exact outputs, the paired performance gate, source-file hashes
@@ -141,3 +141,24 @@ Current coordinator: `outputs/experiments/openfold3-direct-native-followup-20261
 Reserved study destination: `outputs/experiments/openfold3-direct-native-latest-20261010`.
 At preparation time the coordinator is waiting on the existing incremental
 paired process; it has not launched another GPU workload.
+
+
+## Both routed model gates passed
+
+The unchanged native worker and the selected HIP-packing composition both pass
+all 11 arrays bitwise and full CIF bytes against the qualified anchor. Route and
+runner files are sealed output artifacts. The native route emits no optimized
+execution receipts and preserves upstream data-module defaults; the optimized
+route preserves the qualified normalization/QKV/global-softmax coverage. Runner
+configuration differs only by the candidate's recorded `num_workers=0` data path.
+
+| Qualification observation | Native | Optimized |
+| --- | ---: | ---: |
+| Complete invocation | 966.949545 s | 321.596325 s |
+| Model forward | 872.441172 s | 233.799366 s |
+
+Strict FP32 N1536 R3/four trunk passes D200/S1 seed101, HIP7, fresh processes,
+unflushed caches and deterministic memory filling. These are model-entry
+qualification timings, not completed three-pair medians. The three fresh
+AB/BA/AB comparisons are now running under the shared frozen worker tree.
+[Qualification receipt](../provenance/openfold3_direct_native_routes_n1536.json).

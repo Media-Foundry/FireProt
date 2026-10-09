@@ -6119,3 +6119,26 @@ ratio. Do notrestart dueold status"waiting"; inspectcurrentstatusandlivehandles.
 HardwarefollowupPID808423 verifiedlivewaiting_for_direct_native_study. Requires
 nativefollowup success thenisolatedtrace/counters, all11/fullCIFagain. No archive,
 heavyremote build or otherGPU duringtiming. Endpoint.5healthy. Goalactive/notflat.
+
+
+## Both direct-native routes qualified; fresh direct pairs live (2026-10-10)
+
+Previousgoalturnprogress accepted HIPpack E2E, READMEupdatedcommit6d066fd. This
+turn polledliveoriginalqual811871/811872, no retries/parallelGPU. Native completed
+966.949545057E2E /872.441172017model; request908.493908636. Independentlyrechecked
+sealedroute/runner, no optimizedsidecars, all11/fullCIFexact viaRustcompare and
+rawCIFbytes, native data_module_args absent. NativeworkerSHAstillc30ab... matches.
+Candidatequalification822327 completed321.596325004E2E /233.799365609model.
+Bothroutes all11/fullCIFexact; runnerdiff only candidate num_workers0; coverage
+matchesqualifiedHIPpack. route-qualification.json collectedtopath
+/tmp/fireprot-of3-direct-native-followup-20261010/route-qualification.json,
+repo provenance/openfold3_direct_native_routes_n1536.json addsrawhash/workload.
+These areentryqualifications, notfinalpairedratio; avoiddividingearliernative949
+bynewHIP322. Bothsamefreshsharedtree verified, formal3pairs nowstarted.
+
+Direct-native795488 stagepairs, child827126 (Rustbenchmark-pairs), verifyliveatnext
+turn. Rootoutputs/experiments/openfold3-direct-native-latest-20261010/paired.
+Nativeonecall~967s, optimized~322s, totalsixcalls~65minutes; actualETAuncertain.
+Do notstartanotherGPU/build/archivewhiletiming. Hardwarequeue808423 waitsnative
+studyexit0 beforefulltrace/counters. No hardwaremetricresultyet. AllHIP7only.
+No pendingcodeeditsotherthanthisresultdocumentation; goalactive/notflat/notblocked.

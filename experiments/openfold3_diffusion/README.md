@@ -409,3 +409,17 @@ default. The input/checkpoint/cache resources remain on DiamondHill; the
 preparation and source pins must remain valid. A fresh inference alone does not
 reproduce the three-pair performance study; that study additionally requires
 the pinned AB/BA/AB specification, isolated GPU, numerical/CIF gates and collector.
+
+
+## Routed native and optimized model gates completed
+
+Both shared-tree routes pass the strict N1536 full-model gate: all 11 arrays,
+complete CIF bytes, actual route/source identity, and sealed execution receipts.
+Native data-module defaults are preserved and native outputs contain no optimized
+operator receipts. Qualification E2E observations are966.949545 s native and
+321.596325 s optimized; model forward is872.441172 and233.799366 s. These are
+single model-gate observations, not completed three-pair timing results.
+
+The direct-native coordinator has started its three AB/BA/AB pairs. Hardware
+diagnostics remain queued behind that study; no profiling overlaps the timed
+runs. [Qualification receipt](../../provenance/openfold3_direct_native_routes_n1536.json).

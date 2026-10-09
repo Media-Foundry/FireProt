@@ -54,3 +54,17 @@ all six output receipts, collects/archives that series, verifies the current
 environment inventory, builds, probes GPU identity and runs this screen on HIP7.
 A missing or failed predecessor stops the queue. Use existing status records;
 do not restart the same experiment directory.
+
+## Static LDS address audit
+
+`analyze_native_lds.py EXCERPT OUTPUT.json` reconstructs the native main-loop
+operand coordinates from the SHA-pinned disassembly. It checks 4,096 operand
+address relationships across 256 threads, two accumulator groups and eight
+MFMA instructions per DepthU=32 tile. The resulting hypothesis is even/odd K8
+ordering, independently for both operands. This supports probe order 1; it does
+not establish floating-point equality or replace GPU checks.
+
+The excerpt is `pv-0-44f200.asm` inside the previously archived
+`native-mfma-review-v2.tar.gz`; its hash and archive location are in
+`provenance/openfold3_native_mfma_review.json`. The audit result is
+[recorded separately](../../provenance/openfold3_pv_lds_address_audit.json).

@@ -5457,3 +5457,15 @@ expected new archive name openfold3-isolated-data-pairs-20261009.tar.gz.
 Next inspect BOTH existing handles/status files before work. Do not duplicate
 collection, archival, compiler or GPU work. Even a passing PV-only screen is not
 a full attention implementation, model qualification or speedup result.
+
+Local static PV follow-up: archived native excerpt hash verified; reconstructed
+A/B LDS stores and reads support even-then-odd K8 for every thread/accumulator.
+The CPU address audit passes 4,096 relationships (256 threads x 2 groups x 8
+instructions). It is not a GPU arithmetic proof. Script
+experiments/mfma_pv/analyze_native_lds.py and evidence
+provenance/openfold3_pv_lds_address_audit.json. Local extracted excerpt
+/tmp/fireprot-pv-native.asm; verified 2MB archive
+/tmp/fireprot-native-mfma-review-v2.tar.gz. Original persistent archive remains
+outputs/experiments/conditioning-cache-20261006/native-mfma-review-v2.tar.gz,
+SHAecffe69c8447537ed43ddcb875dadf621454d730657b8ac3f3f8df8948fdbfd2.
+This audit does not change the queued three-hypothesis GPU probe.

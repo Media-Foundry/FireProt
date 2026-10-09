@@ -714,3 +714,39 @@ change the earlier gate/packing comparison, and are not a direct original-Torch
 benchmark. See [raw paired evidence](../provenance/openfold3_epilogue_e2e_n1536.json).
 Archive: `openfold3-epilogue-pairs-20261009.tar.gz`, SHA-256
 `99ebf832434a1ff4f298564fae9cc2b207831bddea8f8b8f9a72747dacedd505`.
+
+
+## Startup diagnostic and next trial (2026-10-09)
+
+A diagnostic run retains all eleven arrays and complete CIF bytes against the
+qualified gate/packing anchor. Inclusive CPU wall-clock intervals are:
+
+| Stage | Seconds |
+| --- | ---: |
+| Checkpoint read | 1.367 |
+| Model construction | 2.914 |
+| State loading, including construction | 3.147 |
+| Runner setup | 4.522 |
+| Data setup | 0.001 |
+| DataLoader construction | 0.001 |
+| First prediction start minus DataLoader construction end | 23.422 |
+| Predict step, including output | 262.051 |
+
+Intervals overlap and must not be summed. The 23.422 s gap includes worker
+startup and first-batch preparation; it is not a measured breakdown of those
+components. Full invocation is 355.373 s and model forward is 260.542 s; these
+instrumented observations establish no new speedup.
+
+The old environment inventory rejected this session before worker launch.
+An audit found 48 changed system-library identities, including alias entries:
+FreeRDP/WinPR, FreeType, Poppler, librsvg/pixbuf and libsoup. Inventoried
+Python/Torch/ROCm files did not change. The new experiment pins a newly captured
+manifest with the same coverage and preserves the old manifest and full delta.
+See [stage measurements and environment audit](../provenance/openfold3_startup_profile_n1536.json).
+
+The next isolated experiment emulates worker 0 initialization during single-item
+CPU preparation in the main process, restoring Python/NumPy/Torch RNG, thread
+count and determinism settings before model execution. It addresses a concrete
+semantic difference in the rejected plain zero-worker attempt. Full-model exact
+validation and matched timing are required before selection. It is not enabled
+in maintained profiles and makes no multi-input or multi-seed claim.

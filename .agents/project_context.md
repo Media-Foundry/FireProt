@@ -5383,17 +5383,36 @@ FreeType, Poppler, librsvg/pixbuf and libsoup. No inventoried Python/Torch/ROCm
 files changed. Full capture and delta are preserved under
 outputs/experiments/openfold3-environment-audit-20261009. Original pins retained.
 
-CURRENT LIVE: startup diagnostic timeout PID 590705 in
-outputs/experiments/openfold3-startup-profile-v2-20261009. Output
-outputs/openfold3-startup-profile-v2-n1536-20261009. The new profile pins the
-audit current.json inventory without narrowing its coverage. Same qualified gate composition,
-strict FP32 N1536 R3/D200/S1 seed101 HIP7; no added epilogue. Scoped timing
-wrappers record checkpoint read/selection, construction, state loading, data
-setup/dataloader, trainer prediction and predict_step. Inclusive CPU intervals,
-no added device synchronization, no optimization or E2E result claimed.
-Scripts /tmp/fireprot-{prepare,run}-startup-profile-v2.py and
-/tmp/fireprot-startup-scope.py, also in old gate-model experiment root.
-Model must retain all eleven arrays and complete CIF. Read startup-stages.json
-only after the existing driver completes. Do not duplicate GPU jobs.
-Upstream already wraps construction with skip_random_init(), disabling its
-trunc_normal_init_; measure remaining overhead before further init changes.
+The v2 startup diagnostic (590705) completed and retains all eleven arrays and
+full CIF exactly. E2E 355.372791913 s, forward 260.541610430 s. Checkpoint read
+1.366948292 s, model construction 2.914024332 s, runner setup 4.521564986 s.
+DataLoader construction is negligible; the gap to first predict_step is
+23.42157 s, including worker startup and preparation. No speedup claim.
+Evidence: provenance/openfold3_startup_profile_n1536.json. Full audit included.
+Current environment manifest SHA:
+da808963739db3ca61d4177fd67256a5b3b742bdfaa7f835423ac2047e6147d6.
+
+New direction: single-item in-process featurization with worker-0 initialization
+and isolated Python/NumPy/Torch CPU/CUDA RNG, CPU thread and deterministic state.
+Upstream DataModule explicitly passes pl_worker_init_function; normal num_workers=0
+never invokes it. Candidate uses the iterator's actual _base_seed, worker_id=0,
+and the original callback, then restores parent state before model execution.
+CPU worker context uses one thread and default nondeterministic algorithms as
+fresh worker processes do; the model retains strict determinism and memory fill.
+No input tensors may be on GPU during this scoped data preparation.
+
+First isolated trial 600012 failed before model execution because Lightning wraps
+batch_sampler and sets loader.batch_size=None. Preserve this failure. The new
+check requires len(dataset)==1 and len(loader)==1 plus num_workers=0 instead.
+CURRENT LIVE: v2 timeout PID 601564, root
+outputs/experiments/openfold3-isolated-data-v2-20261009; output
+outputs/openfold3-isolated-data-v2-n1536-20261009. HIP7, same strict N1536 workload
+and gate/packing composition. Check existing driver, all eleven arrays/full CIF,
+restored strict settings, and isolated-data.json before any performance claim.
+Local scripts /tmp/fireprot-{prepare,run}-isolated-data-v2.py and
+/tmp/fireprot-isolated-data-scope-v2.py; remote old gate-model root.
+A paired experiment is drafted locally in /tmp/fireprot-{prepare,run}-isolated-data-pairs.py,
+but still points to the first rejected isolated root: correct it to the qualified
+v2 only if that passes, then use fresh output paths. Do not launch it before
+full-model qualification. No maintained promotion or direct-original latest
+comparison yet. No concurrent GPU jobs/heavy remote work during timing.

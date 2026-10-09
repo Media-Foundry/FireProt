@@ -748,5 +748,16 @@ The next isolated experiment emulates worker 0 initialization during single-item
 CPU preparation in the main process, restoring Python/NumPy/Torch RNG, thread
 count and determinism settings before model execution. It addresses a concrete
 semantic difference in the rejected plain zero-worker attempt. Full-model exact
-validation and matched timing are required before selection. It is not enabled
+validation now passes; matched timing is still required before selection. It is not enabled
 in maintained profiles and makes no multi-input or multi-seed claim.
+
+
+The worker-0 isolated preparation trial now passes all eleven arrays bitwise and
+complete CIF bytes. CPU regression coverage confirms parent-state restoration on
+success and dataset failure, including Lightning's wrapped batch sampler.
+A single observation is **351.541 s E2E / 256.046 s forward**, with 15.877 s inside
+the isolated CPU preparation context. No stable speedup is inferred from this
+observation. Three matched pairs are running separately with the same audited
+2026-10-09 environment in both arms.
+See [experimental implementation](../experiments/openfold3_data/README.md) and
+[qualification](../provenance/openfold3_isolated_data_n1536.json).

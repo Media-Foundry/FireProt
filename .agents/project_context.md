@@ -5404,15 +5404,27 @@ No input tensors may be on GPU during this scoped data preparation.
 First isolated trial 600012 failed before model execution because Lightning wraps
 batch_sampler and sets loader.batch_size=None. Preserve this failure. The new
 check requires len(dataset)==1 and len(loader)==1 plus num_workers=0 instead.
-CURRENT LIVE: v2 timeout PID 601564, root
-outputs/experiments/openfold3-isolated-data-v2-20261009; output
-outputs/openfold3-isolated-data-v2-n1536-20261009. HIP7, same strict N1536 workload
-and gate/packing composition. Check existing driver, all eleven arrays/full CIF,
-restored strict settings, and isolated-data.json before any performance claim.
-Local scripts /tmp/fireprot-{prepare,run}-isolated-data-v2.py and
-/tmp/fireprot-isolated-data-scope-v2.py; remote old gate-model root.
-A paired experiment is drafted locally in /tmp/fireprot-{prepare,run}-isolated-data-pairs.py,
-but still points to the first rejected isolated root: correct it to the qualified
-v2 only if that passes, then use fresh output paths. Do not launch it before
-full-model qualification. No maintained promotion or direct-original latest
-comparison yet. No concurrent GPU jobs/heavy remote work during timing.
+The v2 isolated-data model (601564) completed with all eleven arrays and full
+CIF exact. E2E 351.541369164 s, model 256.045595740 s; one CPU preparation
+15.876904323 s, base_seed302501347963651595, parent128 threads/strict restored.
+No speedup claim from this one run. Maintained defaults unchanged.
+Repository experiment: experiments/openfold3_data/{isolated_scope.py,test_scope.py}.
+Source is byte-identical to the executed runtime. CPU test passes success and
+failure restoration, including Lightning batch_size=None. Evidence in
+provenance/openfold3_isolated_data_n1536.json.
+
+Model/startup/environment/failed-trial archive completed:
+outputs/experiments/openfold3-dataworker-followup-20261009.tar.gz,
+SHA25e911b17a78d50dd891871bd9e8d3b83a3e3d080bd82e8451dc0a735ca35037,
+121156359 bytes; depends on gate-model archive. Do not recreate same archive.
+
+CURRENT LIVE: isolated-data pairs timeout PID 607660, root
+outputs/experiments/openfold3-isolated-data-pairs-20261009. HIP7 only,
+strict N1536 R3/D200/S1 seed101, baseline ten workers vs candidate isolated
+worker-0 initialization with zero subprocess workers. Shared frozen source and
+new environment inventory; only FIREPROT_ISOLATED_DATA=0/1 and profile SHA differ.
+Three AB/BA/AB pairs, all eleven arrays/full CIF required; no epilogue added.
+Local /tmp/fireprot-{prepare,run,collect}-isolated-data-pairs.py, deployed in
+old gate-model experiment root. Collector not executed. Check existing driver;
+never duplicate jobs or run heavy remote work during measured intervals.
+Latest direct original-Torch comparison and maintained promotion remain pending.

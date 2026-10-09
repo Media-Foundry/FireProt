@@ -126,5 +126,37 @@ The serial coordinator
 waits for both original-layout full-model qualifications, verifies the complete
 environment and idle HIP7/PCI93/SMI5, screens the layout, and only then runs
 packed recomputation and compute-skipping whole-model gates. It stops on a
-failed prerequisite or a layout screen with no measured improvement. No packed
-GPU result or E2E claim is available yet.
+failed prerequisite or a layout screen with no measured improvement. The synthetic GPU result is recorded below; no E2E claim is available yet.
+
+
+## Original-layout cache gate and measured bias packing screen
+
+The compute-skipping original-layout cache passes all11 arrays and full CIF
+bytes, with200 denoiser calls,25 misses/4975 hits, no fallbacks/invalidations,
+and no redundant native/consumer comparisons. Single qualification is
+323.335369 s complete invocation /235.354797 s model forward. This is not a
+paired speedup. [Cache qualification](../../provenance/openfold3_global_bias_cache_n1536.json).
+
+The packing screen subsequently passes all112 GPU checks:
+
+| Synthetic case | Original bias add median | Packed bias add median |
+| --- | ---: | ---: |
+| Random | 2.659921 ms | 0.375601 ms |
+| Masked scores | 2.645360 ms | 0.373680 ms |
+| Cancellation | 2.640801 ms | 0.375280 ms |
+| Special float bits | 2.641120 ms | 0.374960 ms |
+
+This approximately7x gain is **only the isolated in-place bias add**, with
+packing and score reset outside timing. It supports the memory-layout hypothesis
+without establishing a hardware memory/computation bound. Packed whole-model
+recomputation and compute-skipping gates are still in progress.
+[Raw screen evidence](../../provenance/openfold3_packed_bias_layout_20261010.json).
+
+A separate serial coordinator waits for both packed model gates before preparing
+three AB/BA/AB E2E pairs: qualified unroll4 versus global normalization/projection
+reuse plus packing. Both arms share one frozen worker tree and scientific
+settings; only the cache flag and profile digest differ. It checks all11 arrays,
+complete CIF bytes, actual cache/normalization/QKV counts and current sidecar
+hashes. Queue root: `outputs/experiments/openfold3-packed-bias-pairs-queue-20261010`;
+benchmark root, once prepared: `outputs/experiments/openfold3-packed-bias-pairs-20261010`.
+No new E2E result exists yet.

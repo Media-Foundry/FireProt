@@ -1,0 +1,608 @@
+{
+  "schema_version": 1,
+  "correctness_passed": true,
+  "all11_exact": true,
+  "full_cif_exact": true,
+  "scope": "Global diffusion normalization and 24 native bias projections, cache; original output layouts",
+  "workload": {
+    "schema_version": 1,
+    "run_id": "openfold3-global-bias-cache-n1536-20261010",
+    "workload": {
+      "model": "openfold3",
+      "model_name": "openbind-0",
+      "recycles": 3,
+      "diffusion_steps": 200,
+      "samples": 1,
+      "precision": "float32",
+      "deterministic": true
+    },
+    "backend": "hip_fused",
+    "seed": 101,
+    "hip_device": 7,
+    "source": {
+      "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+      "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+    },
+    "checkpoints": {
+      "model": {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+        "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+      }
+    },
+    "resources": {},
+    "input": {
+      "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+      "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+    },
+    "output_dir": "/media/IntelSSD/fireprot/outputs/openfold3-global-bias-cache-n1536-20261010"
+  },
+  "arrays": {
+    "confidence.chain_ptm.1": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.disorder": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.gpde": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.has_clash": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.iptm": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.pae": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.pde": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.plddt": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.ptm": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.sample_ranking_score": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "coordinates": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    }
+  },
+  "cache": {
+    "schema_version": 1,
+    "verify": false,
+    "scopes": [
+      {
+        "completed": true,
+        "denoiser_calls": 200,
+        "misses": 25,
+        "hits": 4975,
+        "fallbacks": 0,
+        "invalidations": 0,
+        "native_checks": 0,
+        "consumer_checks": 0,
+        "retained_bytes": 4831838208,
+        "entries": {
+          "normalization": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              128
+            ],
+            "strides": [
+              301989888,
+              301989888,
+              196608,
+              128,
+              1
+            ],
+            "bytes": 1207959552
+          },
+          "projection.0": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.1": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.2": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.3": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.4": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.5": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.6": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.7": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.8": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.9": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.10": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.11": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.12": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.13": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.14": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.15": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.16": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.17": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.18": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.19": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.20": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.21": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.22": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          },
+          "projection.23": {
+            "shape": [
+              1,
+              1,
+              1536,
+              1536,
+              16
+            ],
+            "strides": [
+              37748736,
+              37748736,
+              24576,
+              16,
+              1
+            ],
+            "bytes": 150994944
+          }
+        }
+      }
+    ],
+    "scope": "Global diffusion transformer only; original output layouts",
+    "limits": [
+      "Timing mode requires source-pinned immutable inputs and parameters.",
+      "Identity checks do not detect in-place inference tensor mutation.",
+      "Verification mode is diagnostic and cannot establish performance."
+    ]
+  },
+  "normalization": {
+    "source_sha256": "e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79",
+    "library_sha256": "a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a",
+    "counts": {
+      "accepted": 11003,
+      "fallback": 7846,
+      "contiguous_copies": 4730
+    },
+    "signatures": {
+      "((1, 1536, 1536, 128), (301989888, 196608, 128, 1))": 434,
+      "((1, 256, 1536, 128), (301989888, 196608, 128, 1))": 3225,
+      "((1, 1536, 256, 128), (50331648, 32768, 128, 1))": 2580,
+      "((1, 1536, 256, 128), (301989888, 196608, 128, 1))": 3870,
+      "((1, 256, 1536, 128), (150994944, 128, 98304, 1))": 645,
+      "((1, 1536, 1536, 128), (301989888, 128, 196608, 1))": 215,
+      "((1, 1, 1536, 1536, 128), (301989888, 301989888, 196608, 128, 1))": 4,
+      "((256, 1536, 128), (196608, 128, 1))": 30
+    },
+    "width": 32
+  },
+  "gate": {
+    "accepted": 430,
+    "fallback": 18,
+    "gate_calls": 5160,
+    "copies": 5160,
+    "copy_fallbacks": 1290,
+    "library_sha256": "b7a980bf469a0f13581985033f904541cae5783eab01d4579054588e75c3614c"
+  },
+  "qkv": {
+    "library": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll4-model-20261010/qkv.so",
+    "library_sha256": "80a619ecf7206d729b6f4a6ae95e2009f8c7cced8b0a042555e5893aedbccb3e",
+    "calls_by_batch": {
+      "128": 5064
+    },
+    "fallback_by_batch": {},
+    "retained_scores_written": false,
+    "scope": "Experimental PV-result-only fusion; existing workspace allocation/lease retained; parent QK receipt describes fallback, not fused calls"
+  },
+  "source_preparation": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-global-bias-cache-20261010/preparation.json",
+    "sha256": "29da8bcfa19d9e388f609748d0000afbf1ea98e62b6e479cf74e8b1d970586ff"
+  },
+  "npz": {
+    "path": "/media/IntelSSD/fireprot/outputs/openfold3-global-bias-cache-n1536-20261010/sample-0.npz",
+    "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+  },
+  "cif": {
+    "path": "/media/IntelSSD/fireprot/outputs/openfold3-global-bias-cache-n1536-20261010/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+    "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+  },
+  "e2e_seconds": 323.335368624,
+  "model_seconds": 235.3547973499808,
+  "limits": [
+    "Verification mode is not performance evidence.",
+    "Cache mode single qualification is not a paired speedup.",
+    "Only fixed N1536 strict FP32 workload; no maintained promotion."
+  ],
+  "decision": "Original-layout global pair normalization/projection cache passes compute-skipping full-model qualification; no paired speedup claim.",
+  "source_report": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-global-bias-cache-20261010/collected.json",
+    "sha256": "d90355716c68c57179afda8352a3d5710b0537883f69d49a5adc16d54295742d"
+  }
+}

@@ -5870,3 +5870,43 @@ GitNexusimpactunknown(noindexedcallers), textauditfoundonlyexperimenttests plus
 explicitfrozenworker injection; defaultfalsepreservescallers. No maintainedchange.
 Nextobserve725420 and732542, collectrealqualification, thenpreparematchedE2E
 forqualifiedwinner. Archivesnewunroll4/unroll8/profile/cachefamily remainpending.
+
+
+## Compute-skipping global cache accepted; layout7x; E2E successor queued (2026-10-10)
+
+Previous turn wasprogress(newpackedcandidate andverifiedglobalcache). Thisturn
+725420/730200 finished0; original-layout compute-skipping globalcache all11/fullCIF
+exact,200calls,25misses/4975hits,0recomputechecks/fallbacks/invalidations. Single
+E2E323.335368624/model235.354797350; no pairedratio. Evidence
+provenance/openfold3_global_bias_cache_n1536.json. Do notrerun.
+
+Packedqueue732542 proceeded: fullinventory+HIP7identity verified, fourcaseadd
+layoutscreen112checks pass. Native/packed medians2.659921/.375601,2.645360/.373680,
+2.640801/.375280,2.641120/.374960ms. Onlyadd timed; packingoutside, notE2E.
+Evidence provenance/openfold3_packed_bias_layout_20261010.json. Currentlystage
+model_verified child736880; observeoriginalhandle thenautomaticpackedcachemodel.
+
+NEW successor timeoutPID737448 confirmedlive in
+outputs/experiments/openfold3-packed-bias-pairs-queue-20261010/run_after_packed.py,
+waitingfor732542terminal0 +bothpackedmodelqualifications. Localcomplete scripts
+/tmp/fireprot-of3-packed-bias-pairs-20261010. Willpreparefreshpairsroot
+outputs/experiments/openfold3-packed-bias-pairs-20261010, threeAB/BA/AB, outputs
+outputs/packed-bias-pairs-n1536-{baseline,candidate}-{0,1,2}. Botharmssharecopied
+packedworker withconditionalFIREPROT_GLOBAL_BIAS_CACHE0/1; QKVunroll4always1 and
+BIAS_VERIFYalways0; pairedflag+profileSHAonlydifferences. Baseline skipscache,
+candidatecachesnormalization+24projectionsandpacksbias. Existingdataisolation
+shared; notraworiginalTorch. Collectorchecksall11/fullCIF,currentbyteNPZ,counts,
+cache/sidecarhashes,peakmemoryandchunk_tuners. No pairsresultyet.
+Respect732542AND737448beforeotherGPU/build/archive. NoindependentGPUworkqueued.
+Newfamilyarchivesstillpendinguntiltheseterminal. Goalactive,noblocker.
+
+Read-only next-candidate audit: global diffusion uses5D[1,1,16,N1536,D48]
+attention andhigh_precision=True; maintained/frozen softmax adapter eligibility
+covers4D/H4/D16or32, so global attention remainsnative. Native ._attention does
+FP32einsumQK, addsbothbiases, softmax, einsumPV. Potentialfutureexperiment:
+keepnativeQK/PV, usefourH4slices ofpublishedstrictFP32HIPsoftmax (maskshared,
+packedbiasslicecontiguous), oneoutputallocation. NeedsCABI/source/layoutaudit,
+synthetic/trained/fullmodelcorrectness andperformancegates; notimplemented orqueued.
+Source snapshot /tmp/fireprot-of3-native-attention-20261010.py; maintained
+python/fireprot/adapters/openfold3/attention.py andbackends/amd/softmax_fp32.py.
+Publishedkernel restrictsH4; do notclaimD48alreadyenabled.

@@ -893,3 +893,37 @@ starting247.681 versus229.770 ms. Reject unroll8 at module latency; no unroll8
 full-model/E2E claim. This closes the current tested loop-unroll sweep, without
 claiming that all attention optimization opportunities are exhausted.
 [Unroll8 evidence](../provenance/openfold3_qkv_unroll8_replay_20261010.json).
+
+
+## Packed bias E2E decision and independent global softmax screen
+
+The strict N1536/R3/D200/S1 seed101 experiment completed three AB/BA/AB
+pairs on HIP7 (PCI93, SMI5), with fresh processes and unflushed caches.
+All six outputs match all11 arrays bitwise and complete CIF bytes.
+
+| Pair | Qualified unroll4 | Packed global bias cache | Ratio |
+| --- | ---: | ---: | ---: |
+| AB0 | 328.562508 s | 320.447457 s | 1.0253x |
+| BA1 | 331.768884 s | 332.515964 s | 0.9978x |
+| AB2 | 329.492405 s | 314.023158 s | 1.0493x |
+
+Complete invocation medians are **329.492405 ->320.447457 s (1.0282x)**;
+model medians are 242.326938 ->228.748256 s (1.0594x). The candidate's
+p95/max regresses from331.768884 to332.515964 s. With only three samples,
+p95 here equals the maximum. **Do not promote this cache composition** under
+the predeclared all-pairs-faster gate. No observation is excluded and no cause
+is asserted for the slower second candidate. Retain the qualified unroll4
+composition. This is an incremental comparison, not a direct-native ratio.
+
+The cache-dependent global-softmax queue therefore exited before any GPU
+screen. A separate screen evaluated the grouped HIP softmax over the accepted
+unroll4 path, including the actual uncached `linear_z` bias layout. Seven
+probability checks and196 complete attention checks all match native bits.
+Packed attention improves1.381991 ->1.110792 ms, but the actual interleaved
+layout regresses3.651414 ->3.821254 ms (masked:3.653495 ->3.831414 ms).
+**Reject this implementation for the native interleaved layout.** Its Torch
+contiguous copy remains inside timing; the packed result alone is insufficient.
+No global-softmax full-model job was launched by this screen.
+
+
+See [complete experiment and receipts](../experiments/openfold3_diffusion/README.md#packed-bias-e2e-decision-and-independent-global-softmax-screen).

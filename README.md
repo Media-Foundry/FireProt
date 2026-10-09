@@ -250,6 +250,13 @@ The later template comparison reduces model forward **323.661 → 291.027 s
 qualified triangle-memory anchor. Its scope is N1536 and it remains experimental.
 See [complete evidence and reproduction scope](docs/openfold3-performance.md).
 
+A subsequent global-bias cache experiment measures329.492 ->320.447 s median
+(1.0282x), but one of three pairs regresses; it is **not promoted**. A separate
+HIP bias transpose plus grouped softmax screen reduces synthetic global attention
+from3.650 to1.470 ms with exact results. Full-model/E2E qualification of that
+candidate is pending; the attention ratio is not an E2E claim.
+See [diffusion experiment status](experiments/openfold3_diffusion/README.md#hip-packing-screen).
+
 **Do not multiply these incremental ratios into an original-Torch speedup.**
 A complete three-pair direct original-Torch comparison of the latest combination
 is not available; 1.499x above applies to its earlier measured combination.

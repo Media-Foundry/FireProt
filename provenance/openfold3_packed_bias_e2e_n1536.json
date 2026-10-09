@@ -1,0 +1,2281 @@
+{
+  "schema_version": 1,
+  "correctness_passed": true,
+  "scope": "Qualified unroll4/isolated-data composition versus rollout-local global pair normalization/projection reuse with head-contiguous projected bias. Strict FP32 N1536 R3 D200 S1 seed101, no recomputation checks or profiler in either arm; not an original-Torch comparison.",
+  "workload": {
+    "n": 1536,
+    "precision": "float32",
+    "strict": true,
+    "recycles": 3,
+    "trunk_passes": 4,
+    "diffusion_steps": 200,
+    "samples": 1,
+    "seed": 101,
+    "hip_device": 7
+  },
+  "performance": {
+    "baseline": {
+      "count": 3,
+      "min": 328.562508105,
+      "median": 329.492405333,
+      "p95": 331.768884166,
+      "max": 331.768884166,
+      "mean": 329.941265868
+    },
+    "candidate": {
+      "count": 3,
+      "min": 314.023157647,
+      "median": 320.44745684,
+      "p95": 332.515964478,
+      "max": 332.515964478,
+      "mean": 322.328859655
+    },
+    "median_speedup": 1.0282259955569446,
+    "p95_speedup": 0.9977532497930655,
+    "paired_speedups": [
+      1.0253241244134819,
+      0.9977532497930655,
+      1.049261486961383
+    ],
+    "paired_summary": {
+      "count": 3,
+      "min": 0.9977532497930655,
+      "median": 1.0253241244134819,
+      "p95": 1.049261486961383,
+      "max": 1.049261486961383,
+      "mean": 1.0241129537226434
+    },
+    "observed_trend": "mixed_or_unchanged",
+    "changes": {
+      "invocation.profile_sha256": {
+        "baseline": "5426279ba2c76c85f70a54eae8f087ea271af51b06797ef0f574bbd4affa96a5",
+        "candidate": "6488bad3440d68e02b8c9d32bc79bf6a5ae853ae227664dfef02f3912f75b1fc"
+      },
+      "launch.environment.FIREPROT_GLOBAL_BIAS_CACHE": {
+        "baseline": "0",
+        "candidate": "1"
+      }
+    }
+  },
+  "model_medians": {
+    "baseline": 242.32693819102133,
+    "candidate": 228.7482561939978
+  },
+  "model_speedup": 1.0593608109760086,
+  "runs": [
+    {
+      "arm": "baseline",
+      "pair": 0,
+      "e2e_seconds": 328.562508105,
+      "model_seconds": 241.97179215101642,
+      "request_seconds": 269.89155609800946,
+      "output_dir": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-0",
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "full_cif_bytes_equal": true,
+      "normalization": {
+        "source_sha256": "e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79",
+        "library_sha256": "a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a",
+        "counts": {
+          "accepted": 11202,
+          "fallback": 7846,
+          "contiguous_copies": 4730
+        },
+        "signatures": {
+          "((1, 1536, 1536, 128), (301989888, 196608, 128, 1))": 434,
+          "((1, 256, 1536, 128), (301989888, 196608, 128, 1))": 3225,
+          "((1, 1536, 256, 128), (50331648, 32768, 128, 1))": 2580,
+          "((1, 1536, 256, 128), (301989888, 196608, 128, 1))": 3870,
+          "((1, 256, 1536, 128), (150994944, 128, 98304, 1))": 645,
+          "((1, 1536, 1536, 128), (301989888, 128, 196608, 1))": 215,
+          "((1, 1, 1536, 1536, 128), (301989888, 301989888, 196608, 128, 1))": 203,
+          "((256, 1536, 128), (196608, 128, 1))": 30
+        },
+        "width": 32
+      },
+      "cache": null,
+      "peak_allocated_bytes": 51757716992,
+      "peak_reserved_bytes": 57139003392,
+      "chunk_tuners": {
+        "template_embedder.template_pair_stack": 1024,
+        "msa_module": 1024,
+        "pairformer_stack": 1024,
+        "diffusion_module.diffusion_conditioning": 1024,
+        "aux_heads.pairformer_embedding.pairformer_stack": 256
+      },
+      "sidecars": {
+        "normalization": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-0/normalization.json",
+          "sha256": "9c869b335d929eb1122e3a11f79feefdfcdc240c9e0186e6e87792bc74bacf1b"
+        },
+        "gate-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-0/gate-fusion.json",
+          "sha256": "af5a7410172bd79713d3b0832ee7a502e055087d69baad569771427232ab3eaa"
+        },
+        "qkv-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-0/qkv-fusion.json",
+          "sha256": "966b1cae2e97977e498eb7e5e827f3e6478bb07804f5d12258b0ecf29c12d55a"
+        },
+        "template-reuse": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-0/template-reuse.json",
+          "sha256": "0a6dfe586e5eb768caa4b0d6039d791f9d30a42dce4d629da00685bd62c9390b"
+        },
+        "triangle-key-copy": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-0/triangle-key-copy.json",
+          "sha256": "b3e304e65da317d28c1af221b24e3af6ba2a8e29ae7a44ab28befa58b8283829"
+        },
+        "isolated-data": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-0/isolated-data.json",
+          "sha256": "a28a321bc57e5c5db9c0f7549f5c263c7cbd707d62491fa18f988d854d84cb21"
+        },
+        "operator-runtime": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-0/operator-runtime.json",
+          "sha256": "36e9e9b029647e9fc45a90c8202f4640a0f7f445b2e154af7de36b29de1e56fb"
+        }
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-0/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-0/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-0/accepted.json",
+        "sha256": "98900a02929fa6a8b09c3722bdf7d1cea89f14fe69134fd7bc1a3b1f73465870"
+      }
+    },
+    {
+      "arm": "candidate",
+      "pair": 0,
+      "e2e_seconds": 320.44745684,
+      "model_seconds": 228.7482561939978,
+      "request_seconds": 260.02050625899574,
+      "output_dir": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-0",
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "full_cif_bytes_equal": true,
+      "normalization": {
+        "source_sha256": "e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79",
+        "library_sha256": "a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a",
+        "counts": {
+          "accepted": 11003,
+          "fallback": 7846,
+          "contiguous_copies": 4730
+        },
+        "signatures": {
+          "((1, 1536, 1536, 128), (301989888, 196608, 128, 1))": 434,
+          "((1, 256, 1536, 128), (301989888, 196608, 128, 1))": 3225,
+          "((1, 1536, 256, 128), (50331648, 32768, 128, 1))": 2580,
+          "((1, 1536, 256, 128), (301989888, 196608, 128, 1))": 3870,
+          "((1, 256, 1536, 128), (150994944, 128, 98304, 1))": 645,
+          "((1, 1536, 1536, 128), (301989888, 128, 196608, 1))": 215,
+          "((1, 1, 1536, 1536, 128), (301989888, 301989888, 196608, 128, 1))": 4,
+          "((256, 1536, 128), (196608, 128, 1))": 30
+        },
+        "width": 32
+      },
+      "cache": {
+        "schema_version": 1,
+        "verify": false,
+        "pack_bias": true,
+        "scopes": [
+          {
+            "completed": true,
+            "denoiser_calls": 200,
+            "misses": 25,
+            "hits": 4975,
+            "fallbacks": 0,
+            "invalidations": 0,
+            "native_checks": 0,
+            "consumer_checks": 0,
+            "retained_bytes": 4831838208,
+            "entries": {
+              "normalization": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  128
+                ],
+                "strides": [
+                  301989888,
+                  301989888,
+                  196608,
+                  128,
+                  1
+                ],
+                "bytes": 1207959552
+              },
+              "projection.0": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.1": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.2": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.3": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.4": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.5": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.6": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.7": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.8": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.9": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.10": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.11": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.12": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.13": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.14": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.15": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.16": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.17": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.18": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.19": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.20": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.21": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.22": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.23": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              }
+            }
+          }
+        ],
+        "scope": "Global diffusion transformer only; head-contiguous projected bias",
+        "limits": [
+          "Timing mode requires source-pinned immutable inputs and parameters.",
+          "Identity checks do not detect in-place inference tensor mutation.",
+          "Verification mode is diagnostic and cannot establish performance."
+        ]
+      },
+      "peak_allocated_bytes": 51757716992,
+      "peak_reserved_bytes": 57139003392,
+      "chunk_tuners": {
+        "template_embedder.template_pair_stack": 1024,
+        "msa_module": 1024,
+        "pairformer_stack": 1024,
+        "diffusion_module.diffusion_conditioning": 1024,
+        "aux_heads.pairformer_embedding.pairformer_stack": 256
+      },
+      "sidecars": {
+        "normalization": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-0/normalization.json",
+          "sha256": "ffd05c6adc4f0ca2ee8b76f38bd6ade667a2882be7ee3a5e5aed070412055774"
+        },
+        "gate-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-0/gate-fusion.json",
+          "sha256": "af5a7410172bd79713d3b0832ee7a502e055087d69baad569771427232ab3eaa"
+        },
+        "qkv-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-0/qkv-fusion.json",
+          "sha256": "966b1cae2e97977e498eb7e5e827f3e6478bb07804f5d12258b0ecf29c12d55a"
+        },
+        "template-reuse": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-0/template-reuse.json",
+          "sha256": "0a6dfe586e5eb768caa4b0d6039d791f9d30a42dce4d629da00685bd62c9390b"
+        },
+        "triangle-key-copy": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-0/triangle-key-copy.json",
+          "sha256": "b3e304e65da317d28c1af221b24e3af6ba2a8e29ae7a44ab28befa58b8283829"
+        },
+        "isolated-data": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-0/isolated-data.json",
+          "sha256": "c3b19bf20a41b4829ecdc2e13e1042df6bcc3dc636ddef0da187c8b729564c63"
+        },
+        "operator-runtime": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-0/operator-runtime.json",
+          "sha256": "36e9e9b029647e9fc45a90c8202f4640a0f7f445b2e154af7de36b29de1e56fb"
+        },
+        "global-bias-cache": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-0/global-bias-cache.json",
+          "sha256": "b8e3b2d79b467c2fefac4985ce3a58acee7f8519c6f45e0ff782996668a33917"
+        }
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-0/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-0/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-0/accepted.json",
+        "sha256": "22a29bb592938567d9b8c8ae1870e75ffa017969b2f12ac764b2c51a5e2715a5"
+      }
+    },
+    {
+      "arm": "candidate",
+      "pair": 1,
+      "e2e_seconds": 332.515964478,
+      "model_seconds": 243.67959910002537,
+      "request_seconds": 272.43303726700833,
+      "output_dir": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-1",
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "full_cif_bytes_equal": true,
+      "normalization": {
+        "source_sha256": "e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79",
+        "library_sha256": "a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a",
+        "counts": {
+          "accepted": 11003,
+          "fallback": 7846,
+          "contiguous_copies": 4730
+        },
+        "signatures": {
+          "((1, 1536, 1536, 128), (301989888, 196608, 128, 1))": 434,
+          "((1, 256, 1536, 128), (301989888, 196608, 128, 1))": 3225,
+          "((1, 1536, 256, 128), (50331648, 32768, 128, 1))": 2580,
+          "((1, 1536, 256, 128), (301989888, 196608, 128, 1))": 3870,
+          "((1, 256, 1536, 128), (150994944, 128, 98304, 1))": 645,
+          "((1, 1536, 1536, 128), (301989888, 128, 196608, 1))": 215,
+          "((1, 1, 1536, 1536, 128), (301989888, 301989888, 196608, 128, 1))": 4,
+          "((256, 1536, 128), (196608, 128, 1))": 30
+        },
+        "width": 32
+      },
+      "cache": {
+        "schema_version": 1,
+        "verify": false,
+        "pack_bias": true,
+        "scopes": [
+          {
+            "completed": true,
+            "denoiser_calls": 200,
+            "misses": 25,
+            "hits": 4975,
+            "fallbacks": 0,
+            "invalidations": 0,
+            "native_checks": 0,
+            "consumer_checks": 0,
+            "retained_bytes": 4831838208,
+            "entries": {
+              "normalization": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  128
+                ],
+                "strides": [
+                  301989888,
+                  301989888,
+                  196608,
+                  128,
+                  1
+                ],
+                "bytes": 1207959552
+              },
+              "projection.0": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.1": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.2": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.3": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.4": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.5": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.6": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.7": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.8": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.9": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.10": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.11": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.12": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.13": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.14": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.15": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.16": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.17": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.18": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.19": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.20": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.21": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.22": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.23": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              }
+            }
+          }
+        ],
+        "scope": "Global diffusion transformer only; head-contiguous projected bias",
+        "limits": [
+          "Timing mode requires source-pinned immutable inputs and parameters.",
+          "Identity checks do not detect in-place inference tensor mutation.",
+          "Verification mode is diagnostic and cannot establish performance."
+        ]
+      },
+      "peak_allocated_bytes": 51757716992,
+      "peak_reserved_bytes": 57139003392,
+      "chunk_tuners": {
+        "template_embedder.template_pair_stack": 1024,
+        "msa_module": 1024,
+        "pairformer_stack": 1024,
+        "diffusion_module.diffusion_conditioning": 1024,
+        "aux_heads.pairformer_embedding.pairformer_stack": 256
+      },
+      "sidecars": {
+        "normalization": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-1/normalization.json",
+          "sha256": "ffd05c6adc4f0ca2ee8b76f38bd6ade667a2882be7ee3a5e5aed070412055774"
+        },
+        "gate-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-1/gate-fusion.json",
+          "sha256": "af5a7410172bd79713d3b0832ee7a502e055087d69baad569771427232ab3eaa"
+        },
+        "qkv-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-1/qkv-fusion.json",
+          "sha256": "966b1cae2e97977e498eb7e5e827f3e6478bb07804f5d12258b0ecf29c12d55a"
+        },
+        "template-reuse": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-1/template-reuse.json",
+          "sha256": "0a6dfe586e5eb768caa4b0d6039d791f9d30a42dce4d629da00685bd62c9390b"
+        },
+        "triangle-key-copy": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-1/triangle-key-copy.json",
+          "sha256": "b3e304e65da317d28c1af221b24e3af6ba2a8e29ae7a44ab28befa58b8283829"
+        },
+        "isolated-data": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-1/isolated-data.json",
+          "sha256": "d3a5494f3520259bee6c611ba46ff25fd1315c96097f160ca7e2a6079e8b27e1"
+        },
+        "operator-runtime": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-1/operator-runtime.json",
+          "sha256": "36e9e9b029647e9fc45a90c8202f4640a0f7f445b2e154af7de36b29de1e56fb"
+        },
+        "global-bias-cache": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-1/global-bias-cache.json",
+          "sha256": "b8e3b2d79b467c2fefac4985ce3a58acee7f8519c6f45e0ff782996668a33917"
+        }
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-1/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-1/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-1/accepted.json",
+        "sha256": "14c4724b4b07b9c72d5680e883c15d682707c3685f5c67e981cb21242ba4f8fd"
+      }
+    },
+    {
+      "arm": "baseline",
+      "pair": 1,
+      "e2e_seconds": 331.768884166,
+      "model_seconds": 242.77519492898136,
+      "request_seconds": 272.24684381400584,
+      "output_dir": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-1",
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "full_cif_bytes_equal": true,
+      "normalization": {
+        "source_sha256": "e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79",
+        "library_sha256": "a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a",
+        "counts": {
+          "accepted": 11202,
+          "fallback": 7846,
+          "contiguous_copies": 4730
+        },
+        "signatures": {
+          "((1, 1536, 1536, 128), (301989888, 196608, 128, 1))": 434,
+          "((1, 256, 1536, 128), (301989888, 196608, 128, 1))": 3225,
+          "((1, 1536, 256, 128), (50331648, 32768, 128, 1))": 2580,
+          "((1, 1536, 256, 128), (301989888, 196608, 128, 1))": 3870,
+          "((1, 256, 1536, 128), (150994944, 128, 98304, 1))": 645,
+          "((1, 1536, 1536, 128), (301989888, 128, 196608, 1))": 215,
+          "((1, 1, 1536, 1536, 128), (301989888, 301989888, 196608, 128, 1))": 203,
+          "((256, 1536, 128), (196608, 128, 1))": 30
+        },
+        "width": 32
+      },
+      "cache": null,
+      "peak_allocated_bytes": 51757716992,
+      "peak_reserved_bytes": 57139003392,
+      "chunk_tuners": {
+        "template_embedder.template_pair_stack": 1024,
+        "msa_module": 1024,
+        "pairformer_stack": 1024,
+        "diffusion_module.diffusion_conditioning": 1024,
+        "aux_heads.pairformer_embedding.pairformer_stack": 256
+      },
+      "sidecars": {
+        "normalization": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-1/normalization.json",
+          "sha256": "9c869b335d929eb1122e3a11f79feefdfcdc240c9e0186e6e87792bc74bacf1b"
+        },
+        "gate-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-1/gate-fusion.json",
+          "sha256": "af5a7410172bd79713d3b0832ee7a502e055087d69baad569771427232ab3eaa"
+        },
+        "qkv-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-1/qkv-fusion.json",
+          "sha256": "966b1cae2e97977e498eb7e5e827f3e6478bb07804f5d12258b0ecf29c12d55a"
+        },
+        "template-reuse": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-1/template-reuse.json",
+          "sha256": "0a6dfe586e5eb768caa4b0d6039d791f9d30a42dce4d629da00685bd62c9390b"
+        },
+        "triangle-key-copy": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-1/triangle-key-copy.json",
+          "sha256": "b3e304e65da317d28c1af221b24e3af6ba2a8e29ae7a44ab28befa58b8283829"
+        },
+        "isolated-data": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-1/isolated-data.json",
+          "sha256": "7e902578fafcc2eccb563cf5403094bde2602f18bd97c0fecfbd5b53908cc782"
+        },
+        "operator-runtime": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-1/operator-runtime.json",
+          "sha256": "36e9e9b029647e9fc45a90c8202f4640a0f7f445b2e154af7de36b29de1e56fb"
+        }
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-1/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-1/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-1/accepted.json",
+        "sha256": "c4c2914f9dc03eee60d95b6175d6bec45124b605f5ae07523ea09a6ca00e6015"
+      }
+    },
+    {
+      "arm": "baseline",
+      "pair": 2,
+      "e2e_seconds": 329.492405333,
+      "model_seconds": 242.32693819102133,
+      "request_seconds": 270.4862918499857,
+      "output_dir": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-2",
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "full_cif_bytes_equal": true,
+      "normalization": {
+        "source_sha256": "e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79",
+        "library_sha256": "a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a",
+        "counts": {
+          "accepted": 11202,
+          "fallback": 7846,
+          "contiguous_copies": 4730
+        },
+        "signatures": {
+          "((1, 1536, 1536, 128), (301989888, 196608, 128, 1))": 434,
+          "((1, 256, 1536, 128), (301989888, 196608, 128, 1))": 3225,
+          "((1, 1536, 256, 128), (50331648, 32768, 128, 1))": 2580,
+          "((1, 1536, 256, 128), (301989888, 196608, 128, 1))": 3870,
+          "((1, 256, 1536, 128), (150994944, 128, 98304, 1))": 645,
+          "((1, 1536, 1536, 128), (301989888, 128, 196608, 1))": 215,
+          "((1, 1, 1536, 1536, 128), (301989888, 301989888, 196608, 128, 1))": 203,
+          "((256, 1536, 128), (196608, 128, 1))": 30
+        },
+        "width": 32
+      },
+      "cache": null,
+      "peak_allocated_bytes": 51757716992,
+      "peak_reserved_bytes": 57139003392,
+      "chunk_tuners": {
+        "template_embedder.template_pair_stack": 1024,
+        "msa_module": 1024,
+        "pairformer_stack": 1024,
+        "diffusion_module.diffusion_conditioning": 1024,
+        "aux_heads.pairformer_embedding.pairformer_stack": 256
+      },
+      "sidecars": {
+        "normalization": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-2/normalization.json",
+          "sha256": "9c869b335d929eb1122e3a11f79feefdfcdc240c9e0186e6e87792bc74bacf1b"
+        },
+        "gate-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-2/gate-fusion.json",
+          "sha256": "af5a7410172bd79713d3b0832ee7a502e055087d69baad569771427232ab3eaa"
+        },
+        "qkv-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-2/qkv-fusion.json",
+          "sha256": "966b1cae2e97977e498eb7e5e827f3e6478bb07804f5d12258b0ecf29c12d55a"
+        },
+        "template-reuse": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-2/template-reuse.json",
+          "sha256": "0a6dfe586e5eb768caa4b0d6039d791f9d30a42dce4d629da00685bd62c9390b"
+        },
+        "triangle-key-copy": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-2/triangle-key-copy.json",
+          "sha256": "b3e304e65da317d28c1af221b24e3af6ba2a8e29ae7a44ab28befa58b8283829"
+        },
+        "isolated-data": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-2/isolated-data.json",
+          "sha256": "a12ab4aa432b39f75a4ded0d091f28f99c59be266d1c4bb4fea8da37fb7f3ee5"
+        },
+        "operator-runtime": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-2/operator-runtime.json",
+          "sha256": "36e9e9b029647e9fc45a90c8202f4640a0f7f445b2e154af7de36b29de1e56fb"
+        }
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-2/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-2/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-baseline-2/accepted.json",
+        "sha256": "74400572b443e79319f1d778d8696f06f1ab0cc7cc639cb205e77bf0bacccec3"
+      }
+    },
+    {
+      "arm": "candidate",
+      "pair": 2,
+      "e2e_seconds": 314.023157647,
+      "model_seconds": 226.63625299700652,
+      "request_seconds": 255.28815654400387,
+      "output_dir": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-2",
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "full_cif_bytes_equal": true,
+      "normalization": {
+        "source_sha256": "e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79",
+        "library_sha256": "a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a",
+        "counts": {
+          "accepted": 11003,
+          "fallback": 7846,
+          "contiguous_copies": 4730
+        },
+        "signatures": {
+          "((1, 1536, 1536, 128), (301989888, 196608, 128, 1))": 434,
+          "((1, 256, 1536, 128), (301989888, 196608, 128, 1))": 3225,
+          "((1, 1536, 256, 128), (50331648, 32768, 128, 1))": 2580,
+          "((1, 1536, 256, 128), (301989888, 196608, 128, 1))": 3870,
+          "((1, 256, 1536, 128), (150994944, 128, 98304, 1))": 645,
+          "((1, 1536, 1536, 128), (301989888, 128, 196608, 1))": 215,
+          "((1, 1, 1536, 1536, 128), (301989888, 301989888, 196608, 128, 1))": 4,
+          "((256, 1536, 128), (196608, 128, 1))": 30
+        },
+        "width": 32
+      },
+      "cache": {
+        "schema_version": 1,
+        "verify": false,
+        "pack_bias": true,
+        "scopes": [
+          {
+            "completed": true,
+            "denoiser_calls": 200,
+            "misses": 25,
+            "hits": 4975,
+            "fallbacks": 0,
+            "invalidations": 0,
+            "native_checks": 0,
+            "consumer_checks": 0,
+            "retained_bytes": 4831838208,
+            "entries": {
+              "normalization": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  128
+                ],
+                "strides": [
+                  301989888,
+                  301989888,
+                  196608,
+                  128,
+                  1
+                ],
+                "bytes": 1207959552
+              },
+              "projection.0": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.1": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.2": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.3": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.4": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.5": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.6": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.7": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.8": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.9": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.10": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.11": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.12": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.13": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.14": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.15": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.16": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.17": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.18": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.19": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.20": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.21": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.22": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              },
+              "projection.23": {
+                "shape": [
+                  1,
+                  1,
+                  1536,
+                  1536,
+                  16
+                ],
+                "strides": [
+                  37748736,
+                  37748736,
+                  1536,
+                  1,
+                  2359296
+                ],
+                "bytes": 150994944
+              }
+            }
+          }
+        ],
+        "scope": "Global diffusion transformer only; head-contiguous projected bias",
+        "limits": [
+          "Timing mode requires source-pinned immutable inputs and parameters.",
+          "Identity checks do not detect in-place inference tensor mutation.",
+          "Verification mode is diagnostic and cannot establish performance."
+        ]
+      },
+      "peak_allocated_bytes": 51757716992,
+      "peak_reserved_bytes": 57139003392,
+      "chunk_tuners": {
+        "template_embedder.template_pair_stack": 1024,
+        "msa_module": 1024,
+        "pairformer_stack": 1024,
+        "diffusion_module.diffusion_conditioning": 1024,
+        "aux_heads.pairformer_embedding.pairformer_stack": 256
+      },
+      "sidecars": {
+        "normalization": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-2/normalization.json",
+          "sha256": "ffd05c6adc4f0ca2ee8b76f38bd6ade667a2882be7ee3a5e5aed070412055774"
+        },
+        "gate-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-2/gate-fusion.json",
+          "sha256": "af5a7410172bd79713d3b0832ee7a502e055087d69baad569771427232ab3eaa"
+        },
+        "qkv-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-2/qkv-fusion.json",
+          "sha256": "966b1cae2e97977e498eb7e5e827f3e6478bb07804f5d12258b0ecf29c12d55a"
+        },
+        "template-reuse": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-2/template-reuse.json",
+          "sha256": "0a6dfe586e5eb768caa4b0d6039d791f9d30a42dce4d629da00685bd62c9390b"
+        },
+        "triangle-key-copy": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-2/triangle-key-copy.json",
+          "sha256": "b3e304e65da317d28c1af221b24e3af6ba2a8e29ae7a44ab28befa58b8283829"
+        },
+        "isolated-data": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-2/isolated-data.json",
+          "sha256": "58d40b230f9dc40d8e735f4bf2a61a4c55507f3bf3bd07059ea7932218973130"
+        },
+        "operator-runtime": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-2/operator-runtime.json",
+          "sha256": "36e9e9b029647e9fc45a90c8202f4640a0f7f445b2e154af7de36b29de1e56fb"
+        },
+        "global-bias-cache": {
+          "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-2/global-bias-cache.json",
+          "sha256": "b8e3b2d79b467c2fefac4985ce3a58acee7f8519c6f45e0ff782996668a33917"
+        }
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-2/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-2/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/packed-bias-pairs-n1536-candidate-2/accepted.json",
+        "sha256": "c981e595c512ef4894d589577571802528cbed0c7873f59953e50487aa6b9073"
+      }
+    }
+  ],
+  "benchmark": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-packed-bias-pairs-20261010/paired/benchmark.json",
+    "sha256": "b9de875517590832da9602e556636b30118028bf345cd3b96e484ef01ed2e18e"
+  },
+  "comparison": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-packed-bias-pairs-20261010/paired/comparison.json",
+    "sha256": "59bb8479ae7f776883b00e4054599f40f6a40d4abf79c8b2fb59f5f36f8cf3d1"
+  },
+  "preparation": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-packed-bias-pairs-20261010/preparation.json",
+    "sha256": "597c10613ae2c78d4690b47b735284e43990720471ed264ac78e9453c33a99f6"
+  },
+  "collector": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-packed-bias-pairs-queue-20261010/collect_pairs.py",
+    "sha256": "d70312edd95cc0114f011b3e2c81de2f2cc559579dcdf654dd0b5751f0cf4cd5"
+  },
+  "limits": [
+    "Fresh processes and unflushed caches, three AB/BA/AB pairs.",
+    "No observations discarded; additional current-array and complete-CIF checks after Rust gates.",
+    "No maintained-profile promotion or direct-original-Torch claim."
+  ],
+  "raw_receipt_sha256": "2a397b3ed5ff5b98d35a26f63c6b7731f450daaddf0571988951bd08bbdcf097",
+  "decision": "Do not promote: median improves but one pair and p95 regress; preserve every observation.",
+  "cache_state": "Fresh processes, unflushed filesystem and kernel caches; strict deterministic memory filling."
+}

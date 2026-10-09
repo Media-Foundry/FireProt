@@ -5980,3 +5980,33 @@ Biaslayout qualification notes: originalcacheprojection0 strides
 packingreallychangeslayout. Isolatedadd~7x doesnotpredictwholemodelgain. Single
 originalcache323.335vspacked321.920 notmatched; currentfirstcombinedpair~2.53%.
 No cause claimed for gap between isolatedkernel andoverallgains.
+
+
+## Diffusion cache decision and HIP packing follow-up (2026-10-10)
+
+Packed pairs737448 complete: all6 all11/fullCIFexact; medians329.492405333 ->
+320.447456840 (1.02822599556x), but secondpair331.768884166 ->332.515964478
+regresses. Not promoted; stable experimental composition remains unroll4.
+Dependent softmax750495 exited before screen due all-pairs-faster prerequisite.
+Archive770500 complete:33roots/1334486133bytes, SHA84f57c3b43bf2675029e2f0f0ad127173cb9aae145282af611a11f08254a79e8.
+Independent773583 screen all7 probability/196attentionchecks exact, but actual
+interleaved bias3.651414 ->3.821254ms slower. No model launched. Packed1.381991
+->1.110792ms faster; do not extrapolate. Remote rootglobal-softmax-independent.
+New HIPpack screen rootoutputs/experiments/openfold3-hip-bias-pack-20261010:
+64/128-row uint32transpose, exact actualbias strides(1,24576,16), sharedmemory
+swizzle; Rustbuild and fullattention+arbitrarybitgates. Pending at this entry.
+HIP7only; endpoint.9 verifiedsameDiamondHill bootafbe7b4e-c398-45b8-86ad-45cded194221.
+Native router remains local-only; no new direct-originalTorch comparison.
+
+HIPpack synthetic screen completed:64-row actual3.650305 ->1.469834ms,
+masked3.643425 ->1.467114ms;128-row1.471994/1.472234ms. Bothdrivergatespass.
+64-row rawscreen+arbitrarybitreceipt pulled;128packingreceipt transferinterrupted.
+Library ed9a81589fb906cba2f572d13ae5895e04b203a13fe347fb70f4f95547ff8efd.
+Model rootopenfold3-hip-bias-pack-model-20261010 started child778339 under
+followuprootopenfold3-hip-bias-pack-followup-20261010, logs in screenroot.
+Only HIP7; expected4800hipcopies/19200softmaxgroups/0Torchcopies, all11/fullCIF.
+Network observation timedout19:14UTC; wait120theninspectexistinghandle.
+Local pairqueue prepared /tmp/fireprot-of3-hip-bias-pack-pairs-20261010,
+NOT deployed yet. It requires successfulmodel before AB/BA/AB withsingle shared
+workertree; togglesFIREPROT_GLOBAL_SOFTMAX only. Needreview/deploythenmonitor.
+CPU hostguards+parent+router10pass. No fullmodel/E2E result yet at this entry.

@@ -26,7 +26,8 @@ def run(destination):
     dispatch = GlobalSoftmaxDispatcher(lambda native, *a, **k: native(*a, **k), kernel)
     records = []
     with torch.inference_mode():
-        for case in ("packed", "masked", "strided_bias", "uniform", "all_masked"):
+        for case in ("packed", "masked", "strided_bias", "uniform", "all_masked",
+                     "interleaved_bias", "masked_interleaved"):
             q, k, v = [torch.randn(1, 1, 1536, 16, 48, device="cuda").transpose(-3, -2)
                        for _ in range(3)]
             q = q / (48 ** .5)
@@ -41,6 +42,11 @@ def run(destination):
                 bias.zero_()
             elif case == "all_masked":
                 mask.fill_(-float("inf"))
+            elif case in ("interleaved_bias", "masked_interleaved"):
+                # Actual uncached linear_z output is contiguous [..., N, N, H].
+                bias = torch.randn(1, 1, 1536, 1536, 16, device="cuda").permute(0, 1, 4, 2, 3)
+                if case == "masked_interleaved":
+                    mask[..., ::3] = -1e9
             biases = [mask, bias]
             scores = torch.einsum("...qc, ...kc->...qk", q, k)
             expected_probabilities = scores.clone()
@@ -76,7 +82,7 @@ def run(destination):
         records=records, dispatch=dispatch.manifest(), torch=torch.__version__, hip=torch.version.hip,
         source_pins=[dict(path=str(p), sha256=hashlib.sha256(p.read_bytes()).hexdigest())
                      for p in (source, Path(__file__), Path(__file__).with_name("global_softmax.py"))],
-        scope="Five synthetic probability checks and140 complete native-D48 attention checks",
+        scope="Seven synthetic probability checks and196 complete native-D48 attention checks",
         limits=["Synthetic only: no trained-module, whole-model or E2E qualification.",
                 "Two warmups and twelve alternating samples per arm/case; checks affect cache state.",
                 "All-masked case compares NaN bits, not finite-coordinate model behavior."])

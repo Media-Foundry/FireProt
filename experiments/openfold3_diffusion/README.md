@@ -159,7 +159,7 @@ settings; only the cache flag and profile digest differ. It checks all11 arrays,
 complete CIF bytes, actual cache/normalization/QKV counts and current sidecar
 hashes. Queue root: `outputs/experiments/openfold3-packed-bias-pairs-queue-20261010`;
 benchmark root, once prepared: `outputs/experiments/openfold3-packed-bias-pairs-20261010`.
-No new E2E result exists yet.
+The completed paired result and promotion decision are recorded below.
 
 
 ## Packed model gates and next HIP softmax experiment
@@ -170,7 +170,7 @@ The compute-skipping run records25 misses/4975 hits and no redundant comparisons
 with all11 arrays and complete CIF bytes exact. Single complete invocation is
 321.920080 s, model234.036924 s. These are qualifications, not matched ratios;
 the approximately7x isolated-add result must not be presented as whole-model
-speedup. Three AB/BA/AB pairs are now running.
+speedup. Three AB/BA/AB pairs subsequently completed; see the decision below.
 [Packed verification](../../provenance/openfold3_packed_bias_verified_n1536.json),
 [packed compute-skipping gate](../../provenance/openfold3_packed_bias_cache_n1536.json).
 
@@ -192,8 +192,8 @@ validation remain in the existing attention scope and Rust artifact loader.
 This adapted arithmetic retains Apache-2.0 attribution in its file and
 [THIRD_PARTY.md](../../THIRD_PARTY.md).
 
-`benchmark_global_softmax.py OUTPUT` will compare five synthetic probability
-arrays and140 complete D48 attention results, including strided bias, masking,
+`benchmark_global_softmax.py OUTPUT` compares seven synthetic probability
+arrays and196 complete D48 attention results, including strided bias, masking,
 uniform scores and an all-masked NaN case. Two warmups/twelve alternating
 samples per arm/case retain all observations. Only a correct screen with at
 least1% improvement in both packed and partially masked cases advances to a
@@ -201,11 +201,78 @@ full N1536 model gate. Expected model counts are4800 attention/probability calls
 19200 grouped launches, no bias copies or score-layout fallbacks, unchanged
 cache/norm/QKV behavior, all11 arrays and full CIF bytes exact.
 
-Two CPU fallback-contract tests pass. **No global-softmax GPU or E2E result is
-available yet.** The serial coordinator is
+Two CPU fallback-contract tests pass. The first dependent screen did not run after its E2E prerequisite failed.
+An independent screen subsequently completed, as recorded below. The serial coordinator is
 `outputs/experiments/openfold3-global-softmax-screen-20261010/run_after_pairs.py`.
 It first waits for the packed-bias E2E collector, requires exact outputs and
 improvement in every pair, then validates the complete environment, idle physical
 HIP7/PCI93/SMI5 and source pins before screening. A passed screen precedes
 `outputs/experiments/openfold3-global-softmax-model-20261010`; no new build or
 GPU task overlaps the current E2E measurements.
+
+
+## Packed bias E2E decision and independent global softmax screen
+
+The strict N1536/R3/D200/S1 seed101 experiment completed three AB/BA/AB
+pairs on HIP7 (PCI93, SMI5), with fresh processes and unflushed caches.
+All six outputs match all11 arrays bitwise and complete CIF bytes.
+
+| Pair | Qualified unroll4 | Packed global bias cache | Ratio |
+| --- | ---: | ---: | ---: |
+| AB0 | 328.562508 s | 320.447457 s | 1.0253x |
+| BA1 | 331.768884 s | 332.515964 s | 0.9978x |
+| AB2 | 329.492405 s | 314.023158 s | 1.0493x |
+
+Complete invocation medians are **329.492405 ->320.447457 s (1.0282x)**;
+model medians are 242.326938 ->228.748256 s (1.0594x). The candidate's
+p95/max regresses from331.768884 to332.515964 s. With only three samples,
+p95 here equals the maximum. **Do not promote this cache composition** under
+the predeclared all-pairs-faster gate. No observation is excluded and no cause
+is asserted for the slower second candidate. Retain the qualified unroll4
+composition. This is an incremental comparison, not a direct-native ratio.
+
+The cache-dependent global-softmax queue therefore exited before any GPU
+screen. A separate screen evaluated the grouped HIP softmax over the accepted
+unroll4 path, including the actual uncached `linear_z` bias layout. Seven
+probability checks and196 complete attention checks all match native bits.
+Packed attention improves1.381991 ->1.110792 ms, but the actual interleaved
+layout regresses3.651414 ->3.821254 ms (masked:3.653495 ->3.831414 ms).
+**Reject this implementation for the native interleaved layout.** Its Torch
+contiguous copy remains inside timing; the packed result alone is insufficient.
+No global-softmax full-model job was launched by this screen.
+
+The next experiment adds an explicit HIP bit transpose (`pack_bias.cpp`),
+with64/128-row tiles and swizzled shared memory. The subclass
+`packed_global_softmax.py` accepts only the exact N1536/H16 interleaved FP32
+layout, preserves native QK/PV and delegates other layouts to the qualified
+parent. Library hashes, same-device guards and graph exclusion remain enforced.
+The screen includes allocation and packing in full-attention timing and checks
+arbitrary bits, including NaN payloads. It does not establish E2E speedup.
+
+The completed diffusion experiment family is archived remotely as
+`outputs/experiments/openfold3-diffusion-family-20261010.tar.gz`:
+1,334,486,133 bytes,33 roots, SHA256
+`84f57c3b43bf2675029e2f0f0ad127173cb9aae145282af611a11f08254a79e8`.
+It precedes the independent softmax screen, which is outside that archive.
+Weights and external data remain separate dependencies.
+
+Evidence: [paired E2E](../../provenance/openfold3_packed_bias_e2e_n1536.json),
+[softmax screen](../../provenance/openfold3_global_softmax_screen_20261010.json),
+[archive](../../provenance/openfold3_diffusion_family_archive_20261010.json).
+
+
+### HIP packing screen
+
+The64-row HIP transpose changes complete attention medians for the actual
+interleaved bias from **3.650305 to1.469834 ms (2.4835x)**, including the
+fresh output allocation and packing. The masked case is3.643425 to1.467114 ms.
+All seven probability cases,196 complete attention results and the separate
+arbitrary-bit transpose check pass exactly. The new kernel library SHA256 is
+`ed9a81589fb906cba2f572d13ae5895e04b203a13fe347fb70f4f95547ff8efd`.
+The64-row candidate advances to strict full-model qualification over unroll4,
+without global bias caching. This is a synthetic attention result, not E2E.
+[Screen receipt](../../provenance/openfold3_hip_bias_pack_screen_20261010.json).
+
+Three host guard tests reject tampered binaries, CPU operands and unsupported
+tiles before native launch. Together with the existing softmax and direct-native
+router tests, ten CPU tests pass. GPU qualification is separate from these tests.

@@ -5700,3 +5700,46 @@ Next queues653434(unroll4),657408(QK32 control),669126(family archive) remain
 active; unroll4 should advance from its completed paired prerequisite. Inspect
 current status and existing handles. Do not rerun paired collector/archive or
 start overlapping GPU/heavy remote work. Wait for669126 before next model run.
+
+## Unroll4 wins replay; QK32 rejected; next model/E2E active (2026-10-10)
+
+Prior queued653434 and657408 both finished0. Unroll4 synthetic8x2 pass and84
+trained calls exact: end baseline267.022659302/unroll4 240.266105652/index32
+258.412902832 ms; start256.957168579/230.792106628/248.350906372.
+Four-arm replay144 calls exact: end baseline266.899047852,qk32 271.389434814,
+index32 258.322479248,unroll4 239.579216003; start256.865890503,261.594680786,
+248.300537109,232.345024109. RejectQK32 for latency. Unroll4~1.11x module
+gain repeated, advances to fullmodel. Evidence under provenance, raw local
+/tmp/fireprot-qkv-results-20261010/{unroll4,qk32}-{screen,replay-report}.json.
+
+Archive queue669126 finished0. Archive
+outputs/experiments/openfold3-qkv-family-20261010.tar.gz
+SHA eb995051a45c7b46324cb434948b2aaa7bb3f7b7d559b29624bb48b8026344ba
+size614267969 bytes; includes8 experiment roots and7 outputs, plus dependency
+archive pins. Receipt provenance/openfold3_qkv_family_archive_20261010.json.
+Do not overwrite or rerun. Original PV/fusion/index32/replay/model/pairs and
+unroll4/QK32 evidence now archived.
+
+CURRENT coordinator timeoutPID685102 in
+outputs/experiments/openfold3-qkv-unroll4-followup-20261010/driver.py; model child
+685112. Model root openfold3-qkv-unroll4-model-20261010 and output
+outputs/openfold3-qkv-unroll4-n1536-20261010. Reuses existing qkv_scope with
+new unroll4 library pin, selected after four-arm winner/exactness checks. Root
+prepared once, archive completion/GPUidle verified. Coordinator runs model,
+collector, prepares3AB/BA/AB pairs in openfold3-qkv-unroll4-pairs-20261010,
+executes/collects them only after all11/fullCIF/count gates. Scripts local
+/tmp/fireprot-of3-qkv-unroll4-followup-20261010 and same remote control root.
+No new model/E2E result yet; inspect existing handles instead of relaunch.
+
+NEXT queue timeoutPID688389 in outputs/experiments/openfold3-qkv-unroll8-20261010.
+Waits on685102 final driver-status0 and all6 collected outputs, then environment/
+GPUidle checks, Rust build without visibleGPU, synthetic8x2 gate and three-arm
+trained replay (baseline,unroll8,unroll4). Local sources
+/tmp/fireprot-of3-qkv-unroll8-20261010. Source SHA
+c065c4db5275e2bccae133eebfac8d8e6ecd56438b5d8d27b412f4eadde64f4d.
+Local-only resource compile normal58VGPR/capture77,16KiB/zero scratch; no GPU
+claim. Patch and provenance in repo. Static archive
+outputs/experiments/fireprot-qkv-unroll8-local-20261010.tar.gz SHA
+fa4d37fae63fe5a31a350de0d0fe7b4adb7b695c92bab43db2f8974ece624110,
+36697bytes, uploaded/hash verified. Respect both active queues before GPU/build/
+heavy archival. Old queues648410/649275/653434/657408/669126 all terminal.

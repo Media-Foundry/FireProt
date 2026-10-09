@@ -1,0 +1,11 @@
+--- a/index32.cpp
++++ b/unroll8.cpp
+@@ -140,7 +140,7 @@
+             __syncthreads();
+             if (wave < 2) {
+                 const int feature_base = wave * 16;
+-                #pragma unroll 1
++                #pragma unroll 8
+                 for (int group = 0; group < 16; ++group) {
+                     float av[4], bv[4];
+                     #pragma unroll

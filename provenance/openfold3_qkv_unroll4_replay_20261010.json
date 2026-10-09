@@ -1,0 +1,2048 @@
+{
+  "schema_version": 1,
+  "scope": "Unroll4 synthetic and complete trained attention qualification only; no full-model/E2E result",
+  "synthetic": {
+    "completed": true,
+    "correctness_passed": true,
+    "scope": "Packed synthetic probabilities and PV outputs only; no performance/model qualification",
+    "seed": 101,
+    "strict": true,
+    "hip_device": 7,
+    "library_sha256": "80a619ecf7206d729b6f4a6ae95e2009f8c7cced8b0a042555e5893aedbccb3e",
+    "records": [
+      {
+        "case": "random",
+        "batch": 32,
+        "checks": [
+          {
+            "capture_probabilities": false,
+            "output_mismatches": 0,
+            "probability_mismatches": null,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          },
+          {
+            "capture_probabilities": true,
+            "output_mismatches": 0,
+            "probability_mismatches": 0,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          }
+        ]
+      },
+      {
+        "case": "random",
+        "batch": 128,
+        "checks": [
+          {
+            "capture_probabilities": false,
+            "output_mismatches": 0,
+            "probability_mismatches": null,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          },
+          {
+            "capture_probabilities": true,
+            "output_mismatches": 0,
+            "probability_mismatches": 0,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          }
+        ]
+      },
+      {
+        "case": "transposed_bias",
+        "batch": 128,
+        "checks": [
+          {
+            "capture_probabilities": false,
+            "output_mismatches": 0,
+            "probability_mismatches": null,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          },
+          {
+            "capture_probabilities": true,
+            "output_mismatches": 0,
+            "probability_mismatches": 0,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          }
+        ]
+      },
+      {
+        "case": "masked",
+        "batch": 128,
+        "checks": [
+          {
+            "capture_probabilities": false,
+            "output_mismatches": 0,
+            "probability_mismatches": null,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          },
+          {
+            "capture_probabilities": true,
+            "output_mismatches": 0,
+            "probability_mismatches": 0,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          }
+        ]
+      },
+      {
+        "case": "cancellation",
+        "batch": 32,
+        "checks": [
+          {
+            "capture_probabilities": false,
+            "output_mismatches": 0,
+            "probability_mismatches": null,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          },
+          {
+            "capture_probabilities": true,
+            "output_mismatches": 0,
+            "probability_mismatches": 0,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          }
+        ]
+      },
+      {
+        "case": "subnormal",
+        "batch": 32,
+        "checks": [
+          {
+            "capture_probabilities": false,
+            "output_mismatches": 0,
+            "probability_mismatches": null,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          },
+          {
+            "capture_probabilities": true,
+            "output_mismatches": 0,
+            "probability_mismatches": 0,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          }
+        ]
+      },
+      {
+        "case": "signed_zero",
+        "batch": 32,
+        "checks": [
+          {
+            "capture_probabilities": false,
+            "output_mismatches": 0,
+            "probability_mismatches": null,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          },
+          {
+            "capture_probabilities": true,
+            "output_mismatches": 0,
+            "probability_mismatches": 0,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          }
+        ]
+      },
+      {
+        "case": "nonfinite",
+        "batch": 32,
+        "checks": [
+          {
+            "capture_probabilities": false,
+            "output_mismatches": 0,
+            "probability_mismatches": null,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          },
+          {
+            "capture_probabilities": true,
+            "output_mismatches": 0,
+            "probability_mismatches": 0,
+            "guards_unchanged": true,
+            "bitwise_equal": true
+          }
+        ]
+      }
+    ]
+  },
+  "replay": {
+    "correctness_passed": true,
+    "records": [
+      {
+        "capture": {
+          "path": "/media/IntelSSD/fireprot/outputs/triatt-profile-n1536-v1/trunk_pairformer-tri_att_end.pt",
+          "sha256": "723e5eb4049b94b5fedb0e7a4abe45ef4b6e77594060bc546ea47d7c647c04aa"
+        },
+        "flags": {
+          "transpose_bias": true,
+          "chunk_size": 1024,
+          "use_deepspeed_evo_attention": false,
+          "use_cueq_triangle_kernels": false,
+          "use_triton_triangle_kernels": false,
+          "use_lma": false,
+          "inplace_safe": true
+        },
+        "reference_flags": {
+          "transpose_bias": true,
+          "chunk_size": 256,
+          "use_deepspeed_evo_attention": false,
+          "use_cueq_triangle_kernels": false,
+          "use_triton_triangle_kernels": false,
+          "use_lma": false,
+          "inplace_safe": true
+        },
+        "exact": true,
+        "checks": {
+          "baseline": [
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            }
+          ],
+          "unroll4": [
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            }
+          ],
+          "index32": [
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            }
+          ]
+        },
+        "samples_ms": {
+          "baseline": [
+            267.0035400390625,
+            267.0553894042969,
+            267.15234375,
+            267.13665771484375,
+            266.9381103515625,
+            267.0769958496094,
+            267.0160217285156,
+            267.10064697265625,
+            267.029296875,
+            266.9627380371094,
+            266.8948974609375,
+            266.9102783203125
+          ],
+          "unroll4": [
+            240.89907836914062,
+            243.05491638183594,
+            239.86099243164062,
+            268.6790771484375,
+            239.6804962158203,
+            243.9041748046875,
+            239.5598602294922,
+            240.67457580566406,
+            240.6712188720703,
+            239.47793579101562,
+            239.35617065429688,
+            238.54000854492188
+          ],
+          "index32": [
+            258.3952331542969,
+            315.19921875,
+            258.7505798339844,
+            258.4459533691406,
+            258.3192138671875,
+            258.3422546386719,
+            258.222900390625,
+            258.4305725097656,
+            258.6321716308594,
+            258.38482666015625,
+            258.6145935058594,
+            258.3908996582031
+          ]
+        },
+        "medians_ms": {
+          "baseline": 267.0226593017578,
+          "unroll4": 240.26610565185547,
+          "index32": 258.41290283203125
+        },
+        "orders": [
+          [
+            "baseline",
+            "unroll4",
+            "index32"
+          ],
+          [
+            "unroll4",
+            "index32",
+            "baseline"
+          ],
+          [
+            "index32",
+            "baseline",
+            "unroll4"
+          ],
+          [
+            "index32",
+            "unroll4",
+            "baseline"
+          ],
+          [
+            "baseline",
+            "index32",
+            "unroll4"
+          ],
+          [
+            "unroll4",
+            "baseline",
+            "index32"
+          ],
+          [
+            "baseline",
+            "unroll4",
+            "index32"
+          ],
+          [
+            "unroll4",
+            "index32",
+            "baseline"
+          ],
+          [
+            "index32",
+            "baseline",
+            "unroll4"
+          ],
+          [
+            "index32",
+            "unroll4",
+            "baseline"
+          ],
+          [
+            "baseline",
+            "index32",
+            "unroll4"
+          ],
+          [
+            "unroll4",
+            "baseline",
+            "index32"
+          ]
+        ],
+        "dispatchers": {
+          "baseline": {
+            "experimental_head_dimensions": {
+              "allowed": [
+                16,
+                32
+              ],
+              "submitted_launches": {
+                "16": 0,
+                "32": 0
+              }
+            },
+            "registry": {
+              "implementations": {
+                "attention": [
+                  {
+                    "name": "hip_mask_bias_softmax_fp32",
+                    "priority": 10,
+                    "version": "softmax-fp32-v1"
+                  }
+                ]
+              },
+              "selection_counts": [],
+              "decisions": [],
+              "policy_engine": {
+                "name": "fireprot-core",
+                "bridge_abi": 1,
+                "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-triangle-e2e-v1/target/release/lib_fireprot_bridge.so",
+                "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+              }
+            },
+            "kernel": {
+              "mode": "published",
+              "kernel": {
+                "directory": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1",
+                "library": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1/fireprot_softmax_fp32_7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251.so",
+                "manifest_sha256": "4914cb71a64c42bf54495f1c9ee0eeb27808f0571b6a50fed81e8067f56f01be",
+                "build_identity_sha256": "7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251",
+                "compatibility": {
+                  "package": "fireprot_softmax_fp32",
+                  "target": "gfx90a",
+                  "torch": "2.12.0a0+git78258b9",
+                  "hip": "7.14.60850",
+                  "c_abi": "softmax-fp32-v1"
+                }
+              }
+            },
+            "launches_submitted": 0,
+            "limits": [
+              "Registry selection counts precede QK and do not prove a HIP launch.",
+              "Submitted launches passed the immediate HIP status check; asynchronous completion requires the model acceptance gate."
+            ],
+            "experimental_workspace": {
+              "enabled": true,
+              "registry": {
+                "implementations": {
+                  "attention_workspace": [
+                    {
+                      "name": "hip_qk_softmax_workspace_fp32",
+                      "priority": 20,
+                      "version": "combined-v12-rust-lease-v1"
+                    }
+                  ]
+                },
+                "selection_counts": [
+                  {
+                    "operation": "attention_workspace",
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "count": 28
+                  }
+                ],
+                "decisions": [
+                  {
+                    "signature": {
+                      "operation": "attention_workspace",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "float32",
+                      "shape": [
+                        512,
+                        4,
+                        1536,
+                        32
+                      ],
+                      "strides": [
+                        196608,
+                        32,
+                        128,
+                        1
+                      ],
+                      "layout": "strided",
+                      "mode": "inference",
+                      "mask": "pair_and_token",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "high_precision": "False"
+                      }
+                    },
+                    "selected": "hip_qk_softmax_workspace_fp32",
+                    "rejected": []
+                  },
+                  {
+                    "signature": {
+                      "operation": "attention_workspace",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "float32",
+                      "shape": [
+                        1024,
+                        4,
+                        1536,
+                        32
+                      ],
+                      "strides": [
+                        196608,
+                        32,
+                        128,
+                        1
+                      ],
+                      "layout": "strided",
+                      "mode": "inference",
+                      "mask": "pair_and_token",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "high_precision": "False"
+                      }
+                    },
+                    "selected": "hip_qk_softmax_workspace_fp32",
+                    "rejected": []
+                  }
+                ],
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-triangle-e2e-v1/target/release/lib_fireprot_bridge.so",
+                  "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+                }
+              },
+              "fallback_reasons": {},
+              "workspace": {
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-triangle-e2e-v1/target/release/lib_fireprot_bridge.so",
+                  "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+                },
+                "lease": {
+                  "state": "ready",
+                  "binding": {
+                    "device": 0,
+                    "stream": 0
+                  },
+                  "required_bytes": 4831838208,
+                  "budget_bytes": 4831838208,
+                  "charged_bytes": 4831838208,
+                  "committed_bytes": 4831838208,
+                  "allocation_count": 1,
+                  "completed_calls": 28,
+                  "release_count": 0,
+                  "last_failure": null
+                },
+                "microbatch": 128,
+                "retained_bytes": 4831838208,
+                "allocation_policy": "ordinary",
+                "normalize_transposed_mask": true,
+                "mask_copies": 28,
+                "cache_release_attempts": 0,
+                "cache_releases_completed": 0,
+                "kernel": {
+                  "mode": "published",
+                  "kernel": {
+                    "directory": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-qk-softmax-combined-v12/bundle",
+                    "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-qk-softmax-combined-v12/bundle/fireprot_experimental_qk_softmax_2a6eface672e460a4b81acd7dc12eaecf583b29b773fe2bc3549ed680fbe3dc7.so",
+                    "manifest_sha256": "1f04b110c79520749dc2a9a483b77f35330b559f5c043dfcdd13c72947ec5122",
+                    "build_identity_sha256": "2a6eface672e460a4b81acd7dc12eaecf583b29b773fe2bc3549ed680fbe3dc7",
+                    "compatibility": {
+                      "package": "fireprot_experimental_qk_softmax",
+                      "target": "gfx90a",
+                      "torch": "2.12.0a0+git78258b9",
+                      "hip": "7.14.60850",
+                      "c_abi": "experimental-qk-softmax-n1536-f32-v1"
+                    }
+                  }
+                },
+                "allocations": 1,
+                "successful_kernel_calls": 168,
+                "calls_by_batch": {
+                  "1024": 14,
+                  "512": 14
+                },
+                "closed": false,
+                "released": false
+              }
+            }
+          },
+          "unroll4": {
+            "experimental_head_dimensions": {
+              "allowed": [
+                16,
+                32
+              ],
+              "submitted_launches": {
+                "16": 0,
+                "32": 0
+              }
+            },
+            "registry": {
+              "implementations": {
+                "attention": [
+                  {
+                    "name": "hip_mask_bias_softmax_fp32",
+                    "priority": 10,
+                    "version": "softmax-fp32-v1"
+                  }
+                ]
+              },
+              "selection_counts": [],
+              "decisions": [],
+              "policy_engine": {
+                "name": "fireprot-core",
+                "bridge_abi": 1,
+                "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-triangle-e2e-v1/target/release/lib_fireprot_bridge.so",
+                "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+              }
+            },
+            "kernel": {
+              "mode": "published",
+              "kernel": {
+                "directory": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1",
+                "library": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1/fireprot_softmax_fp32_7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251.so",
+                "manifest_sha256": "4914cb71a64c42bf54495f1c9ee0eeb27808f0571b6a50fed81e8067f56f01be",
+                "build_identity_sha256": "7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251",
+                "compatibility": {
+                  "package": "fireprot_softmax_fp32",
+                  "target": "gfx90a",
+                  "torch": "2.12.0a0+git78258b9",
+                  "hip": "7.14.60850",
+                  "c_abi": "softmax-fp32-v1"
+                }
+              }
+            },
+            "launches_submitted": 0,
+            "limits": [
+              "Registry selection counts precede QK and do not prove a HIP launch.",
+              "Submitted launches passed the immediate HIP status check; asynchronous completion requires the model acceptance gate."
+            ],
+            "experimental_workspace": {
+              "enabled": true,
+              "registry": {
+                "implementations": {
+                  "attention_workspace": [
+                    {
+                      "name": "hip_qk_softmax_workspace_fp32",
+                      "priority": 20,
+                      "version": "combined-v12-rust-lease-v1"
+                    }
+                  ]
+                },
+                "selection_counts": [
+                  {
+                    "operation": "attention_workspace",
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "count": 28
+                  }
+                ],
+                "decisions": [
+                  {
+                    "signature": {
+                      "operation": "attention_workspace",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "float32",
+                      "shape": [
+                        512,
+                        4,
+                        1536,
+                        32
+                      ],
+                      "strides": [
+                        196608,
+                        32,
+                        128,
+                        1
+                      ],
+                      "layout": "strided",
+                      "mode": "inference",
+                      "mask": "pair_and_token",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "high_precision": "False"
+                      }
+                    },
+                    "selected": "hip_qk_softmax_workspace_fp32",
+                    "rejected": []
+                  },
+                  {
+                    "signature": {
+                      "operation": "attention_workspace",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "float32",
+                      "shape": [
+                        1024,
+                        4,
+                        1536,
+                        32
+                      ],
+                      "strides": [
+                        196608,
+                        32,
+                        128,
+                        1
+                      ],
+                      "layout": "strided",
+                      "mode": "inference",
+                      "mask": "pair_and_token",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "high_precision": "False"
+                      }
+                    },
+                    "selected": "hip_qk_softmax_workspace_fp32",
+                    "rejected": []
+                  }
+                ],
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-triangle-e2e-v1/target/release/lib_fireprot_bridge.so",
+                  "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+                }
+              },
+              "fallback_reasons": {},
+              "workspace": {
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-triangle-e2e-v1/target/release/lib_fireprot_bridge.so",
+                  "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+                },
+                "lease": {
+                  "state": "ready",
+                  "binding": {
+                    "device": 0,
+                    "stream": 0
+                  },
+                  "required_bytes": 4831838208,
+                  "budget_bytes": 4831838208,
+                  "charged_bytes": 4831838208,
+                  "committed_bytes": 4831838208,
+                  "allocation_count": 1,
+                  "completed_calls": 28,
+                  "release_count": 0,
+                  "last_failure": null
+                },
+                "microbatch": 128,
+                "retained_bytes": 4831838208,
+                "allocation_policy": "ordinary",
+                "normalize_transposed_mask": true,
+                "mask_copies": 28,
+                "cache_release_attempts": 0,
+                "cache_releases_completed": 0,
+                "kernel": {
+                  "mode": "published",
+                  "kernel": {
+                    "directory": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-qk-softmax-combined-v12/bundle",
+                    "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-qk-softmax-combined-v12/bundle/fireprot_experimental_qk_softmax_2a6eface672e460a4b81acd7dc12eaecf583b29b773fe2bc3549ed680fbe3dc7.so",
+                    "manifest_sha256": "1f04b110c79520749dc2a9a483b77f35330b559f5c043dfcdd13c72947ec5122",
+                    "build_identity_sha256": "2a6eface672e460a4b81acd7dc12eaecf583b29b773fe2bc3549ed680fbe3dc7",
+                    "compatibility": {
+                      "package": "fireprot_experimental_qk_softmax",
+                      "target": "gfx90a",
+                      "torch": "2.12.0a0+git78258b9",
+                      "hip": "7.14.60850",
+                      "c_abi": "experimental-qk-softmax-n1536-f32-v1"
+                    }
+                  }
+                },
+                "allocations": 1,
+                "successful_kernel_calls": 168,
+                "calls_by_batch": {
+                  "1024": 14,
+                  "512": 14
+                },
+                "closed": false,
+                "released": false
+              }
+            }
+          },
+          "index32": {
+            "experimental_head_dimensions": {
+              "allowed": [
+                16,
+                32
+              ],
+              "submitted_launches": {
+                "16": 0,
+                "32": 0
+              }
+            },
+            "registry": {
+              "implementations": {
+                "attention": [
+                  {
+                    "name": "hip_mask_bias_softmax_fp32",
+                    "priority": 10,
+                    "version": "softmax-fp32-v1"
+                  }
+                ]
+              },
+              "selection_counts": [],
+              "decisions": [],
+              "policy_engine": {
+                "name": "fireprot-core",
+                "bridge_abi": 1,
+                "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-triangle-e2e-v1/target/release/lib_fireprot_bridge.so",
+                "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+              }
+            },
+            "kernel": {
+              "mode": "published",
+              "kernel": {
+                "directory": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1",
+                "library": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1/fireprot_softmax_fp32_7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251.so",
+                "manifest_sha256": "4914cb71a64c42bf54495f1c9ee0eeb27808f0571b6a50fed81e8067f56f01be",
+                "build_identity_sha256": "7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251",
+                "compatibility": {
+                  "package": "fireprot_softmax_fp32",
+                  "target": "gfx90a",
+                  "torch": "2.12.0a0+git78258b9",
+                  "hip": "7.14.60850",
+                  "c_abi": "softmax-fp32-v1"
+                }
+              }
+            },
+            "launches_submitted": 0,
+            "limits": [
+              "Registry selection counts precede QK and do not prove a HIP launch.",
+              "Submitted launches passed the immediate HIP status check; asynchronous completion requires the model acceptance gate."
+            ],
+            "experimental_workspace": {
+              "enabled": true,
+              "registry": {
+                "implementations": {
+                  "attention_workspace": [
+                    {
+                      "name": "hip_qk_softmax_workspace_fp32",
+                      "priority": 20,
+                      "version": "combined-v12-rust-lease-v1"
+                    }
+                  ]
+                },
+                "selection_counts": [
+                  {
+                    "operation": "attention_workspace",
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "count": 28
+                  }
+                ],
+                "decisions": [
+                  {
+                    "signature": {
+                      "operation": "attention_workspace",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "float32",
+                      "shape": [
+                        512,
+                        4,
+                        1536,
+                        32
+                      ],
+                      "strides": [
+                        196608,
+                        32,
+                        128,
+                        1
+                      ],
+                      "layout": "strided",
+                      "mode": "inference",
+                      "mask": "pair_and_token",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "high_precision": "False"
+                      }
+                    },
+                    "selected": "hip_qk_softmax_workspace_fp32",
+                    "rejected": []
+                  },
+                  {
+                    "signature": {
+                      "operation": "attention_workspace",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "float32",
+                      "shape": [
+                        1024,
+                        4,
+                        1536,
+                        32
+                      ],
+                      "strides": [
+                        196608,
+                        32,
+                        128,
+                        1
+                      ],
+                      "layout": "strided",
+                      "mode": "inference",
+                      "mask": "pair_and_token",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "high_precision": "False"
+                      }
+                    },
+                    "selected": "hip_qk_softmax_workspace_fp32",
+                    "rejected": []
+                  }
+                ],
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-triangle-e2e-v1/target/release/lib_fireprot_bridge.so",
+                  "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+                }
+              },
+              "fallback_reasons": {},
+              "workspace": {
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-triangle-e2e-v1/target/release/lib_fireprot_bridge.so",
+                  "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+                },
+                "lease": {
+                  "state": "ready",
+                  "binding": {
+                    "device": 0,
+                    "stream": 0
+                  },
+                  "required_bytes": 4831838208,
+                  "budget_bytes": 4831838208,
+                  "charged_bytes": 4831838208,
+                  "committed_bytes": 4831838208,
+                  "allocation_count": 1,
+                  "completed_calls": 28,
+                  "release_count": 0,
+                  "last_failure": null
+                },
+                "microbatch": 128,
+                "retained_bytes": 4831838208,
+                "allocation_policy": "ordinary",
+                "normalize_transposed_mask": true,
+                "mask_copies": 28,
+                "cache_release_attempts": 0,
+                "cache_releases_completed": 0,
+                "kernel": {
+                  "mode": "published",
+                  "kernel": {
+                    "directory": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-qk-softmax-combined-v12/bundle",
+                    "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-qk-softmax-combined-v12/bundle/fireprot_experimental_qk_softmax_2a6eface672e460a4b81acd7dc12eaecf583b29b773fe2bc3549ed680fbe3dc7.so",
+                    "manifest_sha256": "1f04b110c79520749dc2a9a483b77f35330b559f5c043dfcdd13c72947ec5122",
+                    "build_identity_sha256": "2a6eface672e460a4b81acd7dc12eaecf583b29b773fe2bc3549ed680fbe3dc7",
+                    "compatibility": {
+                      "package": "fireprot_experimental_qk_softmax",
+                      "target": "gfx90a",
+                      "torch": "2.12.0a0+git78258b9",
+                      "hip": "7.14.60850",
+                      "c_abi": "experimental-qk-softmax-n1536-f32-v1"
+                    }
+                  }
+                },
+                "allocations": 1,
+                "successful_kernel_calls": 168,
+                "calls_by_batch": {
+                  "1024": 14,
+                  "512": 14
+                },
+                "closed": false,
+                "released": false
+              }
+            }
+          }
+        }
+      },
+      {
+        "capture": {
+          "path": "/media/IntelSSD/fireprot/outputs/triatt-profile-n1536-v1/trunk_pairformer-tri_att_start.pt",
+          "sha256": "3ec48e6a6a1780457fe7d7ef6449993f97f267515b780f23b8964a365416c559"
+        },
+        "flags": {
+          "chunk_size": 1024,
+          "use_deepspeed_evo_attention": false,
+          "use_cueq_triangle_kernels": false,
+          "use_triton_triangle_kernels": false,
+          "use_lma": false,
+          "inplace_safe": true
+        },
+        "reference_flags": {
+          "chunk_size": 256,
+          "use_deepspeed_evo_attention": false,
+          "use_cueq_triangle_kernels": false,
+          "use_triton_triangle_kernels": false,
+          "use_lma": false,
+          "inplace_safe": true
+        },
+        "exact": true,
+        "checks": {
+          "baseline": [
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            }
+          ],
+          "unroll4": [
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            }
+          ],
+          "index32": [
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            },
+            {
+              "bitwise_equal": true,
+              "max_abs_delta": 0.0
+            }
+          ]
+        },
+        "samples_ms": {
+          "baseline": [
+            256.8875732421875,
+            256.92596435546875,
+            257.10675048828125,
+            257.06610107421875,
+            257.0587463378906,
+            257.0498046875,
+            257.00836181640625,
+            256.9883728027344,
+            256.90130615234375,
+            256.8558654785156,
+            256.92083740234375,
+            256.8166809082031
+          ],
+          "unroll4": [
+            230.76290893554688,
+            232.03602600097656,
+            230.82130432128906,
+            231.50674438476562,
+            229.65826416015625,
+            232.76675415039062,
+            230.72898864746094,
+            228.14114379882812,
+            229.7731475830078,
+            229.4758758544922,
+            231.51202392578125,
+            230.83299255371094
+          ],
+          "index32": [
+            248.45123291015625,
+            248.3488311767578,
+            248.30787658691406,
+            248.52386474609375,
+            248.58131408691406,
+            248.30787658691406,
+            248.5424346923828,
+            248.35122680664062,
+            248.3505859375,
+            248.38099670410156,
+            248.2283477783203,
+            248.3211669921875
+          ]
+        },
+        "medians_ms": {
+          "baseline": 256.95716857910156,
+          "unroll4": 230.79210662841797,
+          "index32": 248.3509063720703
+        },
+        "orders": [
+          [
+            "baseline",
+            "unroll4",
+            "index32"
+          ],
+          [
+            "unroll4",
+            "index32",
+            "baseline"
+          ],
+          [
+            "index32",
+            "baseline",
+            "unroll4"
+          ],
+          [
+            "index32",
+            "unroll4",
+            "baseline"
+          ],
+          [
+            "baseline",
+            "index32",
+            "unroll4"
+          ],
+          [
+            "unroll4",
+            "baseline",
+            "index32"
+          ],
+          [
+            "baseline",
+            "unroll4",
+            "index32"
+          ],
+          [
+            "unroll4",
+            "index32",
+            "baseline"
+          ],
+          [
+            "index32",
+            "baseline",
+            "unroll4"
+          ],
+          [
+            "index32",
+            "unroll4",
+            "baseline"
+          ],
+          [
+            "baseline",
+            "index32",
+            "unroll4"
+          ],
+          [
+            "unroll4",
+            "baseline",
+            "index32"
+          ]
+        ],
+        "dispatchers": {
+          "baseline": {
+            "experimental_head_dimensions": {
+              "allowed": [
+                16,
+                32
+              ],
+              "submitted_launches": {
+                "16": 0,
+                "32": 0
+              }
+            },
+            "registry": {
+              "implementations": {
+                "attention": [
+                  {
+                    "name": "hip_mask_bias_softmax_fp32",
+                    "priority": 10,
+                    "version": "softmax-fp32-v1"
+                  }
+                ]
+              },
+              "selection_counts": [],
+              "decisions": [],
+              "policy_engine": {
+                "name": "fireprot-core",
+                "bridge_abi": 1,
+                "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-triangle-e2e-v1/target/release/lib_fireprot_bridge.so",
+                "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+              }
+            },
+            "kernel": {
+              "mode": "published",
+              "kernel": {
+                "directory": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1",
+                "library": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1/fireprot_softmax_fp32_7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251.so",
+                "manifest_sha256": "4914cb71a64c42bf54495f1c9ee0eeb27808f0571b6a50fed81e8067f56f01be",
+                "build_identity_sha256": "7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251",
+                "compatibility": {
+                  "package": "fireprot_softmax_fp32",
+                  "target": "gfx90a",
+                  "torch": "2.12.0a0+git78258b9",
+                  "hip": "7.14.60850",
+                  "c_abi": "softmax-fp32-v1"
+                }
+              }
+            },
+            "launches_submitted": 0,
+            "limits": [
+              "Registry selection counts precede QK and do not prove a HIP launch.",
+              "Submitted launches passed the immediate HIP status check; asynchronous completion requires the model acceptance gate."
+            ],
+            "experimental_workspace": {
+              "enabled": true,
+              "registry": {
+                "implementations": {
+                  "attention_workspace": [
+                    {
+                      "name": "hip_qk_softmax_workspace_fp32",
+                      "priority": 20,
+                      "version": "combined-v12-rust-lease-v1"
+                    }
+                  ]
+                },
+                "selection_counts": [
+                  {
+                    "operation": "attention_workspace",
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "count": 28
+                  }
+                ],
+                "decisions": [
+                  {
+                    "signature": {
+                      "operation": "attention_workspace",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "float32",
+                      "shape": [
+                        512,
+                        4,
+                        1536,
+                        32
+                      ],
+                      "strides": [
+                        196608,
+                        32,
+                        128,
+                        1
+                      ],
+                      "layout": "strided",
+                      "mode": "inference",
+                      "mask": "pair_and_token",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "high_precision": "False"
+                      }
+                    },
+                    "selected": "hip_qk_softmax_workspace_fp32",
+                    "rejected": []
+                  },
+                  {
+                    "signature": {
+                      "operation": "attention_workspace",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "float32",
+                      "shape": [
+                        1024,
+                        4,
+                        1536,
+                        32
+                      ],
+                      "strides": [
+                        196608,
+                        32,
+                        128,
+                        1
+                      ],
+                      "layout": "strided",
+                      "mode": "inference",
+                      "mask": "pair_and_token",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "high_precision": "False"
+                      }
+                    },
+                    "selected": "hip_qk_softmax_workspace_fp32",
+                    "rejected": []
+                  }
+                ],
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-triangle-e2e-v1/target/release/lib_fireprot_bridge.so",
+                  "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+                }
+              },
+              "fallback_reasons": {},
+              "workspace": {
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-triangle-e2e-v1/target/release/lib_fireprot_bridge.so",
+                  "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+                },
+                "lease": {
+                  "state": "ready",
+                  "binding": {
+                    "device": 0,
+                    "stream": 0
+                  },
+                  "required_bytes": 4831838208,
+                  "budget_bytes": 4831838208,
+                  "charged_bytes": 4831838208,
+                  "committed_bytes": 4831838208,
+                  "allocation_count": 1,
+                  "completed_calls": 28,
+                  "release_count": 0,
+                  "last_failure": null
+                },
+                "microbatch": 128,
+                "retained_bytes": 4831838208,
+                "allocation_policy": "ordinary",
+                "normalize_transposed_mask": true,
+                "mask_copies": 0,
+                "cache_release_attempts": 0,
+                "cache_releases_completed": 0,
+                "kernel": {
+                  "mode": "published",
+                  "kernel": {
+                    "directory": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-qk-softmax-combined-v12/bundle",
+                    "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-qk-softmax-combined-v12/bundle/fireprot_experimental_qk_softmax_2a6eface672e460a4b81acd7dc12eaecf583b29b773fe2bc3549ed680fbe3dc7.so",
+                    "manifest_sha256": "1f04b110c79520749dc2a9a483b77f35330b559f5c043dfcdd13c72947ec5122",
+                    "build_identity_sha256": "2a6eface672e460a4b81acd7dc12eaecf583b29b773fe2bc3549ed680fbe3dc7",
+                    "compatibility": {
+                      "package": "fireprot_experimental_qk_softmax",
+                      "target": "gfx90a",
+                      "torch": "2.12.0a0+git78258b9",
+                      "hip": "7.14.60850",
+                      "c_abi": "experimental-qk-softmax-n1536-f32-v1"
+                    }
+                  }
+                },
+                "allocations": 1,
+                "successful_kernel_calls": 168,
+                "calls_by_batch": {
+                  "1024": 14,
+                  "512": 14
+                },
+                "closed": false,
+                "released": false
+              }
+            }
+          },
+          "unroll4": {
+            "experimental_head_dimensions": {
+              "allowed": [
+                16,
+                32
+              ],
+              "submitted_launches": {
+                "16": 0,
+                "32": 0
+              }
+            },
+            "registry": {
+              "implementations": {
+                "attention": [
+                  {
+                    "name": "hip_mask_bias_softmax_fp32",
+                    "priority": 10,
+                    "version": "softmax-fp32-v1"
+                  }
+                ]
+              },
+              "selection_counts": [],
+              "decisions": [],
+              "policy_engine": {
+                "name": "fireprot-core",
+                "bridge_abi": 1,
+                "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-triangle-e2e-v1/target/release/lib_fireprot_bridge.so",
+                "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+              }
+            },
+            "kernel": {
+              "mode": "published",
+              "kernel": {
+                "directory": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1",
+                "library": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1/fireprot_softmax_fp32_7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251.so",
+                "manifest_sha256": "4914cb71a64c42bf54495f1c9ee0eeb27808f0571b6a50fed81e8067f56f01be",
+                "build_identity_sha256": "7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251",
+                "compatibility": {
+                  "package": "fireprot_softmax_fp32",
+                  "target": "gfx90a",
+                  "torch": "2.12.0a0+git78258b9",
+                  "hip": "7.14.60850",
+                  "c_abi": "softmax-fp32-v1"
+                }
+              }
+            },
+            "launches_submitted": 0,
+            "limits": [
+              "Registry selection counts precede QK and do not prove a HIP launch.",
+              "Submitted launches passed the immediate HIP status check; asynchronous completion requires the model acceptance gate."
+            ],
+            "experimental_workspace": {
+              "enabled": true,
+              "registry": {
+                "implementations": {
+                  "attention_workspace": [
+                    {
+                      "name": "hip_qk_softmax_workspace_fp32",
+                      "priority": 20,
+                      "version": "combined-v12-rust-lease-v1"
+                    }
+                  ]
+                },
+                "selection_counts": [
+                  {
+                    "operation": "attention_workspace",
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "count": 28
+                  }
+                ],
+                "decisions": [
+                  {
+                    "signature": {
+                      "operation": "attention_workspace",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "float32",
+                      "shape": [
+                        512,
+                        4,
+                        1536,
+                        32
+                      ],
+                      "strides": [
+                        196608,
+                        32,
+                        128,
+                        1
+                      ],
+                      "layout": "strided",
+                      "mode": "inference",
+                      "mask": "pair_and_token",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "high_precision": "False"
+                      }
+                    },
+                    "selected": "hip_qk_softmax_workspace_fp32",
+                    "rejected": []
+                  },
+                  {
+                    "signature": {
+                      "operation": "attention_workspace",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "float32",
+                      "shape": [
+                        1024,
+                        4,
+                        1536,
+                        32
+                      ],
+                      "strides": [
+                        196608,
+                        32,
+                        128,
+                        1
+                      ],
+                      "layout": "strided",
+                      "mode": "inference",
+                      "mask": "pair_and_token",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "high_precision": "False"
+                      }
+                    },
+                    "selected": "hip_qk_softmax_workspace_fp32",
+                    "rejected": []
+                  }
+                ],
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-triangle-e2e-v1/target/release/lib_fireprot_bridge.so",
+                  "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+                }
+              },
+              "fallback_reasons": {},
+              "workspace": {
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-triangle-e2e-v1/target/release/lib_fireprot_bridge.so",
+                  "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+                },
+                "lease": {
+                  "state": "ready",
+                  "binding": {
+                    "device": 0,
+                    "stream": 0
+                  },
+                  "required_bytes": 4831838208,
+                  "budget_bytes": 4831838208,
+                  "charged_bytes": 4831838208,
+                  "committed_bytes": 4831838208,
+                  "allocation_count": 1,
+                  "completed_calls": 28,
+                  "release_count": 0,
+                  "last_failure": null
+                },
+                "microbatch": 128,
+                "retained_bytes": 4831838208,
+                "allocation_policy": "ordinary",
+                "normalize_transposed_mask": true,
+                "mask_copies": 0,
+                "cache_release_attempts": 0,
+                "cache_releases_completed": 0,
+                "kernel": {
+                  "mode": "published",
+                  "kernel": {
+                    "directory": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-qk-softmax-combined-v12/bundle",
+                    "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-qk-softmax-combined-v12/bundle/fireprot_experimental_qk_softmax_2a6eface672e460a4b81acd7dc12eaecf583b29b773fe2bc3549ed680fbe3dc7.so",
+                    "manifest_sha256": "1f04b110c79520749dc2a9a483b77f35330b559f5c043dfcdd13c72947ec5122",
+                    "build_identity_sha256": "2a6eface672e460a4b81acd7dc12eaecf583b29b773fe2bc3549ed680fbe3dc7",
+                    "compatibility": {
+                      "package": "fireprot_experimental_qk_softmax",
+                      "target": "gfx90a",
+                      "torch": "2.12.0a0+git78258b9",
+                      "hip": "7.14.60850",
+                      "c_abi": "experimental-qk-softmax-n1536-f32-v1"
+                    }
+                  }
+                },
+                "allocations": 1,
+                "successful_kernel_calls": 168,
+                "calls_by_batch": {
+                  "1024": 14,
+                  "512": 14
+                },
+                "closed": false,
+                "released": false
+              }
+            }
+          },
+          "index32": {
+            "experimental_head_dimensions": {
+              "allowed": [
+                16,
+                32
+              ],
+              "submitted_launches": {
+                "16": 0,
+                "32": 0
+              }
+            },
+            "registry": {
+              "implementations": {
+                "attention": [
+                  {
+                    "name": "hip_mask_bias_softmax_fp32",
+                    "priority": 10,
+                    "version": "softmax-fp32-v1"
+                  }
+                ]
+              },
+              "selection_counts": [],
+              "decisions": [],
+              "policy_engine": {
+                "name": "fireprot-core",
+                "bridge_abi": 1,
+                "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-triangle-e2e-v1/target/release/lib_fireprot_bridge.so",
+                "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+              }
+            },
+            "kernel": {
+              "mode": "published",
+              "kernel": {
+                "directory": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1",
+                "library": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1/fireprot_softmax_fp32_7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251.so",
+                "manifest_sha256": "4914cb71a64c42bf54495f1c9ee0eeb27808f0571b6a50fed81e8067f56f01be",
+                "build_identity_sha256": "7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251",
+                "compatibility": {
+                  "package": "fireprot_softmax_fp32",
+                  "target": "gfx90a",
+                  "torch": "2.12.0a0+git78258b9",
+                  "hip": "7.14.60850",
+                  "c_abi": "softmax-fp32-v1"
+                }
+              }
+            },
+            "launches_submitted": 0,
+            "limits": [
+              "Registry selection counts precede QK and do not prove a HIP launch.",
+              "Submitted launches passed the immediate HIP status check; asynchronous completion requires the model acceptance gate."
+            ],
+            "experimental_workspace": {
+              "enabled": true,
+              "registry": {
+                "implementations": {
+                  "attention_workspace": [
+                    {
+                      "name": "hip_qk_softmax_workspace_fp32",
+                      "priority": 20,
+                      "version": "combined-v12-rust-lease-v1"
+                    }
+                  ]
+                },
+                "selection_counts": [
+                  {
+                    "operation": "attention_workspace",
+                    "implementation": "hip_qk_softmax_workspace_fp32",
+                    "count": 28
+                  }
+                ],
+                "decisions": [
+                  {
+                    "signature": {
+                      "operation": "attention_workspace",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "float32",
+                      "shape": [
+                        512,
+                        4,
+                        1536,
+                        32
+                      ],
+                      "strides": [
+                        196608,
+                        32,
+                        128,
+                        1
+                      ],
+                      "layout": "strided",
+                      "mode": "inference",
+                      "mask": "pair_and_token",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "high_precision": "False"
+                      }
+                    },
+                    "selected": "hip_qk_softmax_workspace_fp32",
+                    "rejected": []
+                  },
+                  {
+                    "signature": {
+                      "operation": "attention_workspace",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "float32",
+                      "shape": [
+                        1024,
+                        4,
+                        1536,
+                        32
+                      ],
+                      "strides": [
+                        196608,
+                        32,
+                        128,
+                        1
+                      ],
+                      "layout": "strided",
+                      "mode": "inference",
+                      "mask": "pair_and_token",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "high_precision": "False"
+                      }
+                    },
+                    "selected": "hip_qk_softmax_workspace_fp32",
+                    "rejected": []
+                  }
+                ],
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-triangle-e2e-v1/target/release/lib_fireprot_bridge.so",
+                  "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+                }
+              },
+              "fallback_reasons": {},
+              "workspace": {
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-triangle-e2e-v1/target/release/lib_fireprot_bridge.so",
+                  "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+                },
+                "lease": {
+                  "state": "ready",
+                  "binding": {
+                    "device": 0,
+                    "stream": 0
+                  },
+                  "required_bytes": 4831838208,
+                  "budget_bytes": 4831838208,
+                  "charged_bytes": 4831838208,
+                  "committed_bytes": 4831838208,
+                  "allocation_count": 1,
+                  "completed_calls": 28,
+                  "release_count": 0,
+                  "last_failure": null
+                },
+                "microbatch": 128,
+                "retained_bytes": 4831838208,
+                "allocation_policy": "ordinary",
+                "normalize_transposed_mask": true,
+                "mask_copies": 0,
+                "cache_release_attempts": 0,
+                "cache_releases_completed": 0,
+                "kernel": {
+                  "mode": "published",
+                  "kernel": {
+                    "directory": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-qk-softmax-combined-v12/bundle",
+                    "library": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-qk-softmax-combined-v12/bundle/fireprot_experimental_qk_softmax_2a6eface672e460a4b81acd7dc12eaecf583b29b773fe2bc3549ed680fbe3dc7.so",
+                    "manifest_sha256": "1f04b110c79520749dc2a9a483b77f35330b559f5c043dfcdd13c72947ec5122",
+                    "build_identity_sha256": "2a6eface672e460a4b81acd7dc12eaecf583b29b773fe2bc3549ed680fbe3dc7",
+                    "compatibility": {
+                      "package": "fireprot_experimental_qk_softmax",
+                      "target": "gfx90a",
+                      "torch": "2.12.0a0+git78258b9",
+                      "hip": "7.14.60850",
+                      "c_abi": "experimental-qk-softmax-n1536-f32-v1"
+                    }
+                  }
+                },
+                "allocations": 1,
+                "successful_kernel_calls": 168,
+                "calls_by_batch": {
+                  "1024": 14,
+                  "512": 14
+                },
+                "closed": false,
+                "released": false
+              }
+            }
+          }
+        }
+      }
+    ],
+    "fusion_calls": {
+      "unroll4": 336,
+      "index32": 336
+    },
+    "pins": [
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-template-pairs-recovery1-20261007/controls.json",
+        "sha256": "e7d17fc7b93b3ba251b2fe8ae8bc7c7bab2abbb58d94b52edf9a3a45f0f0898a"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-canonical-source-20261007/screen.py",
+        "sha256": "dc842fcf94631e5e4e1ed7781fdfc25cfd5da72e39e077f8422178a591a3740c"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll4-20261010/benchmark.py",
+        "sha256": "deb76fcebb9eeb9a1167107c5979cb28d3f257c2034410b3cf30c12105d8f578"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll4-20261010/screen.json",
+        "sha256": "2d78b74b7cabd8df02580a3d258f787246647f8698f445a4c5e9f356dd02442d"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll4-20261010/build/build.json",
+        "sha256": "b44cb1a017638df4ec80845e91a179ed34823641ae85d8b49fbaeab133cca91b"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll4-20261010/cache/rust-v1/fireprot_of3_qkv_unroll4_v1_048e4206f1b8c074bd39931e520ac657497663ffb3153ebe03c223ebb4786a6e/fireprot_of3_qkv_unroll4_v1_048e4206f1b8c074bd39931e520ac657497663ffb3153ebe03c223ebb4786a6e.so",
+        "sha256": "80a619ecf7206d729b6f4a6ae95e2009f8c7cced8b0a042555e5893aedbccb3e"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-index32-20261010/screen.json",
+        "sha256": "6f3377fedcb2a64a464409c9ab356ce8a9d90c938912c7e3bc0073974866c8bd"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-index32-20261010/build/build.json",
+        "sha256": "df0f913ea2a4ffe4e5bdc7c68b087d46f1b5c6dc349359e30406aae2cdd42898"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-index32-20261010/cache/rust-v1/fireprot_of3_qkv_index32_v1_5e85fd2264e619d648811f8c11aa3b0885464053eb307d0403b25d2efd571cf1/fireprot_of3_qkv_index32_v1_5e85fd2264e619d648811f8c11aa3b0885464053eb307d0403b25d2efd571cf1.so",
+        "sha256": "4bafb83b9056d8f80d5215bb2ae3a204b3baef5abbb61a0bbd32b829fc2eeab0"
+      }
+    ],
+    "capture_pins": {
+      "trunk_pairformer-tri_att_end.pt": {
+        "sha256": "723e5eb4049b94b5fedb0e7a4abe45ef4b6e77594060bc546ea47d7c647c04aa",
+        "size": 1217732181
+      },
+      "trunk_pairformer-tri_att_start.pt": {
+        "sha256": "3ec48e6a6a1780457fe7d7ef6449993f97f267515b780f23b8964a365416c559",
+        "size": 1217732213
+      }
+    },
+    "scope": "Complete trained TriangleAttention; two warmups and twelve balanced samples per arm/capture; canonical HIP normalization, HIP K packing, strict allocations, same retained score workspace; probabilities unused by fused arms; no model/E2E claim; exact checks between timings affect cache state",
+    "strict": true,
+    "seed": 101,
+    "hip_device": 7
+  },
+  "source_reports": [
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll4-20261010/benchmark/report.json",
+      "sha256": "0dffe7cae8e9dbe2c4fc8b17335d25bb50f414fda3a14ab93f177388ace1e47a"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll4-20261010/screen.json",
+      "sha256": "2d78b74b7cabd8df02580a3d258f787246647f8698f445a4c5e9f356dd02442d"
+    }
+  ]
+}

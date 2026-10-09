@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "scope": "Local-only unroll8 compilation; GPU screen/replay queued after unroll4 E2E",
+  "compiler": {
+    "path": "/opt/rocm/core-7.14/bin/hipcc",
+    "sha256": "d92839ed940e685fd15b8c60744d9f30efa65102e49e0babd655045219be371d"
+  },
+  "compiler_version": "HIP version: 7.14.60850-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 46fcb339fb61119b337f973c7ca9e710a319fdd0+PATCHED:440716f8b87be9d8e20ed910e10e5b6d14d57cf6)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-7.14/lib/llvm/bin\n",
+  "arguments": [
+    "--genco",
+    "--offload-arch=gfx90a",
+    "-O3",
+    "-std=c++17"
+  ],
+  "environment": {
+    "HIP_VISIBLE_DEVICES": "",
+    "removed": [
+      "CUDA_VISIBLE_DEVICES",
+      "ROCR_VISIBLE_DEVICES"
+    ]
+  },
+  "baseline_source_sha256": "12467c8bb72ab7786039a864bc463a4cac5750ad0ba9fc8778eb1b0dd7bc8a24",
+  "source": {
+    "path": "/tmp/fireprot-qkv-unroll8-local-20261010/unroll8.cpp",
+    "sha256": "c065c4db5275e2bccae133eebfac8d8e6ecd56438b5d8d27b412f4eadde64f4d"
+  },
+  "patch": {
+    "path": "experiments/mfma_qkv/unroll8.patch",
+    "sha256": "165adc030769da642be41a21c3f1572407a125f79abc1ff05478f1498db1a6ac"
+  },
+  "resources": [
+    {
+      "name": "_Z11qkv_softmaxILb1EEvPKfS1_S1_S1_S1_PfS2_iiiii",
+      "vgpr_count": "77",
+      "sgpr_count": "38",
+      "group_segment_fixed_size": "16384",
+      "private_segment_fixed_size": "0"
+    },
+    {
+      "name": "_Z11qkv_softmaxILb0EEvPKfS1_S1_S1_S1_PfS2_iiiii",
+      "vgpr_count": "58",
+      "sgpr_count": "35",
+      "group_segment_fixed_size": "16384",
+      "private_segment_fixed_size": "0"
+    }
+  ],
+  "files": [
+    {
+      "path": "/tmp/fireprot-qkv-unroll8-local-20261010/resources.json",
+      "sha256": "e28f91c719208baa73086fb93611b524086b143bbe022b699b849cab2a31bdd7"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-unroll8-local-20261010/unroll8.co",
+      "sha256": "436383e1b93ac217a2d2ede2c8a9a7c0dda7303f493eff25ef48b2a69a7f3e52"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-unroll8-local-20261010/unroll8.cpp",
+      "sha256": "c065c4db5275e2bccae133eebfac8d8e6ecd56438b5d8d27b412f4eadde64f4d"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-unroll8-local-20261010/unroll8.hsaco",
+      "sha256": "9d675d6e0a853fec856046cf229ab33c3649b95a702405f23c9a13ce584699b0"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-unroll8-local-20261010/unroll8.notes",
+      "sha256": "f20b3f6823ecd9d1b540c4e75282a49a9b967eb6f577c846261eb62a06edf8ed"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-unroll8-local-20261010/unroll8.patch",
+      "sha256": "165adc030769da642be41a21c3f1572407a125f79abc1ff05478f1498db1a6ac"
+    }
+  ],
+  "archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/fireprot-qkv-unroll8-local-20261010.tar.gz",
+    "sha256": "fa4d37fae63fe5a31a350de0d0fe7b4adb7b695c92bab43db2f8974ece624110",
+    "size_bytes": 36697,
+    "local_path": "/tmp/fireprot-qkv-unroll8-local-20261010.tar.gz",
+    "remote_sha256_verified": true
+  }
+}

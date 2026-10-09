@@ -137,7 +137,7 @@ paired E2E coordinator completes and all six outputs pass. It then verifies the
 full environment inventory, builds through Rust with no visible GPU, screens
 eight packed cases/two variants on HIP7 and runs complete trained attention
 against both baseline and index32. No additional remote build or GPU work
-overlaps the E2E series. Unroll4 has no numerical or performance result yet.
+overlaps the E2E series. Unroll4 subsequently passed its synthetic/module gates; results are below.
 See [static evidence and archive](../../provenance/openfold3_qkv_pv_scheduling_20261010.json).
 
 ## Separate QK index-width control
@@ -169,3 +169,38 @@ forward; chunk choices, operator counts and recorded peak memory match. These
 records do not identify a clock/power or external-load cause. Median and p95
 are both worse. PV schedule and QK-only index-width trials remain separate
 candidates, with their own numerical and performance gates.
+
+## PV-unroll4 and QK-only control results
+
+The unroll4 candidate passes all eight synthetic cases in both templates and
+all 84 full trained calls in its first replay. It then passes all calls in the
+independent four-arm replay, which also checks the QK-only index32 control.
+
+| Replay / direction | Baseline | QK-only index32 | QKV index32 | QKV unroll4 |
+| --- | ---: | ---: | ---: | ---: |
+| Three-arm / ending | 267.023 ms | — | 258.413 ms | 240.266 ms |
+| Three-arm / starting | 256.957 ms | — | 248.351 ms | 230.792 ms |
+| Four-arm / ending | 266.899 ms | 271.389 ms | 258.322 ms | 239.579 ms |
+| Four-arm / starting | 256.866 ms | 261.595 ms | 248.301 ms | 232.345 ms |
+
+Both replays use strict FP32 N1536, seed101, canonical HIP normalization and K
+packing, unchanged retained workspace, HIP7 and unflushed caches. The three-arm
+series has two warmups/twelve balanced samples per arm/capture; the four-arm
+series has two warmups/sixteen balanced samples (144 exact calls). No profiler
+runs inside timing. Output comparisons between samples affect cache state.
+
+Reject QK-only index32 for latency: fewer registers did not make it faster.
+Unroll4 consistently improves the complete module by about1.11x and advances to
+whole-model qualification, followed by three matched E2E pairs if exactness
+passes. It is not yet an accepted full-model speedup.
+
+Evidence: [unroll4 replay](../../provenance/openfold3_qkv_unroll4_replay_20261010.json),
+[QK-only control](../../provenance/openfold3_qk_index32_replay_20261010.json).
+The completed first QKV family is preserved in a
+[pinned archive](../../provenance/openfold3_qkv_family_archive_20261010.json).
+
+`unroll8.patch` is a further scheduling candidate against the same frozen index32
+source. Local compilation reports58 VGPR for ordinary output,77 for probability
+capture,16KiB LDS and zero scratch. It has no GPU result. Its numerical/module
+screen is queued only after the unroll4 model and paired E2E gates complete.
+See [local unroll8 evidence](../../provenance/openfold3_qkv_unroll8_local_20261010.json).

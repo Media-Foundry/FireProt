@@ -848,3 +848,16 @@ unqualified for full-model/E2E use.
 [Paired evidence](../provenance/openfold3_qkv_e2e_n1536.json) includes the six raw
 measurements and refreshed output/source checks. This is not an original-Torch
 comparison; no new direct-native speedup is claimed.
+
+## PV scheduling follow-up and QK-only control
+
+Unroll4 preserves the MFMA accumulation order and passes synthetic plus complete
+trained attention checks. First three-arm replay gives baseline267.023/256.957
+ms (ending/starting) versus unroll4 240.266/230.792 ms. A second four-arm replay
+gives baseline266.899/256.866 ms versus unroll4 239.579/232.345 ms. All calls
+are bitwise exact, including two warmups plus12/16 balanced samples respectively.
+
+The four-arm control shows that QK-only index32 is slower:271.389/261.595 ms,
+despite reduced local register counts. Reject that control. Unroll4 advances to
+whole-model qualification and paired E2E; its approximately1.11x module gain
+is not yet an E2E result. [Details and evidence](../experiments/mfma_qkv/README.md#pv-unroll4-and-qk-only-control-results).

@@ -20,6 +20,7 @@ entirety, including FireProt modifications, under
 | `experiments/hip_softmax/head16-adapter.patch` | Patch to the preceding FireProt adapter; retains its Apache-2.0 terms |
 | `experiments/hip_softmax/head16-control.patch` | Experimental on/off control for that same Apache-2.0 adapter |
 | `experiments/hip_softmax/worker_overlay.py` | `primitives/attention.py` |
+| `experiments/openfold3_diffusion/global_softmax.py` | `primitives/attention.py`; native QK/PV with grouped HIP softmax |
 | `experiments/conditioning_reuse/verified_reuse.py` | `layers/diffusion_conditioning.py` |
 | `experiments/conditioning_reuse/verified_atom_reuse.py` | `layers/sequence_local_atom_attention.py` |
 | `experiments/conditioning_reuse/atom_cache.py` | `layers/sequence_local_atom_attention.py` |

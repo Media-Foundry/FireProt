@@ -5910,3 +5910,44 @@ synthetic/trained/fullmodelcorrectness andperformancegates; notimplemented orque
 Source snapshot /tmp/fireprot-of3-native-attention-20261010.py; maintained
 python/fireprot/adapters/openfold3/attention.py andbackends/amd/softmax_fp32.py.
 Publishedkernel restrictsH4; do notclaimD48alreadyenabled.
+
+
+## Packed model qualified, pairs active, global HIP softmax queued (2026-10-10)
+
+Previous goalturnprogress: originalcachequalified,packedlayoutscreenpassed,
+pairedsuccessorqueued. Thisturnpacked732542/736880/741965 allfinished0. Packed
+verified200calls,4975nativechecks/5000consumerchecks,all11/fullCIFexact; compute
+cache25misses/4975hits,0checks,all11/fullCIFexact. SinglecacheE2E321.920079837 /
+model234.036924092. Original-layoutcache323.335single cannotprovidepairedratio.
+Evidence provenance/openfold3_packed_bias_{verified,cache}_n1536.json.
+
+CURRENT737448 stagepaired_e2e child745651 confirmedlive. Prepcompletedonce;
+pairsroot outputs/experiments/openfold3-packed-bias-pairs-20261010. No resultsyet.
+Do notrerunpreparer/collectororchangeexistingfrozenbytes. Same3AB/BA/ABflagonly
+comparison; rawcurrentbytechecks andsidecarhashesafternativerustgates.
+
+NEW successor timeoutPID750495 in
+outputs/experiments/openfold3-global-softmax-screen-20261010/run_after_pairs.py,
+local /tmp/fireprot-of3-global-softmax-20261010. Waitsfor737448terminal0 andsix
+exactoutputs plus everyE2Epairfaster, then fullenvironment/physicalGPU/sourcepins,
+synthetic5probability+140completeattentionchecks, >=1%gain onpacked/maskedcases,
+thenfreshwholemodelqualification. Modelrootopenfold3-global-softmax-model-20261010,
+outputopenfold3-global-softmax-n1536-20261010. Not yetGPUexecuted.
+Do notstartotherGPU/build/archiveuntilBOTH737448and750495terminal.
+
+Newcode experiments/openfold3_diffusion/global_softmax.py SHA
+6d793830e559092e6bc4802f926c2bd480fa4eca908d1fcb11864cc7719e863d:
+GlobalSoftmaxDispatcher wrapsexisting WorkspaceDispatcher (no monkeypatch),
+N1536/H16/D48/5D/FP32guard; nativeeinsumQK/PV, fourH4publishedsoftmaxentrylaunches
+batch1/waves2/reuse1 intoonefreshstrictoutput. CABIrowheadfixed4; pointeroffset
+4*N*N*4byteseachgroup. Packedbiasnocopy; mismatchesfallback. ExistingSoftmaxFP32
+inworkerisOwnedScoreSoftmaxsubclass, inheritsentry/device/receipt; sharedlaunch
+counterincrementedbygroups, owned-scorecounts stilldescribeoriginal path only.
+Fullmodelexpects4800calls/19200groups,0biascopies/layoutfallbacks,unchangedcache/
+norm/QKVcounts andall11/fullCIFexact. CPUfallbacktests2pass; numericsnotyettestedGPU.
+Apache2headerandTHIRD_PARTYinventoryaddedfornativearithmeticadaptation.
+
+Screenqueueusespairedoutput/request.json forsource.root; actualcurrentrequest
+keys/sourceverifiedcompatible. Allpreparedscriptscheckedsyntax. Source/prep/run/
+benchmarkpins inremote launch.json. No maintainedprofilepromotion. Next inspect
+existingpairs,softmaxqueue; newfamilyarchivepending afterallGPUtasksend.

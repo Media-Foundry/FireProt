@@ -160,3 +160,52 @@ complete CIF bytes, actual cache/normalization/QKV counts and current sidecar
 hashes. Queue root: `outputs/experiments/openfold3-packed-bias-pairs-queue-20261010`;
 benchmark root, once prepared: `outputs/experiments/openfold3-packed-bias-pairs-20261010`.
 No new E2E result exists yet.
+
+
+## Packed model gates and next HIP softmax experiment
+
+Both packed whole-model gates pass. The diagnostic recomputes4975 hits and
+checks5000 retained results after consumers; all200 denoiser calls complete.
+The compute-skipping run records25 misses/4975 hits and no redundant comparisons,
+with all11 arrays and complete CIF bytes exact. Single complete invocation is
+321.920080 s, model234.036924 s. These are qualifications, not matched ratios;
+the approximately7x isolated-add result must not be presented as whole-model
+speedup. Three AB/BA/AB pairs are now running.
+[Packed verification](../../provenance/openfold3_packed_bias_verified_n1536.json),
+[packed compute-skipping gate](../../provenance/openfold3_packed_bias_cache_n1536.json).
+
+Global diffusion Q/K/V have shape`[1,1,16,1536,48]`. Existing attention eligibility
+covers four-dimensional H4 tensors; global diffusion therefore uses native
+bias addition and softmax. The source-pinned native operation is FP32 einsum QK,
+mask then pair-bias additions, softmax and einsum PV. The published HIP binary
+already implements the required row arithmetic but its C ABI fixes four heads.
+
+`global_softmax.py` is a new experimental dispatcher around the existing scoped
+dispatcher. It preserves native QK/PV and strict FP32, slices16 heads into four
+contiguous H4 groups, and uses the existing published binary with batch1,
+waves2 and the same row order. One fresh output allocation holds all groups.
+Biases are made contiguous only when necessary. Nonmatching tensor/device/mode
+contracts delegate to the previous dispatcher. It excludes graph capture and
+reports calls, submitted groups, copies, layout fallbacks and the binary receipt;
+the shared kernel launch counter includes the grouped calls. Source and binary
+validation remain in the existing attention scope and Rust artifact loader.
+This adapted arithmetic retains Apache-2.0 attribution in its file and
+[THIRD_PARTY.md](../../THIRD_PARTY.md).
+
+`benchmark_global_softmax.py OUTPUT` will compare five synthetic probability
+arrays and140 complete D48 attention results, including strided bias, masking,
+uniform scores and an all-masked NaN case. Two warmups/twelve alternating
+samples per arm/case retain all observations. Only a correct screen with at
+least1% improvement in both packed and partially masked cases advances to a
+full N1536 model gate. Expected model counts are4800 attention/probability calls,
+19200 grouped launches, no bias copies or score-layout fallbacks, unchanged
+cache/norm/QKV behavior, all11 arrays and full CIF bytes exact.
+
+Two CPU fallback-contract tests pass. **No global-softmax GPU or E2E result is
+available yet.** The serial coordinator is
+`outputs/experiments/openfold3-global-softmax-screen-20261010/run_after_pairs.py`.
+It first waits for the packed-bias E2E collector, requires exact outputs and
+improvement in every pair, then validates the complete environment, idle physical
+HIP7/PCI93/SMI5 and source pins before screening. A passed screen precedes
+`outputs/experiments/openfold3-global-softmax-model-20261010`; no new build or
+GPU task overlaps the current E2E measurements.

@@ -1,0 +1,5579 @@
+{
+  "schema_version": 1,
+  "correctness_passed": true,
+  "all11_exact": true,
+  "full_cif_exact": true,
+  "scope": "One steady diffusion-call profiler diagnostic on qualified isolated-data baseline; no E2E comparison",
+  "workload": {
+    "schema_version": 1,
+    "run_id": "openfold3-diffusion-profile-n1536-20261010",
+    "workload": {
+      "model": "openfold3",
+      "model_name": "openbind-0",
+      "recycles": 3,
+      "diffusion_steps": 200,
+      "samples": 1,
+      "precision": "float32",
+      "deterministic": true
+    },
+    "backend": "hip_fused",
+    "seed": 101,
+    "hip_device": 7,
+    "source": {
+      "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+      "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+    },
+    "checkpoints": {
+      "model": {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+        "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+      }
+    },
+    "resources": {},
+    "input": {
+      "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+      "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+    },
+    "output_dir": "/media/IntelSSD/fireprot/outputs/openfold3-diffusion-profile-n1536-20261010"
+  },
+  "arrays": {
+    "confidence.chain_ptm.1": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.disorder": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.gpde": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.has_clash": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.iptm": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.pae": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.pde": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.plddt": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.ptm": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.sample_ranking_score": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "coordinates": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    }
+  },
+  "profile": {
+    "path": "/media/IntelSSD/fireprot/outputs/openfold3-diffusion-profile-n1536-20261010/diffusion-profile.json",
+    "sha256": "ec6edcc9b3cfaf4f832a3c67798a210a69e8bf7b74761bb9b50fc21b80b3b3eb"
+  },
+  "trace": {
+    "path": "/media/IntelSSD/fireprot/outputs/openfold3-diffusion-profile-n1536-20261010/diffusion-call5.chrome.json",
+    "sha256": "63e7a25cac2fa39314534f6fb122a2a01e24f81e00afdee2751854666b770693"
+  },
+  "normalization": {
+    "source_sha256": "e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79",
+    "library_sha256": "a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a",
+    "counts": {
+      "accepted": 11202,
+      "fallback": 7846,
+      "contiguous_copies": 4730
+    },
+    "signatures": {
+      "((1, 1536, 1536, 128), (301989888, 196608, 128, 1))": 434,
+      "((1, 256, 1536, 128), (301989888, 196608, 128, 1))": 3225,
+      "((1, 1536, 256, 128), (50331648, 32768, 128, 1))": 2580,
+      "((1, 1536, 256, 128), (301989888, 196608, 128, 1))": 3870,
+      "((1, 256, 1536, 128), (150994944, 128, 98304, 1))": 645,
+      "((1, 1536, 1536, 128), (301989888, 128, 196608, 1))": 215,
+      "((1, 1, 1536, 1536, 128), (301989888, 301989888, 196608, 128, 1))": 203,
+      "((256, 1536, 128), (196608, 128, 1))": 30
+    },
+    "width": 32
+  },
+  "gate": {
+    "accepted": 430,
+    "fallback": 18,
+    "gate_calls": 5160,
+    "copies": 5160,
+    "copy_fallbacks": 1290,
+    "library_sha256": "b7a980bf469a0f13581985033f904541cae5783eab01d4579054588e75c3614c"
+  },
+  "source_preparation": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-diffusion-profile-20261010/preparation.json",
+    "sha256": "7a91d630240c6fed1189fb01660e901757cd36359a2d003bfc5047ed4f9627b9"
+  },
+  "npz": {
+    "path": "/media/IntelSSD/fireprot/outputs/openfold3-diffusion-profile-n1536-20261010/sample-0.npz",
+    "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+  },
+  "cif": {
+    "path": "/media/IntelSSD/fireprot/outputs/openfold3-diffusion-profile-n1536-20261010/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+    "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+  },
+  "limits": [
+    "Instrumented diagnostic; elapsed/model times are not E2E speedup evidence.",
+    "Only diffusion module call5 is profiled; outer sampler work is excluded."
+  ],
+  "analysis": {
+    "schema_version": 1,
+    "sources": [
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-diffusion-profile-n1536-20261010/diffusion-call5.chrome.json",
+        "sha256": "63e7a25cac2fa39314534f6fb122a2a01e24f81e00afdee2751854666b770693"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-diffusion-profile-n1536-20261010/diffusion-profile.json",
+        "sha256": "ec6edcc9b3cfaf4f832a3c67798a210a69e8bf7b74761bb9b50fc21b80b3b3eb"
+      }
+    ],
+    "denoiser_calls": 200,
+    "sampled_call": 5,
+    "other_calls": {
+      "count": 199,
+      "median_ms": 218.3339385986328,
+      "min_ms": 217.64097595214844,
+      "max_ms": 542.566650390625
+    },
+    "stages": {
+      "fireprot.diffusion.diffusion_conditioning": {
+        "kernels": 48,
+        "kernel_ms": 0.5549919999999999
+      },
+      "outer": {
+        "kernels": 19,
+        "kernel_ms": 0.09694099999999999
+      },
+      "fireprot.diffusion.atom_attn_enc": {
+        "kernels": 710,
+        "kernel_ms": 27.31626400000004
+      },
+      "fireprot.diffusion.diffusion_transformer": {
+        "kernels": 1513,
+        "kernel_ms": 166.1564999999997
+      },
+      "fireprot.diffusion.atom_attn_dec": {
+        "kernels": 574,
+        "kernel_ms": 21.634638000000013
+      },
+      "fireprot.diffusion.layer_norm_a": {
+        "kernels": 4,
+        "kernel_ms": 0.033596
+      },
+      "fireprot.diffusion.linear_s": {
+        "kernels": 1,
+        "kernel_ms": 0.036799
+      },
+      "fireprot.diffusion.layer_norm_s": {
+        "kernels": 4,
+        "kernel_ms": 0.030876999999999998
+      }
+    },
+    "unassigned_kernels": [
+      {
+        "name": "void (anonymous namespace)::normalize<32>(float const*, float const*, float const*, float*, float*, float*, long, float) [clone .kd]",
+        "kernel_ms": 1.7956800000000002
+      }
+    ],
+    "operators": [
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::add_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            16,
+            1536,
+            1536
+          ],
+          [
+            1,
+            1,
+            16,
+            1536,
+            1536
+          ],
+          []
+        ],
+        "kernels": 24,
+        "kernel_ms": 63.05169300000001
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            2359296,
+            128
+          ],
+          [
+            128,
+            16
+          ]
+        ],
+        "kernels": 24,
+        "kernel_ms": 39.286077999999996
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::bmm",
+        "input_shapes": [
+          [
+            16,
+            1536,
+            48
+          ],
+          [
+            16,
+            48,
+            1536
+          ]
+        ],
+        "kernels": 24,
+        "kernel_ms": 11.664461
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::native_layer_norm",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            128,
+            16
+          ],
+          [],
+          [
+            16
+          ],
+          [],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 7.529283
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::native_layer_norm",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            128,
+            16
+          ],
+          [],
+          [
+            16
+          ],
+          [],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 7.523843
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            1536,
+            768
+          ],
+          [
+            768,
+            768
+          ]
+        ],
+        "kernels": 96,
+        "kernel_ms": 6.466468000000001
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::bmm",
+        "input_shapes": [
+          [
+            16,
+            1536,
+            1536
+          ],
+          [
+            16,
+            1536,
+            48
+          ]
+        ],
+        "kernels": 24,
+        "kernel_ms": 6.445578
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            1536,
+            768
+          ],
+          [
+            768,
+            1536
+          ]
+        ],
+        "kernels": 48,
+        "kernel_ms": 5.976757
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::_softmax",
+        "input_shapes": [
+          [
+            1,
+            1,
+            16,
+            1536,
+            1536
+          ],
+          [],
+          []
+        ],
+        "kernels": 24,
+        "kernel_ms": 5.898218
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::add_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            16,
+            1536,
+            1536
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1536
+          ],
+          []
+        ],
+        "kernels": 24,
+        "kernel_ms": 5.5659
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::addmm",
+        "input_shapes": [
+          [
+            768
+          ],
+          [
+            1536,
+            384
+          ],
+          [
+            384,
+            768
+          ],
+          [],
+          []
+        ],
+        "kernels": 192,
+        "kernel_ms": 4.643653
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            1536,
+            1536
+          ],
+          [
+            1536,
+            768
+          ]
+        ],
+        "kernels": 24,
+        "kernel_ms": 3.168138000000001
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::addmm",
+        "input_shapes": [
+          [
+            768
+          ],
+          [
+            1536,
+            768
+          ],
+          [
+            768,
+            768
+          ],
+          [],
+          []
+        ],
+        "kernels": 48,
+        "kernel_ms": 1.9988340000000002
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::_index_put_impl_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1537,
+            768
+          ],
+          [],
+          [
+            1,
+            1,
+            12138,
+            768
+          ],
+          [],
+          []
+        ],
+        "kernels": 10,
+        "kernel_ms": 1.9611109999999996
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            1556480,
+            16
+          ],
+          [
+            16,
+            4
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 1.809758
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            1556480,
+            16
+          ],
+          [
+            16,
+            4
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 1.8076780000000001
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            1536,
+            384
+          ],
+          [
+            384,
+            768
+          ]
+        ],
+        "kernels": 48,
+        "kernel_ms": 1.722032
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            768
+          ],
+          [
+            1,
+            1,
+            1536,
+            768
+          ]
+        ],
+        "kernels": 96,
+        "kernel_ms": 1.2847070000000003
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::add",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            768
+          ],
+          [
+            1,
+            1,
+            1536,
+            768
+          ],
+          []
+        ],
+        "kernels": 96,
+        "kernel_ms": 1.281184
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::sigmoid",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            768
+          ]
+        ],
+        "kernels": 120,
+        "kernel_ms": 1.04292
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::native_layer_norm",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            768
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "kernels": 48,
+        "kernel_ms": 0.9833120000000002
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            1536,
+            128
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.879839
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1536
+          ],
+          []
+        ],
+        "kernels": 192,
+        "kernel_ms": 0.8023680000000001
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::native_layer_norm",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128,
+            128
+          ],
+          [],
+          [
+            128
+          ],
+          [],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.737437
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::native_layer_norm",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128,
+            128
+          ],
+          [],
+          [
+            128
+          ],
+          [],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.735037
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::native_layer_norm",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            384
+          ],
+          [],
+          [
+            384
+          ],
+          [],
+          []
+        ],
+        "kernels": 48,
+        "kernel_ms": 0.7348319999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::native_layer_norm",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128,
+            128
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.732157
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::native_layer_norm",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128,
+            128
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.731518
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            48640,
+            128
+          ],
+          [
+            128,
+            128
+          ]
+        ],
+        "kernels": 9,
+        "kernel_ms": 0.6900710000000001
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            48640,
+            128
+          ],
+          [
+            128,
+            128
+          ]
+        ],
+        "kernels": 9,
+        "kernel_ms": 0.686712
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            1536
+          ],
+          [
+            1,
+            1,
+            1536,
+            1536
+          ]
+        ],
+        "kernels": 24,
+        "kernel_ms": 0.5946959999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::add_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            768
+          ],
+          [
+            1,
+            1,
+            12138,
+            768
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.556957
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            16,
+            48
+          ],
+          [
+            1,
+            1,
+            1536,
+            16,
+            48
+          ]
+        ],
+        "kernels": 24,
+        "kernel_ms": 0.5110159999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::gather",
+        "input_shapes": [
+          [
+            1,
+            12138,
+            128
+          ],
+          [],
+          [
+            1,
+            48640,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.478234
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::gather",
+        "input_shapes": [
+          [
+            1,
+            12138,
+            128
+          ],
+          [],
+          [
+            1,
+            48640,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.476954
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            768
+          ],
+          []
+        ],
+        "kernels": 8,
+        "kernel_ms": 0.463192
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            768
+          ],
+          []
+        ],
+        "kernels": 4,
+        "kernel_ms": 0.46239600000000003
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::silu",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            1536
+          ]
+        ],
+        "kernels": 24,
+        "kernel_ms": 0.44589600000000007
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            768
+          ],
+          [
+            1,
+            1,
+            12138,
+            768
+          ],
+          []
+        ],
+        "kernels": 7,
+        "kernel_ms": 0.430713
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            1,
+            48640,
+            128
+          ],
+          [
+            1,
+            48640,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.418554
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            1,
+            48640,
+            128
+          ],
+          [
+            1,
+            48640,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.40767499999999995
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            16,
+            48
+          ],
+          [
+            1,
+            1,
+            1536,
+            16,
+            48
+          ],
+          []
+        ],
+        "kernels": 24,
+        "kernel_ms": 0.39757600000000015
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::addmm",
+        "input_shapes": [
+          [
+            128
+          ],
+          [
+            48640,
+            128
+          ],
+          [
+            128,
+            128
+          ],
+          [],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.396315
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::addmm",
+        "input_shapes": [
+          [
+            128
+          ],
+          [
+            48640,
+            128
+          ],
+          [
+            128,
+            128
+          ],
+          [],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.395354
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::addmm",
+        "input_shapes": [
+          [
+            128
+          ],
+          [
+            12138,
+            128
+          ],
+          [
+            128,
+            128
+          ],
+          [],
+          []
+        ],
+        "kernels": 18,
+        "kernel_ms": 0.382542
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::addmm",
+        "input_shapes": [
+          [
+            128
+          ],
+          [
+            12138,
+            128
+          ],
+          [
+            128,
+            128
+          ],
+          [],
+          []
+        ],
+        "kernels": 18,
+        "kernel_ms": 0.38142200000000004
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            380,
+            4,
+            32,
+            1,
+            1,
+            128,
+            1
+          ],
+          [
+            380,
+            4,
+            32,
+            1,
+            1,
+            128,
+            1
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.345277
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            380,
+            4,
+            32,
+            1,
+            1,
+            128,
+            1
+          ],
+          [
+            380,
+            4,
+            32,
+            1,
+            1,
+            128,
+            1
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.343997
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            768
+          ],
+          [
+            1,
+            1,
+            1536,
+            1
+          ]
+        ],
+        "kernels": 24,
+        "kernel_ms": 0.342056
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::max",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            768
+          ]
+        ],
+        "kernels": 8,
+        "kernel_ms": 0.30591300000000005
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::min",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            768
+          ]
+        ],
+        "kernels": 8,
+        "kernel_ms": 0.30095200000000005
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::remainder",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            768
+          ],
+          []
+        ],
+        "kernels": 4,
+        "kernel_ms": 0.29231599999999996
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::bmm",
+        "input_shapes": [
+          [
+            1520,
+            32,
+            128
+          ],
+          [
+            1520,
+            128,
+            32
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.275358
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::bmm",
+        "input_shapes": [
+          [
+            1520,
+            32,
+            128
+          ],
+          [
+            1520,
+            128,
+            32
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.274878
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::masked_fill_",
+        "input_shapes": [
+          [
+            1,
+            48640,
+            128
+          ],
+          [
+            1,
+            48640,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.261595
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::masked_fill_",
+        "input_shapes": [
+          [
+            1,
+            48640,
+            128
+          ],
+          [
+            1,
+            48640,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.261114
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::addmm",
+        "input_shapes": [
+          [
+            128
+          ],
+          [
+            12160,
+            128
+          ],
+          [
+            128,
+            128
+          ],
+          [],
+          []
+        ],
+        "kernels": 12,
+        "kernel_ms": 0.258389
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::native_layer_norm",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            128
+          ],
+          [],
+          [
+            128
+          ],
+          [],
+          []
+        ],
+        "kernels": 4,
+        "kernel_ms": 0.255996
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::addmm",
+        "input_shapes": [
+          [
+            128
+          ],
+          [
+            12160,
+            128
+          ],
+          [
+            128,
+            128
+          ],
+          [],
+          []
+        ],
+        "kernels": 12,
+        "kernel_ms": 0.25358800000000004
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            48640,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.253435
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            48640,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.250394
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            768
+          ],
+          []
+        ],
+        "kernels": 48,
+        "kernel_ms": 0.22715200000000002
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            12138,
+            128
+          ],
+          [
+            128,
+            256
+          ]
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.222234
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            12138,
+            128
+          ],
+          [
+            128,
+            256
+          ]
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.21983400000000003
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::div_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            16,
+            1536,
+            48
+          ],
+          []
+        ],
+        "kernels": 24,
+        "kernel_ms": 0.21741599999999997
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::add_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            4,
+            32,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            4,
+            32,
+            128
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.20959699999999998
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            12160,
+            128
+          ],
+          [
+            128,
+            128
+          ]
+        ],
+        "kernels": 9,
+        "kernel_ms": 0.208631
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::add_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            4,
+            32,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            4,
+            32,
+            128
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.20847700000000002
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            384
+          ],
+          []
+        ],
+        "kernels": 48,
+        "kernel_ms": 0.20667199999999994
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            12160,
+            128
+          ],
+          [
+            128,
+            128
+          ]
+        ],
+        "kernels": 9,
+        "kernel_ms": 0.203351
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::native_layer_norm",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            128
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.20047700000000002
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::native_layer_norm",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            128
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.19999699999999998
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::native_layer_norm",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            128
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.19631700000000002
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::native_layer_norm",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            128
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.19535699999999998
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::native_layer_norm",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            128
+          ],
+          [],
+          [
+            128
+          ],
+          [],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.19375799999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::native_layer_norm",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            128
+          ],
+          [],
+          [
+            128
+          ],
+          [],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.19375699999999998
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::native_layer_norm",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            128
+          ],
+          [],
+          [
+            128
+          ],
+          [],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.19327700000000003
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            128,
+            128
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.18863699999999997
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::add",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            128,
+            128
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.188157
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            128,
+            128
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.18575699999999998
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::add",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            128,
+            128
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.185437
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            9321984
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.183997
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::bmm",
+        "input_shapes": [
+          [
+            1520,
+            32,
+            32
+          ],
+          [
+            1520,
+            32,
+            128
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.177117
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::add",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            128
+          ],
+          [
+            1,
+            1,
+            12138,
+            128
+          ],
+          []
+        ],
+        "kernels": 10,
+        "kernel_ms": 0.17567
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::add",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            128
+          ],
+          [
+            1,
+            1,
+            12138,
+            128
+          ],
+          []
+        ],
+        "kernels": 10,
+        "kernel_ms": 0.17439000000000002
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::bmm",
+        "input_shapes": [
+          [
+            1520,
+            32,
+            32
+          ],
+          [
+            1520,
+            32,
+            128
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.174077
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::arange",
+        "input_shapes": [
+          [],
+          [],
+          [],
+          [
+            0
+          ]
+        ],
+        "kernels": 19,
+        "kernel_ms": 0.16686099999999995
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::add",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            1
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.16639400000000001
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::sub",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380
+          ],
+          [
+            1,
+            1,
+            380
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.165434
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::sub",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380
+          ],
+          [
+            1,
+            1,
+            380
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.165114
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.16399400000000003
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::add",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            1
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.163514
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            128
+          ],
+          [
+            1,
+            1,
+            12138,
+            128
+          ]
+        ],
+        "kernels": 9,
+        "kernel_ms": 0.163031
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            128
+          ],
+          [
+            1,
+            1,
+            12138,
+            128
+          ]
+        ],
+        "kernels": 9,
+        "kernel_ms": 0.162551
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::add_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            4,
+            32,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            1,
+            32,
+            128
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.161117
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::add_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            4,
+            32,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            1,
+            32,
+            128
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.159998
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [],
+          []
+        ],
+        "kernels": 39,
+        "kernel_ms": 0.159321
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            1536,
+            384
+          ],
+          [
+            384,
+            768
+          ]
+        ],
+        "kernels": 4,
+        "kernel_ms": 0.150396
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::_softmax",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            4,
+            32,
+            128
+          ],
+          [],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.139997
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            380,
+            4,
+            128,
+            1,
+            1,
+            32,
+            1
+          ],
+          [
+            380,
+            4,
+            128,
+            1,
+            1,
+            32,
+            1
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.138877
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            380,
+            4,
+            128,
+            1,
+            1,
+            32,
+            1
+          ],
+          [
+            380,
+            4,
+            128,
+            1,
+            1,
+            32,
+            1
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.138877
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::_softmax",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            4,
+            32,
+            128
+          ],
+          [],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.138877
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::_assert_async",
+        "input_shapes": [
+          []
+        ],
+        "kernels": 14,
+        "kernel_ms": 0.137426
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::sigmoid",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128,
+            128
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.122397
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::div_",
+        "input_shapes": [
+          [
+            9321984
+          ],
+          [],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.12143899999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            12138,
+            256
+          ],
+          [
+            256,
+            128
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.121117
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::sigmoid",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128,
+            128
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.12031700000000001
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            12138,
+            256
+          ],
+          [
+            256,
+            128
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.119837
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.11631399999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.115194
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            16,
+            48
+          ],
+          []
+        ],
+        "kernels": 24,
+        "kernel_ms": 0.11021600000000001
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::lt",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.10623400000000001
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::lt",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.106074
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380
+          ],
+          [
+            1,
+            1,
+            380
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.103674
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536
+          ],
+          []
+        ],
+        "kernels": 24,
+        "kernel_ms": 0.10365600000000003
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_transformer",
+        "operator": "aten::sub",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536
+          ],
+          [],
+          []
+        ],
+        "kernels": 24,
+        "kernel_ms": 0.10317599999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::sigmoid",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            128
+          ]
+        ],
+        "kernels": 9,
+        "kernel_ms": 0.102392
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            256
+          ],
+          [
+            1,
+            1,
+            12138,
+            256
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.100797
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::ge",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            1
+          ]
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.100314
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            256
+          ],
+          [
+            1,
+            1,
+            12138,
+            256
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.099997
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380
+          ],
+          [
+            1,
+            1,
+            380
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.09951499999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::ge",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            1
+          ]
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.099514
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::sigmoid",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            128
+          ]
+        ],
+        "kernels": 9,
+        "kernel_ms": 0.09855100000000001
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::sum",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138
+          ],
+          [],
+          [],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.09743399999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::sum",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138
+          ],
+          [],
+          [],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.09679399999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            1,
+            48640
+          ],
+          [
+            1,
+            48640
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.094234
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            1,
+            48640
+          ],
+          [
+            1,
+            48640
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.09215399999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            1
+          ],
+          [
+            1,
+            1,
+            380,
+            1,
+            128
+          ]
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.089754
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            1
+          ],
+          [
+            1,
+            1,
+            380,
+            1,
+            128
+          ]
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.08863399999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            4,
+            32
+          ],
+          [
+            1,
+            1,
+            380,
+            32,
+            4,
+            32
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.085437
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [],
+          []
+        ],
+        "kernels": 21,
+        "kernel_ms": 0.08509900000000001
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            128
+          ],
+          [
+            1,
+            1,
+            12138,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.084794
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            128
+          ],
+          [
+            1,
+            1,
+            12138,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.084474
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            12138,
+            128
+          ],
+          [
+            128,
+            768
+          ]
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.083839
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            4,
+            32
+          ],
+          [
+            1,
+            1,
+            380,
+            32,
+            4,
+            32
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.08255699999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138
+          ],
+          [
+            1,
+            1,
+            12138
+          ],
+          []
+        ],
+        "kernels": 13,
+        "kernel_ms": 0.08238699999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            12138,
+            128
+          ],
+          [
+            128,
+            128
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.079197
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::gt",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.07919399999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::gt",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.07839399999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            12138,
+            128
+          ],
+          [
+            128,
+            128
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.076157
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.076154
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::silu",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            256
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.07503699999999999
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            1536,
+            768
+          ],
+          [
+            768,
+            384
+          ]
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.074878
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::silu",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            256
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.07471699999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            128,
+            16
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.072159
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            128,
+            16
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.072159
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::sigmoid",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            128
+          ]
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.071354
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::neg",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380
+          ]
+        ],
+        "kernels": 12,
+        "kernel_ms": 0.071188
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::sigmoid",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            128
+          ]
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.070554
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::clamp_min",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380
+          ],
+          []
+        ],
+        "kernels": 12,
+        "kernel_ms": 0.070068
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::clamp_min",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380
+          ],
+          []
+        ],
+        "kernels": 12,
+        "kernel_ms": 0.06878799999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::bitwise_or",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            128
+          ]
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.067194
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::lt",
+        "input_shapes": [
+          [],
+          []
+        ],
+        "kernels": 7,
+        "kernel_ms": 0.066713
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::neg",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380
+          ]
+        ],
+        "kernels": 12,
+        "kernel_ms": 0.066548
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::bitwise_or",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            128
+          ]
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.06543399999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12160,
+            128
+          ],
+          []
+        ],
+        "kernels": 12,
+        "kernel_ms": 0.06398799999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12160,
+            128
+          ],
+          []
+        ],
+        "kernels": 12,
+        "kernel_ms": 0.063508
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            12138
+          ],
+          []
+        ],
+        "kernels": 15,
+        "kernel_ms": 0.063345
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            380,
+            4,
+            32,
+            32,
+            1,
+            1,
+            1
+          ],
+          [
+            380,
+            4,
+            32,
+            32,
+            1,
+            1,
+            1
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.06127699999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            12138
+          ],
+          []
+        ],
+        "kernels": 15,
+        "kernel_ms": 0.061265
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            380,
+            4,
+            32,
+            32,
+            1,
+            1,
+            1
+          ],
+          [
+            380,
+            4,
+            32,
+            32,
+            1,
+            1,
+            1
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.060316999999999996
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::clamp_min",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            768
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.060159
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::ge",
+        "input_shapes": [
+          [],
+          []
+        ],
+        "kernels": 7,
+        "kernel_ms": 0.059833
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            768
+          ],
+          [
+            1,
+            1,
+            12138,
+            1
+          ]
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.059518999999999996
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            128
+          ],
+          [
+            1,
+            1,
+            12138,
+            1
+          ]
+        ],
+        "kernels": 4,
+        "kernel_ms": 0.059196
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::_index_put_impl_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1537
+          ],
+          [],
+          [
+            1,
+            1,
+            12138
+          ],
+          [],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.057274000000000005
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            380,
+            4,
+            128,
+            1,
+            1,
+            32,
+            1
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.057117
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            380,
+            4,
+            128,
+            1,
+            1,
+            32,
+            1
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.057117
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            380,
+            4,
+            32,
+            1,
+            1,
+            128,
+            1
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.05695700000000001
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::where",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380
+          ],
+          [
+            1,
+            1,
+            380
+          ],
+          [
+            1,
+            1,
+            380
+          ]
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.056794
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::add",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            1
+          ],
+          [
+            1,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.056314
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            380,
+            4,
+            32,
+            1,
+            1,
+            128,
+            1
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.055677000000000004
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::clamp",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            1
+          ],
+          [
+            1,
+            1,
+            380,
+            1
+          ]
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.055354
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::add",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            1
+          ],
+          [
+            1,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.055354
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::where",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380
+          ],
+          [
+            1,
+            1,
+            380
+          ],
+          [
+            1,
+            1,
+            380
+          ]
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.05519399999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            32,
+            128
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.053437
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            32,
+            128
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.052476999999999996
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::add",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            32,
+            128
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.051997
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            1536,
+            833
+          ],
+          [
+            833,
+            384
+          ]
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.051518999999999995
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            380
+          ],
+          []
+        ],
+        "kernels": 12,
+        "kernel_ms": 0.051508
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::add",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            32,
+            128
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.051357
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::arange",
+        "input_shapes": [
+          [],
+          [],
+          [],
+          [
+            0
+          ]
+        ],
+        "kernels": 12,
+        "kernel_ms": 0.051348000000000005
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            4,
+            32
+          ],
+          [
+            1,
+            1,
+            380,
+            32,
+            4,
+            32
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.05119699999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            4,
+            32
+          ],
+          [
+            1,
+            1,
+            380,
+            32,
+            4,
+            32
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.051037
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::clamp",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128
+          ],
+          [
+            1,
+            1,
+            380,
+            1
+          ],
+          [
+            1,
+            1,
+            380,
+            1
+          ]
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.051033999999999996
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            380
+          ],
+          []
+        ],
+        "kernels": 12,
+        "kernel_ms": 0.050868
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            12160
+          ],
+          []
+        ],
+        "kernels": 12,
+        "kernel_ms": 0.05054800000000001
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            48640
+          ],
+          []
+        ],
+        "kernels": 12,
+        "kernel_ms": 0.050547999999999996
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            48640
+          ],
+          []
+        ],
+        "kernels": 12,
+        "kernel_ms": 0.049428
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12160
+          ],
+          []
+        ],
+        "kernels": 12,
+        "kernel_ms": 0.049427999999999986
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            12160
+          ],
+          []
+        ],
+        "kernels": 12,
+        "kernel_ms": 0.049427999999999986
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            1
+          ],
+          []
+        ],
+        "kernels": 12,
+        "kernel_ms": 0.048788
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            1
+          ],
+          []
+        ],
+        "kernels": 12,
+        "kernel_ms": 0.048468000000000004
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12160
+          ],
+          []
+        ],
+        "kernels": 11,
+        "kernel_ms": 0.04654899999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            128
+          ],
+          [
+            1,
+            1,
+            12138,
+            1
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.045118000000000005
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::native_layer_norm",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            833
+          ],
+          [],
+          [
+            833
+          ],
+          [],
+          []
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.043998
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::sub",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380
+          ],
+          [],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.041754
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::sub",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380
+          ],
+          [],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.04175399999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1,
+            768,
+            1,
+            1,
+            12138,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            768,
+            1,
+            1,
+            12138,
+            1
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.040479
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536
+          ],
+          [
+            1,
+            1,
+            1536
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.039196999999999996
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::div_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            4,
+            32,
+            32
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.037597
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::div_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            4,
+            32,
+            32
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.037277
+      },
+      {
+        "stage": "fireprot.diffusion.linear_s",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            1536,
+            384
+          ],
+          [
+            384,
+            768
+          ]
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.036799
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138
+          ],
+          []
+        ],
+        "kernels": 9,
+        "kernel_ms": 0.036791
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            128
+          ],
+          []
+        ],
+        "kernels": 7,
+        "kernel_ms": 0.036473
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::min",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.035197
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::max",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138
+          ]
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.034877
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.034714
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.034714
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::gather",
+        "input_shapes": [
+          [
+            1,
+            12138
+          ],
+          [],
+          [
+            1,
+            48640
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.032154
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            128
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.031837
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            128
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.031837
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.031834
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::gather",
+        "input_shapes": [
+          [
+            1,
+            12138
+          ],
+          [],
+          [
+            1,
+            48640
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.031674
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::sub",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            128
+          ],
+          [],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.031197
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::sub",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            128
+          ],
+          [],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.030077000000000003
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::native_layer_norm",
+        "input_shapes": [
+          [
+            1,
+            1536,
+            384
+          ],
+          [],
+          [
+            384
+          ],
+          [
+            384
+          ],
+          []
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.029278
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::masked_fill_",
+        "input_shapes": [
+          [
+            1,
+            48640
+          ],
+          [
+            1,
+            48640
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.029113999999999998
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::add",
+        "input_shapes": [
+          [
+            380
+          ],
+          [],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.028954
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            1536,
+            768
+          ],
+          [
+            768,
+            128
+          ]
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.028638999999999998
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::add",
+        "input_shapes": [
+          [
+            380
+          ],
+          [],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.028634
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            380
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.028314
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            380
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.028154000000000002
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::sub",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            1
+          ],
+          [],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.028154000000000002
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::masked_fill_",
+        "input_shapes": [
+          [
+            1,
+            48640
+          ],
+          [
+            1,
+            48640
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.027834
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138
+          ],
+          [
+            1,
+            1,
+            12138
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.027674
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1536,
+            768
+          ],
+          [
+            1,
+            1536,
+            768
+          ]
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.027038
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::sub",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            1
+          ],
+          [],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.026714
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.026234
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            48640
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.025914
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            48640
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.025594
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.025434
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.025273999999999998
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.025273999999999998
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.024473999999999996
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            128
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.024473999999999996
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::remainder",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.023197000000000002
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::sum",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536
+          ],
+          [],
+          [],
+          []
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.022078
+      },
+      {
+        "stage": "fireprot.diffusion.layer_norm_a",
+        "operator": "aten::native_layer_norm",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            768
+          ],
+          [],
+          [
+            768
+          ],
+          [],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.020319
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            380,
+            4,
+            32,
+            32,
+            1,
+            1,
+            1
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.020157
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            380,
+            4,
+            32,
+            32,
+            1,
+            1,
+            1
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.019677
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1536,
+            384
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.019514
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138
+          ],
+          []
+        ],
+        "kernels": 4,
+        "kernel_ms": 0.019355999999999998
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::silu",
+        "input_shapes": [
+          [
+            1,
+            1536,
+            768
+          ]
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.019038
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::gather",
+        "input_shapes": [
+          [
+            1537,
+            128
+          ],
+          [],
+          [
+            12138,
+            128
+          ],
+          [],
+          [
+            12138,
+            128
+          ]
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.017759
+      },
+      {
+        "stage": "fireprot.diffusion.layer_norm_s",
+        "operator": "aten::native_layer_norm",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            384
+          ],
+          [],
+          [
+            384
+          ],
+          [],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.017759
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::div",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            768
+          ],
+          [
+            1,
+            1,
+            1536,
+            1
+          ]
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.017599
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::cumsum",
+        "input_shapes": [
+          [
+            1537
+          ],
+          [],
+          []
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.017278
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::cat",
+        "input_shapes": [
+          [
+            [
+              1,
+              1,
+              1536,
+              384
+            ],
+            [
+              1,
+              1,
+              1536,
+              449
+            ]
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.016959
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            4,
+            32
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.016797
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1
+          ],
+          []
+        ],
+        "kernels": 4,
+        "kernel_ms": 0.016475999999999998
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1536,
+            384
+          ],
+          [
+            1,
+            1536,
+            1
+          ]
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.016158
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::ge",
+        "input_shapes": [
+          [
+            1537
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.015839
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            380,
+            32,
+            4,
+            32
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.015517
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::add",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            384
+          ],
+          [
+            1,
+            1,
+            1536,
+            384
+          ],
+          []
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.015358
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            12138,
+            3
+          ],
+          [
+            3,
+            128
+          ]
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.015039
+      },
+      {
+        "stage": "outer",
+        "operator": "aten::add",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            768
+          ],
+          [
+            1,
+            1,
+            1536,
+            768
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.014079000000000001
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::all",
+        "input_shapes": [
+          [
+            1537
+          ]
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.013919
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::max",
+        "input_shapes": [
+          [
+            1,
+            1
+          ]
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.013759
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            12138,
+            128
+          ],
+          [
+            128,
+            3
+          ]
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.013439
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            1537
+          ],
+          [
+            1537
+          ],
+          []
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.013118000000000001
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1536
+          ],
+          []
+        ],
+        "kernels": 6,
+        "kernel_ms": 0.012954
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.012636999999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::cat",
+        "input_shapes": [
+          [
+            [
+              1,
+              1,
+              1536
+            ],
+            [
+              1,
+              1,
+              1
+            ]
+          ],
+          []
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.012478
+      },
+      {
+        "stage": "outer",
+        "operator": "aten::pow",
+        "input_shapes": [
+          [
+            1,
+            1
+          ],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.012476999999999999
+      },
+      {
+        "stage": "outer",
+        "operator": "aten::add",
+        "input_shapes": [
+          [
+            1,
+            1
+          ],
+          [],
+          []
+        ],
+        "kernels": 3,
+        "kernel_ms": 0.012157
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1556480
+          ],
+          []
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.011998
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::add_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138
+          ],
+          [
+            1,
+            1,
+            12138
+          ],
+          []
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.011998
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [
+            1,
+            1536,
+            384
+          ],
+          [
+            1,
+            1536,
+            384
+          ],
+          []
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.011678
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1556480
+          ],
+          []
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.011678
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::mm",
+        "input_shapes": [
+          [
+            1,
+            256
+          ],
+          [
+            256,
+            384
+          ]
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.010398999999999999
+      },
+      {
+        "stage": "outer",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            3
+          ],
+          [
+            1,
+            1,
+            12138,
+            1
+          ]
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.009597999999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1537,
+            768
+          ],
+          []
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.009438
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138
+          ],
+          [
+            1,
+            1,
+            12138
+          ]
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.009278
+      },
+      {
+        "stage": "outer",
+        "operator": "aten::sqrt",
+        "input_shapes": [
+          [
+            1,
+            1
+          ]
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.009118000000000001
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1,
+            128
+          ],
+          []
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.009118
+      },
+      {
+        "stage": "outer",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            12138,
+            3
+          ]
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.008798
+      },
+      {
+        "stage": "fireprot.diffusion.layer_norm_s",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1536
+          ],
+          []
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.008798
+      },
+      {
+        "stage": "outer",
+        "operator": "aten::div",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            3
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.008478999999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::sub",
+        "input_shapes": [
+          [],
+          [
+            1,
+            1,
+            1
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.008478999999999999
+      },
+      {
+        "stage": "fireprot.diffusion.layer_norm_a",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1536
+          ],
+          []
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.008478
+      },
+      {
+        "stage": "outer",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1
+          ],
+          []
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.008478
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::cat",
+        "input_shapes": [
+          [
+            [
+              1,
+              1,
+              1536,
+              128
+            ],
+            [
+              1,
+              1,
+              1,
+              128
+            ]
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.008319
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1537
+          ],
+          []
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.008317999999999999
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::add",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            384
+          ],
+          [
+            1,
+            384
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.008159000000000001
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1537
+          ],
+          []
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.008157999999999999
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::native_layer_norm",
+        "input_shapes": [
+          [
+            256
+          ],
+          [],
+          [
+            256
+          ],
+          [],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.007039
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::div_",
+        "input_shapes": [
+          [
+            12138
+          ],
+          [],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.006879
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::cos",
+        "input_shapes": [
+          [
+            256
+          ]
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.006078999999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            128
+          ],
+          [
+            1,
+            1,
+            1536,
+            1
+          ]
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.005919
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::repeat_interleave",
+        "input_shapes": [
+          [
+            1537
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.005919
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::copy_",
+        "input_shapes": [
+          [],
+          [],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.005599
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1
+          ],
+          [
+            256
+          ]
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.005118999999999999
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::add",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138
+          ],
+          [
+            1,
+            1,
+            12138
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.004959
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            833
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.004799
+      },
+      {
+        "stage": "fireprot.diffusion.layer_norm_a",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            768
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.004799
+      },
+      {
+        "stage": "outer",
+        "operator": "aten::div",
+        "input_shapes": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.004799
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536
+          ],
+          [
+            1,
+            1,
+            1536
+          ]
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.004639
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::add",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            1
+          ],
+          [],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.004639
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::log",
+        "input_shapes": [
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.004479
+      },
+      {
+        "stage": "outer",
+        "operator": "aten::add",
+        "input_shapes": [
+          [
+            1,
+            1,
+            12138,
+            3
+          ],
+          [
+            1,
+            1,
+            12138,
+            3
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.004479
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::sub",
+        "input_shapes": [
+          [],
+          [
+            1,
+            1,
+            12138
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.004479
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_dec",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1553664
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.004479
+      },
+      {
+        "stage": "outer",
+        "operator": "aten::reciprocal",
+        "input_shapes": [
+          [
+            1,
+            1
+          ]
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.004479
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1
+          ],
+          []
+        ],
+        "kernels": 2,
+        "kernel_ms": 0.004478
+      },
+      {
+        "stage": "fireprot.diffusion.layer_norm_s",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            1,
+            1,
+            1536,
+            384
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.00432
+      },
+      {
+        "stage": "fireprot.diffusion.atom_attn_enc",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            768
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.003999
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::div",
+        "input_shapes": [
+          [],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.003839
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.003839
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::add",
+        "input_shapes": [
+          [
+            256
+          ],
+          [
+            256
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.003039
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::mul",
+        "input_shapes": [
+          [
+            256
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.002719
+      },
+      {
+        "stage": "fireprot.diffusion.diffusion_conditioning",
+        "operator": "aten::fill_",
+        "input_shapes": [
+          [
+            256
+          ],
+          []
+        ],
+        "kernels": 1,
+        "kernel_ms": 0.0022389999999999997
+      }
+    ],
+    "limits": [
+      "Only call5 is profiled; 199 other calls still contain event instrumentation.",
+      "Kernel duration sums exclude host gaps and are not stage or E2E latency.",
+      "CPU launch ranges attribute kernels through external IDs; missing IDs stay unassigned.",
+      "No inference about CU saturation or memory/computation bounds.",
+      "Global projection reuse and layout improvements remain hypotheses until measured."
+    ]
+  },
+  "source_report": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-diffusion-profile-20261010/collected.json",
+    "sha256": "31f4ffbe121f35f73f53cef5278744c2aee3f2fcfbe7f2e8c9ebdca0555b9ddf"
+  },
+  "decision": "Prioritize global diffusion projection reuse; investigate projected-bias layout separately. Neither is yet qualified."
+}

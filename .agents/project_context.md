@@ -5812,3 +5812,30 @@ per-block attention_pair_bias.linear_z for global/local stacks. Fixedinputs may
 allow rollout-local reuse, but actual profile cost, consumer immutability and
 retained memory must be checked before implementing. Time-dependent s/a remain
 native. Local source snapshot /tmp/fireprot-openfold3-diffusion-sources-20261010.txt.
+
+
+## Diffusion profile accepted; global projection reuse launched (2026-10-10)
+
+Diffusion coordinator701093/child718563 finished0,200calls,all11/fullCIFexact.
+Raw profile/trace SHAec6edcc9.../63e7a25c...; evidence in
+provenance/openfold3_diffusion_profile_20261010.json. Samplecall5: globalstack
+kernel sum166.156ms, including24pair-projection GEMMs39.286ms and24bias adds
+63.052ms. Atomenc/dec27.316/21.635ms. One HIPnorm1.796ms has no externalID,
+retained asunassigned. 2874kernels accounted; diagnostic only, noE2Egain/CUbound.
+Other199 denoiser eventtimes median218.334ms. Globalbiasreuse isnowpriority.
+
+NEW coordinator timeoutPID725420 confirmedlive, stage model_verified child725432,
+root outputs/experiments/openfold3-global-bias-followup-20261010. It runs fresh
+openfold3-global-bias-verified-20261010 then openfold3-global-bias-cache-20261010
+only on numerical success; local scripts /tmp/fireprot-of3-global-bias-20261010.
+Experiment scope source experiments/openfold3_diffusion/bias_cache.py SHA
+3d5e6d8e902826515d076cced2bc92508d32114858ba1f3e61cf082f21ffc973.
+Copies qualified unroll4 worker, wraps only global normalization+24linear_z;
+keeps original layouts, native time-dependent work and200steps. Expected25misses/
+4975hits; verification4975native+5000postconsumer checks; cache mode no comparisons.
+Result storage4.5GiB; diagnostic extra references not performance evidence.
+CPUtests6pass for reuse acrossrequests,invalidation,mutationdetection,cleanup.
+No GPU acceptance yet. Read current receipts/handles; do not relaunch/overwrite.
+No otherGPU/heavy archive while this coordinator runs. Earlier allqueues terminal.
+Archives for unroll4model/pairs,unroll8,profile/currentcache remainpending until
+allnewGPUworkends. Sourcefileincludeschecks; don'teditdeployedbytes in place.

@@ -1,10 +1,10 @@
 # Steady diffusion-call diagnostic
 
-Status: prepared and queued; no diagnostic result or optimization claim yet.
+Status: diagnostic completed with exact whole-model outputs; global pair-bias reuse is under validation.
 Historical post-normalization profiling recorded about44.35 s in the complete
 sampling module, but its operator trace covered the trunk. This diagnostic
 collects the missing steady denoiser detail on the qualified isolated-data
-baseline, independently of unfinished QKV speedup claims.
+baseline; the later accepted unroll4 fusion was not enabled for this diagnostic.
 
 `probe.py` wraps `model.sample_diffusion.diffusion_module.forward` only within an
 explicit context. The upstream source digest must match the audited diffusion
@@ -35,3 +35,62 @@ Physical scope remains HIP7/PCI0000:93:00.0/SMI5. No profiler overlaps paired E2
 or the queued attention replay. The model runs from
 `outputs/experiments/openfold3-diffusion-profile-20261010` once prepared; output
 is `outputs/openfold3-diffusion-profile-n1536-20261010`.
+
+
+## Measured steady-call result
+
+All200 denoiser calls completed and the whole model matches all11 arrays and
+full CIF bytes. Call5 is profiled; the other199 event timings have a median of
+218.334 ms (they still include event instrumentation). N1536, strict FP32,
+R3/four trunk passes, D200/S1, seed101, HIP7, unflushed caches.
+
+`analyze_trace.py TRACE PROFILE OUTPUT` attributes each kernel's duration to its
+CPU operation and enclosing immediate child range through the external ID.
+It excludes GPU annotation durations from sums to avoid double counting.
+One HIP normalization launch lacks an external ID and remains unassigned
+(1.796 ms). All2874 sampled kernels are accounted for.
+
+| Sampled region / operation | Kernel duration sum |
+| --- | ---: |
+| Global diffusion transformer | 166.156 ms |
+| Atom encoder | 27.316 ms |
+| Atom decoder | 21.635 ms |
+| Global projected bias addition, 24 calls | 63.052 ms |
+| Global pair projection GEMM `[2359296,128] x [128,16]`, 24 calls | 39.286 ms |
+
+The last two rows are included in the global-transformer total. These are sums
+of sampled kernel execution durations, not complete stage latency or E2E time.
+[Diagnostic qualification and analysis](../../provenance/openfold3_diffusion_profile_20261010.json).
+
+## Global bias reuse experiment
+
+`bias_cache.py` scopes reuse to a single `_sample_rollout` and restores every
+instance method on success or failure. It wraps only the global transformer's
+pair normalization and each of its24 `linear_z` projections. Time-dependent
+activations, single conditioning, masks, attention and atom stacks retain their
+existing execution. Values keep their original layouts. Upstream source hashes,
+24 blocks, strict inference and N1536 FP32 tensor shapes are required.
+
+The prior qualified pair cache returns an invariant pair embedding across the
+rollout. Native transformer code normalizes it once per call, and each block
+projects the result; those operations depend on the pair and fixed parameters.
+Identity/shape/stride/parameter guards invalidate on replacements and retained
+owners prevent pointer reuse. They do not detect in-place inference mutations:
+this is an explicitly source-pinned experiment, not a general-purpose cache.
+
+Verification mode recomputes every hit with native operations, checks all bytes,
+and compares retained results again after each denoiser's consumers. Expected
+N1536 counts are200 calls,25 misses,4975 hits,4975 native comparisons and5000
+post-consumer comparisons. The timing version has no redundant computations or
+comparisons and requires a separate full-model all11/fullCIF gate. Retained
+result tensors total4,831,838,208 bytes (4.5 GiB), excluding diagnostic reference
+copies; this is not measured peak-memory overhead. Repeated-rollout invalidation,
+input replacement, consumer mutation and exception cleanup pass six CPU tests;
+those tests do not replace GPU qualification.
+
+Coordinator `outputs/experiments/openfold3-global-bias-followup-20261010/driver.py`
+runs recomputation qualification before compute-skipping qualification. Both
+start from the qualified unroll4 composition on HIP7. No E2E ratio exists yet.
+The projected bias is currently a permuted view after `linear_z`; packing it
+for the later addition is a separate candidate, requiring separate bitwise and
+performance checks. No layout optimization is enabled by this cache experiment.

@@ -4,7 +4,7 @@ Status: source audit, 2026-10-10. The inventory below covers the frozen
 isolated-data series. Unroll4 QKV fusion has since passed paired E2E; packed global
 diffusion bias reuse passed whole-model gates but failed the all-pairs-faster
 promotion criterion. HIP packing plus grouped global softmax has passed its model
-gate and is undergoing paired E2E.
+gate and all three paired E2E comparisons, measuring1.0240x incrementally.
 Those later files are not implicitly covered by the older inventory. No
 maintained-profile promotion has occurred.
 

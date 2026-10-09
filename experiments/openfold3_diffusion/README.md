@@ -289,7 +289,7 @@ unchanged. No global bias cache is enabled.
 
 Single complete invocation is **317.785213 s**, model forward **231.075384 s**.
 This is a numerical qualification with timing, not a paired speedup. Three
-AB/BA/AB pairs are now running against the unroll4 composition, with one shared
+AB/BA/AB pairs subsequently completed against the unroll4 composition, with one shared
 worker tree and only `FIREPROT_GLOBAL_SOFTMAX` plus the profile digest changing.
 Both arms include the same packer library validation and runtime receipts.
 New softmax, QKV and gate sidecars are included in the completed transport
@@ -346,3 +346,66 @@ performance measurements. No OpenFold3 hardware result is available yet.
 Coordinator: `outputs/experiments/openfold3-hardware-followup-20261010`.
 The script has passed syntax inspection; GPU profiling remains pending behind
 the current incremental and direct-native timing jobs.
+
+
+## HIP packing plus grouped softmax: accepted incremental E2E
+
+Three AB/BA/AB pairs compare the qualified unroll4 composition with the same
+composition plus HIP interleaved-bias packing and grouped global softmax. They
+use strict deterministic FP32, N1536, R3/four trunk passes, D200/S1, seed101,
+HIP7/PCI93/SMI5, fresh processes and unflushed caches. Both arms share one frozen
+worker tree; only `FIREPROT_GLOBAL_SOFTMAX` and the profile digest differ. Global
+bias caching remains disabled.
+
+| Pair | Unroll4 baseline | HIP packing + softmax | Incremental speedup |
+| --- | ---: | ---: | ---: |
+| AB0 | 327.198516 s | 320.345378 s | 1.0214x |
+| BA1 | 331.932364 s | 323.498000 s | 1.0261x |
+| AB2 | 330.160733 s | 322.417190 s | 1.0240x |
+
+Complete invocation medians are **330.160733 ->322.417190 s (1.0240x)**,
+a **2.35% time reduction**. Model medians are **242.935593 ->233.159512 s
+(1.0419x)**. p95/max also improves,331.932364 ->323.498000 s; with three samples,
+the reported p95 equals the maximum. No observation is discarded.
+
+All six outputs match all11 arrays bitwise and complete CIF bytes. Each candidate
+executes4800 global attention calls,4800 HIP packing calls and19200 grouped HIP
+softmax launches, with no Torch bias copies or layout fallbacks. Each baseline
+reports zero global HIP calls. Existing normalization, gate, template, isolated
+data and5064 fused QKV calls retain their qualified behavior.
+
+**Retain HIP packing plus grouped global softmax in the experimental composition.**
+The narrower synthetic attention gain2.48x does not describe model or E2E speedup.
+The earlier packed projection-cache proposal remains unselected because its
+paired stability gate failed. Maintained-profile integration is still pending.
+
+The direct-native follow-up has passed CPU preparation and started the unchanged
+native worker's full-model qualification. Its native worker SHA remains
+`c30ab522f9a18cb5fa0f21a182d5d2ac33e85173becb4676489485f6eb7d140e`; the optimized
+worker body is copied unchanged from the qualified paired tree. Both routed model
+gates must pass before the fresh direct-native pairs run. **No new direct-native
+speedup is available yet; do not combine older native timings with these results.**
+
+[Complete paired evidence](../../provenance/openfold3_hip_bias_pack_e2e_n1536.json).
+
+
+### Reproduce the accepted experimental composition
+
+On DiamondHill, after the active benchmark queue has finished, copy the qualified
+request and give it a fresh `run_id` and unused `output_dir`. Keep its input,
+checkpoint, strict workload, seed and `hip_device: 7` for this reproduction:
+
+```bash
+cp /media/IntelSSD/fireprot/outputs/experiments/openfold3-hip-bias-pack-pairs-20261010/hip-bias-pack-pairs-n1536-candidate-0.json /tmp/my-openfold3-hip-pack.json
+# Edit run_id and output_dir in the copied request.
+fireprot_cli=/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-triangle-e2e-v1/target/release/fireprot
+"$fireprot_cli" inspect /tmp/my-openfold3-hip-pack.json
+"$fireprot_cli" infer /tmp/my-openfold3-hip-pack.json /media/IntelSSD/fireprot/outputs/experiments/openfold3-hip-bias-pack-pairs-20261010/candidate-profile.json
+```
+
+This uses the frozen worker and kernel dependencies recorded in the paired
+preparation receipt. It is not a portable installer or the maintained profile's
+default. The input/checkpoint/cache resources remain on DiamondHill; the
+preparation and source pins must remain valid. A fresh inference alone does not
+reproduce the three-pair performance study; that study additionally requires
+the pinned AB/BA/AB specification, isolated GPU, numerical/CIF gates and collector.

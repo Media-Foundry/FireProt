@@ -23,7 +23,7 @@ See the [Rust acceptance audit](docs/rust-acceptance.md).
 
 Protenix and OpenFold3 are separate implementations. Precision, preprocessing,
 recycles, diffusion steps, samples and language-model work remain model-specific.
-The latest OpenFold3 workspace/cache/triangle/template combination is an **experiment with
+The latest OpenFold3 composition is an **experiment with
 frozen deployment artifacts**, not automatically enabled by the maintained profile.
 
 ## Build
@@ -240,6 +240,7 @@ profile's default. See [cache results](docs/protenix-base.md#static-diffusion-bi
 | Fused triangle gates/packing vs canonical-layout HIP normalization combination | 352.949 → 348.258 s | **1.0135x** |
 | Isolated single-item data preparation vs gate/packing combination | 349.971 → 341.782 s | **1.0240x** |
 | QK-softmax-PV fusion with PV-unroll4 vs isolated-data combination | 345.753 → 330.999 s | **1.0446x** |
+| HIP-packed global diffusion bias + grouped softmax vs unroll4 | 330.161 → 322.417 s | **1.0240x** |
 
 Each row has three pairs under the same strict R3/D200/S1 contract. The
 triangle comparison also reduces model forward time **356.595 → 321.699 s
@@ -253,9 +254,10 @@ See [complete evidence and reproduction scope](docs/openfold3-performance.md).
 A subsequent global-bias cache experiment measures329.492 ->320.447 s median
 (1.0282x), but one of three pairs regresses; it is **not promoted**. A separate
 HIP bias transpose plus grouped softmax screen reduces synthetic global attention
-from3.650 to1.470 ms with exact results. Full-model qualification passes all11 arrays and complete CIF bytes; a single
-invocation takes317.785 s. Three paired E2E comparisons are in progress; the
-attention ratio is not an E2E claim.
+from3.650 to1.470 ms with exact results. Full-model qualification and all six paired runs preserve all 11 arrays and
+complete CIF bytes. Three pairs measure **330.161 ->322.417 s E2E medians
+(1.0240x incremental, 2.35% less time)**; every pair improves. Retain this addition
+in the experimental composition. The attention ratio itself is not an E2E claim.
 See [diffusion experiment status](experiments/openfold3_diffusion/README.md#hip-packing-screen).
 
 **Do not multiply these incremental ratios into an original-Torch speedup.**
@@ -269,8 +271,9 @@ triangle-memory combination is retained; neither rejected candidate is promoted.
 
 A later exact QK–softmax–PV fusion also failed its E2E gate: three pairs gave
 **341.626 ->342.072 s (0.9987x)** despite a 3.3–3.5% module replay gain. All six
-outputs match all 11 arrays and full CIF bytes. The isolated-data combination
-remains selected; the fusion is not promoted. See the
+outputs match all 11 arrays and full CIF bytes. At that stage the isolated-data combination
+was retained; the initial index32 fusion was not promoted. Later unroll4 and
+global-softmax additions are measured separately in the table above. See the
 [paired decision](docs/openfold3-performance.md#qkv-index32-three-pair-n1536-e2e-rejection).
 
 C = Protenix cycles; R = additional recycles; D = diffusion steps; S = samples.

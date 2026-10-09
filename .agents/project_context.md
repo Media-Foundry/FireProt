@@ -6093,3 +6093,29 @@ then idleSMI5 andtrace/counters sequential. Bothmodel gates required. Syntaxchec
 only; no GPUresult yet. This queue must not overlap timing or an archive/build.
 Historical Basehardware metrics are not OpenFold3 measurements. OldQK half-tile,
 indexwidth andunroll8 trials already rejected; avoidblind repeats withoutcounters.
+
+
+## HIP packing E2E accepted; direct-native qualification live (2026-10-10)
+
+Incremental783467/783478terminal0, collector811851completed, all6 all11/fullCIFexact.
+Threepairs B0=327.198516225/C0=320.345378463; B1=331.932364033/C1=323.497999927;
+B2=330.160733050/C2=322.417190206. E2Emedians330.160733050 ->322.417190206,
+1.02401715256x,2.3453858%less time; model242.935593404 ->233.159511670,
+1.04192872795x. All3faster/p95improves. ACCEPTglobalHIPpack64+groupedsoftmax on
+unroll4 aslatestexperimentalcomposition; no globalbiascache, maintainedstillpending.
+Rawcollected17,400,393bytes SHA065b66734f1aabad4f8fa14286461ada08da89992cfcb25166d002738a7920d5,
+local/tmp/fireprot-of3-hip-bias-pack-pairs-20261010/collected.json. Reposummary
+provenance/openfold3_hip_bias_pack_e2e_n1536.json trims repeatedfullcompilerlists
+butretainsrawSHA andsidecarpins/library/ABI. Counts4800hipcopies/19200groupsvs0;
+allotherqualifiednorm/gate/QKV/template/data gatesunchanged. No discardedoutliers.
+
+Direct-native795488 automaticallyprepared166pinnedfiles andnowqualifying,
+child811871, Rustmeasurebaseline811872 verifiedlive19:53UTC.
+Rootoutputs/experiments/openfold3-direct-native-latest-20261010 existsnow.
+Router nativesourcec30ab... unchanged; optimizedsourceSHA
+654667c6881abd2fe597e170baace230a5ccbdec16b367b55b78155b21356755.
+Nativefullgatefirst, candidatefullgatenext, then3directpairs; stillno newnative
+ratio. Do notrestart dueold status"waiting"; inspectcurrentstatusandlivehandles.
+HardwarefollowupPID808423 verifiedlivewaiting_for_direct_native_study. Requires
+nativefollowup success thenisolatedtrace/counters, all11/fullCIFagain. No archive,
+heavyremote build or otherGPU duringtiming. Endpoint.5healthy. Goalactive/notflat.

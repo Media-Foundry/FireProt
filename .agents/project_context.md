@@ -5743,3 +5743,15 @@ outputs/experiments/fireprot-qkv-unroll8-local-20261010.tar.gz SHA
 fa4d37fae63fe5a31a350de0d0fe7b4adb7b695c92bab43db2f8974ece624110,
 36697bytes, uploaded/hash verified. Respect both active queues before GPU/build/
 heavy archival. Old queues648410/649275/653434/657408/669126 all terminal.
+
+Unroll4 model child685112 finished0; collector/preparer completed once. Full11
+and CIF exact,5064 calls, unroll4 library SHA
+80a619ecf7206d729b6f4a6ae95e2009f8c7cced8b0a042555e5893aedbccb3e.
+Single E2E333.859070741 s/model241.828974545 s; not a paired ratio.
+Evidence provenance/openfold3_qkv_unroll4_model_n1536.json, raw local
+/tmp/fireprot-qkv-results-20261010/unroll4-model-collected.json.
+CURRENT coordinator685102 stagepaired_e2e, child690424. Pairs root
+outputs/experiments/openfold3-qkv-unroll4-pairs-20261010; outputs
+outputs/qkv-unroll4-pairs-n1536-{baseline,candidate}-{0,1,2}. Do not duplicate
+collector/preparation/launch. Unroll8 queue688389 still waits on coordinator
+685102; no concurrent GPU/heavy build/archive. Goal remains active.

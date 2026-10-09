@@ -190,9 +190,12 @@ series has two warmups/sixteen balanced samples (144 exact calls). No profiler
 runs inside timing. Output comparisons between samples affect cache state.
 
 Reject QK-only index32 for latency: fewer registers did not make it faster.
-Unroll4 consistently improves the complete module by about1.11x and advances to
-whole-model qualification, followed by three matched E2E pairs if exactness
-passes. It is not yet an accepted full-model speedup.
+Unroll4 consistently improves the complete module by about1.11x. Its subsequent
+whole-model qualification passed:5,064 fused calls, all11 arrays and full CIF
+bytes exact, unchanged gate/normalization counts, strict N1536 R3/D200/S1
+seed101 on HIP7. The single invocation took 333.859071 s and model forward
+241.828975 s. Three matched E2E pairs are running; this single observation is
+not a new speedup ratio. See [model evidence](../../provenance/openfold3_qkv_unroll4_model_n1536.json).
 
 Evidence: [unroll4 replay](../../provenance/openfold3_qkv_unroll4_replay_20261010.json),
 [QK-only control](../../provenance/openfold3_qk_index32_replay_20261010.json).

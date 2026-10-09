@@ -861,3 +861,9 @@ The four-arm control shows that QK-only index32 is slower:271.389/261.595 ms,
 despite reduced local register counts. Reject that control. Unroll4 advances to
 whole-model qualification and paired E2E; its approximately1.11x module gain
 is not yet an E2E result. [Details and evidence](../experiments/mfma_qkv/README.md#pv-unroll4-and-qk-only-control-results).
+
+Unroll4 subsequently passed the full-model gate with5,064 calls, all11 arrays
+bitwise equal and full CIF bytes equal. Strict N1536 R3/D200/S1 seed101 on HIP7;
+single invocation 333.859071 s, model forward241.828975 s. Three paired E2E
+runs are now underway. [Qualification evidence](../provenance/openfold3_qkv_unroll4_model_n1536.json);
+this is not yet a stable whole-model speedup claim.

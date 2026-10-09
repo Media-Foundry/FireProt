@@ -5469,3 +5469,28 @@ provenance/openfold3_pv_lds_address_audit.json. Local extracted excerpt
 outputs/experiments/conditioning-cache-20261006/native-mfma-review-v2.tar.gz,
 SHAecffe69c8447537ed43ddcb875dadf621454d730657b8ac3f3f8df8948fdbfd2.
 This audit does not change the queued three-hypothesis GPU probe.
+
+## Conditional full attention fusion prototype (2026-10-09)
+
+A QK/softmax/PV prototype is prepared in experiments/mfma_qkv and remote
+outputs/experiments/openfold3-qkv-fused-20261009. It retains the accepted QK source
+SHA b89129b5... (SOURCE hash, not library hash), full softmax evaluation order,
+then stages normalized probabilities through the existing 16 KiB LDS in six
+bands and accumulates PV with two waves/even-odd K8. The untested performance
+tradeoff is removed probability HBM traffic versus staging and limited PV waves.
+Both ordinary and probability-capture templates will compare against native
+Torch on eight packed cases with exact output/probability bits and guard checks.
+B32/B128 outer, N1536, D32, FP32; no model or performance claim.
+
+CURRENT QUEUED: timeout PID 628440 runs run_after_pv.py in that new root. It waits
+for PV predecessor 617750, requires order 1 and all full PV checks to pass,
+revalidates the full environment inventory and physical GPU, then builds and
+screens. On predecessor failure it stops without running the fusion. Local
+/tmp/fireprot-of3-qkv-fused-20261009 contains sources and coordinator. Do not
+launch it again or overlap remote builds/GPUs with the existing paired sequence.
+
+At the latest read, isolated-data E2E measurements 000..003 completed:
+349.125556821 (baseline0), 341.782122796 (candidate0), 339.599098009 (candidate1),
+349.971491766 (baseline1). Both complete pair checks passed. These are partial
+observations, not a final median/speedup selection. Paired PID607660 still live;
+PV queue617750 waiting; fusion queue628440 waiting. Poll all existing handles.

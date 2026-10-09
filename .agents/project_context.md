@@ -5652,3 +5652,33 @@ FIREPROT_ISOLATED_DATA=0 does NOT disable it there. Original isolated-data paire
 worker does read the flag. Future direct-original comparison needs audited
 conditional data scope/num_workers configuration plus all outer optimization
 flags0 and backendnative. Do not reuse prior flag-only advice blindly.
+
+## QKV E2E diagnosis and final archival queue (2026-10-10)
+
+Compared baseline0, candidate0, candidate1 and original full-model qualification
+operator-runtime records. Chunk tuners exactly match; all have workspace calls
+{'1024':4,'512':4,'256':2508}, total5064, D16/D32 fallback launch counts100/192,
+peak allocated51757716992 and reserved57139003392 bytes. Model times254.552379405,
+277.183544621,253.474888237,249.373961893 respectively. Thus current evidence does
+not support a changed chunk/operator path or different peak memory as the cause
+of candidate0 slowdown. No historical clock/power telemetry proves a cause.
+Local raw diagnosis /tmp/fireprot-qkv-run-diagnosis-20261010.json; authoritative
+per-run operator-runtime.json remain in remote outputs.
+
+First two pairs complete and Rust pair checks pass: baseline0=341.625921611,
+candidate0=364.559315330; candidate1=342.071570544, baseline1=342.858609975.
+Second pair is only ~0.23% faster. Last pair remains active; no final decision.
+Coordinator648410/child649275 and successor653434/657408 revalidated live.
+
+NEW FINAL QUEUE: timeout PID669126 waits after QK32 replay PID657408 in
+outputs/experiments/openfold3-qkv-family-archive-20261010. Script
+archive_after_replays.py (local /tmp/fireprot-qkv-family-archive-20261010/).
+It requires the last terminal receipt, drains recorded coordinator identities,
+checks SMI5 idle, then archives8 experiment roots plus model/six paired outputs.
+It verifies dataworker/isolated-data dependency archive hashes and publishes
+outputs/experiments/openfold3-qkv-family-20261010.tar.gz exclusively with digest.
+Archive permits terminal failed trials and never changes their acceptance.
+External checkpoints/resources/captures remain external and are not claimed
+standalone. Inspect this final queue too before starting another GPU run or
+heavy remote build; let archival finish before new model qualification. Do not
+start a duplicate archive or relaunch any predecessor on observation timeout.

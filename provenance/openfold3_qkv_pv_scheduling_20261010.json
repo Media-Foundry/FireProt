@@ -1,0 +1,210 @@
+{
+  "schema_version": 1,
+  "scope": "Local gfx90a compilation and static scheduling selection; no new GPU result",
+  "compiler": {
+    "path": "/opt/rocm/core-7.14/bin/hipcc",
+    "sha256": "d92839ed940e685fd15b8c60744d9f30efa65102e49e0babd655045219be371d"
+  },
+  "compiler_version": "HIP version: 7.14.60850-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 46fcb339fb61119b337f973c7ca9e710a319fdd0+PATCHED:440716f8b87be9d8e20ed910e10e5b6d14d57cf6)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-7.14/lib/llvm/bin\n",
+  "arguments": [
+    "--genco",
+    "--offload-arch=gfx90a",
+    "-O3",
+    "-std=c++17"
+  ],
+  "environment": {
+    "HIP_VISIBLE_DEVICES": "",
+    "removed": [
+      "CUDA_VISIBLE_DEVICES",
+      "ROCR_VISIBLE_DEVICES"
+    ]
+  },
+  "baseline_source_sha256": "12467c8bb72ab7786039a864bc463a4cac5750ad0ba9fc8778eb1b0dd7bc8a24",
+  "generator": {
+    "path": "experiments/mfma_qkv/pv_variants.py",
+    "sha256": "053546b9edee1981ac9d40a9429a4212c338cb72bc502f246ad18c847291c914"
+  },
+  "sources": {
+    "baseline_sha256": "12467c8bb72ab7786039a864bc463a4cac5750ad0ba9fc8778eb1b0dd7bc8a24",
+    "variants": [
+      {
+        "name": "unroll4",
+        "source": "/tmp/fireprot-qkv-pv-scheduling-20261010/unroll4.cpp",
+        "sha256": "dd7bbb785dae1afed98ad6fd357fa8e6822f0e49310a87530a296ee7c0d9ff9f"
+      },
+      {
+        "name": "unroll16",
+        "source": "/tmp/fireprot-qkv-pv-scheduling-20261010/unroll16.cpp",
+        "sha256": "b939b1e80606477150aaa4feb235c3dee0cd9c45c6186c4d120183469123fb56"
+      },
+      {
+        "name": "prefetch1",
+        "source": "/tmp/fireprot-qkv-pv-scheduling-20261010/prefetch1.cpp",
+        "sha256": "54ff32bb6a3bd3867d76b4db8b5ba10d7ea8b7188267ec7de491912e8d3a89a0"
+      }
+    ],
+    "scope": "Source generation only; no new numerical or speedup claim"
+  },
+  "resources": [
+    {
+      "variant": "unroll4",
+      "kernels": [
+        {
+          "name": "_Z11qkv_softmaxILb1EEvPKfS1_S1_S1_S1_PfS2_iiiii",
+          "vgpr_count": "58",
+          "sgpr_count": "38",
+          "group_segment_fixed_size": "16384",
+          "private_segment_fixed_size": "0"
+        },
+        {
+          "name": "_Z11qkv_softmaxILb0EEvPKfS1_S1_S1_S1_PfS2_iiiii",
+          "vgpr_count": "58",
+          "sgpr_count": "35",
+          "group_segment_fixed_size": "16384",
+          "private_segment_fixed_size": "0"
+        }
+      ],
+      "asm_bytes": 560032
+    },
+    {
+      "variant": "unroll16",
+      "kernels": [
+        {
+          "name": "_Z11qkv_softmaxILb1EEvPKfS1_S1_S1_S1_PfS2_iiiii",
+          "vgpr_count": "82",
+          "sgpr_count": "36",
+          "group_segment_fixed_size": "16384",
+          "private_segment_fixed_size": "0"
+        },
+        {
+          "name": "_Z11qkv_softmaxILb0EEvPKfS1_S1_S1_S1_PfS2_iiiii",
+          "vgpr_count": "69",
+          "sgpr_count": "33",
+          "group_segment_fixed_size": "16384",
+          "private_segment_fixed_size": "0"
+        }
+      ],
+      "asm_bytes": 1298535
+    },
+    {
+      "variant": "prefetch1",
+      "kernels": [
+        {
+          "name": "_Z11qkv_softmaxILb1EEvPKfS1_S1_S1_S1_PfS2_iiiii",
+          "vgpr_count": "55",
+          "sgpr_count": "38",
+          "group_segment_fixed_size": "16384",
+          "private_segment_fixed_size": "0"
+        },
+        {
+          "name": "_Z11qkv_softmaxILb0EEvPKfS1_S1_S1_S1_PfS2_iiiii",
+          "vgpr_count": "58",
+          "sgpr_count": "35",
+          "group_segment_fixed_size": "16384",
+          "private_segment_fixed_size": "0"
+        }
+      ],
+      "asm_bytes": 415808
+    }
+  ],
+  "prefetch1": {
+    "disassembly_instructions_identical": true,
+    "baseline_instruction_sha256": "12d4cf61fb09555ff33c0260f572325e472fccea8b09c2134e13f23ff0b3e711",
+    "candidate_instruction_sha256": "12d4cf61fb09555ff33c0260f572325e472fccea8b09c2134e13f23ff0b3e711",
+    "baseline_disassembly": {
+      "path": "/tmp/fireprot-qkv-pv-scheduling-20261010/baseline.asm",
+      "sha256": "e33ea6263cc4f754dda044e351ed1dad5d90ca070bee4a2322154a639c15716e"
+    },
+    "candidate_disassembly": {
+      "path": "/tmp/fireprot-qkv-pv-scheduling-20261010/prefetch1.asm",
+      "sha256": "7e9efc2ff87a65ba8162b3cd988e8b3583d4ec8af861b03e877c7772d10b0ff4"
+    }
+  },
+  "selection": {
+    "candidate": "unroll4",
+    "reason": "Same ordinary 58 VGPR/16KiB LDS/zero scratch as index32, fewer dynamic loop-control iterations without changing MFMA order; actual performance unmeasured",
+    "skipped_prefetch1": "Identical disassembled instructions",
+    "deprioritized_unroll16": "Ordinary template increases from 58 to69 VGPR; capture82 VGPR; this is static prioritization, not a latency result"
+  },
+  "files": [
+    {
+      "path": "/tmp/fireprot-qkv-pv-scheduling-20261010/baseline.asm",
+      "sha256": "e33ea6263cc4f754dda044e351ed1dad5d90ca070bee4a2322154a639c15716e"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-pv-scheduling-20261010/prefetch1.asm",
+      "sha256": "7e9efc2ff87a65ba8162b3cd988e8b3583d4ec8af861b03e877c7772d10b0ff4"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-pv-scheduling-20261010/prefetch1.co",
+      "sha256": "c66c9e84d455a60f82e5afeb393e6092aac58a179ed59077de6c39757023db1a"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-pv-scheduling-20261010/prefetch1.cpp",
+      "sha256": "54ff32bb6a3bd3867d76b4db8b5ba10d7ea8b7188267ec7de491912e8d3a89a0"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-pv-scheduling-20261010/prefetch1.hsaco",
+      "sha256": "7f80c89d0a46985af8e4f29394606a0447543dcf0d29e64f5a6e3fd330686863"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-pv-scheduling-20261010/prefetch1.notes",
+      "sha256": "4e02a23be387fb3c32fd6b8546a972410af3fe1b32309cb22b6bc366eeb7afc8"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-pv-scheduling-20261010/resources.json",
+      "sha256": "bfeceaafacf5ec58d8e65e482a48a91a002249a70b169c537ca7f8a1542315d3"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-pv-scheduling-20261010/sources.json",
+      "sha256": "44f71bd16569776a21d20c9b2a40fa2ba63a056f072c78be56a6668a1a1fb10c"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-pv-scheduling-20261010/unroll16.asm",
+      "sha256": "9f4962e9072da8157f2f46888c335935600923c27bc3a01ebef52ddde6a89ace"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-pv-scheduling-20261010/unroll16.co",
+      "sha256": "095f7563ccbdd184661e1a9eaae1a0b1ccbb499a3951779401abbff87ac59a71"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-pv-scheduling-20261010/unroll16.cpp",
+      "sha256": "b939b1e80606477150aaa4feb235c3dee0cd9c45c6186c4d120183469123fb56"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-pv-scheduling-20261010/unroll16.hsaco",
+      "sha256": "696b2d18f5573fff156691671d69b71d12c9e43522ef43db00e8146da726d2be"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-pv-scheduling-20261010/unroll16.notes",
+      "sha256": "de6e5d3719400be350bd70476004a484f8ebf1dbf8d45161835dadbe3c43fa49"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-pv-scheduling-20261010/unroll4.asm",
+      "sha256": "3a29ebb1c77f88ae92e7163aac777fcd7a26657fd79fe0cebf102e55a6ef96ab"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-pv-scheduling-20261010/unroll4.co",
+      "sha256": "9e02fca10afcef0c7e95c667326846e197dbef1adaf07632c6e95d96dfa0147c"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-pv-scheduling-20261010/unroll4.cpp",
+      "sha256": "dd7bbb785dae1afed98ad6fd357fa8e6822f0e49310a87530a296ee7c0d9ff9f"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-pv-scheduling-20261010/unroll4.hsaco",
+      "sha256": "ea3bb427482b97212186de96097b38c6d2ab8ee5b1341f41bcaed08ed64f5234"
+    },
+    {
+      "path": "/tmp/fireprot-qkv-pv-scheduling-20261010/unroll4.notes",
+      "sha256": "cd7bbb6878f909df215bd33c1a9877f16bb10398477a34d977aee1b0c689c9a5"
+    }
+  ],
+  "archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/fireprot-qkv-pv-scheduling-20261010.tar.gz",
+    "sha256": "bc5db919ff4cbd458d2885bb6b223f9ca0d138a1e0587edd1418aa28647bf6ae",
+    "size_bytes": 366628,
+    "local_path": "/tmp/fireprot-qkv-pv-scheduling-20261010.tar.gz",
+    "remote_sha256_verified": true
+  }
+}

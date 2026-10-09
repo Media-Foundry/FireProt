@@ -46,7 +46,7 @@ and this numerical screen on HIP7. It stops when the prerequisite fails.
 Complete trained attention replay completed separately under
 `outputs/experiments/openfold3-qkv-replay-20261010`. The full-model gate passed subsequently; paired E2E is running.
 Packing costs, unsupported-input fallback, ownership, memory accounting and
-launch resources still need evaluation before any model integration. The passing
+launch resources still need evaluation before maintained-profile promotion. The passing
 synthetic screen does not establish those properties or a speedup.
 
 
@@ -107,3 +107,45 @@ Three AB/BA/AB pairs are running under
 `outputs/experiments/openfold3-qkv-pairs-20261010`; both arms use identical
 source and isolated-data preparation, differing only in the fusion flag/profile
 digest. Paired E2E evidence remains required before promotion.
+
+## PV scheduling follow-up
+
+`pv_variants.py INDEX32_SOURCE DESTINATION` requires frozen source SHA
+`12467c8bb72ab7786039a864bc463a4cac5750ad0ba9fc8778eb1b0dd7bc8a24`
+and generates PV group-unroll4, unroll16 and one-slot-prefetch candidates.
+It preserves ascending MFMA fragment order and every floating-point operation.
+Source-level preservation does not replace the GPU gates.
+
+Local gfx90a compilation found:
+
+| Variant | Ordinary VGPR | Capture VGPR | LDS | Scratch | Selection |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Qualified index32 | 58 | 55 | 16 KiB | 0 | Control |
+| Unroll4 | 58 | 58 | 16 KiB | 0 | Next GPU trial |
+| Unroll16 | 69 | 82 | 16 KiB | 0 | Deprioritized by resource pressure |
+| One-slot prefetch | 58 | 55 | 16 KiB | 0 | Identical disassembled instructions to control |
+
+The unroll4 candidate waits under
+`outputs/experiments/openfold3-qkv-unroll4-20261010` until the existing index32
+paired E2E coordinator completes and all six outputs pass. It then verifies the
+full environment inventory, builds through Rust with no visible GPU, screens
+eight packed cases/two variants on HIP7 and runs complete trained attention
+against both baseline and index32. No additional remote build or GPU work
+overlaps the E2E series. Unroll4 has no numerical or performance result yet.
+See [static evidence and archive](../../provenance/openfold3_qkv_pv_scheduling_20261010.json).
+
+## Separate QK index-width control
+
+`qk_index32.patch` applies the same guarded 32-bit internal addressing to the
+qualified QK/softmax source b89129b5... while retaining native PV. The C ABI
+keeps 64-bit strides and bounds B to32/128 and known mask/bias layouts. This
+control distinguishes index-width benefits from removing probability traffic.
+
+Local compile: QK+softmax VGPR62 ->44; raw-QK VGPR51 ->44. Both retain16KiB
+LDS and zero scratch. This is not a measured occupancy or speedup result.
+GPU root `outputs/experiments/openfold3-qk-index32-20261010` waits for the
+unroll4 replay, then checks raw scores/probabilities for eight synthetic cases
+and compares complete trained attention for baseline, QK-index32, QKV-index32
+and QKV-unroll4. Two warmups plus sixteen balanced samples per arm/capture:
+144 full calls with exact checks. All queued work remains serial on HIP7.
+See [local evidence](../../provenance/openfold3_qk_index32_local_20261010.json).

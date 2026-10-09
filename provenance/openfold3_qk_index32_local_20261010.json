@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "scope": "Local-only QK/softmax index-width control; no GPU qualification or timing result",
+  "compiler": {
+    "path": "/opt/rocm/core-7.14/bin/hipcc",
+    "sha256": "d92839ed940e685fd15b8c60744d9f30efa65102e49e0babd655045219be371d"
+  },
+  "compiler_version": "HIP version: 7.14.60850-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 46fcb339fb61119b337f973c7ca9e710a319fdd0+PATCHED:440716f8b87be9d8e20ed910e10e5b6d14d57cf6)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-7.14/lib/llvm/bin\n",
+  "arguments": [
+    "--genco",
+    "--offload-arch=gfx90a",
+    "-O3",
+    "-std=c++17"
+  ],
+  "environment": {
+    "HIP_VISIBLE_DEVICES": "",
+    "removed": [
+      "CUDA_VISIBLE_DEVICES",
+      "ROCR_VISIBLE_DEVICES"
+    ]
+  },
+  "resources": [
+    {
+      "name": "baseline",
+      "kernels": [
+        {
+          "name": "_Z10qk_softmaxILb1EEvPKfS1_S1_S1_Pflllll",
+          "vgpr_count": "62",
+          "sgpr_count": "34",
+          "group_segment_fixed_size": "16384",
+          "private_segment_fixed_size": "0"
+        },
+        {
+          "name": "_Z10qk_softmaxILb0EEvPKfS1_S1_S1_Pflllll",
+          "vgpr_count": "51",
+          "sgpr_count": "20",
+          "group_segment_fixed_size": "16384",
+          "private_segment_fixed_size": "0"
+        }
+      ],
+      "source_sha256": "b89129b5efabb20e3563279a39c1ab4c4f47bed6909cbcb5678e367ad30c4405"
+    },
+    {
+      "name": "index32",
+      "kernels": [
+        {
+          "name": "_Z10qk_softmaxILb1EEvPKfS1_S1_S1_Pfiiiii",
+          "vgpr_count": "44",
+          "sgpr_count": "28",
+          "group_segment_fixed_size": "16384",
+          "private_segment_fixed_size": "0"
+        },
+        {
+          "name": "_Z10qk_softmaxILb0EEvPKfS1_S1_S1_Pfiiiii",
+          "vgpr_count": "44",
+          "sgpr_count": "19",
+          "group_segment_fixed_size": "16384",
+          "private_segment_fixed_size": "0"
+        }
+      ],
+      "source_sha256": "d1c0893ec7d4dc971ea4ab7c26ef1ed497e475b7468c70c152595de106f81261"
+    }
+  ],
+  "files": [
+    {
+      "path": "/tmp/fireprot-qk-index32-20261010/baseline.asm",
+      "sha256": "363021f7c8f4db998176c02fc4fe408bb59bb637a5674d665049fcac9e9265c5"
+    },
+    {
+      "path": "/tmp/fireprot-qk-index32-20261010/baseline.co",
+      "sha256": "b67ad066c18ae55860d41e7b5a941611c8cb2a770b4c807ab57f2fb43857b44f"
+    },
+    {
+      "path": "/tmp/fireprot-qk-index32-20261010/baseline.cpp",
+      "sha256": "b89129b5efabb20e3563279a39c1ab4c4f47bed6909cbcb5678e367ad30c4405"
+    },
+    {
+      "path": "/tmp/fireprot-qk-index32-20261010/baseline.hsaco",
+      "sha256": "7bbc215b0b2a21531000584031cdd912ab1602a2320019115072feeacaef6e9b"
+    },
+    {
+      "path": "/tmp/fireprot-qk-index32-20261010/baseline.notes",
+      "sha256": "25a49ed36bb8563cf6a10e4b34185e8b1b5717ba4c3a79d88093f1834832d055"
+    },
+    {
+      "path": "/tmp/fireprot-qk-index32-20261010/index32.asm",
+      "sha256": "f39ce95a5ee4f507a5bf279016bf5742574bc631f3af81322d8f0e6b2aed3baa"
+    },
+    {
+      "path": "/tmp/fireprot-qk-index32-20261010/index32.co",
+      "sha256": "93b49f5ae80e65aadc568ebfd62d528e9e6ba928fd9df340489bc7bd5f9361da"
+    },
+    {
+      "path": "/tmp/fireprot-qk-index32-20261010/index32.cpp",
+      "sha256": "d1c0893ec7d4dc971ea4ab7c26ef1ed497e475b7468c70c152595de106f81261"
+    },
+    {
+      "path": "/tmp/fireprot-qk-index32-20261010/index32.hsaco",
+      "sha256": "2f965a63a1b98ca507b3357cd26f042630315d7c2e78c9093a0e739da8c6953b"
+    },
+    {
+      "path": "/tmp/fireprot-qk-index32-20261010/index32.notes",
+      "sha256": "43e4f8345273fe5e6f00d044091b8e961e39a930f85e90a8c03476513c2be19f"
+    },
+    {
+      "path": "/tmp/fireprot-qk-index32-20261010/resources.json",
+      "sha256": "9397a73d103b7c9f44f93fe52f3dcc9d15e75cedcf7912a0c00d8ed899627bfa"
+    }
+  ],
+  "patch": {
+    "path": "experiments/mfma_qkv/qk_index32.patch",
+    "sha256": "94fd18a4bc8d8d71e39adbae02bd20da0eb6cc0705692515e3fb3cbb91ddea49"
+  },
+  "contract": "Packed N1536 B32/B128 only; internal element indices/strides32-bit, C ABI64-bit strides with exact known-layout guards; native PV remains unchanged",
+  "purpose": "Separate index-width gains from probability/PV fusion gains; resource metadata alone is not performance evidence",
+  "archive": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/fireprot-qk-index32-local-20261010.tar.gz",
+    "sha256": "f07fb158ed4327b99df8de49d6fc151edbea71b5622d4c7d6d76d1be213bfb5e",
+    "size_bytes": 85236,
+    "local_path": "/tmp/fireprot-qk-index32-local-20261010.tar.gz",
+    "remote_sha256_verified": true
+  }
+}

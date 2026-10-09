@@ -1,0 +1,69 @@
+--- a/baseline.cpp
++++ b/index32.cpp
+@@ -21,7 +21,7 @@
+ __global__ __launch_bounds__(1024, 1)
+ void qk_softmax(const float* query, const float* key_transposed,
+                 const float* mask, const float* bias, float* output,
+-                int64_t mb, int64_t mk, int64_t bh, int64_t bq, int64_t bk) {
++                int32_t mb, int32_t mk, int32_t bh, int32_t bq, int32_t bk) {
+ #if defined(__gfx90a__)
+     constexpr int N = 1536;
+     const int lane = threadIdx.x & 63;
+@@ -35,21 +35,21 @@
+     const bool reuse = gridDim.y % 32 == 0;
+     const uint32_t head_query = (linear % 3072) / 8;
+     const int query_base = (reuse ? head_query % 96 : blockIdx.x) * 16;
+-    const uint64_t matrix = reuse
++    const uint32_t matrix = reuse
+         ? ((linear / 3072) * 8 + linear % 8) * 4 + head_query / 96
+         : blockIdx.y;
+-    const uint64_t input_base = matrix * N * 32;
++    const uint32_t input_base = matrix * N * 32;
+     const int row_query = query_base + wave;
+-    const uint64_t row_base = (matrix * N + row_query) * N;
+-    const int64_t mask_base = int64_t(matrix / 4) * mb;
+-    const int64_t bias_base = int64_t(matrix % 4) * bh + int64_t(row_query) * bq;
++    const uint32_t row_base = (matrix * N + row_query) * N;
++    const int32_t mask_base = int32_t(matrix / 4) * mb;
++    const int32_t bias_base = int32_t(matrix % 4) * bh + int32_t(row_query) * bq;
+     __shared__ __align__(16) float stage[16 * 256];
+ 
+     float q_values[8];
+     #pragma unroll
+     for (int fragment = 0; fragment < 8; ++fragment) {
+         const int k = (fragment / 2) * 8 + 2 * k_lane + (fragment % 2);
+-        q_values[fragment] = query[input_base + uint64_t(query_base + coordinate) * 32 + k];
++        q_values[fragment] = query[input_base + uint32_t(query_base + coordinate) * 32 + k];
+     }
+     float values[32];
+     #pragma unroll
+@@ -69,7 +69,7 @@
+             for (int slot = 0; slot < 4; ++slot) {
+                 const int fragment = group * 4 + slot;
+                 const int k = (fragment / 2) * 8 + 2 * k_lane + (fragment % 2);
+-                prefetched[slot] = key_transposed[input_base + uint64_t(k) * N + key_base + coordinate];
++                prefetched[slot] = key_transposed[input_base + uint32_t(k) * N + key_base + coordinate];
+             }
+             #pragma unroll
+             for (int slot = 0; slot < 4; ++slot) {
+@@ -104,8 +104,8 @@
+         #pragma unroll
+         for (int t = 0; t < 24; ++t) {
+             const int key = lane + t * 64;
+-            values[t] = values[t] + mask[mask_base + int64_t(key) * mk];
+-            values[t] = values[t] + bias[bias_base + int64_t(key) * bk];
++            values[t] = values[t] + mask[mask_base + int32_t(key) * mk];
++            values[t] = values[t] + bias[bias_base + int32_t(key) * bk];
+         }
+         float maximum = values[0];
+         #pragma unroll
+@@ -138,7 +138,8 @@
+     int64_t mb, int64_t mk, int64_t bh, int64_t bq, int64_t bk,
+     int softmax, void* stream) {
+     if (!query || !key_transposed || !mask || !bias || !output
+-        || batch < 1 || batch > 1536 || mb < 0 || mk < 0 || bh < 0 || bq < 0 || bk < 0
++        || (batch != 32 && batch != 128) || (mb != 0 && mb != 1536) || mk != 1
++        || bh != 1536 * 1536 || !((bq == 1536 && bk == 1) || (bq == 1 && bk == 1536))
+         || (softmax != 0 && softmax != 1)) return int(hipErrorInvalidValue);
+     #define RUN(S) hipLaunchKernelGGL((qk_softmax<S>), dim3(96, batch * 4), dim3(1024), 0, \
+         reinterpret_cast<hipStream_t>(stream), query, key_transposed, mask, bias, output, \

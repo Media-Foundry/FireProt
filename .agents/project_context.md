@@ -5428,3 +5428,32 @@ Local /tmp/fireprot-{prepare,run,collect}-isolated-data-pairs.py, deployed in
 old gate-model experiment root. Collector not executed. Check existing driver;
 never duplicate jobs or run heavy remote work during measured intervals.
 Latest direct original-Torch comparison and maintained promotion remain pending.
+
+
+## Queued GPU follow-up (2026-10-09)
+
+Prior goal turn made progress: the isolated-data model and CPU state-restoration
+gates passed and were committed; paired E2E is still live (607660, observed again).
+A PV accumulation-order prerequisite probe is now prepared in experiments/mfma_pv.
+No GPU probe or build has run yet, and it has no numerical/performance result.
+It checks native PV kernel identity against the prior trace, three MFMA K-order
+hypotheses on six adversarial/random bounded cases, and full output rows only
+for hypotheses passing every bounded case. Target B128/B512, N1536/K1536/D32.
+
+Queued timeout PID 617750 runs
+outputs/experiments/openfold3-pv-order-20261009/run_after_pairs.py. It waits for
+607660 to complete with six exact outputs, then executes the isolated-data
+collector and archive exactly once, verifies the new full environment inventory,
+checks GPU5/PCI93 idle, uses the Rust HIP compiler service with no visible GPU,
+and finally runs the PV-only numerical probe on HIP7. Logs/status/preparation
+are under the new root. No overlap with paired timing is allowed. A predecessor
+failure or missing process without a terminal receipt stops the queue.
+
+Local source directory /tmp/fireprot-of3-pv-order-20261009; same five source/pin
+files are now in experiments/mfma_pv. The coordinator remains in that local
+folder and the remote root. Paired archive script is
+/tmp/fireprot-archive-isolated-data-pairs.py, deployed in old gate-model root;
+expected new archive name openfold3-isolated-data-pairs-20261009.tar.gz.
+Next inspect BOTH existing handles/status files before work. Do not duplicate
+collection, archival, compiler or GPU work. Even a passing PV-only screen is not
+a full attention implementation, model qualification or speedup result.

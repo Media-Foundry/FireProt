@@ -5682,3 +5682,21 @@ External checkpoints/resources/captures remain external and are not claimed
 standalone. Inspect this final queue too before starting another GPU run or
 heavy remote build; let archival finish before new model qualification. Do not
 start a duplicate archive or relaunch any predecessor on observation timeout.
+
+## QKV E2E terminal result (2026-10-10)
+
+Paired coordinator648410/child649275 finished0; collector ran exactly once and
+collected.json exists. All6 outputs/all11/fullCIF exact; candidates5064 fusedcalls.
+Raw E2E: baseline0 341.625921611, candidate0 364.559315330, candidate1
+342.071570544, baseline1 342.858609975, baseline2 340.641587154, candidate2
+339.245447973. Medians341.625921611 ->342.071570544 (0.99869720558x). Model
+254.552379405 ->253.474888237 (1.00425087935x). REJECT initial index32 QKV
+for promotion; no stable E2E gain. Keep qualified isolated-data composition.
+No outlier discarded and slowdown cause remains unproven. Evidence
+provenance/openfold3_qkv_e2e_n1536.json; local raw
+/tmp/fireprot-qkv-results-20261010/paired-collected.json.
+
+Next queues653434(unroll4),657408(QK32 control),669126(family archive) remain
+active; unroll4 should advance from its completed paired prerequisite. Inspect
+current status and existing handles. Do not rerun paired collector/archive or
+start overlapping GPU/heavy remote work. Wait for669126 before next model run.

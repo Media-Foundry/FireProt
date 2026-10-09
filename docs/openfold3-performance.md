@@ -808,7 +808,8 @@ and twelve balanced samples for each of three arms on each of two captures:
 All 84 calls match native trained outputs bitwise. N1536, strict FP32, seed101,
 HIP7, unflushed caches. Existing retained-score allocation and Rust leases are
 shared across arms; fused kernels leave that score storage unused. The initial
-fusion is rejected. The index32 kernel advances to full-model qualification.
+fusion is rejected. The index32 kernel passed full-model qualification but was subsequently rejected
+by the paired E2E comparison below.
 These are module timings, not E2E speedups; no recycles or diffusion steps change.
 See [implementation and limitations](../experiments/mfma_qkv/README.md) and
 [pinned replay evidence](../provenance/openfold3_qkv_replay_20261010.json).
@@ -817,5 +818,33 @@ The index32 full-model gate subsequently passed: 5,064 fused calls, all 11 array
 bitwise equal and full CIF bytes equal against the qualified isolated-data anchor.
 The strict N1536 R3/D200/S1 seed101 workload and gate/normalization counts are
 unchanged. Single invocation 335.676655 s, model forward 249.373962 s; this is
-qualification, not a new speedup ratio. Three paired E2E comparisons are running.
+qualification, not a new speedup ratio. Three paired E2E comparisons completed; see the decision below.
 See [model qualification](../provenance/openfold3_qkv_model_n1536.json).
+
+## QKV index32: three-pair N1536 E2E rejection
+
+The candidate retains isolated data preparation, caches, template reuse, HIP
+normalization and gate/packing in both arms. Only `FIREPROT_QKV_INDEX32=0/1` and
+the corresponding profile digest differ. Strict FP32 N1536 R3/four trunk passes,
+D200/S1, seed101, HIP7; fresh processes, unflushed caches, AB/BA/AB.
+
+| Measurement | Baseline median | QKV index32 median | Speedup |
+| --- | ---: | ---: | ---: |
+| Complete invocation | 341.625922 s | 342.071571 s | 0.9987x |
+| Model forward | 254.552379 s | 253.474888 s | 1.0043x |
+
+All six outputs match all 11 arrays bitwise and full CIF bytes. All candidates
+execute 5,064 fused calls; existing gate/normalization/key-copy counts and chunk
+choices remain unchanged. First-pair candidate latency rises to364.559315 s; the
+remaining pair ratios are only1.0023x and1.0041x. No observations are excluded.
+
+**Decision: reject this index32 QKV composition for promotion.** Its module
+replay gain did not produce a stable E2E improvement; retain the isolated-data
+baseline. The first slowdown occurred inside model forward with the same peak
+allocated/reserved memory. Available records do not establish its cause.
+The separately queued PV-unroll4 and QK-only-index32 experiments are still
+unqualified for full-model/E2E use.
+
+[Paired evidence](../provenance/openfold3_qkv_e2e_n1536.json) includes the six raw
+measurements and refreshed output/source checks. This is not an original-Torch
+comparison; no new direct-native speedup is claimed.

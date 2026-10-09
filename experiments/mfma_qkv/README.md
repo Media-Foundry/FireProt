@@ -3,7 +3,8 @@
 Status: both initial and index32 kernels passed the GPU synthetic numerical
 screen on HIP7: eight cases, ordinary/capture variants, exact probabilities and
 outputs, unchanged guards. Complete trained attention replay also passes exactly. The index32 variant is
-3.3–3.5% faster in this operator replay; the N1536 full-model exactness gate also passes. No paired E2E speedup claim.
+3.3–3.5% faster in this operator replay; the N1536 full-model exactness gate also passes. Three paired E2E measurements
+found no gain, so this initial index32 fusion is rejected for promotion.
 
 ## Proposed execution
 
@@ -44,7 +45,8 @@ checks device identity/idle state, then invokes the Rust-backed HIP builder
 and this numerical screen on HIP7. It stops when the prerequisite fails.
 
 Complete trained attention replay completed separately under
-`outputs/experiments/openfold3-qkv-replay-20261010`. The full-model gate passed subsequently; paired E2E is running.
+`outputs/experiments/openfold3-qkv-replay-20261010`. The full-model and paired correctness gates passed subsequently; paired E2E
+found no gain.
 Packing costs, unsupported-input fallback, ownership, memory accounting and
 launch resources still need evaluation before maintained-profile promotion. The passing
 synthetic screen does not establish those properties or a speedup.
@@ -103,10 +105,14 @@ N1536 R3/four trunk passes, D200/S1, seed101, HIP7; unchanged normalization/gate
 counts and runner configuration. The single invocation took 335.676655 s, model
 forward 249.373962 s. This is numerical qualification, not a paired speedup.
 See [model evidence](../../provenance/openfold3_qkv_model_n1536.json).
-Three AB/BA/AB pairs are running under
+Three AB/BA/AB pairs completed under
 `outputs/experiments/openfold3-qkv-pairs-20261010`; both arms use identical
 source and isolated-data preparation, differing only in the fusion flag/profile
-digest. Paired E2E evidence remains required before promotion.
+digest. Complete E2E medians were 341.625922 ->342.071571 s (0.9987x); model medians
+254.552379 ->253.474888 s (1.0043x). All six outputs match all11 arrays and full
+CIF bytes. The small module gain did not produce a stable E2E benefit. Retain
+the qualified isolated-data baseline; do not enable this fusion by default.
+See [paired evidence](../../provenance/openfold3_qkv_e2e_n1536.json).
 
 ## PV scheduling follow-up
 
@@ -149,3 +155,17 @@ and compares complete trained attention for baseline, QK-index32, QKV-index32
 and QKV-unroll4. Two warmups plus sixteen balanced samples per arm/capture:
 144 full calls with exact checks. All queued work remains serial on HIP7.
 See [local evidence](../../provenance/openfold3_qk_index32_local_20261010.json).
+
+### Paired E2E decision
+
+| Pair order | Baseline | Index32 fusion | Baseline / fusion |
+| --- | ---: | ---: | ---: |
+| AB | 341.625922 s | 364.559315 s | 0.9371x |
+| BA | 342.858610 s | 342.071571 s | 1.0023x |
+| AB | 340.641587 s | 339.245448 s | 1.0041x |
+
+All observations are retained. The first candidate's slowdown is inside model
+forward; chunk choices, operator counts and recorded peak memory match. These
+records do not identify a clock/power or external-load cause. Median and p95
+are both worse. PV schedule and QK-only index-width trials remain separate
+candidates, with their own numerical and performance gates.

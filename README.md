@@ -253,10 +253,16 @@ See [complete evidence and reproduction scope](docs/openfold3-performance.md).
 A complete three-pair direct original-Torch comparison of the latest combination
 is not available; 1.499x above applies to its earlier measured combination.
 
-The final additional attention cycle rejected both exact candidates: native BMM
+An earlier additional attention cycle rejected both exact candidates: native BMM
 into reused scores plus HIP softmax made complete attention approximately 11%
 slower, and double-LDS buffering made it approximately 1.3% slower. The validated
 triangle-memory combination is retained; neither rejected candidate is promoted.
+
+A later exact QK–softmax–PV fusion also failed its E2E gate: three pairs gave
+**341.626 ->342.072 s (0.9987x)** despite a 3.3–3.5% module replay gain. All six
+outputs match all 11 arrays and full CIF bytes. The isolated-data combination
+remains selected; the fusion is not promoted. See the
+[paired decision](docs/openfold3-performance.md#qkv-index32-three-pair-n1536-e2e-rejection).
 
 C = Protenix cycles; R = additional recycles; D = diffusion steps; S = samples.
 Long inputs and the eight short development cases are regression/performance

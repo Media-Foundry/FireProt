@@ -6035,3 +6035,37 @@ Collector checks all6 all11/fullCIF, scientificrunner, unchangednorm/gate/QKV/
 template/isolation,4800vs0hipcopies and19200vs0groups. Keep allobservations.
 Continuegoal; not flat, not blocked, notcomplete. Maintainedpromotion anddirect
 native routing/pairs remainpending; latestdirect originalTorchstill1.499x.
+
+
+## Direct-native workflow queued after incremental HIP packing pairs (2026-10-10)
+
+Previous goalturn made progress: HIPpack64 fullmodel exact317.785s andpairedrun
+launched. This turn revalidated live783467/783478; firstpair E2E327.198516225 ->
+320.345378463 (both invocationexit0); remaining4runs pending at19:30UTC.
+No additionalGPU/build/archive duringpairedmeasurements.
+
+New repo helpers experiments/openfold3_diffusion/{prepare,qualify,collect}_native_comparison.py.
+Preparation requires all3previouspairs faster/all6all11/fullCIF, fullsourcepins+
+copyinventory(noadded/removedfiles), fixednativeworkerSHA. Copies pairedworker
+body unchanged asoptimized, maintainedreference unchanged, sharedroutertree.
+Baseline9flags0,candidate1; declaresbackend/profile/flag/actualbridgeidentitydiffs.
+Two fresh routedmodelgates first; all11/fullCIFexact, no nativeopreceipts, native
+runnerdefaultvs candidate only data_module_args num_workers0, route/runner sealed.
+Thenfresh3AB/BA/AB directpairs; collector rechecks6 currentarchives/routes/runner/
+counts/arrays/CIF andderivesmedians. 12CPUtests pass; no GPUqualificationyet.
+
+Followup coordinatorDEPLOYEDPID795488, stagewaiting_for_incremental_pairs:
+outputs/experiments/openfold3-direct-native-followup-20261010.
+Localcontrol/tmp/fireprot-of3-direct-native-followup-20261010, includespinnedscripts,
+router, exactreference_worker.py. Futurebundleopenfold3-direct-native-latest-20261010
+NOT preparedyet. Driver waits previousqueue terminal, rejectsanyslowerpair;
+requires idleSMI5 thenprepares/runs2modelgates/directpairs/collector sequentially.
+No needrelaunch orduplicate. Nativebaseline~15min historically; followup can take
+~90min ifallgatespass; don'tpromote timingestimatetomeasurement. Endpoint.5restored.
+LatestdirectoriginalTorch ratio remains1.499x untilnewdirectstudyactuallypasses.
+
+First pair Rust pair-check-000.correctness_passed=true re-read19:32UTC.
+Forward baseline241.733549019 ->candidate233.159511670s (singlepaironly).
+Request270.336135037 ->262.282754763s; supervisor309.506804704 ->302.390554898s.
+These timing-boundary deltas locate remaining overhead but are NOT a startup
+profile or proof of where that CPU/I/O time is spent. Needprofilebeforeattribution.

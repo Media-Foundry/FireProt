@@ -2,7 +2,9 @@
 
 Status: source audit, 2026-10-10. The inventory below covers the frozen
 isolated-data series. Unroll4 QKV fusion has since passed paired E2E; packed global
-diffusion bias reuse has passed whole-model gates and is undergoing paired E2E.
+diffusion bias reuse passed whole-model gates but failed the all-pairs-faster
+promotion criterion. HIP packing plus grouped global softmax has passed its model
+gate and is undergoing paired E2E.
 Those later files are not implicitly covered by the older inventory. No
 maintained-profile promotion has occurred.
 
@@ -58,7 +60,8 @@ ordinary CLI configuration and output serialization are retained. This is a
 source audit, not a new native performance measurement.
 
 `experiments/openfold3_diffusion/native_router.py` prepares a common worker entry
-for a later direct comparison. It is currently **unconnected to GPU execution**.
+for a later direct comparison. It is currently **unqualified through GPU execution**; the gated follow-up
+coordinator described below waits for the incremental E2E decision.
 A frozen tree must contain:
 
 | Worker-package file | Required contents |
@@ -87,3 +90,54 @@ routes on the full workload, including all11 arrays and complete CIF bytes,
 then run fresh matched E2E. The result will compare the pinned upstream native
 Torch route under the common FireProt launcher with the selected composition;
 it will not measure an unwrapped standalone upstream CLI.
+
+
+## Frozen direct-native comparison workflow
+
+The experimental preparation/qualification/collection scripts now make the
+router usable in a bounded follow-up study. They have **not yet produced a
+new direct-native result**. The coordinator waits for the HIP packing study to
+finish and requires all three incremental pairs to be faster before preparing
+this candidate's direct comparison.
+
+`prepare_native_comparison.py PAIRED_ROOT DESTINATION OUTPUT_ROOT REFERENCE_WORKER`
+validates six exact outputs, the paired performance gate, source-file hashes
+and the complete copied-file inventory. It rejects added/removed source files
+and a modified native reference. The destination must be unused. Both original
+worker bodies remain byte-identical, with a common routing entry and explicit
+source manifest. Both profiles share this worker tree and environment inventory;
+all nine optimization selection flags are disabled in the native profile. The
+candidate retains its already-qualified absolute kernel locations, which remain
+external pinned dependencies. This is a frozen experiment, not a portable
+installation or a promotion into the maintained profile.
+
+The preparation writes two full-model qualification specifications and three
+AB/BA/AB pairs. It declares backend, profile, optimization flags and the actual
+Rust bridge file identity as comparison differences. Scientific workload stays
+strict FP32 N1536, R3/four trunk passes, D200/S1, seed101 on HIP7. The native
+worker preserves upstream data-module defaults; the candidate retains its
+qualified isolated single-item data path. The numerical gates must show that
+this execution difference preserves all scientific outputs.
+
+`qualify_native_comparison.py DESTINATION` runs the two model gates through Rust
+`measure-inference`. It requires all 11 arrays and complete CIF bytes to equal
+the qualified anchor, verifies the selected route and its sealed output hash,
+and rejects optimization receipts on the native route. It verifies candidate
+coverage and permits only the recorded `data_module_args.num_workers=0` runner
+difference. A route file merely present on disk is insufficient: it must appear
+in the accepted output archive and retain its recorded bytes.
+
+Only a successful `route-qualification.json` permits Rust `benchmark-pairs`.
+`collect_native_comparison.py DESTINATION` then rechecks all six current output
+archives, selected routes, runner settings, dispatch counts, all 11 arrays and
+complete CIF bytes. It derives model medians from raw measurements and checks
+E2E medians against the Rust comparison. No run is discarded.
+
+Twelve CPU tests cover routing, native source isolation, profile selection,
+changed source inventories, a regressed pair, and missing/tampered sealed route
+receipts. GPU correctness and performance still require the full workflow.
+
+Current coordinator: `outputs/experiments/openfold3-direct-native-followup-20261010`.
+Reserved study destination: `outputs/experiments/openfold3-direct-native-latest-20261010`.
+At preparation time the coordinator is waiting on the existing incremental
+paired process; it has not launched another GPU workload.

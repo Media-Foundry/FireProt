@@ -302,3 +302,19 @@ The recovered128-row packing receipt also confirms arbitrary-bit equality;
 its actual-layout attention medians1.471994/1.472234 ms provide no meaningful
 advantage over64 rows. Both raw variant summaries are retained in the screen
 receipt. No maintained-profile promotion or new direct-original-Torch ratio.
+
+
+## Direct-native follow-up preparation
+
+The direct-native router now has explicit preparation, full-model qualification
+and paired collection scripts in this directory. The follow-up waits for all
+three HIP-packing incremental pairs to pass and improve before selecting that
+candidate. No GPU jobs overlap. Both model routes must then match all 11 arrays
+and full CIF bytes before a fresh direct-native three-pair comparison starts.
+
+Native worker source and data defaults are preserved; all optimized selection
+flags are zero in the native profile. One common worker tree prevents source
+layout differences from being hidden as protected-input changes. Route/runner
+and optimization receipts are sealed with outputs, and the collector checks their
+current bytes. Twelve CPU tests pass; no routed GPU qualification or new direct
+ratio exists yet. See the [workflow and evidence boundary](../../docs/openfold3-deployment-audit.md#frozen-direct-native-comparison-workflow).

@@ -5755,3 +5755,32 @@ outputs/experiments/openfold3-qkv-unroll4-pairs-20261010; outputs
 outputs/qkv-unroll4-pairs-n1536-{baseline,candidate}-{0,1,2}. Do not duplicate
 collector/preparation/launch. Unroll8 queue688389 still waits on coordinator
 685102; no concurrent GPU/heavy build/archive. Goal remains active.
+
+## Steady diffusion profiling queued (2026-10-10)
+
+Previous goal turn was a verified wait:685102/690424 paired run and688389 next
+queue were confirmed live. This turn identified a concrete measurement gap:
+post-norm sample_diffusion44.345s has inclusive stage timing, while operator
+profiling covers trunk only. New experiments/openfold3_diffusion/probe.py samples
+DiffusionModule.forward call5 with Torch CPU/GPU trace and immediate child
+ranges/input shape-stride metadata. All200 calls keep native arithmetic; event
+instrumentation only elsewhere. It excludes outer augmentation/noise/scheduler
+work and does not establish E2E improvement or hardware utilization/bound status.
+Upstream DiffusionModule source is the same file SHA3b5ed9fb... as SampleDiffusion.
+
+NEW queue timeoutPID701093 in
+outputs/experiments/openfold3-diffusion-probe-queue-20261010/run_after_unroll8.py.
+Waits for688389 terminal0/exactness, then checks SMI5/PCI93 idle, prepares fresh
+outputs/experiments/openfold3-diffusion-profile-20261010 from the qualified
+isolated-data baseline (no QKV fusion), and runs Rust measure-inference. Output
+outputs/openfold3-diffusion-profile-n1536-20261010. Requires all11/fullCIF exact,
+unchanged runner/norm/gate counts,200 denoiser calls, one nonempty call5 trace,
+seven expected child names and a verified trace hash. Diagnostic elapsed/model
+times cannot be used as E2E evidence. Source/scripts local
+/tmp/fireprot-of3-diffusion-profile-20261010, copied to remote queue root. New
+probe is in repo; no maintained default changed. No result yet. Inspect queue
+701093 before any further GPU work/archival after unroll8.
+
+Unroll4 paired first result observed during this turn: baseline0 E2E339.417633232,
+candidate0 329.915480453 (~1.0288x); Rust pair-check-000 correctness_passed=true.
+Only first pair is complete; do not report a final median or stable gain yet.

@@ -812,3 +812,10 @@ fusion is rejected. The index32 kernel advances to full-model qualification.
 These are module timings, not E2E speedups; no recycles or diffusion steps change.
 See [implementation and limitations](../experiments/mfma_qkv/README.md) and
 [pinned replay evidence](../provenance/openfold3_qkv_replay_20261010.json).
+
+The index32 full-model gate subsequently passed: 5,064 fused calls, all 11 arrays
+bitwise equal and full CIF bytes equal against the qualified isolated-data anchor.
+The strict N1536 R3/D200/S1 seed101 workload and gate/normalization counts are
+unchanged. Single invocation 335.676655 s, model forward 249.373962 s; this is
+qualification, not a new speedup ratio. Three paired E2E comparisons are running.
+See [model qualification](../provenance/openfold3_qkv_model_n1536.json).

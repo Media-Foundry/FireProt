@@ -5538,3 +5538,31 @@ Rust measure-inference followed by exact11/fullCIF/count/runner checks.
 Reference is qualified isolated-data model output. Prep/run scripts in
 /tmp/fireprot-{prepare,run}-qkv-model-20261010.py and remote replay root.
 Physical GPU idle verified before launch. No simultaneous benchmark/archive.
+
+## Index32 full-model qualification and live paired follow-up (2026-10-10)
+
+Model PID644920 finished0. 5,064 index32 calls, no bounded-batch fallback, all11
+arrays and full CIF exact, expected norm/gate counts unchanged. Single E2E
+335.676654701 s / model249.373961893 s. Collector independently rechecked
+all sources, NPZ arrays and CIF; collected.json exists. Do not rerun collector
+or preparation. Evidence provenance/openfold3_qkv_model_n1536.json.
+
+CURRENT paired coordinator timeout PID648410, child paired runner649275.
+Coordinator script fireprot-run-qkv-followup-20261010.py in remote replay root
+outputs/experiments/openfold3-qkv-replay-20261010. Its followup-status.json says
+paired_e2e. Full model collector and paired preparation already succeeded.
+Pairs root outputs/experiments/openfold3-qkv-pairs-20261010; six outputs named
+outputs/qkv-pairs-n1536-{baseline,candidate}-{0,1,2}. AB/BA/AB, current full
+environment inventory, HIP7 only. Both arms share copied model worker, isolated
+data preparation and retained workspace; FIREPROT_QKV_INDEX32=0/1 is the only
+execution flag difference. Full11/fullCIF and 5064 fusion-call checks required.
+Coordinator will collect pairs exactly once after driver success; it does not
+archive. Do not duplicate collectors/preparation/launch. Local prep/run/collect
+files /tmp/fireprot-{prepare,run,collect}-qkv-pairs-20261010.py; coordinator
+/tmp/fireprot-run-qkv-followup-20261010.py. All copied to remote replay root.
+
+Next: inspect existing handles/terminal receipts, collect paired medians, decide
+whether index32 improves E2E consistently. After GPU queue ends, archive the PV,
+fusion, index32, replay/model and paired evidence. No archive overlaps timing.
+Latest original-Torch direct remains earlier 949.999 -> 633.712 s; don't divide
+that old baseline by current model qualification. Active goal continues.

@@ -1,0 +1,145 @@
+{
+  "qkv": {
+    "library": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-model-20261010/qkv.so",
+    "library_sha256": "4bafb83b9056d8f80d5215bb2ae3a204b3baef5abbb61a0bbd32b829fc2eeab0",
+    "calls_by_batch": {
+      "128": 5064
+    },
+    "fallback_by_batch": {},
+    "retained_scores_written": false,
+    "scope": "Experimental PV-result-only fusion; existing workspace allocation/lease retained; parent QK receipt describes fallback, not fused calls"
+  },
+  "isolated_data": {
+    "scope": "Single input only; worker-0 initialization in isolated RNG/thread context; model settings restored",
+    "records": [
+      {
+        "base_seed": 302501347963651595,
+        "worker_id": 0,
+        "cpu_threads": 1,
+        "seconds": 15.998112734989263,
+        "parent_threads": 128,
+        "parent_deterministic": true
+      }
+    ]
+  },
+  "correctness_passed": true,
+  "all11_exact": true,
+  "full_cif_exact": true,
+  "scope": "Exact index32 QK-softmax-PV with qualified isolated data, gate, normalization and retained workspace; full-model qualification, no paired speedup",
+  "request": {
+    "schema_version": 1,
+    "run_id": "openfold3-qkv-index32-n1536-20261010",
+    "workload": {
+      "model": "openfold3",
+      "model_name": "openbind-0",
+      "recycles": 3,
+      "diffusion_steps": 200,
+      "samples": 1,
+      "precision": "float32",
+      "deterministic": true
+    },
+    "backend": "hip_fused",
+    "seed": 101,
+    "hip_device": 7,
+    "source": {
+      "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+      "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+    },
+    "checkpoints": {
+      "model": {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+        "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+      }
+    },
+    "resources": {},
+    "input": {
+      "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+      "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+    },
+    "output_dir": "/media/IntelSSD/fireprot/outputs/openfold3-qkv-index32-n1536-20261010"
+  },
+  "invocation_seconds": 335.676654701,
+  "model_seconds": 249.3739618929976,
+  "normalization_counts": {
+    "accepted": 11202,
+    "fallback": 7846,
+    "contiguous_copies": 4730
+  },
+  "source_preparation": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-model-20261010/preparation.json",
+    "sha256": "afb742bce34a40ed1bdfebf84594cafc03a69dcb24e0d590a646a71476f60f0f"
+  },
+  "gate": {
+    "accepted": 430,
+    "fallback": 18,
+    "gate_calls": 5160,
+    "copies": 5160,
+    "copy_fallbacks": 1290,
+    "library_sha256": "b7a980bf469a0f13581985033f904541cae5783eab01d4579054588e75c3614c"
+  },
+  "changed_sources": [
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-model-20261010/python/fireprot_workers/openfold3.py",
+      "sha256": "63e1b7af3d54b16aa2d41666a4c07730696e8c06d3501ac3129bcccab2fca8ce"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-model-20261010/python/fireprot_workers/qkv_scope.py",
+      "sha256": "1a273a9b208ed119cc15acb0faf6c3d7190394436f8ae7f36ed8a9d25a1fcbc9"
+    }
+  ],
+  "qkv_library": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-model-20261010/qkv.so",
+    "sha256": "4bafb83b9056d8f80d5215bb2ae3a204b3baef5abbb61a0bbd32b829fc2eeab0"
+  },
+  "gate_library": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-model-20261010/gate.so",
+    "sha256": "b7a980bf469a0f13581985033f904541cae5783eab01d4579054588e75c3614c"
+  },
+  "invocation": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-model-20261010/measurement/invocation.json",
+    "sha256": "ff5b1dc8c0b4f9589341a764879440b933987e739b5c4bccf3b68de6bcfdc70d"
+  },
+  "output_npz": {
+    "path": "/media/IntelSSD/fireprot/outputs/openfold3-qkv-index32-n1536-20261010/sample-0.npz",
+    "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+  },
+  "output_cif": {
+    "path": "/media/IntelSSD/fireprot/outputs/openfold3-qkv-index32-n1536-20261010/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+    "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+  },
+  "reference_npz": {
+    "path": "/media/IntelSSD/fireprot/outputs/openfold3-isolated-data-v2-n1536-20261009/sample-0.npz",
+    "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+  },
+  "reference_cif": {
+    "path": "/media/IntelSSD/fireprot/outputs/openfold3-isolated-data-v2-n1536-20261009/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+    "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+  },
+  "operator_qualification": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-replay-20261010/benchmark/report.json",
+    "sha256": "949054faa3b0fe6da028cac6adf14891b02bb8b8eeb323acb4b8433cf6fec370"
+  },
+  "regression": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-canonical-source-20261007/layout-regression/result.json",
+    "sha256": "9b420ea62b45860aeb29745a935586e77f1c323b01682cf48e17db6df1517dd1"
+  },
+  "regression_result": {
+    "discriminates": true,
+    "records": [
+      {
+        "label": "old",
+        "returncode": 1,
+        "log": "F\n======================================================================\nFAIL: test_sliced_singleton_batch_has_native_output_strides (__main__.OutputLayout.test_sliced_singleton_batch_has_native_output_strides)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/pc/anaconda3/envs/BIO/lib/python3.12/site-packages/torch/utils/_contextlib.py\", line 124, in decorate_context\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/media/IntelSSD/fireprot/outputs/experiments/openfold3-canonical-source-20261007/layout-regression/old/test_output_layout.py\", line 33, in test_sliced_singleton_batch_has_native_output_strides\n    self.assertEqual(actual.stride(), expected.stride())\nAssertionError: Tuples differ: (7680, 640, 128, 1) != (1280, 640, 128, 1)\n\nFirst differing element 0:\n7680\n1280\n\n- (7680, 640, 128, 1)\n?  ^^\n\n+ (1280, 640, 128, 1)\n?  ^^\n\n\n----------------------------------------------------------------------\nRan 1 test in 1.070s\n\nFAILED (failures=1)\n"
+      },
+      {
+        "label": "fixed",
+        "returncode": 0,
+        "log": ".\n----------------------------------------------------------------------\nRan 1 test in 1.077s\n\nOK\n"
+      }
+    ]
+  },
+  "collector": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-replay-20261010/fireprot-collect-qkv-model-20261010.py",
+    "sha256": "e2ba2bd08db280cd3062c78f0e81f336006aec0d1fc0f400b550278ef314d4b2"
+  }
+}

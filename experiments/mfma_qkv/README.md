@@ -3,7 +3,7 @@
 Status: both initial and index32 kernels passed the GPU synthetic numerical
 screen on HIP7: eight cases, ordinary/capture variants, exact probabilities and
 outputs, unchanged guards. Complete trained attention replay also passes exactly. The index32 variant is
-3.3–3.5% faster in this operator replay; no model or E2E speedup claim.
+3.3–3.5% faster in this operator replay; the N1536 full-model exactness gate also passes. No paired E2E speedup claim.
 
 ## Proposed execution
 
@@ -44,8 +44,7 @@ checks device identity/idle state, then invokes the Rust-backed HIP builder
 and this numerical screen on HIP7. It stops when the prerequisite fails.
 
 Complete trained attention replay completed separately under
-`outputs/experiments/openfold3-qkv-replay-20261010`. No full-model or E2E
-comparison has run.
+`outputs/experiments/openfold3-qkv-replay-20261010`. The full-model gate passed subsequently; paired E2E is running.
 Packing costs, unsupported-input fallback, ownership, memory accounting and
 launch resources still need evaluation before any model integration. The passing
 synthetic screen does not establish those properties or a speedup.
@@ -98,4 +97,13 @@ This experimental scope does not support probability-reference inspection.
 
 Evidence: [complete replay](../../provenance/openfold3_qkv_replay_20261010.json)
 and [synthetic qualification](../../provenance/openfold3_qkv_synthetic_20261010.json).
-Full-model and paired E2E gates remain required before promotion.
+The full-model gate passed: 5,064 index32 calls, all 11 arrays bitwise equal and
+full CIF bytes equal against the qualified isolated-data anchor. Strict FP32
+N1536 R3/four trunk passes, D200/S1, seed101, HIP7; unchanged normalization/gate
+counts and runner configuration. The single invocation took 335.676655 s, model
+forward 249.373962 s. This is numerical qualification, not a paired speedup.
+See [model evidence](../../provenance/openfold3_qkv_model_n1536.json).
+Three AB/BA/AB pairs are running under
+`outputs/experiments/openfold3-qkv-pairs-20261010`; both arms use identical
+source and isolated-data preparation, differing only in the fusion flag/profile
+digest. Paired E2E evidence remains required before promotion.

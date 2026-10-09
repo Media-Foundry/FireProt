@@ -5364,14 +5364,36 @@ Completed model/loader archive:
 `7eee4f1d7d3fdcb483f01169074f801149929ef074a082d3ae904909a8ed55f5`,
 153687155 bytes. It depends on the earlier paired/epilogue operator archive.
 
-CURRENT LIVE: timeout PID 279001 runs three epilogue AB/BA/AB E2E pairs in
-`outputs/experiments/openfold3-epilogue-pairs-20261007`. HIP7 only, strict FP32
-N1536 R3/D200/S1 seed101. Shared frozen worker, default ten data workers,
-only FIREPROT_EPILOGUE=0/1 plus declared profile hash differ. Baseline retains
-qualified gate/packing; candidate adds epilogue. Expected 2,580 epilogue calls
-only on candidate. Both arms must retain all eleven arrays/full CIF exactly.
-Local scripts `/tmp/fireprot-{prepare,run,collect}-epilogue-pairs.py`; deployed
-in the old gate-model experiment root. Collector is not yet executed. Poll
-existing driver/paired benchmark; do not restart or run concurrent GPU work,
-builds or archive compression. A new direct original-Torch comparison of the
-latest composition remains outstanding. No epilogue maintained promotion yet.
+## Resumed optimization (2026-10-09)
+
+The epilogue three-pair driver completed successfully; all six outputs retain
+all eleven arrays and full CIF bytes. Independent collection is complete.
+E2E medians 369.435519670 -> 371.197392122 s (0.995253543x); model medians
+270.865807241 -> 269.710602969 s. Only one of three E2E pairs improves.
+Do not select the added epilogue in the best composition. Retain gate/packing.
+Evidence: provenance/openfold3_epilogue_e2e_n1536.json.
+Archive outputs/experiments/openfold3-epilogue-pairs-20261009.tar.gz,
+SHA99ebf832434a1ff4f298564fae9cc2b207831bddea8f8b8f9a72747dacedd505,
+503458943 bytes. Collector and archive are finished; do not rerun on same paths.
+
+The first startup diagnostic (589551) failed before worker launch: the pinned
+environment inventory rejected 48 changed file identities, all system-library
+entries (including /lib aliases). The changed families are FreeRDP/WinPR,
+FreeType, Poppler, librsvg/pixbuf and libsoup. No inventoried Python/Torch/ROCm
+files changed. Full capture and delta are preserved under
+outputs/experiments/openfold3-environment-audit-20261009. Original pins retained.
+
+CURRENT LIVE: startup diagnostic timeout PID 590705 in
+outputs/experiments/openfold3-startup-profile-v2-20261009. Output
+outputs/openfold3-startup-profile-v2-n1536-20261009. The new profile pins the
+audit current.json inventory without narrowing its coverage. Same qualified gate composition,
+strict FP32 N1536 R3/D200/S1 seed101 HIP7; no added epilogue. Scoped timing
+wrappers record checkpoint read/selection, construction, state loading, data
+setup/dataloader, trainer prediction and predict_step. Inclusive CPU intervals,
+no added device synchronization, no optimization or E2E result claimed.
+Scripts /tmp/fireprot-{prepare,run}-startup-profile-v2.py and
+/tmp/fireprot-startup-scope.py, also in old gate-model experiment root.
+Model must retain all eleven arrays and complete CIF. Read startup-stages.json
+only after the existing driver completes. Do not duplicate GPU jobs.
+Upstream already wraps construction with skip_random_init(), disabling its
+trunc_normal_init_; measure remaining overhead before further init changes.

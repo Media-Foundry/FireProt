@@ -665,8 +665,8 @@ Full-model qualification also passes all eleven arrays bitwise and complete CIF
 bytes under strict FP32 N1536 R3/D200/S1, seed101, HIP7. The worker records 2,580
 fused epilogue calls, 430 accepted triangle modules and 18 native fallbacks.
 The single observation is **349.815 s complete invocation / 255.063 s forward**;
-it does not establish an E2E speedup. A separate three-pair AB/BA/AB experiment
-is running in `outputs/experiments/openfold3-epilogue-pairs-20261007`, using
+it does not establish an E2E speedup. The separate three-pair AB/BA/AB experiment
+completed in `outputs/experiments/openfold3-epilogue-pairs-20261007`, using
 `FIREPROT_EPILOGUE=0/1` on shared frozen sources. No maintained default changes.
 
 The first post-run collector incorrectly expected the default data-worker count
@@ -688,3 +688,29 @@ See [both loader trials](../provenance/openfold3_dataworkers_n1536.json).
 These full outputs, frozen workers and scripts are archived on DiamondHill in
 `openfold3-epilogue-model-dataworkers-20261007.tar.gz`, SHA-256
 `7eee4f1d7d3fdcb483f01169074f801149929ef074a082d3ae904909a8ed55f5`.
+
+
+## Output epilogue paired decision (2026-10-09)
+
+All six N1536 outputs pass eleven bitwise array comparisons and complete CIF
+byte checks. The collector independently rechecks outputs, source pins and
+actual dispatch counts. Scientific settings remain strict FP32, R3/D200/S1,
+seed101, HIP7, fresh processes and unflushed caches.
+
+| Pair | Gate/packing baseline E2E (s) | Added epilogue E2E (s) | Ratio |
+| --- | ---: | ---: | ---: |
+| 1 | 357.640 | 375.849 | 0.9516x |
+| 2 | 369.436 | 371.197 | 0.9953x |
+| 3 | 372.737 | 347.422 | 1.0729x |
+
+Complete invocation medians are **369.436 → 371.197 s (0.9953x)**. Model-forward
+medians are **270.866 → 269.711 s (1.0043x)**. E2E median and p95 regress,
+and only one pair improves. The spread prevents treating isolated operator
+wins or the fastest candidate observation as a stable E2E gain.
+
+**Decision: retain the gate/packing composition without the additional epilogue.**
+The epilogue remains a numerically qualified experiment. These results do not
+change the earlier gate/packing comparison, and are not a direct original-Torch
+benchmark. See [raw paired evidence](../provenance/openfold3_epilogue_e2e_n1536.json).
+Archive: `openfold3-epilogue-pairs-20261009.tar.gz`, SHA-256
+`99ebf832434a1ff4f298564fae9cc2b207831bddea8f8b8f9a72747dacedd505`.

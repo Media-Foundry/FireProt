@@ -6010,3 +6010,28 @@ Local pairqueue prepared /tmp/fireprot-of3-hip-bias-pack-pairs-20261010,
 NOT deployed yet. It requires successfulmodel before AB/BA/AB withsingle shared
 workertree; togglesFIREPROT_GLOBAL_SOFTMAX only. Needreview/deploythenmonitor.
 CPU hostguards+parent+router10pass. No fullmodel/E2E result yet at this entry.
+
+
+## HIP packing full-model pass and paired run started (2026-10-10)
+
+Network recovered19:18UTC: preferred10.120.16.5 and.9 verifiedsameboot/host.
+Use.5again. Model778339completed0; all11/fullCIFexact, E2E317.785212749,
+model231.0753838029923. Counts4800attention/hipcopies,19200groups,0Torchcopies/
+layoutfallbacks,5064QKV,unchangednormalization. No globalbiascache. Singlegateonly.
+Collectedraw pulledlocal/tmp/fireprot-of3-hip-bias-pack-model-20261010/collected.json;
+repo provenance/openfold3_hip_bias_pack_model_n1536.json omitsfullcompilerinventory
+butretainssource/rawhash+libraryversions/pin. Raw128packingreceipt also recovered,
+verifiedscreenSHA/arbitrarybits andrecordedsecondvariant. CPU10testspassed.
+
+Pairedqueue DEPLOYEDandRUNNING PID783467/child783478 onHIP7only:
+outputs/experiments/openfold3-hip-bias-pack-pairs-queue-20261010.
+Benchmarkroot outputs/experiments/openfold3-hip-bias-pack-pairs-20261010.
+Localqueue scripts/tmp/fireprot-of3-hip-bias-pack-pairs-20261010.
+Stagepairs confirmed19:19UTC. Six~320s invocations; no concurrentGPU/build/archive.
+No collector/result yet. Checkexistinghandles, not duplicate. Baselineunroll4;
+candidateHIPpack64+groupedsoftmax. Sharedworker tree; onlyGLOBAL_SOFTMAXflag and
+profiledigest differ. Transportincludesnewglobalsoftmax/QKV/gatesidecarhashes.
+Collector checks all6 all11/fullCIF, scientificrunner, unchangednorm/gate/QKV/
+template/isolation,4800vs0hipcopies and19200vs0groups. Keep allobservations.
+Continuegoal; not flat, not blocked, notcomplete. Maintainedpromotion anddirect
+native routing/pairs remainpending; latestdirect originalTorchstill1.499x.

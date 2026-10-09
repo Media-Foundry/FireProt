@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "correctness_passed": true,
+  "all11_exact": true,
+  "full_cif_exact": true,
+  "scope": "Global N1536/H16/D48 native QK/PV with four published HIP softmax groups and HIP interleaved-bias packing (64 rows), over the accepted unroll4 composition without global bias caching",
+  "workload": {
+    "schema_version": 1,
+    "run_id": "openfold3-hip-bias-pack-n1536-20261010",
+    "workload": {
+      "model": "openfold3",
+      "model_name": "openbind-0",
+      "recycles": 3,
+      "diffusion_steps": 200,
+      "samples": 1,
+      "precision": "float32",
+      "deterministic": true
+    },
+    "backend": "hip_fused",
+    "seed": 101,
+    "hip_device": 7,
+    "source": {
+      "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+      "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+    },
+    "checkpoints": {
+      "model": {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+        "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+      }
+    },
+    "resources": {},
+    "input": {
+      "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+      "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+    },
+    "output_dir": "/media/IntelSSD/fireprot/outputs/openfold3-hip-bias-pack-n1536-20261010"
+  },
+  "arrays": {
+    "confidence.chain_ptm.1": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.disorder": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.gpde": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.has_clash": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.iptm": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.pae": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.pde": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.plddt": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.ptm": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "confidence.sample_ranking_score": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "coordinates": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    }
+  },
+  "global_softmax": {
+    "calls": 4800,
+    "probability_calls": 4800,
+    "groups_launched": 19200,
+    "bias_copies": 0,
+    "score_layout_fallbacks": 0,
+    "kernel": {
+      "mode": "published",
+      "kernel": {
+        "directory": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1",
+        "library": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1/fireprot_softmax_fp32_7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251.so",
+        "manifest_sha256": "4914cb71a64c42bf54495f1c9ee0eeb27808f0571b6a50fed81e8067f56f01be",
+        "build_identity_sha256": "7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251",
+        "compatibility": {
+          "package": "fireprot_softmax_fp32",
+          "target": "gfx90a",
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850",
+          "c_abi": "softmax-fp32-v1"
+        }
+      }
+    },
+    "scope": "Strict N1536/H16/D48 global diffusion; four published H4 launches per call",
+    "limits": [
+      "Submitted launch counts do not prove asynchronous completion.",
+      "Whole-model numerical and paired E2E gates are required.",
+      "The shared kernel launch counter includes these group launches."
+    ],
+    "hip_bias_copies": 4800,
+    "pack_tile_rows": 64,
+    "pack_kernel": {
+      "library": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-hip-bias-pack-model-20261010/pack.so",
+      "library_sha256": "ed9a81589fb906cba2f572d13ae5895e04b203a13fe347fb70f4f95547ff8efd",
+      "versions": {
+        "abi": "c",
+        "c_abi": "of3-bias-pack-h16-f32-v1",
+        "hip": "7.14.60850",
+        "recipe": "hip-cabi-1",
+        "torch": "2.12.0a0+git78258b9"
+      }
+    }
+  },
+  "normalization": {
+    "source_sha256": "e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79",
+    "library_sha256": "a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a",
+    "counts": {
+      "accepted": 11202,
+      "fallback": 7846,
+      "contiguous_copies": 4730
+    },
+    "signatures": {
+      "((1, 1536, 1536, 128), (301989888, 196608, 128, 1))": 434,
+      "((1, 256, 1536, 128), (301989888, 196608, 128, 1))": 3225,
+      "((1, 1536, 256, 128), (50331648, 32768, 128, 1))": 2580,
+      "((1, 1536, 256, 128), (301989888, 196608, 128, 1))": 3870,
+      "((1, 256, 1536, 128), (150994944, 128, 98304, 1))": 645,
+      "((1, 1536, 1536, 128), (301989888, 128, 196608, 1))": 215,
+      "((1, 1, 1536, 1536, 128), (301989888, 301989888, 196608, 128, 1))": 203,
+      "((256, 1536, 128), (196608, 128, 1))": 30
+    },
+    "width": 32
+  },
+  "gate": {
+    "accepted": 430,
+    "fallback": 18,
+    "gate_calls": 5160,
+    "copies": 5160,
+    "copy_fallbacks": 1290,
+    "library_sha256": "b7a980bf469a0f13581985033f904541cae5783eab01d4579054588e75c3614c"
+  },
+  "qkv": {
+    "library": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-unroll4-model-20261010/qkv.so",
+    "library_sha256": "80a619ecf7206d729b6f4a6ae95e2009f8c7cced8b0a042555e5893aedbccb3e",
+    "calls_by_batch": {
+      "128": 5064
+    },
+    "fallback_by_batch": {},
+    "retained_scores_written": false,
+    "scope": "Experimental PV-result-only fusion; existing workspace allocation/lease retained; parent QK receipt describes fallback, not fused calls"
+  },
+  "source_preparation": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-hip-bias-pack-model-20261010/preparation.json",
+    "sha256": "29374e299e660a88964d637fab8ea8c9c90d704422b994fba657d70b8c1f8c70"
+  },
+  "npz": {
+    "path": "/media/IntelSSD/fireprot/outputs/openfold3-hip-bias-pack-n1536-20261010/sample-0.npz",
+    "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+  },
+  "cif": {
+    "path": "/media/IntelSSD/fireprot/outputs/openfold3-hip-bias-pack-n1536-20261010/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+    "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+  },
+  "runtime": {
+    "path": "/media/IntelSSD/fireprot/outputs/openfold3-hip-bias-pack-n1536-20261010/operator-runtime.json",
+    "sha256": "1efa0e336f3e3f380c8c30eb68d75a29b49254590a9cfb45bb22f93cc899fe8f"
+  },
+  "global_softmax_receipt": {
+    "path": "/media/IntelSSD/fireprot/outputs/openfold3-hip-bias-pack-n1536-20261010/global-softmax.json",
+    "sha256": "cec7cfdaa72b54ce7c8fd24953e3bd2afbe6a91e17f65958ff78103e1f2856a5"
+  },
+  "e2e_seconds": 317.785212749,
+  "model_seconds": 231.0753838029923,
+  "limits": [
+    "Single full-model qualification, not a paired speedup.",
+    "N1536 strict FP32 only; no maintained promotion."
+  ],
+  "raw_receipt_sha256": "b3033e67d41c81b7f71dd4253e2f9a0daf7b5231f42b67435eb69b0ecc37f8ed",
+  "remote_root": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-hip-bias-pack-model-20261010",
+  "cache_state": "Fresh process; unflushed filesystem and kernel caches; strict deterministic memory filling."
+}

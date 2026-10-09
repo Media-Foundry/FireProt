@@ -276,3 +276,29 @@ without global bias caching. This is a synthetic attention result, not E2E.
 Three host guard tests reject tampered binaries, CPU operands and unsupported
 tiles before native launch. Together with the existing softmax and direct-native
 router tests, ten CPU tests pass. GPU qualification is separate from these tests.
+
+
+### HIP packing full-model qualification
+
+The strict N1536 R3/four-trunk-pass D200/S1 seed101 full model passes all11
+arrays bitwise and full CIF bytes against the qualified unroll4 anchor. It
+executes4800 global attention/probability calls,4800 HIP bias copies and19200
+published softmax groups, with zero Torch bias copies or score-layout fallbacks.
+The existing5064 fused triangle attention calls and normalization counts remain
+unchanged. No global bias cache is enabled.
+
+Single complete invocation is **317.785213 s**, model forward **231.075384 s**.
+This is a numerical qualification with timing, not a paired speedup. Three
+AB/BA/AB pairs are now running against the unroll4 composition, with one shared
+worker tree and only `FIREPROT_GLOBAL_SOFTMAX` plus the profile digest changing.
+Both arms include the same packer library validation and runtime receipts.
+New softmax, QKV and gate sidecars are included in the completed transport
+artifact hashes. All11 arrays and complete CIF bytes are required on every run.
+[Model receipt](../../provenance/openfold3_hip_bias_pack_model_n1536.json).
+
+Paired coordinator: `outputs/experiments/openfold3-hip-bias-pack-pairs-queue-20261010`.
+Paired benchmark: `outputs/experiments/openfold3-hip-bias-pack-pairs-20261010`.
+The recovered128-row packing receipt also confirms arbitrary-bit equality;
+its actual-layout attention medians1.471994/1.472234 ms provide no meaningful
+advantage over64 rows. Both raw variant summaries are retained in the screen
+receipt. No maintained-profile promotion or new direct-original-Torch ratio.

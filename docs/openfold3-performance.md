@@ -927,3 +927,14 @@ No global-softmax full-model job was launched by this screen.
 
 
 See [complete experiment and receipts](../experiments/openfold3_diffusion/README.md#packed-bias-e2e-decision-and-independent-global-softmax-screen).
+
+
+## HIP packing plus grouped global softmax: model qualification
+
+The64-row HIP bit transpose passes the strict N1536 full-model gate: all11
+arrays and complete CIF bytes are exact,4800 HIP bias copies and19200 grouped
+softmax launches complete with no copies through Torch and no layout fallback.
+Single invocation is317.785213 s, model231.075384 s, over the accepted unroll4
+composition without global bias caching. Three matched AB/BA/AB E2E pairs are
+running; this qualification alone does not establish a new speedup ratio.
+[Evidence and paired roots](../experiments/openfold3_diffusion/README.md#hip-packing-full-model-qualification).

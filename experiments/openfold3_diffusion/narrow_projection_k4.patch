@@ -1,0 +1,32 @@
+--- a/narrow_projection.cpp
++++ b/narrow_projection.cpp
+@@ -12,8 +12,8 @@
+ #endif
+ 
+ __device__ __forceinline__ int input_stage_index(int row, int k) {
+-    const int fragment = (k / 8) * 2 + (k & 1);
+-    const int k_lane = (k & 7) / 2;
++    const int fragment = (k / 16) * 4 + (k & 3);
++    const int k_lane = (k & 15) / 4;
+     return fragment * 256 + (row / 16) * 64 + k_lane * 16 + (row & 15);
+ }
+ 
+@@ -45,7 +45,7 @@
+         #pragma unroll
+         for (int slot = 0; slot < 4; ++slot) {
+             const int fragment = group * 4 + slot;
+-            const int k = (fragment / 2) * 8 + k_lane * 2 + (fragment & 1);
++            const int k = (fragment / 4) * 16 + k_lane * 4 + (fragment & 3);
+             a[slot] = weight[coordinate * 128 + k];
+             b[slot] = stage[fragment * 256 + wave * 64 + lane];
+         }
+@@ -67,8 +67,7 @@
+ 
+ extern "C" int fireprot_project_128_16(const float* input, const float* weight,
+                                      float* output, int rows, int packed, void* stream) {
+-    if (!input || !weight || !output || rows <= 0 || rows > 1536 * 1536
+-        || rows % 64 || (packed != 0 && packed != 1)
++    if (!input || !weight || !output || rows != 1536 * 1536 || (packed != 0 && packed != 1)
+         || (reinterpret_cast<uintptr_t>(input) & 15)
+         || (reinterpret_cast<uintptr_t>(output) & 15))
+         return int(hipErrorInvalidValue);

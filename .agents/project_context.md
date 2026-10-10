@@ -6196,3 +6196,105 @@ theseincludeactualhotgrids3145728,6291456,9437184 (first1000-1050:49/47/2samples
 Originalsamples10-12 missedthem. Two-rowsdriverterminal0+SMI5idleprerequisites.
 Runsfullstrictmodel/all11/fullCIF; instrumentedtimeisnotE2E. Needcollectactual
 countercoveragebeforeclaimingbound. No concurrentGPU/build/archive.
+
+
+## Narrow projection K4 screen passes; full-model gates running (2026-10-10)
+
+Commit6dddcd8 pushed the new direct-native2.864391789x E2E result, original
+hardware report and two rejected smaller-block QKV trials. This turn also
+completed late GEMM counters932016: all11/fullCIFexact under the refreshed
+inventory. Actual coverage is101 dispatches, all one GEMM name:93 samples at
+large grid6291456,8 at98304. Large median5.73775ms, CUbusy99.73%, MFMA72.71%,
+occupancy24.69%, HBM450.40GB/s. The SDK reported301 outstanding kernels during
+finalization; the other requested GEMM name is absent. Earlier hardware counters
+also had the301 warning, discovered in the actual worker stderr. Do not claim
+complete capture. New provenance/openfold3_gemm_counters_20261010.json records it.
+
+New narrow projection prototype uses cooperative input staging and MFMA for
+M2359296/K128/N16. Initial K2 order matched small cases but failed actual N1536
+with30,921,559 differing elements; no timing. Corrected K4 grouping (source
+443d11abbd44ba429f79d3197dcb8a766f65972737a890616072d81f6953c7bd) passes8 full-size
+cases x2 output layouts and72 timed/warmup exact outputs. Torch1.664797ms,
+Torch+HIPpack2.019596ms, HIPordinary1.517517ms, HIPpacked1.655597ms.1.2199x is an
+operator result only. Both before/after full inventories match new e9a14970...;
+no approximation or changed model settings. Coordinator938449 is terminal0.
+
+CURRENT model coordinator940061 (Python940062), first child940077 verified:
+outputs/experiments/openfold3-narrow-model-followup-20261010.
+Model source/spec root outputs/experiments/openfold3-narrow-model-20261010.
+Local control /tmp/fireprot-of3-narrow-model-20261010. narrow_scope.py targets24
+source-pinned global linear_z modules only; shape1,1,1536,1536,128, FP32 contiguous,
+weight16x128, no bias, strict inference. K4 direct head-major output. Verify-first
+mode checks24 trained projections; expected4800 calls/0fallback and200 perblock.
+Then compute-only mode (0 native checks) runs with a fresh output and same worker.
+Both must match all11/fullCIF, unchanged other operator counts and native runner;
+global HIPpacking becomes0 while globalsoftmax4800/groups19200 remain. Newsealed
+sidecar narrow-projection.json. Both new requests use refreshed full inventory.
+
+SUCCESSOR queue943267 (Python943268) is deployed and waiting for both model gates:
+outputs/experiments/openfold3-narrow-pairs-queue-20261010.
+Local /tmp/fireprot-of3-narrow-pairs-20261010. Future root
+outputs/experiments/openfold3-narrow-pairs-20261010. Same frozen source/updated
+inventory in both arms, only NARROW_PROJECTION0/1 and profilehash differ; verify0
+and globalsoftmax1 shared. Three AB/BA/AB pairs, all6 current arrays/fullCIF and
+sealed sidecars rechecked, no outliers discarded. No current E2E result for narrow
+projection. Observe both original handles; no new GPU/build/archive until done.
+All GPU work HIP7 only. Goal continues; no maintained promotion.
+
+
+## FP32 narrow model qualified; precision diagnostics queued (2026-10-10)
+
+User requested continuing OpenFold3, then FP16 only in recycle (never diffusion),
+and checking official BF16/FP16 recipes and overflow. User explicitly chose
+REPORT DEVIATIONS FIRST before selecting mixed-precision acceptance thresholds.
+Do not reuse the Base0.1A policy or promote mixed precision without that decision.
+Official pinned training YAMLs use bf16-mixed; inference defaults32-true; trunk
+returns float32 and rollout explicitly chooses float32 autocast. New experiment
+scopes only PairFormer percycle; embedding/template/MSA/diffusion/confidence and
+master weights stay FP32. FP32-only triangle gate fusion is bypassed in that
+scoped low-precision region and restored. Actual dtype/ranges/boundaries recorded.
+
+Original narrow940061 andpaired943267 terminated1: all4800calls fallback.
+Causeconfirmed deployedTorch leaves FP32autocast enabled; oldguard rejected it.
+narrow_scope admits enabled FP32 target only, retains BF16/FP16 fallback andlogs
+firstactualmetadata. Recovery1 model951781 selected4800,0fallback,24trainedchecks,
+all11/fullCIFexact; collector failedbecause runner.json wasnot sealed. Its paired
+queue952366 stopped. These frozen failures remain unchanged.
+
+Recovery2 model957627 isterminal0. Both verified andcompute gates pass all11/full
+CIF andsealedrunner/operators. Verified322.128372s E2E/230.196040model; compute
+327.444330s/235.950417. Singlequalifications only, no incrementalratio.4800calls,
+0fallback,24or0nativechecks,200perblock; globalsoftmax4800/groups19200,0HIPbiascopies.
+New provenance/openfold3_narrow_projection_models_20261010.json. Root
+outputs/experiments/openfold3-narrow-model-recovery2-20261010.
+
+CURRENTpairedqueue957628, benchmarkchild965831:
+outputs/experiments/openfold3-narrow-pairs-recovery2-queue-20261010; pairedroot
+outputs/experiments/openfold3-narrow-pairs-recovery2-20261010. ThreeAB/BA/AB, HIP7
+only, refreshed inventorye9a14970..., no concurrentGPU/build/archive. Lastseen
+firstbaseline active. Observe existinghandles, do not duplicate. Localcontrols
+/tmp/fireprot-of3-narrow-{model,pairs}-recovery2-20261010.
+
+NEXTprecisionqueue965152 waits for pairedterminal0 andidleSMI5:
+outputs/experiments/openfold3-precision-queue-20261010. Localcontrol
+/tmp/fireprot-of3-precision-diagnostic-20261010. Futuremodelroot
+outputs/experiments/openfold3-precision-diagnostic-20261010 NOT preparedyet.
+Runs FP32diagnostic first (mustall11/fullCIFexact), thenBF16 thenFP16 diagnostic.
+ScientificN1536/R3/D200/S1seed101 unchanged. Frozen base requestFP32 is explicitly
+overridden by hashed precision policy; effective stagedtypes sealed separately.
+Do not call mixedresults pureFP32 or useinstrumentedtimesasE2Espeedups.
+Onlyexplicitlyrecordednonfinitefailures arecompletedrejections; othererrorsstop.
+No mixedGPUresultyet. FourCPUtests pass (mockautocast/sourcepins), actualGPUneeded.
+
+New standaloneRust experiments/openfold3_precision/deviation.rs computes allatom
+/CAlpha alignment, perresidue/atom residual distributions, allCApairdistance
+changes andconfidence deltas with noqualityverdict. TwoCPUtests pass. Localbinary
+/tmp/fireprot-of3-precision-deviation andbuildreceipt...-build.json; notdeployed
+yet. Needcollect actualdeviations afterdiagnostics; no acceptance threshold.
+
+Wider32queryQKV sourcegeneratorlocalcompile only:128VGPR,32KiBLDS,scratch8bytes
+ordinary108capture. Grid/LDSbijections pass. DeprioritizedbeforeGPU; precision
+requesttakespriority. No speedupclaim. Provenanceopenfold3_qkv_wide_query_local_20261010.json.
+Latest officialdirectE2E still2.864x. READMEallmodelreview commit ed856d8 pushed.
+Allprioruncommittednarrow/kernel/hardwarewarningfiles stillneedcommit; docs/isa
+userPDF remainsuntracked. Workonmaster; endpointpc@10.120.16.5; onlyHIP6/7.

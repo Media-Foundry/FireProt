@@ -281,3 +281,18 @@ apply. No full-model/E2E job is launched for either smaller-block variant.
 Keep the qualified1024-thread unroll4 implementation. Higher active-wave fraction
 during PV does not establish a net performance gain.
 [Two-row evidence](../../provenance/openfold3_qkv_two_rows_replay_20261010.json).
+
+## Wider query tile: local resource screen only
+
+`wide_query_variant.py` derives a32-query,1024-thread tile from the qualified
+unroll4 source. Each K fragment feeds two independent QK accumulators, each wave
+retains two softmax rows, and four waves perform PV. Ascending arithmetic within
+each output is preserved at source level; GPU equality has not been checked.
+Grid/LDS bijections pass CPU enumeration at B32/B128.
+
+Local gfx90a compilation uses128 VGPRs and32 KiB LDS for both templates. Ordinary
+output spills8 bytes per workitem; probability capture spills108 bytes. This
+tradeoff is deprioritized before GPU timing. No performance rejection or gain is
+inferred from compilation alone. The requested BF16/FP16 PairFormer diagnostics
+take priority after the existing FP32 paired cycle.
+[Source/compiler/resource receipt](../../provenance/openfold3_qkv_wide_query_local_20261010.json).

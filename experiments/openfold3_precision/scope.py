@@ -1,0 +1,176 @@
+"""Experimental PairFormer-only autocast with explicit FP32 rollout boundaries.
+
+This scope is tensor glue for a frozen diagnostic worker. The environment's
+precision override must be declared separately from its base FP32 request;
+finite outputs or an accepted archive do not establish mixed-precision parity.
+"""
+from contextlib import contextmanager
+import hashlib
+import inspect
+import json
+import math
+from pathlib import Path
+
+import torch
+
+
+def tensors(value):
+    if isinstance(value, torch.Tensor):
+        yield value
+    elif isinstance(value, dict):
+        for child in value.values():
+            yield from tensors(child)
+    elif isinstance(value, (list, tuple)):
+        for child in value:
+            yield from tensors(child)
+
+
+@contextmanager
+def pairformer_precision_scope(model, output, precision, diagnostic=True):
+    from openfold3.core.model.layers.triangular_multiplicative_update import TriangleMultiplicativeUpdate
+
+    dtype = {'float32': torch.float32, 'bfloat16': torch.bfloat16,
+             'float16': torch.float16}[precision]
+    pins = {}
+    for cls, expected in (
+        (type(model), '1cd02947e24bcea5d30dba98122e6a38e707f88ebe1d4c4f2aa16f4b177f7e0c'),
+        (type(model.pairformer_stack), 'cdb66c9553ef42b93835dec92f3e6dcf711dbf139a5a59aa1f2561216435af9f'),
+        (TriangleMultiplicativeUpdate, '612caf7abd07a86a7fdf4eda7e0a2170c04b407f9121fc286ab864a648db1ba7'),
+    ):
+        path = Path(inspect.getfile(cls))
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        if digest != expected:
+            raise RuntimeError(f'Unqualified precision boundary: {path}')
+        pins[str(path)] = digest
+    if model.training or not torch.is_inference_mode_enabled() or torch.is_grad_enabled():
+        raise RuntimeError('Precision experiment requires inference mode')
+    if any(p.is_floating_point() and p.dtype != torch.float32 for p in model.parameters()):
+        raise RuntimeError('Master parameters must remain FP32')
+    stack = model.pairformer_stack
+    native_triangle = TriangleMultiplicativeUpdate._inference_forward
+    # Enter before the experimental gate scope, whose raw ABI is FP32-only.
+    if inspect.getfile(native_triangle) != inspect.getfile(TriangleMultiplicativeUpdate):
+        raise RuntimeError('Enter precision scope before triangle replacements')
+    had_local = 'forward' in stack.__dict__
+    old_local = stack.__dict__.get('forward')
+    original = stack.forward
+    report = dict(completed=False, diagnostic=diagnostic, source_pins=pins,
+                  base_request_precision='float32',
+                  effective_precision=dict(pairformer_autocast=precision,
+                                           input_and_recycle_embeddings='float32',
+                                           template_and_msa='float32',
+                                           diffusion='float32', confidence='float32',
+                                           master_parameters='float32'),
+                  cycles=[], ranges={}, output_dtypes={}, boundary_calls={},
+                  nonfinite=None, triangle_fp32_fusion_bypassed_cycles=0,
+                  limits=['Diagnostic activation scans invalidate performance timing.',
+                          'Mixed-precision outputs require independent aligned-coordinate and confidence evaluation.',
+                          'No output clamping, changed recycle count or shortened diffusion.'])
+    active = False
+    handles = []
+
+    def observe(label, value, scan):
+        for i, tensor in enumerate(tensors(value)):
+            if not tensor.is_floating_point():
+                continue
+            key = f'{label}:{i}:{tensor.dtype}'
+            report['output_dtypes'][str(tensor.dtype)] = report['output_dtypes'].get(str(tensor.dtype), 0) + 1
+            if scan and tensor.numel():
+                low, high = torch.aminmax(tensor.detach())
+                low, high = float(low), float(high)
+                if not math.isfinite(low) or not math.isfinite(high):
+                    report['nonfinite'] = dict(cycle=len(report['cycles']),
+                        module=label, dtype=str(tensor.dtype), shape=list(tensor.shape),
+                        minimum=str(low), maximum=str(high))
+                    raise FloatingPointError(f'Nonfinite activation: {label}, {tensor.dtype}')
+                item = report['ranges'].setdefault(key, dict(calls=0, minimum=low,
+                    maximum=high, max_abs=0.0, shape=list(tensor.shape)))
+                item['calls'] += 1
+                item['minimum'] = min(item['minimum'], low)
+                item['maximum'] = max(item['maximum'], high)
+                item['max_abs'] = max(item['max_abs'], abs(low), abs(high))
+
+    def activation_hook(name):
+        def hook(module, args, result):
+            if active:
+                observe(name, result, diagnostic)
+        return hook
+
+    def fp32_guard(name):
+        def hook(module, args, kwargs):
+            if active or (torch.is_autocast_enabled('cuda')
+                          and torch.get_autocast_dtype('cuda') != torch.float32):
+                raise RuntimeError(f'Lower precision escaped PairFormer into {name}')
+            for tensor in tensors((args, kwargs)):
+                if tensor.is_cuda and tensor.is_floating_point() and tensor.dtype != torch.float32:
+                    raise RuntimeError(f'{name} received {tensor.dtype}')
+            report['boundary_calls'][name] = report['boundary_calls'].get(name, 0) + 1
+        return hook
+
+    def diffusion_output(module, args, result):
+        for tensor in tensors(result):
+            if tensor.is_cuda and tensor.is_floating_point() and tensor.dtype != torch.float32:
+                raise RuntimeError('Diffusion produced a non-FP32 activation')
+
+    def forward(*args, **kwargs):
+        nonlocal active
+        if active:
+            raise RuntimeError('Nested PairFormer precision scope')
+        if torch.is_autocast_enabled('cuda') and torch.get_autocast_dtype('cuda') != torch.float32:
+            raise RuntimeError('Unexpected outer mixed-precision context')
+        observe('pairformer.input', (args, kwargs), True)
+        record = dict(index=len(report['cycles']), completed=False,
+                      autocast=precision, returned_dtypes=[])
+        report['cycles'].append(record)
+        installed_triangle = TriangleMultiplicativeUpdate._inference_forward
+        if dtype != torch.float32:
+            TriangleMultiplicativeUpdate._inference_forward = native_triangle
+            report['triangle_fp32_fusion_bypassed_cycles'] += 1
+        active = True
+        try:
+            with torch.amp.autocast('cuda', dtype=dtype):
+                result = original(*args, **kwargs)
+            observe('pairformer.output', result, True)
+            if not isinstance(result, tuple) or len(result) != 2:
+                raise RuntimeError('Unexpected PairFormer return contract')
+            result = tuple(t.float() for t in result)
+            record['returned_dtypes'] = [str(t.dtype) for t in result]
+            record['completed'] = True
+            return result
+        finally:
+            active = False
+            TriangleMultiplicativeUpdate._inference_forward = installed_triangle
+
+    try:
+        stack.forward = forward
+        for name, module in stack.named_modules():
+            if type(module).__name__ in ('Linear', 'LayerNorm', 'Attention',
+                                        'TriangleMultiplicativeUpdate', 'PairFormerBlock'):
+                handles.append(module.register_forward_hook(activation_hook(name)))
+        for name, module in (('sample_diffusion', model.sample_diffusion),
+                             ('diffusion_module', model.diffusion_module),
+                             ('confidence', model.aux_heads)):
+            handles.append(module.register_forward_pre_hook(fp32_guard(name), with_kwargs=True))
+        for module in model.diffusion_module.modules():
+            if not list(module.children()):
+                handles.append(module.register_forward_hook(diffusion_output))
+        yield report
+        if len(report['cycles']) != model.shared.num_recycles + 1:
+            raise RuntimeError('PairFormer recycle count changed')
+        if any(not r['completed'] for r in report['cycles']):
+            raise RuntimeError('Incomplete PairFormer cycle')
+        if report['boundary_calls'].get('diffusion_module') != model.shared.diffusion.no_full_rollout_steps:
+            raise RuntimeError('Diffusion step coverage changed')
+        if report['boundary_calls'].get('sample_diffusion') != 1 or report['boundary_calls'].get('confidence') != 1:
+            raise RuntimeError('Missing FP32 rollout/confidence boundary')
+        if not report['output_dtypes'].get(str(dtype)):
+            raise RuntimeError('Requested PairFormer dtype was never observed')
+        report['completed'] = True
+    finally:
+        for handle in reversed(handles):
+            handle.remove()
+        if had_local:
+            stack.forward = old_local
+        else:
+            delattr(stack, 'forward')
+        Path(output, 'pairformer-precision.json').write_text(json.dumps(report, indent=2, allow_nan=False) + '\n')

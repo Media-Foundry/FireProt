@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "status": "local_compile_only",
+  "source_sha256": "8b5c98b224b48f734fc87b24cf447023a52630ce20e64479eab5672bcc179e4f",
+  "generator_sha256": "a108468ea94f08b159b987224c1a046ae94480cc66d7d351a4227b9544bfbb8f",
+  "base_source_sha256": "dd7bbb785dae1afed98ad6fd357fa8e6822f0e49310a87530a296ee7c0d9ff9f",
+  "compiler": "HIP version: 7.14.60850-0000000\nAMD clang version 23.0.0git (https://github.com/ROCm/llvm-project.git 46fcb339fb61119b337f973c7ca9e710a319fdd0+PATCHED:440716f8b87be9d8e20ed910e10e5b6d14d57cf6)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /opt/rocm/core-7.14/lib/llvm/bin\n",
+  "command": "HIP_VISIBLE_DEVICES='' hipcc -O3 -ffp-contract=off --offload-arch=gfx90a --cuda-device-only -S SOURCE.cpp -o OUTPUT.s",
+  "assembly_sha256": "24914980146498cbd7b5d9d721f856639aabd7df5e20774e3869a462ba974736",
+  "resources": {
+    "ordinary": {
+      "vgpr": 128,
+      "lds_bytes": 32768,
+      "scratch_bytes_per_workitem": 8
+    },
+    "probability_capture": {
+      "vgpr": 128,
+      "lds_bytes": 32768,
+      "scratch_bytes_per_workitem": 108
+    }
+  },
+  "cpu_checks": [
+    "Grid mapping bijective for B32/B128 and all48 query tiles",
+    "LDS mapping bijective across all8192 addresses"
+  ],
+  "decision": "Deprioritized: both templates spill; no GPU or speedup claim. User-requested PairFormer precision diagnostics take priority after narrow projection pairs."
+}

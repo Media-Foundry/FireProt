@@ -1,0 +1,475 @@
+{
+  "schema_version": 1,
+  "scope": "Strict N1536 R3/D200/S1 seed101 HIP7, FP32 with memory filling. Verified and compute-only full-model gates; paired E2E is pending.",
+  "status": "model_gates_passed",
+  "runs": {
+    "verified": {
+      "correctness_passed": true,
+      "all11_exact": true,
+      "full_cif_exact": true,
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "projection": {
+        "completed": true,
+        "calls": 4800,
+        "fallbacks": 0,
+        "native_checks": 24,
+        "verify_first": true,
+        "library": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-narrow-model-recovery2-20261010/projection.so",
+        "library_sha256": "72e5c258ece81421ac2a3645ceaa06898e93a56953a2b4cc344f27acafef17d2",
+        "calls_by_block": {
+          "0": 200,
+          "1": 200,
+          "2": 200,
+          "3": 200,
+          "4": 200,
+          "5": 200,
+          "6": 200,
+          "7": 200,
+          "8": 200,
+          "9": 200,
+          "10": 200,
+          "11": 200,
+          "12": 200,
+          "13": 200,
+          "14": 200,
+          "15": 200,
+          "16": 200,
+          "17": 200,
+          "18": 200,
+          "19": 200,
+          "20": 200,
+          "21": 200,
+          "22": 200,
+          "23": 200
+        },
+        "first_call": {
+          "shape": [
+            1,
+            1,
+            1536,
+            1536,
+            128
+          ],
+          "strides": [
+            301989888,
+            301989888,
+            196608,
+            128,
+            1
+          ],
+          "dtype": "torch.float32",
+          "weight_dtype": "torch.float32",
+          "weight_shape": [
+            16,
+            128
+          ],
+          "weight_strides": [
+            128,
+            1
+          ],
+          "device": "cuda:0",
+          "precision": "None",
+          "has_bias": false,
+          "training": false,
+          "requires_grad": false,
+          "inference_mode": true,
+          "grad_enabled": false,
+          "autocast_enabled": true,
+          "autocast_dtype": "torch.float32"
+        },
+        "scope": "Only24 global diffusion linear_z projections; strict FP32 N1536, head-major output, no caching."
+      },
+      "global_softmax": {
+        "calls": 4800,
+        "probability_calls": 4800,
+        "groups_launched": 19200,
+        "bias_copies": 0,
+        "score_layout_fallbacks": 0,
+        "kernel": {
+          "mode": "published",
+          "kernel": {
+            "directory": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1",
+            "library": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1/fireprot_softmax_fp32_7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251.so",
+            "manifest_sha256": "4914cb71a64c42bf54495f1c9ee0eeb27808f0571b6a50fed81e8067f56f01be",
+            "build_identity_sha256": "7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251",
+            "compatibility": {
+              "package": "fireprot_softmax_fp32",
+              "target": "gfx90a",
+              "torch": "2.12.0a0+git78258b9",
+              "hip": "7.14.60850",
+              "c_abi": "softmax-fp32-v1"
+            }
+          }
+        },
+        "scope": "Strict N1536/H16/D48 global diffusion; four published H4 launches per call",
+        "limits": [
+          "Submitted launch counts do not prove asynchronous completion.",
+          "Whole-model numerical and paired E2E gates are required.",
+          "The shared kernel launch counter includes these group launches."
+        ],
+        "hip_bias_copies": 0,
+        "pack_tile_rows": 64
+      },
+      "workload": {
+        "schema_version": 1,
+        "run_id": "openfold3-narrow-recovery2-verified-n1536-20261010",
+        "workload": {
+          "model": "openfold3",
+          "model_name": "openbind-0",
+          "recycles": 3,
+          "diffusion_steps": 200,
+          "samples": 1,
+          "precision": "float32",
+          "deterministic": true
+        },
+        "backend": "hip_fused",
+        "seed": 101,
+        "hip_device": 7,
+        "source": {
+          "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+          "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+            "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+          }
+        },
+        "resources": {},
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/openfold3-narrow-recovery2-verified-n1536-20261010"
+      },
+      "preparation": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-narrow-model-recovery2-20261010/preparation.json",
+        "sha256": "1d469036a30db0d7f80c5fe2f4a0f35872dc3eca6939e9b71449216813746059"
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-narrow-recovery2-verified-n1536-20261010/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-narrow-recovery2-verified-n1536-20261010/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-narrow-recovery2-verified-n1536-20261010/accepted.json",
+        "sha256": "f5fbbb8978cc176a62509cfc110ef8c9a27ace78918a6885c91fc33f7704dad4"
+      },
+      "projection_receipt": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-narrow-recovery2-verified-n1536-20261010/narrow-projection.json",
+        "sha256": "b218bd3b399e9596f8d0e5f0c242567f4688b075465c535489e2c322500362d1"
+      },
+      "invocation": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-narrow-model-recovery2-20261010/verified-measurement/invocation.json",
+        "sha256": "5c58160be98685fda2880b2408f2b68b8e244f18a4ffefb911a4a7e4f300028d"
+      },
+      "e2e_seconds": 322.128372234,
+      "model_seconds": 230.19603970900062,
+      "scope": "Single exact whole-model qualification; not a paired performance result"
+    },
+    "compute": {
+      "correctness_passed": true,
+      "all11_exact": true,
+      "full_cif_exact": true,
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "projection": {
+        "completed": true,
+        "calls": 4800,
+        "fallbacks": 0,
+        "native_checks": 0,
+        "verify_first": false,
+        "library": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-narrow-model-recovery2-20261010/projection.so",
+        "library_sha256": "72e5c258ece81421ac2a3645ceaa06898e93a56953a2b4cc344f27acafef17d2",
+        "calls_by_block": {
+          "0": 200,
+          "1": 200,
+          "2": 200,
+          "3": 200,
+          "4": 200,
+          "5": 200,
+          "6": 200,
+          "7": 200,
+          "8": 200,
+          "9": 200,
+          "10": 200,
+          "11": 200,
+          "12": 200,
+          "13": 200,
+          "14": 200,
+          "15": 200,
+          "16": 200,
+          "17": 200,
+          "18": 200,
+          "19": 200,
+          "20": 200,
+          "21": 200,
+          "22": 200,
+          "23": 200
+        },
+        "first_call": {
+          "shape": [
+            1,
+            1,
+            1536,
+            1536,
+            128
+          ],
+          "strides": [
+            301989888,
+            301989888,
+            196608,
+            128,
+            1
+          ],
+          "dtype": "torch.float32",
+          "weight_dtype": "torch.float32",
+          "weight_shape": [
+            16,
+            128
+          ],
+          "weight_strides": [
+            128,
+            1
+          ],
+          "device": "cuda:0",
+          "precision": "None",
+          "has_bias": false,
+          "training": false,
+          "requires_grad": false,
+          "inference_mode": true,
+          "grad_enabled": false,
+          "autocast_enabled": true,
+          "autocast_dtype": "torch.float32"
+        },
+        "scope": "Only24 global diffusion linear_z projections; strict FP32 N1536, head-major output, no caching."
+      },
+      "global_softmax": {
+        "calls": 4800,
+        "probability_calls": 4800,
+        "groups_launched": 19200,
+        "bias_copies": 0,
+        "score_layout_fallbacks": 0,
+        "kernel": {
+          "mode": "published",
+          "kernel": {
+            "directory": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1",
+            "library": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1/fireprot_softmax_fp32_7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251.so",
+            "manifest_sha256": "4914cb71a64c42bf54495f1c9ee0eeb27808f0571b6a50fed81e8067f56f01be",
+            "build_identity_sha256": "7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251",
+            "compatibility": {
+              "package": "fireprot_softmax_fp32",
+              "target": "gfx90a",
+              "torch": "2.12.0a0+git78258b9",
+              "hip": "7.14.60850",
+              "c_abi": "softmax-fp32-v1"
+            }
+          }
+        },
+        "scope": "Strict N1536/H16/D48 global diffusion; four published H4 launches per call",
+        "limits": [
+          "Submitted launch counts do not prove asynchronous completion.",
+          "Whole-model numerical and paired E2E gates are required.",
+          "The shared kernel launch counter includes these group launches."
+        ],
+        "hip_bias_copies": 0,
+        "pack_tile_rows": 64
+      },
+      "workload": {
+        "schema_version": 1,
+        "run_id": "openfold3-narrow-recovery2-compute-n1536-20261010",
+        "workload": {
+          "model": "openfold3",
+          "model_name": "openbind-0",
+          "recycles": 3,
+          "diffusion_steps": 200,
+          "samples": 1,
+          "precision": "float32",
+          "deterministic": true
+        },
+        "backend": "hip_fused",
+        "seed": 101,
+        "hip_device": 7,
+        "source": {
+          "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3",
+          "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+        },
+        "checkpoints": {
+          "model": {
+            "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+            "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+          }
+        },
+        "resources": {},
+        "input": {
+          "path": "/media/IntelSSD/fireprot/benchmarks/openfold3/inputs/umem_L01536_6b140cc19f02d9b9.json",
+          "sha256": "5fa81bf9103636adc316c9d5cbeceee6afdba63ba862bcbcb9e414a502800a5c"
+        },
+        "output_dir": "/media/IntelSSD/fireprot/outputs/openfold3-narrow-recovery2-compute-n1536-20261010"
+      },
+      "preparation": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-narrow-model-recovery2-20261010/preparation.json",
+        "sha256": "1d469036a30db0d7f80c5fe2f4a0f35872dc3eca6939e9b71449216813746059"
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-narrow-recovery2-compute-n1536-20261010/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-narrow-recovery2-compute-n1536-20261010/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-narrow-recovery2-compute-n1536-20261010/accepted.json",
+        "sha256": "00e4d3e6bf81e5d64f68a33ffd61bf1b2e902e794e0d3b767f0e39b518eabddc"
+      },
+      "projection_receipt": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-narrow-recovery2-compute-n1536-20261010/narrow-projection.json",
+        "sha256": "419c882a36c15dfe858d9cfa010c5829a290d14ecf1d48013c753b07bff755f5"
+      },
+      "invocation": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-narrow-model-recovery2-20261010/compute-measurement/invocation.json",
+        "sha256": "26cbbe5dab142a36a7ed55cdca00126f3c21e68212dc464b4dcc2588601fb004"
+      },
+      "e2e_seconds": 327.444330443,
+      "model_seconds": 235.95041667998885,
+      "scope": "Single exact whole-model qualification; not a paired performance result"
+    }
+  },
+  "collection_sha256": {
+    "verified": "0712ffd20c15b21cc1fb3dcb12f580502bd9a5aed57e366c2c6b30dcc1a96bd3",
+    "compute": "0ba027dfc2f6202c05ccd906b7c1b7105007d906a8b1ce4d2bfefe4c0b0e26cb"
+  },
+  "recovery_history": [
+    {
+      "root": "openfold3-narrow-model-20261010",
+      "result": "All4800 calls fell back because FP32 autocast was incorrectly excluded."
+    },
+    {
+      "root": "openfold3-narrow-model-recovery1-20261010",
+      "result": "All4800 selected;24 trained/all11/CIF exact; final collector rejected missing sealed runner receipt."
+    },
+    {
+      "root": "openfold3-narrow-model-recovery2-20261010",
+      "result": "Both complete model gates pass, including sealed runner and operator receipts."
+    }
+  ],
+  "limits": [
+    "No new paired performance or original-Torch ratio.",
+    "Maintained dispatch unchanged; the kernel is experimental."
+  ]
+}

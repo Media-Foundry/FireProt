@@ -424,3 +424,65 @@ single model-gate observations, not completed three-pair timing results.
 The direct-native coordinator completed all three AB/BA/AB pairs:950.891469 ->
 331.969765 s E2E medians (2.8644x), all six all11/full-CIF exact. Subsequent
 hardware diagnostics also passed their exact gates. [Qualification receipt](../../provenance/openfold3_direct_native_routes_n1536.json).
+
+## Narrow global projection experiment
+
+The earlier diffusion-call trace identifies 24 `linear_z` calls of
+`[2359296,128] @ [128,16]` per denoiser call. `narrow_projection.cpp` is an
+experimental handwritten MFMA implementation with cooperative input staging.
+It can also write the head-major layout directly, avoiding the subsequent
+separate HIP bias transpose. It is not installed in maintained dispatch.
+
+The initial two-elements-per-lane reduction order matches the smaller synthetic
+matrices, but fails the actual large shape: 30,921,559 output elements differ in
+each layout. That version is rejected before timing. The
+`narrow_projection_k4.patch` changes the MFMA lane grouping to four K elements
+and restricts its C ABI to exactly 2,359,296 rows. This demonstrates why a small
+matrix gate cannot qualify the model's GEMM shape.
+
+The K4 variant passes eight full-size cases in both output layouts, including
+cancellation, subnormal, signed-zero and nonfinite inputs. All output canaries
+remain intact. A separate balanced timing sequence includes strict output
+allocation, two warmups and 16 samples for each of four arms; every result is
+checked bitwise between samples. FP32, seed101, HIP7, unflushed caches and the
+same refreshed full environment inventory before/after apply.
+
+| Synthetic projection path | Median |
+| --- | ---: |
+| Original Torch linear | 1.664797 ms |
+| Original Torch linear + qualified HIP packing | 2.019596 ms |
+| HIP K4, ordinary output layout | 1.517517 ms |
+| HIP K4, direct head-major output | 1.655597 ms |
+
+Direct head-major output is 1.2199x faster than linear plus HIP packing in this
+screen. This is not a trained-module or E2E speedup. The full-model follow-up
+uses `narrow_scope.py`, validates upstream source/library hashes, and restricts
+selection to the 24 global projections with exact dtype/shape/layout/inference
+guards. Other inputs call the original method. Verification mode compares the
+first invocation of every trained projection against the original module;
+both verification and compute-only runs must then pass all 11 arrays/full CIF.
+
+Only after those two model gates pass may the queued three-pair comparison run.
+Both arms use a shared frozen worker tree and the refreshed full environment;
+only `FIREPROT_NARROW_PROJECTION` and the profile digest differ. Verification and
+profiling are disabled during timing. No observations may be discarded.
+
+- [Initial numerical rejection](../../provenance/openfold3_narrow_projection_initial_20261010.json).
+- [K4 synthetic gates and complete raw timings](../../provenance/openfold3_narrow_projection_k4_screen_20261010.json).
+- [Complete model qualification](../../provenance/openfold3_narrow_projection_models_20261010.json).
+- Current model root: `outputs/experiments/openfold3-narrow-model-recovery2-20261010`.
+- Current model coordinator: `outputs/experiments/openfold3-narrow-model-recovery2-followup-20261010`.
+- Current paired coordinator: `outputs/experiments/openfold3-narrow-pairs-recovery2-queue-20261010`.
+- Current paired root: `outputs/experiments/openfold3-narrow-pairs-recovery2-20261010`.
+
+The initial model attempt selected zero calls because its guard rejected the
+upstream FP32-target autocast context. The corrected guard admits FP32 autocast
+while retaining FP16/BF16 fallback. Actual sealed metadata confirms FP32 inputs,
+weights and autocast target. The first recovery passed trained/full-output checks
+but its collector rejected an unsealed runner receipt; that failed audit is
+retained. Recovery2 seals runner and operator receipts and passes both modes:
+4,800 projection calls, zero fallbacks, 24 native checks in verification mode,
+all eleven arrays bitwise and full CIF bytes equal. The redundant 4,800 HIP bias
+copies disappear, while 4,800 global-softmax calls and 19,200 groups remain.
+The three-pair E2E comparison is running; single qualification timings do not
+establish an incremental speedup.

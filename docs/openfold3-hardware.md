@@ -20,6 +20,11 @@ Occurrence10–12 filtering applies to kernel names, so important later GEMM
 shapes are absent. Matching name/grid does not prove identical tensor strides
 or execution phase. There is no model-wide counter average.
 
+The counter profiler reported301 outstanding kernels and queue synchronization
+timeouts during finalization. This limits completeness: the112 records above
+are complete individual samples, not proof that every selected dispatch was
+captured. The uninstrumented E2E study and exact model-output gates are separate.
+
 ## Measured priorities
 
 | Sampled operator / grid | CU busy | Wave occupancy | MFMA utilization | HBM throughput |
@@ -53,6 +58,20 @@ Adding batch is not supported as the first remedy for the large sampled QKV
 grid: CU activity and wave occupancy are already high. This does not establish
 that every OpenFold3 operator is compute-bound or rule out throughput benefits
 for a separate multi-request workload.
+
+## Follow-up on late GEMM occurrences
+
+A separate full-model counter run selects occurrences1000–1100 of the two
+largest GEMM names. It passes all11 arrays and full CIF bytes under the refreshed
+complete environment inventory. However, the SDK again reports301 outstanding
+kernels at finalization; only one of the two requested names has usable samples.
+
+The main observed grid6,291,456 has93 complete samples: median5.738 ms,
+CU busy99.73%, wave occupancy24.69%, MFMA utilization72.71%, HBM450.40 GB/s.
+Eight additional samples belong to its smaller grid98,304. These observations
+support investigating compute efficiency for that particular large GEMM; they
+do not establish utilization for the missing GEMM family.
+[Actual coverage and limitations](../provenance/openfold3_gemm_counters_20261010.json).
 
 ## Evidence and reproduction
 

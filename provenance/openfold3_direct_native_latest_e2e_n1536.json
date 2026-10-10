@@ -1,0 +1,682 @@
+{
+  "schema_version": 1,
+  "correctness_passed": true,
+  "all11_exact": true,
+  "full_cif_exact": true,
+  "scope": "Original native Torch under the common FireProt launcher versus qualified unroll4 plus HIP global bias packing/softmax. Strict FP32 N1536 R3/four trunk passes D200/S1 seed101; native data-module defaults preserved.",
+  "performance": {
+    "baseline": {
+      "count": 3,
+      "min": 949.160923716,
+      "median": 950.891468587,
+      "p95": 970.270235385,
+      "max": 970.270235385,
+      "mean": 956.7742092293333
+    },
+    "candidate": {
+      "count": 3,
+      "min": 321.835635531,
+      "median": 331.969764885,
+      "p95": 374.020485794,
+      "max": 374.020485794,
+      "mean": 342.60862873666673
+    },
+    "median_speedup": 2.864391788560639,
+    "p95_speedup": 2.594163347296965,
+    "paired_speedups": [
+      2.864391788560639,
+      2.594163347296965,
+      2.9492101524120207
+    ],
+    "paired_summary": {
+      "count": 3,
+      "min": 2.594163347296965,
+      "median": 2.864391788560639,
+      "p95": 2.9492101524120207,
+      "max": 2.9492101524120207,
+      "mean": 2.8025884294232077
+    },
+    "observed_trend": "faster_median_and_p95",
+    "changes": {
+      "backend": {
+        "baseline": "native",
+        "candidate": "hip_fused"
+      },
+      "invocation.profile_sha256": {
+        "baseline": "43900e55fbe5824f00064f25f54ebfd256816cc1e23933489f72198d42549d30",
+        "candidate": "56de29d84bef55b77d502de596b0f9b7892f57d9b74d71059e99fc4573247d88"
+      },
+      "launch.environment.FIREPROT_ATOM_CACHE": {
+        "baseline": "0",
+        "candidate": "1"
+      },
+      "launch.environment.FIREPROT_CONDITIONING_CACHE": {
+        "baseline": "0",
+        "candidate": "1"
+      },
+      "launch.environment.FIREPROT_GLOBAL_SOFTMAX": {
+        "baseline": "0",
+        "candidate": "1"
+      },
+      "launch.environment.FIREPROT_NORM128": {
+        "baseline": "0",
+        "candidate": "1"
+      },
+      "launch.environment.FIREPROT_QKV_INDEX32": {
+        "baseline": "0",
+        "candidate": "1"
+      },
+      "launch.environment.FIREPROT_QK_WORKSPACE": {
+        "baseline": "0",
+        "candidate": "1"
+      },
+      "launch.environment.FIREPROT_SOFTMAX_HEAD16": {
+        "baseline": "0",
+        "candidate": "1"
+      },
+      "launch.environment.FIREPROT_TEMPLATE_REUSE": {
+        "baseline": "0",
+        "candidate": "1"
+      },
+      "launch.environment.FIREPROT_TRIANGLE_MEMORY": {
+        "baseline": "0",
+        "candidate": "1"
+      },
+      "launch.inputs.rust-bridge": {
+        "baseline": null,
+        "candidate": {
+          "canonical_path": "/media/IntelSSD/fireprot/runtime/recovered-openfold3-20261007/fireprot-triangle-e2e-v1/target/release/lib_fireprot_bridge.so",
+          "name": "rust-bridge",
+          "sha256": "e021ec5d8e1089151abda953812a7e4f6a94a5adef428f413c6c8716cf06dc7a"
+        }
+      }
+    }
+  },
+  "model_medians": {
+    "baseline": 855.1515205100004,
+    "candidate": 237.1994870060007
+  },
+  "model_speedup": 3.6051997047041113,
+  "records": [
+    {
+      "arm": "baseline",
+      "pair": 0,
+      "route": {
+        "schema_version": 1,
+        "backend": "native",
+        "selected_worker": {
+          "module": "openfold3_reference",
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-direct-native-latest-20261010/python/fireprot_workers/openfold3_reference.py",
+          "sha256": "c30ab522f9a18cb5fa0f21a182d5d2ac33e85173becb4676489485f6eb7d140e"
+        },
+        "reference_worker_sha256": "c30ab522f9a18cb5fa0f21a182d5d2ac33e85173becb4676489485f6eb7d140e",
+        "scope": "Only the selected worker is imported by this router; no request rewriting"
+      },
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "full_cif_exact": true,
+      "e2e_seconds": 950.891468587,
+      "model_seconds": 855.1515205100004,
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-direct-native-latest-20261010-baseline-0/accepted.json",
+        "sha256": "f23e50fcde3337221383dd9ff7212002ddaf4bd8881bb7c0749788eaf0065a7d"
+      },
+      "invocation": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-direct-native-latest-20261010/paired/measurement-000/invocation.json",
+        "sha256": "b99b16d18f1b41e49bdb2b40e6433e1ba4884efcc694f907a42de174d69be8d5"
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-direct-native-latest-20261010-baseline-0/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-direct-native-latest-20261010-baseline-0/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      }
+    },
+    {
+      "arm": "candidate",
+      "pair": 0,
+      "route": {
+        "schema_version": 1,
+        "backend": "hip_fused",
+        "selected_worker": {
+          "module": "openfold3_optimized",
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-direct-native-latest-20261010/python/fireprot_workers/openfold3_optimized.py",
+          "sha256": "654667c6881abd2fe597e170baace230a5ccbdec16b367b55b78155b21356755"
+        },
+        "reference_worker_sha256": "c30ab522f9a18cb5fa0f21a182d5d2ac33e85173becb4676489485f6eb7d140e",
+        "scope": "Only the selected worker is imported by this router; no request rewriting"
+      },
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "full_cif_exact": true,
+      "e2e_seconds": 331.969764885,
+      "model_seconds": 237.1994870060007,
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-direct-native-latest-20261010-candidate-0/accepted.json",
+        "sha256": "2ed6e586ff5fad649abfc9f8e624f82fae1df03b1e5ca43bb6ae7c39c31b88d6"
+      },
+      "invocation": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-direct-native-latest-20261010/paired/measurement-001/invocation.json",
+        "sha256": "222adda1ea841b501158f6c895cc6c7cc10015bc21734ecdaff6d65f2a4ad947"
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-direct-native-latest-20261010-candidate-0/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-direct-native-latest-20261010-candidate-0/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      }
+    },
+    {
+      "arm": "candidate",
+      "pair": 1,
+      "route": {
+        "schema_version": 1,
+        "backend": "hip_fused",
+        "selected_worker": {
+          "module": "openfold3_optimized",
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-direct-native-latest-20261010/python/fireprot_workers/openfold3_optimized.py",
+          "sha256": "654667c6881abd2fe597e170baace230a5ccbdec16b367b55b78155b21356755"
+        },
+        "reference_worker_sha256": "c30ab522f9a18cb5fa0f21a182d5d2ac33e85173becb4676489485f6eb7d140e",
+        "scope": "Only the selected worker is imported by this router; no request rewriting"
+      },
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "full_cif_exact": true,
+      "e2e_seconds": 374.020485794,
+      "model_seconds": 278.94065498100827,
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-direct-native-latest-20261010-candidate-1/accepted.json",
+        "sha256": "e94f7eadaeaf980dd518e23b707f7e0ffcb66284ef02f52eb9d2ea63e9cdd51f"
+      },
+      "invocation": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-direct-native-latest-20261010/paired/measurement-002/invocation.json",
+        "sha256": "ac1fcb4265a5441d9dbd883be64d7b265f77412851d50e3254e4b140f351773b"
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-direct-native-latest-20261010-candidate-1/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-direct-native-latest-20261010-candidate-1/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      }
+    },
+    {
+      "arm": "baseline",
+      "pair": 1,
+      "route": {
+        "schema_version": 1,
+        "backend": "native",
+        "selected_worker": {
+          "module": "openfold3_reference",
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-direct-native-latest-20261010/python/fireprot_workers/openfold3_reference.py",
+          "sha256": "c30ab522f9a18cb5fa0f21a182d5d2ac33e85173becb4676489485f6eb7d140e"
+        },
+        "reference_worker_sha256": "c30ab522f9a18cb5fa0f21a182d5d2ac33e85173becb4676489485f6eb7d140e",
+        "scope": "Only the selected worker is imported by this router; no request rewriting"
+      },
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "full_cif_exact": true,
+      "e2e_seconds": 970.270235385,
+      "model_seconds": 875.5468203779892,
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-direct-native-latest-20261010-baseline-1/accepted.json",
+        "sha256": "0018b6b1621a22e911812dac969dd361941d267a1a84219bb214bcd101167c52"
+      },
+      "invocation": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-direct-native-latest-20261010/paired/measurement-003/invocation.json",
+        "sha256": "3cea9c87676083c070a597ced3a128932adee105220e6c52b6dea83212d24dc4"
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-direct-native-latest-20261010-baseline-1/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-direct-native-latest-20261010-baseline-1/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      }
+    },
+    {
+      "arm": "baseline",
+      "pair": 2,
+      "route": {
+        "schema_version": 1,
+        "backend": "native",
+        "selected_worker": {
+          "module": "openfold3_reference",
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-direct-native-latest-20261010/python/fireprot_workers/openfold3_reference.py",
+          "sha256": "c30ab522f9a18cb5fa0f21a182d5d2ac33e85173becb4676489485f6eb7d140e"
+        },
+        "reference_worker_sha256": "c30ab522f9a18cb5fa0f21a182d5d2ac33e85173becb4676489485f6eb7d140e",
+        "scope": "Only the selected worker is imported by this router; no request rewriting"
+      },
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "full_cif_exact": true,
+      "e2e_seconds": 949.160923716,
+      "model_seconds": 854.619435953995,
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-direct-native-latest-20261010-baseline-2/accepted.json",
+        "sha256": "b0683eb688abb68404ec37ce6dd91698d5359f074b35f0d1c5d354b6fb8a7f05"
+      },
+      "invocation": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-direct-native-latest-20261010/paired/measurement-004/invocation.json",
+        "sha256": "a82420fd783c2e28cb8f83520d23e910a00c88a16321e6736bf947feffb06872"
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-direct-native-latest-20261010-baseline-2/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-direct-native-latest-20261010-baseline-2/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      }
+    },
+    {
+      "arm": "candidate",
+      "pair": 2,
+      "route": {
+        "schema_version": 1,
+        "backend": "hip_fused",
+        "selected_worker": {
+          "module": "openfold3_optimized",
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-direct-native-latest-20261010/python/fireprot_workers/openfold3_optimized.py",
+          "sha256": "654667c6881abd2fe597e170baace230a5ccbdec16b367b55b78155b21356755"
+        },
+        "reference_worker_sha256": "c30ab522f9a18cb5fa0f21a182d5d2ac33e85173becb4676489485f6eb7d140e",
+        "scope": "Only the selected worker is imported by this router; no request rewriting"
+      },
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "full_cif_exact": true,
+      "e2e_seconds": 321.835635531,
+      "model_seconds": 234.90069286199287,
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-direct-native-latest-20261010-candidate-2/accepted.json",
+        "sha256": "ae3f0ce0d53c7d6e5deeb821c1025cb0ba5ead4729d22b38b49468004881d385"
+      },
+      "invocation": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-direct-native-latest-20261010/paired/measurement-005/invocation.json",
+        "sha256": "fc8e16f973c86020972cdeb61b6dec1ada9adbc70dc4d5477deb12e86e9394cd"
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-direct-native-latest-20261010-candidate-2/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/openfold3-direct-native-latest-20261010-candidate-2/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      }
+    }
+  ],
+  "comparison": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-direct-native-latest-20261010/paired/comparison.json",
+    "sha256": "7e16c2c7c008c760965f565b4088106db79523fe452a61b830bc00be1e384f40"
+  },
+  "preparation": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-direct-native-latest-20261010/preparation.json",
+    "sha256": "e2d2580a0d13304f72b44c1fd382bf97fb7644d10ab031b9ea46c2fac69857ea"
+  },
+  "qualification": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-direct-native-latest-20261010/route-qualification.json",
+    "sha256": "18a24e47ff6078e3d8330a3c67c23edb3a13a11149eeb2b00cf1b32a7753016c"
+  },
+  "limits": [
+    "Direct native Torch under the common FireProt launcher, not an unwrapped upstream CLI.",
+    "Strict FP32 N1536 R3/four trunk passes D200/S1 seed101; native data defaults retained.",
+    "Three AB/BA/AB pairs, fresh processes, unflushed caches, HIP7 only; no observations discarded."
+  ],
+  "raw_collection": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-direct-native-latest-20261010/collected.json",
+    "sha256": "5cb26ef3280cbbb255882109981a731dcfc5a0209ab6ee8cf8f77d1b1820df85",
+    "bytes": 23731
+  },
+  "workload": {
+    "model": "OpenFold3 / OpenBind-0",
+    "length": 1536,
+    "dtype": "strict deterministic FP32",
+    "recycles": 3,
+    "trunk_passes": 4,
+    "diffusion_steps": 200,
+    "samples": 1,
+    "seed": 101,
+    "hip_device": 7,
+    "cache_state": "Fresh processes; filesystem and kernel caches unflushed; all observations retained"
+  }
+}

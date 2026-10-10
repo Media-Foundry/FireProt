@@ -971,12 +971,11 @@ The narrower synthetic attention gain2.48x does not describe model or E2E speedu
 The earlier packed projection-cache proposal remains unselected because its
 paired stability gate failed. Maintained-profile integration is still pending.
 
-The direct-native follow-up has passed CPU preparation and started the unchanged
-native worker's full-model qualification. Its native worker SHA remains
-`c30ab522f9a18cb5fa0f21a182d5d2ac33e85173becb4676489485f6eb7d140e`; the optimized
-worker body is copied unchanged from the qualified paired tree. Both routed model
-gates must pass before the fresh direct-native pairs run. **No new direct-native
-speedup is available yet; do not combine older native timings with these results.**
+The direct-native follow-up subsequently passed both routed model gates and all
+three fresh pairs:950.891469 ->331.969765 s E2E medians (2.8644x). Its native worker
+SHA remains `c30ab522f9a18cb5fa0f21a182d5d2ac33e85173becb4676489485f6eb7d140e`;
+the optimized worker body is copied unchanged from the qualified paired tree.
+This direct result is independent of the incremental ratio above.
 
 [Complete paired evidence](../provenance/openfold3_hip_bias_pack_e2e_n1536.json).
 
@@ -990,7 +989,40 @@ model forward is872.441172 and233.799366 s respectively. Strict FP32 N1536,
 R3/four trunk passes, D200/S1, seed101, HIP7, fresh processes and unflushed caches.
 These individual observations do not replace a repeated direct-native study.
 
-Three fresh AB/BA/AB comparisons have started. Their results will establish the
-new direct ratio independently of earlier incremental experiments. The historical
-1.499x direct comparison remains labeled as its earlier composition until the
-new study completes. [Routed qualification evidence](../provenance/openfold3_direct_native_routes_n1536.json).
+The three fresh AB/BA/AB comparisons subsequently completed; their independent
+direct result is below. The historical 1.499x applies to its earlier composition.
+[Routed qualification evidence](../provenance/openfold3_direct_native_routes_n1536.json).
+
+## Latest composition direct-native E2E result
+
+Three fresh AB/BA/AB pairs compare the original maintained native-Torch worker
+with the qualified unroll4 + HIP-packed global-softmax composition. The common
+frozen worker tree routes each request to its pinned worker body. Native uses
+upstream data defaults and no optimized operator receipts; the candidate uses
+the qualified single-item data path. Both retain strict deterministic FP32 with
+memory filling, N1536, R3/four trunk passes, D200/S1, seed101, HIP7/PCI93/SMI5,
+fresh processes and unflushed filesystem/kernel caches.
+
+| Pair order | Native E2E | Optimized E2E | Speedup |
+| --- | ---: | ---: | ---: |
+| AB0 | 950.891469 s | 331.969765 s | 2.8644x |
+| BA1 | 970.270235 s | 374.020486 s | 2.5942x |
+| AB2 | 949.160924 s | 321.835636 s | 2.9492x |
+
+Complete invocation medians are **950.891469 → 331.969765 s (2.8644x)**,
+or **65.09% less time**. Model-forward medians are
+**855.151521 → 237.199487 s (3.6052x)**. The p95/max comparison is
+970.270235 → 374.020486 s (2.5942x); with three samples, p95 is the maximum.
+Every pair improves, and no observation is discarded. The slower candidate's
+model forward is278.940655 s; the receipts do not establish its cause.
+
+All six current output archives match all11 arrays bitwise and full CIF bytes.
+The collector revalidates selected routes, source hashes, sealed runner/operator
+receipts and the original qualification anchors. No profiler overlaps these
+timed runs. This is original native Torch under the common FireProt launcher,
+not a standalone upstream CLI timing. The optimized composition remains an
+experiment with frozen deployment artifacts; maintained-profile integration
+is still pending.
+
+[Full direct paired evidence](../provenance/openfold3_direct_native_latest_e2e_n1536.json).
+See [hardware diagnosis](openfold3-hardware.md) for the next optimization target.

@@ -60,8 +60,8 @@ ordinary CLI configuration and output serialization are retained. This is a
 source audit, not a new native performance measurement.
 
 `experiments/openfold3_diffusion/native_router.py` prepares a common worker entry
-for a later direct comparison. Both routes now pass strict full-model qualification; the gated follow-up
-coordinator is executing the fresh three-pair direct-native study.
+for the direct comparison. Both routes pass strict full-model qualification and
+all six calls of the completed three-pair direct-native study.
 A frozen tree must contain:
 
 | Worker-package file | Required contents |
@@ -159,6 +159,8 @@ configuration differs only by the candidate's recorded `num_workers=0` data path
 
 Strict FP32 N1536 R3/four trunk passes D200/S1 seed101, HIP7, fresh processes,
 unflushed caches and deterministic memory filling. These are model-entry
-qualification timings, not completed three-pair medians. The three fresh
-AB/BA/AB comparisons are now running under the shared frozen worker tree.
+qualification timings. The subsequent three fresh AB/BA/AB comparisons completed
+under the shared frozen worker tree:950.891469 ->331.969765 s E2E medians
+(2.8644x), with all11 arrays and full CIF bytes exact for all six runs.
+[Direct E2E receipt](../provenance/openfold3_direct_native_latest_e2e_n1536.json).
 [Qualification receipt](../provenance/openfold3_direct_native_routes_n1536.json).

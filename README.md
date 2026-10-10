@@ -163,6 +163,7 @@ warm or unflushed as specified in the linked evidence.
 | AtlasFold + AtlasLM-3B, 1536 aa | 553.359 → 203.910 s | **2.714x** | Chunked native math; medians of sequential three-run sets [²](docs/atlasfold-performance.md#final-qkv-request-repetitions) |
 | OpenFold3, 1536 aa, HIP softmax experiment | 956.112 → 694.973 s | **1.376x** | Complete Rust invocation; three pairs [³](docs/openfold3-performance.md#exact-fp32-hip-softmax-three-pair-n1536-result) |
 | OpenFold3, 1536 aa, combined reuse experiment | 949.999 → 633.712 s | **1.499x** | Complete Rust invocation; three pairs, before later increments [³](docs/openfold3-performance.md#combined-reuse-direct-original-torch-n1536-e2e-result) |
+| OpenFold3, 1536 aa, latest experimental composition | 950.891 → 331.970 s | **2.864x** | Complete Rust invocation; three fresh AB/BA/AB pairs, all 11 arrays and full CIF bytes exact [³](docs/openfold3-performance.md#latest-composition-direct-native-e2e-result) |
 
 1. **Protenix:** Mini-default v0.5.0 FP32, **C4/D1/S1**, seed101, no MSA/templates.
    Reference is the same checkout's native Torch route, including a shared bond-mask
@@ -261,8 +262,12 @@ in the experimental composition. The attention ratio itself is not an E2E claim.
 See [diffusion experiment status](experiments/openfold3_diffusion/README.md#hip-packing-screen).
 
 **Do not multiply these incremental ratios into an original-Torch speedup.**
-A complete three-pair direct original-Torch comparison of the latest combination
-is not available; 1.499x above applies to its earlier measured combination.
+The latest composition now has its own three-pair direct comparison: **950.891 →
+331.970 s complete invocation medians (2.864x, 65.09% less time)**. Model forward
+medians are **855.152 → 237.199 s (3.605x)**. Candidate observations span
+321.836–374.020 s; all are retained. Both arms use the common FireProt launcher,
+and the native route preserves upstream data-module defaults. This composition
+remains available through the frozen experimental entry, pending maintained integration.
 
 An earlier additional attention cycle rejected both exact candidates: native BMM
 into reused scores plus HIP softmax made complete attention approximately 11%

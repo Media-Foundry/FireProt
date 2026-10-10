@@ -231,3 +231,53 @@ Reject unroll8 relative to unroll4. Keep all samples, including the slower
 observations; register counts do not explain these measured latencies alone.
 Strict FP32, seed101, HIP7, unflushed caches and exact checks between samples.
 [Unroll8 evidence](../../provenance/openfold3_qkv_unroll8_replay_20261010.json).
+
+## Counter-guided smaller-block trials
+
+The [N1536 hardware profile](../../docs/openfold3-hardware.md) identifies fused
+QKV as35.37% of summed kernel time. Its sampled CU busy and wave occupancy are
+near100%, but MFMA utilization is25.97% and HBM traffic65.92 GB/s. The source
+uses only two of16 waves during PV. This motivates a scheduling experiment;
+the metrics alone do not prove a synchronization bottleneck.
+
+`half_query_variant.py QUALIFIED_UNROLL4_SOURCE NEW_CPP` generates a512-thread,
+eight-query version from pinned source `dd7bbb785dae1afed98ad6fd357fa8e6822f0e49310a87530a296ee7c0d9ff9f`.
+It retains ascending MFMA arithmetic and original softmax order, duplicates
+unused MFMA rows, and uses12 QK bands plus8 KiB LDS. All eight synthetic cases
+pass both output modes, including NaN/signed-zero bits and output canaries.
+All84 complete trained module calls also match native bits.
+
+| Complete attention direction | Qualified unroll4 | Eight-query trial |
+| --- | ---: | ---: |
+| Ending | 240.193 ms | 310.138 ms |
+| Starting | 229.695 ms | 299.978 ms |
+
+**Reject this variant for latency.** No full-model or E2E trial is launched.
+Two warmups and12 balanced samples per arm/direction use strict FP32, seed101,
+HIP7, canonical normalization, K packing, unchanged retained workspace and
+unflushed caches. Exact comparisons occur between samples.
+[Complete evidence](../../provenance/openfold3_qkv_half_query_replay_20261010.json).
+
+The initial attempt stopped before GPU/build because system packages changed.
+Recovery retains the full157,886-entry environment inventory and compares
+both arms under its refreshed pin, with identical inventories before/after.
+The [audit](../../provenance/openfold3_environment_refresh_20261010.json) records
+22 changed entries representing six canonical OS libraries; historical receipts
+are preserved. Earlier E2E values are not combined with these module timings.
+
+`two_rows_variant.py QUALIFIED_UNROLL4_SOURCE NEW_CPP` is a separate512-thread
+proposal: retain16 queries and have each wave hold two rows. This avoids the
+previous variant's redundant MFMA rows, while increasing per-thread registers
+and QK barriers. All eight synthetic cases in both modes and all84 complete
+trained calls pass bitwise. It is also rejected for latency:
+
+| Complete attention direction | Qualified unroll4 | Two-row trial |
+| --- | ---: | ---: |
+| Ending | 239.100 ms | 404.324 ms |
+| Starting | 229.054 ms | 394.744 ms |
+
+The same strict workload, balanced sampling and refreshed before/after inventory
+apply. No full-model/E2E job is launched for either smaller-block variant.
+Keep the qualified1024-thread unroll4 implementation. Higher active-wave fraction
+during PV does not establish a net performance gain.
+[Two-row evidence](../../provenance/openfold3_qkv_two_rows_replay_20261010.json).

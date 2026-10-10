@@ -301,7 +301,7 @@ Paired benchmark: `outputs/experiments/openfold3-hip-bias-pack-pairs-20261010`.
 The recovered128-row packing receipt also confirms arbitrary-bit equality;
 its actual-layout attention medians1.471994/1.472234 ms provide no meaningful
 advantage over64 rows. Both raw variant summaries are retained in the screen
-receipt. No maintained-profile promotion or new direct-original-Torch ratio.
+receipt. Maintained-profile promotion remains pending; the later direct result is below.
 
 
 ## Direct-native follow-up preparation
@@ -316,11 +316,11 @@ Native worker source and data defaults are preserved; all optimized selection
 flags are zero in the native profile. One common worker tree prevents source
 layout differences from being hidden as protected-input changes. Route/runner
 and optimization receipts are sealed with outputs, and the collector checks their
-current bytes. Twelve CPU tests pass; no routed GPU qualification or new direct
-ratio exists yet. See the [workflow and evidence boundary](../../docs/openfold3-deployment-audit.md#frozen-direct-native-comparison-workflow).
+current bytes. Twelve CPU tests pass. Both routed GPU qualifications and the
+three-pair direct comparison now pass (2.8644x E2E). See the [workflow and evidence boundary](../../docs/openfold3-deployment-audit.md#frozen-direct-native-comparison-workflow).
 
 
-## Pending hardware diagnostics
+## Completed hardware diagnostics
 
 `hardware_profile.py trace` and `hardware_profile.py counters` prepare two
 separate diagnostic profiles around the exact HIP-packing model worker. The
@@ -341,11 +341,13 @@ Both runs must preserve all11 arrays, full CIF bytes and the qualified dispatch
 receipts. Raw CSV files and their hashes are retained. Per-grid coverage and
 metric completeness must be examined before any hardware conclusion. Counter
 sampling is not a complete model timeline, and instrumented times are not E2E
-performance measurements. No OpenFold3 hardware result is available yet.
+performance measurements. Both diagnostic runs now pass all11/full-CIF gates.
+[Per-grid hardware analysis](../../docs/openfold3-hardware.md) identifies fused
+QKV as the next scheduling target; sampled coverage is explicitly bounded.
 
 Coordinator: `outputs/experiments/openfold3-hardware-followup-20261010`.
-The script has passed syntax inspection; GPU profiling remains pending behind
-the current incremental and direct-native timing jobs.
+The diagnostic jobs completed after all direct-native timed calls; no profiling
+overlapped the timing study.112 counter dispatches have all nine metrics.
 
 
 ## HIP packing plus grouped softmax: accepted incremental E2E
@@ -379,12 +381,11 @@ The narrower synthetic attention gain2.48x does not describe model or E2E speedu
 The earlier packed projection-cache proposal remains unselected because its
 paired stability gate failed. Maintained-profile integration is still pending.
 
-The direct-native follow-up has passed CPU preparation and started the unchanged
-native worker's full-model qualification. Its native worker SHA remains
-`c30ab522f9a18cb5fa0f21a182d5d2ac33e85173becb4676489485f6eb7d140e`; the optimized
-worker body is copied unchanged from the qualified paired tree. Both routed model
-gates must pass before the fresh direct-native pairs run. **No new direct-native
-speedup is available yet; do not combine older native timings with these results.**
+The direct-native follow-up subsequently passed both routed model gates and all
+three fresh pairs:950.891469 ->331.969765 s E2E medians (2.8644x). Its native worker
+SHA remains `c30ab522f9a18cb5fa0f21a182d5d2ac33e85173becb4676489485f6eb7d140e`;
+the optimized worker body is copied unchanged from the qualified paired tree.
+This direct result is independent of the incremental ratio above.
 
 [Complete paired evidence](../../provenance/openfold3_hip_bias_pack_e2e_n1536.json).
 
@@ -420,6 +421,6 @@ operator receipts. Qualification E2E observations are966.949545 s native and
 321.596325 s optimized; model forward is872.441172 and233.799366 s. These are
 single model-gate observations, not completed three-pair timing results.
 
-The direct-native coordinator has started its three AB/BA/AB pairs. Hardware
-diagnostics remain queued behind that study; no profiling overlaps the timed
-runs. [Qualification receipt](../../provenance/openfold3_direct_native_routes_n1536.json).
+The direct-native coordinator completed all three AB/BA/AB pairs:950.891469 ->
+331.969765 s E2E medians (2.8644x), all six all11/full-CIF exact. Subsequent
+hardware diagnostics also passed their exact gates. [Qualification receipt](../../provenance/openfold3_direct_native_routes_n1536.json).

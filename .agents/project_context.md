@@ -6142,3 +6142,57 @@ Nativeonecall~967s, optimized~322s, totalsixcalls~65minutes; actualETAuncertain.
 Do notstartanotherGPU/build/archivewhiletiming. Hardwarequeue808423 waitsnative
 studyexit0 beforefulltrace/counters. No hardwaremetricresultyet. AllHIP7only.
 No pendingcodeeditsotherthanthisresultdocumentation; goalactive/notflat/notblocked.
+
+
+## Direct native2.864x, hardware diagnosis, smaller-block trial (2026-10-10)
+
+Direct-native795488/827126 andhardware808423 allterminal0. Sixdirectcalls:
+B0=950.891468587,C0=331.969764885,C1=374.020485794,B1=970.270235385,
+B2=949.160923716,C2=321.835635531. All11/fullCIFexact andsealedroutes/runner/
+operatorreceipts checked. Medians950.891469 ->331.969765s,2.864391789x;
+model855.151521 ->237.199487s,3.605199705x. Keepallobservations; C1model278.940655s,
+no establishedcause. This supersedes earlierdirect1.499x onlyforlatestexperimental
+composition; maintainedintegrationstillpending. Provenanceopenfold3_direct_native_latest_e2e_n1536.json.
+
+Hardwaretrace/counters bothall11/fullCIFexact.112sampleddispatches,49name/gridgroups,
+9metricseach; trace807382dispatches,sum248.549684s,union247.825494s,span287.020558s.
+FusedQKV5064calls,87.921949s/35.37%; median15.529ms. SampleCUbusy99.85%,occupancy98.75%,
+MFMA25.97%,HBM65.92GB/s. Samplescover45.44%tracekernel-time byname/grid only;
+no modelwideboundclaim. Newdocs/openfold3-hardware.md andpinnedsummary.
+
+Firsteight-queryfusedQKVtrial926451 stoppedbeforeGPU/build becausefullenvironment
+inventorychanged22entries(sixcanonicalOSlibraries). dpkgupdates06:53; ROCm/Torch/
+model/sourcepinsunchanged. Newfull157886-entryinventory:
+outputs/experiments/openfold3-environment-audit-20261010/current.json
+SHAe9a14970d1d8c805cd808bd9d28e6d7333cb2e8a17b87a7b13e0a08c7d08ab45.
+Oldhistoricalinventoriesleftuntouched. Do notsilentlyreuseoldprofilesonnewenvironment;
+newtrialsrecordbotharmsundernewinventory. Auditprovenanceopenfold3_environment_refresh_20261010.json.
+
+CURRENTrecoverycoordinator927401:
+outputs/experiments/openfold3-qkv-half-query-recovery1-20261010.
+Local/tmp/fireprot-of3-qkv-half-query-recovery1-20261010. SourceSHA2354be172f63ac39ea98f6b0a3648280539f24024c9a97222f8c78ca38b0c07f.
+Newexperiments/mfma_qkv/half_query_variant.py generatesfromqualifiedunroll4dd7bbb...
+512threads/8queries/8KiBLDS; redundantMFMArows,12QK128-columnbands,PVorderunchanged.
+Testswhetheradditionalblocksoutweighaddedwork. ExistingQK-onlyhalftileexperiment
+isnotthisfusedPVtrial. RustbuildGPUhidden, then8x2syntheticexact and3-arm84complete
+trainedmodulecalls(vsQKbaselineandunroll4), HIP7only, fullinventorybefore/after.
+No newmodel/E2Ejobunlessreplayfasterbothdirections. Observehandle; norelaunchor
+parallelGPU/build/archive. Goalcontinues; no claimednewkernelspeedupyet.
+
+
+Smaller-block follow-up: recovery927401 finished0, all8x2synthetic and84trained
+calls exact; eight-query310.137802/299.977692ms versusunroll4240.192955/229.695213.
+Reject. Secondtrial929846 finished0,16queries/tworowsperwave all8x2+84exact;
+404.323792/394.744125ms versus239.099518/229.054398. Reject; no fullmodel/E2E for
+both. Fullnewenvironmentinventoryidenticalbefore/afterbothreplays. Sources and
+reports inexperiments/mfma_qkv/{half_query_variant,two_rows_variant}.py and
+provenance/openfold3_qkv_{half_query,two_rows}_replay_20261010.json.
+
+CURRENTnewdiagnosticPID932016 rootoutputs/experiments/openfold3-gemm-counters-20261010,
+local/tmp/fireprot-of3-gemm-counters-20261010. Profilecollectorfrozenfromhardware
+helper, nativequalificationworkerunchanged, refreshedfullinventorypin; HIP7only.
+Samplesoccurrences1000-1100 ofthetwohighest-durationGEMMnames. Tracepositionsshow
+theseincludeactualhotgrids3145728,6291456,9437184 (first1000-1050:49/47/2samples).
+Originalsamples10-12 missedthem. Two-rowsdriverterminal0+SMI5idleprerequisites.
+Runsfullstrictmodel/all11/fullCIF; instrumentedtimeisnotE2E. Needcollectactual
+countercoveragebeforeclaimingbound. No concurrentGPU/build/archive.

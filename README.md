@@ -151,19 +151,25 @@ Ratios are reference time divided by optimized time. All workloads retain the
 same scientific settings within their comparison; filesystem/kernel caches are
 warm or unflushed as specified in the linked evidence.
 
-### Direct native comparisons
+### Latest direct native comparison per model and length
+
+Evidence reviewed on **2026-10-10**. Base and OpenFold3 below measure the complete
+Rust invocation. Mini and AtlasFold retain their narrower historical request
+timers; their ratios are not complete Rust E2E measurements. An existing result
+is not a fresh benchmark of today's checkout, and ratios across models do not
+rank their absolute performance or prediction quality.
 
 | Model / length | Reference → optimized | Speedup | Timing boundary and evidence |
 | --- | ---: | ---: | --- |
-| Protenix Base, 600 aa, initialization only | 179.350 → 127.047 s | **1.412x** | Complete Rust invocation; one pair, strict deterministic C10/D200/S1; all 9 arrays exact ([details](docs/protenix-base.md#fast-construction-qualification)) |
 | Protenix Base, 1000 aa, latest maintained composition | 381.968 → 110.025 s | **3.472x** | Complete Rust invocation; three AB/BA/AB pairs, strict FP32 C10/D200/S1, shared fast initialization, unused-template omission; explicit aligned-coordinate/summary-confidence policy ([details](docs/protenix-base.md#latest-maintained-direct-native-result)) |
 | Protenix Mini, 1000 aa | 82.074 → 27.949 s | **2.937x** | Historical worker request; three pairs [¹](docs/protenix-native-requests.md) |
 | Protenix Mini, 1536 aa | 177.345 → 45.596 s | **3.889x** | Historical worker request; three pairs [¹](docs/protenix-native-requests.md) |
 | AtlasFold + AtlasLM-3B, 1000 aa | 184.581 → 84.174 s | **2.193x** | Earlier packaged revision; one request pair [²](docs/atlasfold-performance.md#packaged-bias-reuse-and-batched-transpose) |
 | AtlasFold + AtlasLM-3B, 1536 aa | 553.359 → 203.910 s | **2.714x** | Chunked native math; medians of sequential three-run sets [²](docs/atlasfold-performance.md#final-qkv-request-repetitions) |
-| OpenFold3, 1536 aa, HIP softmax experiment | 956.112 → 694.973 s | **1.376x** | Complete Rust invocation; three pairs [³](docs/openfold3-performance.md#exact-fp32-hip-softmax-three-pair-n1536-result) |
-| OpenFold3, 1536 aa, combined reuse experiment | 949.999 → 633.712 s | **1.499x** | Complete Rust invocation; three pairs, before later increments [³](docs/openfold3-performance.md#combined-reuse-direct-original-torch-n1536-e2e-result) |
 | OpenFold3, 1536 aa, latest experimental composition | 950.891 → 331.970 s | **2.864x** | Complete Rust invocation; three fresh AB/BA/AB pairs, all 11 arrays and full CIF bytes exact [³](docs/openfold3-performance.md#latest-composition-direct-native-e2e-result) |
+| Protenix Mini-ESM + ESM2-3B, 1000 aa | Not established | — | Numerical integration validated; no controlled paired speedup ([scope](docs/protenix-mini-esm.md#n1000-numerical-checks)) |
+| Protenix Tiny, 124 aa | Not established | — | Loading/numerical checks do not establish paired E2E performance |
+| OpenFold2 / ESMFold | Not measured | — | Adapters remain planned |
 
 1. **Protenix:** Mini-default v0.5.0 FP32, **C4/D1/S1**, seed101, no MSA/templates.
    Reference is the same checkout's native Torch route, including a shared bond-mask
@@ -180,6 +186,32 @@ warm or unflushed as specified in the linked evidence.
    R3/four trunk passes, D200/S1, seed101. All 11 arrays are bitwise equal;
    comparisons also check CIF identities. These experiments do not mean every
    optimization is enabled by `configs/diamondhill/openfold3-hip-fused.json`.
+
+Earlier direct results remain available as history: Base N600 initialization
+only [1.412x](docs/protenix-base.md#fast-construction-qualification), OpenFold3
+softmax only [1.376x](docs/openfold3-performance.md#exact-fp32-hip-softmax-three-pair-n1536-result),
+and OpenFold3 combined reuse
+[1.499x](docs/openfold3-performance.md#combined-reuse-direct-original-torch-n1536-e2e-result).
+They do not describe the latest compositions above. AtlasFold N1000 retains its
+earlier direct comparison because later QKV packaging has no new matched native
+measurement; do not divide observations from different experiments.
+
+### Where further optimization is justified
+
+This is an evidence-based work priority, not a forecast of additional speedup.
+
+| Model | Remaining opportunity and next step |
+| --- | --- |
+| **OpenFold3 — first priority** | Fused QKV accounts for **35.37% of summed instrumented kernel time**; sampled MFMA utilization is **25.97%** despite high CU activity. Investigate scheduling and data movement while preserving exact arithmetic. Also profile the complete invocation's non-forward work. Two smaller-block trials already regressed; do not repeat them unchanged. |
+| **Mini-ESM — exploratory profiling** | ESM2-3B loading/features execute outside the folding-forward timer. Establish a serial N1000 complete-invocation baseline and stage split before selecting kernels; its remaining headroom is unknown. |
+| **Mini-default — remeasure before porting** | Historical N1000 request/model medians are **27.949 / 15.391 s**. Measure the current Rust entry and check whether later Base/OpenFold3 ideas apply to its actual shapes and C4/D1 workload. No transferred gain is established. |
+| **AtlasFold + AtlasLM-3B — reopen only with a new hotspot** | The previous exact-operator cycle reached a practical plateau. Later layout/LM trials gave negligible gains or failed equality; preserve every stochastic LM pass. A fresh stage profile is needed before further tuning. |
+| **Protenix Base — retain the qualified route** | Sampled triangle BMMs reach about **99% MFMA activity**; Graph and gate-fusion follow-ups did not improve E2E. The N1000 cycle and batching investigation are closed at their measured scope. |
+| **Tiny / OpenFold2 / ESMFold** | Tiny is outside the long-sequence priority; the planned adapters need integration and baselines before an optimization ranking. |
+
+See [optimization priorities and evidence](docs/performance-priorities.md).
+The latest narrow-projection screen is an operator experiment only; it adds
+no measured E2E gain to the OpenFold3 **2.864x** result.
 
 ### Experimental Base N1000 cycle
 

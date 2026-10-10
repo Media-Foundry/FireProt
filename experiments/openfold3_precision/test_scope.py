@@ -92,6 +92,9 @@ class ScopeTest(unittest.TestCase):
         self.assertTrue(report['completed'])
         self.assertEqual(report['boundary_calls']['diffusion_module'], 2)
         self.assertGreater(report['output_dtypes']['torch.float16'], 0)
+        for cycle in report['cycles']:
+            self.assertEqual(cycle['activation_ranges_by_dtype']['torch.float16']['max_abs'], 1.0)
+        self.assertIn('allow_fp16_reduced_precision_reduction', report['matmul_flags'])
         self.assertNotIn('forward', self.model.pairformer_stack.__dict__)
 
     @torch.inference_mode()

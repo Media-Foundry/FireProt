@@ -62,6 +62,10 @@ def pairformer_precision_scope(model, output, precision, diagnostic=True):
                                            diffusion='float32', confidence='float32',
                                            master_parameters='float32'),
                   cycles=[], ranges={}, output_dtypes={}, boundary_calls={},
+                  matmul_flags={name: getattr(torch.backends.cuda.matmul, name, None)
+                      for name in ('allow_tf32', 'allow_fp16_reduced_precision_reduction',
+                                   'allow_bf16_reduced_precision_reduction',
+                                   'allow_fp16_accumulation')},
                   nonfinite=None, triangle_fp32_fusion_bypassed_cycles=0,
                   limits=['Diagnostic activation scans invalidate performance timing.',
                           'Mixed-precision outputs require independent aligned-coordinate and confidence evaluation.',
@@ -89,6 +93,14 @@ def pairformer_precision_scope(model, output, precision, diagnostic=True):
                 item['minimum'] = min(item['minimum'], low)
                 item['maximum'] = max(item['maximum'], high)
                 item['max_abs'] = max(item['max_abs'], abs(low), abs(high))
+                if active:
+                    cycle_range = report['cycles'][-1].setdefault('activation_ranges_by_dtype', {})
+                    value = cycle_range.setdefault(str(tensor.dtype),
+                        dict(calls=0, minimum=low, maximum=high, max_abs=0.0))
+                    value['calls'] += 1
+                    value['minimum'] = min(value['minimum'], low)
+                    value['maximum'] = max(value['maximum'], high)
+                    value['max_abs'] = max(value['max_abs'], abs(low), abs(high))
 
     def activation_hook(name):
         def hook(module, args, result):

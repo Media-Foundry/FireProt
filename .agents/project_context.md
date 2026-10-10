@@ -6298,3 +6298,17 @@ requesttakespriority. No speedupclaim. Provenanceopenfold3_qkv_wide_query_local_
 Latest officialdirectE2E still2.864x. READMEallmodelreview commit ed856d8 pushed.
 Allprioruncommittednarrow/kernel/hardwarewarningfiles stillneedcommit; docs/isa
 userPDF remainsuntracked. Workonmaster; endpointpc@10.120.16.5; onlyHIP6/7.
+
+
+Commit6e914d6 pushed narrow full-model gates and precision diagnostic code.
+First narrowpairedcomparison exact, E2E323.468318 ->324.589092 (0.996547x),
+no gain; keepremainingpairs. Current next run candidate1. No narrowpromotion.
+
+Precision queue965152 was explicitly stopped while waiting, before anymodel/GPU,
+exit143 superseded. Adds per-cycle min/maxbydtype andactualTorchmatmulflags.
+NEWCURRENT precisionqueue978289:
+outputs/experiments/openfold3-precision-recovery1-queue-20261010, waitingfor
+originalnarrowpairedqueue957628. Futuremodelroot
+outputs/experiments/openfold3-precision-diagnostic-recovery1-20261010.
+Local/tmp/fireprot-of3-precision-diagnostic-recovery1-20261010. Scope+tests changed
+after6e914d6;4CPUtests pass again. No numericalprecision GPU result yet.

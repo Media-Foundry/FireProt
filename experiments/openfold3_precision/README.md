@@ -27,8 +27,9 @@ claim to reproduce the complete official BF16 training configuration.
 
 ## Guards and observations
 
-`scope.py` records effective precision, per-cycle completion, observed activation
-dtypes and activation min/max ranges. Diagnostic hooks stop on nonfinite module
+`scope.py` records effective precision, per-cycle completion and activation ranges
+by dtype, aggregate per-module ranges, and actual Torch matmul backend flags.
+Diagnostic hooks stop on nonfinite module
 outputs. FP16 has a finite range limit of 65504, so projection outputs, triangle
 updates, attention and normalization boundaries are checked; no values are
 clipped to make a failure pass. Functional intermediates inside a module are not
@@ -84,5 +85,7 @@ distortion/reflection differences. The standalone Rust binary links the current
 workspace's `fireprot-validation`, `nalgebra` and `serde_json` release artifacts;
 its build commands and artifact digests are retained with experiment evidence.
 
-Remote queue: `outputs/experiments/openfold3-precision-queue-20261010`.
-Future model root: `outputs/experiments/openfold3-precision-diagnostic-20261010`.
+Current remote queue: `outputs/experiments/openfold3-precision-recovery1-queue-20261010`.
+Future model root: `outputs/experiments/openfold3-precision-diagnostic-recovery1-20261010`.
+The initial waiting queue was explicitly stopped before model preparation or GPU
+execution to add per-cycle range reporting. Its frozen controls remain intact.

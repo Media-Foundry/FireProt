@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "status": "queued_no_gpu_result",
+  "effective_scope": "Autocast PairFormer only; all other model stages and master parameters FP32.",
+  "quality_policy": "User requested reporting deviations before selecting any tolerance.",
+  "tests": {
+    "cpu_scope_tests": 4,
+    "rust_alignment_tests": 2,
+    "scope_tests_mock_autocast_and_source_pins": true
+  },
+  "queue": {
+    "pid": 978289,
+    "root": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-recovery1-queue-20261010",
+    "prerequisite": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-narrow-pairs-recovery2-queue-20261010/driver-status.json",
+    "control_pins": {
+      "driver.py": "7e5225b142ff0dc81793c77d0f27647952131ceb4e2ac205aea82868dd6ae81e",
+      "run_diagnostic.py": "79840bc0ddf353f593ad29103b9fb411e04ff4b801ba037223187ed279fe501a",
+      "scope.py": "caa52a200aaa90d718fb05d1f12ee09204961052206adeb07b452aae0fa8ae58",
+      "prepare.py": "8d81ea11b67b009cd89f2072580f91ac7273dffdce56e339ef7e96204f194351"
+    }
+  },
+  "rust_metrics_build": {
+    "command": [
+      "rustc",
+      "--edition=2024",
+      "-O",
+      "experiments/openfold3_precision/deviation.rs",
+      "-L",
+      "dependency=/home/husrcf/Code/fireprot/target/release/deps",
+      "--extern",
+      "serde_json=/home/husrcf/Code/fireprot/target/release/deps/libserde_json-cceb10acde35fd52.rlib",
+      "--extern",
+      "nalgebra=/home/husrcf/Code/fireprot/target/release/deps/libnalgebra-6cd083da8cd94a18.rlib",
+      "--extern",
+      "fireprot_validation=/home/husrcf/Code/fireprot/target/release/libfireprot_validation.rlib"
+    ],
+    "pins": {
+      "experiments/openfold3_precision/deviation.rs": "d8cf437c6a06d5294a7164ad0cb0073b2ed7df3ded24d4c0d6c55cab20ccc017",
+      "/home/husrcf/Code/fireprot/target/release/deps/libserde_json-cceb10acde35fd52.rlib": "5ffcfc07d378bb2bf28c8da4310a40836818d2f5b9589b5b9d281e34b7dbeb0a",
+      "/home/husrcf/Code/fireprot/target/release/deps/libnalgebra-6cd083da8cd94a18.rlib": "910cd1f247eb8deea02aac74020a97aa81fe6056cc762cd90d6c916025293c5a",
+      "/home/husrcf/Code/fireprot/target/release/libfireprot_validation.rlib": "27a80e331d8ab987046bc05883f7d3b096e7f7195c4e61745fdd9d1657ab5e10",
+      "/tmp/fireprot-of3-precision-deviation": "c557536a88a026a0e7a6523a6d0a68479999c031007db17dc2ecafde75620174"
+    }
+  },
+  "prior_queue": {
+    "pid": 965152,
+    "exit_code": 143,
+    "reason": "Explicitly superseded while waiting, before GPU or model preparation."
+  },
+  "limits": [
+    "No BF16/FP16 numerical or speedup result yet.",
+    "Instrumented diagnostic times will not establish E2E acceleration.",
+    "Runtime/base request precision remains FP32; a pinned and sealed experimental policy declares the scoped arithmetic override."
+  ]
+}

@@ -77,7 +77,7 @@ def pairformer_precision_scope(model, output, precision, diagnostic=True,
                           'No output clamping, changed recycle count or shortened diffusion.'])
     active = False
     handles = []
-    triangle_modules = {id(m) for m in stack.modules()
+    triangle_modules = {id(m): name for name, m in stack.named_modules()
                         if isinstance(m, TriangleMultiplicativeUpdate)}
 
     def protected_triangle(module, *args, **kwargs):
@@ -91,6 +91,9 @@ def pairformer_precision_scope(model, output, precision, diagnostic=True,
         if any(t.is_floating_point() and t.dtype != torch.float32 for t in tensors(result)):
             raise RuntimeError('Protected triangle returned a non-FP32 tensor')
         report['triangle_fp32_calls'] += 1
+        calls = report['cycles'][-1].setdefault('triangle_fp32_calls', {})
+        name = triangle_modules[id(module)]
+        calls[name] = calls.get(name, 0) + 1
         return result
 
     def observe(label, value, scan):
@@ -193,9 +196,14 @@ def pairformer_precision_scope(model, output, precision, diagnostic=True,
         if any(not r['completed'] for r in report['cycles']):
             raise RuntimeError('Incomplete PairFormer cycle')
         if triangle_precision == 'float32' and dtype != torch.float32:
-            expected = len(triangle_modules) * len(report['cycles'])
-            if expected == 0 or report['triangle_fp32_calls'] != expected:
-                raise RuntimeError('Incomplete FP32 triangle coverage')
+            # Upstream tunes chunk size by executing block zero before the
+            # real stack. Require every module in every cycle, retaining all
+            # additional tuning calls instead of assuming a fixed total.
+            names = set(triangle_modules.values())
+            for cycle in report['cycles']:
+                calls = cycle.get('triangle_fp32_calls', {})
+                if not names or set(calls) != names or any(v < 1 for v in calls.values()):
+                    raise RuntimeError('Incomplete FP32 triangle coverage')
         if report['boundary_calls'].get('diffusion_module') != model.shared.diffusion.no_full_rollout_steps:
             raise RuntimeError('Diffusion step coverage changed')
         if report['boundary_calls'].get('sample_diffusion') != 1 or report['boundary_calls'].get('confidence') != 1:

@@ -6355,3 +6355,17 @@ modelrootoutputs/experiments/openfold3-precision-triangle-fp32-recovery1-2026101
 Onlyinventorypath/hash andfreshoutputIDschanged; sourcepolicyunchanged.
 GitNexusrefreshhit16GiBDBcap; supportedGITNEXUS_LBUG_MAX_DB_SIZE=34359738368
 refreshsucceeded. Use32GiBcap forfuturerefreshes; noanalyzercodepatch.
+
+Commit e7f7755 pushed initial results/protectedscope. Recovery1FP32 passesall11/fullCIF.
+Foundstatictrianglecallcountincorrect: pinnedupstreamPairFormer._prep_blocks
+executesblocks[0] forchunktuning. ExplicitlycancelledonlyownRustinfer1580045 via
+SIGTERMaftercmdlinecheck; worker1580158cleaned, coordinator1576252terminal1.
+KeptcompletedFP32anchorSHA b8aad0a622b5a67f342f860fa7dc32ed5111b4fbd59a8fe640a3a176dc638449.
+Addedregressionfailedoldguard, now8tests pass. Guardnowrequiresalltrianglemodules
+inEVERYcycle andrecordsadditionalwarmupspermodule/cycle. Arithmeticunchanged.
+CURRENTrecovery2coordinator1583067:
+outputs/experiments/openfold3-precision-triangle-fp32-recovery2-queue-20261015
+modelrootoutputs/experiments/openfold3-precision-triangle-fp32-recovery2-20261015.
+RunsprotectedFP16ONLYaftercheckingpriorFP32anchor/allartifacthashes. Sameinventory
+14c60e2a.../HIP7/KFD8466only. NoGPUresultyet. Scope/test/README/context/provenance
+updatesaftere7f7755stillneedcommit. NodeGitNexus32GiBrefreshneededbeforecommit.

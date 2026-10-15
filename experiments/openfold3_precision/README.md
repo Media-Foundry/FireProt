@@ -130,10 +130,15 @@ paired E2E measurements.
 A conservative first protected candidate is now running: **complete native
 triangle multiplicative updates remain FP32**, with FP16 autocast for the rest
 of PairFormer. This is broader protection than contraction alone. The hashed
-policy declares `triangle_precision: float32`; call coverage must equal the
-number of PairFormer triangle modules times trunk passes. Seven CPU scope tests
-cover the original gates plus protected dispatch, missing coverage and failure
-restoration. The queue runs a fresh exact FP32 anchor before the FP16 candidate.
+policy declares `triangle_precision: float32`; every triangle module must run
+under protection in every trunk pass. Extra upstream chunk-tuner calls are
+recorded per module and cycle. Eight CPU scope tests cover the original gates,
+protected dispatch, missing coverage, failure restoration and chunk-tuner warmup.
+The fixed-total check was too strict: upstream `_prep_blocks` executes block zero
+while tuning chunk size. Its regression test fails before the correction and
+passes afterward. The FP16 candidate using that check was explicitly cancelled
+through its own Rust inference supervisor; its completed FP32 anchor remains
+valid. The recovery rechecks that anchor and runs only the corrected candidate.
 [Preparation and control pins](../../provenance/openfold3_precision_triangle_fp32_preparation_20261015.json).
 No protected-candidate GPU numerical result is established yet. HIP7 remains
 the only authorized device; all these runs are instrumented diagnostics.

@@ -172,6 +172,23 @@ class ScopeTest(unittest.TestCase):
         self.assertFalse(self.report()['completed'])
         self.assertEqual(self.report()['triangle_fp32_calls'], 1)
 
+    @torch.inference_mode()
+    def test_triangle_protection_includes_chunk_tuner_warmup(self):
+        self.model.pairformer_stack.triangle = Triangle()
+        self.model.pairformer_stack.inject = lambda: self.model.pairformer_stack.triangle._inference_forward()
+        with pairformer_precision_scope(self.model, self.output, 'float16',
+                                        triangle_precision='float32'):
+            self.model.pairformer_stack.inject = lambda: [
+                self.model.pairformer_stack.triangle._inference_forward() for _ in range(2)]
+            s, z = self.model.pairformer_stack(torch.ones(1), torch.ones(1))
+            self.model.pairformer_stack.inject = lambda: self.model.pairformer_stack.triangle._inference_forward()
+            s, z = self.model.pairformer_stack(s, z)
+            self.model.sample_diffusion(s)
+            self.model.aux_heads(z)
+        self.assertTrue(self.report()['completed'])
+        self.assertEqual(self.report()['triangle_fp32_calls'], 3)
+        self.assertEqual(self.report()['cycles'][0]['triangle_fp32_calls']['triangle'], 2)
+
 
 if __name__ == '__main__':
     unittest.main()

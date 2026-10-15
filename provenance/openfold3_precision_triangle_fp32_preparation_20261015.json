@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "initial_attempt_failed_before_model; recovery1_fp32_anchor_running",
+  "status": "recovery2_protected_fp16_running",
   "queue_pid": 1574668,
   "queue_root": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-triangle-fp32-queue-20261015",
   "model_root": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-triangle-fp32-20261015",
@@ -21,7 +21,7 @@
     "preflight": "KFD process VRAM on target ID must be zero; HIP probe PCI must match; Rust invocation retains supervision and inventory checks.",
     "telemetry_caveat": "Target busy_percent reports100 with only13926400 VRAM bytes and no KFD VRAM owner. Diagnostic computation succeeds; do not use these runs as performance evidence."
   },
-  "cpu_scope_tests": 7,
+  "cpu_scope_tests": 8,
   "next": "Collect protected call coverage, finite outputs and aligned/local/confidence deviations. Preserve all failures.",
   "initial_failure": "Environment inventory changed; no precision report or model computation.",
   "recovery1": {
@@ -35,6 +35,22 @@
       "driver.py": "000b62df3cd2914b55d9f2cba4354dcd1d6c61ac4681b0bf9a43e1ae7fe5e439"
     },
     "environment_audit": "provenance/openfold3_environment_refresh_20261015.json",
-    "preparation_change": "Frozen prepare.py changes only environment inventory path/digest. Driver changes only experiment root/run tag."
+    "preparation_change": "Frozen prepare.py changes only environment inventory path/digest. Driver changes only experiment root/run tag.",
+    "status": "FP32 anchor passed all11/full CIF; FP16 explicitly cancelled to correct fixed-total coverage check",
+    "fp32_collected_sha256": "b8aad0a622b5a67f342f860fa7dc32ed5111b4fbd59a8fe640a3a176dc638449"
+  },
+  "recovery2": {
+    "queue_pid": 1583067,
+    "queue_root": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-triangle-fp32-recovery2-queue-20261015",
+    "model_root": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-triangle-fp32-recovery2-20261015",
+    "control_pins": {
+      "prepare.py": "a47fc1d20fd1af42936ec50c5e00efba3f524f9f88cf00d7441e8c5b1d9378b2",
+      "scope.py": "5c16b39c1d350c3ba7712cb02a2246d911d118663b1cb033cd1ac2c736323b1b",
+      "run_diagnostic.py": "79840bc0ddf353f593ad29103b9fb411e04ff4b801ba037223187ed279fe501a",
+      "driver.py": "b2f9bcc3f163084b005bfc31316d185b8c0954b16f08daf389937774c00a8218"
+    },
+    "coverage": "Every PairFormer triangle module in every cycle; extra tuner calls recorded per module/cycle.",
+    "anchor": "Reuses newly qualified recovery1 FP32 anchor with rechecked hashes; mixed-only bookkeeping changed, arithmetic unchanged. No timing comparison.",
+    "regression": "New chunk-tuner warmup test reproduced fixed-count false rejection, then passed with all eight lifecycle tests."
   }
 }

@@ -139,6 +139,10 @@ The intended deployment path is:
 /media/PM982/engramfold/folding_e2e_20260921/weights/esm3-open/snapshot/data/weights/esm3_sm_open_v1.pth
 ```
 
-Download and actual model qualification are still pending at this stage. The
-checkpoint is not added to Git. The standalone sequence-forward scope does not
-require the separate structure/function codec checkpoints.
+The download and a second SHA-256 calculation after transfer both passed. Native
+N1000 inference passed Rust acceptance on HIP7; all tokens, BF16 embeddings and
+BF16 sequence logits match an independent official-factory run bitwise.
+See [asset receipt](../provenance/esm3_assets_20261015.json) and
+[qualification](../provenance/esm3_qualification_20261015.json).
+The checkpoint is not added to Git. The standalone sequence-forward scope does
+not require the separate structure/function codec checkpoints.

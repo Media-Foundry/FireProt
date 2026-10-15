@@ -35,7 +35,7 @@ Multiple-sequence batching and masked-token/generation tasks are not connected.
 | `esmc-fold2-6b` | Tokens and final normalized embedding | BF16 embedding | Encoder bundled in the pinned Biohub ESMFold2 release; no MLM head |
 | `esm2-3b` | Tokens, final normalized layer-36 embedding and logits | FP32 | `esm2_t36_3B_UR50D.pt` plus contact regression companion |
 | `atlaslm-3b` | Tokens, native embedding and logits | FP32 embedding, BF16 logits | `atlaslm_3b_base.pth` |
-| `esm3-open` | Tokens, native embedding and sequence logits | Native model precision; qualification pending | Official `biohub/esm3-sm-open-v1`; download/validation in progress |
+| `esm3-open` | Tokens, native prenorm embedding and sequence logits | BF16 embedding/logits with native BF16 autocast | Official `biohub/esm3-sm-open-v1`; N1000 native factory parity passed |
 
 Tokens retain BOS/EOS: `[1, N+2]`. Embeddings retain those positions too:
 `[1, N+2, hidden_size]`. For residue-only use, select `[:, 1:-1, :]`.
@@ -62,6 +62,8 @@ fireprot esm configs/requests/plm-esm2-3b-n1000-fireprot.json \
   configs/diamondhill/plm-esm2-3b.json
 fireprot atlaslm configs/requests/plm-atlaslm-3b-n1000-native.json \
   configs/diamondhill/plm-atlaslm-3b.json
+fireprot esm configs/requests/plm-esm3-open-n1000-native.json \
+  configs/diamondhill/plm-esm3-open.json
 ```
 
 The request's `hip_device` controls GPU selection. The supervisor replaces inherited
@@ -143,3 +145,34 @@ The frozen benchmark CLI is:
 The profiles for these three models use the matching frozen worker directory and
 bridge. Inference examples may point to a previously used output directory;
 always copy requests and change their run ID/output path before execution.
+
+## ESM3 native qualification
+
+Official ESM3-open weights were downloaded at revision
+`47f0545b2b6daf26a93439a3cd610f4f7f3d5478`; both the local download and its
+DiamondHill copy match official LFS SHA-256
+`5ead5a135c658068db6a4f1b933e72d6110992c4668822e1c0e2dcc53e38acd9`.
+The model card is retained beside the checkpoint. [Asset record](../provenance/esm3_assets_20261015.json).
+
+The maintained sequence loader uses the pinned architecture and strict local
+state loading. Nonpersistent RoPE buffers are constructed on CPU as in the
+official factory, then moved/cast with the model. Unused auxiliary codec callbacks
+reject calls rather than downloading additional models. The full native forward
+still computes its heads; this entry exports sequence logits and prenorm embeddings.
+
+On HIP7, N1000/seed101, all three output arrays pass Rust schema-5 acceptance and
+are bitwise equal across the supervised worker, the standalone loader and the
+independent official `ESM3.from_pretrained` factory with local asset routing.
+The comparison does not establish an ESM3 acceleration ratio or validate sequence
+sampling, structure decoding or multimodal prompting.
+[Qualification record](../provenance/esm3_qualification_20261015.json).
+
+The prepared ESM3 CLI/worker deployment is separate from the frozen three-model
+benchmark:
+
+```text
+/media/IntelSSD/fireprot/outputs/experiments/plm-esm3-20261015/target/release/fireprot
+```
+
+Use it with `configs/diamondhill/plm-esm3-open.json`, or build the current checkout
+and deploy its workers explicitly. Neither prepared example is a dependency installer.

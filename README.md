@@ -136,8 +136,8 @@ three-model Protenix smoke manifest. See [batch inference](docs/batch-inference.
 Use `fireprot esm REQUEST PROFILE` for ESMC/ESM2/ESM3 sequence inference and
 `fireprot atlaslm REQUEST PROFILE` for AtlasLM. These entries export embeddings
 and available sequence logits independently of folding. ESMC, ESM2 and AtlasLM
-have N1000 native/opt-in exact-output qualification; ESM3 weight validation is
-pending. Standalone ESM2 N1000 complete invocation improves **39.304 → 18.827 s
+have N1000 native/opt-in exact-output qualification. ESM3 native N1000 outputs
+match the official model factory bitwise. Standalone ESM2 N1000 complete invocation improves **39.304 → 18.827 s
 (2.088x)** with exact outputs. ESMC/AtlasLM have warm-forward gains but no cold-start
 E2E gain in this round. These results do not change folding speedup rows.
 See [commands, native precision and performance scope](docs/protein-language-models.md).
@@ -222,7 +222,8 @@ This is an evidence-based work priority, not a forecast of additional speedup.
 
 | Model | Remaining opportunity and next step |
 | --- | --- |
-| **ESMFold2 + ESMC — current focus** | Native versus opt-in packing reuse now gives **2.006x complete N1000 invocation** and **3.289x forward** with exact outputs. Profile the optimized route before testing fused HIP cast/layout packing; no additional gain is established. |
+| **Standalone ESM/AtlasLM — current cycle complete** | ESM2 N1000 complete invocation improves **2.088x** with exact outputs. ESMC/AtlasLM HIP RoPE improves warm forward but not cold-start E2E. ESM3 native N1000 is connected and matches the official factory. [Scope](docs/protein-language-models.md). |
+| **ESMFold2 + ESMC — qualified folding route** | Native versus opt-in packing reuse now gives **2.006x complete N1000 invocation** and **3.289x forward** with exact outputs. Profile the optimized route before testing fused HIP cast/layout packing; no additional gain is established. |
 | **OpenFold3 — current cycle closed** | Final QKV LDS padding trials gave no consistent gain. Non-forward attribution is recorded; a thread-cap comparison was rejected by the protected environment gate. The accepted E2E result remains **2.864x**. [Final trials](docs/openfold3-performance.md#final-bounded-trials-and-transition-to-esmfold2-2026-10-15). |
 | **Mini-ESM — exploratory profiling** | ESM2-3B loading/features execute outside the folding-forward timer. Establish a serial N1000 complete-invocation baseline and stage split before selecting kernels; its remaining headroom is unknown. |
 | **Mini-default — remeasure before porting** | Historical N1000 request/model medians are **27.949 / 15.391 s**. Measure the current Rust entry and check whether later Base/OpenFold3 ideas apply to its actual shapes and C4/D1 workload. No transferred gain is established. |

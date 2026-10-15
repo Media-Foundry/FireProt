@@ -19,7 +19,26 @@ def load_model(request, sequence):
         from atlaslm.pretrained import load_model as load_atlas
         if request['source']['commit'] != ATLAS_COMMIT or Path(atlaslm.__file__).resolve().parents[2] != source:
             raise ValueError('AtlasLM imported source differs from its pin')
-        model = load_atlas(checkpoint, device='cuda').eval()
+        if request['backend'] == 'fireprot':
+            from atlaslm.pretrained import get_model
+            # Retain native BF16 weights and RoPE buffer initialization. Eager
+            # GPU restoration avoids repeated CPU mmap faults; strict assignment
+            # also avoids allocating a second complete GPU copy of the weights.
+            with torch.device('meta'):
+                model = get_model('atlaslm-3b').to(torch.bfloat16)
+            state = torch.load(checkpoint, map_location='cuda', weights_only=True, mmap=False)
+            if any(t.dtype != torch.bfloat16 for t in state.values()):
+                raise ValueError('AtlasLM eager assignment requires native BF16 checkpoint tensors')
+            model.load_state_dict(state, strict=True, assign=True)
+            del state
+            for module in model.modules():
+                if hasattr(module, 'init_buffers'):
+                    module.init_buffers(device=torch.device('cuda'))
+            if any(t.is_meta for t in list(model.parameters()) + list(model.buffers())):
+                raise RuntimeError('AtlasLM checkpoint or native buffers leave meta tensors')
+            model.eval()
+        else:
+            model = load_atlas(checkpoint, device='cuda').eval()
         tokens = model.encode([sequence])
         def forward():
             with torch.autocast('cuda', dtype=torch.bfloat16):

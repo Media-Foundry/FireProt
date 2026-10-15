@@ -6485,3 +6485,50 @@ ESM2 accepted E2E remains39.304->18.827s,2.088x; AtlasLM has no accepted cold E2
 gain (15.913->16.219s,0.981x), despite1.101x warm RoPE. Native remains Atlas default.
 README/architecture/pLM documentation now distinguish these scopes and outcomes.
 User docs/isa remains untracked. Work on master; no routine feature branches.
+
+
+### AtlasLM standalone follow-up (2026-10-16, after fc1c398)
+
+User clarified AtlasLM had been optimized and requested continued analysis and
+speed work; HIP6 explicitly reconfirmed. This cycle used HIP6 exclusively; all
+own GPU jobs are finished. No new goal was created (the previous goal is complete).
+
+Native warmed AtlasLM N1000 profiling: GEMM59.958ms/57.15%, attention12.859ms/12.26%,
+copy8.313ms, layernorm5.426ms, SiLU2.317ms out of104.920ms device time. ATen rows
+and their device kernel rows overlap; never sum both. Complete input/masks/GEMMs
+stay native. Both unmasked attention candidates (forced efficient or auto) changed
+embeddings/logits and were rejected.
+
+Accepted HIP SwiGLU uses native BF16 intermediate rounding before multiplication.
+All48 trained calls and full outputs exact; all65280 finite BF16 bit patterns
+with varying gates produce zero raw-bit mismatches. Rust build source is
+kernels/amd/fireprot_plm_swiglu.hip, library SHAe2acd46b8421dd59f87791fd321c22b1bc1bdb0c8a4a926e88a81b833d7ae048.
+Full Rust receipt remains outputs/experiments/atlaslm-speed-20261016/build-receipt.json;
+compact evidence in provenance/atlaslm_optimization_trials_20261016.json.
+The optimized scope deduplicates the single shared AtlasLM rotary module and
+requires48 RoPE +48 SwiGLU calls when the hip_swiglu resource is present.
+
+Loading experiments: mmapCPU5.339s, eagerCPU6.195s (rejected), eagerGPU3.993s,
+all outputs exact. First eagerGPU+HIP composition copies state to allocated GPU
+parameters; three pairs16.100376440->15.053462848s,1.069546363x, but loading peak
+12.361GB versus native6.199GB. Retained as provenance/atlaslm_eager_copy_e2e_20261016.json.
+Final loader constructs meta/nativeBF16, eagerly loads directly to GPU, checks all
+checkpoint tensorsBF16, strict assign=True, restores native RoPE buffers and
+rejects remaining meta tensors. Loading peak returns to6.193620480GB.
+Final independent matched three-pair E2E:15.915074956->15.046496010s,1.057726327x,
+5.46% less time. Baseline[15.906238099,16.005439103,15.915074956] (chronological
+order should be read from raw evidence); retain every observation. First-forward
+medians0.924329813->0.833048545s. All6 archives rehashed, all3 arrays exact.
+Final evidence provenance/atlaslm_composed_e2e_20261016.json. Do not choose the
+larger first-cycle ratio as the final result; candidate medians are similar but
+native timings vary. Final packaged warm scope104.700913->94.168295ms,1.111848876x,
+15 observations per arm, AB/BA/AB, method restoration checked every repetition.
+
+Frozen final deployment outputs/experiments/atlaslm-speed-20261016/qualified-assign
+contains matched CLI/bridge/workers/kernels. Profile SHAf406b5faac6e8865fd12e6c91ea8f4742691ebd889bf773adad239ad85fa7bff.
+Use configs/requests/plm-atlaslm-3b-n1000-composed.json with
+configs/diamondhill/plm-atlaslm-3b-optimized.json. Old profiles/requests remain
+historical. This supersedes the old standalone AtlasLM no-cold-E2E-gain result;
+AtlasFold folding ratios and padded LM lengths remain separately qualified.
+README and standalone docs updated. No upstream/model-source edits, no Triton.
+User docs/isa remains untracked. Continue on master.

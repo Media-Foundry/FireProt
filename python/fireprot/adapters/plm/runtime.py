@@ -18,6 +18,7 @@ def optimized_scope(model, request, length):
     state = dict(implementation='unused_attention_mean' if name == 'esm2-3b' else 'hip_bf16_rope', calls=0)
     changes = []
     library = None
+    swiglu_library = None
     if name != 'esm2-3b':
         library = ctypes.CDLL(str(Path(request['resources']['hip_rope']['path']).resolve()))
         entry = getattr(library, 'fireprot_esmc_rope' if name == 'esmc-fold2-6b' else 'fireprot_atlaslm_rope')
@@ -56,8 +57,12 @@ def optimized_scope(model, request, length):
                 changes.append((module, native)); module.forward = call
         else:
             heads = 40 if name == 'esmc-fold2-6b' else 36
+            seen = set()
             for block in model.transformer.blocks:
                 module = block.attn.rotary
+                if id(module) in seen:
+                    continue
+                seen.add(id(module))
                 native = module.forward
                 if name == 'esmc-fold2-6b':
                     module._update_cos_sin_cache(length+2, device=torch.device('cuda:0'), dtype=torch.bfloat16)
@@ -87,10 +92,47 @@ def optimized_scope(model, request, length):
                         return ao,bo
                     return dispatch(q, eligible, _native, candidate, q,k,*args,**kwargs)
                 changes.append((module,native));module.forward=call
+            state['rotary_modules'] = len(seen)
+        if name == 'atlaslm-3b' and 'hip_swiglu' in request.get('resources', {}):
+            swiglu_library = ctypes.CDLL(str(Path(request['resources']['hip_swiglu']['path']).resolve()))
+            swiglu_entry = swiglu_library.fireprot_atlaslm_swiglu
+            swiglu_entry.argtypes = [ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p]
+            swiglu_entry.restype = ctypes.c_int
+            state['swiglu_library'] = request['resources']['hip_swiglu']
+            state['swiglu_calls'] = 0
+            def run_swiglu(callback, tensor):
+                state['swiglu_calls'] += 1
+                return callback(tensor)
+            registry.register(operation='plm_swiglu', name='hip_bf16_swiglu', function=run_swiglu,
+                priority=10, version='n1000-v1', supports=lambda s: dict(s.attributes).get('eligible') == 'True')
+            for block in model.transformer.blocks:
+                module = block.ffn[2]
+                native = module.forward
+                def call_swiglu(x, _native=native):
+                    eligible = (tuple(x.shape) == (1,1002,12288) and x.dtype == torch.bfloat16
+                        and x.is_cuda and x.device.index == 0 and x.is_contiguous()
+                        and not torch.is_grad_enabled() and not model.training
+                        and not x.requires_grad and not x.is_conj() and not x.is_neg())
+                    signature = signature_from_tensor('plm_swiglu', x, architecture=architecture,
+                        mode='inference', mask='none', inplace=False, attributes=dict(eligible=eligible, model=name))
+                    selected = registry.resolve(signature)
+                    if selected.implementation is None:
+                        return _native(x)
+                    def candidate(tensor):
+                        output = torch.empty((1,1002,6144), dtype=tensor.dtype, device=tensor.device)
+                        code = swiglu_entry(tensor.data_ptr(), output.data_ptr(), 1002,
+                                            torch.cuda.current_stream(tensor.device).cuda_stream)
+                        if code:
+                            raise RuntimeError(f'AtlasLM HIP SwiGLU failed: {code}')
+                        return output
+                    return selected.implementation.function(candidate, x)
+                changes.append((module,native)); module.forward=call_swiglu
         yield state
         expected = 36 if name == 'esm2-3b' else 80 if name == 'esmc-fold2-6b' else 48
         if state['calls'] != expected:
             raise RuntimeError(f'pLM optimized coverage mismatch: {state["calls"]} != {expected}')
+        if swiglu_library is not None and state['swiglu_calls'] != 48:
+            raise RuntimeError(f'AtlasLM SwiGLU coverage mismatch: {state["swiglu_calls"]} != 48')
     finally:
         for module,native in reversed(changes):
             module.forward=native

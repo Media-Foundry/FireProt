@@ -59,6 +59,9 @@ def collect(root, destination, *selected):
             if request['backend'] == 'fireprot':
                 runtime = json.loads((output/'operator-runtime.json').read_text())
                 assert runtime['calls'] == calls
+                if model == 'atlaslm-3b' and 'hip_swiglu' in request.get('resources', {}):
+                    assert runtime['swiglu_calls'] == 48 and runtime['rotary_modules'] == 1
+                    assert runtime['swiglu_library'] == request['resources']['hip_swiglu']
             with zipfile.ZipFile(output/'sample-0.npz') as archive:
                 values = {name: archive.read(name) for name in archive.namelist()}
             if anchor is None: anchor = values

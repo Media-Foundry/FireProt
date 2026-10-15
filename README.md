@@ -141,7 +141,8 @@ match the official model factory bitwise. At N1000, complete invocation improves
 **36.047 → 23.951 s (1.505x) for ESMC**, primarily through parallel full-file
 asset verification, and **39.304 → 18.827 s (2.088x) for ESM2**, primarily through
 checkpoint-covered initialization. All retained outputs are bitwise equal.
-AtlasLM has a warm-forward gain but no measured cold-start E2E gain.
+AtlasLM now improves **15.915 → 15.046 s (1.058x)** with eager GPU weight
+assignment and HIP RoPE/SwiGLU; packaged warm forward improves **1.112x**.
 ESM3 selects the official loader at **13.489 s**, which outperforms the earlier
 local loader (14.564 s); no speedup over the official ESM3 implementation is claimed.
 These results do not change folding speedup rows.
@@ -227,7 +228,7 @@ This is an evidence-based work priority, not a forecast of additional speedup.
 
 | Model | Remaining opportunity and next step |
 | --- | --- |
-| **Standalone ESM/AtlasLM — current cycle complete** | ESM2 N1000 complete invocation improves **2.088x** with exact outputs. ESMC/AtlasLM HIP RoPE improves warm forward but not cold-start E2E. ESM3 native N1000 is connected and matches the official factory. [Scope](docs/protein-language-models.md). |
+| **Standalone ESM/AtlasLM — measured N1000 routes** | Complete invocation improves **1.505x ESMC**, **2.088x ESM2**, and **1.058x AtlasLM**, with exact outputs. AtlasLM packaged warm forward improves **1.112x**. ESM3 uses its faster official loader; no gain over official ESM3 is claimed. [Scope](docs/protein-language-models.md). |
 | **ESMFold2 + ESMC — qualified folding route** | Native versus opt-in packing reuse now gives **2.006x complete N1000 invocation** and **3.289x forward** with exact outputs. Profile the optimized route before testing fused HIP cast/layout packing; no additional gain is established. |
 | **OpenFold3 — current cycle closed** | Final QKV LDS padding trials gave no consistent gain. Non-forward attribution is recorded; a thread-cap comparison was rejected by the protected environment gate. The accepted E2E result remains **2.864x**. [Final trials](docs/openfold3-performance.md#final-bounded-trials-and-transition-to-esmfold2-2026-10-15). |
 | **Mini-ESM — exploratory profiling** | ESM2-3B loading/features execute outside the folding-forward timer. Establish a serial N1000 complete-invocation baseline and stage split before selecting kernels; its remaining headroom is unknown. |

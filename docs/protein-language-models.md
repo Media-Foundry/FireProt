@@ -60,8 +60,8 @@ fireprot esm configs/requests/plm-esmc-fold2-6b-n1000-fireprot.json \
   configs/diamondhill/plm-esmc-fold2-6b-optimized.json
 fireprot esm configs/requests/plm-esm2-3b-n1000-fireprot.json \
   configs/diamondhill/plm-esm2-3b.json
-fireprot atlaslm configs/requests/plm-atlaslm-3b-n1000-native.json \
-  configs/diamondhill/plm-atlaslm-3b.json
+fireprot atlaslm configs/requests/plm-atlaslm-3b-n1000-composed.json \
+  configs/diamondhill/plm-atlaslm-3b-optimized.json
 fireprot esm configs/requests/plm-esm3-open-n1000-native.json \
   configs/diamondhill/plm-esm3-open.json
 ```
@@ -82,8 +82,11 @@ No worker downloads a missing checkpoint. Weights stay outside the repository.
   multiplication, sign, concatenation, addition and copying kernels. Both BF16
   products are rounded before the final addition, preserving native arithmetic.
 - **AtlasLM:** the same arithmetic uses its 36-head layout and native RoPE tables;
-  invariant table casts are prepared for the fixed sequence. No language model
-  result or stochastic folding pass is cached.
+  invariant table casts are prepared once for the shared rotary module. The
+  composed request also uses HIP SwiGLU with the native intermediate BF16 rounding
+  and eager GPU checkpoint restoration with strict assignment. Published tensors
+  must already be BF16; native RoPE buffers are recreated and remaining meta
+  tensors are rejected. No language model result or stochastic folding pass is cached.
 - **ESM2:** omit attention-head means discarded by this sequence-only caller.
   Checkpoint-covered meta construction avoids random parameter initialization.
   Published FP16 weights are still promoted to FP32, as in the native loader;
@@ -161,7 +164,7 @@ all retained NPY bytes. [Versioned evidence](../provenance/plm_e2e_n1000_2026101
 | --- | ---: | ---: | --- |
 | ESMC bundled 6B | 36.148 → 36.798 s | 0.982x | RoPE alone gives no cold-start E2E gain; superseded by the composition above |
 | ESM2-3B | 39.304 → 18.827 s | **2.088x** | Opt-in meta initialization plus omitted unused attention mean; exact FP32 outputs |
-| AtlasLM-3B | 15.913 → 16.219 s | 0.981x | No cold-start E2E gain; retain native as the one-off default |
+| AtlasLM-3B | 15.913 → 16.219 s | 0.981x | RoPE alone gives no cold-start E2E gain; superseded by the composition below |
 
 The RoPE optimization remains available explicitly for experimentation, with its
 warm-forward benefit scoped separately. Loading, hashing and process startup
@@ -177,8 +180,59 @@ The frozen benchmark CLI is:
 ```
 
 The profiles for these three models use the matching frozen worker directory and
-bridge, except the separate new ESMC `-optimized` profile above. Inference examples may point to a previously used output directory;
+bridge, except the separate ESMC and AtlasLM `-optimized` profiles. Inference examples may point to a previously used output directory;
 always copy requests and change their run ID/output path before execution.
+
+### AtlasLM loading and HIP composition (2026-10-16)
+
+The final three AB/BA/AB pairs improve complete invocation **15.915 → 15.046 s
+(1.058x, 5.46% less time)**. These fresh-process N1000 comparisons use HIP6,
+seed102, native BF16 weights/autocast, FP32 embeddings and BF16 logits, one
+forward, unflushed filesystem/GPU library caches, and identical assets. Every
+archive passes Rust acceptance and all three output arrays match bitwise.
+Each candidate records 48 HIP RoPE and 48 HIP SwiGLU calls, with one shared
+rotary module. [Final E2E evidence](../provenance/atlaslm_composed_e2e_20261016.json).
+
+The native profile attributes 57.15% of device time to GEMMs and 12.26% to
+attention. Those computations and the native attention mask remain unchanged.
+Both attempted unmasked attention routes changed outputs and were rejected.
+The accepted changes are:
+
+- Restore checkpoint tensors directly to the GPU with eager deserialization,
+  then strictly assign them to the meta-constructed model. This avoids CPU mmap
+  faults during hundreds of individual native copies and avoids a second GPU
+  allocation for every parameter. No checkpoint or input hash is skipped.
+- Prepare the shared HIP RoPE module once instead of reinstalling it 48 times.
+- Fuse SiLU and multiplication in a handwritten HIP kernel, preserving BF16
+  rounding between the operations. All 48 trained calls match, and an additional
+  test of all 65,280 finite BF16 bit patterns with varying gates has zero raw-bit
+  differences, including signed zero and overflow results.
+
+The first eager-loading composition copied the GPU state into separate model
+storage. It measured 16.100 → 15.053 s (1.070x) in its own three-pair comparison,
+but doubled loading peak allocation from 6.199 to 12.361 GB. The final strict
+assignment route returns the measured loading peak to **6.194 GB**. Its candidate
+E2E median is similar; separate native medians vary between experiments. The
+published ratio uses the final matched comparison, not the larger earlier ratio.
+[First composition](../provenance/atlaslm_eager_copy_e2e_20261016.json).
+
+A separate same-process comparison of the final packaged scope measures
+**104.701 → 94.168 ms (1.112x)**, with 15 observations per arm and AB/BA/AB
+ordering. It includes registry scope setup/cleanup on every forward. This is
+distinct from cold E2E; all repetitions are exact and restore original methods.
+[Profiles, kernel build pin, warm observations and rejected trials](../provenance/atlaslm_optimization_trials_20261016.json).
+
+Use the composed request and optimized profile from the examples above with:
+
+```text
+/media/IntelSSD/fireprot/outputs/experiments/atlaslm-speed-20261016/qualified-assign/target/release/fireprot
+```
+
+`experiments/plm/prepare_atlaslm_pairs.py` reproduces the three pairs in a fresh
+frozen deployment with the recorded HIP build receipt. The earlier native and
+RoPE-only requests/profiles remain available. This standalone optimization does
+not change AtlasFold's stochastic LM passes or its published folding speedups;
+the folding model's padded LM lengths require separate qualification.
 
 ### Rejected loading and head trials
 

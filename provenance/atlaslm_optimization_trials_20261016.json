@@ -1,0 +1,489 @@
+{
+  "schema_version": 1,
+  "model": "atlaslm-3b",
+  "source": {
+    "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold",
+    "commit": "8ab3aca0e18c8b814d5ca6756b2617a07d72c68d"
+  },
+  "checkpoints": {
+    "model": {
+      "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlaslm3b/snapshot/weights/atlaslm_3b_base.pth",
+      "sha256": "8097cc4a234853f19ca97435844829d84fe7f13215c900e74659fa9682cc0ddb"
+    }
+  },
+  "input": {
+    "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+    "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+  },
+  "seed": 102,
+  "length": 1000,
+  "scope": "Diagnostic loader/operator screens; requested HIP6. No folding work or feature caching. Formal supervised E2E is separately recorded for two three-pair compositions. Warm packaged results include entering/exiting the Rust registry scope each forward. All observations retained. Native attention/GEMMs preserved; unmasked candidates rejected for output differences.",
+  "reports": {
+    "native": {
+      "record": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/atlaslm-speed-20261016/native/report.json",
+        "sha256": "86dab4192970120ad0e48312da04d07d758fb102407ac9ea844f9ba76c4a35dd"
+      },
+      "result": {
+        "mode": "native",
+        "load_seconds": 5.338989268988371,
+        "checkpoint_loads": [
+          {
+            "seconds": 0.04329062602482736,
+            "mmap": true,
+            "map_location": "cpu"
+          }
+        ],
+        "first_forward_seconds": 0.9431860789190978,
+        "warm_forward_seconds": [
+          0.10513051401358098,
+          0.10495744505897164,
+          0.10475326597224921,
+          0.10478550393600017,
+          0.10510297399014235
+        ],
+        "exact": {
+          "tokens": true,
+          "embeddings": true,
+          "logits": true
+        },
+        "hip_visible_devices": "6"
+      }
+    },
+    "eager_cpu": {
+      "record": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/atlaslm-speed-20261016/eager_cpu/report.json",
+        "sha256": "cc1e6ab914f98618c2a4b0373efab9d836cc7bce6b18b1e6e223acdd6ece0ad6"
+      },
+      "result": {
+        "mode": "eager_cpu",
+        "load_seconds": 6.195122820907272,
+        "checkpoint_loads": [
+          {
+            "seconds": 3.605904749012552,
+            "mmap": false,
+            "map_location": "cpu"
+          }
+        ],
+        "first_forward_seconds": 0.7915409500710666,
+        "warm_forward_seconds": [
+          0.1049896030453965,
+          0.10494664893485606,
+          0.10488355997949839,
+          0.10482306103222072,
+          0.1048056180588901
+        ],
+        "exact": {
+          "tokens": true,
+          "embeddings": true,
+          "logits": true
+        },
+        "hip_visible_devices": "6"
+      }
+    },
+    "eager_gpu": {
+      "record": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/atlaslm-speed-20261016/eager_gpu/report.json",
+        "sha256": "cd9e56aaa1cfd6e1ed688c3de74e96f738eaafc2066cb07eb141ca68d8bd0b63"
+      },
+      "result": {
+        "mode": "eager_gpu",
+        "load_seconds": 3.993215588037856,
+        "checkpoint_loads": [
+          {
+            "seconds": 2.7058156320126727,
+            "mmap": false,
+            "map_location": "cuda"
+          }
+        ],
+        "first_forward_seconds": 0.9018811240093783,
+        "warm_forward_seconds": [
+          0.10504818300250918,
+          0.104768370045349,
+          0.10484032495878637,
+          0.10477777698542923,
+          0.10487710288725793
+        ],
+        "exact": {
+          "tokens": true,
+          "embeddings": true,
+          "logits": true
+        },
+        "hip_visible_devices": "6"
+      }
+    },
+    "ops-screen": {
+      "record": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/atlaslm-speed-20261016/ops-screen/report.json",
+        "sha256": "4f24e758421b179bbf104bf246d9d16b7428eac12ad4b41e93e7c857c8c57a1e"
+      },
+      "result": {
+        "length": 1000,
+        "seed": 102,
+        "trials": {
+          "swiglu": {
+            "exact": {
+              "tokens": true,
+              "embeddings": true,
+              "logits": true
+            },
+            "verified_swiglu_calls": 48,
+            "pairs": [
+              {
+                "native": [
+                  0.10506906604859978,
+                  0.10484744305722415,
+                  0.10476760100573301,
+                  0.10491243097931147,
+                  0.10478531499393284
+                ],
+                "swiglu": [
+                  0.10350117995403707,
+                  0.10288726398721337,
+                  0.10312798095401376,
+                  0.10308780404739082,
+                  0.10310912691056728
+                ]
+              },
+              {
+                "swiglu": [
+                  0.10336746694520116,
+                  0.10316038900054991,
+                  0.10309632204007357,
+                  0.10311446501873434,
+                  0.10299060796387494
+                ],
+                "native": [
+                  0.10525219200644642,
+                  0.10473382205236703,
+                  0.1049035630421713,
+                  0.1046603680588305,
+                  0.10486513702198863
+                ]
+              },
+              {
+                "native": [
+                  0.10508606000803411,
+                  0.10480219905730337,
+                  0.10472155699972063,
+                  0.10489113803487271,
+                  0.10475895297713578
+                ],
+                "swiglu": [
+                  0.11172310297843069,
+                  0.10311744408681989,
+                  0.10320029489230365,
+                  0.10309014306403697,
+                  0.10311605501919985
+                ]
+              }
+            ],
+            "medians": {
+              "native": 0.10484744305722415,
+              "swiglu": 0.10311605501919985
+            }
+          },
+          "efficient_unmasked": {
+            "exact": {
+              "tokens": true,
+              "embeddings": false,
+              "logits": false
+            },
+            "verified_swiglu_calls": 0,
+            "decision": "rejected: full output mismatch"
+          },
+          "auto_unmasked": {
+            "exact": {
+              "tokens": true,
+              "embeddings": false,
+              "logits": false
+            },
+            "verified_swiglu_calls": 0,
+            "decision": "rejected: full output mismatch"
+          }
+        }
+      }
+    },
+    "composed-screen": {
+      "record": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/atlaslm-speed-20261016/composed-screen/report.json",
+        "sha256": "1ac4c87ede1f51b98ac567c7cabc9a48433dddce91e425e5e155cc001bfe56c2"
+      },
+      "result": {
+        "length": 1000,
+        "seed": 102,
+        "pairs": [
+          {
+            "native": [
+              0.1051378509728238,
+              0.10492304700892419,
+              0.10478023602627218,
+              0.1048273699125275,
+              0.1049002050422132
+            ],
+            "candidate": [
+              0.09497058496344835,
+              0.09565201809164137,
+              0.09439502598252147,
+              0.09413085808046162,
+              0.09402559406589717
+            ]
+          },
+          {
+            "candidate": [
+              0.09423332195729017,
+              0.09410709596704692,
+              0.09403450996614993,
+              0.09411255398299545,
+              0.09403289097826928
+            ],
+            "native": [
+              0.10467090492602438,
+              0.10460203804541379,
+              0.10463930503465235,
+              0.10457322897855192,
+              0.10466491710394621
+            ]
+          },
+          {
+            "native": [
+              0.10476760100573301,
+              0.1045896130381152,
+              0.10465310094878078,
+              0.1046343669295311,
+              0.10460600606165826
+            ],
+            "candidate": [
+              0.0940658999606967,
+              0.09409258991945535,
+              0.09397398203145713,
+              0.09401873697061092,
+              0.09410606604069471
+            ]
+          }
+        ],
+        "finite_domain_patterns": 65280,
+        "finite_domain_mismatches": 0,
+        "medians": {
+          "native": 0.10466491710394621,
+          "candidate": 0.09410606604069471
+        },
+        "speedup": 1.1122015987650093,
+        "all_outputs_exact": true
+      }
+    },
+    "memory-native": {
+      "record": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/atlaslm-speed-20261016/memory-native/report.json",
+        "sha256": "764c89c15fe78f28cc7280a60f16d49dba356cefbd0eff53a93023daf6c11cf4"
+      },
+      "result": {
+        "mode": "native",
+        "load_seconds": 5.332355543971062,
+        "checkpoint_loads": [
+          {
+            "seconds": 0.0439994289772585,
+            "mmap": true,
+            "map_location": "cpu"
+          }
+        ],
+        "loading_peak_bytes": 6198855168,
+        "loading_reserved_bytes": 6385827840,
+        "first_forward_seconds": 0.9744805039372295,
+        "warm_forward_seconds": [
+          0.10513918101787567,
+          0.10485838889144361,
+          0.10477805603295565,
+          0.105086539988406,
+          0.10484022495802492
+        ],
+        "exact": {
+          "tokens": true,
+          "embeddings": true,
+          "logits": true
+        },
+        "hip_visible_devices": "6"
+      }
+    },
+    "memory-eager_gpu": {
+      "record": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/atlaslm-speed-20261016/memory-eager_gpu/report.json",
+        "sha256": "23f15a725262b288fcb1fac59fe71124b05760a17d81cd70052b4ec2da1c697e"
+      },
+      "result": {
+        "mode": "eager_gpu",
+        "load_seconds": 4.080213983892463,
+        "checkpoint_loads": [
+          {
+            "seconds": 2.770775446901098,
+            "mmap": false,
+            "map_location": "cuda"
+          }
+        ],
+        "loading_peak_bytes": 12361479680,
+        "loading_reserved_bytes": 12721324032,
+        "first_forward_seconds": 0.8983789209742099,
+        "warm_forward_seconds": [
+          0.10491962800733745,
+          0.10474029008764774,
+          0.10481130599509925,
+          0.104866505949758,
+          0.10486672702245414
+        ],
+        "exact": {
+          "tokens": true,
+          "embeddings": true,
+          "logits": true
+        },
+        "hip_visible_devices": "6"
+      }
+    },
+    "composed-assign-screen": {
+      "record": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/atlaslm-speed-20261016/composed-assign-screen/report.json",
+        "sha256": "0e293af5a9716a507b76d01b2eccddc6ba714e63f507f40e8e471b68e6b78168"
+      },
+      "result": {
+        "length": 1000,
+        "seed": 102,
+        "pairs": [
+          {
+            "native": [
+              0.1049528659787029,
+              0.10481398494448513,
+              0.10470091295428574,
+              0.1046982950065285,
+              0.10471249010879546
+            ],
+            "candidate": [
+              0.09432206093333662,
+              0.09811010397970676,
+              0.0948982210829854,
+              0.09405498392879963,
+              0.09420390205923468
+            ]
+          },
+          {
+            "candidate": [
+              0.09426934993825853,
+              0.09419479500502348,
+              0.09419295494444668,
+              0.09416719397995621,
+              0.09411250299308449
+            ],
+            "native": [
+              0.10479777993168682,
+              0.10461723303887993,
+              0.10469882399775088,
+              0.10474153992254287,
+              0.10466372699011117
+            ]
+          },
+          {
+            "native": [
+              0.10497468907851726,
+              0.10466672503389418,
+              0.1046930270968005,
+              0.10459913895465434,
+              0.10474652692209929
+            ],
+            "candidate": [
+              0.09416829503607005,
+              0.09414415305946022,
+              0.09407084796112031,
+              0.09400716098025441,
+              0.09414389298763126
+            ]
+          }
+        ],
+        "finite_domain_patterns": 65280,
+        "finite_domain_mismatches": 0,
+        "loading_seconds_with_initialized_device": 3.6863018489675596,
+        "loading_peak_bytes": 6193620480,
+        "loading_reserved_bytes": 6377439232,
+        "medians": {
+          "native": 0.10470091295428574,
+          "candidate": 0.09416829503607005
+        },
+        "speedup": 1.1118488756134035,
+        "all_outputs_exact": true
+      }
+    }
+  },
+  "kernel": {
+    "build_receipt": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/atlaslm-speed-20261016/build-receipt.json",
+      "sha256": "f3a0068bcc502c57f3b5031ad2404265786d6c5b15edf265b88a8a546709dd9f"
+    },
+    "source": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/atlaslm-speed-20261016/fireprot_plm_swiglu.hip",
+      "sha256": "9c23a60720ad6eb72c453b64d2bbed192c3cfd1a74319687b601876909dad4d1"
+    },
+    "library": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/atlaslm-speed-20261016/kernel-cache/fireprot_atlaslm_swiglu_283419187fc35fff959e7335a3d71a660f33bab4ccaf0e2030380efe8a9589c2/fireprot_atlaslm_swiglu_283419187fc35fff959e7335a3d71a660f33bab4ccaf0e2030380efe8a9589c2.so",
+      "sha256": "e2acd46b8421dd59f87791fd321c22b1bc1bdb0c8a4a926e88a81b833d7ae048"
+    },
+    "arguments": {
+      "compile": [
+        "-O3",
+        "-ffp-contract=off",
+        "-std=c++17",
+        "-fPIC",
+        "-shared",
+        "--offload-arch=gfx90a"
+      ],
+      "fireprot_hip_process": [
+        "1",
+        "compiler",
+        "guard",
+        "[\"source\"]",
+        "600000",
+        "600000",
+        "/opt/rocm/bin/hipcc"
+      ],
+      "include": [
+        "/opt/rocm/include"
+      ],
+      "link": []
+    }
+  },
+  "native_profile": {
+    "table": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/atlaslm-speed-20261016/native/profile.txt",
+      "sha256": "5cd29158f71acb42f90240426d0bea75d8c8ed5c178b03a5faa416574efd82b1"
+    },
+    "trace": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/atlaslm-speed-20261016/native/forward-trace.json",
+      "sha256": "a27a77b80110ade7bc8a48c0d4f1b4cca26e7e74ea7644254a53b1a969df7f38"
+    },
+    "self_device_total_ms": 104.92,
+    "aten_only": [
+      {
+        "name": "aten::mm",
+        "calls": 192,
+        "self_device_ms": 59.958
+      },
+      {
+        "name": "aten::_efficient_attention_forward",
+        "calls": 48,
+        "self_device_ms": 12.859
+      },
+      {
+        "name": "aten::copy_",
+        "calls": 823,
+        "self_device_ms": 8.313
+      },
+      {
+        "name": "aten::native_layer_norm",
+        "calls": 194,
+        "self_device_ms": 5.426
+      },
+      {
+        "name": "aten::silu",
+        "calls": 48,
+        "self_device_ms": 2.317
+      }
+    ],
+    "note": "ATen summaries overlap their device-kernel rows. Do not add those rows together."
+  }
+}

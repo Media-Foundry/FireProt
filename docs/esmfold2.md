@@ -1,8 +1,8 @@
 # Biohub ESMFold2 integration and optimization
 
 Status, 2026-10-15: Native and opt-in N600 qualification passes on HIP7, with
-all 12 arrays bitwise equal and identical complete CIF bytes. Repeated N1000
-E2E measurement is running. This is the standard **biohub/ESMFold2**,
+all 12 arrays bitwise equal and identical complete CIF bytes. N1000 also passes
+three matched E2E pairs: **2.006x complete invocation, 3.289x model forward**. This is the standard **biohub/ESMFold2**,
 not ESMFold v1 or ESMFold2-Fast.
 
 ## Source, weights and execution boundaries
@@ -127,6 +127,13 @@ ESMFOLD2_CLI=/media/IntelSSD/fireprot/outputs/experiments/esmfold2-integration-r
 "$ESMFOLD2_CLI" infer /tmp/my-esmfold2.json configs/diamondhill/esmfold2-experimental.json
 ```
 
+The maintained shell entry can select the same frozen CLI without replacing a
+shared installation:
+
+```bash
+FIREPROT_BIN="$ESMFOLD2_CLI" scripts/infer.sh /tmp/my-esmfold2.json configs/diamondhill/esmfold2-experimental.json
+```
+
 `configs/requests/esmfold2-n1000-native.json` selects the matching native reference.
 The profile pins the existing environment inventory and fixed deployment paths;
 it is not a portable installer. Recreate and verify the inventory when moving the
@@ -145,3 +152,48 @@ before three-decimal formatting. Eleven real half-boundary coordinates exposed
 the earlier direct-promotion assumption; dedicated regression tests preserve
 the native serialization without rounding raw output arrays. Recovery1 retains
 that failed qualification, and recovery2 retains an aborted stale-binary run.
+
+## N1000 direct native E2E result
+
+Three fresh-process pairs ran serially in AB/BA/AB order on HIP7 / PCI
+`0000:93:00.0` (gfx90a MI250). Both arms include bundled ESMC and native query-only
+MSA, native BF16/FP32 boundaries, loops3/four main trunk passes, requested
+sampling50/34 actual denoiser calls, S1, seed101, chunk64 and deterministic
+execution. Profiling is disabled; filesystem and GPU-library caches are not
+flushed. No observation is discarded.
+
+| Pair | Native complete invocation | Opt-in complete invocation | Ratio |
+| --- | ---: | ---: | ---: |
+| 1, AB | 382.872 s | 189.072 s | 2.025x |
+| 2, BA | 376.498 s | 189.513 s | 1.987x |
+| 3, AB | 379.298 s | 188.180 s | 2.016x |
+| Arm medians | **379.298 s** | **189.072 s** | **2.006x** |
+
+Complete invocation time falls by **50.15%**. Model-forward medians are
+**271.231 -> 82.467 s (3.289x)**. The p95/max comparison is
+382.872 -> 189.513 s (2.020x); with three samples, p95 is the maximum. These
+are descriptive measurements, not a significance test or a default-recipe claim.
+The reference is pinned upstream native Torch under the common Rust launcher,
+not a separately timed upstream CLI. Complete invocation includes asset/source
+verification, loading, preprocessing, model execution, serialization and
+supervision. It is not a resident-model latency measurement.
+
+All six accepted archives pass the unchanged all-arrays-exact policy. The
+collector independently rehashes their metadata/outputs, checks the physical GPU
+and actual call counts, and confirms that all complete CIF bytes match. Each
+optimized run completes 460 selected triangle calls. Peak allocated memory is
+30,239,519,232 bytes native versus 30,238,601,728 bytes opt-in; reserved memory
+is 46,852,472,832 bytes in both arms. No memory reduction claim is based on
+that small allocation difference.
+
+[Full paired evidence and retained receipt hashes](../provenance/esmfold2_e2e_n1000_20261015.json).
+Raw records: `outputs/experiments/esmfold2-integration-recovery3-20261015/n1000-pairs/measurements`
+on DiamondHill. The read-only collector is `experiments/esmfold2/collect_pairs.py`;
+the authoritative execution and numerical comparison are owned by Rust
+`benchmark-pairs`. Failed earlier adapter runs remain separate and are excluded
+from this experiment, not removed from a timed observation set.
+
+The current optimization reuses Torch/ROCm BMM and removes redundant operand
+packing; it does not introduce a new HIP attention kernel or Triton. Fused HIP
+cast/layout packing is a next hypothesis requiring its own profile, exact
+operator/full-model gates and matched E2E measurements.

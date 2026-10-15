@@ -1,11 +1,28 @@
-# Performance priorities after the 2026-10-10 evidence review
+# Performance priorities after the 2026-10-15 transition
 
 The [README snapshot](../README.md#latest-direct-native-comparison-per-model-and-length)
 lists the latest measured direct ratios. This assessment ranks further work from
 local experimental evidence. It does not rank model quality, predict a new
 speedup, or treat different timing boundaries as a uniform benchmark.
 
-## 1. OpenFold3 has the clearest measured remaining target
+## Current focus: Biohub ESMFold2 with bundled ESMC
+
+The user closed the bounded OpenFold3 follow-ups and selected **biohub/ESMFold2**.
+The native and opt-in monomer paths are connected through Rust. N600 qualification
+matches all 12 arrays bitwise and complete CIF bytes, with 460 triangle calls
+using the candidate. Reusing right-operand packing reduces instrumented forward
+time from 68.209 to 29.861 s. Three matched N1000 pairs now measure complete
+invocation medians **379.298 -> 189.072 s (2.006x)** and forward medians
+**271.231 -> 82.467 s (3.289x)**, with all six output archives matching exactly across 12 arrays and full CIF bytes.
+This is loops3/schedule50 in both arms, not the upstream loops20/schedule200
+default. [Integration and conditions](esmfold2.md).
+
+The next operator hypothesis is fusing cast/layout packing in HIP while retaining
+the native contraction chunks and arithmetic. It has no measured benefit yet.
+Profile the optimized route before pursuing another kernel; the native trace's
+dominant operation need not remain dominant after packing reuse.
+
+## OpenFold3: current cycle closed
 
 OpenBind-0 N1536 retains strict FP32 with deterministic memory filling, R3/four
 trunk passes, D200/S1 and seed101. Three fresh AB/BA/AB pairs give complete
@@ -35,7 +52,7 @@ These are instrumented diagnostics, not new speedup results. The input has low
 mean pLDDT (~37.9); prediction disagreement alone does not establish experimental
 accuracy. [Precision results](../experiments/openfold3_precision/README.md#collected-results-and-next-experiment).
 
-Recommended work, in order:
+The following were the earlier investigation targets:
 
 1. Investigate the accepted QKV kernel's QK/softmax/PV scheduling using trained
    inputs and the existing exact reduction order. Compare against the accepted
@@ -50,6 +67,13 @@ Recommended work, in order:
    threshold or timing. Finite outputs alone do not qualify a mixed candidate.
 4. Qualify maintained integration separately; promoting an already measured
    experimental composition is useful deployment work, not another speedup.
+
+The two final bounded directions are now closed: LDS row pitches 264/272 gave
+no consistent trained-attention improvement; boundary profiling attributed the
+non-forward work, and the thread-cap comparison was rejected by the protected
+environment gate. No guard was relaxed and the accepted 2.864x result is unchanged.
+These targets are retained as history, not active instructions to resume tuning.
+[Final trials](openfold3-performance.md#final-bounded-trials-and-transition-to-esmfold2-2026-10-15).
 
 As a sensitivity example only, halving an operation occupying 35.37% of a trace
 would reduce that trace's summed kernel time by 17.69%, or yield about 1.215x
@@ -112,5 +136,5 @@ aligned-RMSD/0.001 summary-confidence policy; native agreement is not bitwise.
 ## Models without a long-sequence performance claim
 
 Tiny L124 validation does not establish long-sequence performance. OpenFold2
-and ESMFold remain future adapters. Their integration and representative native
+and original ESMFold v1 remain future adapters. Their integration and representative native
 baselines must precede kernel ranking or published acceleration claims.

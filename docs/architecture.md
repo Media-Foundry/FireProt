@@ -32,7 +32,8 @@ every sample's atom14/CIF correspondence in Rust, including relocated archive
 replay. See [structure acceptance](cif-validation.md).
 Biohub ESMFold2 adds a separate schema-4 monomer contract, including bundled
 ESMC, native loop/sampling semantics, raw coordinates, padded atom confidence
-and its mask. Its native and opt-in triangle paths are under qualification;
+and its mask. Native and opt-in triangle paths pass N600/N1000 exact-output
+qualification, with a three-pair N1000 complete-invocation comparison;
 see [ESMFold2 status](esmfold2.md). Original ESMFold v1 remains a future adapter.
 Launch records now bind the executable, declared worker inputs and effective
 environment; final reports retain independently verified physical device mapping.

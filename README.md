@@ -19,7 +19,7 @@ See the [Rust acceptance audit](docs/rust-acceptance.md).
 | AtlasFold 260703 **with AtlasLM-3B** | Native, chunked, HIP and fused HIP | N1000/N1536; exact public-output bytes; N1536 reference uses chunked native math |
 | OpenFold3 / OpenBind-0 | `native`, opt-in `hip_fused` | Strict deterministic FP32 N1000/N1536; all 11 arrays bitwise equal |
 | Protenix Base-default v0.5.0 | `native`, opt-in `fireprot` | Strict FP32 N1000 C10/D200/S1: maintained composition passes user 0.1 Å aligned-RMSD and summary-confidence criteria; legacy 0.001 Å coordinate gate fails ([status](docs/protenix-base.md)) |
-| Biohub ESMFold2, including ESMC | Native and experimental opt-in worker under qualification | Rust contracts and synthetic operator gates pass; full-model/E2E qualification in progress ([status](docs/esmfold2.md)) |
+| Biohub ESMFold2, including ESMC | `native`, experimental opt-in `fireprot` | N600/N1000 native precision, loops3/schedule50/S1; all 12 arrays and complete CIF bytes exact; N1000 three-pair E2E validated ([status](docs/esmfold2.md)) |
 | OpenFold2, original ESMFold v1 and other models | Planned | No verified integration or speedup claim |
 
 Protenix and OpenFold3 are separate implementations. Precision, preprocessing,
@@ -96,6 +96,7 @@ Other starting points:
 | AtlasFold + AtlasLM-3B N1536 | `configs/requests/atlasfold-n1536-hip-fused.json` | `configs/diamondhill/atlasfold-all-published.json` |
 | OpenFold3 strict N1000 | `configs/requests/openfold3-n1000-hip-fused.json` | `configs/diamondhill/openfold3-hip-fused.json` |
 | OpenFold3 strict N1536 | `configs/requests/openfold3-n1536-hip-fused.json` | `configs/diamondhill/openfold3-hip-fused.json` |
+| Biohub ESMFold2 + ESMC N1000, experimental opt-in | `configs/requests/esmfold2-n1000-fireprot.json` | `configs/diamondhill/esmfold2-experimental.json` |
 
 The opt-in Base profile requires **N1000, FP32 C10/D200/S1** and uses maintained
 workers plus the published bundles and buffered bridge installed on DiamondHill.
@@ -120,6 +121,11 @@ Graph medians), despite bitwise-identical outputs. See the
 The Mini examples explicitly use **C4/D1/S1**; they are not the upstream Mini
 D5 default. Review the workload before using an example as a scientific preset.
 Mini-ESM needs its ESM2-3B assets as well; see [Mini-ESM setup](docs/protenix-mini-esm.md).
+
+The ESMFold2 examples use **loops3/four passes, requested sampling50/S1** in both
+arms, whereas the pinned upstream `fold()` defaults to loops20/sampling200.
+They include bundled ESMC and the native query-only MSA path. Use the frozen
+experimental CLI/profile together; see [ESMFold2 entry and scope](docs/esmfold2.md#run-the-opt-in-pipeline).
 
 `scripts/infer.sh REQUEST PROFILE` delegates to Rust `infer`.
 `scripts/smoke.sh [MANIFEST]` delegates to Rust `infer-batch`; its default is the
@@ -154,7 +160,8 @@ warm or unflushed as specified in the linked evidence.
 
 ### Latest direct native comparison per model and length
 
-Evidence reviewed on **2026-10-10**. Base and OpenFold3 below measure the complete
+ESMFold2 evidence added on **2026-10-15**; other rows retain the historical
+measurements reviewed on 2026-10-10. Base, OpenFold3 and ESMFold2 measure the complete
 Rust invocation. Mini and AtlasFold retain their narrower historical request
 timers; their ratios are not complete Rust E2E measurements. An existing result
 is not a fresh benchmark of today's checkout, and ratios across models do not
@@ -170,7 +177,7 @@ rank their absolute performance or prediction quality.
 | OpenFold3, 1536 aa, latest experimental composition | 950.891 → 331.970 s | **2.864x** | Complete Rust invocation; three fresh AB/BA/AB pairs, all 11 arrays and full CIF bytes exact [³](docs/openfold3-performance.md#latest-composition-direct-native-e2e-result) |
 | Protenix Mini-ESM + ESM2-3B, 1000 aa | Not established | — | Numerical integration validated; no controlled paired speedup ([scope](docs/protenix-mini-esm.md#n1000-numerical-checks)) |
 | Protenix Tiny, 124 aa | Not established | — | Loading/numerical checks do not establish paired E2E performance |
-| Biohub ESMFold2 + ESMC | Qualification in progress | — | Native/opt-in integration; no accepted E2E claim yet ([status](docs/esmfold2.md)) |
+| Biohub ESMFold2 + ESMC, 1000 aa | 379.298 → 189.072 s | **2.006x** | Complete Rust invocation; three AB/BA/AB pairs, native BF16/FP32, loops3/four passes, requested schedule50/S1 (34 denoiser calls), all 12 arrays and full CIF exact ([details](docs/esmfold2.md#n1000-direct-native-e2e-result)) |
 | OpenFold2 / original ESMFold v1 | Not measured | — | Adapters remain planned |
 
 1. **Protenix:** Mini-default v0.5.0 FP32, **C4/D1/S1**, seed101, no MSA/templates.
@@ -204,7 +211,7 @@ This is an evidence-based work priority, not a forecast of additional speedup.
 
 | Model | Remaining opportunity and next step |
 | --- | --- |
-| **ESMFold2 + ESMC — current focus** | Qualify the native monomer path and opt-in triangle operand packing, then measure complete N1000 invocation pairs. Synthetic operator gains alone do not establish E2E speedup. |
+| **ESMFold2 + ESMC — current focus** | Native versus opt-in packing reuse now gives **2.006x complete N1000 invocation** and **3.289x forward** with exact outputs. Profile the optimized route before testing fused HIP cast/layout packing; no additional gain is established. |
 | **OpenFold3 — current cycle closed** | Final QKV LDS padding trials gave no consistent gain. Non-forward attribution is recorded; a thread-cap comparison was rejected by the protected environment gate. The accepted E2E result remains **2.864x**. [Final trials](docs/openfold3-performance.md#final-bounded-trials-and-transition-to-esmfold2-2026-10-15). |
 | **Mini-ESM — exploratory profiling** | ESM2-3B loading/features execute outside the folding-forward timer. Establish a serial N1000 complete-invocation baseline and stage split before selecting kernels; its remaining headroom is unknown. |
 | **Mini-default — remeasure before porting** | Historical N1000 request/model medians are **27.949 / 15.391 s**. Measure the current Rust entry and check whether later Base/OpenFold3 ideas apply to its actual shapes and C4/D1 workload. No transferred gain is established. |

@@ -1,8 +1,9 @@
 # PairFormer-only precision diagnostics
 
-Status: CPU lifecycle tests pass; full-model diagnostics are queued after the
-current FP32 narrow-projection paired experiment. No mixed-precision speedup or
-quality acceptance is established. The user requested **reporting deviations
+Status (2026-10-15): full-model diagnostics finished. Unprotected FP16 produced
+nonfinite activations in the first PairFormer cycle; BF16 completed but changed
+the aligned structure substantially. Neither candidate is promoted. No
+mixed-precision speedup or quality acceptance is established. The user requested **reporting deviations
 before choosing a numerical threshold**; the Base 0.1 Angstrom policy is not
 automatically applied to OpenFold3.
 
@@ -86,6 +87,53 @@ workspace's `fireprot-validation`, `nalgebra` and `serde_json` release artifacts
 its build commands and artifact digests are retained with experiment evidence.
 
 Current remote queue: `outputs/experiments/openfold3-precision-recovery1-queue-20261010`.
-Future model root: `outputs/experiments/openfold3-precision-diagnostic-recovery1-20261010`.
+Completed model root: `outputs/experiments/openfold3-precision-diagnostic-recovery1-20261010`.
 The initial waiting queue was explicitly stopped before model preparation or GPU
 execution to add per-cycle range reporting. Its frozen controls remain intact.
+
+## Collected results and next experiment
+
+[Results and artifact pins](../../provenance/openfold3_precision_results_20261015.json)
+cover N1536, R3/four trunk passes, D200/S1, seed101, HIP7. The FP32 diagnostic
+reproduces all eleven reference arrays exactly. BF16 completes all four cycles
+and 200 FP32 diffusion calls with finite monitored outputs. FP16 stops in cycle
+one at `blocks.0.pair_stack.tri_mul_out.layer_norm_out` with NaN outputs.
+This locates the first observed failure; contraction overflow upstream of the
+normalization remains a hypothesis until its intermediate tensors are inspected.
+
+BF16 versus the FP32 diagnostic, using raw NPZ coordinates and matching CIF atom
+identities:
+
+| Metric | Value |
+| --- | ---: |
+| Raw all-atom RMSD | 5.29650 Angstrom |
+| Proper-rotation/translation aligned all-atom RMSD | 5.29304 Angstrom |
+| Independently aligned C-alpha RMSD | 5.23828 Angstrom |
+| Aligned atom displacement p95 / maximum | 11.04323 / 40.54562 Angstrom |
+| C-alpha pair-distance absolute change median / p95 | 1.05840 / 7.66723 Angstrom |
+| Atom pLDDT absolute change mean / maximum | 0.46462 / 8.93342 |
+
+Rigid-motion compensation does not remove these differences. Mean atom pLDDT
+is 37.89925 for FP32 and 37.91813 for BF16, so this is a low-confidence prediction;
+neither prediction is experimental ground truth. No general accuracy conclusion
+or numerical acceptance threshold follows from this single case. Instrumented
+diagnostic latency is deliberately excluded from speedup claims.
+
+The next bounded precision experiment should inspect the first triangle
+contraction before normalization, then evaluate FP16 projections with FP32
+contraction and normalization. Preserve FP32 residual storage and every
+diffusion operation. Do not clamp values or reduce cycles/steps to hide failure.
+First establish finite intermediate values and report final aligned/local and
+confidence deviations; only an accepted candidate should proceed to uninstrumented
+paired E2E measurements.
+
+A conservative first protected candidate is now running: **complete native
+triangle multiplicative updates remain FP32**, with FP16 autocast for the rest
+of PairFormer. This is broader protection than contraction alone. The hashed
+policy declares `triangle_precision: float32`; call coverage must equal the
+number of PairFormer triangle modules times trunk passes. Seven CPU scope tests
+cover the original gates plus protected dispatch, missing coverage and failure
+restoration. The queue runs a fresh exact FP32 anchor before the FP16 candidate.
+[Preparation and control pins](../../provenance/openfold3_precision_triangle_fp32_preparation_20261015.json).
+No protected-candidate GPU numerical result is established yet. HIP7 remains
+the only authorized device; all these runs are instrumented diagnostics.

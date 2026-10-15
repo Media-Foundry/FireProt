@@ -26,11 +26,14 @@ def tensors(value):
 
 
 @contextmanager
-def pairformer_precision_scope(model, output, precision, diagnostic=True):
+def pairformer_precision_scope(model, output, precision, diagnostic=True,
+                               triangle_precision='inherit'):
     from openfold3.core.model.layers.triangular_multiplicative_update import TriangleMultiplicativeUpdate
 
     dtype = {'float32': torch.float32, 'bfloat16': torch.bfloat16,
              'float16': torch.float16}[precision]
+    if triangle_precision not in ('inherit', 'float32'):
+        raise ValueError('Unsupported triangle precision policy')
     pins = {}
     for cls, expected in (
         (type(model), '1cd02947e24bcea5d30dba98122e6a38e707f88ebe1d4c4f2aa16f4b177f7e0c'),
@@ -57,6 +60,7 @@ def pairformer_precision_scope(model, output, precision, diagnostic=True):
     report = dict(completed=False, diagnostic=diagnostic, source_pins=pins,
                   base_request_precision='float32',
                   effective_precision=dict(pairformer_autocast=precision,
+                                           triangle_multiplicative_update=triangle_precision,
                                            input_and_recycle_embeddings='float32',
                                            template_and_msa='float32',
                                            diffusion='float32', confidence='float32',
@@ -67,11 +71,27 @@ def pairformer_precision_scope(model, output, precision, diagnostic=True):
                                    'allow_bf16_reduced_precision_reduction',
                                    'allow_fp16_accumulation')},
                   nonfinite=None, triangle_fp32_fusion_bypassed_cycles=0,
+                  triangle_fp32_calls=0,
                   limits=['Diagnostic activation scans invalidate performance timing.',
                           'Mixed-precision outputs require independent aligned-coordinate and confidence evaluation.',
                           'No output clamping, changed recycle count or shortened diffusion.'])
     active = False
     handles = []
+    triangle_modules = {id(m) for m in stack.modules()
+                        if isinstance(m, TriangleMultiplicativeUpdate)}
+
+    def protected_triangle(module, *args, **kwargs):
+        if not active or id(module) not in triangle_modules:
+            raise RuntimeError('FP32 triangle protection escaped PairFormer')
+        if any(t.is_floating_point() and t.dtype != torch.float32
+               for t in tensors((args, kwargs))):
+            raise RuntimeError('Protected triangle requires FP32 input/residual storage')
+        with torch.amp.autocast('cuda', enabled=False):
+            result = native_triangle(module, *args, **kwargs)
+        if any(t.is_floating_point() and t.dtype != torch.float32 for t in tensors(result)):
+            raise RuntimeError('Protected triangle returned a non-FP32 tensor')
+        report['triangle_fp32_calls'] += 1
+        return result
 
     def observe(label, value, scan):
         for i, tensor in enumerate(tensors(value)):
@@ -136,7 +156,8 @@ def pairformer_precision_scope(model, output, precision, diagnostic=True):
         report['cycles'].append(record)
         installed_triangle = TriangleMultiplicativeUpdate._inference_forward
         if dtype != torch.float32:
-            TriangleMultiplicativeUpdate._inference_forward = native_triangle
+            TriangleMultiplicativeUpdate._inference_forward = (
+                protected_triangle if triangle_precision == 'float32' else native_triangle)
             report['triangle_fp32_fusion_bypassed_cycles'] += 1
         active = True
         try:
@@ -171,6 +192,10 @@ def pairformer_precision_scope(model, output, precision, diagnostic=True):
             raise RuntimeError('PairFormer recycle count changed')
         if any(not r['completed'] for r in report['cycles']):
             raise RuntimeError('Incomplete PairFormer cycle')
+        if triangle_precision == 'float32' and dtype != torch.float32:
+            expected = len(triangle_modules) * len(report['cycles'])
+            if expected == 0 or report['triangle_fp32_calls'] != expected:
+                raise RuntimeError('Incomplete FP32 triangle coverage')
         if report['boundary_calls'].get('diffusion_module') != model.shared.diffusion.no_full_rollout_steps:
             raise RuntimeError('Diffusion step coverage changed')
         if report['boundary_calls'].get('sample_diffusion') != 1 or report['boundary_calls'].get('confidence') != 1:

@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "status": "initial_attempt_failed_before_model; recovery1_fp32_anchor_running",
+  "queue_pid": 1574668,
+  "queue_root": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-triangle-fp32-queue-20261015",
+  "model_root": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-triangle-fp32-20261015",
+  "control_pins": {
+    "prepare.py": "37b32ee44738813565759b178d8052aa9abada42b7eefba33e44f2f5bccc91f6",
+    "scope.py": "27f7ef6b189208afc3f72fd83afac71606a32e591f180099067f3d02957fdf69",
+    "run_diagnostic.py": "79840bc0ddf353f593ad29103b9fb411e04ff4b801ba037223187ed279fe501a",
+    "driver.py": "ade3187ad9e9f06bc651cddbb24d7f7133c1eae21be8b0b9743414f2738a4e8f"
+  },
+  "scope": "FP32 anchor then FP16 PairFormer with complete native triangle multiplicative updates in FP32. Diffusion, other stages, parameters and residual storage remain FP32. No quality or speedup verdict.",
+  "device": {
+    "HIP_VISIBLE_DEVICES": "7",
+    "pci": "0000:93:00.0",
+    "kfd_gpu_id": "8466",
+    "architecture": "gfx90a",
+    "boot_id": "afbe7b4e-c398-45b8-86ad-45cded194221",
+    "health_check": "16-element add and sum synchronized; result32.0",
+    "preflight": "KFD process VRAM on target ID must be zero; HIP probe PCI must match; Rust invocation retains supervision and inventory checks.",
+    "telemetry_caveat": "Target busy_percent reports100 with only13926400 VRAM bytes and no KFD VRAM owner. Diagnostic computation succeeds; do not use these runs as performance evidence."
+  },
+  "cpu_scope_tests": 7,
+  "next": "Collect protected call coverage, finite outputs and aligned/local/confidence deviations. Preserve all failures.",
+  "initial_failure": "Environment inventory changed; no precision report or model computation.",
+  "recovery1": {
+    "queue_pid": 1576252,
+    "queue_root": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-triangle-fp32-recovery1-queue-20261015",
+    "model_root": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-triangle-fp32-recovery1-20261015",
+    "control_pins": {
+      "prepare.py": "a47fc1d20fd1af42936ec50c5e00efba3f524f9f88cf00d7441e8c5b1d9378b2",
+      "scope.py": "27f7ef6b189208afc3f72fd83afac71606a32e591f180099067f3d02957fdf69",
+      "run_diagnostic.py": "79840bc0ddf353f593ad29103b9fb411e04ff4b801ba037223187ed279fe501a",
+      "driver.py": "000b62df3cd2914b55d9f2cba4354dcd1d6c61ac4681b0bf9a43e1ae7fe5e439"
+    },
+    "environment_audit": "provenance/openfold3_environment_refresh_20261015.json",
+    "preparation_change": "Frozen prepare.py changes only environment inventory path/digest. Driver changes only experiment root/run tag."
+  }
+}

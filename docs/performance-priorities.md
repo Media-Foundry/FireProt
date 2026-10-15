@@ -23,12 +23,22 @@ exactness but regressed trained module latency and were rejected.
 [Hardware evidence and sampling limitations](openfold3-hardware.md),
 [rejected schedules](../experiments/mfma_qkv/README.md#counter-guided-smaller-block-trials).
 
+Follow-up reviewed on 2026-10-15: the narrow projection passes trained/full-model
+exactness but regresses all three E2E pairs (322.475 -> 324.589 s median, 0.993486x).
+It is not promoted. [Paired evidence](../provenance/openfold3_narrow_projection_e2e_20261015.json).
+
+PairFormer-only BF16 completes, but aligned all-atom RMSD versus FP32 is 5.293 A;
+unprotected FP16 produces NaN in the first triangle update. Neither is promoted.
+These are instrumented diagnostics, not new speedup results. The input has low
+mean pLDDT (~37.9); prediction disagreement alone does not establish experimental
+accuracy. [Precision results](../experiments/openfold3_precision/README.md#collected-results-and-next-experiment).
+
 Recommended work, in order:
 
-1. Finish the bounded narrow-projection investigation with explicit dispatch
-   coverage. Its approximately 1.220x synthetic projection-plus-packing result
-   is not an E2E gain or proof of trained-model coverage. Require the real model
-   to select the kernel before interpreting numerical parity as qualification.
+1. Diagnose the first FP16 triangle contraction before normalization. Test FP32
+   contraction/normalization and residual storage with FP16 projections inside
+   PairFormer only. Keep diffusion FP32. Report aligned/local and confidence
+   deviations before choosing acceptance thresholds or timing a candidate.
 2. Investigate the accepted QKV kernel's QK/softmax/PV scheduling using trained
    inputs and the existing exact reduction order. Compare against the accepted
    unroll4 implementation before running a complete model.
@@ -44,9 +54,11 @@ would reduce that trace's summed kernel time by 17.69%, or yield about 1.215x
 at that boundary with everything else unchanged. It does not predict E2E gain;
 the trace includes instrumentation and stalls, and the reduction is hypothetical.
 
-Keep FP32, recycles, diffusion steps, sample count and randomness fixed. Require
+For strict kernel work, keep FP32, recycles, diffusion steps, sample count and randomness fixed. Require
 trained operator parity, full-model array/CIF parity and three alternating E2E
-pairs before accepting a new speedup. Use only authorized HIP devices 6/7 and
+pairs before accepting a new speedup. The separate precision experiment explicitly
+changes PairFormer arithmetic and needs its own quality policy. Use only HIP 7
+under the latest user instruction and
 verify the physical PCI mapping. Keep profiler runs separate from timed pairs.
 
 ## 2. Mini-ESM and Mini-default need current measurements

@@ -22,7 +22,8 @@ def write(path, value):
         handle.write('\n')
 
 
-def prepare(root, scope):
+def prepare(root, scope, triangle_precision='inherit', run_tag='diagnostic-20261010'):
+    assert triangle_precision in ('inherit', 'float32')
     root = Path(root).absolute()
     source = root.parent / 'openfold3-hip-bias-pack-model-20261010'
     prep, qualified = read(source / 'preparation.json'), read(source / 'collected.json')
@@ -61,18 +62,20 @@ def prepare(root, scope):
         if policy['pairformer_autocast'] not in ('float32', 'bfloat16', 'float16'):
             raise RuntimeError('Unsupported PairFormer precision')
         (output / 'precision-policy.json').write_bytes(policy_bytes)
-        mixed_scope = pairformer_precision_scope(model, output, policy['pairformer_autocast'], diagnostic=True)
+        mixed_scope = pairformer_precision_scope(model, output, policy['pairformer_autocast'],
+            diagnostic=True, triangle_precision=policy['triangle_precision'])
         with mixed_scope, scope, atom_scope,''')
     compile(code, str(path), 'exec')
     path.write_text(code)
     for dtype in ('float32', 'bfloat16', 'float16'):
         request = read(source / 'request.json')
-        request.update(run_id=f'of3-pairformer-{dtype}-diagnostic-20261010',
-                       output_dir=f'/media/IntelSSD/fireprot/outputs/of3-pairformer-{dtype}-diagnostic-20261010')
+        request.update(run_id=f'of3-pairformer-{dtype}-{run_tag}',
+                       output_dir=f'/media/IntelSSD/fireprot/outputs/of3-pairformer-{dtype}-{run_tag}')
         assert request['hip_device'] == 7 and not Path(request['output_dir']).exists()
         write(root / f'{dtype}-request.json', request)
         write(root / f'{dtype}-policy.json', dict(schema_version=1, diagnostic_only=True,
             base_request_precision='float32', pairformer_autocast=dtype,
+            triangle_precision=triangle_precision,
             other_stages='float32', master_parameters='float32',
             recycle_count_unchanged=True, diffusion_steps_unchanged=True,
             acceptance='Report deviations first; no mixed-precision quality threshold or promotion authorized.',

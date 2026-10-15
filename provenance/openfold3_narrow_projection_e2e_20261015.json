@@ -1,0 +1,1354 @@
+{
+  "schema_version": 1,
+  "correctness_passed": true,
+  "scope": "Qualified HIP-packed global-softmax composition versus native-compatible K4 narrow projection with direct head-major output. Strict FP32 N1536 R3 D200 S1 seed101; both arms use the same refreshed full environment inventory, no verification or profiler during timing; incremental, not original Torch.",
+  "workload": {
+    "n": 1536,
+    "precision": "float32",
+    "strict": true,
+    "recycles": 3,
+    "trunk_passes": 4,
+    "diffusion_steps": 200,
+    "samples": 1,
+    "seed": 101,
+    "hip_device": 7
+  },
+  "performance": {
+    "baseline": {
+      "count": 3,
+      "min": 319.18681002,
+      "median": 322.474731625,
+      "p95": 323.468317733,
+      "max": 323.468317733,
+      "mean": 321.70995312599996
+    },
+    "candidate": {
+      "count": 3,
+      "min": 321.389773862,
+      "median": 324.589091584,
+      "p95": 326.585150476,
+      "max": 326.585150476,
+      "mean": 324.18800530733336
+    },
+    "median_speedup": 0.9934860412323719,
+    "p95_speedup": 0.9904562937461877,
+    "paired_speedups": [
+      0.996547099455713,
+      0.9874139444337593,
+      0.9931455073522472
+    ],
+    "paired_summary": {
+      "count": 3,
+      "min": 0.9874139444337593,
+      "median": 0.9931455073522472,
+      "p95": 0.996547099455713,
+      "max": 0.996547099455713,
+      "mean": 0.9923688504139064
+    },
+    "observed_trend": "slower_median_and_p95",
+    "changes": {
+      "invocation.profile_sha256": {
+        "baseline": "2b155d8ddaca255ce2cd58089daa33d4f3c9df5265f7236d6a201ed89f768e41",
+        "candidate": "28010de9cc4aaccf18829f3a99dd37c0a2b64ef2d4658362d6716fac9a70d640"
+      },
+      "launch.environment.FIREPROT_NARROW_PROJECTION": {
+        "baseline": "0",
+        "candidate": "1"
+      }
+    }
+  },
+  "model_medians": {
+    "baseline": 231.8296139689919,
+    "candidate": 234.53831692400854
+  },
+  "model_speedup": 0.9884509150123463,
+  "runs": [
+    {
+      "arm": "baseline",
+      "pair": 0,
+      "e2e_seconds": 323.468317733,
+      "model_seconds": 231.76385914499406,
+      "request_seconds": 261.3871845359972,
+      "output_dir": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-0",
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "full_cif_bytes_equal": true,
+      "normalization": {
+        "source_sha256": "e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79",
+        "library_sha256": "a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a",
+        "counts": {
+          "accepted": 11202,
+          "fallback": 7846,
+          "contiguous_copies": 4730
+        },
+        "signatures": {
+          "((1, 1536, 1536, 128), (301989888, 196608, 128, 1))": 434,
+          "((1, 256, 1536, 128), (301989888, 196608, 128, 1))": 3225,
+          "((1, 1536, 256, 128), (50331648, 32768, 128, 1))": 2580,
+          "((1, 1536, 256, 128), (301989888, 196608, 128, 1))": 3870,
+          "((1, 256, 1536, 128), (150994944, 128, 98304, 1))": 645,
+          "((1, 1536, 1536, 128), (301989888, 128, 196608, 1))": 215,
+          "((1, 1, 1536, 1536, 128), (301989888, 301989888, 196608, 128, 1))": 203,
+          "((256, 1536, 128), (196608, 128, 1))": 30
+        },
+        "width": 32
+      },
+      "global_softmax": {
+        "calls": 4800,
+        "probability_calls": 4800,
+        "groups_launched": 19200,
+        "bias_copies": 0,
+        "score_layout_fallbacks": 0,
+        "kernel": {
+          "mode": "published",
+          "kernel": {
+            "directory": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1",
+            "library": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1/fireprot_softmax_fp32_7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251.so",
+            "manifest_sha256": "4914cb71a64c42bf54495f1c9ee0eeb27808f0571b6a50fed81e8067f56f01be",
+            "build_identity_sha256": "7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251",
+            "compatibility": {
+              "package": "fireprot_softmax_fp32",
+              "target": "gfx90a",
+              "torch": "2.12.0a0+git78258b9",
+              "hip": "7.14.60850",
+              "c_abi": "softmax-fp32-v1"
+            }
+          }
+        },
+        "scope": "Strict N1536/H16/D48 global diffusion; four published H4 launches per call",
+        "limits": [
+          "Submitted launch counts do not prove asynchronous completion.",
+          "Whole-model numerical and paired E2E gates are required.",
+          "The shared kernel launch counter includes these group launches."
+        ],
+        "hip_bias_copies": 4800,
+        "pack_tile_rows": 64
+      },
+      "projection": null,
+      "peak_allocated_bytes": 51757716992,
+      "peak_reserved_bytes": 57139003392,
+      "chunk_tuners": {
+        "template_embedder.template_pair_stack": 1024,
+        "msa_module": 1024,
+        "pairformer_stack": 1024,
+        "diffusion_module.diffusion_conditioning": 1024,
+        "aux_heads.pairformer_embedding.pairformer_stack": 256
+      },
+      "sidecars": {
+        "normalization": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-0/normalization.json",
+          "sha256": "9c869b335d929eb1122e3a11f79feefdfcdc240c9e0186e6e87792bc74bacf1b"
+        },
+        "gate-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-0/gate-fusion.json",
+          "sha256": "af5a7410172bd79713d3b0832ee7a502e055087d69baad569771427232ab3eaa"
+        },
+        "qkv-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-0/qkv-fusion.json",
+          "sha256": "8f50769789fd0435a9b9347c633a70c03570130122d59e0b775f4d6a2862bc56"
+        },
+        "template-reuse": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-0/template-reuse.json",
+          "sha256": "0a6dfe586e5eb768caa4b0d6039d791f9d30a42dce4d629da00685bd62c9390b"
+        },
+        "triangle-key-copy": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-0/triangle-key-copy.json",
+          "sha256": "b3e304e65da317d28c1af221b24e3af6ba2a8e29ae7a44ab28befa58b8283829"
+        },
+        "isolated-data": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-0/isolated-data.json",
+          "sha256": "a67fdd35d61946508fb32fe505bbe5a5f4ffe224320b25481e1bc807e130e11b"
+        },
+        "operator-runtime": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-0/operator-runtime.json",
+          "sha256": "1efa0e336f3e3f380c8c30eb68d75a29b49254590a9cfb45bb22f93cc899fe8f"
+        },
+        "global-softmax": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-0/global-softmax.json",
+          "sha256": "cec7cfdaa72b54ce7c8fd24953e3bd2afbe6a91e17f65958ff78103e1f2856a5"
+        }
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-0/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-0/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-0/accepted.json",
+        "sha256": "da098bf5e479b0863de80ecce01bd3fb190ae21d319f2277e35d283f5980335d"
+      }
+    },
+    {
+      "arm": "candidate",
+      "pair": 0,
+      "e2e_seconds": 324.589091584,
+      "model_seconds": 232.80086172299343,
+      "request_seconds": 262.6392931319715,
+      "output_dir": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-0",
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "full_cif_bytes_equal": true,
+      "normalization": {
+        "source_sha256": "e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79",
+        "library_sha256": "a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a",
+        "counts": {
+          "accepted": 11202,
+          "fallback": 7846,
+          "contiguous_copies": 4730
+        },
+        "signatures": {
+          "((1, 1536, 1536, 128), (301989888, 196608, 128, 1))": 434,
+          "((1, 256, 1536, 128), (301989888, 196608, 128, 1))": 3225,
+          "((1, 1536, 256, 128), (50331648, 32768, 128, 1))": 2580,
+          "((1, 1536, 256, 128), (301989888, 196608, 128, 1))": 3870,
+          "((1, 256, 1536, 128), (150994944, 128, 98304, 1))": 645,
+          "((1, 1536, 1536, 128), (301989888, 128, 196608, 1))": 215,
+          "((1, 1, 1536, 1536, 128), (301989888, 301989888, 196608, 128, 1))": 203,
+          "((256, 1536, 128), (196608, 128, 1))": 30
+        },
+        "width": 32
+      },
+      "global_softmax": {
+        "calls": 4800,
+        "probability_calls": 4800,
+        "groups_launched": 19200,
+        "bias_copies": 0,
+        "score_layout_fallbacks": 0,
+        "kernel": {
+          "mode": "published",
+          "kernel": {
+            "directory": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1",
+            "library": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1/fireprot_softmax_fp32_7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251.so",
+            "manifest_sha256": "4914cb71a64c42bf54495f1c9ee0eeb27808f0571b6a50fed81e8067f56f01be",
+            "build_identity_sha256": "7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251",
+            "compatibility": {
+              "package": "fireprot_softmax_fp32",
+              "target": "gfx90a",
+              "torch": "2.12.0a0+git78258b9",
+              "hip": "7.14.60850",
+              "c_abi": "softmax-fp32-v1"
+            }
+          }
+        },
+        "scope": "Strict N1536/H16/D48 global diffusion; four published H4 launches per call",
+        "limits": [
+          "Submitted launch counts do not prove asynchronous completion.",
+          "Whole-model numerical and paired E2E gates are required.",
+          "The shared kernel launch counter includes these group launches."
+        ],
+        "hip_bias_copies": 0,
+        "pack_tile_rows": 64
+      },
+      "projection": {
+        "completed": true,
+        "calls": 4800,
+        "fallbacks": 0,
+        "native_checks": 0,
+        "verify_first": false,
+        "library": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-narrow-model-recovery2-20261010/projection.so",
+        "library_sha256": "72e5c258ece81421ac2a3645ceaa06898e93a56953a2b4cc344f27acafef17d2",
+        "calls_by_block": {
+          "0": 200,
+          "1": 200,
+          "2": 200,
+          "3": 200,
+          "4": 200,
+          "5": 200,
+          "6": 200,
+          "7": 200,
+          "8": 200,
+          "9": 200,
+          "10": 200,
+          "11": 200,
+          "12": 200,
+          "13": 200,
+          "14": 200,
+          "15": 200,
+          "16": 200,
+          "17": 200,
+          "18": 200,
+          "19": 200,
+          "20": 200,
+          "21": 200,
+          "22": 200,
+          "23": 200
+        },
+        "first_call": {
+          "shape": [
+            1,
+            1,
+            1536,
+            1536,
+            128
+          ],
+          "strides": [
+            301989888,
+            301989888,
+            196608,
+            128,
+            1
+          ],
+          "dtype": "torch.float32",
+          "weight_dtype": "torch.float32",
+          "weight_shape": [
+            16,
+            128
+          ],
+          "weight_strides": [
+            128,
+            1
+          ],
+          "device": "cuda:0",
+          "precision": "None",
+          "has_bias": false,
+          "training": false,
+          "requires_grad": false,
+          "inference_mode": true,
+          "grad_enabled": false,
+          "autocast_enabled": true,
+          "autocast_dtype": "torch.float32"
+        },
+        "scope": "Only24 global diffusion linear_z projections; strict FP32 N1536, head-major output, no caching."
+      },
+      "peak_allocated_bytes": 51757716992,
+      "peak_reserved_bytes": 57139003392,
+      "chunk_tuners": {
+        "template_embedder.template_pair_stack": 1024,
+        "msa_module": 1024,
+        "pairformer_stack": 1024,
+        "diffusion_module.diffusion_conditioning": 1024,
+        "aux_heads.pairformer_embedding.pairformer_stack": 256
+      },
+      "sidecars": {
+        "normalization": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-0/normalization.json",
+          "sha256": "9c869b335d929eb1122e3a11f79feefdfcdc240c9e0186e6e87792bc74bacf1b"
+        },
+        "gate-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-0/gate-fusion.json",
+          "sha256": "af5a7410172bd79713d3b0832ee7a502e055087d69baad569771427232ab3eaa"
+        },
+        "qkv-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-0/qkv-fusion.json",
+          "sha256": "8f50769789fd0435a9b9347c633a70c03570130122d59e0b775f4d6a2862bc56"
+        },
+        "template-reuse": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-0/template-reuse.json",
+          "sha256": "0a6dfe586e5eb768caa4b0d6039d791f9d30a42dce4d629da00685bd62c9390b"
+        },
+        "triangle-key-copy": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-0/triangle-key-copy.json",
+          "sha256": "b3e304e65da317d28c1af221b24e3af6ba2a8e29ae7a44ab28befa58b8283829"
+        },
+        "isolated-data": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-0/isolated-data.json",
+          "sha256": "b31119b2a282f9d5dff25277fd50071c9f761f02f78183b14cb8ab4f58273b1c"
+        },
+        "operator-runtime": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-0/operator-runtime.json",
+          "sha256": "1efa0e336f3e3f380c8c30eb68d75a29b49254590a9cfb45bb22f93cc899fe8f"
+        },
+        "global-softmax": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-0/global-softmax.json",
+          "sha256": "2593972bcabbf73cf13c86e2e283398ece9977f7068adf388dc045be0503c7fa"
+        },
+        "narrow-projection": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-0/narrow-projection.json",
+          "sha256": "419c882a36c15dfe858d9cfa010c5829a290d14ecf1d48013c753b07bff755f5"
+        }
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-0/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-0/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-0/accepted.json",
+        "sha256": "8823052be317e203a12d1d9ffbfcba96f94c9e060a76b284fb0c024a1ef61193"
+      }
+    },
+    {
+      "arm": "candidate",
+      "pair": 1,
+      "e2e_seconds": 326.585150476,
+      "model_seconds": 234.53831692400854,
+      "request_seconds": 264.38068931997987,
+      "output_dir": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-1",
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "full_cif_bytes_equal": true,
+      "normalization": {
+        "source_sha256": "e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79",
+        "library_sha256": "a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a",
+        "counts": {
+          "accepted": 11202,
+          "fallback": 7846,
+          "contiguous_copies": 4730
+        },
+        "signatures": {
+          "((1, 1536, 1536, 128), (301989888, 196608, 128, 1))": 434,
+          "((1, 256, 1536, 128), (301989888, 196608, 128, 1))": 3225,
+          "((1, 1536, 256, 128), (50331648, 32768, 128, 1))": 2580,
+          "((1, 1536, 256, 128), (301989888, 196608, 128, 1))": 3870,
+          "((1, 256, 1536, 128), (150994944, 128, 98304, 1))": 645,
+          "((1, 1536, 1536, 128), (301989888, 128, 196608, 1))": 215,
+          "((1, 1, 1536, 1536, 128), (301989888, 301989888, 196608, 128, 1))": 203,
+          "((256, 1536, 128), (196608, 128, 1))": 30
+        },
+        "width": 32
+      },
+      "global_softmax": {
+        "calls": 4800,
+        "probability_calls": 4800,
+        "groups_launched": 19200,
+        "bias_copies": 0,
+        "score_layout_fallbacks": 0,
+        "kernel": {
+          "mode": "published",
+          "kernel": {
+            "directory": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1",
+            "library": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1/fireprot_softmax_fp32_7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251.so",
+            "manifest_sha256": "4914cb71a64c42bf54495f1c9ee0eeb27808f0571b6a50fed81e8067f56f01be",
+            "build_identity_sha256": "7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251",
+            "compatibility": {
+              "package": "fireprot_softmax_fp32",
+              "target": "gfx90a",
+              "torch": "2.12.0a0+git78258b9",
+              "hip": "7.14.60850",
+              "c_abi": "softmax-fp32-v1"
+            }
+          }
+        },
+        "scope": "Strict N1536/H16/D48 global diffusion; four published H4 launches per call",
+        "limits": [
+          "Submitted launch counts do not prove asynchronous completion.",
+          "Whole-model numerical and paired E2E gates are required.",
+          "The shared kernel launch counter includes these group launches."
+        ],
+        "hip_bias_copies": 0,
+        "pack_tile_rows": 64
+      },
+      "projection": {
+        "completed": true,
+        "calls": 4800,
+        "fallbacks": 0,
+        "native_checks": 0,
+        "verify_first": false,
+        "library": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-narrow-model-recovery2-20261010/projection.so",
+        "library_sha256": "72e5c258ece81421ac2a3645ceaa06898e93a56953a2b4cc344f27acafef17d2",
+        "calls_by_block": {
+          "0": 200,
+          "1": 200,
+          "2": 200,
+          "3": 200,
+          "4": 200,
+          "5": 200,
+          "6": 200,
+          "7": 200,
+          "8": 200,
+          "9": 200,
+          "10": 200,
+          "11": 200,
+          "12": 200,
+          "13": 200,
+          "14": 200,
+          "15": 200,
+          "16": 200,
+          "17": 200,
+          "18": 200,
+          "19": 200,
+          "20": 200,
+          "21": 200,
+          "22": 200,
+          "23": 200
+        },
+        "first_call": {
+          "shape": [
+            1,
+            1,
+            1536,
+            1536,
+            128
+          ],
+          "strides": [
+            301989888,
+            301989888,
+            196608,
+            128,
+            1
+          ],
+          "dtype": "torch.float32",
+          "weight_dtype": "torch.float32",
+          "weight_shape": [
+            16,
+            128
+          ],
+          "weight_strides": [
+            128,
+            1
+          ],
+          "device": "cuda:0",
+          "precision": "None",
+          "has_bias": false,
+          "training": false,
+          "requires_grad": false,
+          "inference_mode": true,
+          "grad_enabled": false,
+          "autocast_enabled": true,
+          "autocast_dtype": "torch.float32"
+        },
+        "scope": "Only24 global diffusion linear_z projections; strict FP32 N1536, head-major output, no caching."
+      },
+      "peak_allocated_bytes": 51757716992,
+      "peak_reserved_bytes": 57139003392,
+      "chunk_tuners": {
+        "template_embedder.template_pair_stack": 1024,
+        "msa_module": 1024,
+        "pairformer_stack": 1024,
+        "diffusion_module.diffusion_conditioning": 1024,
+        "aux_heads.pairformer_embedding.pairformer_stack": 256
+      },
+      "sidecars": {
+        "normalization": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-1/normalization.json",
+          "sha256": "9c869b335d929eb1122e3a11f79feefdfcdc240c9e0186e6e87792bc74bacf1b"
+        },
+        "gate-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-1/gate-fusion.json",
+          "sha256": "af5a7410172bd79713d3b0832ee7a502e055087d69baad569771427232ab3eaa"
+        },
+        "qkv-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-1/qkv-fusion.json",
+          "sha256": "8f50769789fd0435a9b9347c633a70c03570130122d59e0b775f4d6a2862bc56"
+        },
+        "template-reuse": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-1/template-reuse.json",
+          "sha256": "0a6dfe586e5eb768caa4b0d6039d791f9d30a42dce4d629da00685bd62c9390b"
+        },
+        "triangle-key-copy": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-1/triangle-key-copy.json",
+          "sha256": "b3e304e65da317d28c1af221b24e3af6ba2a8e29ae7a44ab28befa58b8283829"
+        },
+        "isolated-data": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-1/isolated-data.json",
+          "sha256": "4d7e7c74ac5c44d677c98b223cc471fe01f6f728088da82380570ce72484c077"
+        },
+        "operator-runtime": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-1/operator-runtime.json",
+          "sha256": "1efa0e336f3e3f380c8c30eb68d75a29b49254590a9cfb45bb22f93cc899fe8f"
+        },
+        "global-softmax": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-1/global-softmax.json",
+          "sha256": "2593972bcabbf73cf13c86e2e283398ece9977f7068adf388dc045be0503c7fa"
+        },
+        "narrow-projection": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-1/narrow-projection.json",
+          "sha256": "419c882a36c15dfe858d9cfa010c5829a290d14ecf1d48013c753b07bff755f5"
+        }
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-1/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-1/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-1/accepted.json",
+        "sha256": "2ade664acb330c132809041e00540998a6d86f3ff5464caa86dd81ab08744ca7"
+      }
+    },
+    {
+      "arm": "baseline",
+      "pair": 1,
+      "e2e_seconds": 322.474731625,
+      "model_seconds": 234.02391683802125,
+      "request_seconds": 264.21372539698496,
+      "output_dir": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-1",
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "full_cif_bytes_equal": true,
+      "normalization": {
+        "source_sha256": "e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79",
+        "library_sha256": "a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a",
+        "counts": {
+          "accepted": 11202,
+          "fallback": 7846,
+          "contiguous_copies": 4730
+        },
+        "signatures": {
+          "((1, 1536, 1536, 128), (301989888, 196608, 128, 1))": 434,
+          "((1, 256, 1536, 128), (301989888, 196608, 128, 1))": 3225,
+          "((1, 1536, 256, 128), (50331648, 32768, 128, 1))": 2580,
+          "((1, 1536, 256, 128), (301989888, 196608, 128, 1))": 3870,
+          "((1, 256, 1536, 128), (150994944, 128, 98304, 1))": 645,
+          "((1, 1536, 1536, 128), (301989888, 128, 196608, 1))": 215,
+          "((1, 1, 1536, 1536, 128), (301989888, 301989888, 196608, 128, 1))": 203,
+          "((256, 1536, 128), (196608, 128, 1))": 30
+        },
+        "width": 32
+      },
+      "global_softmax": {
+        "calls": 4800,
+        "probability_calls": 4800,
+        "groups_launched": 19200,
+        "bias_copies": 0,
+        "score_layout_fallbacks": 0,
+        "kernel": {
+          "mode": "published",
+          "kernel": {
+            "directory": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1",
+            "library": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1/fireprot_softmax_fp32_7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251.so",
+            "manifest_sha256": "4914cb71a64c42bf54495f1c9ee0eeb27808f0571b6a50fed81e8067f56f01be",
+            "build_identity_sha256": "7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251",
+            "compatibility": {
+              "package": "fireprot_softmax_fp32",
+              "target": "gfx90a",
+              "torch": "2.12.0a0+git78258b9",
+              "hip": "7.14.60850",
+              "c_abi": "softmax-fp32-v1"
+            }
+          }
+        },
+        "scope": "Strict N1536/H16/D48 global diffusion; four published H4 launches per call",
+        "limits": [
+          "Submitted launch counts do not prove asynchronous completion.",
+          "Whole-model numerical and paired E2E gates are required.",
+          "The shared kernel launch counter includes these group launches."
+        ],
+        "hip_bias_copies": 4800,
+        "pack_tile_rows": 64
+      },
+      "projection": null,
+      "peak_allocated_bytes": 51757716992,
+      "peak_reserved_bytes": 57139003392,
+      "chunk_tuners": {
+        "template_embedder.template_pair_stack": 1024,
+        "msa_module": 1024,
+        "pairformer_stack": 1024,
+        "diffusion_module.diffusion_conditioning": 1024,
+        "aux_heads.pairformer_embedding.pairformer_stack": 256
+      },
+      "sidecars": {
+        "normalization": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-1/normalization.json",
+          "sha256": "9c869b335d929eb1122e3a11f79feefdfcdc240c9e0186e6e87792bc74bacf1b"
+        },
+        "gate-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-1/gate-fusion.json",
+          "sha256": "af5a7410172bd79713d3b0832ee7a502e055087d69baad569771427232ab3eaa"
+        },
+        "qkv-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-1/qkv-fusion.json",
+          "sha256": "8f50769789fd0435a9b9347c633a70c03570130122d59e0b775f4d6a2862bc56"
+        },
+        "template-reuse": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-1/template-reuse.json",
+          "sha256": "0a6dfe586e5eb768caa4b0d6039d791f9d30a42dce4d629da00685bd62c9390b"
+        },
+        "triangle-key-copy": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-1/triangle-key-copy.json",
+          "sha256": "b3e304e65da317d28c1af221b24e3af6ba2a8e29ae7a44ab28befa58b8283829"
+        },
+        "isolated-data": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-1/isolated-data.json",
+          "sha256": "160da93a4395fe37712e78886aebdd71b0bad446f9fe3a527c517b337b096444"
+        },
+        "operator-runtime": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-1/operator-runtime.json",
+          "sha256": "1efa0e336f3e3f380c8c30eb68d75a29b49254590a9cfb45bb22f93cc899fe8f"
+        },
+        "global-softmax": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-1/global-softmax.json",
+          "sha256": "cec7cfdaa72b54ce7c8fd24953e3bd2afbe6a91e17f65958ff78103e1f2856a5"
+        }
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-1/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-1/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-1/accepted.json",
+        "sha256": "f48f28dd6cb9376baac8a25067be34e0785f54a331fc708f27d00c8f114c4f8c"
+      }
+    },
+    {
+      "arm": "baseline",
+      "pair": 2,
+      "e2e_seconds": 319.18681002,
+      "model_seconds": 231.8296139689919,
+      "request_seconds": 261.7632086959784,
+      "output_dir": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-2",
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "full_cif_bytes_equal": true,
+      "normalization": {
+        "source_sha256": "e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79",
+        "library_sha256": "a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a",
+        "counts": {
+          "accepted": 11202,
+          "fallback": 7846,
+          "contiguous_copies": 4730
+        },
+        "signatures": {
+          "((1, 1536, 1536, 128), (301989888, 196608, 128, 1))": 434,
+          "((1, 256, 1536, 128), (301989888, 196608, 128, 1))": 3225,
+          "((1, 1536, 256, 128), (50331648, 32768, 128, 1))": 2580,
+          "((1, 1536, 256, 128), (301989888, 196608, 128, 1))": 3870,
+          "((1, 256, 1536, 128), (150994944, 128, 98304, 1))": 645,
+          "((1, 1536, 1536, 128), (301989888, 128, 196608, 1))": 215,
+          "((1, 1, 1536, 1536, 128), (301989888, 301989888, 196608, 128, 1))": 203,
+          "((256, 1536, 128), (196608, 128, 1))": 30
+        },
+        "width": 32
+      },
+      "global_softmax": {
+        "calls": 4800,
+        "probability_calls": 4800,
+        "groups_launched": 19200,
+        "bias_copies": 0,
+        "score_layout_fallbacks": 0,
+        "kernel": {
+          "mode": "published",
+          "kernel": {
+            "directory": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1",
+            "library": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1/fireprot_softmax_fp32_7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251.so",
+            "manifest_sha256": "4914cb71a64c42bf54495f1c9ee0eeb27808f0571b6a50fed81e8067f56f01be",
+            "build_identity_sha256": "7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251",
+            "compatibility": {
+              "package": "fireprot_softmax_fp32",
+              "target": "gfx90a",
+              "torch": "2.12.0a0+git78258b9",
+              "hip": "7.14.60850",
+              "c_abi": "softmax-fp32-v1"
+            }
+          }
+        },
+        "scope": "Strict N1536/H16/D48 global diffusion; four published H4 launches per call",
+        "limits": [
+          "Submitted launch counts do not prove asynchronous completion.",
+          "Whole-model numerical and paired E2E gates are required.",
+          "The shared kernel launch counter includes these group launches."
+        ],
+        "hip_bias_copies": 4800,
+        "pack_tile_rows": 64
+      },
+      "projection": null,
+      "peak_allocated_bytes": 51757716992,
+      "peak_reserved_bytes": 57139003392,
+      "chunk_tuners": {
+        "template_embedder.template_pair_stack": 1024,
+        "msa_module": 1024,
+        "pairformer_stack": 1024,
+        "diffusion_module.diffusion_conditioning": 1024,
+        "aux_heads.pairformer_embedding.pairformer_stack": 256
+      },
+      "sidecars": {
+        "normalization": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-2/normalization.json",
+          "sha256": "9c869b335d929eb1122e3a11f79feefdfcdc240c9e0186e6e87792bc74bacf1b"
+        },
+        "gate-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-2/gate-fusion.json",
+          "sha256": "af5a7410172bd79713d3b0832ee7a502e055087d69baad569771427232ab3eaa"
+        },
+        "qkv-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-2/qkv-fusion.json",
+          "sha256": "8f50769789fd0435a9b9347c633a70c03570130122d59e0b775f4d6a2862bc56"
+        },
+        "template-reuse": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-2/template-reuse.json",
+          "sha256": "0a6dfe586e5eb768caa4b0d6039d791f9d30a42dce4d629da00685bd62c9390b"
+        },
+        "triangle-key-copy": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-2/triangle-key-copy.json",
+          "sha256": "b3e304e65da317d28c1af221b24e3af6ba2a8e29ae7a44ab28befa58b8283829"
+        },
+        "isolated-data": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-2/isolated-data.json",
+          "sha256": "969a03bb3f34d9432255716b4d0c5a6e97b964cdec5bad9ff8d8b13ad6bdd9cf"
+        },
+        "operator-runtime": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-2/operator-runtime.json",
+          "sha256": "1efa0e336f3e3f380c8c30eb68d75a29b49254590a9cfb45bb22f93cc899fe8f"
+        },
+        "global-softmax": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-2/global-softmax.json",
+          "sha256": "cec7cfdaa72b54ce7c8fd24953e3bd2afbe6a91e17f65958ff78103e1f2856a5"
+        }
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-2/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-2/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-baseline-2/accepted.json",
+        "sha256": "a2dcba7e03328dd2c46ed0a5ad1ea32c12bb34b23d64c6dc50ef5cbcad9379ac"
+      }
+    },
+    {
+      "arm": "candidate",
+      "pair": 2,
+      "e2e_seconds": 321.389773862,
+      "model_seconds": 235.1716156679904,
+      "request_seconds": 264.0977280130028,
+      "output_dir": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-2",
+      "arrays": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "full_cif_bytes_equal": true,
+      "normalization": {
+        "source_sha256": "e39b9599c1711a232b7a52767732920e45e069dc37850192090c1f59440b3d79",
+        "library_sha256": "a06828d77438cd417298f19221dca4cff371ed81ba4df041283eb2ab8ebbf03a",
+        "counts": {
+          "accepted": 11202,
+          "fallback": 7846,
+          "contiguous_copies": 4730
+        },
+        "signatures": {
+          "((1, 1536, 1536, 128), (301989888, 196608, 128, 1))": 434,
+          "((1, 256, 1536, 128), (301989888, 196608, 128, 1))": 3225,
+          "((1, 1536, 256, 128), (50331648, 32768, 128, 1))": 2580,
+          "((1, 1536, 256, 128), (301989888, 196608, 128, 1))": 3870,
+          "((1, 256, 1536, 128), (150994944, 128, 98304, 1))": 645,
+          "((1, 1536, 1536, 128), (301989888, 128, 196608, 1))": 215,
+          "((1, 1, 1536, 1536, 128), (301989888, 301989888, 196608, 128, 1))": 203,
+          "((256, 1536, 128), (196608, 128, 1))": 30
+        },
+        "width": 32
+      },
+      "global_softmax": {
+        "calls": 4800,
+        "probability_calls": 4800,
+        "groups_launched": 19200,
+        "bias_copies": 0,
+        "score_layout_fallbacks": 0,
+        "kernel": {
+          "mode": "published",
+          "kernel": {
+            "directory": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1",
+            "library": "/media/IntelSSD/fireprot/runtime/kernels/softmax-fp32-v1/fireprot_softmax_fp32_7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251.so",
+            "manifest_sha256": "4914cb71a64c42bf54495f1c9ee0eeb27808f0571b6a50fed81e8067f56f01be",
+            "build_identity_sha256": "7c48f5053feacf4e77cf511d6066358c86921d40994a4e3c0cfa971ebfd57251",
+            "compatibility": {
+              "package": "fireprot_softmax_fp32",
+              "target": "gfx90a",
+              "torch": "2.12.0a0+git78258b9",
+              "hip": "7.14.60850",
+              "c_abi": "softmax-fp32-v1"
+            }
+          }
+        },
+        "scope": "Strict N1536/H16/D48 global diffusion; four published H4 launches per call",
+        "limits": [
+          "Submitted launch counts do not prove asynchronous completion.",
+          "Whole-model numerical and paired E2E gates are required.",
+          "The shared kernel launch counter includes these group launches."
+        ],
+        "hip_bias_copies": 0,
+        "pack_tile_rows": 64
+      },
+      "projection": {
+        "completed": true,
+        "calls": 4800,
+        "fallbacks": 0,
+        "native_checks": 0,
+        "verify_first": false,
+        "library": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-narrow-model-recovery2-20261010/projection.so",
+        "library_sha256": "72e5c258ece81421ac2a3645ceaa06898e93a56953a2b4cc344f27acafef17d2",
+        "calls_by_block": {
+          "0": 200,
+          "1": 200,
+          "2": 200,
+          "3": 200,
+          "4": 200,
+          "5": 200,
+          "6": 200,
+          "7": 200,
+          "8": 200,
+          "9": 200,
+          "10": 200,
+          "11": 200,
+          "12": 200,
+          "13": 200,
+          "14": 200,
+          "15": 200,
+          "16": 200,
+          "17": 200,
+          "18": 200,
+          "19": 200,
+          "20": 200,
+          "21": 200,
+          "22": 200,
+          "23": 200
+        },
+        "first_call": {
+          "shape": [
+            1,
+            1,
+            1536,
+            1536,
+            128
+          ],
+          "strides": [
+            301989888,
+            301989888,
+            196608,
+            128,
+            1
+          ],
+          "dtype": "torch.float32",
+          "weight_dtype": "torch.float32",
+          "weight_shape": [
+            16,
+            128
+          ],
+          "weight_strides": [
+            128,
+            1
+          ],
+          "device": "cuda:0",
+          "precision": "None",
+          "has_bias": false,
+          "training": false,
+          "requires_grad": false,
+          "inference_mode": true,
+          "grad_enabled": false,
+          "autocast_enabled": true,
+          "autocast_dtype": "torch.float32"
+        },
+        "scope": "Only24 global diffusion linear_z projections; strict FP32 N1536, head-major output, no caching."
+      },
+      "peak_allocated_bytes": 51757716992,
+      "peak_reserved_bytes": 57139003392,
+      "chunk_tuners": {
+        "template_embedder.template_pair_stack": 1024,
+        "msa_module": 1024,
+        "pairformer_stack": 1024,
+        "diffusion_module.diffusion_conditioning": 1024,
+        "aux_heads.pairformer_embedding.pairformer_stack": 256
+      },
+      "sidecars": {
+        "normalization": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-2/normalization.json",
+          "sha256": "9c869b335d929eb1122e3a11f79feefdfcdc240c9e0186e6e87792bc74bacf1b"
+        },
+        "gate-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-2/gate-fusion.json",
+          "sha256": "af5a7410172bd79713d3b0832ee7a502e055087d69baad569771427232ab3eaa"
+        },
+        "qkv-fusion": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-2/qkv-fusion.json",
+          "sha256": "8f50769789fd0435a9b9347c633a70c03570130122d59e0b775f4d6a2862bc56"
+        },
+        "template-reuse": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-2/template-reuse.json",
+          "sha256": "0a6dfe586e5eb768caa4b0d6039d791f9d30a42dce4d629da00685bd62c9390b"
+        },
+        "triangle-key-copy": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-2/triangle-key-copy.json",
+          "sha256": "b3e304e65da317d28c1af221b24e3af6ba2a8e29ae7a44ab28befa58b8283829"
+        },
+        "isolated-data": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-2/isolated-data.json",
+          "sha256": "5eb66095043509197f2b9324ce0b7f95c3db48282cea933148f9e7b53b9a9034"
+        },
+        "operator-runtime": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-2/operator-runtime.json",
+          "sha256": "1efa0e336f3e3f380c8c30eb68d75a29b49254590a9cfb45bb22f93cc899fe8f"
+        },
+        "global-softmax": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-2/global-softmax.json",
+          "sha256": "2593972bcabbf73cf13c86e2e283398ece9977f7068adf388dc045be0503c7fa"
+        },
+        "narrow-projection": {
+          "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-2/narrow-projection.json",
+          "sha256": "419c882a36c15dfe858d9cfa010c5829a290d14ecf1d48013c753b07bff755f5"
+        }
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-2/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-2/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      },
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/narrow-recovery2-pairs-n1536-candidate-2/accepted.json",
+        "sha256": "60a9c8af6de3273eb49d5d4de6fb4616679df866375a4c399120859c8293cd3d"
+      }
+    }
+  ],
+  "benchmark": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-narrow-pairs-recovery2-20261010/paired/benchmark.json",
+    "sha256": "1fa0801fa91e222b446ce02a9434f56c2a024aeaf34d2533f0b036905a0610c9"
+  },
+  "comparison": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-narrow-pairs-recovery2-20261010/paired/comparison.json",
+    "sha256": "18c992f2c4144f7b56b0897bfd652253f0641fcbd5db47ac286bcd0c9d1b3fff"
+  },
+  "preparation": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-narrow-pairs-recovery2-20261010/preparation.json",
+    "sha256": "96415c82f75bc791bdadd812ca5a0b11b53bf0a97d7e77abd49f5cc007f4d2d5"
+  },
+  "collector": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-narrow-pairs-recovery2-queue-20261010/collect_pairs.py",
+    "sha256": "489e860d177deabbc60d8284d601463696b10b5f278b7dbf0ae2e2d79d6d09b5"
+  },
+  "limits": [
+    "Fresh processes and unflushed caches, three AB/BA/AB pairs.",
+    "No observations discarded; additional current-array and complete-CIF checks after Rust gates.",
+    "No maintained-profile promotion or direct-original-Torch claim."
+  ],
+  "collection": {
+    "date": "2026-10-15",
+    "remote_path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-narrow-pairs-recovery2-20261010/collected.json",
+    "sha256": "3e83a4b8b8b26a299080710e8c2af5d6f5d9e629eb4d8d399f1c01689bc8c62c",
+    "decision": "Do not promote: all three paired speedups below one."
+  }
+}

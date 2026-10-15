@@ -6312,3 +6312,46 @@ originalnarrowpairedqueue957628. Futuremodelroot
 outputs/experiments/openfold3-precision-diagnostic-recovery1-20261010.
 Local/tmp/fireprot-of3-precision-diagnostic-recovery1-20261010. Scope+tests changed
 after6e914d6;4CPUtests pass again. No numericalprecision GPU result yet.
+
+
+## Precision results and protected triangle follow-up (2026-10-15)
+
+Latest user: continue OpenFold3, HIP7 ONLY. Native E2E remains2.864391789x.
+Narrow recovery2 paired coordinator957628 completed0: all6 all11/fullCIFexact,
+322.474731625 ->324.589091584s median,0.993486x; all3pairs slower. Reject promotion.
+New provenance/openfold3_narrow_projection_e2e_20261015.json preservesall6.
+Precision978289 completed0 diagnostics. FP32all11exact; BF16finite4cycles200diffusion
+FP32calls, but alignedallatomRMSD5.293044A/CA5.238280A; pairdistancep50=1.058401A,
+p95=7.667233A. MeanatompLDDT37.89925->37.91813, lowconfidence prediction; noaccuracy
+claim againstexperimentaltruth. UnprotectedFP16 firstcycle firsttri_mul_out
+layer_norm_out outputsNaN. Precedingcontractionoverflowhypothesis notyetmeasured.
+Reportdeviationsfirst, noqualitythreshold/no mixedprecisionpromotion.
+Rustdeviationrebuilt locally;2alignmenttests pass; downloadedNPZ/CIFSHAverified,
+BF16policy/acceptedhashrecheckedaftertransientnetwork120secondretry. Results
+provenance/openfold3_precision_results_20261015.json.
+
+Newscope optionaltriangle_precision=float32 keepsentirenativeTriMulFP32 inside
+FP16PairFormer; allotherstages/diffusion/master/residualFP32. Requiresactual
+trianglecalls=modulecount*cycles;7CPUtests pass. Maintainedprofileunchanged.
+CURRENTcoordinator1574668, firstFP32child1574704:
+outputs/experiments/openfold3-precision-triangle-fp32-queue-20261015
+modelrootoutputs/experiments/openfold3-precision-triangle-fp32-20261015.
+RunsfreshFP32anchor thenprotectedFP16; noBF16run. No GPUresultyet.
+Localdriver/tmp/fireprot-precision-protected-driver-20261015.py; controlpins
+inprovenance/openfold3_precision_triangle_fp32_preparation_20261015.json.
+HIP7PCI0000:93:00.0,KFD8466,SMI5. Targetbusy_percent100 butonly13MiBVRAM/no
+KFDVRAMowner; boundedHIPprobe and16elementTorchsum workcorrectly. Do not use
+theseinstrumentedrunsasperformanceevidence. DriverchecksKFDtargetfree before
+stages; Rustsupervision/inventoryunchanged. Other6GCDsoccupied, donotinterfere.
+Observeexistinghandle; no duplicatejobs. UserPDFdocs/isa remainsuntracked.
+
+Protected1574668 terminated1 BEFOREmodel: oldenvironmentinventorymismatch.
+Full157886-entrynewcapture14c60e2a88af9c7149b739e0af142154c8c1faf01096e014a7d04f1b26d3214f,
+69identitydifferences onlysystemlibraries/loadercache; Python/ROCm/publishedkernel
+rootsunchanged. Auditprovenance/openfold3_environment_refresh_20261015.json.
+CURRENTrecovery1coordinator1576252, freshFP32anchor thenprotectedFP16:
+outputs/experiments/openfold3-precision-triangle-fp32-recovery1-queue-20261015
+modelrootoutputs/experiments/openfold3-precision-triangle-fp32-recovery1-20261015.
+Onlyinventorypath/hash andfreshoutputIDschanged; sourcepolicyunchanged.
+GitNexusrefreshhit16GiBDBcap; supportedGITNEXUS_LBUG_MAX_DB_SIZE=34359738368
+refreshsucceeded. Use32GiBcap forfuturerefreshes; noanalyzercodepatch.

@@ -484,5 +484,10 @@ retained. Recovery2 seals runner and operator receipts and passes both modes:
 4,800 projection calls, zero fallbacks, 24 native checks in verification mode,
 all eleven arrays bitwise and full CIF bytes equal. The redundant 4,800 HIP bias
 copies disappear, while 4,800 global-softmax calls and 19,200 groups remain.
-The three-pair E2E comparison is running; single qualification timings do not
-establish an incremental speedup.
+The completed three-pair E2E comparison rejects promotion: baseline median
+322.474732 s versus candidate 324.589092 s, **0.993486x** (0.66% more time).
+All three paired ratios are below one: 0.996547x, 0.987414x and 0.993146x.
+Model-forward medians likewise regress from 231.829614 to 234.538317 s.
+All six outputs retain all eleven arrays bitwise and full CIF bytes exactly;
+numerical correctness does not establish a performance improvement. Retain the
+previous qualified HIP-packed composition. [Full paired evidence](../../provenance/openfold3_narrow_projection_e2e_20261015.json).

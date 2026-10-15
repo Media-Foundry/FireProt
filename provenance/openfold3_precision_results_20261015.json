@@ -1,0 +1,1333 @@
+{
+  "schema_version": 1,
+  "collected_on": "2026-10-15",
+  "workload": {
+    "model": "OpenFold3 / OpenBind-0",
+    "length": 1536,
+    "recycles": 3,
+    "trunk_passes": 4,
+    "diffusion_steps": 200,
+    "samples": 1,
+    "seed": 101,
+    "hip_visible_devices": "7",
+    "cache": "unflushed; fresh processes",
+    "deterministic": true,
+    "memory_filling": true
+  },
+  "policy": "PairFormer autocast only; master weights and all other stages FP32. No acceptance threshold selected.",
+  "decisions": {
+    "float16": "Reject unprotected whole-PairFormer autocast: first cycle nonfinite. Contraction overflow is a hypothesis, not yet directly measured.",
+    "bfloat16": "Not promoted: finite monitored outputs but substantial aligned structural differences. No claim of worse experimental accuracy.",
+    "timing": "Diagnostic activation scans invalidate speedup comparisons. Latest accepted strict-FP32 direct E2E remains 2.864391789x."
+  },
+  "results": {
+    "float32": {
+      "precision": "float32",
+      "instrumented": true,
+      "quality_verdict": null,
+      "speedup_verdict": null,
+      "invocation_exit_code": 0,
+      "precision_report_pin": {
+        "path": "/media/IntelSSD/fireprot/outputs/of3-pairformer-float32-diagnostic-recovery1-20261010/pairformer-precision.json",
+        "sha256": "b375fc95da7efd7e86aa3c0660cbe5df98ddcacb8da2f27d209a71373a62e422"
+      },
+      "policy": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-diagnostic-recovery1-20261010/float32-policy.json",
+        "sha256": "3786360bdeaa3e96283cfff9ad173c4f573924896f5e63d0b6e2785d779754c6"
+      },
+      "preparation": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-diagnostic-recovery1-20261010/preparation.json",
+        "sha256": "51ded54c3ba10313e0a1f78ba7d5417db43c05953f302855f3b07617249bc7a8"
+      },
+      "status": "finite_outputs_deviation_assessment_pending",
+      "exact_array_diagnostics": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.disorder": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.gpde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pde": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.plddt": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.ptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "coordinates": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        }
+      },
+      "exact_array_comparison_exit_code": 0,
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/of3-pairformer-float32-diagnostic-recovery1-20261010/accepted.json",
+        "sha256": "8251d1b31e276a0ee977584b1e71ce0a61497a32e88df8817464f0649b731aaa"
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/of3-pairformer-float32-diagnostic-recovery1-20261010/sample-0.npz",
+        "sha256": "ffd62574880c3ac49d3df9644cb612b01003df8b5745803ff47ffc2578fa0633"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/of3-pairformer-float32-diagnostic-recovery1-20261010/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "05b2cda9b220c3b1910a4dddb2b7b9b549a0ab48c2b2c45c78218f62929579b7"
+      },
+      "invocation": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-diagnostic-recovery1-20261010/float32-measurement/invocation.json",
+        "sha256": "35087d0d27eae6febd9a4fba863dc30f8d98581cb9f6f4b2addf8bb26fedd191"
+      },
+      "raw_collected_sha256": "5dac0ac5ef3eeb107daf2f70809d7dd55b4e96aeb77723e815555b03167acd8d",
+      "raw_collected_remote_path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-diagnostic-recovery1-20261010/float32-collected.json",
+      "precision_summary": {
+        "completed": true,
+        "diagnostic": true,
+        "source_pins": {
+          "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3/openfold3/projects/of3_all_atom/model.py": "1cd02947e24bcea5d30dba98122e6a38e707f88ebe1d4c4f2aa16f4b177f7e0c",
+          "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3/openfold3/core/model/latent/pairformer.py": "cdb66c9553ef42b93835dec92f3e6dcf711dbf139a5a59aa1f2561216435af9f",
+          "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3/openfold3/core/model/layers/triangular_multiplicative_update.py": "612caf7abd07a86a7fdf4eda7e0a2170c04b407f9121fc286ab864a648db1ba7"
+        },
+        "base_request_precision": "float32",
+        "effective_precision": {
+          "pairformer_autocast": "float32",
+          "input_and_recycle_embeddings": "float32",
+          "template_and_msa": "float32",
+          "diffusion": "float32",
+          "confidence": "float32",
+          "master_parameters": "float32"
+        },
+        "cycles": [
+          {
+            "index": 0,
+            "completed": true,
+            "autocast": "float32",
+            "returned_dtypes": [
+              "torch.float32",
+              "torch.float32"
+            ],
+            "activation_ranges_by_dtype": {
+              "torch.float32": {
+                "calls": 10685,
+                "minimum": -121501.8828125,
+                "maximum": 108490.9609375,
+                "max_abs": 121501.8828125
+              }
+            }
+          },
+          {
+            "index": 1,
+            "completed": true,
+            "autocast": "float32",
+            "returned_dtypes": [
+              "torch.float32",
+              "torch.float32"
+            ],
+            "activation_ranges_by_dtype": {
+              "torch.float32": {
+                "calls": 10514,
+                "minimum": -131234.484375,
+                "maximum": 118255.8046875,
+                "max_abs": 131234.484375
+              }
+            }
+          },
+          {
+            "index": 2,
+            "completed": true,
+            "autocast": "float32",
+            "returned_dtypes": [
+              "torch.float32",
+              "torch.float32"
+            ],
+            "activation_ranges_by_dtype": {
+              "torch.float32": {
+                "calls": 10514,
+                "minimum": -132414.6875,
+                "maximum": 118950.25,
+                "max_abs": 132414.6875
+              }
+            }
+          },
+          {
+            "index": 3,
+            "completed": true,
+            "autocast": "float32",
+            "returned_dtypes": [
+              "torch.float32",
+              "torch.float32"
+            ],
+            "activation_ranges_by_dtype": {
+              "torch.float32": {
+                "calls": 10514,
+                "minimum": -132518.75,
+                "maximum": 119024.59375,
+                "max_abs": 132518.75
+              }
+            }
+          }
+        ],
+        "output_dtypes": {
+          "torch.float32": 42243
+        },
+        "boundary_calls": {
+          "sample_diffusion": 1,
+          "diffusion_module": 200,
+          "confidence": 1
+        },
+        "matmul_flags": {
+          "allow_tf32": true,
+          "allow_fp16_reduced_precision_reduction": true,
+          "allow_bf16_reduced_precision_reduction": true,
+          "allow_fp16_accumulation": false
+        },
+        "nonfinite": null,
+        "triangle_fp32_fusion_bypassed_cycles": 0,
+        "limits": [
+          "Diagnostic activation scans invalidate performance timing.",
+          "Mixed-precision outputs require independent aligned-coordinate and confidence evaluation.",
+          "No output clamping, changed recycle count or shortened diffusion."
+        ]
+      },
+      "structure_and_confidence": {
+        "aligned_atom_displacement_angstrom": {
+          "count": 12138,
+          "max": 3.197442310920451e-14,
+          "mean": 1.2068544130817692e-14,
+          "p50": 1.1420196569513929e-14,
+          "p90": 2.1316282072803006e-14,
+          "p95": 2.2748467065386707e-14,
+          "p99": 2.994887058365124e-14,
+          "rms": 1.3460469952167622e-14
+        },
+        "all_atom": {
+          "aligned_rmsd_angstrom": 1.3460469952167724e-14,
+          "atom_count": 12138,
+          "max_abs_coordinate_delta_angstrom": 0.0,
+          "raw_rmsd_angstrom": 0.0
+        },
+        "all_ca_pair_distance_absolute_change_angstrom": {
+          "count": 1178880,
+          "max": 0.0,
+          "mean": 0.0,
+          "p50": 0.0,
+          "p90": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "rms": 0.0
+        },
+        "ca_after_all_atom_alignment_angstrom": {
+          "count": 1536,
+          "max": 3.197442310920451e-14,
+          "mean": 1.2072858469266238e-14,
+          "p50": 1.1374233532693354e-14,
+          "p90": 2.1316282072803006e-14,
+          "p95": 2.2752800107361087e-14,
+          "p99": 2.984943230618702e-14,
+          "rms": 1.346538082097384e-14
+        },
+        "ca_own_alignment": {
+          "aligned_rmsd_angstrom": 1.2673237915491066e-14,
+          "atom_count": 1536,
+          "max_abs_coordinate_delta_angstrom": 0.0,
+          "raw_rmsd_angstrom": 0.0
+        },
+        "confidence": {
+          "confidence.chain_ptm.1": {
+            "absolute_delta": {
+              "count": 1,
+              "max": 0.0,
+              "mean": 0.0,
+              "p50": 0.0,
+              "p90": 0.0,
+              "p95": 0.0,
+              "p99": 0.0,
+              "rms": 0.0
+            },
+            "bitwise_equal": true,
+            "candidate_mean": 0.20447438955307007,
+            "reference_mean": 0.20447438955307007
+          },
+          "confidence.disorder": {
+            "absolute_delta": {
+              "count": 1,
+              "max": 0.0,
+              "mean": 0.0,
+              "p50": 0.0,
+              "p90": 0.0,
+              "p95": 0.0,
+              "p99": 0.0,
+              "rms": 0.0
+            },
+            "bitwise_equal": true,
+            "candidate_mean": 0.2884114682674408,
+            "reference_mean": 0.2884114682674408
+          },
+          "confidence.gpde": {
+            "absolute_delta": {
+              "count": 1,
+              "max": 0.0,
+              "mean": 0.0,
+              "p50": 0.0,
+              "p90": 0.0,
+              "p95": 0.0,
+              "p99": 0.0,
+              "rms": 0.0
+            },
+            "bitwise_equal": true,
+            "candidate_mean": 1.6354081630706787,
+            "reference_mean": 1.6354081630706787
+          },
+          "confidence.has_clash": {
+            "absolute_delta": {
+              "count": 1,
+              "max": 0.0,
+              "mean": 0.0,
+              "p50": 0.0,
+              "p90": 0.0,
+              "p95": 0.0,
+              "p99": 0.0,
+              "rms": 0.0
+            },
+            "bitwise_equal": true,
+            "candidate_mean": 0.0,
+            "reference_mean": 0.0
+          },
+          "confidence.iptm": {
+            "absolute_delta": {
+              "count": 1,
+              "max": 0.0,
+              "mean": 0.0,
+              "p50": 0.0,
+              "p90": 0.0,
+              "p95": 0.0,
+              "p99": 0.0,
+              "rms": 0.0
+            },
+            "bitwise_equal": true,
+            "candidate_mean": 0.0,
+            "reference_mean": 0.0
+          },
+          "confidence.pae": {
+            "absolute_delta": {
+              "count": 2359296,
+              "max": 0.0,
+              "mean": 0.0,
+              "p50": 0.0,
+              "p90": 0.0,
+              "p95": 0.0,
+              "p99": 0.0,
+              "rms": 0.0
+            },
+            "bitwise_equal": true,
+            "candidate_mean": 29.81506108803669,
+            "reference_mean": 29.81506108803669
+          },
+          "confidence.pde": {
+            "absolute_delta": {
+              "count": 2359296,
+              "max": 0.0,
+              "mean": 0.0,
+              "p50": 0.0,
+              "p90": 0.0,
+              "p95": 0.0,
+              "p99": 0.0,
+              "rms": 0.0
+            },
+            "bitwise_equal": true,
+            "candidate_mean": 17.01281501093793,
+            "reference_mean": 17.01281501093793
+          },
+          "confidence.plddt": {
+            "absolute_delta": {
+              "count": 12138,
+              "max": 0.0,
+              "mean": 0.0,
+              "p50": 0.0,
+              "p90": 0.0,
+              "p95": 0.0,
+              "p99": 0.0,
+              "rms": 0.0
+            },
+            "bitwise_equal": true,
+            "candidate_mean": 37.89925038266524,
+            "reference_mean": 37.89925038266524
+          },
+          "confidence.ptm": {
+            "absolute_delta": {
+              "count": 1,
+              "max": 0.0,
+              "mean": 0.0,
+              "p50": 0.0,
+              "p90": 0.0,
+              "p95": 0.0,
+              "p99": 0.0,
+              "rms": 0.0
+            },
+            "bitwise_equal": true,
+            "candidate_mean": 0.20447438955307007,
+            "reference_mean": 0.20447438955307007
+          },
+          "confidence.sample_ranking_score": {
+            "absolute_delta": {
+              "count": 1,
+              "max": 0.0,
+              "mean": 0.0,
+              "p50": 0.0,
+              "p90": 0.0,
+              "p95": 0.0,
+              "p99": 0.0,
+              "rms": 0.0
+            },
+            "bitwise_equal": true,
+            "candidate_mean": 0.18510061502456665,
+            "reference_mean": 0.18510061502456665
+          }
+        },
+        "largest_residue_deviations": [
+          {
+            "aligned_rmsd_angstrom": 3.1835962228711667e-14,
+            "atom_count": 10,
+            "chain": "A",
+            "insertion": null,
+            "name": "HIS",
+            "residue": 27
+          },
+          {
+            "aligned_rmsd_angstrom": 3.1275989552275635e-14,
+            "atom_count": 8,
+            "chain": "A",
+            "insertion": null,
+            "name": "LEU",
+            "residue": 29
+          },
+          {
+            "aligned_rmsd_angstrom": 3.09936637674401e-14,
+            "atom_count": 7,
+            "chain": "A",
+            "insertion": null,
+            "name": "VAL",
+            "residue": 23
+          },
+          {
+            "aligned_rmsd_angstrom": 3.093786081273495e-14,
+            "atom_count": 9,
+            "chain": "A",
+            "insertion": null,
+            "name": "GLU",
+            "residue": 26
+          },
+          {
+            "aligned_rmsd_angstrom": 3.069552842346873e-14,
+            "atom_count": 5,
+            "chain": "A",
+            "insertion": null,
+            "name": "ALA",
+            "residue": 24
+          },
+          {
+            "aligned_rmsd_angstrom": 3.056159864571351e-14,
+            "atom_count": 7,
+            "chain": "A",
+            "insertion": null,
+            "name": "THR",
+            "residue": 28
+          },
+          {
+            "aligned_rmsd_angstrom": 3.053060833997822e-14,
+            "atom_count": 10,
+            "chain": "A",
+            "insertion": null,
+            "name": "HIS",
+            "residue": 21
+          },
+          {
+            "aligned_rmsd_angstrom": 3.040633126371917e-14,
+            "atom_count": 12,
+            "chain": "A",
+            "insertion": null,
+            "name": "TYR",
+            "residue": 19
+          },
+          {
+            "aligned_rmsd_angstrom": 3.040633126371917e-14,
+            "atom_count": 6,
+            "chain": "A",
+            "insertion": null,
+            "name": "SER",
+            "residue": 25
+          },
+          {
+            "aligned_rmsd_angstrom": 3.037875329067062e-14,
+            "atom_count": 8,
+            "chain": "A",
+            "insertion": null,
+            "name": "ASN",
+            "residue": 20
+          },
+          {
+            "aligned_rmsd_angstrom": 3.03543989777123e-14,
+            "atom_count": 7,
+            "chain": "A",
+            "insertion": null,
+            "name": "PRO",
+            "residue": 22
+          },
+          {
+            "aligned_rmsd_angstrom": 3.0142504003289116e-14,
+            "atom_count": 8,
+            "chain": "A",
+            "insertion": null,
+            "name": "ASP",
+            "residue": 4
+          },
+          {
+            "aligned_rmsd_angstrom": 2.999054699016826e-14,
+            "atom_count": 6,
+            "chain": "A",
+            "insertion": null,
+            "name": "SER",
+            "residue": 11
+          },
+          {
+            "aligned_rmsd_angstrom": 2.9952633240941496e-14,
+            "atom_count": 7,
+            "chain": "A",
+            "insertion": null,
+            "name": "PRO",
+            "residue": 18
+          },
+          {
+            "aligned_rmsd_angstrom": 2.992482544784952e-14,
+            "atom_count": 10,
+            "chain": "A",
+            "insertion": null,
+            "name": "HIS",
+            "residue": 5
+          },
+          {
+            "aligned_rmsd_angstrom": 2.98668978247202e-14,
+            "atom_count": 5,
+            "chain": "A",
+            "insertion": null,
+            "name": "ALA",
+            "residue": 16
+          },
+          {
+            "aligned_rmsd_angstrom": 2.986561843947121e-14,
+            "atom_count": 8,
+            "chain": "A",
+            "insertion": null,
+            "name": "ASN",
+            "residue": 17
+          },
+          {
+            "aligned_rmsd_angstrom": 2.9798706783845235e-14,
+            "atom_count": 9,
+            "chain": "A",
+            "insertion": null,
+            "name": "GLN",
+            "residue": 7
+          },
+          {
+            "aligned_rmsd_angstrom": 2.979520760812385e-14,
+            "atom_count": 11,
+            "chain": "A",
+            "insertion": null,
+            "name": "ARG",
+            "residue": 6
+          },
+          {
+            "aligned_rmsd_angstrom": 2.9777166713245526e-14,
+            "atom_count": 6,
+            "chain": "A",
+            "insertion": null,
+            "name": "SER",
+            "residue": 12
+          }
+        ],
+        "quality_verdict": null,
+        "residue_rmsd_after_all_atom_alignment_angstrom": {
+          "count": 1536,
+          "max": 3.1835962228711667e-14,
+          "mean": 1.2141391410700213e-14,
+          "p50": 1.1573560468754962e-14,
+          "p90": 2.116147795045068e-14,
+          "p95": 2.2636275627490702e-14,
+          "p99": 2.986645003988305e-14,
+          "rms": 1.3496384464505663e-14
+        },
+        "schema_version": 1,
+        "scope": "Prediction regression; no experimental structure truth or selected tolerance."
+      },
+      "npz_cif_hashes_rechecked_locally": true
+    },
+    "bfloat16": {
+      "precision": "bfloat16",
+      "instrumented": true,
+      "quality_verdict": null,
+      "speedup_verdict": null,
+      "invocation_exit_code": 0,
+      "precision_report_pin": {
+        "path": "/media/IntelSSD/fireprot/outputs/of3-pairformer-bfloat16-diagnostic-recovery1-20261010/pairformer-precision.json",
+        "sha256": "9f3f5c53df8a97e7ccc1e5cbf0a157e95610096e54060b232e1c2f8e5c1f4ab3"
+      },
+      "policy": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-diagnostic-recovery1-20261010/bfloat16-policy.json",
+        "sha256": "4e55abfc0475a10b288a587398fa191bf4c21ca73181dd7115e12ce848fbcf5c"
+      },
+      "preparation": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-diagnostic-recovery1-20261010/preparation.json",
+        "sha256": "51ded54c3ba10313e0a1f78ba7d5417db43c05953f302855f3b07617249bc7a8"
+      },
+      "status": "finite_outputs_deviation_assessment_pending",
+      "exact_array_diagnostics": {
+        "confidence.chain_ptm.1": {
+          "bitwise_equal": false,
+          "max_abs_delta": 6.876885890960693e-05,
+          "passed": false
+        },
+        "confidence.disorder": {
+          "bitwise_equal": false,
+          "max_abs_delta": 0.018880188465118408,
+          "passed": false
+        },
+        "confidence.gpde": {
+          "bitwise_equal": false,
+          "max_abs_delta": 0.002354860305786133,
+          "passed": false
+        },
+        "confidence.has_clash": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.iptm": {
+          "bitwise_equal": true,
+          "max_abs_delta": 0.0,
+          "passed": true
+        },
+        "confidence.pae": {
+          "bitwise_equal": false,
+          "max_abs_delta": 17.033403396606445,
+          "passed": false
+        },
+        "confidence.pde": {
+          "bitwise_equal": false,
+          "max_abs_delta": 13.569421768188477,
+          "passed": false
+        },
+        "confidence.plddt": {
+          "bitwise_equal": false,
+          "max_abs_delta": 8.933418273925781,
+          "passed": false
+        },
+        "confidence.ptm": {
+          "bitwise_equal": false,
+          "max_abs_delta": 6.876885890960693e-05,
+          "passed": false
+        },
+        "confidence.sample_ranking_score": {
+          "bitwise_equal": false,
+          "max_abs_delta": 0.009453848004341125,
+          "passed": false
+        },
+        "coordinates": {
+          "bitwise_equal": false,
+          "max_abs_delta": 36.29850673675537,
+          "passed": false
+        }
+      },
+      "exact_array_comparison_exit_code": 1,
+      "accepted": {
+        "path": "/media/IntelSSD/fireprot/outputs/of3-pairformer-bfloat16-diagnostic-recovery1-20261010/accepted.json",
+        "sha256": "8d053c4e60e751fd75e959fda766821571c4ee083e2377dcf7436290ef8faecd"
+      },
+      "npz": {
+        "path": "/media/IntelSSD/fireprot/outputs/of3-pairformer-bfloat16-diagnostic-recovery1-20261010/sample-0.npz",
+        "sha256": "c8c39e5f327e9570e47ff5591a8ddd7514e3f2f44ed3b9b517395ae704d520c9"
+      },
+      "cif": {
+        "path": "/media/IntelSSD/fireprot/outputs/of3-pairformer-bfloat16-diagnostic-recovery1-20261010/native/umem_L01536_6b140cc19f02d9b9/seed_101/umem_L01536_6b140cc19f02d9b9_seed_101_sample_1_model.cif",
+        "sha256": "26ac9aad6254ef697f28df01983fdeae438ff48d7febaea34ff0688e2b91ccad"
+      },
+      "invocation": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-diagnostic-recovery1-20261010/bfloat16-measurement/invocation.json",
+        "sha256": "6ab7c5000bf59f57372ad8b0dab594d90a308c4d5acc2a0b6d5ee190987e5d12"
+      },
+      "raw_collected_sha256": "f7a3bd36e2abd22734e1b2ffe690ea9282589a4713fc0b2cb884e546111c3952",
+      "raw_collected_remote_path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-diagnostic-recovery1-20261010/bfloat16-collected.json",
+      "precision_summary": {
+        "completed": true,
+        "diagnostic": true,
+        "source_pins": {
+          "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3/openfold3/projects/of3_all_atom/model.py": "1cd02947e24bcea5d30dba98122e6a38e707f88ebe1d4c4f2aa16f4b177f7e0c",
+          "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3/openfold3/core/model/latent/pairformer.py": "cdb66c9553ef42b93835dec92f3e6dcf711dbf139a5a59aa1f2561216435af9f",
+          "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3/openfold3/core/model/layers/triangular_multiplicative_update.py": "612caf7abd07a86a7fdf4eda7e0a2170c04b407f9121fc286ab864a648db1ba7"
+        },
+        "base_request_precision": "float32",
+        "effective_precision": {
+          "pairformer_autocast": "bfloat16",
+          "input_and_recycle_embeddings": "float32",
+          "template_and_msa": "float32",
+          "diffusion": "float32",
+          "confidence": "float32",
+          "master_parameters": "float32"
+        },
+        "cycles": [
+          {
+            "index": 0,
+            "completed": true,
+            "autocast": "bfloat16",
+            "returned_dtypes": [
+              "torch.float32",
+              "torch.float32"
+            ],
+            "activation_ranges_by_dtype": {
+              "torch.float32": {
+                "calls": 2207,
+                "minimum": -121498.5859375,
+                "maximum": 108456.96875,
+                "max_abs": 121498.5859375
+              },
+              "torch.bfloat16": {
+                "calls": 8478,
+                "minimum": -34048.0,
+                "maximum": 33024.0,
+                "max_abs": 34048.0
+              }
+            }
+          },
+          {
+            "index": 1,
+            "completed": true,
+            "autocast": "bfloat16",
+            "returned_dtypes": [
+              "torch.float32",
+              "torch.float32"
+            ],
+            "activation_ranges_by_dtype": {
+              "torch.float32": {
+                "calls": 2162,
+                "minimum": -131377.71875,
+                "maximum": 118277.0546875,
+                "max_abs": 131377.71875
+              },
+              "torch.bfloat16": {
+                "calls": 8352,
+                "minimum": -48384.0,
+                "maximum": 45824.0,
+                "max_abs": 48384.0
+              }
+            }
+          },
+          {
+            "index": 2,
+            "completed": true,
+            "autocast": "bfloat16",
+            "returned_dtypes": [
+              "torch.float32",
+              "torch.float32"
+            ],
+            "activation_ranges_by_dtype": {
+              "torch.float32": {
+                "calls": 2162,
+                "minimum": -132349.15625,
+                "maximum": 119000.15625,
+                "max_abs": 132349.15625
+              },
+              "torch.bfloat16": {
+                "calls": 8352,
+                "minimum": -50176.0,
+                "maximum": 47360.0,
+                "max_abs": 50176.0
+              }
+            }
+          },
+          {
+            "index": 3,
+            "completed": true,
+            "autocast": "bfloat16",
+            "returned_dtypes": [
+              "torch.float32",
+              "torch.float32"
+            ],
+            "activation_ranges_by_dtype": {
+              "torch.float32": {
+                "calls": 2162,
+                "minimum": -132379.46875,
+                "maximum": 118977.828125,
+                "max_abs": 132379.46875
+              },
+              "torch.bfloat16": {
+                "calls": 8352,
+                "minimum": -50176.0,
+                "maximum": 47616.0,
+                "max_abs": 50176.0
+              }
+            }
+          }
+        ],
+        "output_dtypes": {
+          "torch.float32": 8709,
+          "torch.bfloat16": 33534
+        },
+        "boundary_calls": {
+          "sample_diffusion": 1,
+          "diffusion_module": 200,
+          "confidence": 1
+        },
+        "matmul_flags": {
+          "allow_tf32": true,
+          "allow_fp16_reduced_precision_reduction": true,
+          "allow_bf16_reduced_precision_reduction": true,
+          "allow_fp16_accumulation": false
+        },
+        "nonfinite": null,
+        "triangle_fp32_fusion_bypassed_cycles": 4,
+        "limits": [
+          "Diagnostic activation scans invalidate performance timing.",
+          "Mixed-precision outputs require independent aligned-coordinate and confidence evaluation.",
+          "No output clamping, changed recycle count or shortened diffusion."
+        ]
+      },
+      "structure_and_confidence": {
+        "aligned_atom_displacement_angstrom": {
+          "count": 12138,
+          "max": 40.545616287322005,
+          "mean": 3.0990177260578835,
+          "p50": 1.62662607540869,
+          "p90": 6.325208754333274,
+          "p95": 11.043225038148087,
+          "p99": 24.036491146558294,
+          "rms": 5.29304415634504
+        },
+        "all_atom": {
+          "aligned_rmsd_angstrom": 5.293044156345034,
+          "atom_count": 12138,
+          "max_abs_coordinate_delta_angstrom": 36.29850673675537,
+          "raw_rmsd_angstrom": 5.296499289567968
+        },
+        "all_ca_pair_distance_absolute_change_angstrom": {
+          "count": 1178880,
+          "max": 34.56343176773031,
+          "mean": 2.0682069801542835,
+          "p50": 1.0584013441228137,
+          "p90": 4.773886567173202,
+          "p95": 7.667232941088438,
+          "p99": 16.37010084306541,
+          "rms": 3.7305515793264217
+        },
+        "ca_after_all_atom_alignment_angstrom": {
+          "count": 1536,
+          "max": 34.82438398124128,
+          "mean": 3.0899919443133483,
+          "p50": 1.6169044350233528,
+          "p90": 6.492532933034667,
+          "p95": 11.14663918541536,
+          "p99": 23.978819093677537,
+          "rms": 5.23874146477107
+        },
+        "ca_own_alignment": {
+          "aligned_rmsd_angstrom": 5.23828016660165,
+          "atom_count": 1536,
+          "max_abs_coordinate_delta_angstrom": 28.221724033355713,
+          "raw_rmsd_angstrom": 5.24046787315604
+        },
+        "confidence": {
+          "confidence.chain_ptm.1": {
+            "absolute_delta": {
+              "count": 1,
+              "max": 6.876885890960693e-05,
+              "mean": 6.876885890960693e-05,
+              "p50": 6.876885890960693e-05,
+              "p90": 6.876885890960693e-05,
+              "p95": 6.876885890960693e-05,
+              "p99": 6.876885890960693e-05,
+              "rms": 6.876885890960693e-05
+            },
+            "bitwise_equal": false,
+            "candidate_mean": 0.20454315841197968,
+            "reference_mean": 0.20447438955307007
+          },
+          "confidence.disorder": {
+            "absolute_delta": {
+              "count": 1,
+              "max": 0.018880188465118408,
+              "mean": 0.018880188465118408,
+              "p50": 0.018880188465118408,
+              "p90": 0.018880188465118408,
+              "p95": 0.018880188465118408,
+              "p99": 0.018880188465118408,
+              "rms": 0.018880188465118408
+            },
+            "bitwise_equal": false,
+            "candidate_mean": 0.3072916567325592,
+            "reference_mean": 0.2884114682674408
+          },
+          "confidence.gpde": {
+            "absolute_delta": {
+              "count": 1,
+              "max": 0.002354860305786133,
+              "mean": 0.002354860305786133,
+              "p50": 0.002354860305786133,
+              "p90": 0.002354860305786133,
+              "p95": 0.002354860305786133,
+              "p99": 0.002354860305786133,
+              "rms": 0.002354860305786133
+            },
+            "bitwise_equal": false,
+            "candidate_mean": 1.6330533027648926,
+            "reference_mean": 1.6354081630706787
+          },
+          "confidence.has_clash": {
+            "absolute_delta": {
+              "count": 1,
+              "max": 0.0,
+              "mean": 0.0,
+              "p50": 0.0,
+              "p90": 0.0,
+              "p95": 0.0,
+              "p99": 0.0,
+              "rms": 0.0
+            },
+            "bitwise_equal": true,
+            "candidate_mean": 0.0,
+            "reference_mean": 0.0
+          },
+          "confidence.iptm": {
+            "absolute_delta": {
+              "count": 1,
+              "max": 0.0,
+              "mean": 0.0,
+              "p50": 0.0,
+              "p90": 0.0,
+              "p95": 0.0,
+              "p99": 0.0,
+              "rms": 0.0
+            },
+            "bitwise_equal": true,
+            "candidate_mean": 0.0,
+            "reference_mean": 0.0
+          },
+          "confidence.pae": {
+            "absolute_delta": {
+              "count": 2359296,
+              "max": 17.033403396606445,
+              "mean": 0.10754442064940879,
+              "p50": 0.031124114990234375,
+              "p90": 0.19253253936767578,
+              "p95": 0.3339085578918457,
+              "p99": 1.495017147064198,
+              "rms": 0.4152911734716108
+            },
+            "bitwise_equal": false,
+            "candidate_mean": 29.78462903612735,
+            "reference_mean": 29.81506108803669
+          },
+          "confidence.pde": {
+            "absolute_delta": {
+              "count": 2359296,
+              "max": 13.569421768188477,
+              "mean": 0.42124427238703294,
+              "p50": 0.1819772720336914,
+              "p90": 1.0337376594543457,
+              "p95": 1.6263885498046875,
+              "p99": 3.659942626953125,
+              "rms": 0.8342413617211951
+            },
+            "bitwise_equal": false,
+            "candidate_mean": 16.94981791734785,
+            "reference_mean": 17.01281501093793
+          },
+          "confidence.plddt": {
+            "absolute_delta": {
+              "count": 12138,
+              "max": 8.933418273925781,
+              "mean": 0.4646161009165773,
+              "p50": 0.21372604370117188,
+              "p90": 0.909673118591311,
+              "p95": 1.7482821464538565,
+              "p99": 4.7451147460937495,
+              "rms": 0.951973317987542
+            },
+            "bitwise_equal": false,
+            "candidate_mean": 37.918130021056776,
+            "reference_mean": 37.89925038266524
+          },
+          "confidence.ptm": {
+            "absolute_delta": {
+              "count": 1,
+              "max": 6.876885890960693e-05,
+              "mean": 6.876885890960693e-05,
+              "p50": 6.876885890960693e-05,
+              "p90": 6.876885890960693e-05,
+              "p95": 6.876885890960693e-05,
+              "p99": 6.876885890960693e-05,
+              "rms": 6.876885890960693e-05
+            },
+            "bitwise_equal": false,
+            "candidate_mean": 0.20454315841197968,
+            "reference_mean": 0.20447438955307007
+          },
+          "confidence.sample_ranking_score": {
+            "absolute_delta": {
+              "count": 1,
+              "max": 0.009453848004341125,
+              "mean": 0.009453848004341125,
+              "p50": 0.009453848004341125,
+              "p90": 0.009453848004341125,
+              "p95": 0.009453848004341125,
+              "p99": 0.009453848004341125,
+              "rms": 0.009453848004341125
+            },
+            "bitwise_equal": false,
+            "candidate_mean": 0.19455446302890778,
+            "reference_mean": 0.18510061502456665
+          }
+        },
+        "largest_residue_deviations": [
+          {
+            "aligned_rmsd_angstrom": 35.55981367062918,
+            "atom_count": 9,
+            "chain": "A",
+            "insertion": null,
+            "name": "GLU",
+            "residue": 156
+          },
+          {
+            "aligned_rmsd_angstrom": 34.23797409976443,
+            "atom_count": 4,
+            "chain": "A",
+            "insertion": null,
+            "name": "GLY",
+            "residue": 154
+          },
+          {
+            "aligned_rmsd_angstrom": 34.13645781775135,
+            "atom_count": 9,
+            "chain": "A",
+            "insertion": null,
+            "name": "LYS",
+            "residue": 153
+          },
+          {
+            "aligned_rmsd_angstrom": 33.51989998080676,
+            "atom_count": 11,
+            "chain": "A",
+            "insertion": null,
+            "name": "ARG",
+            "residue": 163
+          },
+          {
+            "aligned_rmsd_angstrom": 32.83269538033326,
+            "atom_count": 8,
+            "chain": "A",
+            "insertion": null,
+            "name": "ASN",
+            "residue": 149
+          },
+          {
+            "aligned_rmsd_angstrom": 32.49534230451759,
+            "atom_count": 9,
+            "chain": "A",
+            "insertion": null,
+            "name": "LYS",
+            "residue": 148
+          },
+          {
+            "aligned_rmsd_angstrom": 30.663719554682064,
+            "atom_count": 7,
+            "chain": "A",
+            "insertion": null,
+            "name": "THR",
+            "residue": 157
+          },
+          {
+            "aligned_rmsd_angstrom": 30.517817567996914,
+            "atom_count": 6,
+            "chain": "A",
+            "insertion": null,
+            "name": "SER",
+            "residue": 160
+          },
+          {
+            "aligned_rmsd_angstrom": 30.060078872614472,
+            "atom_count": 7,
+            "chain": "A",
+            "insertion": null,
+            "name": "THR",
+            "residue": 151
+          },
+          {
+            "aligned_rmsd_angstrom": 29.20215355038942,
+            "atom_count": 5,
+            "chain": "A",
+            "insertion": null,
+            "name": "ALA",
+            "residue": 159
+          },
+          {
+            "aligned_rmsd_angstrom": 28.775458506426904,
+            "atom_count": 7,
+            "chain": "A",
+            "insertion": null,
+            "name": "VAL",
+            "residue": 155
+          },
+          {
+            "aligned_rmsd_angstrom": 27.252002592737867,
+            "atom_count": 7,
+            "chain": "A",
+            "insertion": null,
+            "name": "THR",
+            "residue": 164
+          },
+          {
+            "aligned_rmsd_angstrom": 24.942854336907647,
+            "atom_count": 7,
+            "chain": "A",
+            "insertion": null,
+            "name": "VAL",
+            "residue": 150
+          },
+          {
+            "aligned_rmsd_angstrom": 24.718012293425137,
+            "atom_count": 7,
+            "chain": "A",
+            "insertion": null,
+            "name": "VAL",
+            "residue": 152
+          },
+          {
+            "aligned_rmsd_angstrom": 24.67824513502631,
+            "atom_count": 4,
+            "chain": "A",
+            "insertion": null,
+            "name": "GLY",
+            "residue": 158
+          },
+          {
+            "aligned_rmsd_angstrom": 24.454790769895578,
+            "atom_count": 5,
+            "chain": "A",
+            "insertion": null,
+            "name": "ALA",
+            "residue": 146
+          },
+          {
+            "aligned_rmsd_angstrom": 23.71268117846184,
+            "atom_count": 9,
+            "chain": "A",
+            "insertion": null,
+            "name": "LYS",
+            "residue": 141
+          },
+          {
+            "aligned_rmsd_angstrom": 23.308209784908247,
+            "atom_count": 9,
+            "chain": "A",
+            "insertion": null,
+            "name": "LYS",
+            "residue": 142
+          },
+          {
+            "aligned_rmsd_angstrom": 23.164045608285857,
+            "atom_count": 7,
+            "chain": "A",
+            "insertion": null,
+            "name": "PRO",
+            "residue": 139
+          },
+          {
+            "aligned_rmsd_angstrom": 23.01730582235269,
+            "atom_count": 8,
+            "chain": "A",
+            "insertion": null,
+            "name": "ASP",
+            "residue": 167
+          }
+        ],
+        "quality_verdict": null,
+        "residue_rmsd_after_all_atom_alignment_angstrom": {
+          "count": 1536,
+          "max": 35.55981367062918,
+          "mean": 3.1712331799630173,
+          "p50": 1.6494015498024341,
+          "p90": 6.712607145390075,
+          "p95": 11.444947579457573,
+          "p99": 24.195052412893837,
+          "rms": 5.396407602215284
+        },
+        "schema_version": 1,
+        "scope": "Prediction regression; no experimental structure truth or selected tolerance."
+      },
+      "npz_cif_hashes_rechecked_locally": true
+    },
+    "float16": {
+      "precision": "float16",
+      "instrumented": true,
+      "quality_verdict": null,
+      "speedup_verdict": null,
+      "invocation_exit_code": 1,
+      "precision_report_pin": {
+        "path": "/media/IntelSSD/fireprot/outputs/of3-pairformer-float16-diagnostic-recovery1-20261010/pairformer-precision.json",
+        "sha256": "3d374cbfda51cefb05aa4dd3830c896d2d9bed9c5aa34d6e8023082f673deba8"
+      },
+      "policy": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-diagnostic-recovery1-20261010/float16-policy.json",
+        "sha256": "f8ab7b82dda361749670ba5c84bb6f130b412253c89eeb1771b8bcfdb8b01bc1"
+      },
+      "preparation": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-diagnostic-recovery1-20261010/preparation.json",
+        "sha256": "51ded54c3ba10313e0a1f78ba7d5417db43c05953f302855f3b07617249bc7a8"
+      },
+      "status": "nonfinite_rejected",
+      "stderr": {
+        "path": "/media/IntelSSD/fireprot/outputs/of3-pairformer-float16-diagnostic-recovery1-20261010/stderr.log",
+        "sha256": "48668e6ad95d9d1f7f828b8e0424fb9a9112ca00335b3457dc9d60d5c23860b4"
+      },
+      "raw_collected_sha256": "7e31537772277d8dfe4af1cb93f68fcfc578aacc8a943edd5a762f6a20ad6d78",
+      "raw_collected_remote_path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-diagnostic-recovery1-20261010/float16-collected.json",
+      "precision_summary": {
+        "completed": false,
+        "diagnostic": true,
+        "source_pins": {
+          "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3/openfold3/projects/of3_all_atom/model.py": "1cd02947e24bcea5d30dba98122e6a38e707f88ebe1d4c4f2aa16f4b177f7e0c",
+          "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3/openfold3/core/model/latent/pairformer.py": "cdb66c9553ef42b93835dec92f3e6dcf711dbf139a5a59aa1f2561216435af9f",
+          "/media/PM982/engramfold/folding_e2e_20260921/repos/openfold3/openfold3/core/model/layers/triangular_multiplicative_update.py": "612caf7abd07a86a7fdf4eda7e0a2170c04b407f9121fc286ab864a648db1ba7"
+        },
+        "base_request_precision": "float32",
+        "effective_precision": {
+          "pairformer_autocast": "float16",
+          "input_and_recycle_embeddings": "float32",
+          "template_and_msa": "float32",
+          "diffusion": "float32",
+          "confidence": "float32",
+          "master_parameters": "float32"
+        },
+        "cycles": [
+          {
+            "index": 0,
+            "completed": false,
+            "autocast": "float16",
+            "returned_dtypes": [],
+            "activation_ranges_by_dtype": {
+              "torch.float32": {
+                "calls": 7,
+                "minimum": -5.229698657989502,
+                "maximum": 2.8914666175842285,
+                "max_abs": 5.229698657989502
+              },
+              "torch.float16": {
+                "calls": 14,
+                "minimum": -32.6875,
+                "maximum": 33.6875,
+                "max_abs": 33.6875
+              }
+            }
+          }
+        ],
+        "output_dtypes": {
+          "torch.float32": 11,
+          "torch.float16": 15
+        },
+        "boundary_calls": {},
+        "matmul_flags": {
+          "allow_tf32": true,
+          "allow_fp16_reduced_precision_reduction": true,
+          "allow_bf16_reduced_precision_reduction": true,
+          "allow_fp16_accumulation": false
+        },
+        "nonfinite": {
+          "cycle": 1,
+          "module": "blocks.0.pair_stack.tri_mul_out.layer_norm_out",
+          "dtype": "torch.float16",
+          "shape": [
+            1,
+            1536,
+            256,
+            128
+          ],
+          "minimum": "nan",
+          "maximum": "nan"
+        },
+        "triangle_fp32_fusion_bypassed_cycles": 1,
+        "limits": [
+          "Diagnostic activation scans invalidate performance timing.",
+          "Mixed-precision outputs require independent aligned-coordinate and confidence evaluation.",
+          "No output clamping, changed recycle count or shortened diffusion."
+        ]
+      }
+    }
+  },
+  "metrics_build": {
+    "command": [
+      "rustc",
+      "--edition=2024",
+      "-O",
+      "/home/husrcf/Code/fireprot/experiments/openfold3_precision/deviation.rs",
+      "-L",
+      "dependency=/home/husrcf/Code/fireprot/target/release/deps",
+      "--extern",
+      "serde_json=/home/husrcf/Code/fireprot/target/release/deps/libserde_json-cceb10acde35fd52.rlib",
+      "--extern",
+      "nalgebra=/home/husrcf/Code/fireprot/target/release/deps/libnalgebra-6cd083da8cd94a18.rlib",
+      "--extern",
+      "fireprot_validation=/home/husrcf/Code/fireprot/target/release/libfireprot_validation.rlib"
+    ],
+    "pins": {
+      "/home/husrcf/Code/fireprot/experiments/openfold3_precision/deviation.rs": "d8cf437c6a06d5294a7164ad0cb0073b2ed7df3ded24d4c0d6c55cab20ccc017",
+      "/home/husrcf/Code/fireprot/target/release/deps/libserde_json-cceb10acde35fd52.rlib": "5ffcfc07d378bb2bf28c8da4310a40836818d2f5b9589b5b9d281e34b7dbeb0a",
+      "/home/husrcf/Code/fireprot/target/release/deps/libnalgebra-6cd083da8cd94a18.rlib": "910cd1f247eb8deea02aac74020a97aa81fe6056cc762cd90d6c916025293c5a",
+      "/home/husrcf/Code/fireprot/target/release/libfireprot_validation.rlib": "27a80e331d8ab987046bc05883f7d3b096e7f7195c4e61745fdd9d1657ab5e10",
+      "/tmp/fireprot-of3-precision-deviation-20261015": "0aabd50c0dbfd202affc82b6b3d5cc65c61f0c1008318776da7de7c211e30067"
+    }
+  },
+  "checks": {
+    "rust_alignment_unit_tests": 2,
+    "fp32_self_comparison": "zero raw coordinate and confidence deltas; aligned residual ~1e-14 A",
+    "bf16_policy_and_accepted_current_remote_hashes_rechecked": true
+  },
+  "limits": [
+    "One prediction/input/seed comparison, not experimental ground truth.",
+    "Baseline mean atom pLDDT is approximately 37.9; no high-confidence-only analysis yet.",
+    "First nonfinite was observed at layer_norm_out; unobserved functional intermediates need direct diagnosis."
+  ]
+}

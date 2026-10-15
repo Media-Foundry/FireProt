@@ -125,6 +125,53 @@ class ScopeTest(unittest.TestCase):
                     self.model.pairformer_stack(torch.ones(1), torch.ones(1))
         self.assertFalse(self.report()['completed'])
 
+    @torch.inference_mode()
+    def test_triangle_protection_disables_autocast_and_restores(self):
+        original = Triangle._inference_forward
+        self.model.pairformer_stack.triangle = Triangle()
+        self.model.pairformer_stack.inject = self.model.pairformer_stack.triangle._inference_forward
+        # Resolve the patched method at call time, as upstream forward does.
+        self.model.pairformer_stack.inject = lambda: self.model.pairformer_stack.triangle._inference_forward()
+        with patch('torch.amp.autocast', side_effect=lambda *a, **k: nullcontext()) as amp:
+            with pairformer_precision_scope(self.model, self.output, 'float16',
+                                            triangle_precision='float32'):
+                for _ in range(2):
+                    s, z = self.model.pairformer_stack(torch.ones(1), torch.ones(1))
+                self.model.sample_diffusion(s)
+                self.model.aux_heads(z)
+        self.assertEqual(sum(c.kwargs.get('enabled') is False for c in amp.call_args_list), 2)
+        self.assertEqual(self.report()['triangle_fp32_calls'], 2)
+        self.assertTrue(self.report()['completed'])
+        self.assertIs(Triangle._inference_forward, original)
+
+    @torch.inference_mode()
+    def test_triangle_protection_rejects_missing_coverage(self):
+        self.model.pairformer_stack.triangle = Triangle()
+        with self.assertRaisesRegex(RuntimeError, 'Incomplete FP32 triangle coverage'):
+            with pairformer_precision_scope(self.model, self.output, 'float16',
+                                            triangle_precision='float32'):
+                for _ in range(2):
+                    s, z = self.model.pairformer_stack(torch.ones(1), torch.ones(1))
+                self.model.sample_diffusion(s)
+                self.model.aux_heads(z)
+        self.assertFalse(self.report()['completed'])
+
+    @torch.inference_mode()
+    def test_triangle_protection_restores_after_failure(self):
+        original = Triangle._inference_forward
+        self.model.pairformer_stack.triangle = Triangle()
+        def fail():
+            self.model.pairformer_stack.triangle._inference_forward()
+            raise RuntimeError('injected triangle failure')
+        self.model.pairformer_stack.inject = fail
+        with self.assertRaisesRegex(RuntimeError, 'injected triangle failure'):
+            with pairformer_precision_scope(self.model, self.output, 'float16',
+                                            triangle_precision='float32'):
+                self.model.pairformer_stack(torch.ones(1), torch.ones(1))
+        self.assertIs(Triangle._inference_forward, original)
+        self.assertFalse(self.report()['completed'])
+        self.assertEqual(self.report()['triangle_fp32_calls'], 1)
+
 
 if __name__ == '__main__':
     unittest.main()

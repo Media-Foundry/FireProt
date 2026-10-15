@@ -1,5 +1,9 @@
 # Pinned batch inference
 
+For multiple sequences sharing a resident protein language model and actual GPU
+microbatches, use the separate [pLM batch workload](plm-batch.md). The command
+described below retains independent model processes and per-job verification.
+
 `fireprot infer-batch MANIFEST` executes an ordered list of requests through the
 same Rust preflight, worker supervision, output acceptance and archive sealing as
 `fireprot infer`. The runtime owns sequencing and stop-on-failure behavior.

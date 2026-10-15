@@ -25,6 +25,9 @@ pub struct TensorDescriptor {
 #[serde(deny_unknown_fields)]
 pub struct Prediction {
     pub sample: u32,
+    /// Schema 6 uses sample as the original input index, not a folding sample.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub input_id: Option<String>,
     pub archive: PathBuf,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub structure: Option<PathBuf>,
@@ -41,6 +44,8 @@ pub struct Bundle {
     pub predictions: Vec<Prediction>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub input_snapshot: Option<PathBuf>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub batch_groups: Option<Vec<Vec<usize>>>,
     pub model_seconds: f64,
     pub request_seconds: f64,
     pub environment: BTreeMap<String, String>,
@@ -60,7 +65,7 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
     }
     let bundle: Bundle =
         serde_json::from_slice(&fs::read(manifest)?).map_err(|e| Error::Schema(e.to_string()))?;
-    if !matches!(bundle.schema_version, 1..=5)
+    if !matches!(bundle.schema_version, 1..=6)
         || bundle.run_id != r.run_id
         || bundle.seed != r.seed
         || bundle.workload != r.workload
@@ -80,7 +85,7 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
         }
     }
     let samples = match r.workload {
-        Workload::Plm { .. } => 1,
+        Workload::Plm { ref batch, .. } => batch.as_ref().map_or(1, |b| b.items as u32),
         Workload::Protenix { samples, .. }
         | Workload::Atlasfold { samples, .. }
         | Workload::Openfold3 { samples, .. }
@@ -89,12 +94,14 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
     if bundle.predictions.len() != samples as usize {
         return Err(schema("prediction sample count mismatch"));
     }
-    let sequence = if matches!(bundle.schema_version, 3..=5) {
+    let mut batch_plan = None;
+    let sequence = if matches!(bundle.schema_version, 3..=6) {
         if !matches!(
             (&r.workload, bundle.schema_version),
             (Workload::Atlasfold { .. }, 3)
                 | (Workload::Esmfold2 { .. }, 4)
-                | (Workload::Plm { .. }, 5)
+                | (Workload::Plm { batch: None, .. }, 5)
+                | (Workload::Plm { batch: Some(_), .. }, 6)
         ) {
             return Err(schema("input binding schema does not match the model"));
         }
@@ -123,22 +130,44 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
         if format!("{:x}", Sha256::digest(&bytes)) != r.input.sha256 {
             return Err(schema("input snapshot differs from the request input pin"));
         }
-        Some(crate::atlasfold::input_sequence(
-            &bytes,
-            r.input.path.extension().is_some_and(|e| e == "json"),
-        )?)
+        if let Workload::Plm {
+            batch: Some(options),
+            ..
+        } = &r.workload
+        {
+            let plan = fireprot_core::plm_batch::plan(&bytes, options).map_err(Error::Schema)?;
+            if bundle.batch_groups.as_ref() != Some(&plan.groups) {
+                return Err(schema("pLM batch grouping differs from Rust plan"));
+            }
+            batch_plan = Some(plan);
+            None
+        } else {
+            Some(crate::atlasfold::input_sequence(
+                &bytes,
+                r.input.path.extension().is_some_and(|e| e == "json"),
+            )?)
+        }
     } else {
         if bundle.input_snapshot.is_some() {
             return Err(schema("input snapshot requires bundle schema 3, 4 or 5"));
         }
         None
     };
+    if batch_plan.is_none() && bundle.batch_groups.is_some() {
+        return Err(schema("batch groups require a schema 6 pLM batch"));
+    }
     let mut ids = BTreeSet::new();
     let mut archives = BTreeSet::new();
     let mut structures = BTreeSet::new();
-    for prediction in &bundle.predictions {
+    for (position, prediction) in bundle.predictions.iter().enumerate() {
         if prediction.sample >= samples || !ids.insert(prediction.sample) {
             return Err(schema("duplicate or invalid sample ID"));
+        }
+        if batch_plan.is_none() && prediction.input_id.is_some() {
+            return Err(schema("input ID requires a schema 6 pLM batch"));
+        }
+        if batch_plan.is_some() && prediction.sample as usize != position {
+            return Err(schema("pLM batch outputs must retain input order"));
         }
         if prediction.archive.as_os_str().is_empty()
             || !prediction
@@ -173,21 +202,26 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
             arrays.insert(name, array);
         }
         if let Workload::Plm { model_name, .. } = &r.workload {
-            if bundle.schema_version != 5
+            if !matches!(bundle.schema_version, 5 | 6)
                 || prediction.structure.is_some()
                 || prediction.confidence.is_some()
             {
                 return Err(schema(
-                    "standalone pLM requires schema 5 without structures/confidence",
+                    "standalone pLM requires schema 5/6 without structures/confidence",
                 ));
             }
-            crate::plm::validate(
-                model_name,
+            let input_sequence = if let Some(plan) = &batch_plan {
+                let item = &plan.sequences[prediction.sample as usize];
+                if prediction.input_id.as_ref() != Some(&item.id) {
+                    return Err(schema("pLM batch input ID/index mismatch"));
+                }
+                item.sequence.as_str()
+            } else {
                 sequence
                     .as_deref()
-                    .ok_or_else(|| schema("missing pLM input binding"))?,
-                &arrays,
-            )?;
+                    .ok_or_else(|| schema("missing pLM input binding"))?
+            };
+            crate::plm::validate(model_name, input_sequence, &arrays)?;
         } else {
             validate_model(&r.workload, &arrays, prediction.confidence.as_ref())?;
         }
@@ -262,7 +296,8 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
 pub fn validate_current(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bundle> {
     let bundle = validate(request, verified)?;
     let expected = match request.as_request().workload {
-        Workload::Plm { .. } => 5,
+        Workload::Plm { batch: Some(_), .. } => 6,
+        Workload::Plm { batch: None, .. } => 5,
         Workload::Atlasfold { .. } => 3,
         Workload::Esmfold2 { .. } => 4,
         _ => 2,

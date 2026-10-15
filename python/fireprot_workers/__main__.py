@@ -20,7 +20,10 @@ def main():
         import torch
         channel.ready(torch)
         if request['workload']['model'] == 'plm':
-            from .plm import predict
+            if request['workload'].get('batch') is not None:
+                from .plm_batch import predict
+            else:
+                from .plm import predict
         elif request['workload']['model'] == 'openfold3':
             from .openfold3 import predict
         elif request['workload']['model'] == 'atlasfold':

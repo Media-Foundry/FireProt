@@ -155,5 +155,15 @@ fn _fireprot_bridge(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(build::accept_kernel, module)?)?;
     module.add_function(wrap_pyfunction!(build::build_torch, module)?)?;
     module.add_function(wrap_pyfunction!(build::build_hip, module)?)?;
+    module.add_function(wrap_pyfunction!(plan_plm_batch, module)?)?;
     Ok(())
+}
+
+#[pyfunction]
+fn plan_plm_batch(input: &str, options: &str) -> PyResult<String> {
+    let options =
+        serde_json::from_str(options).map_err(|e| PyValueError::new_err(e.to_string()))?;
+    let plan = fireprot_core::plm_batch::plan(input.as_bytes(), &options)
+        .map_err(PyValueError::new_err)?;
+    serde_json::to_string(&plan).map_err(|e| PyValueError::new_err(e.to_string()))
 }

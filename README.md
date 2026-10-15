@@ -148,6 +148,26 @@ local loader (14.564 s); no speedup over the official ESM3 implementation is cla
 These results do not change folding speedup rows.
 See [commands, native precision and performance scope](docs/protein-language-models.md).
 
+**Model-resident pLM batches** are also available through the same commands.
+An explicit `workload.batch` and pinned sequence manifest load the model once,
+with Rust controlling length grouping and microbatch limits. All four native
+entries pass equal-length B4, mixed-length B4 and resident B1 output checks.
+N1000 HIP batches for AtlasLM/ESMC and the ESM2 optimization retain bitwise
+equality to the official implementation with the **same batch grouping**;
+singleton-to-batch drift is reported separately. See
+[batch inputs, commands and measured scope](docs/plm-batch.md).
+For the same four-sequence N1000 batch, complete invocation improves
+**16.045 → 15.053 s (1.066x) for AtlasLM** and
+**40.347 → 20.026 s (2.015x) for ESM2**. ESMC's B4 HIP route does not improve
+complete invocation (**0.964x**), so native remains recommended for a single B4
+job. These comparisons use native B4 as the reference and do not measure the
+benefit of replacing four independent model loads with one resident batch.
+That separate AtlasLM comparison is now measured: four **already optimized**
+singleton invocations total **58.967 s**, versus **15.204 s** for one optimized B4
+invocation (**3.879x aggregate throughput**, three AB/BA/AB pairs). Each arm
+matches its own official grouping bitwise. This is a four-sequence workload
+result, not a 3.879x improvement to single-sequence latency or folding.
+
 ## Outputs and measurement
 
 A successful request writes `accepted.json`, `supervisor.json`, provenance and

@@ -157,7 +157,12 @@ fn run_loaded(
             path,
         });
     }
-    if prepared.request().as_request().backend != fireprot_core::request::Backend::Native {
+    if prepared.request().as_request().backend != fireprot_core::request::Backend::Native
+        || matches!(
+            &prepared.request().as_request().workload,
+            fireprot_core::request::Workload::Plm { batch: Some(_), .. }
+        )
+    {
         let path = env
             .iter()
             .find(|(key, _)| key == "FIREPROT_BRIDGE_LIBRARY")

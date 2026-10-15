@@ -55,6 +55,8 @@ pub enum Workload {
     Plm {
         model_name: String,
         precision: Precision,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        batch: Option<crate::plm_batch::Options>,
     },
     Protenix {
         model_name: String,
@@ -129,6 +131,7 @@ impl Workload {
         if let Self::Plm {
             model_name,
             precision,
+            batch,
         } = self
         {
             if !matches!(
@@ -141,6 +144,11 @@ impl Workload {
             }
             if *precision != Precision::Native {
                 return Err(RequestError::UnsupportedPrecision);
+            }
+            if let Some(options) = batch {
+                options
+                    .validate()
+                    .map_err(|_| RequestError::EmptyField("invalid pLM batch options"))?;
             }
             if backend != Backend::Native
                 && !(backend == Backend::Fireprot && model_name != "esm3-open")

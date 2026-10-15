@@ -1,5 +1,9 @@
 # Standalone protein language models
 
+For model-resident multi-sequence inference, explicit GPU microbatching and its
+separate numerical/performance contract, see [pLM batches](plm-batch.md).
+The single-sequence results below retain their original scope.
+
 FireProt provides separate Rust commands for protein language model inference:
 
 ```text

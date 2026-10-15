@@ -302,6 +302,17 @@ features match the freshly generated tensors. See [Mini-ESM](protenix-mini-esm.m
 
 ## Ordered batch execution
 
+Standalone pLM requests can instead declare an explicit optional `batch` contract.
+`fireprot-core::plm_batch` validates the input manifest and owns deterministic
+length grouping under microbatch-size and padded-token limits. The Rust bridge
+provides the plan to a single resident tensor worker; Python uses upstream
+tokenizers, masks, native precision and heads without implementing scheduling
+policy. Schema 6 independently recomputes the plan from the hash-bound snapshot
+and binds every trimmed output to its original index and input ID. The native
+batch path records its Rust bridge in execution identity as well. Existing
+single-sequence requests retain their wire identity and schema 5 outputs.
+See [pLM batching](plm-batch.md) for numerical reference and qualification scope.
+
 `fireprot-runtime::batch` owns pinned request/profile snapshots, duplicate-output
 checks, sequential job transitions, cancellation and a shared deadline. The CLI
 validates execution-profile schemas before starting the coordinator and supplies

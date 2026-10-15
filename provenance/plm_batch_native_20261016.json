@@ -1,0 +1,2214 @@
+{
+  "schema_version": 1,
+  "status": "native batching and entry qualification; no complete E2E speedup claim",
+  "remote_root": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016",
+  "numerical_policy": "User approved identical native batch grouping as the strict bitwise reference; singleton drift reported separately.",
+  "screens": {
+    "esm2-3b": {
+      "model": "esm2-3b",
+      "seed": 101,
+      "precision": "native",
+      "hip_visible_devices": "6",
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "boundary": "warm resident forward only; excludes tokenization, loading, export and validation",
+      "cache_state": "unflushed; two warmups per arm per pair",
+      "inputs": "deterministic rotations/truncations; development data, not independent test set",
+      "request_sha256": "b45ddf8fb2d62c65f04d22ff6cb48ad3c6c8109c619205527e5780c42e5e8482",
+      "cases": [
+        {
+          "lengths": [
+            1000,
+            1000
+          ],
+          "singleton_drift": [
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 1.430511474609375e-05,
+                "mean_abs": 3.758563593692088e-07,
+                "different_values": 2541494
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 5.054473876953125e-05,
+                "mean_abs": 4.247579909133492e-06,
+                "different_values": 31578
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 1.8596649169921875e-05,
+                "mean_abs": 3.6730850183630537e-07,
+                "different_values": 2541209
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 8.299946784973145e-05,
+                "mean_abs": 4.387678018247243e-06,
+                "different_values": 31678
+              }
+            }
+          ],
+          "pairs": [
+            {
+              "serial": {
+                "seconds": [
+                  0.49092741101048887,
+                  0.4869086369872093,
+                  0.48744388099294156
+                ],
+                "peak_allocated_bytes": 11985461248
+              },
+              "batch": {
+                "seconds": [
+                  0.45866983104497194,
+                  0.46167727501597255,
+                  0.45915508293546736
+                ],
+                "peak_allocated_bytes": 12360381440
+              }
+            },
+            {
+              "batch": {
+                "seconds": [
+                  0.4587098970077932,
+                  0.4587431160034612,
+                  0.45897159597370774
+                ],
+                "peak_allocated_bytes": 12360381440
+              },
+              "serial": {
+                "seconds": [
+                  0.4861269990215078,
+                  0.4861022370168939,
+                  0.48580628994386643
+                ],
+                "peak_allocated_bytes": 11985461248
+              }
+            },
+            {
+              "serial": {
+                "seconds": [
+                  0.4864148990018293,
+                  0.48555882601067424,
+                  0.48581327800638974
+                ],
+                "peak_allocated_bytes": 11985461248
+              },
+              "batch": {
+                "seconds": [
+                  0.45858888898510486,
+                  0.45894459600094706,
+                  0.4584820559248328
+                ],
+                "peak_allocated_bytes": 12360381440
+              }
+            }
+          ],
+          "medians": {
+            "serial": 0.4861269990215078,
+            "batch": 0.4587431160034612
+          },
+          "forward_throughput_speedup": 1.0596932838068789,
+          "batch_sequences_per_second": 4.359738446701639
+        },
+        {
+          "lengths": [
+            1000,
+            1000,
+            1000,
+            1000
+          ],
+          "singleton_drift": [
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 1.621246337890625e-05,
+                "mean_abs": 3.7299366795195965e-07,
+                "different_values": 2540951
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 5.817413330078125e-05,
+                "mean_abs": 4.363218067737762e-06,
+                "different_values": 31609
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 1.621246337890625e-05,
+                "mean_abs": 3.63046780194054e-07,
+                "different_values": 2541079
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 6.29425048828125e-05,
+                "mean_abs": 4.403388174978318e-06,
+                "different_values": 31635
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 1.2874603271484375e-05,
+                "mean_abs": 3.5921758012591454e-07,
+                "different_values": 2540657
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 5.817413330078125e-05,
+                "mean_abs": 4.432758942130022e-06,
+                "different_values": 31674
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 1.049041748046875e-05,
+                "mean_abs": 3.5875103776561446e-07,
+                "different_values": 2540614
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 5.91278076171875e-05,
+                "mean_abs": 4.341115527495276e-06,
+                "different_values": 31680
+              }
+            }
+          ],
+          "pairs": [
+            {
+              "serial": {
+                "seconds": [
+                  0.9716108309803531,
+                  0.9717273709829897,
+                  0.9719920289935544
+                ],
+                "peak_allocated_bytes": 11985493504
+              },
+              "batch": {
+                "seconds": [
+                  0.8966760330367833,
+                  0.8963812760775909,
+                  0.8966629169881344
+                ],
+                "peak_allocated_bytes": 13112711680
+              }
+            },
+            {
+              "batch": {
+                "seconds": [
+                  0.8965637419605628,
+                  0.8965472070267424,
+                  0.8966102759586647
+                ],
+                "peak_allocated_bytes": 13112711680
+              },
+              "serial": {
+                "seconds": [
+                  0.9715432939119637,
+                  0.9754566139308736,
+                  0.9803708769613877
+                ],
+                "peak_allocated_bytes": 11985493504
+              }
+            },
+            {
+              "serial": {
+                "seconds": [
+                  0.9752391300862655,
+                  0.9711393649922684,
+                  0.9762551679741591
+                ],
+                "peak_allocated_bytes": 11985493504
+              },
+              "batch": {
+                "seconds": [
+                  0.8968959769699723,
+                  0.8966772019630298,
+                  0.8963878130307421
+                ],
+                "peak_allocated_bytes": 13112711680
+              }
+            }
+          ],
+          "medians": {
+            "serial": 0.9719920289935544,
+            "batch": 0.8966102759586647
+          },
+          "forward_throughput_speedup": 1.0840741569176093,
+          "batch_sequences_per_second": 4.461247107304408
+        },
+        {
+          "lengths": [
+            600,
+            800,
+            900,
+            1000
+          ],
+          "singleton_drift": [
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 6.67572021484375e-06,
+                "mean_abs": 3.317194341434515e-07,
+                "different_values": 1526723
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 4.1961669921875e-05,
+                "mean_abs": 3.7919930946372915e-06,
+                "different_values": 18997
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 1.71661376953125e-05,
+                "mean_abs": 3.8062444218667224e-07,
+                "different_values": 2033906
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 7.05718994140625e-05,
+                "mean_abs": 4.710133453045273e-06,
+                "different_values": 25389
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 1.3828277587890625e-05,
+                "mean_abs": 3.627855846843886e-07,
+                "different_values": 2287371
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 5.340576171875e-05,
+                "mean_abs": 4.321049800637411e-06,
+                "different_values": 28454
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 1.049041748046875e-05,
+                "mean_abs": 3.5875103776561446e-07,
+                "different_values": 2540614
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 5.91278076171875e-05,
+                "mean_abs": 4.341115527495276e-06,
+                "different_values": 31680
+              }
+            }
+          ],
+          "pairs": [
+            {
+              "serial": {
+                "seconds": [
+                  0.804243724909611,
+                  0.8041490089381114,
+                  0.8049771010410041
+                ],
+                "peak_allocated_bytes": 11985488384
+              },
+              "batch": {
+                "seconds": [
+                  0.9708818839862943,
+                  0.9681036800611764,
+                  0.9674991499632597
+                ],
+                "peak_allocated_bytes": 13112710656
+              }
+            },
+            {
+              "batch": {
+                "seconds": [
+                  0.9678312150062993,
+                  0.9749029870145023,
+                  0.9679649890167639
+                ],
+                "peak_allocated_bytes": 13112710656
+              },
+              "serial": {
+                "seconds": [
+                  0.8036357959499583,
+                  0.8038652769755572,
+                  0.8041193690150976
+                ],
+                "peak_allocated_bytes": 11985488384
+              }
+            },
+            {
+              "serial": {
+                "seconds": [
+                  0.8040787030477077,
+                  0.8036807409953326,
+                  0.8042545709758997
+                ],
+                "peak_allocated_bytes": 11985488384
+              },
+              "batch": {
+                "seconds": [
+                  0.9678192579885945,
+                  0.9676175389904529,
+                  0.9676563859684393
+                ],
+                "peak_allocated_bytes": 13112710656
+              }
+            }
+          ],
+          "medians": {
+            "serial": 0.8041193690150976,
+            "batch": 0.9678312150062993
+          },
+          "forward_throughput_speedup": 0.8308466977993305,
+          "batch_sequences_per_second": 4.132952045748974
+        }
+      ],
+      "singleton_wrapper_check": {
+        "tokens": {
+          "bitwise_equal": true,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "different_values": 0
+        },
+        "embeddings": {
+          "bitwise_equal": true,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "different_values": 0
+        },
+        "logits": {
+          "bitwise_equal": true,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "different_values": 0
+        }
+      }
+    },
+    "atlaslm": {
+      "model": "atlaslm-3b",
+      "seed": 102,
+      "precision": "native",
+      "hip_visible_devices": "6",
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "boundary": "warm resident forward only; excludes tokenization, loading, export and validation",
+      "cache_state": "unflushed; two warmups per arm per pair",
+      "inputs": "deterministic rotations/truncations; development data, not independent test set",
+      "request_sha256": "adf84c2e9a916f3e75d641635a5db5b72e99cc23599dd2f4de294863c40ab142",
+      "cases": [
+        {
+          "lengths": [
+            1000,
+            1000
+          ],
+          "singleton_drift": [
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 0.07709646224975586,
+                "mean_abs": 0.0014534239890053868,
+                "different_values": 2308605
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 0.875,
+                "mean_abs": 0.026249824091792107,
+                "different_values": 26009
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 0.09948645532131195,
+                "mean_abs": 0.0015380949480459094,
+                "different_values": 2308600
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 1.0,
+                "mean_abs": 0.02745409682393074,
+                "different_values": 26451
+              }
+            }
+          ],
+          "pairs": [
+            {
+              "serial": {
+                "seconds": [
+                  0.2096456829458475,
+                  0.2096612979657948,
+                  0.20950729097239673
+                ],
+                "peak_allocated_bytes": 6549917696
+              },
+              "batch": {
+                "seconds": [
+                  0.196741227991879,
+                  0.19681518198922276,
+                  0.1968737910501659
+                ],
+                "peak_allocated_bytes": 6828368896
+              }
+            },
+            {
+              "batch": {
+                "seconds": [
+                  0.1966877260711044,
+                  0.196636653970927,
+                  0.19663752301130444
+                ],
+                "peak_allocated_bytes": 6828368896
+              },
+              "serial": {
+                "seconds": [
+                  0.20998752396553755,
+                  0.209513577981852,
+                  0.20965385006275028
+                ],
+                "peak_allocated_bytes": 6549917696
+              }
+            },
+            {
+              "serial": {
+                "seconds": [
+                  0.20954498799983412,
+                  0.20991431002039462,
+                  0.20970517199020833
+                ],
+                "peak_allocated_bytes": 6549917696
+              },
+              "batch": {
+                "seconds": [
+                  0.1967934889253229,
+                  0.19668779603671283,
+                  0.1967836229596287
+                ],
+                "peak_allocated_bytes": 6828368896
+              }
+            }
+          ],
+          "medians": {
+            "serial": 0.20965385006275028,
+            "batch": 0.196741227991879
+          },
+          "forward_throughput_speedup": 1.0656325174071004,
+          "batch_sequences_per_second": 10.16563747422861
+        },
+        {
+          "lengths": [
+            1000,
+            1000,
+            1000,
+            1000
+          ],
+          "singleton_drift": [
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 0.08158040046691895,
+                "mean_abs": 0.0015129477251321077,
+                "different_values": 2308605
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 1.25,
+                "mean_abs": 0.027689768001437187,
+                "different_values": 26327
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 0.10022348165512085,
+                "mean_abs": 0.0014688435476273298,
+                "different_values": 2308607
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 0.7734375,
+                "mean_abs": 0.028689302504062653,
+                "different_values": 27214
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 0.21422621607780457,
+                "mean_abs": 0.001841465593315661,
+                "different_values": 2308606
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 2.625,
+                "mean_abs": 0.03510468080639839,
+                "different_values": 29151
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 1.262101411819458,
+                "mean_abs": 0.002307281829416752,
+                "different_values": 2308606
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 2.375,
+                "mean_abs": 0.05209951475262642,
+                "different_values": 36947
+              }
+            }
+          ],
+          "pairs": [
+            {
+              "serial": {
+                "seconds": [
+                  0.4188261979725212,
+                  0.41851631505414844,
+                  0.4187420760281384
+                ],
+                "peak_allocated_bytes": 6549949952
+              },
+              "batch": {
+                "seconds": [
+                  0.36464772594626993,
+                  0.36184250097721815,
+                  0.36475325003266335
+                ],
+                "peak_allocated_bytes": 7388756480
+              }
+            },
+            {
+              "batch": {
+                "seconds": [
+                  0.3639184089843184,
+                  0.36432699696160853,
+                  0.36192031402606517
+                ],
+                "peak_allocated_bytes": 7388756480
+              },
+              "serial": {
+                "seconds": [
+                  0.418325842008926,
+                  0.41833830694667995,
+                  0.41865192796103656
+                ],
+                "peak_allocated_bytes": 6549949952
+              }
+            },
+            {
+              "serial": {
+                "seconds": [
+                  0.41806605202145875,
+                  0.4184184100013226,
+                  0.41832121391780674
+                ],
+                "peak_allocated_bytes": 6549949952
+              },
+              "batch": {
+                "seconds": [
+                  0.3654854350024834,
+                  0.364963085972704,
+                  0.3659168650628999
+                ],
+                "peak_allocated_bytes": 7388756480
+              }
+            }
+          ],
+          "medians": {
+            "serial": 0.4184184100013226,
+            "batch": 0.36464772594626993
+          },
+          "forward_throughput_speedup": 1.1474592606206893,
+          "batch_sequences_per_second": 10.969491142773208
+        },
+        {
+          "lengths": [
+            600,
+            800,
+            900,
+            1000
+          ],
+          "singleton_drift": [
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 0.11668586730957031,
+                "mean_abs": 0.0015070504741743207,
+                "different_values": 1387000
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 1.0625,
+                "mean_abs": 0.029435470700263977,
+                "different_values": 16233
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 0.07598292827606201,
+                "mean_abs": 0.0015535459388047457,
+                "different_values": 1847807
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 0.875,
+                "mean_abs": 0.028605135157704353,
+                "different_values": 21903
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 0.11848002672195435,
+                "mean_abs": 0.0016980518121272326,
+                "different_values": 2078207
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 2.75,
+                "mean_abs": 0.03362796828150749,
+                "different_values": 26462
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 1.262101411819458,
+                "mean_abs": 0.002307281829416752,
+                "different_values": 2308606
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 2.375,
+                "mean_abs": 0.05209951475262642,
+                "different_values": 36947
+              }
+            }
+          ],
+          "pairs": [
+            {
+              "serial": {
+                "seconds": [
+                  0.3568363899830729,
+                  0.35689760895911604,
+                  0.35692644910886884
+                ],
+                "peak_allocated_bytes": 6549944832
+              },
+              "batch": {
+                "seconds": [
+                  0.36266787396743894,
+                  0.3647799100726843,
+                  0.3620869260048494
+                ],
+                "peak_allocated_bytes": 7388751360
+              }
+            },
+            {
+              "batch": {
+                "seconds": [
+                  0.36448055400978774,
+                  0.3630319170188159,
+                  0.36176728596910834
+                ],
+                "peak_allocated_bytes": 7388751360
+              },
+              "serial": {
+                "seconds": [
+                  0.35677104303613305,
+                  0.3568798149935901,
+                  0.35695010097697377
+                ],
+                "peak_allocated_bytes": 6549944832
+              }
+            },
+            {
+              "serial": {
+                "seconds": [
+                  0.35674276296049356,
+                  0.35692424001172185,
+                  0.35693909402471036
+                ],
+                "peak_allocated_bytes": 6549944832
+              },
+              "batch": {
+                "seconds": [
+                  0.3636211130069569,
+                  0.36157438391819596,
+                  0.363325995975174
+                ],
+                "peak_allocated_bytes": 7388751360
+              }
+            }
+          ],
+          "medians": {
+            "serial": 0.35689760895911604,
+            "batch": 0.3630319170188159
+          },
+          "forward_throughput_speedup": 0.9831025654436276,
+          "batch_sequences_per_second": 11.018314953813498
+        }
+      ],
+      "singleton_wrapper_check": {
+        "tokens": {
+          "bitwise_equal": true,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "different_values": 0
+        },
+        "embeddings": {
+          "bitwise_equal": true,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "different_values": 0
+        },
+        "logits": {
+          "bitwise_equal": true,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "different_values": 0
+        }
+      }
+    },
+    "esmc-fold2-6b": {
+      "model": "esmc-fold2-6b",
+      "seed": 101,
+      "precision": "native",
+      "hip_visible_devices": "6",
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "boundary": "warm resident forward only; excludes tokenization, loading, export and validation",
+      "cache_state": "unflushed; two warmups per arm per pair",
+      "inputs": "deterministic rotations/truncations; development data, not independent test set",
+      "request_sha256": "e39055ac4f5e89c0c0d29d82c3b6c9a74894b4361a022d689119a904545ff6ac",
+      "cases": [
+        {
+          "lengths": [
+            1000,
+            1000
+          ],
+          "singleton_drift": [
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 0.96875,
+                "mean_abs": 0.018837880343198776,
+                "different_values": 2341165
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 1.0625,
+                "mean_abs": 0.020613424479961395,
+                "different_values": 2359247
+              }
+            }
+          ],
+          "pairs": [
+            {
+              "serial": {
+                "seconds": [
+                  0.3937319579999894,
+                  0.39400068495888263,
+                  0.3940294849453494
+                ],
+                "peak_allocated_bytes": 12961433600
+              },
+              "batch": {
+                "seconds": [
+                  0.33032436401117593,
+                  0.3269590630661696,
+                  0.3270477830665186
+                ],
+                "peak_allocated_bytes": 13037812736
+              }
+            },
+            {
+              "batch": {
+                "seconds": [
+                  0.3272103659110144,
+                  0.3271719100885093,
+                  0.32697429799009115
+                ],
+                "peak_allocated_bytes": 13037812736
+              },
+              "serial": {
+                "seconds": [
+                  0.3945178660796955,
+                  0.4107106680748984,
+                  0.39844198094215244
+                ],
+                "peak_allocated_bytes": 12961433600
+              }
+            },
+            {
+              "serial": {
+                "seconds": [
+                  0.3941279009450227,
+                  0.3939436440123245,
+                  0.39405123796314
+                ],
+                "peak_allocated_bytes": 12961433600
+              },
+              "batch": {
+                "seconds": [
+                  0.3269184270175174,
+                  0.32688019098713994,
+                  0.32693533203564584
+                ],
+                "peak_allocated_bytes": 13037812736
+              }
+            }
+          ],
+          "medians": {
+            "serial": 0.39405123796314,
+            "batch": 0.32697429799009115
+          },
+          "forward_throughput_speedup": 1.2051443810274092,
+          "batch_sequences_per_second": 6.116688719247925
+        },
+        {
+          "lengths": [
+            1000,
+            1000,
+            1000,
+            1000
+          ],
+          "singleton_drift": [
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 1.4375,
+                "mean_abs": 0.019293339923024178,
+                "different_values": 2341892
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 0.75,
+                "mean_abs": 0.01937425136566162,
+                "different_values": 2351060
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 0.75,
+                "mean_abs": 0.017969850450754166,
+                "different_values": 2333670
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 1.5,
+                "mean_abs": 0.018336398527026176,
+                "different_values": 2335899
+              }
+            }
+          ],
+          "pairs": [
+            {
+              "serial": {
+                "seconds": [
+                  0.7877117010066286,
+                  0.7874897969886661,
+                  0.7877141589997336
+                ],
+                "peak_allocated_bytes": 12961465856
+              },
+              "batch": {
+                "seconds": [
+                  0.6472957489313558,
+                  0.6499517959309742,
+                  0.6483397259144112
+                ],
+                "peak_allocated_bytes": 13190488576
+              }
+            },
+            {
+              "batch": {
+                "seconds": [
+                  0.8495620660251006,
+                  0.6496778411092237,
+                  0.6523234109627083
+                ],
+                "peak_allocated_bytes": 13190488576
+              },
+              "serial": {
+                "seconds": [
+                  0.787863478064537,
+                  0.7879609949886799,
+                  0.7881611939519644
+                ],
+                "peak_allocated_bytes": 12961465856
+              }
+            },
+            {
+              "serial": {
+                "seconds": [
+                  0.788041035993956,
+                  0.7883305859286338,
+                  0.7881945220287889
+                ],
+                "peak_allocated_bytes": 12961465856
+              },
+              "batch": {
+                "seconds": [
+                  0.6471160909859464,
+                  0.651140111964196,
+                  0.6435138429515064
+                ],
+                "peak_allocated_bytes": 13190488576
+              }
+            }
+          ],
+          "medians": {
+            "serial": 0.7879609949886799,
+            "batch": 0.6496778411092237
+          },
+          "forward_throughput_speedup": 1.2128488077157737,
+          "batch_sequences_per_second": 6.156897691278224
+        },
+        {
+          "lengths": [
+            600,
+            800,
+            900,
+            1000
+          ],
+          "singleton_drift": [
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 0.5625,
+                "mean_abs": 0.01605853997170925,
+                "different_values": 1381035
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 0.9375,
+                "mean_abs": 0.019183790311217308,
+                "different_values": 1878364
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 1.25,
+                "mean_abs": 0.01872827485203743,
+                "different_values": 2111381
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 0.75,
+                "mean_abs": 0.018006419762969017,
+                "different_values": 2335030
+              }
+            }
+          ],
+          "pairs": [
+            {
+              "serial": {
+                "seconds": [
+                  0.6369113769615069,
+                  0.6369108879007399,
+                  0.6374139030231163
+                ],
+                "peak_allocated_bytes": 12961460736
+              },
+              "batch": {
+                "seconds": [
+                  0.676533128018491,
+                  0.679370890953578,
+                  0.6786023790482432
+                ],
+                "peak_allocated_bytes": 13190483456
+              }
+            },
+            {
+              "batch": {
+                "seconds": [
+                  0.6799488100223243,
+                  0.6774020550074056,
+                  0.6824392559938133
+                ],
+                "peak_allocated_bytes": 13190483456
+              },
+              "serial": {
+                "seconds": [
+                  0.6374187410110608,
+                  0.6373494250001386,
+                  0.6372316259657964
+                ],
+                "peak_allocated_bytes": 12961460736
+              }
+            },
+            {
+              "serial": {
+                "seconds": [
+                  0.6374313669512048,
+                  0.6373493950814009,
+                  0.6372946039773524
+                ],
+                "peak_allocated_bytes": 12961460736
+              },
+              "batch": {
+                "seconds": [
+                  0.6773969980422407,
+                  0.6783158089965582,
+                  0.6770903739379719
+                ],
+                "peak_allocated_bytes": 13190483456
+              }
+            }
+          ],
+          "medians": {
+            "serial": 0.6373493950814009,
+            "batch": 0.6783158089965582
+          },
+          "forward_throughput_speedup": 0.939605691962628,
+          "batch_sequences_per_second": 5.896958241202213
+        }
+      ],
+      "singleton_wrapper_check": {
+        "tokens": {
+          "bitwise_equal": true,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "different_values": 0
+        },
+        "embeddings": {
+          "bitwise_equal": true,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "different_values": 0
+        }
+      }
+    },
+    "esm3-open": {
+      "model": "esm3-open",
+      "seed": 101,
+      "precision": "native",
+      "hip_visible_devices": "6",
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "boundary": "warm resident forward only; excludes tokenization, loading, export and validation",
+      "cache_state": "unflushed; two warmups per arm per pair",
+      "inputs": "deterministic rotations/truncations; development data, not independent test set",
+      "request_sha256": "f481d0e2c67815e50186d3ccd7cb9e79fdb134cd84ec8805018640f28bb58dda",
+      "cases": [
+        {
+          "lengths": [
+            1000,
+            1000
+          ],
+          "singleton_drift": [
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 128.0,
+                "mean_abs": 1.6042869091033936,
+                "different_values": 1321851
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 0.375,
+                "mean_abs": 0.020551323890686035,
+                "different_values": 25649
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 128.0,
+                "mean_abs": 1.585121750831604,
+                "different_values": 1321378
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 0.375,
+                "mean_abs": 0.02028670534491539,
+                "different_values": 25565
+              }
+            }
+          ],
+          "pairs": [
+            {
+              "serial": {
+                "seconds": [
+                  0.24281986395362765,
+                  0.2368069039657712,
+                  0.23707738996017724
+                ],
+                "peak_allocated_bytes": 7588372992
+              },
+              "batch": {
+                "seconds": [
+                  0.2161441839998588,
+                  0.21364834194537252,
+                  0.2167442460777238
+                ],
+                "peak_allocated_bytes": 12255116800
+              }
+            },
+            {
+              "batch": {
+                "seconds": [
+                  0.21581392898224294,
+                  0.2157285891007632,
+                  0.21573034895118326
+                ],
+                "peak_allocated_bytes": 12255116800
+              },
+              "serial": {
+                "seconds": [
+                  0.2368832470383495,
+                  0.23684209107887,
+                  0.23703693400602788
+                ],
+                "peak_allocated_bytes": 7588372992
+              }
+            },
+            {
+              "serial": {
+                "seconds": [
+                  0.23708177800290287,
+                  0.23685703694354743,
+                  0.23688421701081097
+                ],
+                "peak_allocated_bytes": 7588372992
+              },
+              "batch": {
+                "seconds": [
+                  0.21401259500999004,
+                  0.21572492993436754,
+                  0.21398120606318116
+                ],
+                "peak_allocated_bytes": 12255116800
+              }
+            }
+          ],
+          "medians": {
+            "serial": 0.23688421701081097,
+            "batch": 0.2157285891007632
+          },
+          "forward_throughput_speedup": 1.0980659447977308,
+          "batch_sequences_per_second": 9.270908451850271
+        },
+        {
+          "lengths": [
+            1000,
+            1000,
+            1000,
+            1000
+          ],
+          "singleton_drift": [
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 128.0,
+                "mean_abs": 1.668845534324646,
+                "different_values": 1327712
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 0.5,
+                "mean_abs": 0.0208461694419384,
+                "different_values": 25737
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 128.0,
+                "mean_abs": 1.5666557550430298,
+                "different_values": 1317254
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 0.5,
+                "mean_abs": 0.021019605919718742,
+                "different_values": 25970
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 192.0,
+                "mean_abs": 1.7533543109893799,
+                "different_values": 1330512
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 0.375,
+                "mean_abs": 0.022475553676486015,
+                "different_values": 26880
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 128.0,
+                "mean_abs": 1.7094694375991821,
+                "different_values": 1331536
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 0.2578125,
+                "mean_abs": 0.022148417308926582,
+                "different_values": 26832
+              }
+            }
+          ],
+          "pairs": [
+            {
+              "serial": {
+                "seconds": [
+                  0.4756200109841302,
+                  0.47182802797760814,
+                  0.4732573210494593
+                ],
+                "peak_allocated_bytes": 7588405248
+              },
+              "batch": {
+                "seconds": [
+                  0.40444729500450194,
+                  0.4042476740432903,
+                  0.4009791810531169
+                ],
+                "peak_allocated_bytes": 21593167872
+              }
+            },
+            {
+              "batch": {
+                "seconds": [
+                  0.40054635994601995,
+                  0.40412511699832976,
+                  0.40015012805815786
+                ],
+                "peak_allocated_bytes": 21593167872
+              },
+              "serial": {
+                "seconds": [
+                  0.471876400988549,
+                  0.47162496799137443,
+                  0.47177533607464284
+                ],
+                "peak_allocated_bytes": 7588405248
+              }
+            },
+            {
+              "serial": {
+                "seconds": [
+                  0.47208367893472314,
+                  0.47199315996840596,
+                  0.4719560929806903
+                ],
+                "peak_allocated_bytes": 7588405248
+              },
+              "batch": {
+                "seconds": [
+                  0.4043082029093057,
+                  0.4003566459286958,
+                  0.40444828395266086
+                ],
+                "peak_allocated_bytes": 21593167872
+              }
+            }
+          ],
+          "medians": {
+            "serial": 0.4719560929806903,
+            "batch": 0.40412511699832976
+          },
+          "forward_throughput_speedup": 1.1678464740973793,
+          "batch_sequences_per_second": 9.897924755853598
+        },
+        {
+          "lengths": [
+            600,
+            800,
+            900,
+            1000
+          ],
+          "singleton_drift": [
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 1152.0,
+                "mean_abs": 17.779539108276367,
+                "different_values": 911815
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 2.125,
+                "mean_abs": 0.12778668105602264,
+                "different_values": 31136
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 896.0,
+                "mean_abs": 10.231407165527344,
+                "different_values": 1201835
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 3.125,
+                "mean_abs": 0.11911013722419739,
+                "different_values": 37389
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 544.0,
+                "mean_abs": 7.628062725067139,
+                "different_values": 1341047
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 1.75,
+                "mean_abs": 0.07860539853572845,
+                "different_values": 38497
+              }
+            },
+            {
+              "tokens": {
+                "bitwise_equal": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "different_values": 0
+              },
+              "embeddings": {
+                "bitwise_equal": false,
+                "max_abs": 128.0,
+                "mean_abs": 1.7094694375991821,
+                "different_values": 1331536
+              },
+              "logits": {
+                "bitwise_equal": false,
+                "max_abs": 0.2578125,
+                "mean_abs": 0.022148417308926582,
+                "different_values": 26832
+              }
+            }
+          ],
+          "pairs": [
+            {
+              "serial": {
+                "seconds": [
+                  0.3791687990305945,
+                  0.37883287598378956,
+                  0.37909824401140213
+                ],
+                "peak_allocated_bytes": 7588400128
+              },
+              "batch": {
+                "seconds": [
+                  0.4008713470539078,
+                  0.40433920198120177,
+                  0.40486108092591166
+                ],
+                "peak_allocated_bytes": 21593162752
+              }
+            },
+            {
+              "batch": {
+                "seconds": [
+                  0.40531594201456755,
+                  0.4052007319405675,
+                  0.4050873420201242
+                ],
+                "peak_allocated_bytes": 21593162752
+              },
+              "serial": {
+                "seconds": [
+                  0.37959436199162155,
+                  0.3794071970041841,
+                  0.3793658409267664
+                ],
+                "peak_allocated_bytes": 7588400128
+              }
+            },
+            {
+              "serial": {
+                "seconds": [
+                  0.3790807700715959,
+                  0.37961096595972776,
+                  0.37918970198370516
+                ],
+                "peak_allocated_bytes": 7588400128
+              },
+              "batch": {
+                "seconds": [
+                  0.4009706430369988,
+                  0.4049588969210163,
+                  0.40440261003095657
+                ],
+                "peak_allocated_bytes": 21593162752
+              }
+            }
+          ],
+          "medians": {
+            "serial": 0.37918970198370516,
+            "batch": 0.40486108092591166
+          },
+          "forward_throughput_speedup": 0.9365921296176545,
+          "batch_sequences_per_second": 9.879932125982709
+        }
+      ],
+      "singleton_wrapper_check": {
+        "tokens": {
+          "bitwise_equal": true,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "different_values": 0
+        },
+        "embeddings": {
+          "bitwise_equal": true,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "different_values": 0
+        },
+        "logits": {
+          "bitwise_equal": true,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "different_values": 0
+        }
+      }
+    }
+  },
+  "entry_qualification": {
+    "cli_sha256": "23570f7b5e3e05c29d7f58bdd47748ae00dd14657eb22b287f36a2f93e26e832",
+    "hip_device": 6,
+    "policy": "bitwise equality to native outputs with identical microbatch grouping",
+    "measurement": "entry qualification; not repeated paired E2E",
+    "runs": [
+      {
+        "model": "atlaslm-3b",
+        "case": "1000-1000-1000-1000",
+        "batch_size": 4,
+        "outputs_exact": true,
+        "observed_invocation_seconds": 16.09099225094542,
+        "request_sha256": "d5acfbef339523eaeaf418dd1b58a04b067fb04a4e247eb519963aa9775e4be6",
+        "profile_sha256": "04c0330e14753dd2a124dbe8da142be0077c133d9cc5fa2aa5503ea45c258b2d",
+        "artifacts": [
+          {
+            "index": 0,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/atlaslm/1000-1000-1000-1000/batch-0.npz",
+            "expected_sha256": "69d4fa6c063a6fc855e6d0bad2b9d3d560e4ab1e7a9dd50443facc8a2f696af2",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/atlaslm-3b-1000-1000-1000-1000-b4/sample-0.npz",
+            "actual_sha256": "69d4fa6c063a6fc855e6d0bad2b9d3d560e4ab1e7a9dd50443facc8a2f696af2"
+          },
+          {
+            "index": 1,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/atlaslm/1000-1000-1000-1000/batch-1.npz",
+            "expected_sha256": "d7a87d69e57a9a5436388d032218366c2304fca0958eeece8d7c3a69258c1f45",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/atlaslm-3b-1000-1000-1000-1000-b4/sample-1.npz",
+            "actual_sha256": "d7a87d69e57a9a5436388d032218366c2304fca0958eeece8d7c3a69258c1f45"
+          },
+          {
+            "index": 2,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/atlaslm/1000-1000-1000-1000/batch-2.npz",
+            "expected_sha256": "18a98bfeb90c7ffb275f05ff9f7f4a47a47564b3e572340cdf75aef2ebaefc43",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/atlaslm-3b-1000-1000-1000-1000-b4/sample-2.npz",
+            "actual_sha256": "18a98bfeb90c7ffb275f05ff9f7f4a47a47564b3e572340cdf75aef2ebaefc43"
+          },
+          {
+            "index": 3,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/atlaslm/1000-1000-1000-1000/batch-3.npz",
+            "expected_sha256": "5ce4a383ff4608a1e40f28de7feed91eb9ee5d513fd484c85dbaf74cb48cb7b3",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/atlaslm-3b-1000-1000-1000-1000-b4/sample-3.npz",
+            "actual_sha256": "5ce4a383ff4608a1e40f28de7feed91eb9ee5d513fd484c85dbaf74cb48cb7b3"
+          }
+        ]
+      },
+      {
+        "model": "atlaslm-3b",
+        "case": "600-800-900-1000",
+        "batch_size": 4,
+        "outputs_exact": true,
+        "observed_invocation_seconds": 16.20985809294507,
+        "request_sha256": "6ae64e4287983a0addefc8341ea44c5c5801fe8b91d64a0c84d344c1b9d5b890",
+        "profile_sha256": "04c0330e14753dd2a124dbe8da142be0077c133d9cc5fa2aa5503ea45c258b2d",
+        "artifacts": [
+          {
+            "index": 0,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/atlaslm/600-800-900-1000/batch-0.npz",
+            "expected_sha256": "247cea808d3575b88a45916298605df5039aaa5077c10fb804881466baeb795d",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/atlaslm-3b-600-800-900-1000-b4/sample-0.npz",
+            "actual_sha256": "247cea808d3575b88a45916298605df5039aaa5077c10fb804881466baeb795d"
+          },
+          {
+            "index": 1,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/atlaslm/600-800-900-1000/batch-1.npz",
+            "expected_sha256": "6d94e3ebb84e48d77aee1ac0c8df53e713022a63bf9de8427c367b28cb5ce657",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/atlaslm-3b-600-800-900-1000-b4/sample-1.npz",
+            "actual_sha256": "6d94e3ebb84e48d77aee1ac0c8df53e713022a63bf9de8427c367b28cb5ce657"
+          },
+          {
+            "index": 2,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/atlaslm/600-800-900-1000/batch-2.npz",
+            "expected_sha256": "9042132de614d5b52f2aaf8b2bed0f932ce997c618d1946e552da711f7a70f72",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/atlaslm-3b-600-800-900-1000-b4/sample-2.npz",
+            "actual_sha256": "9042132de614d5b52f2aaf8b2bed0f932ce997c618d1946e552da711f7a70f72"
+          },
+          {
+            "index": 3,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/atlaslm/600-800-900-1000/batch-3.npz",
+            "expected_sha256": "5ce4a383ff4608a1e40f28de7feed91eb9ee5d513fd484c85dbaf74cb48cb7b3",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/atlaslm-3b-600-800-900-1000-b4/sample-3.npz",
+            "actual_sha256": "5ce4a383ff4608a1e40f28de7feed91eb9ee5d513fd484c85dbaf74cb48cb7b3"
+          }
+        ]
+      },
+      {
+        "model": "atlaslm-3b",
+        "case": "1000-1000-1000-1000",
+        "batch_size": 1,
+        "outputs_exact": true,
+        "observed_invocation_seconds": 16.390417963033542,
+        "request_sha256": "62a779a75bbf2db85e42abd49b8dfb3929ddc1a155b7455c6300159a14fc05d6",
+        "profile_sha256": "04c0330e14753dd2a124dbe8da142be0077c133d9cc5fa2aa5503ea45c258b2d",
+        "artifacts": [
+          {
+            "index": 0,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/atlaslm/1000-1000-1000-1000/single-0.npz",
+            "expected_sha256": "7e55fe86389a65b938915f935e0e496872171300c3f499911344a1a096249a41",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/atlaslm-3b-1000-1000-1000-1000-b1/sample-0.npz",
+            "actual_sha256": "7e55fe86389a65b938915f935e0e496872171300c3f499911344a1a096249a41"
+          },
+          {
+            "index": 1,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/atlaslm/1000-1000-1000-1000/single-1.npz",
+            "expected_sha256": "0bdde916b7c6967d09477201263f2bd62c102111e8310c9dabedf0ac6e2b5e04",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/atlaslm-3b-1000-1000-1000-1000-b1/sample-1.npz",
+            "actual_sha256": "0bdde916b7c6967d09477201263f2bd62c102111e8310c9dabedf0ac6e2b5e04"
+          },
+          {
+            "index": 2,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/atlaslm/1000-1000-1000-1000/single-2.npz",
+            "expected_sha256": "37d6a01cc88b60686194daa4207c0d67fe9fbeedf9359a0a1d489dab398ddd40",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/atlaslm-3b-1000-1000-1000-1000-b1/sample-2.npz",
+            "actual_sha256": "37d6a01cc88b60686194daa4207c0d67fe9fbeedf9359a0a1d489dab398ddd40"
+          },
+          {
+            "index": 3,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/atlaslm/1000-1000-1000-1000/single-3.npz",
+            "expected_sha256": "1acb5cf37bf2b17fff1c88fa83413fad3659379142facc254d5ca88b6df47c7c",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/atlaslm-3b-1000-1000-1000-1000-b1/sample-3.npz",
+            "actual_sha256": "1acb5cf37bf2b17fff1c88fa83413fad3659379142facc254d5ca88b6df47c7c"
+          }
+        ]
+      },
+      {
+        "model": "esmc-fold2-6b",
+        "case": "1000-1000-1000-1000",
+        "batch_size": 4,
+        "outputs_exact": true,
+        "observed_invocation_seconds": 25.012595333042555,
+        "request_sha256": "4ebe000ab59db43fd8b2a2343d3d876d98638fbfbfd4dfcbd6fad0968c1e7797",
+        "profile_sha256": "e74803bf5bb9dbb92fc3d6a7c8f7f50bb399fa4739d5087484af62503cbf5eea",
+        "artifacts": [
+          {
+            "index": 0,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esmc-fold2-6b/1000-1000-1000-1000/batch-0.npz",
+            "expected_sha256": "cf1bde1d74913b6ea46dd45e9a3b286336a2f98cac9c2a2616d511114adeba47",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esmc-fold2-6b-1000-1000-1000-1000-b4/sample-0.npz",
+            "actual_sha256": "cf1bde1d74913b6ea46dd45e9a3b286336a2f98cac9c2a2616d511114adeba47"
+          },
+          {
+            "index": 1,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esmc-fold2-6b/1000-1000-1000-1000/batch-1.npz",
+            "expected_sha256": "3498818ef513046663ce092c1365496b00dc9f891d140dec88a6b98fb21eb1c4",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esmc-fold2-6b-1000-1000-1000-1000-b4/sample-1.npz",
+            "actual_sha256": "3498818ef513046663ce092c1365496b00dc9f891d140dec88a6b98fb21eb1c4"
+          },
+          {
+            "index": 2,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esmc-fold2-6b/1000-1000-1000-1000/batch-2.npz",
+            "expected_sha256": "53a74b41749fc81d8114ef21927fa70935525ac0fc767388feb435bf71374aba",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esmc-fold2-6b-1000-1000-1000-1000-b4/sample-2.npz",
+            "actual_sha256": "53a74b41749fc81d8114ef21927fa70935525ac0fc767388feb435bf71374aba"
+          },
+          {
+            "index": 3,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esmc-fold2-6b/1000-1000-1000-1000/batch-3.npz",
+            "expected_sha256": "241d97d741b3209276268da3be6adb6eff15056e4909f24764c3f226c2eeb3e9",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esmc-fold2-6b-1000-1000-1000-1000-b4/sample-3.npz",
+            "actual_sha256": "241d97d741b3209276268da3be6adb6eff15056e4909f24764c3f226c2eeb3e9"
+          }
+        ]
+      },
+      {
+        "model": "esmc-fold2-6b",
+        "case": "600-800-900-1000",
+        "batch_size": 4,
+        "outputs_exact": true,
+        "observed_invocation_seconds": 24.912046885932796,
+        "request_sha256": "535f802d54dc08a76b01fceb1c34511693a57260979f71700b5bd5e94c94f452",
+        "profile_sha256": "e74803bf5bb9dbb92fc3d6a7c8f7f50bb399fa4739d5087484af62503cbf5eea",
+        "artifacts": [
+          {
+            "index": 0,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esmc-fold2-6b/600-800-900-1000/batch-0.npz",
+            "expected_sha256": "a2ad49d7959c5ae6855e043924813efa8645a33dba8fdb02c49f90bcf3cfb291",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esmc-fold2-6b-600-800-900-1000-b4/sample-0.npz",
+            "actual_sha256": "a2ad49d7959c5ae6855e043924813efa8645a33dba8fdb02c49f90bcf3cfb291"
+          },
+          {
+            "index": 1,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esmc-fold2-6b/600-800-900-1000/batch-1.npz",
+            "expected_sha256": "1f653fc610ceeeb311f64d7a721fddfc82d9825be48484ddf12b814f0847fb5d",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esmc-fold2-6b-600-800-900-1000-b4/sample-1.npz",
+            "actual_sha256": "1f653fc610ceeeb311f64d7a721fddfc82d9825be48484ddf12b814f0847fb5d"
+          },
+          {
+            "index": 2,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esmc-fold2-6b/600-800-900-1000/batch-2.npz",
+            "expected_sha256": "fec4371b7857a030970b464fbf10eea90e51f847d6629fe91ab6f54bb5dc6a19",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esmc-fold2-6b-600-800-900-1000-b4/sample-2.npz",
+            "actual_sha256": "fec4371b7857a030970b464fbf10eea90e51f847d6629fe91ab6f54bb5dc6a19"
+          },
+          {
+            "index": 3,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esmc-fold2-6b/600-800-900-1000/batch-3.npz",
+            "expected_sha256": "8835297376cd7977f6242fc38f52f2e51aac305388f9b2e611793fe456fab408",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esmc-fold2-6b-600-800-900-1000-b4/sample-3.npz",
+            "actual_sha256": "8835297376cd7977f6242fc38f52f2e51aac305388f9b2e611793fe456fab408"
+          }
+        ]
+      },
+      {
+        "model": "esmc-fold2-6b",
+        "case": "1000-1000-1000-1000",
+        "batch_size": 1,
+        "outputs_exact": true,
+        "observed_invocation_seconds": 23.947441601078026,
+        "request_sha256": "19f363b9bf999ae03a93347b8b568539fee08a8f65afdf68e07a27b043f3532a",
+        "profile_sha256": "e74803bf5bb9dbb92fc3d6a7c8f7f50bb399fa4739d5087484af62503cbf5eea",
+        "artifacts": [
+          {
+            "index": 0,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esmc-fold2-6b/1000-1000-1000-1000/single-0.npz",
+            "expected_sha256": "18bf06d3e0341e4c66af06dd02c2383ea2c9e4e7ddbcf2dff13bc18f638b50b9",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esmc-fold2-6b-1000-1000-1000-1000-b1/sample-0.npz",
+            "actual_sha256": "18bf06d3e0341e4c66af06dd02c2383ea2c9e4e7ddbcf2dff13bc18f638b50b9"
+          },
+          {
+            "index": 1,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esmc-fold2-6b/1000-1000-1000-1000/single-1.npz",
+            "expected_sha256": "7a203beaa66fd55baf8bf5e67ac0cafb21739135da812c45dd6ae0a21fa3b718",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esmc-fold2-6b-1000-1000-1000-1000-b1/sample-1.npz",
+            "actual_sha256": "7a203beaa66fd55baf8bf5e67ac0cafb21739135da812c45dd6ae0a21fa3b718"
+          },
+          {
+            "index": 2,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esmc-fold2-6b/1000-1000-1000-1000/single-2.npz",
+            "expected_sha256": "b4a6138e332561e20f893acd5e398cb603d7a910331359cabf23b3eb9fc51366",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esmc-fold2-6b-1000-1000-1000-1000-b1/sample-2.npz",
+            "actual_sha256": "b4a6138e332561e20f893acd5e398cb603d7a910331359cabf23b3eb9fc51366"
+          },
+          {
+            "index": 3,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esmc-fold2-6b/1000-1000-1000-1000/single-3.npz",
+            "expected_sha256": "70bf87a09e3774b14e7f3874726fe3baabe1c7a66e27b21bd32fdde8c2063aa8",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esmc-fold2-6b-1000-1000-1000-1000-b1/sample-3.npz",
+            "actual_sha256": "70bf87a09e3774b14e7f3874726fe3baabe1c7a66e27b21bd32fdde8c2063aa8"
+          }
+        ]
+      },
+      {
+        "model": "esm2-3b",
+        "case": "1000-1000-1000-1000",
+        "batch_size": 4,
+        "outputs_exact": true,
+        "observed_invocation_seconds": 40.46674326399807,
+        "request_sha256": "453c4722a76fcc25f399e158381b2bb2e34674fab3044b87803050ef4b1b1280",
+        "profile_sha256": "3f2b1e72c2f135fe34620c95346885124d5f1902abb82a1ae8429335e1f1b64e",
+        "artifacts": [
+          {
+            "index": 0,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm2-3b/1000-1000-1000-1000/batch-0.npz",
+            "expected_sha256": "365e92997c7bba489e3cc78795d1f5b3bd3d80ee33226c8a1cb3d8ad99651cb7",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm2-3b-1000-1000-1000-1000-b4/sample-0.npz",
+            "actual_sha256": "365e92997c7bba489e3cc78795d1f5b3bd3d80ee33226c8a1cb3d8ad99651cb7"
+          },
+          {
+            "index": 1,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm2-3b/1000-1000-1000-1000/batch-1.npz",
+            "expected_sha256": "fad0f3475b9426365fad30b7baefd8c579bdef7a1b869252a4782f491cf403e8",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm2-3b-1000-1000-1000-1000-b4/sample-1.npz",
+            "actual_sha256": "fad0f3475b9426365fad30b7baefd8c579bdef7a1b869252a4782f491cf403e8"
+          },
+          {
+            "index": 2,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm2-3b/1000-1000-1000-1000/batch-2.npz",
+            "expected_sha256": "e3adef69ad5a829f77a6338f60657efdfc8dbe8076a398df48c40f0259cac031",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm2-3b-1000-1000-1000-1000-b4/sample-2.npz",
+            "actual_sha256": "e3adef69ad5a829f77a6338f60657efdfc8dbe8076a398df48c40f0259cac031"
+          },
+          {
+            "index": 3,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm2-3b/1000-1000-1000-1000/batch-3.npz",
+            "expected_sha256": "caf1e9d86085b641631b5a94b78a230e6d06c3c708a9216a896689f966d67752",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm2-3b-1000-1000-1000-1000-b4/sample-3.npz",
+            "actual_sha256": "caf1e9d86085b641631b5a94b78a230e6d06c3c708a9216a896689f966d67752"
+          }
+        ]
+      },
+      {
+        "model": "esm2-3b",
+        "case": "600-800-900-1000",
+        "batch_size": 4,
+        "outputs_exact": true,
+        "observed_invocation_seconds": 40.35250244499184,
+        "request_sha256": "efddac871793613d3e2784c4c23b6d8d8588cca7c4fb6f17072ddc0b58523b61",
+        "profile_sha256": "3f2b1e72c2f135fe34620c95346885124d5f1902abb82a1ae8429335e1f1b64e",
+        "artifacts": [
+          {
+            "index": 0,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm2-3b/600-800-900-1000/batch-0.npz",
+            "expected_sha256": "099ab4f76f048a6db407b3acaf4f7068db0ff2167a6f234c4762a95d47a51812",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm2-3b-600-800-900-1000-b4/sample-0.npz",
+            "actual_sha256": "099ab4f76f048a6db407b3acaf4f7068db0ff2167a6f234c4762a95d47a51812"
+          },
+          {
+            "index": 1,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm2-3b/600-800-900-1000/batch-1.npz",
+            "expected_sha256": "e60229352b7359386f9a45f875e4b152cb9d2e023b6cf7cc7803a5752637e5cf",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm2-3b-600-800-900-1000-b4/sample-1.npz",
+            "actual_sha256": "e60229352b7359386f9a45f875e4b152cb9d2e023b6cf7cc7803a5752637e5cf"
+          },
+          {
+            "index": 2,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm2-3b/600-800-900-1000/batch-2.npz",
+            "expected_sha256": "a004ee1ca957b3d197cf353f8065fb6780e5c3f19c8746a12d103f70b1f3c040",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm2-3b-600-800-900-1000-b4/sample-2.npz",
+            "actual_sha256": "a004ee1ca957b3d197cf353f8065fb6780e5c3f19c8746a12d103f70b1f3c040"
+          },
+          {
+            "index": 3,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm2-3b/600-800-900-1000/batch-3.npz",
+            "expected_sha256": "caf1e9d86085b641631b5a94b78a230e6d06c3c708a9216a896689f966d67752",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm2-3b-600-800-900-1000-b4/sample-3.npz",
+            "actual_sha256": "caf1e9d86085b641631b5a94b78a230e6d06c3c708a9216a896689f966d67752"
+          }
+        ]
+      },
+      {
+        "model": "esm2-3b",
+        "case": "1000-1000-1000-1000",
+        "batch_size": 1,
+        "outputs_exact": true,
+        "observed_invocation_seconds": 40.363418802036904,
+        "request_sha256": "d7bee6d8edf58a77368241d2d055c29b0dd8ecfa69dfa042d4143358d767d4f4",
+        "profile_sha256": "3f2b1e72c2f135fe34620c95346885124d5f1902abb82a1ae8429335e1f1b64e",
+        "artifacts": [
+          {
+            "index": 0,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm2-3b/1000-1000-1000-1000/single-0.npz",
+            "expected_sha256": "40390e8b7fff6be38920a0a818c46fa3b7e40a0a2c38afd2a87b4f5f3efac3d5",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm2-3b-1000-1000-1000-1000-b1/sample-0.npz",
+            "actual_sha256": "40390e8b7fff6be38920a0a818c46fa3b7e40a0a2c38afd2a87b4f5f3efac3d5"
+          },
+          {
+            "index": 1,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm2-3b/1000-1000-1000-1000/single-1.npz",
+            "expected_sha256": "14fe6da4ece1650a8e0e86a16c1eae665b7fa8d617b6c0b7072767fac461e465",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm2-3b-1000-1000-1000-1000-b1/sample-1.npz",
+            "actual_sha256": "14fe6da4ece1650a8e0e86a16c1eae665b7fa8d617b6c0b7072767fac461e465"
+          },
+          {
+            "index": 2,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm2-3b/1000-1000-1000-1000/single-2.npz",
+            "expected_sha256": "41f218787a227e6af3b983336d54eedad02764b2dace9d898080edc1efac027f",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm2-3b-1000-1000-1000-1000-b1/sample-2.npz",
+            "actual_sha256": "41f218787a227e6af3b983336d54eedad02764b2dace9d898080edc1efac027f"
+          },
+          {
+            "index": 3,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm2-3b/1000-1000-1000-1000/single-3.npz",
+            "expected_sha256": "4aa4c5a2aaa0176c69e30e1614dc0047169f451a448d3a8318a965aff6301c8c",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm2-3b-1000-1000-1000-1000-b1/sample-3.npz",
+            "actual_sha256": "4aa4c5a2aaa0176c69e30e1614dc0047169f451a448d3a8318a965aff6301c8c"
+          }
+        ]
+      },
+      {
+        "model": "esm3-open",
+        "case": "1000-1000-1000-1000",
+        "batch_size": 4,
+        "outputs_exact": true,
+        "observed_invocation_seconds": 13.584324539988302,
+        "request_sha256": "9e0bb0619d4a3cf849d1bcd357e310b68f5b94d3edb90c9ccecd9c8b8127af54",
+        "profile_sha256": "8274694568c09e5302896f46f66ecdfc9e2128b581cd15a56f5a70f8fa9c1364",
+        "artifacts": [
+          {
+            "index": 0,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm3-open/1000-1000-1000-1000/batch-0.npz",
+            "expected_sha256": "60390e35a6f49cd79a37dd60f02b3215d423af035da6c6f32e2890a4c5d8b9aa",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm3-open-1000-1000-1000-1000-b4/sample-0.npz",
+            "actual_sha256": "60390e35a6f49cd79a37dd60f02b3215d423af035da6c6f32e2890a4c5d8b9aa"
+          },
+          {
+            "index": 1,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm3-open/1000-1000-1000-1000/batch-1.npz",
+            "expected_sha256": "8b91e295a7effa18ea99b7b68b9a55714c8bc7f3faefd36e3d1fbd87b4fad24c",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm3-open-1000-1000-1000-1000-b4/sample-1.npz",
+            "actual_sha256": "8b91e295a7effa18ea99b7b68b9a55714c8bc7f3faefd36e3d1fbd87b4fad24c"
+          },
+          {
+            "index": 2,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm3-open/1000-1000-1000-1000/batch-2.npz",
+            "expected_sha256": "b3a3777b965ce6a92880eb60f96da775c20390e7896987bbe3429675c8e6b086",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm3-open-1000-1000-1000-1000-b4/sample-2.npz",
+            "actual_sha256": "b3a3777b965ce6a92880eb60f96da775c20390e7896987bbe3429675c8e6b086"
+          },
+          {
+            "index": 3,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm3-open/1000-1000-1000-1000/batch-3.npz",
+            "expected_sha256": "4881ca392df0c291b358b89446ccc7d4361fdfb58155b45aed69fcd78a4c966c",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm3-open-1000-1000-1000-1000-b4/sample-3.npz",
+            "actual_sha256": "4881ca392df0c291b358b89446ccc7d4361fdfb58155b45aed69fcd78a4c966c"
+          }
+        ]
+      },
+      {
+        "model": "esm3-open",
+        "case": "600-800-900-1000",
+        "batch_size": 4,
+        "outputs_exact": true,
+        "observed_invocation_seconds": 13.551818746956997,
+        "request_sha256": "4a41bcf4d95912b1842f5351b6966a1c7fef51d7d34d02eb5b7d1a3b042fb359",
+        "profile_sha256": "8274694568c09e5302896f46f66ecdfc9e2128b581cd15a56f5a70f8fa9c1364",
+        "artifacts": [
+          {
+            "index": 0,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm3-open/600-800-900-1000/batch-0.npz",
+            "expected_sha256": "05c24bb9c060b8d4c91d98926df95ce9bfe9865144bc3ba44516dccc3d03f2f1",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm3-open-600-800-900-1000-b4/sample-0.npz",
+            "actual_sha256": "05c24bb9c060b8d4c91d98926df95ce9bfe9865144bc3ba44516dccc3d03f2f1"
+          },
+          {
+            "index": 1,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm3-open/600-800-900-1000/batch-1.npz",
+            "expected_sha256": "6855f0efc605788b9eef6131966835e7c8419790e56fdc7668f94a0504e5813e",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm3-open-600-800-900-1000-b4/sample-1.npz",
+            "actual_sha256": "6855f0efc605788b9eef6131966835e7c8419790e56fdc7668f94a0504e5813e"
+          },
+          {
+            "index": 2,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm3-open/600-800-900-1000/batch-2.npz",
+            "expected_sha256": "de85664b5be307347d9aefb2d609a18cef0d0fe4d262cd09d8729cd49ddf817b",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm3-open-600-800-900-1000-b4/sample-2.npz",
+            "actual_sha256": "de85664b5be307347d9aefb2d609a18cef0d0fe4d262cd09d8729cd49ddf817b"
+          },
+          {
+            "index": 3,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm3-open/600-800-900-1000/batch-3.npz",
+            "expected_sha256": "4881ca392df0c291b358b89446ccc7d4361fdfb58155b45aed69fcd78a4c966c",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm3-open-600-800-900-1000-b4/sample-3.npz",
+            "actual_sha256": "4881ca392df0c291b358b89446ccc7d4361fdfb58155b45aed69fcd78a4c966c"
+          }
+        ]
+      },
+      {
+        "model": "esm3-open",
+        "case": "1000-1000-1000-1000",
+        "batch_size": 1,
+        "outputs_exact": true,
+        "observed_invocation_seconds": 13.505385263939388,
+        "request_sha256": "c85235b9a046276f8e8b07dcefa7a8acb8d906b54b3961d0ab0d62ef9fc1adde",
+        "profile_sha256": "8274694568c09e5302896f46f66ecdfc9e2128b581cd15a56f5a70f8fa9c1364",
+        "artifacts": [
+          {
+            "index": 0,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm3-open/1000-1000-1000-1000/single-0.npz",
+            "expected_sha256": "c6c17f887385396e4ba07f88eff754474afaccdaaa34e5f7ec1d3c958eed6305",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm3-open-1000-1000-1000-1000-b1/sample-0.npz",
+            "actual_sha256": "c6c17f887385396e4ba07f88eff754474afaccdaaa34e5f7ec1d3c958eed6305"
+          },
+          {
+            "index": 1,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm3-open/1000-1000-1000-1000/single-1.npz",
+            "expected_sha256": "f6355573257eb145679b1a94ccd4fcb934a9ce3f0987d186be640d24a6ef8eec",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm3-open-1000-1000-1000-1000-b1/sample-1.npz",
+            "actual_sha256": "f6355573257eb145679b1a94ccd4fcb934a9ce3f0987d186be640d24a6ef8eec"
+          },
+          {
+            "index": 2,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm3-open/1000-1000-1000-1000/single-2.npz",
+            "expected_sha256": "e3596e588101d8b93a1a9b33a8dedb473523cc5bd25427d5cc45afb264cce0da",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm3-open-1000-1000-1000-1000-b1/sample-2.npz",
+            "actual_sha256": "e3596e588101d8b93a1a9b33a8dedb473523cc5bd25427d5cc45afb264cce0da"
+          },
+          {
+            "index": 3,
+            "expected": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/esm3-open/1000-1000-1000-1000/single-3.npz",
+            "expected_sha256": "845fc85638266cef01331861ff5ea2daa0710e539670241f1cb2750b8d5c0e6b",
+            "actual": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/entry-qualification-v2/esm3-open-1000-1000-1000-1000-b1/sample-3.npz",
+            "actual_sha256": "845fc85638266cef01331861ff5ea2daa0710e539670241f1cb2750b8d5c0e6b"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "experiments/plm/batch_screen.py": "d078e8d296a81a509404d17b1b091e9fc330a76c4855fc7872c83d0816efa6fd",
+    "experiments/plm/qualify_batch.py": "2fe52ad22502301d2e8bba523cc3e0bbbab77a557178ea2356267ce04cff838a"
+  }
+}

@@ -1,6 +1,7 @@
 //! Model-independent contracts. This crate neither imports model runtimes nor
 //! initializes a GPU. A valid request describes work; it does not prove that a
 //! particular machine, checkpoint, or accelerated implementation can execute it.
+pub mod plm_batch;
 pub mod protocol;
 pub mod registry;
 pub mod request;

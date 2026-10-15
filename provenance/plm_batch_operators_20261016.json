@@ -1,0 +1,1172 @@
+{
+  "schema_version": 1,
+  "scope": "Packaged warm forward; same native batch reference; not E2E. AB/BA/AB, 9 observations per arm, two warmups per arm per pair.",
+  "kernel": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/kernel-cache/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e.so",
+    "sha256": "9624b8a166b7639e44fb3daa26abbe84ec8faa998f98f1beb0a7df057135b900"
+  },
+  "models": {
+    "esmc-fold2-6b-ops": {
+      "model": "esmc-fold2-6b",
+      "hip_device": 6,
+      "seed": 101,
+      "precision": "native",
+      "boundary": "warm packaged forward including context entry/exit; not complete invocation",
+      "reference": "native identical batch grouping",
+      "cases": [
+        {
+          "batch_size": 1,
+          "pairs": [
+            {
+              "native": [
+                0.1966894849902019,
+                0.1964709919411689,
+                0.1964567160466686
+              ],
+              "candidate": [
+                0.17451766098383814,
+                0.17546902096364647,
+                0.17455575696658343
+              ]
+            },
+            {
+              "candidate": [
+                0.17443895793985575,
+                0.17485023592598736,
+                0.17428134405054152
+              ],
+              "native": [
+                0.19643233495298773,
+                0.19628558598924428,
+                0.1963257120223716
+              ]
+            },
+            {
+              "native": [
+                0.19653002999257296,
+                0.19631954410579056,
+                0.19627829804085195
+              ],
+              "candidate": [
+                0.17451354290824383,
+                0.17421389592345804,
+                0.1741713210940361
+              ]
+            }
+          ],
+          "medians": {
+            "native": 0.19643233495298773,
+            "candidate": 0.17451354290824383
+          },
+          "speedup": 1.1255993757244869,
+          "all_arrays_bitwise_equal": true,
+          "runtime": {
+            "implementation": "hip_bf16_rope",
+            "calls": 80,
+            "library": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/kernel-cache/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e.so",
+              "sha256": "9624b8a166b7639e44fb3daa26abbe84ec8faa998f98f1beb0a7df057135b900"
+            },
+            "batch_size": 1,
+            "rotary_modules": 80,
+            "registry": {
+              "implementations": {
+                "plm_inference": [
+                  {
+                    "name": "hip_bf16_rope",
+                    "priority": 10,
+                    "version": "n1000-batch-v1"
+                  }
+                ]
+              },
+              "selection_counts": [
+                {
+                  "operation": "plm_inference",
+                  "implementation": "hip_bf16_rope",
+                  "count": 80
+                }
+              ],
+              "decisions": [
+                {
+                  "signature": {
+                    "operation": "plm_inference",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "bfloat16",
+                    "shape": [
+                      1,
+                      1002,
+                      40,
+                      64
+                    ],
+                    "strides": [
+                      2565120,
+                      2560,
+                      64,
+                      1
+                    ],
+                    "layout": "contiguous",
+                    "mode": "inference",
+                    "mask": "native",
+                    "inplace": false,
+                    "attributes": {
+                      "eligible": "True",
+                      "model": "esmc-fold2-6b"
+                    }
+                  },
+                  "selected": "hip_bf16_rope",
+                  "rejected": []
+                }
+              ],
+              "policy_engine": {
+                "name": "fireprot-core",
+                "bridge_abi": 1,
+                "library": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/qualified-v3/target/release/lib_fireprot_bridge.so",
+                "sha256": "8edcf38e79de569c579667012e3495dc29fbbf24030f3569c2ed92cf1713880a"
+              }
+            }
+          }
+        },
+        {
+          "batch_size": 2,
+          "pairs": [
+            {
+              "native": [
+                0.3244972889078781,
+                0.32493274798616767,
+                0.32452406000811607
+              ],
+              "candidate": [
+                0.290038135019131,
+                0.2895785649307072,
+                0.29008814704138786
+              ]
+            },
+            {
+              "candidate": [
+                0.2894927739398554,
+                0.2899364900076762,
+                0.2893338290741667
+              ],
+              "native": [
+                0.3250038429396227,
+                0.3244053019443527,
+                0.32479896396398544
+              ]
+            },
+            {
+              "native": [
+                0.32447986502666026,
+                0.32474789093248546,
+                0.32430210697930306
+              ],
+              "candidate": [
+                0.28996911901049316,
+                0.28932224307209253,
+                0.2898499600123614
+              ]
+            }
+          ],
+          "medians": {
+            "native": 0.32452406000811607,
+            "candidate": 0.2898499600123614
+          },
+          "speedup": 1.119627754974594,
+          "all_arrays_bitwise_equal": true,
+          "runtime": {
+            "implementation": "hip_bf16_rope",
+            "calls": 80,
+            "library": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/kernel-cache/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e.so",
+              "sha256": "9624b8a166b7639e44fb3daa26abbe84ec8faa998f98f1beb0a7df057135b900"
+            },
+            "batch_size": 2,
+            "rotary_modules": 80,
+            "registry": {
+              "implementations": {
+                "plm_inference": [
+                  {
+                    "name": "hip_bf16_rope",
+                    "priority": 10,
+                    "version": "n1000-batch-v1"
+                  }
+                ]
+              },
+              "selection_counts": [
+                {
+                  "operation": "plm_inference",
+                  "implementation": "hip_bf16_rope",
+                  "count": 80
+                }
+              ],
+              "decisions": [
+                {
+                  "signature": {
+                    "operation": "plm_inference",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "bfloat16",
+                    "shape": [
+                      2,
+                      1002,
+                      40,
+                      64
+                    ],
+                    "strides": [
+                      2565120,
+                      2560,
+                      64,
+                      1
+                    ],
+                    "layout": "contiguous",
+                    "mode": "inference",
+                    "mask": "native",
+                    "inplace": false,
+                    "attributes": {
+                      "eligible": "True",
+                      "model": "esmc-fold2-6b"
+                    }
+                  },
+                  "selected": "hip_bf16_rope",
+                  "rejected": []
+                }
+              ],
+              "policy_engine": {
+                "name": "fireprot-core",
+                "bridge_abi": 1,
+                "library": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/qualified-v3/target/release/lib_fireprot_bridge.so",
+                "sha256": "8edcf38e79de569c579667012e3495dc29fbbf24030f3569c2ed92cf1713880a"
+              }
+            }
+          }
+        },
+        {
+          "batch_size": 4,
+          "pairs": [
+            {
+              "native": [
+                0.6336281379917637,
+                0.6382718849927187,
+                0.6336859379662201
+              ],
+              "candidate": [
+                0.5813496360788122,
+                0.5753919970011339,
+                0.579764268011786
+              ]
+            },
+            {
+              "candidate": [
+                0.5729191859718412,
+                0.5822252919897437,
+                0.5727287329500541
+              ],
+              "native": [
+                0.6371001120423898,
+                0.6320951610105112,
+                0.6387791379820555
+              ]
+            },
+            {
+              "native": [
+                0.630535272997804,
+                0.6395771809620783,
+                0.6352339109871536
+              ],
+              "candidate": [
+                0.5789629559731111,
+                0.5747450219932944,
+                0.5781599149340764
+              ]
+            }
+          ],
+          "medians": {
+            "native": 0.6352339109871536,
+            "candidate": 0.5781599149340764
+          },
+          "speedup": 1.0987166259348593,
+          "all_arrays_bitwise_equal": true,
+          "runtime": {
+            "implementation": "hip_bf16_rope",
+            "calls": 80,
+            "library": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/kernel-cache/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e.so",
+              "sha256": "9624b8a166b7639e44fb3daa26abbe84ec8faa998f98f1beb0a7df057135b900"
+            },
+            "batch_size": 4,
+            "rotary_modules": 80,
+            "registry": {
+              "implementations": {
+                "plm_inference": [
+                  {
+                    "name": "hip_bf16_rope",
+                    "priority": 10,
+                    "version": "n1000-batch-v1"
+                  }
+                ]
+              },
+              "selection_counts": [
+                {
+                  "operation": "plm_inference",
+                  "implementation": "hip_bf16_rope",
+                  "count": 80
+                }
+              ],
+              "decisions": [
+                {
+                  "signature": {
+                    "operation": "plm_inference",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "bfloat16",
+                    "shape": [
+                      4,
+                      1002,
+                      40,
+                      64
+                    ],
+                    "strides": [
+                      2565120,
+                      2560,
+                      64,
+                      1
+                    ],
+                    "layout": "contiguous",
+                    "mode": "inference",
+                    "mask": "native",
+                    "inplace": false,
+                    "attributes": {
+                      "eligible": "True",
+                      "model": "esmc-fold2-6b"
+                    }
+                  },
+                  "selected": "hip_bf16_rope",
+                  "rejected": []
+                }
+              ],
+              "policy_engine": {
+                "name": "fireprot-core",
+                "bridge_abi": 1,
+                "library": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/qualified-v3/target/release/lib_fireprot_bridge.so",
+                "sha256": "8edcf38e79de569c579667012e3495dc29fbbf24030f3569c2ed92cf1713880a"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "esm2-3b-ops": {
+      "model": "esm2-3b",
+      "hip_device": 6,
+      "seed": 101,
+      "precision": "native",
+      "boundary": "warm packaged forward including context entry/exit; not complete invocation",
+      "reference": "native identical batch grouping",
+      "cases": [
+        {
+          "batch_size": 1,
+          "pairs": [
+            {
+              "native": [
+                0.2434108379529789,
+                0.2435511100338772,
+                0.24335880705621094
+              ],
+              "candidate": [
+                0.238417714019306,
+                0.2380252699367702,
+                0.23750932898838073
+              ]
+            },
+            {
+              "candidate": [
+                0.23821908293757588,
+                0.2378358260029927,
+                0.23772060603369027
+              ],
+              "native": [
+                0.24348539300262928,
+                0.24308754096273333,
+                0.24343716900330037
+              ]
+            },
+            {
+              "native": [
+                0.24355818703770638,
+                0.24333967303391546,
+                0.24334326200187206
+              ],
+              "candidate": [
+                0.23788559902459383,
+                0.23798521398566663,
+                0.2378009679960087
+              ]
+            }
+          ],
+          "medians": {
+            "native": 0.2434108379529789,
+            "candidate": 0.23788559902459383
+          },
+          "speedup": 1.023226454022607,
+          "all_arrays_bitwise_equal": true,
+          "runtime": {
+            "implementation": "unused_attention_mean",
+            "calls": 36,
+            "batch_size": 1,
+            "registry": {
+              "implementations": {
+                "plm_inference": [
+                  {
+                    "name": "unused_attention_mean",
+                    "priority": 10,
+                    "version": "n1000-batch-v1"
+                  }
+                ]
+              },
+              "selection_counts": [
+                {
+                  "operation": "plm_inference",
+                  "implementation": "unused_attention_mean",
+                  "count": 36
+                }
+              ],
+              "decisions": [
+                {
+                  "signature": {
+                    "operation": "plm_inference",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "float32",
+                    "shape": [
+                      1002,
+                      1,
+                      2560
+                    ],
+                    "strides": [
+                      2560,
+                      2560,
+                      1
+                    ],
+                    "layout": "contiguous",
+                    "mode": "inference",
+                    "mask": "native",
+                    "inplace": false,
+                    "attributes": {
+                      "eligible": "True",
+                      "model": "esm2-3b"
+                    }
+                  },
+                  "selected": "unused_attention_mean",
+                  "rejected": []
+                }
+              ],
+              "policy_engine": {
+                "name": "fireprot-core",
+                "bridge_abi": 1,
+                "library": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/qualified-v3/target/release/lib_fireprot_bridge.so",
+                "sha256": "8edcf38e79de569c579667012e3495dc29fbbf24030f3569c2ed92cf1713880a"
+              }
+            }
+          }
+        },
+        {
+          "batch_size": 2,
+          "pairs": [
+            {
+              "native": [
+                0.461004298995249,
+                0.4574756260262802,
+                0.45719272398855537
+              ],
+              "candidate": [
+                0.44789673504419625,
+                0.44824953202623874,
+                0.4478858889779076
+              ]
+            },
+            {
+              "candidate": [
+                0.4480881879571825,
+                0.4480584990233183,
+                0.44810136302839965
+              ],
+              "native": [
+                0.4580503960605711,
+                0.4580034629907459,
+                0.4580903130117804
+              ]
+            },
+            {
+              "native": [
+                0.4584965109825134,
+                0.4583082370227203,
+                0.45810613699723035
+              ],
+              "candidate": [
+                0.4478445319691673,
+                0.4482559399912134,
+                0.4480348569341004
+              ]
+            }
+          ],
+          "medians": {
+            "native": 0.4580903130117804,
+            "candidate": 0.4480584990233183
+          },
+          "speedup": 1.0223895183560394,
+          "all_arrays_bitwise_equal": true,
+          "runtime": {
+            "implementation": "unused_attention_mean",
+            "calls": 36,
+            "batch_size": 2,
+            "registry": {
+              "implementations": {
+                "plm_inference": [
+                  {
+                    "name": "unused_attention_mean",
+                    "priority": 10,
+                    "version": "n1000-batch-v1"
+                  }
+                ]
+              },
+              "selection_counts": [
+                {
+                  "operation": "plm_inference",
+                  "implementation": "unused_attention_mean",
+                  "count": 36
+                }
+              ],
+              "decisions": [
+                {
+                  "signature": {
+                    "operation": "plm_inference",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "float32",
+                    "shape": [
+                      1002,
+                      2,
+                      2560
+                    ],
+                    "strides": [
+                      5120,
+                      2560,
+                      1
+                    ],
+                    "layout": "contiguous",
+                    "mode": "inference",
+                    "mask": "native",
+                    "inplace": false,
+                    "attributes": {
+                      "eligible": "True",
+                      "model": "esm2-3b"
+                    }
+                  },
+                  "selected": "unused_attention_mean",
+                  "rejected": []
+                }
+              ],
+              "policy_engine": {
+                "name": "fireprot-core",
+                "bridge_abi": 1,
+                "library": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/qualified-v3/target/release/lib_fireprot_bridge.so",
+                "sha256": "8edcf38e79de569c579667012e3495dc29fbbf24030f3569c2ed92cf1713880a"
+              }
+            }
+          }
+        },
+        {
+          "batch_size": 4,
+          "pairs": [
+            {
+              "native": [
+                0.8967347430298105,
+                0.8955398770049214,
+                0.8950921029318124
+              ],
+              "candidate": [
+                0.874750612070784,
+                0.8749802520032972,
+                0.8750432110391557
+              ]
+            },
+            {
+              "candidate": [
+                0.8746507270261645,
+                0.8745156039949507,
+                0.8749460049439222
+              ],
+              "native": [
+                0.894867651979439,
+                0.8951384769752622,
+                0.8949478539871052
+              ]
+            },
+            {
+              "native": [
+                0.8949266410199925,
+                0.8957992679206654,
+                0.8956971119623631
+              ],
+              "candidate": [
+                0.8798907160526142,
+                0.8751612699124962,
+                0.8815621059620753
+              ]
+            }
+          ],
+          "medians": {
+            "native": 0.8951384769752622,
+            "candidate": 0.8749802520032972
+          },
+          "speedup": 1.023038491355447,
+          "all_arrays_bitwise_equal": true,
+          "runtime": {
+            "implementation": "unused_attention_mean",
+            "calls": 36,
+            "batch_size": 4,
+            "registry": {
+              "implementations": {
+                "plm_inference": [
+                  {
+                    "name": "unused_attention_mean",
+                    "priority": 10,
+                    "version": "n1000-batch-v1"
+                  }
+                ]
+              },
+              "selection_counts": [
+                {
+                  "operation": "plm_inference",
+                  "implementation": "unused_attention_mean",
+                  "count": 36
+                }
+              ],
+              "decisions": [
+                {
+                  "signature": {
+                    "operation": "plm_inference",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "float32",
+                    "shape": [
+                      1002,
+                      4,
+                      2560
+                    ],
+                    "strides": [
+                      10240,
+                      2560,
+                      1
+                    ],
+                    "layout": "contiguous",
+                    "mode": "inference",
+                    "mask": "native",
+                    "inplace": false,
+                    "attributes": {
+                      "eligible": "True",
+                      "model": "esm2-3b"
+                    }
+                  },
+                  "selected": "unused_attention_mean",
+                  "rejected": []
+                }
+              ],
+              "policy_engine": {
+                "name": "fireprot-core",
+                "bridge_abi": 1,
+                "library": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/qualified-v3/target/release/lib_fireprot_bridge.so",
+                "sha256": "8edcf38e79de569c579667012e3495dc29fbbf24030f3569c2ed92cf1713880a"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "atlaslm-3b-ops": {
+      "model": "atlaslm-3b",
+      "hip_device": 6,
+      "seed": 102,
+      "precision": "native",
+      "boundary": "warm packaged forward including context entry/exit; not complete invocation",
+      "reference": "native identical batch grouping",
+      "cases": [
+        {
+          "batch_size": 1,
+          "pairs": [
+            {
+              "native": [
+                0.10488603904377669,
+                0.10484013601671904,
+                0.10475980304181576
+              ],
+              "candidate": [
+                0.09435092099010944,
+                0.09434682200662792,
+                0.0942570730112493
+              ]
+            },
+            {
+              "candidate": [
+                0.09434888209216297,
+                0.09425134502816945,
+                0.09430963499471545
+              ],
+              "native": [
+                0.10517983708996326,
+                0.10483020904939622,
+                0.10480349790304899
+              ]
+            },
+            {
+              "native": [
+                0.10483116807881743,
+                0.1048262610565871,
+                0.10473601194098592
+              ],
+              "candidate": [
+                0.0946874039946124,
+                0.09414411196485162,
+                0.09415458899457008
+              ]
+            }
+          ],
+          "medians": {
+            "native": 0.10483020904939622,
+            "candidate": 0.09430963499471545
+          },
+          "speedup": 1.1115535443994695,
+          "all_arrays_bitwise_equal": true,
+          "runtime": {
+            "implementation": "hip_bf16_rope",
+            "calls": 48,
+            "library": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/kernel-cache/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e.so",
+              "sha256": "9624b8a166b7639e44fb3daa26abbe84ec8faa998f98f1beb0a7df057135b900"
+            },
+            "batch_size": 1,
+            "rotary_modules": 1,
+            "swiglu_library": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/kernel-cache/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e.so",
+              "sha256": "9624b8a166b7639e44fb3daa26abbe84ec8faa998f98f1beb0a7df057135b900"
+            },
+            "swiglu_calls": 48,
+            "registry": {
+              "implementations": {
+                "plm_inference": [
+                  {
+                    "name": "hip_bf16_rope",
+                    "priority": 10,
+                    "version": "n1000-batch-v1"
+                  }
+                ],
+                "plm_swiglu": [
+                  {
+                    "name": "hip_bf16_swiglu",
+                    "priority": 10,
+                    "version": "n1000-batch-v1"
+                  }
+                ]
+              },
+              "selection_counts": [
+                {
+                  "operation": "plm_inference",
+                  "implementation": "hip_bf16_rope",
+                  "count": 48
+                },
+                {
+                  "operation": "plm_swiglu",
+                  "implementation": "hip_bf16_swiglu",
+                  "count": 48
+                }
+              ],
+              "decisions": [
+                {
+                  "signature": {
+                    "operation": "plm_inference",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "bfloat16",
+                    "shape": [
+                      1,
+                      1002,
+                      36,
+                      64
+                    ],
+                    "strides": [
+                      2308608,
+                      2304,
+                      64,
+                      1
+                    ],
+                    "layout": "contiguous",
+                    "mode": "inference",
+                    "mask": "native",
+                    "inplace": false,
+                    "attributes": {
+                      "eligible": "True",
+                      "model": "atlaslm-3b"
+                    }
+                  },
+                  "selected": "hip_bf16_rope",
+                  "rejected": []
+                },
+                {
+                  "signature": {
+                    "operation": "plm_swiglu",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "bfloat16",
+                    "shape": [
+                      1,
+                      1002,
+                      12288
+                    ],
+                    "strides": [
+                      12312576,
+                      12288,
+                      1
+                    ],
+                    "layout": "contiguous",
+                    "mode": "inference",
+                    "mask": "none",
+                    "inplace": false,
+                    "attributes": {
+                      "eligible": "True",
+                      "model": "atlaslm-3b"
+                    }
+                  },
+                  "selected": "hip_bf16_swiglu",
+                  "rejected": []
+                }
+              ],
+              "policy_engine": {
+                "name": "fireprot-core",
+                "bridge_abi": 1,
+                "library": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/qualified-v3/target/release/lib_fireprot_bridge.so",
+                "sha256": "8edcf38e79de569c579667012e3495dc29fbbf24030f3569c2ed92cf1713880a"
+              }
+            }
+          }
+        },
+        {
+          "batch_size": 2,
+          "pairs": [
+            {
+              "native": [
+                0.19632493192330003,
+                0.19633447902742773,
+                0.20378991798497736
+              ],
+              "candidate": [
+                0.17984700901433825,
+                0.17988001799676567,
+                0.17978424998000264
+              ]
+            },
+            {
+              "candidate": [
+                0.18000920303165913,
+                0.17985110695008188,
+                0.18452184391207993
+              ],
+              "native": [
+                0.19672416301909834,
+                0.19639564806129783,
+                0.19640723406337202
+              ]
+            },
+            {
+              "native": [
+                0.19642687600571662,
+                0.19661323190666735,
+                0.1961861599702388
+              ],
+              "candidate": [
+                0.17990214994642884,
+                0.1797100770054385,
+                0.1796327930642292
+              ]
+            }
+          ],
+          "medians": {
+            "native": 0.19640723406337202,
+            "candidate": 0.17985110695008188
+          },
+          "speedup": 1.0920546300439804,
+          "all_arrays_bitwise_equal": true,
+          "runtime": {
+            "implementation": "hip_bf16_rope",
+            "calls": 48,
+            "library": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/kernel-cache/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e.so",
+              "sha256": "9624b8a166b7639e44fb3daa26abbe84ec8faa998f98f1beb0a7df057135b900"
+            },
+            "batch_size": 2,
+            "rotary_modules": 1,
+            "swiglu_library": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/kernel-cache/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e.so",
+              "sha256": "9624b8a166b7639e44fb3daa26abbe84ec8faa998f98f1beb0a7df057135b900"
+            },
+            "swiglu_calls": 48,
+            "registry": {
+              "implementations": {
+                "plm_inference": [
+                  {
+                    "name": "hip_bf16_rope",
+                    "priority": 10,
+                    "version": "n1000-batch-v1"
+                  }
+                ],
+                "plm_swiglu": [
+                  {
+                    "name": "hip_bf16_swiglu",
+                    "priority": 10,
+                    "version": "n1000-batch-v1"
+                  }
+                ]
+              },
+              "selection_counts": [
+                {
+                  "operation": "plm_inference",
+                  "implementation": "hip_bf16_rope",
+                  "count": 48
+                },
+                {
+                  "operation": "plm_swiglu",
+                  "implementation": "hip_bf16_swiglu",
+                  "count": 48
+                }
+              ],
+              "decisions": [
+                {
+                  "signature": {
+                    "operation": "plm_inference",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "bfloat16",
+                    "shape": [
+                      2,
+                      1002,
+                      36,
+                      64
+                    ],
+                    "strides": [
+                      2308608,
+                      2304,
+                      64,
+                      1
+                    ],
+                    "layout": "contiguous",
+                    "mode": "inference",
+                    "mask": "native",
+                    "inplace": false,
+                    "attributes": {
+                      "eligible": "True",
+                      "model": "atlaslm-3b"
+                    }
+                  },
+                  "selected": "hip_bf16_rope",
+                  "rejected": []
+                },
+                {
+                  "signature": {
+                    "operation": "plm_swiglu",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "bfloat16",
+                    "shape": [
+                      2,
+                      1002,
+                      12288
+                    ],
+                    "strides": [
+                      12312576,
+                      12288,
+                      1
+                    ],
+                    "layout": "contiguous",
+                    "mode": "inference",
+                    "mask": "none",
+                    "inplace": false,
+                    "attributes": {
+                      "eligible": "True",
+                      "model": "atlaslm-3b"
+                    }
+                  },
+                  "selected": "hip_bf16_swiglu",
+                  "rejected": []
+                }
+              ],
+              "policy_engine": {
+                "name": "fireprot-core",
+                "bridge_abi": 1,
+                "library": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/qualified-v3/target/release/lib_fireprot_bridge.so",
+                "sha256": "8edcf38e79de569c579667012e3495dc29fbbf24030f3569c2ed92cf1713880a"
+              }
+            }
+          }
+        },
+        {
+          "batch_size": 4,
+          "pairs": [
+            {
+              "native": [
+                0.361990958917886,
+                0.3643632549792528,
+                0.36287037294823676
+              ],
+              "candidate": [
+                0.3359925439581275,
+                0.3363486099988222,
+                0.337409941945225
+              ]
+            },
+            {
+              "candidate": [
+                0.3351941119180992,
+                0.33429663395509124,
+                0.33624278695788234
+              ],
+              "native": [
+                0.36248725606128573,
+                0.36154304596129805,
+                0.3623862919630483
+              ]
+            },
+            {
+              "native": [
+                0.36468073492869735,
+                0.36355048697441816,
+                0.3618922830792144
+              ],
+              "candidate": [
+                0.3340921549824998,
+                0.33540208905469626,
+                0.336749961017631
+              ]
+            }
+          ],
+          "medians": {
+            "native": 0.36248725606128573,
+            "candidate": 0.3359925439581275
+          },
+          "speedup": 1.0788550596719793,
+          "all_arrays_bitwise_equal": true,
+          "runtime": {
+            "implementation": "hip_bf16_rope",
+            "calls": 48,
+            "library": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/kernel-cache/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e.so",
+              "sha256": "9624b8a166b7639e44fb3daa26abbe84ec8faa998f98f1beb0a7df057135b900"
+            },
+            "batch_size": 4,
+            "rotary_modules": 1,
+            "swiglu_library": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/kernel-cache/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e.so",
+              "sha256": "9624b8a166b7639e44fb3daa26abbe84ec8faa998f98f1beb0a7df057135b900"
+            },
+            "swiglu_calls": 48,
+            "registry": {
+              "implementations": {
+                "plm_inference": [
+                  {
+                    "name": "hip_bf16_rope",
+                    "priority": 10,
+                    "version": "n1000-batch-v1"
+                  }
+                ],
+                "plm_swiglu": [
+                  {
+                    "name": "hip_bf16_swiglu",
+                    "priority": 10,
+                    "version": "n1000-batch-v1"
+                  }
+                ]
+              },
+              "selection_counts": [
+                {
+                  "operation": "plm_inference",
+                  "implementation": "hip_bf16_rope",
+                  "count": 48
+                },
+                {
+                  "operation": "plm_swiglu",
+                  "implementation": "hip_bf16_swiglu",
+                  "count": 48
+                }
+              ],
+              "decisions": [
+                {
+                  "signature": {
+                    "operation": "plm_inference",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "bfloat16",
+                    "shape": [
+                      4,
+                      1002,
+                      36,
+                      64
+                    ],
+                    "strides": [
+                      2308608,
+                      2304,
+                      64,
+                      1
+                    ],
+                    "layout": "contiguous",
+                    "mode": "inference",
+                    "mask": "native",
+                    "inplace": false,
+                    "attributes": {
+                      "eligible": "True",
+                      "model": "atlaslm-3b"
+                    }
+                  },
+                  "selected": "hip_bf16_rope",
+                  "rejected": []
+                },
+                {
+                  "signature": {
+                    "operation": "plm_swiglu",
+                    "device_type": "cuda",
+                    "architecture": "gfx90a",
+                    "dtype": "bfloat16",
+                    "shape": [
+                      4,
+                      1002,
+                      12288
+                    ],
+                    "strides": [
+                      12312576,
+                      12288,
+                      1
+                    ],
+                    "layout": "contiguous",
+                    "mode": "inference",
+                    "mask": "none",
+                    "inplace": false,
+                    "attributes": {
+                      "eligible": "True",
+                      "model": "atlaslm-3b"
+                    }
+                  },
+                  "selected": "hip_bf16_swiglu",
+                  "rejected": []
+                }
+              ],
+              "policy_engine": {
+                "name": "fireprot-core",
+                "bridge_abi": 1,
+                "library": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/qualified-v3/target/release/lib_fireprot_bridge.so",
+                "sha256": "8edcf38e79de569c579667012e3495dc29fbbf24030f3569c2ed92cf1713880a"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "source_sha256": "bcf0adc3a1e37904f6889beff7ba9d5c743251805d43917937f1806a3f27c024"
+}

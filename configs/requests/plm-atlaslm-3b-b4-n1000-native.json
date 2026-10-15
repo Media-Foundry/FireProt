@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "run_id": "plm-atlaslm-3b-b4-n1000-native",
+  "workload": {
+    "model": "plm",
+    "model_name": "atlaslm-3b",
+    "precision": "native",
+    "batch": {
+      "items": 4,
+      "max_batch_size": 4,
+      "max_padded_tokens": 4008,
+      "grouping": "length_sorted"
+    }
+  },
+  "backend": "native",
+  "seed": 102,
+  "hip_device": 6,
+  "source": {
+    "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/atlasfold",
+    "commit": "8ab3aca0e18c8b814d5ca6756b2617a07d72c68d"
+  },
+  "checkpoints": {
+    "model": {
+      "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/atlaslm3b/snapshot/weights/atlaslm_3b_base.pth",
+      "sha256": "8097cc4a234853f19ca97435844829d84fe7f13215c900e74659fa9682cc0ddb"
+    }
+  },
+  "input": {
+    "path": "/media/IntelSSD/fireprot/configs/inputs/plm-batch-n1000.json",
+    "sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2"
+  },
+  "output_dir": "/media/IntelSSD/fireprot/outputs/plm-atlaslm-3b-b4-n1000-native",
+  "resources": {
+    "hip_batch": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/kernel-cache/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e.so",
+      "sha256": "9624b8a166b7639e44fb3daa26abbe84ec8faa998f98f1beb0a7df057135b900"
+    }
+  }
+}

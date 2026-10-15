@@ -88,7 +88,7 @@ def load_model(request, sequence):
             from esm.models.esmc.checkpoint_layout import published_to_native
             from esm.models.esmc.tokenizer import EsmcTokenizer
             from .esmfold2 import model_directory
-            asset_request = dict(request, resources={k:v for k,v in request['resources'].items() if k != 'hip_rope'})
+            asset_request = dict(request, resources={k:v for k,v in request['resources'].items() if k not in ('hip_rope', 'hip_batch')})
             root = model_directory(asset_request)
             cfg = EsmcConfig.from_dict(json.loads((root / 'config.json').read_text())['esmc_config'])
             if (cfg.hidden_size, cfg.num_hidden_layers, cfg.num_attention_heads) != (2560, 80, 40):

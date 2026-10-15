@@ -132,6 +132,7 @@ fn model_gates_keep_full_array_diagnostics_separate_from_protenix_acceptance() {
         ),
     ]);
     let prediction = Prediction {
+        input_id: None,
         sample: 0,
         archive: "unused".into(),
         structure: None,

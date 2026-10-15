@@ -6532,3 +6532,73 @@ historical. This supersedes the old standalone AtlasLM no-cold-E2E-gain result;
 AtlasFold folding ratios and padded LM lengths remain separately qualified.
 README and standalone docs updated. No upstream/model-source edits, no Triton.
 User docs/isa remains untracked. Continue on master.
+
+
+### Model-resident pLM batches and exact HIP batch operators (2026-10-16)
+
+User reconfirmed HIP6 and explicitly selected the strict numerical policy:
+match the official identical batch grouping bitwise; report singleton drift
+separately. All experiments this cycle used HIP6/PCI0000:8e:00.0 only.
+Rust optional Workload::Plm.batch preserves legacy wire identity. Core owns
+bounded input validation and stable length grouping; bridge provides the plan
+to one resident worker. Schema6 recomputes the hash-bound plan and checks IDs,
+original order, complete item coverage, trimmed native tokens/dtypes. Native
+batch also records Rust bridge identity. Existing infer-batch remains separate.
+
+All four native pLMs passed B4 N1000, B4 mixed600/800/900/1000, and residentB1:
+12 supervised jobs,48 output archives exact to matching native references.
+Native warm B4 vs serial speedups Atlas1.147x,ESMC1.213x,ESM21.084x,ESM31.168x.
+Mixed padding erased all gains. Raw singleton drift is NOT zero (including
+ESM3 prenorm embeddings); see provenance/plm_batch_native_20261016.json.
+First incomplete deployment failed before model execution; retained at
+outputs/experiments/plm-batch-20261016/entry-qualification. Native successful
+workers/CLI frozen in qualified-v2; do not rerun old failed controls.
+
+New kernels/amd/fireprot_plm_batch.hip supportsN1000 B1/B2/B4: reset RoPE
+positions per sequence, preserve BF16 products; flatten Atlas SwiGLU rows and
+retain BF16 intermediate. All real-weight B1/B2/B4 outputs exact; packaged B4
+warm gains Atlas1.079x,ESMC1.099x,ESM21.023x. New library SHA
+9624b8a166b7639e44fb3daa26abbe84ec8faa998f98f1beb0a7df057135b900, Rust cache
+fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e.
+Old standalone artifacts unchanged. Optimized batch rejects nonN1000 or actual
+group sizes outside1/2/4; ESM3 native only.
+
+Three AB/BA/AB complete invocation pairs for identical B4:
+Atlas16.045368866->15.052900764s,1.0659320165x;
+ESMC24.137981993->25.041499738s,0.963919184x (NO E2E gain; native recommended);
+ESM240.347227159->20.025705761s,2.0147717958x (mainly loading).
+All72 item archives exact, full accepted records rehashed and HIP6 PCI verified.
+Evidence provenance/plm_batch_e2e_20261016.json. ESMC parallel hashing shared
+between arms. Never multiply warm-screen ratios or hide the negative ESMC E2E.
+
+Separate AtlasLM three-pair batch reuse comparison uses already-optimized
+singleton path as baseline: summed4 complete invocations57.305163255,59.990332902,
+58.967220890s versus B4 15.286241133,15.203582189,15.042426604s.
+Medians58.967220890->15.203582189s,3.8785083776x aggregate throughput.
+Each arm exact to its own official grouping; this is NOT singleton latency
+or folding acceleration. All15 invocations individually Rust-measured/sealed.
+Evidence provenance/atlaslm_batch_reuse_e2e_20261016.json. No corresponding
+cold-process aggregate ratio for other models.
+
+Final frozen candidate root outputs/experiments/plm-batch-20261016/qualified-v3,
+CLI SHA14f993a109b960c6b41d8ed73aa57cf4d96a3c23cc439a366fff57f5d0153aaf,
+bridgeSHA8edcf38e79de569c579667012e3495dc29fbbf24030f3569c2ed92cf1713880a.
+Public configs/requests/plm-*-b4-n1000-{native,fireprot}.json and
+configs/diamondhill/plm-*-batch.json; ESM3 profile retains qualified-v2 workers.
+Input configs/inputs/plm-batch-n1000.json contains distinct development rotations.
+Documentation docs/plm-batch.md. 196 workspace tests/49suites passed; affected
+crates Clippy clean, Python syntax checked. All own GPU jobs have finished.
+Source/doc synchronization, final commit/push and goal status must be checked
+before assuming publication complete. User docs/isa remains untracked.
+
+Publication sync incident: precheck found remote bridge SHA39b7152f... instead
+of expected parent version. Orchestration mistakenly continued after exit1,
+so 43 intended paths were synchronized before the planned backup. Exact prior
+bridge content recovered from Git5c7b4f9cb9cf9ec59a47476634015cca23edfe9e and
+retained as outputs/experiments/plm-batch-20261016/recovered-pre-sync-bridge.rs;
+its SHA matches the originally observed hash. All43 live paths independently
+rehash to intended final sources. Other pre-sync file contents were not captured;
+do NOT claim complete pre-sync backups. No weights, frozen deployment or model
+outputs were in the source list. Incident disclosed to user and recorded in
+provenance/plm_batch_source_sync_incident_20261016.json. Future dependent
+mutations MUST inspect tool exit_code and throw/stop on nonzero.

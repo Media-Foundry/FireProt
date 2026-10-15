@@ -127,7 +127,7 @@ First establish finite intermediate values and report final aligned/local and
 confidence deviations; only an accepted candidate should proceed to uninstrumented
 paired E2E measurements.
 
-A conservative first protected candidate is now running: **complete native
+A conservative first protected candidate has completed: **complete native
 triangle multiplicative updates remain FP32**, with FP16 autocast for the rest
 of PairFormer. This is broader protection than contraction alone. The hashed
 policy declares `triangle_precision: float32`; every triangle module must run
@@ -140,5 +140,35 @@ passes afterward. The FP16 candidate using that check was explicitly cancelled
 through its own Rust inference supervisor; its completed FP32 anchor remains
 valid. The recovery rechecks that anchor and runs only the corrected candidate.
 [Preparation and control pins](../../provenance/openfold3_precision_triangle_fp32_preparation_20261015.json).
-No protected-candidate GPU numerical result is established yet. HIP7 remains
-the only authorized device; all these runs are instrumented diagnostics.
+HIP7 remains the only authorized device; all these runs are instrumented diagnostics.
+
+### Protected FP16 result
+
+The corrected candidate completes all four trunk passes and 200 FP32 diffusion
+calls. Every pass covers all 96 triangle modules; actual calls are 106/96/96/96
+(394 total), including ten extra first-pass chunk-tuner calls. Monitored module
+outputs remain finite. The largest observed FP16 activation magnitude is 50,240;
+FP32 residual values reach 132,454.47. This one input does not establish a global
+overflow guarantee or diagnose the unobserved intermediate that failed earlier.
+
+| Metric versus the exact FP32 anchor | Protected FP16 |
+| --- | ---: |
+| Raw all-atom RMSD | 6.55157 Angstrom |
+| Aligned all-atom RMSD | 6.42278 Angstrom |
+| Independently aligned C-alpha RMSD | 6.22577 Angstrom |
+| Aligned atom displacement p95 / maximum | 11.01379 / 35.22841 Angstrom |
+| C-alpha pair-distance absolute change median / p95 | 2.45894 / 9.05669 Angstrom |
+| Atom pLDDT absolute change mean / maximum | 0.72522 / 4.62874 |
+
+This candidate resolves the observed nonfinite failure but does **not** reduce
+the structural deviation below the whole-PairFormer BF16 result. It is not
+promoted and has no E2E speedup claim. Mean atom pLDDT changes from 37.89925 to
+38.20775; these confidence values and disagreements do not establish which
+prediction is closer to experimental truth. No user acceptance threshold has
+been selected. All sealed outputs were rehashed before the Rust comparison.
+[Complete result and pins](../../provenance/openfold3_precision_triangle_fp32_results_20261015.json).
+
+Prioritize strict-FP32 QKV scheduling and attribution of non-forward invocation
+time. Any later precision trial should narrow the changed modules, record
+chunk-tuner behavior and assess sensitivity across inputs before a quality or
+performance claim. Neither whole-PairFormer candidate proceeds to timed pairs.

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "recovery2_protected_fp16_running",
+  "status": "completed_not_promoted",
   "queue_pid": 1574668,
   "queue_root": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-triangle-fp32-queue-20261015",
   "model_root": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-precision-triangle-fp32-20261015",
@@ -22,7 +22,7 @@
     "telemetry_caveat": "Target busy_percent reports100 with only13926400 VRAM bytes and no KFD VRAM owner. Diagnostic computation succeeds; do not use these runs as performance evidence."
   },
   "cpu_scope_tests": 8,
-  "next": "Collect protected call coverage, finite outputs and aligned/local/confidence deviations. Preserve all failures.",
+  "next": "Prioritize strict-FP32 QKV and non-forward invocation attribution. Neither whole-PairFormer mixed candidate proceeds to timing.",
   "initial_failure": "Environment inventory changed; no precision report or model computation.",
   "recovery1": {
     "queue_pid": 1576252,
@@ -51,6 +51,8 @@
     },
     "coverage": "Every PairFormer triangle module in every cycle; extra tuner calls recorded per module/cycle.",
     "anchor": "Reuses newly qualified recovery1 FP32 anchor with rechecked hashes; mixed-only bookkeeping changed, arithmetic unchanged. No timing comparison.",
-    "regression": "New chunk-tuner warmup test reproduced fixed-count false rejection, then passed with all eight lifecycle tests."
-  }
+    "regression": "New chunk-tuner warmup test reproduced fixed-count false rejection, then passed with all eight lifecycle tests.",
+    "status": "completed_finite_monitored_outputs; aligned_all_atom_rmsd6.422775693258075A"
+  },
+  "result": "provenance/openfold3_precision_triangle_fp32_results_20261015.json"
 }

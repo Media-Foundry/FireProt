@@ -28,24 +28,26 @@ exactness but regresses all three E2E pairs (322.475 -> 324.589 s median, 0.9934
 It is not promoted. [Paired evidence](../provenance/openfold3_narrow_projection_e2e_20261015.json).
 
 PairFormer-only BF16 completes, but aligned all-atom RMSD versus FP32 is 5.293 A;
-unprotected FP16 produces NaN in the first triangle update. Neither is promoted.
+unprotected FP16 produces NaN in the first triangle update. Protecting complete
+triangle updates in FP32 eliminates the observed nonfinite failure, but aligned
+all-atom RMSD is 6.423 A. None of these precision candidates is promoted.
 These are instrumented diagnostics, not new speedup results. The input has low
 mean pLDDT (~37.9); prediction disagreement alone does not establish experimental
 accuracy. [Precision results](../experiments/openfold3_precision/README.md#collected-results-and-next-experiment).
 
 Recommended work, in order:
 
-1. Diagnose the first FP16 triangle contraction before normalization. Test FP32
-   contraction/normalization and residual storage with FP16 projections inside
-   PairFormer only. Keep diffusion FP32. Report aligned/local and confidence
-   deviations before choosing acceptance thresholds or timing a candidate.
-2. Investigate the accepted QKV kernel's QK/softmax/PV scheduling using trained
+1. Investigate the accepted QKV kernel's QK/softmax/PV scheduling using trained
    inputs and the existing exact reduction order. Compare against the accepted
    unroll4 implementation before running a complete model.
-3. Attribute non-forward invocation time. The differences between per-run E2E
+2. Attribute non-forward invocation time. The differences between per-run E2E
    and model timers are approximately **86.9-95.1 s** in the three optimized
    runs. These differences are not all removable startup overhead: loading,
    validation, features, serialization and supervision require separate timing.
+3. Defer whole-PairFormer precision changes. Any narrower precision experiment
+   must keep diffusion FP32, retain per-module/cycle coverage including chunk
+   tuning, and report aligned/local/confidence deviations before an acceptance
+   threshold or timing. Finite outputs alone do not qualify a mixed candidate.
 4. Qualify maintained integration separately; promoting an already measured
    experimental composition is useful deployment work, not another speedup.
 

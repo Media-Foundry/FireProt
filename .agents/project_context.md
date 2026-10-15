@@ -6369,3 +6369,21 @@ modelrootoutputs/experiments/openfold3-precision-triangle-fp32-recovery2-2026101
 RunsprotectedFP16ONLYaftercheckingpriorFP32anchor/allartifacthashes. Sameinventory
 14c60e2a.../HIP7/KFD8466only. NoGPUresultyet. Scope/test/README/context/provenance
 updatesaftere7f7755stillneedcommit. NodeGitNexus32GiBrefreshneededbeforecommit.
+
+
+Protected recovery2 coordinator1583067 completed0; NO remaining GPU jobs from
+this cycle. FP16PairFormer+nativeFP32triangles complete4trunk/200FP32diffusion.
+All96trianglemodules everycycle; actualcalls106/96/96/96=394 (10firstcycletuner
+extras). MonitoredFP16maxabs50240, FP32maxabs132454.47, noobservednonfinite.
+Rustanalysisrootoutputs/experiments/openfold3-precision-triangle-fp32-recovery2-analysis-20261015
+finished0 andrehashesallsealedmetadata/outputs. RawRMSD6.551568A, alignedallatom
+6.422776A/CA6.225766A; CApairdistancep50=2.458937A,p95=9.056692A.
+pLDDTabsdeltamean0.725221,max4.628738; meanpLDDT37.89925->38.20775.
+NOTpromoted/noqualitythreshold/noE2Espeedupclaim. This ispredictionregression,
+notexperimentaltruth. BF16aligned5.293A wasalsonotpromoted. Nextprioritize
+strictFP32QKV35.37%tracekernel-time andnon-forwardE2Egap87-95s attribution.
+UserHIP7only remains; no freshGPUjob queued. DirectE2E stays2.864391789x.
+Rawprotectedresultprovenance/openfold3_precision_triangle_fp32_results_20261015.json.
+Scopecoveragefix1999cc6 pushed; resultdocs/context/provenanceupdatedafterthat
+needfinalcommit. EightCPUscopetests andtwoRustalignmenttests pass; no need
+repeatwholemodel solelyforcurrentdocumentationupdates.

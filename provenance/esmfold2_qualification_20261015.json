@@ -1,0 +1,353 @@
+{
+  "records": [
+    {
+      "arm": "native",
+      "output": "/media/IntelSSD/fireprot/outputs/esmfold2-n600-native-qualification-recovery3-20261015",
+      "model_seconds": 68.20898907002993,
+      "request_seconds": 89.87412251695059,
+      "runtime": {
+        "schema_version": 1,
+        "source_commit": "43b4548b86762edfa747b07d5f440aad3c33acee",
+        "weight_revision": "69869f737beffec5294845ede23db5fc0b4f509e",
+        "kernel_backend": null,
+        "fireprot": null,
+        "bundled_esmc": true,
+        "esmc_precision": "bfloat16",
+        "other_precision": "pinned native boundaries",
+        "requested_sampling_steps": 50,
+        "actual_denoiser_calls": 34,
+        "counts": {
+          "model": 1,
+          "language_model": 1,
+          "trunk": 4,
+          "lm_encoder": 4,
+          "diffusion": 34
+        },
+        "lm_dropout": 0.3,
+        "chunk_size": 64,
+        "stage_cuda_ms": {
+          "language_model": [
+            156.64617919921875
+          ],
+          "lm_encoder": [
+            1049.22119140625,
+            1014.1419677734375,
+            1012.7797241210938,
+            1017.85009765625
+          ],
+          "trunk": [
+            12202.1806640625,
+            12244.7041015625,
+            12154.154296875,
+            12153.0537109375
+          ],
+          "diffusion": [
+            115.68014526367188,
+            80.79611206054688,
+            80.2091064453125,
+            80.24639129638672,
+            80.47123718261719,
+            80.58438110351562,
+            80.2195053100586,
+            80.10652160644531,
+            80.26271057128906,
+            80.48788452148438,
+            80.35249328613281,
+            80.45716094970703,
+            80.49332427978516,
+            80.35393524169922,
+            80.39186096191406,
+            80.72441864013672,
+            80.421630859375,
+            80.26079559326172,
+            80.58326721191406,
+            80.4634017944336,
+            80.53333282470703,
+            80.3846664428711,
+            80.19261932373047,
+            80.34833526611328,
+            80.33872985839844,
+            80.48500061035156,
+            80.23662567138672,
+            80.37057495117188,
+            80.3057632446289,
+            80.29167938232422,
+            80.70248413085938,
+            80.13308715820312,
+            80.56326293945312,
+            83.91216278076172
+          ]
+        },
+        "profiling": true,
+        "peak_allocated_bytes": 19724909568,
+        "peak_reserved_bytes": 33420214272
+      }
+    },
+    {
+      "arm": "fireprot",
+      "output": "/media/IntelSSD/fireprot/outputs/esmfold2-n600-fireprot-qualification-recovery3-20261015",
+      "model_seconds": 29.86058378207963,
+      "request_seconds": 50.86228604707867,
+      "runtime": {
+        "schema_version": 1,
+        "source_commit": "43b4548b86762edfa747b07d5f440aad3c33acee",
+        "weight_revision": "69869f737beffec5294845ede23db5fc0b4f509e",
+        "kernel_backend": null,
+        "fireprot": {
+          "experimental": true,
+          "implementation": "reuse_right_pack",
+          "completed_dispatches": 460,
+          "registry": {
+            "implementations": {
+              "esmfold2_triangle_contract": [
+                {
+                  "name": "reuse_right_pack",
+                  "priority": 10,
+                  "version": "experimental-v1"
+                }
+              ]
+            },
+            "selection_counts": [
+              {
+                "operation": "esmfold2_triangle_contract",
+                "implementation": "reuse_right_pack",
+                "count": 460
+              }
+            ],
+            "decisions": [
+              {
+                "signature": {
+                  "operation": "esmfold2_triangle_contract",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    1,
+                    600,
+                    600,
+                    256
+                  ],
+                  "strides": [
+                    184320000,
+                    307200,
+                    512,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "already_applied",
+                  "inplace": false,
+                  "attributes": {
+                    "autocast": "torch.bfloat16",
+                    "chunk_size": "64",
+                    "eligible": "True",
+                    "flow": "incoming",
+                    "right_strides": "(184320000, 307200, 512, 1)"
+                  }
+                },
+                "selected": "reuse_right_pack",
+                "rejected": []
+              },
+              {
+                "signature": {
+                  "operation": "esmfold2_triangle_contract",
+                  "device_type": "cuda",
+                  "architecture": "gfx90a",
+                  "dtype": "float32",
+                  "shape": [
+                    1,
+                    600,
+                    600,
+                    256
+                  ],
+                  "strides": [
+                    184320000,
+                    307200,
+                    512,
+                    1
+                  ],
+                  "layout": "strided",
+                  "mode": "inference",
+                  "mask": "already_applied",
+                  "inplace": false,
+                  "attributes": {
+                    "autocast": "torch.bfloat16",
+                    "chunk_size": "64",
+                    "eligible": "True",
+                    "flow": "outgoing",
+                    "right_strides": "(184320000, 307200, 512, 1)"
+                  }
+                },
+                "selected": "reuse_right_pack",
+                "rejected": []
+              }
+            ],
+            "policy_engine": {
+              "name": "fireprot-core",
+              "bridge_abi": 1,
+              "library": "/media/IntelSSD/fireprot/outputs/experiments/esmfold2-integration-recovery3-20261015/target/release/lib_fireprot_bridge.so",
+              "sha256": "41bbf7c97570fe9e17f829450e382fdbcb730c55dea9e6c859f339ed97c294be"
+            }
+          },
+          "scope": "Trunk/LM encoder/coda/confidence/MSA triangle contractions only; diffusion unchanged."
+        },
+        "bundled_esmc": true,
+        "esmc_precision": "bfloat16",
+        "other_precision": "pinned native boundaries",
+        "requested_sampling_steps": 50,
+        "actual_denoiser_calls": 34,
+        "counts": {
+          "model": 1,
+          "language_model": 1,
+          "trunk": 4,
+          "lm_encoder": 4,
+          "diffusion": 34
+        },
+        "lm_dropout": 0.3,
+        "chunk_size": 64,
+        "stage_cuda_ms": {
+          "language_model": [
+            155.6419219970703
+          ],
+          "lm_encoder": [
+            345.2799987792969,
+            344.18634033203125,
+            345.7536926269531,
+            345.75897216796875
+          ],
+          "trunk": [
+            4154.2734375,
+            4170.9384765625,
+            4161.56494140625,
+            4151.51318359375
+          ],
+          "diffusion": [
+            114.59957122802734,
+            80.62118530273438,
+            80.33936309814453,
+            79.84772491455078,
+            80.26110076904297,
+            80.31359100341797,
+            80.22797393798828,
+            80.56660461425781,
+            80.08202362060547,
+            80.07193756103516,
+            80.2066879272461,
+            80.51876068115234,
+            80.36223602294922,
+            80.30479431152344,
+            80.3511962890625,
+            80.46370697021484,
+            80.07818603515625,
+            80.63846588134766,
+            80.1660385131836,
+            80.3214340209961,
+            80.05801391601562,
+            80.3219223022461,
+            80.34272003173828,
+            80.3217544555664,
+            80.5385971069336,
+            80.51187896728516,
+            80.18812561035156,
+            80.15836334228516,
+            80.61974334716797,
+            80.19181060791016,
+            80.31599426269531,
+            80.09210205078125,
+            80.11978912353516,
+            80.81610107421875
+          ]
+        },
+        "profiling": true,
+        "peak_allocated_bytes": 19724909568,
+        "peak_reserved_bytes": 33420214272
+      }
+    }
+  ],
+  "arrays": {
+    "atom_mask": {
+      "bitwise_equal": true,
+      "max_abs_delta": null,
+      "passed": true
+    },
+    "coordinates": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "entity_id": {
+      "bitwise_equal": true,
+      "max_abs_delta": null,
+      "passed": true
+    },
+    "iptm": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "pae": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "pair_chains_iptm": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "pde": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "plddt": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "plddt_per_atom": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "ptm": {
+      "bitwise_equal": true,
+      "max_abs_delta": 0.0,
+      "passed": true
+    },
+    "residue_index": {
+      "bitwise_equal": true,
+      "max_abs_delta": null,
+      "passed": true
+    },
+    "token_to_atoms": {
+      "bitwise_equal": true,
+      "max_abs_delta": null,
+      "passed": true
+    }
+  },
+  "all12_exact": true,
+  "full_cif_exact": true,
+  "comparison_exit_code": 0,
+  "scope": "One instrumented qualification per arm; not a repeated E2E speedup claim.",
+  "schema_version": 1,
+  "date": "2026-10-15",
+  "model": "biohub/ESMFold2 including bundled ESMC",
+  "length": 600,
+  "loops": 3,
+  "trunk_passes": 4,
+  "requested_sampling_steps": 50,
+  "actual_denoiser_calls": 34,
+  "samples": 1,
+  "seed": 101,
+  "precision": "Pinned native BF16/FP32 boundaries",
+  "chunk_size": 64,
+  "deterministic": true,
+  "hip_device": 7,
+  "pci_address": "0000:93:00.0",
+  "cache_state": "Fresh processes; caches not flushed; earlier diagnostic runs retained separately",
+  "raw_result": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/esmfold2-integration-recovery3-20261015/qualification-result.json",
+    "sha256": "586fb78da1960a2b7d11ef987404366552fed881b3cb7e31b8cd2003edf6ad22"
+  }
+}

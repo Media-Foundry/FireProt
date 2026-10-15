@@ -19,7 +19,8 @@ See the [Rust acceptance audit](docs/rust-acceptance.md).
 | AtlasFold 260703 **with AtlasLM-3B** | Native, chunked, HIP and fused HIP | N1000/N1536; exact public-output bytes; N1536 reference uses chunked native math |
 | OpenFold3 / OpenBind-0 | `native`, opt-in `hip_fused` | Strict deterministic FP32 N1000/N1536; all 11 arrays bitwise equal |
 | Protenix Base-default v0.5.0 | `native`, opt-in `fireprot` | Strict FP32 N1000 C10/D200/S1: maintained composition passes user 0.1 Å aligned-RMSD and summary-confidence criteria; legacy 0.001 Å coordinate gate fails ([status](docs/protenix-base.md)) |
-| OpenFold2, ESMFold and other models | Planned | No verified integration or speedup claim |
+| Biohub ESMFold2, including ESMC | Native and experimental opt-in worker under qualification | Rust contracts and synthetic operator gates pass; full-model/E2E qualification in progress ([status](docs/esmfold2.md)) |
+| OpenFold2, original ESMFold v1 and other models | Planned | No verified integration or speedup claim |
 
 Protenix and OpenFold3 are separate implementations. Precision, preprocessing,
 recycles, diffusion steps, samples and language-model work remain model-specific.
@@ -169,7 +170,8 @@ rank their absolute performance or prediction quality.
 | OpenFold3, 1536 aa, latest experimental composition | 950.891 → 331.970 s | **2.864x** | Complete Rust invocation; three fresh AB/BA/AB pairs, all 11 arrays and full CIF bytes exact [³](docs/openfold3-performance.md#latest-composition-direct-native-e2e-result) |
 | Protenix Mini-ESM + ESM2-3B, 1000 aa | Not established | — | Numerical integration validated; no controlled paired speedup ([scope](docs/protenix-mini-esm.md#n1000-numerical-checks)) |
 | Protenix Tiny, 124 aa | Not established | — | Loading/numerical checks do not establish paired E2E performance |
-| OpenFold2 / ESMFold | Not measured | — | Adapters remain planned |
+| Biohub ESMFold2 + ESMC | Qualification in progress | — | Native/opt-in integration; no accepted E2E claim yet ([status](docs/esmfold2.md)) |
+| OpenFold2 / original ESMFold v1 | Not measured | — | Adapters remain planned |
 
 1. **Protenix:** Mini-default v0.5.0 FP32, **C4/D1/S1**, seed101, no MSA/templates.
    Reference is the same checkout's native Torch route, including a shared bond-mask
@@ -202,12 +204,13 @@ This is an evidence-based work priority, not a forecast of additional speedup.
 
 | Model | Remaining opportunity and next step |
 | --- | --- |
-| **OpenFold3 — first priority** | Fused QKV accounts for **35.37% of summed instrumented kernel time**; sampled MFMA utilization is **25.97%** despite high CU activity. Investigate scheduling and data movement while preserving exact arithmetic. Also profile the complete invocation's non-forward work. Two smaller-block trials already regressed; do not repeat them unchanged. |
+| **ESMFold2 + ESMC — current focus** | Qualify the native monomer path and opt-in triangle operand packing, then measure complete N1000 invocation pairs. Synthetic operator gains alone do not establish E2E speedup. |
+| **OpenFold3 — current cycle closed** | Final QKV LDS padding trials gave no consistent gain. Non-forward attribution is recorded; a thread-cap comparison was rejected by the protected environment gate. The accepted E2E result remains **2.864x**. [Final trials](docs/openfold3-performance.md#final-bounded-trials-and-transition-to-esmfold2-2026-10-15). |
 | **Mini-ESM — exploratory profiling** | ESM2-3B loading/features execute outside the folding-forward timer. Establish a serial N1000 complete-invocation baseline and stage split before selecting kernels; its remaining headroom is unknown. |
 | **Mini-default — remeasure before porting** | Historical N1000 request/model medians are **27.949 / 15.391 s**. Measure the current Rust entry and check whether later Base/OpenFold3 ideas apply to its actual shapes and C4/D1 workload. No transferred gain is established. |
 | **AtlasFold + AtlasLM-3B — reopen only with a new hotspot** | The previous exact-operator cycle reached a practical plateau. Later layout/LM trials gave negligible gains or failed equality; preserve every stochastic LM pass. A fresh stage profile is needed before further tuning. |
 | **Protenix Base — retain the qualified route** | Sampled triangle BMMs reach about **99% MFMA activity**; Graph and gate-fusion follow-ups did not improve E2E. The N1000 cycle and batching investigation are closed at their measured scope. |
-| **Tiny / OpenFold2 / ESMFold** | Tiny is outside the long-sequence priority; the planned adapters need integration and baselines before an optimization ranking. |
+| **Tiny / OpenFold2 / original ESMFold v1** | Tiny is outside the long-sequence priority; the planned adapters need integration and baselines before an optimization ranking. |
 
 See [optimization priorities and evidence](docs/performance-priorities.md).
 The latest narrow-projection screen is an operator experiment only; it adds

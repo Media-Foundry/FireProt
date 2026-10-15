@@ -62,7 +62,7 @@ pub fn validate_atom14(sequence: &str, coordinates: &Array, structure: &Structur
 }
 
 // AtlasFold 8ab3aca0, common/residue_constants.py. X is UNK with five atoms.
-fn residue_atoms(aa: u8) -> Result<(&'static str, &'static str)> {
+pub(crate) fn residue_atoms(aa: u8) -> Result<(&'static str, &'static str)> {
     Ok(match aa {
         b'A' => ("ALA", "N CA C O CB"),
         b'R' => ("ARG", "N CA C O CB CG CD NE CZ NH1 NH2"),

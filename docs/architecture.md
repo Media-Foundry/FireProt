@@ -30,6 +30,10 @@ does not imply bitwise native/accelerated array equality.
 AtlasFold schema 3 also binds retained input bytes to the request and verifies
 every sample's atom14/CIF correspondence in Rust, including relocated archive
 replay. See [structure acceptance](cif-validation.md).
+Biohub ESMFold2 adds a separate schema-4 monomer contract, including bundled
+ESMC, native loop/sampling semantics, raw coordinates, padded atom confidence
+and its mask. Its native and opt-in triangle paths are under qualification;
+see [ESMFold2 status](esmfold2.md). Original ESMFold v1 remains a future adapter.
 Launch records now bind the executable, declared worker inputs and effective
 environment; final reports retain independently verified physical device mapping.
 See [execution provenance](execution-provenance.md) for its remaining environment

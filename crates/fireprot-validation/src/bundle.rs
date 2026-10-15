@@ -60,7 +60,7 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
     }
     let bundle: Bundle =
         serde_json::from_slice(&fs::read(manifest)?).map_err(|e| Error::Schema(e.to_string()))?;
-    if !matches!(bundle.schema_version, 1..=3)
+    if !matches!(bundle.schema_version, 1..=4)
         || bundle.run_id != r.run_id
         || bundle.seed != r.seed
         || bundle.workload != r.workload
@@ -82,16 +82,18 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
     let samples = match r.workload {
         Workload::Protenix { samples, .. }
         | Workload::Atlasfold { samples, .. }
-        | Workload::Openfold3 { samples, .. } => samples,
+        | Workload::Openfold3 { samples, .. }
+        | Workload::Esmfold2 { samples, .. } => samples,
     };
     if bundle.predictions.len() != samples as usize {
         return Err(schema("prediction sample count mismatch"));
     }
-    let sequence = if bundle.schema_version == 3 {
-        if !matches!(r.workload, Workload::Atlasfold { .. }) {
-            return Err(schema(
-                "bundle schema 3 is reserved for AtlasFold input binding",
-            ));
+    let sequence = if matches!(bundle.schema_version, 3 | 4) {
+        if !matches!(
+            (&r.workload, bundle.schema_version),
+            (Workload::Atlasfold { .. }, 3) | (Workload::Esmfold2 { .. }, 4)
+        ) {
+            return Err(schema("input binding schema does not match the model"));
         }
         let relative = bundle
             .input_snapshot
@@ -124,7 +126,7 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
         )?)
     } else {
         if bundle.input_snapshot.is_some() {
-            return Err(schema("input snapshot requires bundle schema 3"));
+            return Err(schema("input snapshot requires bundle schema 3 or 4"));
         }
         None
     };
@@ -198,6 +200,15 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
             }
             let coords = &arrays["coordinates"];
             match &r.workload {
+                Workload::Esmfold2 { .. } => {
+                    crate::esmfold2::validate_structure(
+                        sequence
+                            .as_deref()
+                            .ok_or_else(|| schema("missing ESMFold2 input binding"))?,
+                        &arrays,
+                        &structure,
+                    )?;
+                }
                 Workload::Atlasfold { .. } => {
                     if let Some(sequence) = &sequence {
                         crate::atlasfold::validate_atom14(sequence, coords, &structure)?;
@@ -229,10 +240,10 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
 /// models require schema 2. Older schemas remain readable for archive replay.
 pub fn validate_current(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bundle> {
     let bundle = validate(request, verified)?;
-    let expected = if matches!(request.as_request().workload, Workload::Atlasfold { .. }) {
-        3
-    } else {
-        2
+    let expected = match request.as_request().workload {
+        Workload::Atlasfold { .. } => 3,
+        Workload::Esmfold2 { .. } => 4,
+        _ => 2,
     };
     if bundle.schema_version != expected {
         return Err(schema(&format!(
@@ -253,6 +264,7 @@ fn validate_model(
         return Err(schema("coordinates must be floating point"));
     }
     match workload {
+        Workload::Esmfold2 { .. } => crate::esmfold2::validate_arrays(arrays)?,
         Workload::Atlasfold { .. } => {
             for key in ["plddt", "pae", "ptm"] {
                 floating(arrays, key)?;

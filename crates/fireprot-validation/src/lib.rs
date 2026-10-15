@@ -2,6 +2,7 @@
 pub mod array;
 pub mod atlasfold;
 pub mod bundle;
+mod esmfold2;
 pub mod metrics;
 pub mod numpy;
 pub mod paired;

@@ -78,6 +78,19 @@ pub enum Workload {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         deterministic: Option<bool>,
     },
+    Esmfold2 {
+        model_name: String,
+        /// Upstream num_loops: the pinned release executes loops + 1 passes.
+        loops: u32,
+        /// Upstream schedule size before the native sigma cap. Record actual
+        /// denoiser calls separately; do not relabel this as executed steps.
+        sampling_steps: u32,
+        samples: u32,
+        precision: Precision,
+        /// Native token-axis chunk size, identical in paired comparisons.
+        chunk_size: u32,
+        deterministic: bool,
+    },
 }
 
 impl Workload {
@@ -85,7 +98,8 @@ impl Workload {
         match self {
             Self::Protenix { model_name, .. }
             | Self::Atlasfold { model_name, .. }
-            | Self::Openfold3 { model_name, .. } => model_name,
+            | Self::Openfold3 { model_name, .. }
+            | Self::Esmfold2 { model_name, .. } => model_name,
         }
     }
 
@@ -96,6 +110,7 @@ impl Workload {
             Self::Atlasfold { recycles, .. } | Self::Openfold3 { recycles, .. } => {
                 recycles.checked_add(1).ok_or(RequestError::CycleOverflow)
             }
+            Self::Esmfold2 { loops, .. } => loops.checked_add(1).ok_or(RequestError::CycleOverflow),
         }
     }
 
@@ -104,6 +119,20 @@ impl Workload {
             return Err(RequestError::EmptyField("model_name"));
         }
         self.trunk_passes()?;
+        if let Self::Esmfold2 {
+            model_name,
+            chunk_size,
+            deterministic,
+            ..
+        } = self
+        {
+            if model_name != "biohub/ESMFold2" || *chunk_size == 0 {
+                return Err(RequestError::Esmfold2Contract);
+            }
+            if backend == Backend::Fireprot && !deterministic {
+                return Err(RequestError::Esmfold2Contract);
+            }
+        }
         let (steps, samples, precision, backends) = match self {
             Self::Protenix {
                 diffusion_steps,
@@ -143,6 +172,17 @@ impl Workload {
                 *precision,
                 &[Backend::Native, Backend::HipFused, Backend::Triton][..],
             ),
+            Self::Esmfold2 {
+                sampling_steps,
+                samples,
+                precision,
+                ..
+            } => (
+                *sampling_steps,
+                *samples,
+                *precision,
+                &[Backend::Native, Backend::Fireprot][..],
+            ),
         };
         if steps == 0 {
             return Err(RequestError::ZeroCount("diffusion_steps"));
@@ -155,7 +195,7 @@ impl Workload {
         }
         let valid_precision = match self {
             Self::Protenix { .. } => matches!(precision, Precision::Float32 | Precision::Bfloat16),
-            Self::Atlasfold { .. } => precision == Precision::Native,
+            Self::Atlasfold { .. } | Self::Esmfold2 { .. } => precision == Precision::Native,
             Self::Openfold3 { .. } => precision == Precision::Float32,
         };
         if !valid_precision {
@@ -283,6 +323,10 @@ pub(crate) fn validate_artifact(artifact: &ArtifactRef) -> Result<(), RequestErr
 
 #[derive(Debug, Clone, PartialEq, Eq, Error)]
 pub enum RequestError {
+    #[error(
+        "ESMFold2 requires biohub/ESMFold2, positive chunk_size, and deterministic FireProt execution"
+    )]
+    Esmfold2Contract,
     #[error("unsupported request schema version {0}")]
     Schema(u32),
     #[error("run_id must be 1–128 ASCII letters/digits/underscore/dot/hyphen, excluding . and ..")]

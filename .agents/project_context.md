@@ -6387,3 +6387,33 @@ Rawprotectedresultprovenance/openfold3_precision_triangle_fp32_results_20261015.
 Scopecoveragefix1999cc6 pushed; resultdocs/context/provenanceupdatedafterthat
 needfinalcommit. EightCPUscopetests andtwoRustalignmenttests pass; no need
 repeatwholemodel solelyforcurrentdocumentationupdates.
+
+
+## User-directed transition scope (2026-10-15)
+
+User explicitly requests: finish exactly two bounded OpenFold3 directions, then
+STOP expanding OpenFold3 tuning and switch to ESMFold opt-in pipeline + speedup.
+HIP7 only. Directions: (1) strictFP32QKV scheduling, (2) non-forward E2E attribution
+and a justified bounded overhead trial. Keep model/steps/recycles/quality gates.
+ForQKV, newLDSrowpadding family264/272 preservesarithmetic/reduction/barriers;
+first8x2synthetic+trainedreplay, fullmodel/E2E onlyifwins. Priorhalf-query,tworow,
+unroll8,wide-queryspill andmixedprecisiondirections remainclosed.
+Newgenerator experiments/mfma_qkv/padded_stage_variant.py pinsqualifiedunroll4
+dd7bbb...; CPUbijections pass. Sources /tmp/fireprot-qkv-padded-stage-20261015.
+ESMFold plannedadapter needs actualupstream/weights/envdiscovery, nativebaseline,
+Rustrequest/registry/outputacceptance integration, explicitopt-in route, qualified
+ops andmatchedE2E. Do notconfuseitwithMini-ESM orAtlasLM. NoESMFoldassetsconfirmedyet.
+CurrentHEADb549139; docs/isa userPDF remainsuntracked.
+
+### 2026-10-15 ESMFold2 qualification continuation
+
+The user explicitly selected biohub/ESMFold2 including bundled ESMC. The final two OpenFold3 directions are closed: padded QKV LDS had no consistent gain; thread8 E2E comparison was rejected by the protected environment comparator. Accepted OF3 N1536 speedup stays 2.864x.
+ESMFold2 source 43b4548b86762edfa747b07d5f440aad3c33acee and revision 69869f737beffec5294845ede23db5fc0b4f509e are pinned. All six shards/config/index/CCD freshly verified. Native/opt-in Rust requests, worker and original triangle packing adapter are implemented but uncommitted. All eight N600/N1000 synthetic FP32/BF16 triangle cases are bitwise exact (3.6–6.3x operator only); no E2E claim yet. The workspace suite passed 184 tests before atom-mask addition.
+First full native N600 run completed 68.459 s forward but failed Rust output acceptance: raw per-atom confidence has 4800 padded slots vs 4769 real atoms. Preserve this failed run at outputs/experiments/esmfold2-integration-20261015; do not count it as an accepted baseline. Correction adds a native atom_mask and preserves padded confidence (12 arrays). Regression reproduced failure before fix, targeted validation passed after fix. Recovery root will be esmfold2-integration-recovery1-20261015. HIP7 only, PCI 0000:93:00.0/KFD8466; use pc@10.120.16.5. Requested sampling_steps50 executes 34 actual denoiser calls under native sigma cap; loops3 executes four trunk/LM-encoder passes, ESMC once. Do not change these semantics.
+
+### 2026-10-15 ESMFold2 N600 qualified; N1000 pairs running
+
+OpenFold3 closure committed on master as 7986adf. ESMFold2 N600 native and reuse-right-pack opt-in now pass Rust supervised content/isolation acceptance, all 12 arrays bitwise equal and complete CIF bytes equal. Forward 68.208989 -> 29.860584 s (one instrumented pair); 460 dispatched triangles, ESMC1, main trunk4, LM encoder4, actual denoiser34. No repeated E2E claim from this qualification. Native query-only MSA encoder is preserved too. All 186 workspace tests pass; four ESM validation tests pass after equivalent FP32 literal cleanup; targeted Clippy clean.
+The native CIF writer goes FP32 -> shortest decimal string -> f64 -> .3f; direct FP32 promotion fails at 11 real rounding boundaries. Recovery1 retained this failure; recovery2 was cancelled due a stale CLI upload. Successful frozen deployment is outputs/experiments/esmfold2-integration-recovery3-20261015, CLI SHA256 161382546dc6f1ddd0d54073762149a0c2cd44e7558ca679c8524112c518e2c3. No workers/binaries may change during the running experiment.
+N1000 three AB/BA/AB pairs run in that root/n1000-pairs/measurements under Rust benchmark-pairs, coordinator PID1640514 (shell1640513). First native accepted, forward271.955189 s/request296.739212 s; candidate1 running at last check. Only HIP7. Qualification profiling1, timed profile profiling0. Native precision, loops3/fourpasses, requested sampling50/actual34, S1/seed101/chunk64/deterministic. Crucial: upstream fold() defaults loops20/sampling200. Our reduced development workload is identical across arms and NOT a default-recipe speedup or accuracy claim.
+Checked-in experimental requests/profiles point to the frozen recovery3 deployment; not a portable installer. Collect and verify six archives plus final benchmark, compare all 12 arrays and complete CIF bytes, publish direct E2E medians and scope, sync reviewed source only, commit/push master. docs/isa/CDNA2.pdf remains untracked. GitNexus --force fixed missing new test symbols; typed status is current, MCP staleness prose remains registry-stale. Do not use empty symbol IDs as real critical dependencies.

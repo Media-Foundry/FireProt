@@ -9,9 +9,29 @@ has not been independently verified in this task.
 Preferred SSH endpoint: `pc@10.120.16.5` (updated 2026-10-07).
 `10.120.16.9` is another interface on the same DiamondHill host; hostname and
 boot identity were checked before switching. FireProt workspace: `/media/IntelSSD/fireprot`.
-The current user restriction is **HIP_VISIBLE_DEVICES=6 or 7**; it supersedes
+The current user restriction is **HIP_VISIBLE_DEVICES=7**; it supersedes
 the earlier authorization to use all eight GCDs.
 Check device occupancy before execution and monitor benchmark isolation.
+
+## ESMFold2 (current target, 2026-10-15)
+
+The user explicitly selected **biohub/ESMFold2**. All six model shards include
+the ESMC language model; do not substitute the separate original ESMFold v1 or
+ESM2-3B checkpoints. Full hashes of the existing snapshot were recomputed and
+matched its pinned download manifest on 2026-10-15.
+
+- Snapshot: `/media/PM982/engramfold/folding_e2e_20260921/weights/esmfold2/snapshot`.
+- Index: `model.safetensors.index.json`; six shards total 26,319,349,908 bytes.
+- Configuration: `config.json`; CCD: `ccd.pkl` (417,306,584 bytes).
+- Weight revision: `69869f737beffec5294845ede23db5fc0b4f509e`.
+- Source: `/media/PM982/engramfold/folding_e2e_20260921/repos/esm`, official
+  `v3.4.1.post1` commit `43b4548b86762edfa747b07d5f440aad3c33acee`.
+- Python: `/media/PM982/engramfold/folding_e2e_20260921/venvs/esmfold2-amd/bin/python`.
+
+See [ESMFold2 integration](esmfold2.md) and
+[full artifact hashes](../provenance/esmfold2_assets_20261015.json).
+
+## Previously recorded single-file checkpoints
 
 | Model | Bytes | Absolute path |
 | --- | ---: | --- |

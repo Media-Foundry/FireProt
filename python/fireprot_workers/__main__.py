@@ -14,7 +14,8 @@ def main():
         if request['backend'] != 'native' and not (
                 (request['workload']['model'] == 'protenix' and request['backend'] == 'fireprot') or
                 (request['workload']['model'] == 'atlasfold' and request['backend'] in ('chunked', 'hip', 'hip_fused')) or
-                (request['workload']['model'] == 'openfold3' and request['backend'] == 'hip_fused')):
+                (request['workload']['model'] == 'openfold3' and request['backend'] == 'hip_fused') or
+                (request['workload']['model'] == 'esmfold2' and request['backend'] == 'fireprot')):
             raise ValueError('Accelerated worker backends are not integrated yet')
         import torch
         channel.ready(torch)
@@ -24,6 +25,8 @@ def main():
             from .atlasfold import predict
         elif request['workload']['model'] == 'protenix':
             from .protenix import predict
+        elif request['workload']['model'] == 'esmfold2':
+            from .esmfold2 import predict
         else:
             raise ValueError('This model worker is not integrated yet')
         bundle = predict(request, channel)

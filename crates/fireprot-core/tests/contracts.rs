@@ -151,7 +151,8 @@ fn counts_cannot_overflow_or_disappear() {
         match &mut w {
             Workload::Protenix { samples, .. }
             | Workload::Atlasfold { samples, .. }
-            | Workload::Openfold3 { samples, .. } => *samples = 0,
+            | Workload::Openfold3 { samples, .. }
+            | Workload::Esmfold2 { samples, .. } => *samples = 0,
         }
         assert_eq!(
             ValidatedRequest::try_from(request(w)),

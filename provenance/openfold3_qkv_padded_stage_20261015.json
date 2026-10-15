@@ -1,0 +1,317 @@
+{
+  "schema_version": 1,
+  "decision": "Rejected: no consistent improvement over qualified unroll4; QKV tuning closed.",
+  "scope": "Strict FP32 N1536 complete trained triangle attention replay, seed101, 2 warmups and 12 balanced samples per arm and direction; HIP7 only. No new full-model/E2E claim.",
+  "trials": [
+    {
+      "pitch": 264,
+      "driver": {
+        "exit_code": 0,
+        "correctness_passed": true,
+        "faster_in_both_directions": false,
+        "scope": "Synthetic and complete trained attention only; no new full-model/E2E result"
+      },
+      "screen_correctness_passed": true,
+      "screen_records": 8,
+      "timings": [
+        {
+          "capture": {
+            "path": "/media/IntelSSD/fireprot/outputs/triatt-profile-n1536-v1/trunk_pairformer-tri_att_end.pt",
+            "sha256": "723e5eb4049b94b5fedb0e7a4abe45ef4b6e77594060bc546ea47d7c647c04aa"
+          },
+          "exact": true,
+          "medians_ms": {
+            "baseline": 267.10816955566406,
+            "padded_stage": 239.151123046875,
+            "unroll4": 239.74724578857422
+          },
+          "samples_ms": {
+            "baseline": [
+              267.1496887207031,
+              266.9014892578125,
+              267.1565856933594,
+              267.133056640625,
+              267.0261535644531,
+              266.9989318847656,
+              267.1684265136719,
+              267.0832824707031,
+              267.1737060546875,
+              267.07513427734375,
+              266.9790954589844,
+              267.1689147949219
+            ],
+            "padded_stage": [
+              241.68072509765625,
+              306.14837646484375,
+              239.42965698242188,
+              238.18746948242188,
+              238.58099365234375,
+              238.53408813476562,
+              238.65541076660156,
+              239.09214782714844,
+              238.2318115234375,
+              240.36923217773438,
+              239.31845092773438,
+              239.21009826660156
+            ],
+            "unroll4": [
+              239.33538818359375,
+              239.9464111328125,
+              239.79934692382812,
+              273.9774475097656,
+              239.49703979492188,
+              240.55709838867188,
+              238.4529571533203,
+              239.6951446533203,
+              241.64166259765625,
+              241.6374969482422,
+              238.5294647216797,
+              238.26412963867188
+            ]
+          }
+        },
+        {
+          "capture": {
+            "path": "/media/IntelSSD/fireprot/outputs/triatt-profile-n1536-v1/trunk_pairformer-tri_att_start.pt",
+            "sha256": "3ec48e6a6a1780457fe7d7ef6449993f97f267515b780f23b8964a365416c559"
+          },
+          "exact": true,
+          "medians_ms": {
+            "baseline": 256.9475860595703,
+            "padded_stage": 230.11997985839844,
+            "unroll4": 229.84398651123047
+          },
+          "samples_ms": {
+            "baseline": [
+              256.9619140625,
+              256.9444580078125,
+              256.9630126953125,
+              257.07598876953125,
+              256.9134216308594,
+              256.9507141113281,
+              257.0163269042969,
+              256.9034729003906,
+              256.813232421875,
+              256.951171875,
+              256.78314208984375,
+              256.8212585449219
+            ],
+            "padded_stage": [
+              230.34178161621094,
+              228.01902770996094,
+              231.19412231445312,
+              231.2584686279297,
+              230.42770385742188,
+              229.08982849121094,
+              231.62718200683594,
+              229.7147674560547,
+              229.89817810058594,
+              232.5928497314453,
+              229.43246459960938,
+              229.41616821289062
+            ],
+            "unroll4": [
+              232.01174926757812,
+              229.84214782714844,
+              229.83718872070312,
+              229.8319091796875,
+              229.8458251953125,
+              230.60183715820312,
+              232.96380615234375,
+              229.3494110107422,
+              232.1805877685547,
+              229.52415466308594,
+              229.28091430664062,
+              230.4203643798828
+            ]
+          }
+        }
+      ],
+      "pins": {
+        "preparation.json": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-pitch264-20261015/preparation.json",
+          "sha256": "0e3aa29c6e1e0d5fe557d8e9f9ab51e5c6fb4e9c1f5e5bcb59049420ff565776"
+        },
+        "screen.json": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-pitch264-20261015/screen.json",
+          "sha256": "2b9c7991e1ac9ad484dcaa7be1ffa1e2e748bd765196b7348dcaef79b9b7fdf9"
+        },
+        "benchmark/report.json": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-pitch264-20261015/benchmark/report.json",
+          "sha256": "871d6484fa6613ae078284d5c6e9d111197918d2ce565a21d4447a4bf22b8cf9"
+        },
+        "environment.json": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-pitch264-20261015/environment.json",
+          "sha256": "14c60e2a88af9c7149b739e0af142154c8c1faf01096e014a7d04f1b26d3214f"
+        },
+        "environment-after.json": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-pitch264-20261015/environment-after.json",
+          "sha256": "14c60e2a88af9c7149b739e0af142154c8c1faf01096e014a7d04f1b26d3214f"
+        },
+        "driver-status.json": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-pitch264-20261015/driver-status.json",
+          "sha256": "55bd61b681d87a8d3de772b6c5acc1d9f2ed3daa75c4bc3bfc966b5e72f516f8"
+        },
+        "qkv_fused.cpp": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-pitch264-20261015/qkv_fused.cpp",
+          "sha256": "f6ee4aa8ea6f758b7418b58b9c0a09ab533ab412e9dde89a72b19b3c1ac8264e"
+        }
+      }
+    },
+    {
+      "pitch": 272,
+      "driver": {
+        "exit_code": 0,
+        "correctness_passed": true,
+        "faster_in_both_directions": false,
+        "scope": "Synthetic and complete trained attention only; no new full-model/E2E result"
+      },
+      "screen_correctness_passed": true,
+      "screen_records": 8,
+      "timings": [
+        {
+          "capture": {
+            "path": "/media/IntelSSD/fireprot/outputs/triatt-profile-n1536-v1/trunk_pairformer-tri_att_end.pt",
+            "sha256": "723e5eb4049b94b5fedb0e7a4abe45ef4b6e77594060bc546ea47d7c647c04aa"
+          },
+          "exact": true,
+          "medians_ms": {
+            "baseline": 266.97047424316406,
+            "padded_stage": 239.47341918945312,
+            "unroll4": 239.1148681640625
+          },
+          "samples_ms": {
+            "baseline": [
+              266.9628601074219,
+              267.1246643066406,
+              340.10784912109375,
+              266.9505310058594,
+              266.9090881347656,
+              266.9841613769531,
+              298.4355773925781,
+              267.0505676269531,
+              266.97808837890625,
+              266.9025573730469,
+              266.8735656738281,
+              266.8686218261719
+            ],
+            "padded_stage": [
+              306.413818359375,
+              238.07728576660156,
+              239.8919219970703,
+              239.55055236816406,
+              238.7324676513672,
+              239.2412109375,
+              239.3962860107422,
+              238.26100158691406,
+              239.65586853027344,
+              238.0131072998047,
+              239.60401916503906,
+              241.7299346923828
+            ],
+            "unroll4": [
+              241.28102111816406,
+              239.11911010742188,
+              238.84625244140625,
+              238.4932098388672,
+              240.83724975585938,
+              238.61082458496094,
+              240.7701873779297,
+              239.11062622070312,
+              240.1428680419922,
+              238.1454620361328,
+              240.15086364746094,
+              238.33941650390625
+            ]
+          }
+        },
+        {
+          "capture": {
+            "path": "/media/IntelSSD/fireprot/outputs/triatt-profile-n1536-v1/trunk_pairformer-tri_att_start.pt",
+            "sha256": "3ec48e6a6a1780457fe7d7ef6449993f97f267515b780f23b8964a365416c559"
+          },
+          "exact": true,
+          "medians_ms": {
+            "baseline": 256.9363555908203,
+            "padded_stage": 230.21573638916016,
+            "unroll4": 229.6853790283203
+          },
+          "samples_ms": {
+            "baseline": [
+              256.9166564941406,
+              257.0213317871094,
+              257.0389404296875,
+              256.9651794433594,
+              256.9096374511719,
+              257.0485534667969,
+              256.807373046875,
+              256.959716796875,
+              256.7728271484375,
+              256.9544372558594,
+              256.7124938964844,
+              256.91827392578125
+            ],
+            "padded_stage": [
+              230.63726806640625,
+              228.94554138183594,
+              228.9521026611328,
+              230.3578338623047,
+              229.1807861328125,
+              228.64402770996094,
+              231.62997436523438,
+              228.9797821044922,
+              230.48043823242188,
+              230.09922790527344,
+              231.68150329589844,
+              230.33224487304688
+            ],
+            "unroll4": [
+              232.32803344726562,
+              230.02401733398438,
+              228.69139099121094,
+              229.909423828125,
+              229.32994079589844,
+              229.46133422851562,
+              231.1376953125,
+              230.58668518066406,
+              229.1527862548828,
+              231.7404022216797,
+              229.3116912841797,
+              228.17080688476562
+            ]
+          }
+        }
+      ],
+      "pins": {
+        "preparation.json": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-pitch272-20261015/preparation.json",
+          "sha256": "b2278e11afee8f7f37c48bda06e28ab57ad59551dcecfca27d01dc81137d9361"
+        },
+        "screen.json": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-pitch272-20261015/screen.json",
+          "sha256": "37cf2d7576d78acfe1c450424e7e59954d9b47f971c7cc14f1fde23f20aac0ff"
+        },
+        "benchmark/report.json": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-pitch272-20261015/benchmark/report.json",
+          "sha256": "231313d14f06ddf1fbc73454144e4e4a213aee60142abaf19fffa1a884baf54e"
+        },
+        "environment.json": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-pitch272-20261015/environment.json",
+          "sha256": "14c60e2a88af9c7149b739e0af142154c8c1faf01096e014a7d04f1b26d3214f"
+        },
+        "environment-after.json": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-pitch272-20261015/environment-after.json",
+          "sha256": "14c60e2a88af9c7149b739e0af142154c8c1faf01096e014a7d04f1b26d3214f"
+        },
+        "driver-status.json": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-pitch272-20261015/driver-status.json",
+          "sha256": "55bd61b681d87a8d3de772b6c5acc1d9f2ed3daa75c4bc3bfc966b5e72f516f8"
+        },
+        "qkv_fused.cpp": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-qkv-pitch272-20261015/qkv_fused.cpp",
+          "sha256": "3ec6e469fe10557f0e76877298e58beaf0341dd0b95df14f06736ddb2741e5e7"
+        }
+      }
+    }
+  ]
+}

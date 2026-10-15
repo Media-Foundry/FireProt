@@ -1026,3 +1026,31 @@ is still pending.
 
 [Full direct paired evidence](../provenance/openfold3_direct_native_latest_e2e_n1536.json).
 See [hardware diagnosis](openfold3-hardware.md) for the next optimization target.
+
+## Final bounded trials and transition to ESMFold2 (2026-10-15)
+
+OpenFold3 tuning is closed for this task at the user's request. The accepted
+direct comparison remains **950.891 -> 331.970 s, 2.864x complete invocation**
+for strict FP32 N1536, R3/four trunk passes, D200/S1, seed101, HIP7. The following
+trials do not change that result.
+
+- QKV LDS row pitches 264 and 272 retained exact synthetic and trained-attention
+  outputs. Against the qualified pitch256/unroll4 implementation, pitch264
+  changed ending attention from 239.747 to 239.151 ms and starting attention
+  from 229.844 to 230.120 ms. Pitch272 was slower in both directions. Neither
+  progressed to full-model timing. [Raw evidence](../provenance/openfold3_qkv_padded_stage_20261015.json).
+- Boundary instrumentation preserved all 11 output arrays and the complete CIF.
+  Preflight took 1.914 s; the three environment/identity checks took 17.917,
+  18.018 and 17.166 s. Within the upstream call, setup before forward took
+  25.559 s and work after forward took 5.788 s. These are boundaries in one
+  diagnostic run, not a general startup benchmark. Checks remain enabled.
+- A bounded OMP/MKL thread-cap trial completed one native-thread arm and one
+  eight-thread arm. Both matched the existing 11-array/CIF reference exactly.
+  Complete invocation times were 327.232 and 325.898 s; forward times were
+  233.299 and 231.802 s. The paired comparator rejected a change to protected
+  `MKL_NUM_THREADS`, then skipped the remaining four planned jobs. No accepted
+  paired speedup verdict exists and no comparison guard was relaxed.
+  [Attribution and trial evidence](../provenance/openfold3_overhead_20261015.json).
+
+The next model is explicitly **biohub/ESMFold2**, including its bundled ESMC
+language model. Original ESMFold v1 is outside this transition.

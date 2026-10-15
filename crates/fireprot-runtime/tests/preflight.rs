@@ -103,6 +103,58 @@ fn named_model_resources_are_hashed_and_cannot_change_silently() {
             .contains("artifact digest mismatch")
     );
 }
+
+#[test]
+fn parallel_hashes_preserve_provenance_and_reject_each_corrupted_asset() {
+    let f = Fixture::new();
+    let mut r = f.request();
+    for index in 0..7 {
+        let path = f.dir.path().join(format!("shard-{index}"));
+        fs::write(&path, vec![index as u8; 65537 + index]).unwrap();
+        r.resources.insert(
+            format!("shard_{index}"),
+            ArtifactRef {
+                sha256: sha256(&path).unwrap(),
+                path,
+            },
+        );
+    }
+    let serial = prepare(checked(r.clone()), SourceOrigin::GitCheckout).unwrap();
+    for threads in [2, 4] {
+        let parallel =
+            prepare_with_hash_threads(checked(r.clone()), SourceOrigin::GitCheckout, threads)
+                .unwrap();
+        assert_eq!(
+            serde_json::to_value(serial.provenance()).unwrap(),
+            serde_json::to_value(parallel.provenance()).unwrap()
+        );
+        assert_eq!(
+            serde_json::to_value(serial.request().as_request()).unwrap(),
+            serde_json::to_value(parallel.request().as_request()).unwrap()
+        );
+    }
+    let paths: Vec<_> = std::iter::once(&r.input)
+        .chain(r.checkpoints.values())
+        .chain(r.resources.values())
+        .map(|artifact| artifact.path.clone())
+        .collect();
+    for path in paths {
+        let original = fs::read(&path).unwrap();
+        fs::write(&path, b"corrupted").unwrap();
+        let error = prepare_with_hash_threads(checked(r.clone()), SourceOrigin::GitCheckout, 4)
+            .err()
+            .unwrap();
+        assert!(error.contains("artifact digest mismatch"), "{error}");
+        fs::write(&path, original).unwrap();
+    }
+    for threads in [0, 5, usize::MAX] {
+        assert!(
+            prepare_with_hash_threads(checked(r.clone()), SourceOrigin::GitCheckout, threads)
+                .is_err()
+        );
+    }
+    assert!(!r.output_dir.exists());
+}
 #[test]
 fn wrong_commit_and_hidden_dirty_source_fail() {
     let f = Fixture::new();

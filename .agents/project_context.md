@@ -6434,3 +6434,54 @@ ESM3 official public HF repo biohub/esm3-sm-open-v1, revision47f0545b2b6daf26a93
 
 Standalone pLM implementation/results committed and pushed master deb3b3797a0bdb50e35c16789eec90cf2593faa7. Three-model formal queue1691148 finished; no remaining ownGPUjobs. Local/remote39sourcepaths reviewed against precommit version, backed up at outputs/experiments/plm-20261015/top-source-backup, synchronized with empty checksumdryrun. Weights/outputs/Gitnottransferred bythat source sync. Complete E2E results asabove, no coldE2EgainESMC/Atlas, native remainsdefault; ESM2 opt-in2.088x.
 ESM3 download now COMPLETE: all2803646068bytes matchofficialLFS5ead5a...; remote checksumaftertransferpassed. Localdownload/tmp/fireprot-esm3-download includesmodelcard+download.json; officialcheckpointremote intendedpathnowexists. OldremoteDNSfailure retained weights/esm3-open/download-attempt-dns-failure.json; currentdownload.jsonsuccess. ESM3 separate deployment outputs/experiments/plm-esm3-20261015, RustCLIwithsingle-read dedicatedcommandand.hipidentitycoverage, pinnedESMsource43b4548. HIP7onlyPCI93/SMI5. NativeN1000run plm-esm3-open-n1000-native accepted, worker1701206ended. Officialfactoryparity1701864completed: tokens[1,1002]int64, prenormembeddings[1,1002,1536]BF16, logits[1,1002,64]BF16 allfinite/allbitwise. Nativefactoryusespatcheddata_rootONLYtolocalofficialweights, modelcodeunchanged; callbacksnoauxcodec needed. Rustcompare-factoryandcompare-workerbothall3exact. Acceptedmetadata/outputshashes rechecked bycollector. Evidence provenance/esm3_assets_20261015.json and esm3_qualification_20261015.json; noESM3accelerationclaim. Finaldocs nowmarkESM3nativequalified andseparatethreePLME2Eresults. TheseESM3evidence/doc/contextupdatesNEEDfinalcommitpush/syncandfinalindexcheck. UserISA PDFremainsuntracked.
+
+
+### Standalone pLM follow-up completed (2026-10-16)
+
+Prior integration and official ESM3 download/qualification were committed and
+pushed as deb3b37 and 5a0c21e. All four pLM entries use real local weights.
+The latest cycle used HIP6 only; HIP6/7 remain authorized. All own diagnostic and
+formal GPU jobs have finished. Do not restart old jobs from earlier context.
+
+ESMC now has a complete-invocation improvement: three AB/BA/AB N1000 pairs,
+native BF16/seed101/one forward/unflushed caches, 36.046971074 -> 23.950733326 s
+medians, 1.5050466549x. Native values [36.046971074,36.011338317,36.098249314];
+candidate [23.849133775,23.950733326,24.056302818]. Every output array is bitwise
+identical. The main improvement is parallel full-file SHA-256 verification of
+independent shards, with qualified HIP RoPE retained. No integrity checks,
+assets or output work are omitted. Runtime prepare_with_hash_threads supports
+1..4 threads; default prepare remains serial. The CLI reads the explicit profile
+FIREPROT_PREFLIGHT_HASH_THREADS setting, which is recorded in launch environment
+and profile pins. Corrupting each input/checkpoint/resource independently still
+fails before launch. 113 runtime/CLI tests pass; Clippy is clean.
+Frozen deployment: outputs/experiments/plm-e2e-next-20261015. Public profile:
+configs/diamondhill/plm-esmc-fold2-6b-optimized.json. Its SHA matches measured
+candidate profile f9ba550cc46522e22b812a3341530bcaeac6397fc2d4afe1596cdff5e9091e98.
+Evidence: provenance/plm_esmc_parallel_hash_e2e_20261015.json. Earlier 0.982x
+ESMC operator-only cold result is historical, superseded by this composition.
+
+ESM3 three paired E2E measurements found the official ESM3.from_pretrained
+factory faster than our previous strict local mmap/assign loader: official
+13.489040224 s versus local 14.564478463 s medians. Local/official ratio is
+0.9261601957x, so do not claim ESM3 acceleration over official implementation.
+All six archives and three output arrays are exact; native BF16, N1000, seed101,
+HIP6, all heads retained, no generation/codecs. The public ESM3 profile now uses
+FIREPROT_ESM3_REFERENCE_FACTORY=1, with data_root routed only to the verified
+local data/weights/esm3_sm_open_v1.pth. Flag0/default retains prior local loader.
+Prepared CLI/workers: outputs/experiments/plm-esm3-load-20261015. Profile SHA
+is e661bbe281c27e59e0d2763c8b83e3162d84673684dbed7959563b0cf32b4f27, identical to
+measured official baseline. Evidence: provenance/plm_esm3_loader_e2e_20261015.json.
+Both ESM3 benchmark arms use backend native; FireProt ESM3 operator backend
+remains unsupported. Selecting official improves previous integration by1.080x,
+which is not a speedup over upstream.
+
+Rejected loading diagnostics: per-tensor asynchronous transfer, pinned-host
+slab transfer, and ESM3 unused-head omission. All outputs exact, but ESMC load
+10.142 ->18.828/26.475 s; Atlas5.280 ->5.121/6.932 s; ESM3 local4.623 ->4.620/5.949 s.
+Unused ESM3 heads save about1ms warm; none promoted. These are single-process
+screens, not formal E2E. Raw outputs under outputs/experiments/plm-load-20261015;
+provenance/plm_loading_screens_20261015.json preserves observations and script pins.
+ESM2 accepted E2E remains39.304->18.827s,2.088x; AtlasLM has no accepted cold E2E
+gain (15.913->16.219s,0.981x), despite1.101x warm RoPE. Native remains Atlas default.
+README/architecture/pLM documentation now distinguish these scopes and outcomes.
+User docs/isa remains untracked. Work on master; no routine feature branches.

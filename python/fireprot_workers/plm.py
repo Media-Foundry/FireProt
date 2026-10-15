@@ -98,18 +98,35 @@ def load_model(request, sequence):
             tokenizer = EsmSequenceTokenizer()
             def unavailable(*args, **kwargs):
                 raise ValueError('Standalone ESM3 entry supports sequence forward only, not structure/function codecs')
-            # Native forward only reads the sequence tokenizer. No auxiliary
-            # decoder or annotation vocabulary download is needed in this scope.
-            from accelerate import init_empty_weights
-            # Keep native nonpersistent RoPE buffers on CPU, as upstream does.
-            with init_empty_weights():
-                model = ESM3(d_model=1536, n_heads=24, v_heads=256, n_layers=48,
-                    structure_encoder_fn=unavailable, structure_decoder_fn=unavailable,
-                    function_decoder_fn=unavailable, tokenizers=SimpleNamespace(sequence=tokenizer))
-            weights = torch.load(checkpoint, map_location='cpu', weights_only=True, mmap=True)
-            model.load_state_dict(weights, strict=True, assign=True)
-            del weights
-            model = model.to(device='cuda', dtype=torch.bfloat16).eval()
+            # Explicit reference-loader control for comparing with the official
+            # factory. Both paths keep the same native model and all output heads.
+            reference_factory = os.environ.get('FIREPROT_ESM3_REFERENCE_FACTORY', '0')
+            if reference_factory not in ('0', '1'):
+                raise ValueError('FIREPROT_ESM3_REFERENCE_FACTORY must be 0 or 1')
+            if reference_factory == '1':
+                from unittest.mock import patch
+                import esm.pretrained as pretrained
+                import esm.utils.constants.esm3 as constants
+                root = checkpoint.parents[2]
+                if checkpoint != root / 'data/weights/esm3_sm_open_v1.pth':
+                    raise ValueError('Official ESM3 factory needs the exact pinned local filename')
+                with patch.object(pretrained, 'data_root', lambda _: root), \
+                     patch.object(constants, 'data_root', lambda _: root):
+                    model = ESM3.from_pretrained('esm3_sm_open_v1', device=torch.device('cuda')).eval()
+                tokenizer = model.tokenizers.sequence
+            else:
+                # Native forward only reads the sequence tokenizer. No auxiliary
+                # decoder or annotation vocabulary download is needed in this scope.
+                from accelerate import init_empty_weights
+                # Keep native nonpersistent RoPE buffers on CPU, as upstream does.
+                with init_empty_weights():
+                    model = ESM3(d_model=1536, n_heads=24, v_heads=256, n_layers=48,
+                        structure_encoder_fn=unavailable, structure_decoder_fn=unavailable,
+                        function_decoder_fn=unavailable, tokenizers=SimpleNamespace(sequence=tokenizer))
+                weights = torch.load(checkpoint, map_location='cpu', weights_only=True, mmap=True)
+                model.load_state_dict(weights, strict=True, assign=True)
+                del weights
+                model = model.to(device='cuda', dtype=torch.bfloat16).eval()
             tokens = torch.tensor([tokenizer.encode(sequence)], dtype=torch.int64, device='cuda')
             def forward():
                 with torch.autocast('cuda', dtype=torch.bfloat16):

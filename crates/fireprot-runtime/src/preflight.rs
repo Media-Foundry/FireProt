@@ -190,6 +190,19 @@ fn verify_artifact(artifact: &ArtifactRef) -> Result<VerifiedArtifact, String> {
 }
 
 pub fn prepare(request: ValidatedRequest, origin: SourceOrigin) -> Result<PreparedRequest, String> {
+    prepare_with_hash_threads(request, origin, 1)
+}
+
+/// Verify independent assets concurrently without caching or omitting any bytes.
+/// All verification threads finish before a prepared request can be returned.
+pub fn prepare_with_hash_threads(
+    request: ValidatedRequest,
+    origin: SourceOrigin,
+    hash_threads: usize,
+) -> Result<PreparedRequest, String> {
+    if !(1..=4).contains(&hash_threads) {
+        return Err("artifact verification requires 1..=4 hash threads".into());
+    }
     let mut r = request.into_request();
     let root = r.source.root.canonicalize().map_err(|e| e.to_string())?;
     let (source, exported_manifest) = match origin {
@@ -214,15 +227,19 @@ pub fn prepare(request: ValidatedRequest, origin: SourceOrigin) -> Result<Prepar
             (m, Some(verified))
         }
     };
-    let input = verify_artifact(&r.input)?;
-    let mut checkpoints = BTreeMap::new();
-    for (role, artifact) in &r.checkpoints {
-        checkpoints.insert(*role, verify_artifact(artifact)?);
-    }
-    let mut resources = BTreeMap::new();
-    for (name, artifact) in &r.resources {
-        resources.insert(name.clone(), verify_artifact(artifact)?);
-    }
+    let artifacts: Vec<_> = std::iter::once(&r.input)
+        .chain(r.checkpoints.values())
+        .chain(r.resources.values())
+        .collect();
+    let mut verified = verify_artifacts(&artifacts, hash_threads)?.into_iter();
+    let input = verified.next().ok_or("missing input verification")?;
+    let checkpoints: BTreeMap<_, _> = r
+        .checkpoints
+        .keys()
+        .copied()
+        .zip(verified.by_ref().take(r.checkpoints.len()))
+        .collect();
+    let resources: BTreeMap<_, _> = r.resources.keys().cloned().zip(verified).collect();
     r.source.root = root.clone();
     r.input.path = input.path.clone();
     for (role, artifact) in &mut r.checkpoints {
@@ -248,5 +265,46 @@ pub fn prepare(request: ValidatedRequest, origin: SourceOrigin) -> Result<Prepar
             checkpoints,
             resources,
         },
+    })
+}
+
+fn verify_artifacts(
+    artifacts: &[&ArtifactRef],
+    threads: usize,
+) -> Result<Vec<VerifiedArtifact>, String> {
+    if threads == 1 {
+        return artifacts
+            .iter()
+            .map(|artifact| verify_artifact(artifact))
+            .collect();
+    }
+    let workers = threads.min(artifacts.len());
+    std::thread::scope(|scope| {
+        let handles: Vec<_> = (0..workers)
+            .map(|worker| {
+                scope.spawn(move || {
+                    artifacts
+                        .iter()
+                        .enumerate()
+                        .skip(worker)
+                        .step_by(workers)
+                        .map(|(index, artifact)| (index, verify_artifact(artifact)))
+                        .collect::<Vec<_>>()
+                })
+            })
+            .collect();
+        let mut results = Vec::with_capacity(artifacts.len());
+        let mut panicked = false;
+        for handle in handles {
+            match handle.join() {
+                Ok(items) => results.extend(items),
+                Err(_) => panicked = true,
+            }
+        }
+        if panicked {
+            return Err("artifact verification thread panicked".into());
+        }
+        results.sort_unstable_by_key(|(index, _)| *index);
+        results.into_iter().map(|(_, result)| result).collect()
     })
 }

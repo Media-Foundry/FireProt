@@ -137,9 +137,14 @@ Use `fireprot esm REQUEST PROFILE` for ESMC/ESM2/ESM3 sequence inference and
 `fireprot atlaslm REQUEST PROFILE` for AtlasLM. These entries export embeddings
 and available sequence logits independently of folding. ESMC, ESM2 and AtlasLM
 have N1000 native/opt-in exact-output qualification. ESM3 native N1000 outputs
-match the official model factory bitwise. Standalone ESM2 N1000 complete invocation improves **39.304 → 18.827 s
-(2.088x)** with exact outputs. ESMC/AtlasLM have warm-forward gains but no cold-start
-E2E gain in this round. These results do not change folding speedup rows.
+match the official model factory bitwise. At N1000, complete invocation improves
+**36.047 → 23.951 s (1.505x) for ESMC**, primarily through parallel full-file
+asset verification, and **39.304 → 18.827 s (2.088x) for ESM2**, primarily through
+checkpoint-covered initialization. All retained outputs are bitwise equal.
+AtlasLM has a warm-forward gain but no measured cold-start E2E gain.
+ESM3 selects the official loader at **13.489 s**, which outperforms the earlier
+local loader (14.564 s); no speedup over the official ESM3 implementation is claimed.
+These results do not change folding speedup rows.
 See [commands, native precision and performance scope](docs/protein-language-models.md).
 
 ## Outputs and measurement

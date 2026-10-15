@@ -35,7 +35,7 @@ Multiple-sequence batching and masked-token/generation tasks are not connected.
 | `esmc-fold2-6b` | Tokens and final normalized embedding | BF16 embedding | Encoder bundled in the pinned Biohub ESMFold2 release; no MLM head |
 | `esm2-3b` | Tokens, final normalized layer-36 embedding and logits | FP32 | `esm2_t36_3B_UR50D.pt` plus contact regression companion |
 | `atlaslm-3b` | Tokens, native embedding and logits | FP32 embedding, BF16 logits | `atlaslm_3b_base.pth` |
-| `esm3-open` | Tokens, native prenorm embedding and sequence logits | BF16 embedding/logits with native BF16 autocast | Official `biohub/esm3-sm-open-v1`; N1000 native factory parity passed |
+| `esm3-open` | Tokens, native prenorm embedding and sequence logits | BF16 embedding/logits with native BF16 autocast | Official `biohub/esm3-sm-open-v1`; N1000 native factory parity passed; prepared profile uses the faster official factory |
 
 Tokens retain BOS/EOS: `[1, N+2]`. Embeddings retain those positions too:
 `[1, N+2, hidden_size]`. For residue-only use, select `[:, 1:-1, :]`.
@@ -56,8 +56,8 @@ DiamondHill deployment, not a portable installer. Copy each request and choose
 an unused `run_id` and `output_dir` before executing it.
 
 ```bash
-fireprot esm configs/requests/plm-esmc-fold2-6b-n1000-native.json \
-  configs/diamondhill/plm-esmc-fold2-6b.json
+fireprot esm configs/requests/plm-esmc-fold2-6b-n1000-fireprot.json \
+  configs/diamondhill/plm-esmc-fold2-6b-optimized.json
 fireprot esm configs/requests/plm-esm2-3b-n1000-fireprot.json \
   configs/diamondhill/plm-esm2-3b.json
 fireprot atlaslm configs/requests/plm-atlaslm-3b-n1000-native.json \
@@ -115,6 +115,40 @@ not establish a cold-start speedup. Complete invocation results below include st
 
 ## Complete invocation E2E results
 
+### Latest ESMC composition
+
+Three additional AB/BA/AB N1000 pairs measure **36.047 → 23.951 seconds
+(1.505x, 33.56% less time)** for serial full-asset verification/native Torch
+versus four-thread full-asset verification/HIP RoPE. Every archive and both
+output arrays pass the unchanged acceptance gates and bitwise comparisons.
+HIP6, native BF16, seed101, one sequence forward, fresh processes and unflushed
+filesystem/GPU library caches are identical across arms.
+[Full observations and receipt pins](../provenance/plm_esmc_parallel_hash_e2e_20261015.json).
+
+The gain mainly comes from **CPU startup verification of the six large shards**.
+Each declared file is still read completely and checked against SHA-256 on every
+invocation. No digest cache, model-output cache, reduced weight set or skipped
+integrity check is used. All verification threads finish before worker launch.
+First-forward medians are 1.038 → 1.011 seconds; the 1.505x result must not be
+described as a 1.505x transformer/GPU speedup.
+
+Use `configs/diamondhill/plm-esmc-fold2-6b-optimized.json` with a fresh copy of
+the FireProt request. Its profile sets `FIREPROT_PREFLIGHT_HASH_THREADS=4` and
+uses this matched CLI/worker/bridge deployment:
+
+```text
+/media/IntelSSD/fireprot/outputs/experiments/plm-e2e-next-20261015/target/release/fireprot
+```
+
+The explicit profile setting accepts 1–4 threads; omission preserves serial
+verification. It applies to independent input/checkpoint/resource files, not
+parallel chunks of a single SHA-256 stream. It is not a reason to expect the same
+gain for single-checkpoint AtlasLM or ESM3. The launch environment and profile
+hash bind the setting to the comparison. Reproduce with
+`experiments/plm/prepare_hash_pairs.py` in a new built source snapshot.
+
+### Earlier operator-only comparison
+
 Three fresh-process AB/BA/AB pairs per model completed on HIP6, N1000, using a
 single frozen Rust CLI and serial execution. Native precision, one forward,
 seed101 (ESMC/ESM2) or seed102 (AtlasLM), unflushed filesystem/GPU library caches;
@@ -125,7 +159,7 @@ all retained NPY bytes. [Versioned evidence](../provenance/plm_e2e_n1000_2026101
 
 | Model | Native → opt-in E2E median | Ratio | Decision |
 | --- | ---: | ---: | --- |
-| ESMC bundled 6B | 36.148 → 36.798 s | 0.982x | No cold-start E2E gain; retain native as the one-off default |
+| ESMC bundled 6B | 36.148 → 36.798 s | 0.982x | RoPE alone gives no cold-start E2E gain; superseded by the composition above |
 | ESM2-3B | 39.304 → 18.827 s | **2.088x** | Opt-in meta initialization plus omitted unused attention mean; exact FP32 outputs |
 | AtlasLM-3B | 15.913 → 16.219 s | 0.981x | No cold-start E2E gain; retain native as the one-off default |
 
@@ -143,8 +177,26 @@ The frozen benchmark CLI is:
 ```
 
 The profiles for these three models use the matching frozen worker directory and
-bridge. Inference examples may point to a previously used output directory;
+bridge, except the separate new ESMC `-optimized` profile above. Inference examples may point to a previously used output directory;
 always copy requests and change their run ID/output path before execution.
+
+### Rejected loading and head trials
+
+All nine diagnostic runs retained bitwise output equality. Single-process load
+times, including imports inside the loader, were:
+
+| Model | Native | Per-tensor asynchronous transfer | Packed pinned-host transfer |
+| --- | ---: | ---: | ---: |
+| ESMC | 10.142 s | 18.828 s | 26.475 s |
+| AtlasLM | 5.280 s | 5.121 s | 6.932 s |
+| ESM3 | 4.623 s | 4.620 s | 5.949 s |
+
+The ESM3 candidate also omitted auxiliary heads not exported by the sequence
+interface, saving only about 1 ms of warm forward time. These are single-trial
+diagnostics, not supervised E2E measurements or statistically established gains.
+None is promoted. The small AtlasLM difference does not establish an E2E gain,
+and pinned-memory packing is slower for all three models.
+[Trial evidence](../provenance/plm_loading_screens_20261015.json).
 
 ## ESM3 native qualification
 
@@ -154,25 +206,48 @@ DiamondHill copy match official LFS SHA-256
 `5ead5a135c658068db6a4f1b933e72d6110992c4668822e1c0e2dcc53e38acd9`.
 The model card is retained beside the checkpoint. [Asset record](../provenance/esm3_assets_20261015.json).
 
-The maintained sequence loader uses the pinned architecture and strict local
-state loading. Nonpersistent RoPE buffers are constructed on CPU as in the
-official factory, then moved/cast with the model. Unused auxiliary codec callbacks
-reject calls rather than downloading additional models. The full native forward
-still computes its heads; this entry exports sequence logits and prenorm embeddings.
+Both supported loading routes use the pinned architecture and local weights.
+Nonpersistent RoPE buffers retain the native construction and casting behavior.
+The full native forward still computes its heads; this entry exports sequence
+logits and prenorm embeddings. No auxiliary codec is invoked by this interface.
 
 On HIP7, N1000/seed101, all three output arrays pass Rust schema-5 acceptance and
 are bitwise equal across the supervised worker, the standalone loader and the
 independent official `ESM3.from_pretrained` factory with local asset routing.
-The comparison does not establish an ESM3 acceleration ratio or validate sequence
+That initial qualification did not establish an ESM3 acceleration ratio or validate sequence
 sampling, structure decoding or multimodal prompting.
 [Qualification record](../provenance/esm3_qualification_20261015.json).
 
-The prepared ESM3 CLI/worker deployment is separate from the frozen three-model
-benchmark:
+### ESM3 loader E2E decision
+
+Three subsequent AB/BA/AB N1000 pairs on HIP6 compare the official
+`ESM3.from_pretrained` factory (routing only `data_root` to the verified local
+checkpoint) against the previously integrated strict mmap/assign loader. Both
+arms retain native Torch BF16 math, all output heads, seed101, one forward,
+fresh processes and unflushed caches. All six archives and all three arrays
+pass the unchanged Rust gates and bitwise comparisons.
+
+| Loading route | Complete invocation median |
+| --- | ---: |
+| Official factory | **13.489 s** |
+| Previous local mmap/assign loader | 14.564 s |
+
+The mmap route is **0.926x versus the official factory**, so it is not promoted
+as an optimization. Selecting the official factory instead improves the earlier
+integration by 1.080x; this is not a speedup over the official implementation.
+[Full observations and receipt pins](../provenance/plm_esm3_loader_e2e_20261015.json).
+
+The prepared ESM3 profile now explicitly sets
+`FIREPROT_ESM3_REFERENCE_FACTORY=1` and uses this matched CLI/worker deployment:
 
 ```text
-/media/IntelSSD/fireprot/outputs/experiments/plm-esm3-20261015/target/release/fireprot
+/media/IntelSSD/fireprot/outputs/experiments/plm-esm3-load-20261015/target/release/fireprot
 ```
 
 Use it with `configs/diamondhill/plm-esm3-open.json`, or build the current checkout
-and deploy its workers explicitly. Neither prepared example is a dependency installer.
+and deploy its workers explicitly. Setting the flag to `0` retains the earlier
+strict mmap/assign loader; omission also retains that general local-loader path.
+The official factory requires the verified `data/weights/esm3_sm_open_v1.pth`
+filename/layout. No remote download is introduced by this flag. Reproduce with
+`experiments/plm/prepare_esm3_loader_pairs.py` in a fresh frozen deployment.
+Neither prepared example is a dependency installer.

@@ -54,6 +54,12 @@ sequence logits match the pinned official model factory bitwise. Generation and
 auxiliary structure/function codec workflows are outside this contract.
 See [standalone pLM inference](protein-language-models.md).
 
+Artifact preflight optionally verifies independent files with 1–4 Rust threads,
+selected explicitly by `FIREPROT_PREFLIGHT_HASH_THREADS` in the execution profile.
+The default remains serial. Every file retains full SHA-256 and before/after
+metadata checks; no worker launches until all checks succeed. This reduces the
+measured sharded ESMC startup cost without changing model arithmetic or precision.
+
 ## Historical operator implementation
 
 The pre-migration implementation used `fireprot/ops`, `fireprot/backends/amd`, `fireprot/adapters/protenix` and `fireprot/validation`. Those Python boundaries now live under `python/fireprot`; Rust owns shared policy and maintained validation. Historical reproduction tools remain under `benchmarks/protenix`. The independent Protenix checkout exposes `fireprot` choices for triangle multiplication and triangle attention while retaining its upstream torch defaults.

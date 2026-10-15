@@ -6,7 +6,7 @@ use fireprot_runtime::{
     build_tree::BuildTree,
     device::AmdSmiMonitor,
     execution,
-    preflight::{SourceOrigin, prepare},
+    preflight::{SourceOrigin, prepare_with_hash_threads},
     supervisor::{self, Limits, RunReport, WorkerCommand},
 };
 use fireprot_validation::bundle;
@@ -86,7 +86,15 @@ fn run_loaded(
         Some(manifest) => SourceOrigin::Exported { manifest },
         None => SourceOrigin::GitCheckout,
     };
-    let prepared = prepare(request, origin)?;
+    // Explicit profile setting, retained in launch environment and profile pins.
+    // Do not derive verification policy from an unrecorded ambient default.
+    let hash_threads = execution
+        .environment
+        .get("FIREPROT_PREFLIGHT_HASH_THREADS")
+        .map(|value| value.parse::<usize>())
+        .transpose()?
+        .unwrap_or(1);
+    let prepared = prepare_with_hash_threads(request, origin, hash_threads)?;
     let workers = execution.workers.canonicalize()?;
     let root = prepared.request().as_request().source.root.clone();
     let framework = workers
@@ -177,7 +185,6 @@ fn run_loaded(
             suffixes: vec![
                 ".cpp".into(),
                 ".cu".into(),
-                ".hip".into(),
                 ".hip".into(),
                 ".h".into(),
                 ".hpp".into(),

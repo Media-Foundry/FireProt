@@ -7,7 +7,7 @@ import sys
 import zipfile
 
 
-def collect(root, destination):
+def collect(root, destination, *selected):
     root = Path(root).resolve()
     def pin(path):
         return dict(path=str(path), sha256=hashlib.sha256(path.read_bytes()).hexdigest())
@@ -16,7 +16,13 @@ def collect(root, destination):
         assert path.is_absolute() and pin(path)['sha256'] == item['sha256']
         return json.loads(path.read_text())
     models = {}
-    for model, calls, arrays in [('esmc-fold2-6b',80,2),('esm2-3b',36,3),('atlaslm-3b',48,3)]:
+    specifications = [('esmc-fold2-6b',80,2),('esm2-3b',36,3),('atlaslm-3b',48,3)]
+    if 'esm3-open' in selected:
+        specifications.append(('esm3-open', 0, 3))
+    assert set(selected).issubset({item[0] for item in specifications})
+    for model, calls, arrays in specifications:
+        if selected and model not in selected:
+            continue
         path = root / (model+'-measurements/benchmark.json')
         benchmark = json.loads(path.read_text())
         assert benchmark['phase'] == 'succeeded' and len(benchmark['measurements']) == 6
@@ -69,7 +75,7 @@ def collect(root, destination):
             records=records,performance=comparison['performance'],all_arrays_exact=True,
             first_forward_medians={arm:statistics.median(r['first_forward_seconds'] for r in records if r['slot']['arm']==arm) for arm in ('baseline','candidate')})
     result = dict(schema_version=1, length=1000, hip_device=6, pci_address='0000:8e:00.0',models=models,
-        scope='Three AB/BA/AB fresh-process pairs per model under frozen Rust CLI, sequentially on HIP6. Native precision, seed101 ESMC/ESM2 or seed102 AtlasLM, one sequence forward, unflushed filesystem/GPU library caches. All arrays bitwise equal; no observations discarded. Cold first-forward timings include lazy GPU initialization and are distinct from warm-forward screens. No folding speedup is claimed.')
+        scope='Three AB/BA/AB fresh-process pairs per model under frozen Rust CLI, sequentially on HIP6. Native precision, seed101 except seed102 AtlasLM, one sequence forward, unflushed filesystem/GPU library caches. All arrays bitwise equal; no observations discarded. Cold first-forward timings include lazy GPU initialization and are distinct from warm-forward screens. No folding speedup is claimed.')
     with Path(destination).open('x') as handle:
         json.dump(result,handle,indent=2);handle.write('\n')
 

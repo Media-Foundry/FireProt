@@ -113,6 +113,17 @@ fn execute(command: Command<'_>) -> Result<()> {
                 return Err("batch failed or cancelled; inspect per-job reports".into());
             }
         }
+        Command::Plm {
+            family,
+            request,
+            profile,
+        } => {
+            let report = inference::run_plm(request, profile, family)?;
+            print_json(&report)?;
+            if report.phase != Phase::Succeeded {
+                return Err("pLM inference failed; inspect supervisor.json and stderr.log".into());
+            }
+        }
         Command::Infer { request, profile } => {
             let report = inference::run(request, profile)?;
             print_json(&report)?;

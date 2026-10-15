@@ -15,11 +15,13 @@ def main():
                 (request['workload']['model'] == 'protenix' and request['backend'] == 'fireprot') or
                 (request['workload']['model'] == 'atlasfold' and request['backend'] in ('chunked', 'hip', 'hip_fused')) or
                 (request['workload']['model'] == 'openfold3' and request['backend'] == 'hip_fused') or
-                (request['workload']['model'] == 'esmfold2' and request['backend'] == 'fireprot')):
+                (request['workload']['model'] in ('esmfold2', 'plm') and request['backend'] == 'fireprot')):
             raise ValueError('Accelerated worker backends are not integrated yet')
         import torch
         channel.ready(torch)
-        if request['workload']['model'] == 'openfold3':
+        if request['workload']['model'] == 'plm':
+            from .plm import predict
+        elif request['workload']['model'] == 'openfold3':
             from .openfold3 import predict
         elif request['workload']['model'] == 'atlasfold':
             from .atlasfold import predict

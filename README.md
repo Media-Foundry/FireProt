@@ -131,6 +131,17 @@ experimental CLI/profile together; see [ESMFold2 entry and scope](docs/esmfold2.
 `scripts/smoke.sh [MANIFEST]` delegates to Rust `infer-batch`; its default is the
 three-model Protenix smoke manifest. See [batch inference](docs/batch-inference.md).
 
+## Standalone protein language models
+
+Use `fireprot esm REQUEST PROFILE` for ESMC/ESM2/ESM3 sequence inference and
+`fireprot atlaslm REQUEST PROFILE` for AtlasLM. These entries export embeddings
+and available sequence logits independently of folding. ESMC, ESM2 and AtlasLM
+have N1000 native/opt-in exact-output qualification; ESM3 weight validation is
+pending. Standalone ESM2 N1000 complete invocation improves **39.304 → 18.827 s
+(2.088x)** with exact outputs. ESMC/AtlasLM have warm-forward gains but no cold-start
+E2E gain in this round. These results do not change folding speedup rows.
+See [commands, native precision and performance scope](docs/protein-language-models.md).
+
 ## Outputs and measurement
 
 A successful request writes `accepted.json`, `supervisor.json`, provenance and

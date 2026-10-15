@@ -60,7 +60,7 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
     }
     let bundle: Bundle =
         serde_json::from_slice(&fs::read(manifest)?).map_err(|e| Error::Schema(e.to_string()))?;
-    if !matches!(bundle.schema_version, 1..=4)
+    if !matches!(bundle.schema_version, 1..=5)
         || bundle.run_id != r.run_id
         || bundle.seed != r.seed
         || bundle.workload != r.workload
@@ -80,6 +80,7 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
         }
     }
     let samples = match r.workload {
+        Workload::Plm { .. } => 1,
         Workload::Protenix { samples, .. }
         | Workload::Atlasfold { samples, .. }
         | Workload::Openfold3 { samples, .. }
@@ -88,10 +89,12 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
     if bundle.predictions.len() != samples as usize {
         return Err(schema("prediction sample count mismatch"));
     }
-    let sequence = if matches!(bundle.schema_version, 3 | 4) {
+    let sequence = if matches!(bundle.schema_version, 3..=5) {
         if !matches!(
             (&r.workload, bundle.schema_version),
-            (Workload::Atlasfold { .. }, 3) | (Workload::Esmfold2 { .. }, 4)
+            (Workload::Atlasfold { .. }, 3)
+                | (Workload::Esmfold2 { .. }, 4)
+                | (Workload::Plm { .. }, 5)
         ) {
             return Err(schema("input binding schema does not match the model"));
         }
@@ -126,7 +129,7 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
         )?)
     } else {
         if bundle.input_snapshot.is_some() {
-            return Err(schema("input snapshot requires bundle schema 3 or 4"));
+            return Err(schema("input snapshot requires bundle schema 3, 4 or 5"));
         }
         None
     };
@@ -169,8 +172,26 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
             };
             arrays.insert(name, array);
         }
-        validate_model(&r.workload, &arrays, prediction.confidence.as_ref())?;
-        if bundle.schema_version >= 2 {
+        if let Workload::Plm { model_name, .. } = &r.workload {
+            if bundle.schema_version != 5
+                || prediction.structure.is_some()
+                || prediction.confidence.is_some()
+            {
+                return Err(schema(
+                    "standalone pLM requires schema 5 without structures/confidence",
+                ));
+            }
+            crate::plm::validate(
+                model_name,
+                sequence
+                    .as_deref()
+                    .ok_or_else(|| schema("missing pLM input binding"))?,
+                &arrays,
+            )?;
+        } else {
+            validate_model(&r.workload, &arrays, prediction.confidence.as_ref())?;
+        }
+        if (2..=4).contains(&bundle.schema_version) {
             let file = prediction
                 .structure
                 .as_ref()
@@ -241,6 +262,7 @@ pub fn validate(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bund
 pub fn validate_current(request: &ValidatedRequest, verified: &[PathBuf]) -> Result<Bundle> {
     let bundle = validate(request, verified)?;
     let expected = match request.as_request().workload {
+        Workload::Plm { .. } => 5,
         Workload::Atlasfold { .. } => 3,
         Workload::Esmfold2 { .. } => 4,
         _ => 2,
@@ -264,6 +286,7 @@ fn validate_model(
         return Err(schema("coordinates must be floating point"));
     }
     match workload {
+        Workload::Plm { .. } => return Err(schema("pLM requires input-bound validation")),
         Workload::Esmfold2 { .. } => crate::esmfold2::validate_arrays(arrays)?,
         Workload::Atlasfold { .. } => {
             for key in ["plddt", "pae", "ptm"] {

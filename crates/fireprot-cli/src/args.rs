@@ -13,6 +13,11 @@ pub enum Command<'a> {
         specification: &'a Path,
         destination: &'a Path,
     },
+    Plm {
+        family: &'a str,
+        request: &'a Path,
+        profile: &'a Path,
+    },
     InferBatch(&'a Path),
     InspectCif(&'a Path),
     CompareProtenixCif {
@@ -65,6 +70,16 @@ pub enum Command<'a> {
 }
 
 const COMMANDS: &[(&str, &str, &str)] = &[
+    (
+        "esm",
+        "REQUEST EXECUTION",
+        "Run standalone ESMC, ESM2 or ESM3 sequence inference.",
+    ),
+    (
+        "atlaslm",
+        "REQUEST EXECUTION",
+        "Run standalone AtlasLM sequence inference.",
+    ),
     (
         "benchmark-pairs",
         "SPECIFICATION DESTINATION",
@@ -221,6 +236,11 @@ pub fn parse(args: &[String]) -> Result<Command<'_>, String> {
             digest,
         },
         ["inspect", request] => Command::Inspect(Path::new(*request)),
+        [family @ ("esm" | "atlaslm"), request, profile] => Command::Plm {
+            family,
+            request: Path::new(*request),
+            profile: Path::new(*profile),
+        },
         ["infer", request, profile] => Command::Infer {
             request: Path::new(*request),
             profile: Path::new(*profile),

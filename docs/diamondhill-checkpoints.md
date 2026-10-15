@@ -118,3 +118,27 @@ Sequence: complete the current OpenFold3 cycle, the one additional attention
 cycle, and README clarification; then integrate Base and profile representative
 1000/1536-residue workloads with native and optimized outputs checked at matched
 scientific settings. Preserve these weights unchanged and outside Git.
+
+## Standalone language models (2026-10-15)
+
+Standalone pLM requests now reuse the published AtlasLM-3B and ESM2-3B weights
+listed above. ESMC uses only the encoder subtree bundled in the pinned ESMFold2
+snapshot; it has no standalone MLM head in that checkpoint. Independent commands,
+output precision and matched measurements are documented in
+[standalone pLM inference](protein-language-models.md).
+
+ESM3-open was absent from the inspected local asset directories. The user
+subsequently authorized downloading the official public
+[`biohub/esm3-sm-open-v1`](https://huggingface.co/biohub/esm3-sm-open-v1) checkpoint.
+The pinned download is revision `47f0545b2b6daf26a93439a3cd610f4f7f3d5478`,
+file `data/weights/esm3_sm_open_v1.pth`, 2,803,646,068 bytes, official LFS SHA-256
+`5ead5a135c658068db6a4f1b933e72d6110992c4668822e1c0e2dcc53e38acd9`.
+The intended deployment path is:
+
+```text
+/media/PM982/engramfold/folding_e2e_20260921/weights/esm3-open/snapshot/data/weights/esm3_sm_open_v1.pth
+```
+
+Download and actual model qualification are still pending at this stage. The
+checkpoint is not added to Git. The standalone sequence-forward scope does not
+require the separate structure/function codec checkpoints.

@@ -42,6 +42,16 @@ coverage limits. See [migration gates](rust-migration.md), [running](rust-runnin
 [operator bridge](rust-operators.md). Historical benchmark Python remains for
 reproduction; it is not the target owner of new framework policy.
 
+## Standalone language model boundary
+
+The `plm` workload shares Rust asset preflight, process/device supervision and
+archive sealing, with dedicated `esm` and `atlaslm` family commands. Schema 5
+validates input-bound tokens, native embeddings and available sequence logits;
+it does not manufacture coordinates or reuse folding confidence contracts.
+ESMC, ESM2 and AtlasLM have separate native precision and loading contracts.
+ESM3 currently exposes sequence-forward loading, pending weight qualification.
+See [standalone pLM inference](protein-language-models.md).
+
 ## Historical operator implementation
 
 The pre-migration implementation used `fireprot/ops`, `fireprot/backends/amd`, `fireprot/adapters/protenix` and `fireprot/validation`. Those Python boundaries now live under `python/fireprot`; Rust owns shared policy and maintained validation. Historical reproduction tools remain under `benchmarks/protenix`. The independent Protenix checkout exposes `fireprot` choices for triangle multiplication and triangle attention while retaining its upstream torch defaults.

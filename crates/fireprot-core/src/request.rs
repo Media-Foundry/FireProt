@@ -51,6 +51,11 @@ pub struct SourcePin {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "model", rename_all = "snake_case", deny_unknown_fields)]
 pub enum Workload {
+    /// Standalone sequence encoder inference, with no folding or generation.
+    Plm {
+        model_name: String,
+        precision: Precision,
+    },
     Protenix {
         model_name: String,
         /// Total trunk cycles, unlike the additional recycles below.
@@ -96,7 +101,8 @@ pub enum Workload {
 impl Workload {
     pub fn model_name(&self) -> &str {
         match self {
-            Self::Protenix { model_name, .. }
+            Self::Plm { model_name, .. }
+            | Self::Protenix { model_name, .. }
             | Self::Atlasfold { model_name, .. }
             | Self::Openfold3 { model_name, .. }
             | Self::Esmfold2 { model_name, .. } => model_name,
@@ -105,6 +111,7 @@ impl Workload {
 
     pub fn trunk_passes(&self) -> Result<u32, RequestError> {
         match self {
+            Self::Plm { .. } => Ok(1),
             Self::Protenix { cycles, .. } if *cycles > 0 => Ok(*cycles),
             Self::Protenix { .. } => Err(RequestError::ZeroCount("cycles")),
             Self::Atlasfold { recycles, .. } | Self::Openfold3 { recycles, .. } => {
@@ -119,6 +126,29 @@ impl Workload {
             return Err(RequestError::EmptyField("model_name"));
         }
         self.trunk_passes()?;
+        if let Self::Plm {
+            model_name,
+            precision,
+        } = self
+        {
+            if !matches!(
+                model_name.as_str(),
+                "esmc-fold2-6b" | "esm2-3b" | "esm3-open" | "atlaslm-3b"
+            ) {
+                return Err(RequestError::EmptyField(
+                    "unsupported standalone pLM model_name",
+                ));
+            }
+            if *precision != Precision::Native {
+                return Err(RequestError::UnsupportedPrecision);
+            }
+            if backend != Backend::Native
+                && !(backend == Backend::Fireprot && model_name != "esm3-open")
+            {
+                return Err(RequestError::UnsupportedBackend);
+            }
+            return Ok(());
+        }
         if let Self::Esmfold2 {
             model_name,
             chunk_size,
@@ -134,6 +164,7 @@ impl Workload {
             }
         }
         let (steps, samples, precision, backends) = match self {
+            Self::Plm { .. } => unreachable!("validated above"),
             Self::Protenix {
                 diffusion_steps,
                 samples,
@@ -195,7 +226,9 @@ impl Workload {
         }
         let valid_precision = match self {
             Self::Protenix { .. } => matches!(precision, Precision::Float32 | Precision::Bfloat16),
-            Self::Atlasfold { .. } | Self::Esmfold2 { .. } => precision == Precision::Native,
+            Self::Plm { .. } | Self::Atlasfold { .. } | Self::Esmfold2 { .. } => {
+                precision == Precision::Native
+            }
             Self::Openfold3 { .. } => precision == Precision::Float32,
         };
         if !valid_precision {

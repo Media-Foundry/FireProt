@@ -149,6 +149,7 @@ fn counts_cannot_overflow_or_disappear() {
     );
     for mut w in workloads() {
         match &mut w {
+            Workload::Plm { .. } => unreachable!("folding fixtures only"),
             Workload::Protenix { samples, .. }
             | Workload::Atlasfold { samples, .. }
             | Workload::Openfold3 { samples, .. }

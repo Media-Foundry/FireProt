@@ -43,6 +43,21 @@ pub fn run(request: &Path, profile: &Path) -> Result<RunReport> {
     run_loaded(request, execution, &cancelled)
 }
 
+/// Validate the dedicated command family and execute the same immutable request.
+pub fn run_plm(request: &Path, profile: &Path, family: &str) -> Result<RunReport> {
+    let request = read_request(request)?;
+    let fireprot_core::request::Workload::Plm { model_name, .. } = &request.as_request().workload
+    else {
+        return Err("standalone pLM command requires a plm workload".into());
+    };
+    if (family == "atlaslm") != (model_name == "atlaslm-3b") {
+        return Err("pLM command does not match the requested model family".into());
+    }
+    let execution: Execution = read_json(profile)?;
+    let cancelled = cancellation()?;
+    run_loaded(request, execution, &cancelled)
+}
+
 pub fn run_batch(path: &Path) -> Result<fireprot_runtime::batch::BatchReport> {
     use fireprot_runtime::batch::{self, BatchPlan};
     let cancelled = cancellation()?;
@@ -162,6 +177,7 @@ fn run_loaded(
             suffixes: vec![
                 ".cpp".into(),
                 ".cu".into(),
+                ".hip".into(),
                 ".hip".into(),
                 ".h".into(),
                 ".hpp".into(),

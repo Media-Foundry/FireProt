@@ -114,7 +114,7 @@ pub fn run(specification: Specification) -> Result<Report> {
             baseline_run_id: aq.run_id,
             candidate_run_id: bq.run_id,
             samples,
-            cif_atom_identities_checked: ab.schema_version >= 2,
+            cif_atom_identities_checked: (2..=4).contains(&ab.schema_version),
         });
     }
     Ok(Report {

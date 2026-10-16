@@ -173,6 +173,11 @@ The ESMC CK follow-up found no acceptable improvement: the installed CK GEMM
 slowed B4 warm forward by 7.3%, and all 48 direct-tile cases failed bitwise
 projection equality. Production retains hipBLASLt; the E2E figures above are
 unchanged. See [CK diagnostics](docs/esm-optimization.md#esmc-ck-follow-up-rejected-candidates).
+A subsequent [fixed-GEMM experiment](docs/esmc-gemm-followup.md) preserves exact
+outputs and improves ESMC B4 warm forward by 1.052x over current FireProt.
+Incremental E2E medians are only 1.009x for four inputs and 1.025x for 64 inputs,
+with mixed paired results; it remains experimental and does not change the
+published direct-native ratios.
 Warm forward excludes loading/export and is measured independently. See
 [exact-route commands and evidence](docs/esm-optimization.md). ESM3's separate
 64-input resident workload (sixteen B4 groups) improves **20.212 → 15.490 s

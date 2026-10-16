@@ -6700,3 +6700,72 @@ constraints, corrected before GPU trials. An initial script used the monomer
 input reader and stopped before model loading; the measured script uses Rust's
 batch plan. No source synchronization into the remote top-level checkout was
 performed in this follow-up; only the new isolated experiment directory changed.
+
+
+## 2026-10-16 ESMC GEMM continuation: exact warm gains, mixed E2E
+
+The active thread goal is now "consistently optimize the ESMC"; keep it active.
+Work on master, HIP6 only (0000:8e:00.0 / SMI4). This cycle's GPU jobs and evidence
+collection finished; SMI4 reports no processes. No source synchronization into
+the remote top-level checkout, default-profile change, or upstream edit occurred.
+
+Experiment root: `/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016`.
+Eight layout/backend cases and 48 low-three-bit K permutations do not recover
+CK equality (two layouts unsupported). Frozen Torch GEMM algorithms pass all
+outputs at B1/B4 and improve warm forward 1.046x/1.062x, but TunableOp adds about
+4.1 s to a fresh worker's model boundary. Its two-call cold pilot has exact
+archives but failed paired treatment validation because profile SHA changes were
+not declared; it is not a qualified E2E result. The reproduction script is fixed.
+
+A direct C ABI hipBLASLt implementation in `experiments/plm/esmc_lt_fixed.hip`
+replaces only FFN up/gate. Algorithm IDs 4335 (B1) / 4139 (B4), library version
+100401 / revision 8d1ae90e are checked. All 80 projections and final outputs pass
+bitwise checks. Warm forward: B1 170.800 -> 165.901 ms (1.030x), B4 575.346 ->
+546.701 ms (1.052x). The original diagnostic's setup timer includes prior queued
+native work; do not cite it as isolated plan time. The current reproduction
+script synchronizes before that timer. Forward timers were already correct.
+
+Published HIP binary:
+`lt-kernel-cache/esmc_lt_fixed_0127bd4dd508f6bd2d25e5db77a5d59e3c47a90c681c2b272a84a6153709df6d/esmc_lt_fixed_0127bd4dd508f6bd2d25e5db77a5d59e3c47a90c681c2b272a84a6153709df6d.so`
+relative to the experiment root; SHA256
+`7b554428ba5a79ed1ef2f107f8e4d8ba8e306352a8efa88c0b116f04f1fdedb4`.
+Rust build spec and full receipt remain in the experiment root.
+
+Final frozen experimental deployment: `lt-validation/qualified-fixed`.
+The direct worker overlay includes gemm_fixed.py, a guarded runtime context and
+separation of the extra hip_esmc_lt resource from the strict checkpoint asset
+set. Both baseline and candidate use this identical overlay and resources;
+only FIREPROT_ESMC_FIXED_GEMM=0/1 and the declared profile SHA differ.
+Three AB/BA/AB complete invocation pairs each:
+- Four inputs/B4: 20.830440526 -> 20.638042799 s (1.009322479x); one slower pair.
+- 64 inputs/sixteen B4 groups: 31.198883375 -> 30.434632791 s (1.025111214x);
+  one slower pair, candidate maximum worse (31.796810290 vs31.268159500 s).
+- Model-forward medians within these calls: B4 1.342766566 -> 1.478638496 s;
+  resident64 9.996016573 -> 9.617732389 s.
+All 12 invocations and 408 archives were independently rehashed and compared
+bytewise; GPU identity and every group's 80 direct projections were checked.
+Do not promote as a consistent E2E improvement, change the default route, or
+multiply these incremental ratios by the earlier native result (1.195x).
+
+HIP graph initially fails on model.py bool_mask.all(). Moving this verified
+unpadded decision outside capture preserves the native transformer branch.
+Original and changed-token inputs both match bitwise. Replay gains only
+1.012x B1 /1.004x B4, with extra warmup+capture 0.448/1.216 s; not promoted.
+
+Evidence: `provenance/esmc_gemm_followup_20261016.json` and
+`docs/esmc-gemm-followup.md`. Remote `collected-evidence-v2.json` includes the
+rejected TunableOp cold pilot; `lt-validation/collected.json` is the independent
+final E2E collection. Earlier failed deployment attempts remain under
+validation-v2/v3/v4 and the first root attempt; do not restart or overwrite them.
+All process handles from this cycle are terminal.
+
+Next concrete target: ESMC checkpoint startup. Current maintained
+`python/fireprot_workers/plm_loading.py::streamed_esmc_state` opens safetensors
+on cuda:0, transfers FP32 tensor by tensor, then converts to BF16 on GPU and
+packs per block. Test per-block CPU BF16 conversion followed by H2D, and pinned
+asynchronous H2D with bounded staging, preserving native mapping and every
+parameter/output bit. Compare against current GPU-streamed loader, and measure
+complete invocations after a loader candidate passes. Original weights remain
+immutable and full-file preflight remains enabled. Do not run CPU hashing/build
+alongside formal GPU timing. Direct QKV algorithm selection is a secondary
+steady-state opportunity, but loading dominates the one-group E2E boundary.

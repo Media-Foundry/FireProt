@@ -1,0 +1,1905 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-16",
+  "baseline_commit": "ec5bcbc",
+  "experiment": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016",
+  "status": "experimental direct FFN; exact outputs, mixed incremental E2E; production unchanged",
+  "notes": [
+    "No new direct-native E2E ratio; comparisons are incremental against current FireProt.",
+    "Original direct-screen plan timer includes pending native work and is not a valid isolated setup measurement; forward timers synchronize correctly.",
+    "TunableOp complete-call pilot stopped for undeclared profile hash differences; not an accepted paired performance result."
+  ],
+  "reports": {
+    "order": {
+      "model": "esmc-fold2-6b",
+      "length": 1000,
+      "batch": 1,
+      "seed": 101,
+      "hip_device": 6,
+      "dtype": "native BF16",
+      "input_sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2",
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "library_sha256": "4c07a5d1d068ab8ba4869751fc22bf678ad053e968bee27bec3dfd2f04d934cf",
+      "script_sha256": "a16ca10a3ab2a586764c79dc8659b1fd3abf449224bae12bb67f4dbabf0eadf3",
+      "scope": "first block FFN up/gate; correctness diagnostics only; no timing claim",
+      "layouts": [
+        {
+          "backend": "cublaslt",
+          "layout": "native_linear",
+          "difference": {
+            "bitwise_equal": true,
+            "unequal_elements": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "finite": true
+          },
+          "kernels": [
+            "Cijk_Alik_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT192x256x32_MI32x32x1_SN_LDSB0_AFC1_AG0_AGGSUA0_AGNTAB0_AFEM1_AFEM1_ASEM1_BL1_BS1_CD1_1_CLR1_CLS0_CADS0_DTLA0_DTLB0_DTLM0_DTVA0_DTVB0_DTVMXSA0_DTVMXSB0_DTVSM0_DPLB0_EPS0_ELFLR0_EMLLn1_FDSI0_GRPM1_GRVWA8_GRVWB8_GSUAMB_GLS0_HPLR0_ISA90a_ICIW0_IU1_K1_LDSTI0_LBSPPA128_LBSPPB128_LBSPPMXSA0_LBSPPMXSB0_LBSPPM0_LPA8_LPB8_LPMXSA0_LPMXSB0_LPM0_LRVW8_LWPMn1_MIAV0_MIWT3_4_MXLIBL_MXSFNS_MO40_MGRIPM1_NTn1_NTA0_NTB0_NTC0_NTD0_NTE0_NTMXSA0_NTMXSB0_NTM0_NTWS0_NVn1_NVA0_NVB0_NVC0_NVD0_NVE0_NVMXSA0_NVMXSB0_NVM0_NVWS0_NEPBS0_NLCA1_NLCB1_ONLL1_PAP0_PGL0_PGR2_PLR1_PKA1_SGROB0_SIA3_SS1_SPO0_SRVW0_SSO0_SVW1_SK0_SKFTR0_SKFDPO0_SKWS0_SKXCCM0_SNLL0_SIP1_SGRO0_TDMI0_TDMIM0_TDMS0_TIN0_THn1_THA0_THB0_THC0_THD0_THE0_THMXSA0_THMXSB0_THM0_THWS0_TLDS1_TLDSMn1_ULSGRO0_USL1_USLMX0_UDFMAC0_UIOFGRO0_UPLRP0_USFGROn1_USI0_VSn1_VWA1_VWB1_WSGRA1_WSGRB1_WS64_WG64_4_1_WGMXCC1.kd"
+          ]
+        },
+        {
+          "backend": "cublaslt",
+          "layout": "contiguous_rhs",
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 1520,
+            "max_abs": 0.03125,
+            "mean_abs": 1.679695174061635e-07,
+            "finite": true
+          },
+          "kernels": [
+            "Cijk_Ailk_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT256x64x32_MI32x32x1_SN_LDSB1_AFC1_AG0_AGGSUA0_AGNTAB0_AFEM1_AFEM1_ASEM1_BL1_BS1_CD1_1_CLR1_CLS0_CADS0_DTLA0_DTLB0_DTLM0_DTVA0_DTVB0_DTVMXSA0_DTVMXSB0_DTVSM0_DPLB0_EPS0_ELFLR0_EMLLn1_FDSI0_GRPM1_GRVWA8_GRVWB8_GSUAMB_GLS0_HPLR0_ISA90a_ICIW0_IU1_K1_LDSTI0_LBSPPA0_LBSPPB128_LBSPPMXSA0_LBSPPMXSB0_LBSPPM0_LPA0_LPB8_LPMXSA0_LPMXSB0_LPM0_LRVW8_LWPMn1_MIAV0_MIWT2_2_MXLIBL_MXSFNS_MO40_MGRIPM1_NTn1_NTA0_NTB0_NTC0_NTD0_NTE0_NTMXSA0_NTMXSB0_NTM0_NTWS0_NVn1_NVA0_NVB0_NVC0_NVD0_NVE0_NVMXSA0_NVMXSB0_NVM0_NVWS0_NEPBS2_NLCA1_NLCB1_ONLL1_PAP0_PGL0_PGR2_PLR1_PKA1_SGROB0_SIA3_SS1_SPO1_SRVW0_SSO0_SVW1_SK0_SKFTR0_SKFDPO0_SKWS0_SKXCCM0_SNLL0_SIP1_SGRO0_TDMI0_TDMIM0_TDMS0_TIN0_THn1_THA0_THB0_THC0_THD0_THE0_THMXSA0_THMXSB0_THM0_THWS0_TLDS1_TLDSMn1_ULSGRO0_USL1_USLMX0_UDFMAC0_UIOFGRO0_UPLRP0_USFGROn1_USI0_VSn1_VWA2_VWB1_WSGRA0_WSGRB1_WS64_WG128_2_1_WGMXCC1.kd",
+            "void at::native::elementwise_kernel_manual_unroll<128, 8, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1} const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1} const&)::{lambda(int, bool)#1}) [clone .kd]"
+          ]
+        },
+        {
+          "backend": "cublaslt",
+          "layout": "swapped_operands",
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 1504,
+            "max_abs": 0.03125,
+            "mean_abs": 1.655691335145093e-07,
+            "finite": true
+          },
+          "kernels": [
+            "Cijk_Alik_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT128x96x64_MI32x32x1_SN_LDSB1_AFC1_AG0_AGGSUA0_AGNTAB0_AFEM1_AFEM1_ASEM1_BL1_BS1_CD1_1_CLR1_CLS0_CADS0_DTLA0_DTLB0_DTLM0_DTVA0_DTVB0_DTVMXSA0_DTVMXSB0_DTVSM0_DPLB0_EPS0_ELFLR0_EMLLn1_FDSI0_GRPM1_GRVWA8_GRVWB8_GSUAMB_GLS0_HPLR0_ISA90a_ICIW0_IU1_K1_LDSTI0_LBSPPA128_LBSPPB128_LBSPPMXSA0_LBSPPMXSB0_LBSPPM0_LPA8_LPB8_LPMXSA0_LPMXSB0_LPM0_LRVW8_LWPMn1_MIAV0_MIWT1_3_MXLIBL_MXSFNS_MO40_MGRIPM1_NTn1_NTA0_NTB0_NTC0_NTD0_NTE0_NTMXSA0_NTMXSB0_NTM0_NTWS0_NVn1_NVA0_NVB0_NVC0_NVD0_NVE0_NVMXSA0_NVMXSB0_NVM0_NVWS0_NEPBS2_NLCA1_NLCB1_ONLL1_PAP0_PGL0_PGR2_PLR1_PKA1_SGROB0_SIA3_SS1_SPO1_SRVW0_SSO0_SVW1_SK0_SKFTR0_SKFDPO0_SKWS0_SKXCCM0_SNLL0_SIP1_SGRO0_TDMI0_TDMIM0_TDMS0_TIN0_THn1_THA0_THB0_THC0_THD0_THE0_THMXSA0_THMXSB0_THM0_THWS0_TLDS1_TLDSMn1_ULSGRO0_USL1_USLMX0_UDFMAC0_UIOFGRO0_UPLRP0_USFGROn1_USI0_VSn1_VWA1_VWB1_WSGRA1_WSGRB1_WS64_WG128_2_1_WGMXCC1.kd",
+            "void at::native::elementwise_kernel_manual_unroll<128, 8, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1} const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1} const&)::{lambda(int, bool)#1}) [clone .kd]"
+          ]
+        },
+        {
+          "backend": "cublaslt",
+          "layout": "swapped_contiguous_rhs",
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 1477,
+            "max_abs": 0.0625,
+            "mean_abs": 1.881007420934111e-07,
+            "finite": true
+          },
+          "kernels": [
+            "Cijk_Ailk_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT256x64x32_MI32x32x1_SN_LDSB1_AFC1_AG0_AGGSUA0_AGNTAB0_AFEM1_AFEM1_ASEM1_BL1_BS1_CD1_1_CLR1_CLS0_CADS0_DTLA0_DTLB0_DTLM0_DTVA0_DTVB0_DTVMXSA0_DTVMXSB0_DTVSM0_DPLB0_EPS0_ELFLR0_EMLLn1_FDSI0_GRPM1_GRVWA8_GRVWB8_GSUAMB_GLS0_HPLR0_ISA90a_ICIW0_IU1_K1_LDSTI0_LBSPPA0_LBSPPB128_LBSPPMXSA0_LBSPPMXSB0_LBSPPM0_LPA0_LPB8_LPMXSA0_LPMXSB0_LPM0_LRVW8_LWPMn1_MIAV0_MIWT2_2_MXLIBL_MXSFNS_MO40_MGRIPM1_NTn1_NTA0_NTB0_NTC0_NTD0_NTE0_NTMXSA0_NTMXSB0_NTM0_NTWS0_NVn1_NVA0_NVB0_NVC0_NVD0_NVE0_NVMXSA0_NVMXSB0_NVM0_NVWS0_NEPBS2_NLCA1_NLCB1_ONLL1_PAP0_PGL0_PGR2_PLR1_PKA1_SGROB0_SIA3_SS1_SPO1_SRVW0_SSO0_SVW1_SK0_SKFTR0_SKFDPO0_SKWS0_SKXCCM0_SNLL0_SIP1_SGRO0_TDMI0_TDMIM0_TDMS0_TIN0_THn1_THA0_THB0_THC0_THD0_THE0_THMXSA0_THMXSB0_THM0_THWS0_TLDS1_TLDSMn1_ULSGRO0_USL1_USLMX0_UDFMAC0_UIOFGRO0_UPLRP0_USFGROn1_USI0_VSn1_VWA2_VWB1_WSGRA0_WSGRB1_WS64_WG128_2_1_WGMXCC1.kd",
+            "void at::native::elementwise_kernel_manual_unroll<128, 8, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1} const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1} const&)::{lambda(int, bool)#1}) [clone .kd]"
+          ]
+        },
+        {
+          "backend": "ck",
+          "layout": "native_linear",
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2199,
+            "max_abs": 0.0625,
+            "mean_abs": 2.6788168838720594e-07,
+            "finite": true
+          },
+          "kernels": [
+            "void ck::kernel_gemm_xdl_cshuffle_v3_multi_d<ck::GridwiseGemmMultiD_xdl_cshuffle_v3<ck::tensor_layout::gemm::RowMajor, ck::tensor_layout::gemm::ColumnMajor, ck::Tuple<>, ck::tensor_layout::gemm::RowMajor, unsigned short, unsigned short, float, unsigned short, ck::Tuple<>, unsigned short, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, at::native::AlphaBetaAdd, (ck::tensor_operation::device::GemmSpecialization)7, 256, 128, 128, 64, 8, 8, 32, 32, 2, 2, ck::Sequence<8, 32, 1>, ck::Sequence<1, 0, 2>, ck::Sequence<1, 0, 2>, 2, 8, 8, false, 0, ck::Sequence<8, 32, 1>, ck::Sequence<1, 0, 2>, ck::Sequence<1, 0, 2>, 2, 8, 8, false, 0, 1, 1, ck::Sequence<1, 32, 1, 8>, ck::Sequence<4>, (ck::BlockGemmPipelineScheduler)0, (ck::BlockGemmPipelineVersion)0, unsigned short, unsigned short, unsigned short, unsigned short, false, false>, true, (ck::InMemoryDataOperationEnum)0, 1, (ck::TailNumber)10>(ck::GridwiseGemmMultiD_xdl_cshuffle_v3<ck::tensor_layout::gemm::RowMajor, ck::tensor_layout::gemm::ColumnMajor, ck::Tuple<>, ck::tensor_layout::gemm::RowMajor, unsigned short, unsigned short, float, unsigned short, ck::Tuple<>, unsigned short, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, at::native::AlphaBetaAdd, (ck::tensor_operation::device::GemmSpecialization)7, 256, 128, 128, 64, 8, 8, 32, 32, 2, 2, ck::Sequence<8, 32, 1>, ck::Sequence<1, 0, 2>, ck::Sequence<1, 0, 2>, 2, 8, 8, false, 0, ck::Sequence<8, 32, 1>, ck::Sequence<1, 0, 2>, ck::Sequence<1, 0, 2>, 2, 8, 8, false, 0, 1, 1, ck::Sequence<1, 32, 1, 8>, ck::Sequence<4>, (ck::BlockGemmPipelineScheduler)0, (ck::BlockGemmPipelineVersion)0, unsigned short, unsigned short, unsigned short, unsigned short, false, false>::Argument) [clone .kd]"
+          ]
+        },
+        {
+          "backend": "ck",
+          "layout": "contiguous_rhs",
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2199,
+            "max_abs": 0.0625,
+            "mean_abs": 2.6788168838720594e-07,
+            "finite": true
+          },
+          "kernels": [
+            "void at::native::elementwise_kernel_manual_unroll<128, 8, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1} const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1} const&)::{lambda(int, bool)#1}) [clone .kd]",
+            "void ck::kernel_gemm_xdl_cshuffle_v3_multi_d<ck::GridwiseGemmMultiD_xdl_cshuffle_v3<ck::tensor_layout::gemm::RowMajor, ck::tensor_layout::gemm::RowMajor, ck::Tuple<>, ck::tensor_layout::gemm::RowMajor, unsigned short, unsigned short, float, unsigned short, ck::Tuple<>, unsigned short, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, at::native::AlphaBetaAdd, (ck::tensor_operation::device::GemmSpecialization)7, 256, 128, 128, 64, 8, 8, 32, 32, 2, 2, ck::Sequence<8, 32, 1>, ck::Sequence<1, 0, 2>, ck::Sequence<1, 0, 2>, 2, 8, 8, false, 0, ck::Sequence<8, 32, 1>, ck::Sequence<0, 2, 1>, ck::Sequence<0, 2, 1>, 1, 4, 8, false, 0, 1, 1, ck::Sequence<1, 32, 1, 8>, ck::Sequence<4>, (ck::BlockGemmPipelineScheduler)0, (ck::BlockGemmPipelineVersion)0, unsigned short, unsigned short, unsigned short, unsigned short, false, false>, true, (ck::InMemoryDataOperationEnum)0, 1, (ck::TailNumber)10>(ck::GridwiseGemmMultiD_xdl_cshuffle_v3<ck::tensor_layout::gemm::RowMajor, ck::tensor_layout::gemm::RowMajor, ck::Tuple<>, ck::tensor_layout::gemm::RowMajor, unsigned short, unsigned short, float, unsigned short, ck::Tuple<>, unsigned short, ck::tensor_operation::element_wise::PassThrough, ck::tensor_operation::element_wise::PassThrough, at::native::AlphaBetaAdd, (ck::tensor_operation::device::GemmSpecialization)7, 256, 128, 128, 64, 8, 8, 32, 32, 2, 2, ck::Sequence<8, 32, 1>, ck::Sequence<1, 0, 2>, ck::Sequence<1, 0, 2>, 2, 8, 8, false, 0, ck::Sequence<8, 32, 1>, ck::Sequence<0, 2, 1>, ck::Sequence<0, 2, 1>, 1, 4, 8, false, 0, 1, 1, ck::Sequence<1, 32, 1, 8>, ck::Sequence<4>, (ck::BlockGemmPipelineScheduler)0, (ck::BlockGemmPipelineVersion)0, unsigned short, unsigned short, unsigned short, unsigned short, false, false>::Argument) [clone .kd]"
+          ]
+        },
+        {
+          "backend": "ck",
+          "layout": "swapped_operands",
+          "unsupported": "wrong! device_gemm with the specified compilation parameters does not support this GEMM problem"
+        },
+        {
+          "backend": "ck",
+          "layout": "swapped_contiguous_rhs",
+          "unsupported": "wrong! device_gemm with the specified compilation parameters does not support this GEMM problem"
+        }
+      ],
+      "permutations": [
+        {
+          "bits": [
+            0,
+            1,
+            2
+          ],
+          "xor": 0,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2185,
+            "max_abs": 0.0625,
+            "mean_abs": 2.526881246467383e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            0,
+            1,
+            2
+          ],
+          "xor": 1,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2185,
+            "max_abs": 0.0625,
+            "mean_abs": 2.526881246467383e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            0,
+            1,
+            2
+          ],
+          "xor": 2,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2185,
+            "max_abs": 0.0625,
+            "mean_abs": 2.526881246467383e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            0,
+            1,
+            2
+          ],
+          "xor": 3,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2185,
+            "max_abs": 0.0625,
+            "mean_abs": 2.526881246467383e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            0,
+            1,
+            2
+          ],
+          "xor": 4,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2256,
+            "max_abs": 0.0625,
+            "mean_abs": 2.599479103082558e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            0,
+            1,
+            2
+          ],
+          "xor": 5,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2256,
+            "max_abs": 0.0625,
+            "mean_abs": 2.599479103082558e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            0,
+            1,
+            2
+          ],
+          "xor": 6,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2256,
+            "max_abs": 0.0625,
+            "mean_abs": 2.599479103082558e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            0,
+            1,
+            2
+          ],
+          "xor": 7,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2256,
+            "max_abs": 0.0625,
+            "mean_abs": 2.599479103082558e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            0,
+            2,
+            1
+          ],
+          "xor": 0,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2977,
+            "max_abs": 0.0625,
+            "mean_abs": 8.827700526126137e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            0,
+            2,
+            1
+          ],
+          "xor": 1,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2977,
+            "max_abs": 0.0625,
+            "mean_abs": 8.827700526126137e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            0,
+            2,
+            1
+          ],
+          "xor": 2,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2970,
+            "max_abs": 0.0625,
+            "mean_abs": 8.973935905487451e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            0,
+            2,
+            1
+          ],
+          "xor": 3,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2970,
+            "max_abs": 0.0625,
+            "mean_abs": 8.973935905487451e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            0,
+            2,
+            1
+          ],
+          "xor": 4,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2977,
+            "max_abs": 0.0625,
+            "mean_abs": 8.827700526126137e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            0,
+            2,
+            1
+          ],
+          "xor": 5,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2977,
+            "max_abs": 0.0625,
+            "mean_abs": 8.827700526126137e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            0,
+            2,
+            1
+          ],
+          "xor": 6,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2970,
+            "max_abs": 0.0625,
+            "mean_abs": 8.973935905487451e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            0,
+            2,
+            1
+          ],
+          "xor": 7,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2970,
+            "max_abs": 0.0625,
+            "mean_abs": 8.973935905487451e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            1,
+            0,
+            2
+          ],
+          "xor": 0,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2189,
+            "max_abs": 0.0625,
+            "mean_abs": 2.6572192268758954e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            1,
+            0,
+            2
+          ],
+          "xor": 1,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2189,
+            "max_abs": 0.0625,
+            "mean_abs": 2.6572192268758954e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            1,
+            0,
+            2
+          ],
+          "xor": 2,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2189,
+            "max_abs": 0.0625,
+            "mean_abs": 2.6572192268758954e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            1,
+            0,
+            2
+          ],
+          "xor": 3,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2189,
+            "max_abs": 0.0625,
+            "mean_abs": 2.6572192268758954e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            1,
+            0,
+            2
+          ],
+          "xor": 4,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2252,
+            "max_abs": 0.0625,
+            "mean_abs": 2.665656495537405e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            1,
+            0,
+            2
+          ],
+          "xor": 5,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2252,
+            "max_abs": 0.0625,
+            "mean_abs": 2.665656495537405e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            1,
+            0,
+            2
+          ],
+          "xor": 6,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2252,
+            "max_abs": 0.0625,
+            "mean_abs": 2.665656495537405e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            1,
+            0,
+            2
+          ],
+          "xor": 7,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2252,
+            "max_abs": 0.0625,
+            "mean_abs": 2.665656495537405e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            1,
+            2,
+            0
+          ],
+          "xor": 0,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2962,
+            "max_abs": 0.0625,
+            "mean_abs": 8.735794949643605e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            1,
+            2,
+            0
+          ],
+          "xor": 1,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2962,
+            "max_abs": 0.0625,
+            "mean_abs": 8.735794949643605e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            1,
+            2,
+            0
+          ],
+          "xor": 2,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2963,
+            "max_abs": 0.0625,
+            "mean_abs": 9.003940704133129e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            1,
+            2,
+            0
+          ],
+          "xor": 3,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2963,
+            "max_abs": 0.0625,
+            "mean_abs": 9.003940704133129e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            1,
+            2,
+            0
+          ],
+          "xor": 4,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2962,
+            "max_abs": 0.0625,
+            "mean_abs": 8.735794949643605e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            1,
+            2,
+            0
+          ],
+          "xor": 5,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2962,
+            "max_abs": 0.0625,
+            "mean_abs": 8.735794949643605e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            1,
+            2,
+            0
+          ],
+          "xor": 6,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2963,
+            "max_abs": 0.0625,
+            "mean_abs": 9.003940704133129e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            1,
+            2,
+            0
+          ],
+          "xor": 7,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2963,
+            "max_abs": 0.0625,
+            "mean_abs": 9.003940704133129e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            2,
+            0,
+            1
+          ],
+          "xor": 0,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2959,
+            "max_abs": 0.0625,
+            "mean_abs": 8.999911642604275e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            2,
+            0,
+            1
+          ],
+          "xor": 1,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2918,
+            "max_abs": 0.0625,
+            "mean_abs": 9.040757049660897e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            2,
+            0,
+            1
+          ],
+          "xor": 2,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2959,
+            "max_abs": 0.0625,
+            "mean_abs": 8.999911642604275e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            2,
+            0,
+            1
+          ],
+          "xor": 3,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2918,
+            "max_abs": 0.0625,
+            "mean_abs": 9.040757049660897e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            2,
+            0,
+            1
+          ],
+          "xor": 4,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2959,
+            "max_abs": 0.0625,
+            "mean_abs": 8.999911642604275e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            2,
+            0,
+            1
+          ],
+          "xor": 5,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2918,
+            "max_abs": 0.0625,
+            "mean_abs": 9.040757049660897e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            2,
+            0,
+            1
+          ],
+          "xor": 6,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2959,
+            "max_abs": 0.0625,
+            "mean_abs": 8.999911642604275e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            2,
+            0,
+            1
+          ],
+          "xor": 7,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2918,
+            "max_abs": 0.0625,
+            "mean_abs": 9.040757049660897e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            2,
+            1,
+            0
+          ],
+          "xor": 0,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2920,
+            "max_abs": 0.0625,
+            "mean_abs": 8.935859909797728e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            2,
+            1,
+            0
+          ],
+          "xor": 1,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2912,
+            "max_abs": 0.0625,
+            "mean_abs": 8.950098049353983e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            2,
+            1,
+            0
+          ],
+          "xor": 2,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2920,
+            "max_abs": 0.0625,
+            "mean_abs": 8.935859909797728e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            2,
+            1,
+            0
+          ],
+          "xor": 3,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2912,
+            "max_abs": 0.0625,
+            "mean_abs": 8.950098049353983e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            2,
+            1,
+            0
+          ],
+          "xor": 4,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2920,
+            "max_abs": 0.0625,
+            "mean_abs": 8.935859909797728e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            2,
+            1,
+            0
+          ],
+          "xor": 5,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2912,
+            "max_abs": 0.0625,
+            "mean_abs": 8.950098049353983e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            2,
+            1,
+            0
+          ],
+          "xor": 6,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2920,
+            "max_abs": 0.0625,
+            "mean_abs": 8.935859909797728e-07,
+            "finite": true
+          }
+        },
+        {
+          "bits": [
+            2,
+            1,
+            0
+          ],
+          "xor": 7,
+          "difference": {
+            "bitwise_equal": false,
+            "unequal_elements": 2912,
+            "max_abs": 0.0625,
+            "mean_abs": 8.950098049353983e-07,
+            "finite": true
+          }
+        }
+      ],
+      "shape": [
+        1002,
+        13824,
+        2560
+      ],
+      "best_permutation": {
+        "bits": [
+          0,
+          1,
+          2
+        ],
+        "xor": 0,
+        "difference": {
+          "bitwise_equal": false,
+          "unequal_elements": 2185,
+          "max_abs": 0.0625,
+          "mean_abs": 2.526881246467383e-07,
+          "finite": true
+        }
+      },
+      "exact_permutations": []
+    },
+    "tunable": {
+      "model": "esmc-fold2-6b",
+      "hip_device": 6,
+      "seed": 101,
+      "length": 1000,
+      "precision": "native BF16",
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "input_sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2",
+      "script_sha256": "f8e70a3bdc911914d8b3552a74468544132ec576359d306f026757f2681fa10d",
+      "boundary": "warm forward, excludes offline tuning and loading; not E2E",
+      "cache_state": "resident weights and warmed operators, caches not flushed",
+      "internal_tolerances": {
+        "atol": 1e-45,
+        "rtol": 1e-45
+      },
+      "acceptance": "independent raw-byte equality",
+      "cases": [
+        {
+          "batch": 1,
+          "operators": [
+            {
+              "index": 0,
+              "tuning_seconds": 16.11404190096073,
+              "difference": {
+                "bitwise_equal": true,
+                "unequal_elements": 0,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "finite": true
+              }
+            },
+            {
+              "index": 1,
+              "tuning_seconds": 6.881963816005737,
+              "difference": {
+                "bitwise_equal": true,
+                "unequal_elements": 0,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "finite": true
+              }
+            },
+            {
+              "index": 2,
+              "tuning_seconds": 19.627326597925276,
+              "difference": {
+                "bitwise_equal": true,
+                "unequal_elements": 0,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "finite": true
+              }
+            },
+            {
+              "index": 3,
+              "tuning_seconds": 12.837464092997834,
+              "difference": {
+                "bitwise_equal": true,
+                "unequal_elements": 0,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "finite": true
+              }
+            }
+          ],
+          "initial_forward_difference": {
+            "tokens": {
+              "bitwise_equal": true,
+              "unequal_elements": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "finite": true
+            },
+            "embeddings": {
+              "bitwise_equal": true,
+              "unequal_elements": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "finite": true
+            }
+          },
+          "accepted": true,
+          "pairs": [
+            {
+              "current_fireprot": [
+                0.17087660601828247,
+                0.1709697040496394,
+                0.17091374297160655
+              ],
+              "candidate": [
+                0.1634311230154708,
+                0.16319313703570515,
+                0.1633860800648108
+              ]
+            },
+            {
+              "candidate": [
+                0.16329396096989512,
+                0.163446739083156,
+                0.16338194091804326
+              ],
+              "current_fireprot": [
+                0.17104620696045458,
+                0.1709978940198198,
+                0.17090271704364568
+              ]
+            },
+            {
+              "current_fireprot": [
+                0.17078749800566584,
+                0.17097077309153974,
+                0.1708821039646864
+              ],
+              "candidate": [
+                0.1633252298925072,
+                0.1632211069809273,
+                0.16335847903974354
+              ]
+            }
+          ],
+          "medians": {
+            "candidate": 0.16335847903974354,
+            "current_fireprot": 0.17091374297160655
+          },
+          "speedup": 1.0462495976717858
+        },
+        {
+          "batch": 4,
+          "operators": [
+            {
+              "index": 0,
+              "tuning_seconds": 36.54784469900187,
+              "difference": {
+                "bitwise_equal": true,
+                "unequal_elements": 0,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "finite": true
+              }
+            },
+            {
+              "index": 1,
+              "tuning_seconds": 13.56202683004085,
+              "difference": {
+                "bitwise_equal": true,
+                "unequal_elements": 0,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "finite": true
+              }
+            },
+            {
+              "index": 2,
+              "tuning_seconds": 68.89232810796238,
+              "difference": {
+                "bitwise_equal": true,
+                "unequal_elements": 0,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "finite": true
+              }
+            },
+            {
+              "index": 3,
+              "tuning_seconds": 30.74666140298359,
+              "difference": {
+                "bitwise_equal": true,
+                "unequal_elements": 0,
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "finite": true
+              }
+            }
+          ],
+          "initial_forward_difference": {
+            "tokens": {
+              "bitwise_equal": true,
+              "unequal_elements": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "finite": true
+            },
+            "embeddings": {
+              "bitwise_equal": true,
+              "unequal_elements": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "finite": true
+            }
+          },
+          "accepted": true,
+          "pairs": [
+            {
+              "current_fireprot": [
+                0.5779097819468006,
+                0.5791426129871979,
+                0.5768321370705962
+              ],
+              "candidate": [
+                0.5442122329259291,
+                0.5442170009482652,
+                0.5442353649996221
+              ]
+            },
+            {
+              "candidate": [
+                0.5444108740193769,
+                0.5447168679675087,
+                0.5441536629805341
+              ],
+              "current_fireprot": [
+                0.5768580180592835,
+                0.5780382469529286,
+                0.5793621470220387
+              ]
+            },
+            {
+              "current_fireprot": [
+                0.5787906659534201,
+                0.5765631810063496,
+                0.5789845789549872
+              ],
+              "candidate": [
+                0.5442796889692545,
+                0.544378096004948,
+                0.5439863810315728
+              ]
+            }
+          ],
+          "medians": {
+            "candidate": 0.5442353649996221,
+            "current_fireprot": 0.5780382469529286
+          },
+          "speedup": 1.062110778033195
+        }
+      ],
+      "algorithms": [
+        [
+          "GemmTunableOp_BFloat16_TN",
+          "tn_7680_4008_2560_ld_2560_2560_7680",
+          "Gemm_Hipblaslt_4069",
+          1.2636819907597132
+        ],
+        [
+          "GemmTunableOp_BFloat16_TN",
+          "tn_2560_1002_6912_ld_6912_6912_2560",
+          "Gemm_Hipblaslt_4174",
+          0.31312689930200577
+        ],
+        [
+          "GemmTunableOp_BFloat16_TN",
+          "tn_13824_1002_2560_ld_2560_2560_13824",
+          "Gemm_Hipblaslt_4335",
+          0.6484163999557495
+        ],
+        [
+          "GemmTunableOp_BFloat16_TN",
+          "tn_2560_4008_6912_ld_6912_6912_2560",
+          "Default",
+          1.0940247774124146
+        ],
+        [
+          "GemmTunableOp_BFloat16_TN",
+          "tn_13824_4008_2560_ld_2560_2560_13824",
+          "Gemm_Hipblaslt_4139",
+          2.327243745326996
+        ],
+        [
+          "GemmTunableOp_BFloat16_TN",
+          "tn_2560_1002_2560_ld_2560_2560_2560",
+          "Gemm_Hipblaslt_5214",
+          0.16065379828214646
+        ],
+        [
+          "GemmTunableOp_BFloat16_TN",
+          "tn_2560_4008_2560_ld_2560_2560_2560",
+          "Gemm_Hipblaslt_5224",
+          0.4558118462562561
+        ],
+        [
+          "GemmTunableOp_BFloat16_TN",
+          "tn_7680_1002_2560_ld_2560_2560_7680",
+          "Gemm_Hipblaslt_4139",
+          0.3520965978503227
+        ]
+      ]
+    },
+    "graph": {
+      "model": "esmc-fold2-6b",
+      "hip_device": 6,
+      "seed": 101,
+      "length": 1000,
+      "precision": "native BF16",
+      "input_sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2",
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "script_sha256": "1af1acf18260e4a05def257d81ebca872802449dc8932e8464119d6bcef8d527",
+      "boundary": "warm graph replay; capture and side-stream warmup reported separately; not E2E",
+      "cache_state": "resident model, warmed operators and graph, caches not flushed",
+      "cases": [
+        {
+          "batch": 1,
+          "warmup_seconds": 0.35407511005178094,
+          "capture_seconds": 0.09394823107868433,
+          "allocated_before_capture": 12928750592,
+          "allocated_after_capture": 12933881856,
+          "capture_peak_allocated": 13001538560,
+          "initial_difference": {
+            "tokens": {
+              "bitwise_equal": true,
+              "unequal_elements": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "finite": true
+            },
+            "embeddings": {
+              "bitwise_equal": true,
+              "unequal_elements": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "finite": true
+            }
+          },
+          "changed_tokens_difference": {
+            "tokens": {
+              "bitwise_equal": true,
+              "unequal_elements": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "finite": true
+            },
+            "embeddings": {
+              "bitwise_equal": true,
+              "unequal_elements": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "finite": true
+            }
+          },
+          "pairs": [
+            {
+              "eager": [
+                0.1707824090262875,
+                0.17090650601312518,
+                0.1713470220565796
+              ],
+              "graph": [
+                0.1689005329972133,
+                0.17358089704066515,
+                0.16883371595758945
+              ]
+            },
+            {
+              "graph": [
+                0.1688352160854265,
+                0.1688424829626456,
+                0.16880347696132958
+              ],
+              "eager": [
+                0.17075272998772562,
+                0.17084853595588356,
+                0.17056243494153023
+              ]
+            },
+            {
+              "eager": [
+                0.17089716903865337,
+                0.17067081795539707,
+                0.17085154494270682
+              ],
+              "graph": [
+                0.1690447930013761,
+                0.16875907208304852,
+                0.16881934099365026
+              ]
+            }
+          ],
+          "medians": {
+            "graph": 0.1688352160854265,
+            "eager": 0.17084853595588356
+          },
+          "speedup": 1.0119247626007026
+        },
+        {
+          "batch": 4,
+          "warmup_seconds": 1.158721405081451,
+          "capture_seconds": 0.057382737984880805,
+          "allocated_before_capture": 12943576576,
+          "allocated_after_capture": 12964549120,
+          "capture_peak_allocated": 13235962368,
+          "initial_difference": {
+            "tokens": {
+              "bitwise_equal": true,
+              "unequal_elements": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "finite": true
+            },
+            "embeddings": {
+              "bitwise_equal": true,
+              "unequal_elements": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "finite": true
+            }
+          },
+          "changed_tokens_difference": {
+            "tokens": {
+              "bitwise_equal": true,
+              "unequal_elements": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "finite": true
+            },
+            "embeddings": {
+              "bitwise_equal": true,
+              "unequal_elements": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "finite": true
+            }
+          },
+          "pairs": [
+            {
+              "eager": [
+                0.5813229959458113,
+                0.582894720020704,
+                0.5799931379733607
+              ],
+              "graph": [
+                0.577627131016925,
+                0.5813470479333773,
+                0.5790202460484579
+              ]
+            },
+            {
+              "graph": [
+                0.58061003300827,
+                0.5782178939552978,
+                0.5780016799690202
+              ],
+              "eager": [
+                0.579185648006387,
+                0.579009999986738,
+                0.5812083850614727
+              ]
+            },
+            {
+              "eager": [
+                0.5803730960469693,
+                0.577171238954179,
+                0.5816943859681487
+              ],
+              "graph": [
+                0.5753820110112429,
+                0.5743530080653727,
+                0.5773788370424882
+              ]
+            }
+          ],
+          "medians": {
+            "graph": 0.5780016799690202,
+            "eager": 0.5803730960469693
+          },
+          "speedup": 1.0041027840577836
+        }
+      ]
+    },
+    "direct": {
+      "model": "esmc-fold2-6b",
+      "length": 1000,
+      "hip_device": 6,
+      "seed": 101,
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "precision": "native BF16",
+      "input_sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2",
+      "library_sha256": "7b554428ba5a79ed1ef2f107f8e4d8ba8e306352a8efa88c0b116f04f1fdedb4",
+      "script_sha256": "fd87f39ac079f06bdd7a922311d0daf4f6fecb23c43b3d7122294e9e6ab4a7d9",
+      "scope_sha256": "5969120877f7d42fe18bf173d1e3044292dd557929ec42a27b6ed72843e93cd9",
+      "boundary": "warm direct FFN plus existing exact HIP scope; not E2E",
+      "cache_state": "resident model, warmed native library, caches not flushed",
+      "cases": [
+        {
+          "batch": 1,
+          "plan_seconds_after_native_warmup": 0.13240470609162003,
+          "all_80_projections_exact": true,
+          "initial_difference": {
+            "tokens": {
+              "bitwise_equal": true,
+              "unequal_elements": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "finite": true
+            },
+            "embeddings": {
+              "bitwise_equal": true,
+              "unequal_elements": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "finite": true
+            }
+          },
+          "pairs": [
+            {
+              "current_fireprot": [
+                0.17076637397985905,
+                0.17654549598228186,
+                0.17177244496997446
+              ],
+              "candidate": [
+                0.16601001797243953,
+                0.16592109797056764,
+                0.16591419000178576
+              ]
+            },
+            {
+              "candidate": [
+                0.16590115509461612,
+                0.16591923800297081,
+                0.16581075603608042
+              ],
+              "current_fireprot": [
+                0.1708571930648759,
+                0.170781129039824,
+                0.17076106602326035
+              ]
+            },
+            {
+              "current_fireprot": [
+                0.17078500799834728,
+                0.1708138679387048,
+                0.1707995330216363
+              ],
+              "candidate": [
+                0.16577671794220805,
+                0.1656653470126912,
+                0.165818264009431
+              ]
+            }
+          ],
+          "medians": {
+            "candidate": 0.16590115509461612,
+            "current_fireprot": 0.1707995330216363
+          },
+          "speedup": 1.0295258819881428
+        },
+        {
+          "batch": 4,
+          "plan_seconds_after_native_warmup": 0.5804391528945416,
+          "all_80_projections_exact": true,
+          "initial_difference": {
+            "tokens": {
+              "bitwise_equal": true,
+              "unequal_elements": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "finite": true
+            },
+            "embeddings": {
+              "bitwise_equal": true,
+              "unequal_elements": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "finite": true
+            }
+          },
+          "pairs": [
+            {
+              "current_fireprot": [
+                0.5747953740647063,
+                0.5750373700866476,
+                0.5818094260757789
+              ],
+              "candidate": [
+                0.54734130599536,
+                0.5467442229855806,
+                0.5469299879623577
+              ]
+            },
+            {
+              "candidate": [
+                0.546607170952484,
+                0.5464710680535063,
+                0.5465162019245327
+              ],
+              "current_fireprot": [
+                0.573774988995865,
+                0.5763877810677513,
+                0.5753463229630142
+              ]
+            },
+            {
+              "current_fireprot": [
+                0.5765378689393401,
+                0.572994351037778,
+                0.5777183180907741
+              ],
+              "candidate": [
+                0.546761307050474,
+                0.5466792160877958,
+                0.5467007179977372
+              ]
+            }
+          ],
+          "medians": {
+            "candidate": 0.5467007179977372,
+            "current_fireprot": 0.5753463229630142
+          },
+          "speedup": 1.0523972331153872
+        }
+      ]
+    },
+    "e2e": {
+      "schema_version": 1,
+      "hip_device": 6,
+      "batch_size": 4,
+      "length": 1000,
+      "models": {
+        "esmc-fixed-4": {
+          "benchmark": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-4-pairs/measurements/benchmark.json",
+            "sha256": "8fb0b1a16d762d0e3ffe2ee7d3c8b32ac86c0c4f484a8fd3811db163ac8f89cf"
+          },
+          "comparison": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-4-pairs/measurements/comparison.json",
+            "sha256": "9c5660a865e624585848e8e5281d96defd2d51bd394603315dd54a729f228d8e"
+          },
+          "records": [
+            {
+              "index": 0,
+              "slot": {
+                "arm": "baseline",
+                "pair": 0
+              },
+              "run_id": "esmc-fixed-4-baseline-1",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-4-pairs/measurements/measurement-000/invocation.json",
+                "sha256": "7241c2a839989f6b16a277d4cfe243e2988a1063ece875b2aa6097e14318cfbb"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-4-pairs/baseline-1/accepted.json",
+                "sha256": "4019b0a40b8f2c3fa480c3093533bee952e1f0e12dec36d224e9e5a666666cc6"
+              },
+              "e2e_seconds": 20.593839931,
+              "model_forward_seconds": 1.3338274320121855,
+              "request_seconds": 7.278939087991603
+            },
+            {
+              "index": 1,
+              "slot": {
+                "arm": "candidate",
+                "pair": 0
+              },
+              "run_id": "esmc-fixed-4-candidate-1",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-4-pairs/measurements/measurement-001/invocation.json",
+                "sha256": "f752e57c621c64f9a1679644c2bd09c5e657e0d719ad62a2ee4de2deb7f1e419"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-4-pairs/candidate-1/accepted.json",
+                "sha256": "a3d188e2208d3dcd44b0776064d0fdc615c67d9b601da9455125db48d4fd59b6"
+              },
+              "e2e_seconds": 20.646224255,
+              "model_forward_seconds": 1.5070125559577718,
+              "request_seconds": 7.786980521981604
+            },
+            {
+              "index": 2,
+              "slot": {
+                "arm": "candidate",
+                "pair": 1
+              },
+              "run_id": "esmc-fixed-4-candidate-2",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-4-pairs/measurements/measurement-002/invocation.json",
+                "sha256": "ef9c7b9f8ae87db343f32f55e2613d02b4bee0af141013c5c0097c530c7a47b4"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-4-pairs/candidate-2/accepted.json",
+                "sha256": "6c377d42f0dc1eb1969cbcfdcdbf264d625457222aa15e83a96569dd73d6ff82"
+              },
+              "e2e_seconds": 20.638042799,
+              "model_forward_seconds": 1.4786384960170835,
+              "request_seconds": 7.486498456099071
+            },
+            {
+              "index": 3,
+              "slot": {
+                "arm": "baseline",
+                "pair": 1
+              },
+              "run_id": "esmc-fixed-4-baseline-2",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-4-pairs/measurements/measurement-003/invocation.json",
+                "sha256": "0d9d7cd55f44b2f22099acda71b07537acf41d8b8bc1223cf8c481f63c191a31"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-4-pairs/baseline-2/accepted.json",
+                "sha256": "1a3bf96c8db81dfcf15e234ae7db51f503315a3de9a5c234c6a8d22fa109b64c"
+              },
+              "e2e_seconds": 20.860516264,
+              "model_forward_seconds": 1.4122791489353403,
+              "request_seconds": 7.394124567974359
+            },
+            {
+              "index": 4,
+              "slot": {
+                "arm": "baseline",
+                "pair": 2
+              },
+              "run_id": "esmc-fixed-4-baseline-3",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-4-pairs/measurements/measurement-004/invocation.json",
+                "sha256": "bbf52e78ade351bba06777f6a8ac3349bd5772d64506974035cb2800a1a317fa"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-4-pairs/baseline-3/accepted.json",
+                "sha256": "d82e7cecdc20a7df5662be0c9e289216aba912dcfa0fac4729390c651ab753f7"
+              },
+              "e2e_seconds": 20.830440526,
+              "model_forward_seconds": 1.3427665659692138,
+              "request_seconds": 7.356484718970023
+            },
+            {
+              "index": 5,
+              "slot": {
+                "arm": "candidate",
+                "pair": 2
+              },
+              "run_id": "esmc-fixed-4-candidate-3",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-4-pairs/measurements/measurement-005/invocation.json",
+                "sha256": "5e7b36428e685466f1aad8e925ffba86a0aee34d3aeb06cce3b277d294ac27e3"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-4-pairs/candidate-3/accepted.json",
+                "sha256": "7295dea0c2c54a6c70156596a75f8200bcf00f8d18713e865fe0105c5b5760e3"
+              },
+              "e2e_seconds": 20.523555356,
+              "model_forward_seconds": 1.442299005924724,
+              "request_seconds": 7.404970108997077
+            }
+          ],
+          "performance": {
+            "baseline": {
+              "count": 3,
+              "min": 20.593839931,
+              "median": 20.830440526,
+              "p95": 20.860516264,
+              "max": 20.860516264,
+              "mean": 20.761598907
+            },
+            "candidate": {
+              "count": 3,
+              "min": 20.523555356,
+              "median": 20.638042799,
+              "p95": 20.646224255,
+              "max": 20.646224255,
+              "mean": 20.60260747
+            },
+            "median_speedup": 1.00932247931036,
+            "p95_speedup": 1.0103792347866272,
+            "paired_speedups": [
+              0.9974627649417636,
+              1.0107797753482117,
+              1.0149528268702375
+            ],
+            "paired_summary": {
+              "count": 3,
+              "min": 0.9974627649417636,
+              "median": 1.0107797753482117,
+              "p95": 1.0149528268702375,
+              "max": 1.0149528268702375,
+              "mean": 1.0077317890534043
+            },
+            "observed_trend": "faster_median_and_p95",
+            "changes": {
+              "invocation.profile_sha256": {
+                "baseline": "c5c42357cd48b8884aa11c4d3f46a700f44cb35bc21dc418a3e33d08af726f24",
+                "candidate": "38bf1ff69985cc5667634c11ed027a15d7b886ec4d50081d0e9da3205930ec75"
+              },
+              "launch.environment.FIREPROT_ESMC_FIXED_GEMM": {
+                "baseline": "0",
+                "candidate": "1"
+              }
+            }
+          },
+          "all_arrays_exact": true,
+          "model_forward_medians": {
+            "baseline": 1.3427665659692138,
+            "candidate": 1.4786384960170835
+          }
+        },
+        "esmc-fixed-64": {
+          "benchmark": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-64-pairs/measurements/benchmark.json",
+            "sha256": "19071ab3e918915c0edfdeb4d8bdc5281afab1efed4da0a4d67fc39cf4681734"
+          },
+          "comparison": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-64-pairs/measurements/comparison.json",
+            "sha256": "1eaa1b28a326d95fea1c37b60e63b1a6815a30899b88167397cc998835d6313a"
+          },
+          "records": [
+            {
+              "index": 0,
+              "slot": {
+                "arm": "baseline",
+                "pair": 0
+              },
+              "run_id": "esmc-fixed-64-baseline-1",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-64-pairs/measurements/measurement-000/invocation.json",
+                "sha256": "35a8a51c1623ddf698c176dcaeceed6349424328e94c0ea40127a18f2f2a01ee"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-64-pairs/baseline-1/accepted.json",
+                "sha256": "9eef2b81139f3076c8895f660730ba38a5e7c1d1ea007af27687711e28873ab6"
+              },
+              "e2e_seconds": 30.979399211,
+              "model_forward_seconds": 10.074091561953537,
+              "request_seconds": 16.392499139998108
+            },
+            {
+              "index": 1,
+              "slot": {
+                "arm": "candidate",
+                "pair": 0
+              },
+              "run_id": "esmc-fixed-64-candidate-1",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-64-pairs/measurements/measurement-001/invocation.json",
+                "sha256": "dd92f6d07dc6f8f727a668b9e8fe9bd9a146c051d689813614e6df677563e81f"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-64-pairs/candidate-1/accepted.json",
+                "sha256": "fff26ede7fd95463420c915c6138d7268f80fb8623aed1051069fe3d7a3d424e"
+              },
+              "e2e_seconds": 31.79681029,
+              "model_forward_seconds": 9.624897064990364,
+              "request_seconds": 15.943783579976298
+            },
+            {
+              "index": 2,
+              "slot": {
+                "arm": "candidate",
+                "pair": 1
+              },
+              "run_id": "esmc-fixed-64-candidate-2",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-64-pairs/measurements/measurement-002/invocation.json",
+                "sha256": "74f079e47f11215e0925c58df9356b3cf929ab69ea5511ec3dff7b3f6b6641da"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-64-pairs/candidate-2/accepted.json",
+                "sha256": "1fa76c877d9b643abc005464e98e4b3b983bc5cf206d505a103a9d5c1459634f"
+              },
+              "e2e_seconds": 30.434632791,
+              "model_forward_seconds": 9.60657644609455,
+              "request_seconds": 15.71281854598783
+            },
+            {
+              "index": 3,
+              "slot": {
+                "arm": "baseline",
+                "pair": 1
+              },
+              "run_id": "esmc-fixed-64-baseline-2",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-64-pairs/measurements/measurement-003/invocation.json",
+                "sha256": "d15eaaa244760ded78666ed11c71598f2ec5a7ed7f9b026ae24453e3e32dfa6b"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-64-pairs/baseline-2/accepted.json",
+                "sha256": "042e8dfd37d53e74d445f7713c74d4aa1c318907eadc777931dde23676089c91"
+              },
+              "e2e_seconds": 31.2681595,
+              "model_forward_seconds": 9.996016573044471,
+              "request_seconds": 16.14460830797907
+            },
+            {
+              "index": 4,
+              "slot": {
+                "arm": "baseline",
+                "pair": 2
+              },
+              "run_id": "esmc-fixed-64-baseline-3",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-64-pairs/measurements/measurement-004/invocation.json",
+                "sha256": "b1335d3d689d5c73a5ad3852e44bb765bad0bed6159ffe05d6ebe678b9754e8e"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-64-pairs/baseline-3/accepted.json",
+                "sha256": "d8e0b2a1628373465773afdcc7078087dca05a2d6b092f1bf3024e5989ec8d25"
+              },
+              "e2e_seconds": 31.198883375,
+              "model_forward_seconds": 9.975620925193653,
+              "request_seconds": 16.134169804980047
+            },
+            {
+              "index": 5,
+              "slot": {
+                "arm": "candidate",
+                "pair": 2
+              },
+              "run_id": "esmc-fixed-64-candidate-3",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-64-pairs/measurements/measurement-005/invocation.json",
+                "sha256": "6450a67b41f338ca1f91086718bde331bd0c0d2f5b4fb734de5afa4f68510122"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-validation/esmc-fixed-64-pairs/candidate-3/accepted.json",
+                "sha256": "12b2ebd13dadbac2e71ebfd55d5271205b89b29748526bb426f78b0ea060559c"
+              },
+              "e2e_seconds": 30.344695936,
+              "model_forward_seconds": 9.617732389131561,
+              "request_seconds": 15.766508118016645
+            }
+          ],
+          "performance": {
+            "baseline": {
+              "count": 3,
+              "min": 30.979399211,
+              "median": 31.198883375,
+              "p95": 31.2681595,
+              "max": 31.2681595,
+              "mean": 31.148814028666667
+            },
+            "candidate": {
+              "count": 3,
+              "min": 30.344695936,
+              "median": 30.434632791,
+              "p95": 31.79681029,
+              "max": 31.79681029,
+              "mean": 30.85871300566667
+            },
+            "median_speedup": 1.0251112142291399,
+            "p95_speedup": 0.9833740936534675,
+            "paired_speedups": [
+              0.974292670505473,
+              1.0273874409697654,
+              1.0281494809109826
+            ],
+            "paired_summary": {
+              "count": 3,
+              "min": 0.974292670505473,
+              "median": 1.0273874409697654,
+              "p95": 1.0281494809109826,
+              "max": 1.0281494809109826,
+              "mean": 1.0099431974620736
+            },
+            "observed_trend": "mixed_or_unchanged",
+            "changes": {
+              "invocation.profile_sha256": {
+                "baseline": "c5c42357cd48b8884aa11c4d3f46a700f44cb35bc21dc418a3e33d08af726f24",
+                "candidate": "38bf1ff69985cc5667634c11ed027a15d7b886ec4d50081d0e9da3205930ec75"
+              },
+              "launch.environment.FIREPROT_ESMC_FIXED_GEMM": {
+                "baseline": "0",
+                "candidate": "1"
+              }
+            }
+          },
+          "all_arrays_exact": true,
+          "model_forward_medians": {
+            "baseline": 9.996016573044471,
+            "candidate": 9.617732389131561
+          }
+        }
+      },
+      "scope": "Incremental comparison against current qualified FireProt, not a new direct native ratio. Three AB/BA/AB complete Rust invocation pairs per workload. N1000, identical B4 grouping, native BF16, seed101, HIP6, unflushed caches, fresh processes. Four or 64 inputs (one or sixteen B4 groups). Offline native build excluded; shared-library and plan loading included. All retained arrays exact."
+    }
+  },
+  "files": {
+    "order-v2/report.json": "fbece84a1d04adf489e58ad135b000c61d1442d73f6c30fc618ff6dbb92dfd8e",
+    "tunable-v3/report.json": "1b50cad2b9f988fbf845b8ccacaffdf30b4278d434f6e4d90c7ba98cc68f614a",
+    "tunable-v3/algorithms.csv": "9980c71947c81b3c759cdff4707376031126b0fa35045b7f0b3ece6345e3c060",
+    "graph-v2/report.json": "35ca5c3feb491732cb621db12f59c88dd1082137e7ee87b334b9f2ca01e743de",
+    "lt-screen/report.json": "1494d54c018505a719ee3ac5ec068700488cce886f4b494fccdb505f88a2ef27",
+    "lt-build-spec.json": "69b967c8c590933618126159659eb688cb4a7e53425c0b845931466e79804ed3",
+    "lt-build-receipt.json": "b64ed81cdf44b01d592ce3d787c4188ea2cb8fa16fd92b01242f47fc64523a1f",
+    "lt-validation/deployment-manifest.json": "a0edf963dced506776976fa3519a01ba2da0e6221f97ad66ffc6093f65d485ff",
+    "lt-validation/collected.json": "949b515f4115759e2ed23f12b2412316f12bcbed1baec935fd63d4b190fd47f7",
+    "screen_esmc_gemm_order.py": "a16ca10a3ab2a586764c79dc8659b1fd3abf449224bae12bb67f4dbabf0eadf3",
+    "screen_esmc_tunable.py": "f8e70a3bdc911914d8b3552a74468544132ec576359d306f026757f2681fa10d",
+    "screen_esmc_graph.py": "1af1acf18260e4a05def257d81ebca872802449dc8932e8464119d6bcef8d527",
+    "esmc_lt_fixed.hip": "86717f70a8a5a0aed5fc0d1b26e3903d7a2088b0f60dd1a14a96a20df756e011",
+    "esmc_lt_scope.py": "5969120877f7d42fe18bf173d1e3044292dd557929ec42a27b6ed72843e93cd9",
+    "screen_esmc_lt_fixed.py": "fd87f39ac079f06bdd7a922311d0daf4f6fecb23c43b3d7122294e9e6ab4a7d9",
+    "lt-validation/esmc_lt_scope.py": "f9cde00b8b963f92995a8968780b6ad87b5252c35d828ac7f5a95ee765304a01",
+    "lt-validation/prepare_esmc_fixed_pairs.py": "67dba4eeb50fa0020e4d696fe42c07a37f07f35e1fa43f34f0185a8167df1c90",
+    "lt-validation/collect_esmc_fixed_pairs.py": "bc2f762230a72cac0f10603b91a71d956e96283d48969c91d157e3f7f91cc0f8",
+    "lt-kernel-cache/esmc_lt_fixed_0127bd4dd508f6bd2d25e5db77a5d59e3c47a90c681c2b272a84a6153709df6d/esmc_lt_fixed_0127bd4dd508f6bd2d25e5db77a5d59e3c47a90c681c2b272a84a6153709df6d.so": "7b554428ba5a79ed1ef2f107f8e4d8ba8e306352a8efa88c0b116f04f1fdedb4",
+    "lt-validation/esmc-fixed-4-pairs/spec.json": "e917e24fb59660c4ad830aa8bc1ac20b5d2976c3ec5e403ff25a5f2c8e0c626a",
+    "lt-validation/esmc-fixed-4-pairs/measurements/benchmark.json": "8fb0b1a16d762d0e3ffe2ee7d3c8b32ac86c0c4f484a8fd3811db163ac8f89cf",
+    "lt-validation/esmc-fixed-64-pairs/spec.json": "5277bc112b05b31611bfdfd458a54d2363879b0ca9be26f60f86e149103eb53c",
+    "lt-validation/esmc-fixed-64-pairs/measurements/benchmark.json": "19071ab3e918915c0edfdeb4d8bdc5281afab1efed4da0a4d67fc39cf4681734"
+  },
+  "tunable_cold_pilot": {
+    "benchmark": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/validation-v4/esmc-tuned-4-pairs/measurements/benchmark.json",
+      "sha256": "00375db71fe5b0fdd047b847af7c3590c88902a4fc4b2c2fdfebaaf3a024577d"
+    },
+    "status": "not a qualified paired performance result; profile hash declaration missing",
+    "records": [
+      {
+        "arm": "baseline",
+        "accepted": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/validation-v4/esmc-tuned-4-pairs/baseline-1/accepted.json",
+          "sha256": "bbd0b78871e46b910a27f73b4e8f87855f32d3126fd1c31de07a31a3a9217a9b"
+        },
+        "predictions": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/validation-v4/esmc-tuned-4-pairs/baseline-1/predictions.json",
+          "sha256": "8f613f9a6dcdf1ff2a638a8b3b070187287cff4decb62aba5e492b7fde5584b9"
+        },
+        "model_seconds": 1.3578062880551443,
+        "request_seconds": 7.277308505028486
+      },
+      {
+        "arm": "candidate",
+        "accepted": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/validation-v4/esmc-tuned-4-pairs/candidate-1/accepted.json",
+          "sha256": "fb1438f37733fd25512f07cc45ded0a9aa3d63a102a7ce359667efe759a80cc6"
+        },
+        "predictions": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/validation-v4/esmc-tuned-4-pairs/candidate-1/predictions.json",
+          "sha256": "6d8cdab24d2c871a75d3a3ccf9b6c5f6d0b36db9e6834f0d5b48f1f310f1c2df"
+        },
+        "model_seconds": 5.456025914987549,
+        "request_seconds": 11.53266526304651
+      }
+    ],
+    "all_four_output_archives_bitwise_equal": true
+  }
+}

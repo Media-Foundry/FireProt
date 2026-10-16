@@ -125,10 +125,12 @@ That functional run overlapped asset copying and is excluded from performance
 claims. A missing `outputs/` parent caused an earlier startup failure before
 any GPU work; creating it resolved the failure without changing validation.
 
-The current ESM3 profile uses `/home/husrcf/anaconda3/envs/BIO/bin/python`,
+The native ESM3 profile uses `/home/husrcf/anaconda3/envs/BIO/bin/python`,
 Python 3.12.7, Torch `2.13.0+rocm10.0.0`, HIP `7.15.26333`, and the pinned
 Biohub source above. It selects the official pretrained factory and offline
-checkpoint loading. No DiamondHill HIP/CK operator bundle is loaded.
+checkpoint loading. The separate FireProt profile uses the same environment but
+selects the qualified sequence-only direct-GPU loader described below. No
+DiamondHill HIP/CK operator bundle is loaded.
 
 Independent native timing is recorded under
 `runtime/precision-baselines-20261016/`, with fresh workers, complete hashes and
@@ -194,6 +196,18 @@ improve. Model-forward medians are 2.438680 versus 0.987543 seconds. Filesystem
 and GPU library caches were not flushed, and no asset transfer or concurrent GPU
 workload was present.
 
+The FireProt profile also replaces the general official factory with the same
+meta-device ESM3 constructor restricted to the sequence-only interface. Unlike
+the rejected CPU-mmap loader, it restores the pinned checkpoint directly to the
+GPU before assignment, while avoiding unused structure/function codecs and
+tokenizers. An incremental three-pair AB/BA/AB comparison measured the official
+factory at 10.550715826 seconds median and 11.474607739 seconds p95, versus
+10.509555259 and 10.533975665 seconds for direct-GPU loading. Median speedup is
+**1.003916490x**, p95 speedup is **1.089295068x**, and all three pair ratios are
+above one. All 12 paired predictions remain bitwise exact. This is a small
+loading improvement, not an operator-speed claim. Full evidence is in
+[`precision_esm3_direct_cuda_gfx1100_20261017.json`](../provenance/precision_esm3_direct_cuda_gfx1100_20261017.json).
+
 The route is qualified only for sequence-only ESM3, N1000, B1/B4, native BF16,
 Torch `2.13.0+rocm10.0.0`, HIP `7.15.26333`, and gfx1100. It does not establish
 performance or compatibility for generation, structure/function inputs, other
@@ -208,7 +222,7 @@ cd /media/990Pro/fireprot
 cp configs/requests/precision-esm3-open-b4-n1000-fireprot.json /tmp/my-esm3-fireprot.json
 # Edit run_id and output_dir in /tmp/my-esm3-fireprot.json.
 target/release/fireprot esm /tmp/my-esm3-fireprot.json \
-  configs/precision/plm-esm3-open-native.json
+  configs/precision/plm-esm3-open-fireprot.json
 ```
 
 ## Qualified gfx1100 ESM2 exact-loading route

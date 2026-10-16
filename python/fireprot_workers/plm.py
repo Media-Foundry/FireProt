@@ -163,7 +163,7 @@ def load_model(request, sequence):
                     model = ESM3(d_model=1536, n_heads=24, v_heads=256, n_layers=48,
                         structure_encoder_fn=unavailable, structure_decoder_fn=unavailable,
                         function_decoder_fn=unavailable, tokenizers=SimpleNamespace(sequence=tokenizer))
-                weights = torch.load(checkpoint, map_location='cpu', weights_only=True, mmap=True)
+                weights = torch.load(checkpoint, map_location='cuda', weights_only=True, mmap=False)
                 model.load_state_dict(weights, strict=True, assign=True)
                 del weights
                 model = model.to(device='cuda', dtype=torch.bfloat16).eval()

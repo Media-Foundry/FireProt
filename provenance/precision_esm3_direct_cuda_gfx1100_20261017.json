@@ -1,0 +1,190 @@
+{
+  "schema_version": 1,
+  "status": "gfx1100_esm3_direct_cuda_loading_verified",
+  "host": "Precision",
+  "hip_device": 0,
+  "pci_address": "0000:53:00.0",
+  "architecture": "gfx1100",
+  "model": "esm3-open",
+  "workload": {
+    "batch": 4,
+    "length": 1000,
+    "precision": "native BF16",
+    "seed": 101
+  },
+  "runtime": {
+    "python": "3.12.7",
+    "torch": "2.13.0+rocm10.0.0",
+    "hip": "7.15.26333",
+    "biohub_esm_commit": "43b4548b86762edfa747b07d5f440aad3c33acee"
+  },
+  "implementation": "esm3_sequence_direct_cuda_loading_v1",
+  "scope": "Sequence-only meta construction with direct GPU checkpoint restoration, compared with the official local factory while retaining the qualified gfx1100 frameless route and all public output heads.",
+  "checkpoint": {
+    "path": "/media/990Pro/fireprot/runtime/weights/esm3-open/snapshot/data/weights/esm3_sm_open_v1.pth",
+    "sha256": "5ead5a135c658068db6a4f1b933e72d6110992c4668822e1c0e2dcc53e38acd9"
+  },
+  "benchmark": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-direct-cuda-pairs-20261017-v1/benchmark/benchmark.json",
+    "sha256": "7533b0053e6f8b6c3639775f7175afa2c638a2b4e3ff8e43ada986f348b4dfba"
+  },
+  "comparison": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-direct-cuda-pairs-20261017-v1/benchmark/comparison.json",
+    "sha256": "30f3036bea30890f8352864450dfa97f847e4aa5e237fb10f045c2b9c55e4214"
+  },
+  "source_files": {
+    "python/fireprot_workers/plm.py": "a89033310f80183ec68d812100115da034dcba229c250c7e3bc14543cd3a4ed7",
+    "python/fireprot/adapters/plm/runtime.py": "b2bc5118678fa71db6c8b843edc8a039886d38f7d37688ae4930bb0cb7fab065",
+    "python/fireprot/adapters/plm/esm.py": "2cb8a5a9d6e5eff7bacee1110a9eb1bdc15b5a5bdd15282647d9451dca6d8d48",
+    "configs/precision/plm-esm3-open-fireprot.json": "6dda04d550e3fc47c356ba7c1f193f6e8204c7f11c78d9c9d84c16c1590da11c",
+    "configs/requests/precision-esm3-open-b4-n1000-fireprot.json": "132f2f4e9b5e4e0b6ad88b7f82ee621b9374148a3919a8c152240e31d7b22c27"
+  },
+  "records": [
+    {
+      "pair": 0,
+      "arm": "baseline",
+      "run_id": "gfx11-esm3-direct-cuda-baseline-0",
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-direct-cuda-pairs-20261017-v1/benchmark/measurement-000/invocation.json",
+        "sha256": "e88b23db25e082d26893338a7a356f60f119f6d06163e8bdd75ac882e903d459"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-direct-cuda-pairs-20261017-v1/gfx11-esm3-direct-cuda-baseline-0/accepted.json",
+        "sha256": "5800da84f69dbe4f41d79303e268efe87e3a0495b02f824247e7046c1df81bab"
+      },
+      "e2e_seconds": 11.474607739,
+      "request_seconds": 5.282109942985699,
+      "model_forward_seconds": 0.9521673540002666
+    },
+    {
+      "pair": 0,
+      "arm": "candidate",
+      "run_id": "gfx11-esm3-direct-cuda-candidate-0",
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-direct-cuda-pairs-20261017-v1/benchmark/measurement-001/invocation.json",
+        "sha256": "bf2a242bff2a5f0feda92f8fd9cba01ee5214f3c39483a0b52dd9db122f216e7"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-direct-cuda-pairs-20261017-v1/gfx11-esm3-direct-cuda-candidate-0/accepted.json",
+        "sha256": "389f1e70e25b20242616a3eeb4e1311428f56338080a0dfbecb822516d5125a5"
+      },
+      "e2e_seconds": 10.533975665,
+      "request_seconds": 5.134279624995543,
+      "model_forward_seconds": 0.9746221639798023
+    },
+    {
+      "pair": 1,
+      "arm": "candidate",
+      "run_id": "gfx11-esm3-direct-cuda-candidate-1",
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-direct-cuda-pairs-20261017-v1/benchmark/measurement-002/invocation.json",
+        "sha256": "58a74dd5e1b9cc8f58d67f409bff5f5a1c6b3869ba01b8a958def63198a97485"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-direct-cuda-pairs-20261017-v1/gfx11-esm3-direct-cuda-candidate-1/accepted.json",
+        "sha256": "3c9bda8cf2972dc3bb7429549cfb060166b12f673b1c5d5adaca7185f592500d"
+      },
+      "e2e_seconds": 10.509555259,
+      "request_seconds": 5.13739056099439,
+      "model_forward_seconds": 0.9774735060054809
+    },
+    {
+      "pair": 1,
+      "arm": "baseline",
+      "run_id": "gfx11-esm3-direct-cuda-baseline-1",
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-direct-cuda-pairs-20261017-v1/benchmark/measurement-003/invocation.json",
+        "sha256": "65509b2d84823d7260586f7658751dfc85181aa6c892973dae8b9e99794c98e7"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-direct-cuda-pairs-20261017-v1/gfx11-esm3-direct-cuda-baseline-1/accepted.json",
+        "sha256": "593841f1b79141f3d6e4899f125ddf3478eceaf4118cbc921955f3e3c1212ce9"
+      },
+      "e2e_seconds": 10.550715826,
+      "request_seconds": 5.20177627299563,
+      "model_forward_seconds": 0.9480273609806318
+    },
+    {
+      "pair": 2,
+      "arm": "baseline",
+      "run_id": "gfx11-esm3-direct-cuda-baseline-2",
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-direct-cuda-pairs-20261017-v1/benchmark/measurement-004/invocation.json",
+        "sha256": "e677a5d9189e3a6aa738a4ec960391146faf76e269d6f8ae915cca45b17fadb3"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-direct-cuda-pairs-20261017-v1/gfx11-esm3-direct-cuda-baseline-2/accepted.json",
+        "sha256": "2b1e75c2660bca9a5232af1483fc3f11d6003fb966141b63a5415655cfac7768"
+      },
+      "e2e_seconds": 10.431749556,
+      "request_seconds": 5.0944227679865435,
+      "model_forward_seconds": 0.9507547909743153
+    },
+    {
+      "pair": 2,
+      "arm": "candidate",
+      "run_id": "gfx11-esm3-direct-cuda-candidate-2",
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-direct-cuda-pairs-20261017-v1/benchmark/measurement-005/invocation.json",
+        "sha256": "ee36db9e3d4630d2ba32c8172bbfdecaa67f31c1835cc1d579908d87877d70cb"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-direct-cuda-pairs-20261017-v1/gfx11-esm3-direct-cuda-candidate-2/accepted.json",
+        "sha256": "0f09f747ef6089bbdba2e83d263707baa71b6a728f0c0bcf04f8d44aedf92829"
+      },
+      "e2e_seconds": 10.415195658,
+      "request_seconds": 5.018117316998541,
+      "model_forward_seconds": 0.9747532769979443
+    }
+  ],
+  "performance": {
+    "baseline": {
+      "count": 3,
+      "min": 10.431749556,
+      "median": 10.550715826,
+      "p95": 11.474607739,
+      "max": 11.474607739,
+      "mean": 10.819024373666666
+    },
+    "candidate": {
+      "count": 3,
+      "min": 10.415195658,
+      "median": 10.509555259,
+      "p95": 10.533975665,
+      "max": 10.533975665,
+      "mean": 10.486242194
+    },
+    "median_speedup": 1.0039164898975863,
+    "p95_speedup": 1.0892950680648834,
+    "paired_speedups": [
+      1.0892950680648834,
+      1.0039164898975863,
+      1.0015893986578432
+    ],
+    "observed_trend": "faster_median_and_p95",
+    "changes": {
+      "invocation.profile_sha256": {
+        "baseline": "030ef904873621ceb4b432c4307dbf2bb1fa59980194cf4f3eb6f11630df1c87",
+        "candidate": "6dda04d550e3fc47c356ba7c1f193f6e8204c7f11c78d9c9d84c16c1590da11c"
+      },
+      "launch.environment.FIREPROT_ESM3_REFERENCE_FACTORY": {
+        "baseline": "1",
+        "candidate": "0"
+      }
+    }
+  },
+  "request_seconds_medians": {
+    "baseline": 5.20177627299563,
+    "candidate": 5.134279624995543
+  },
+  "model_forward_medians": {
+    "baseline": 0.9507547909743153,
+    "candidate": 0.9747532769979443
+  },
+  "all_arrays_exact": true,
+  "accepted_invocations_rehashed": 6,
+  "accepted_artifacts_rehashed": 66,
+  "prediction_archives_rehashed": 24,
+  "paired_prediction_archives_compared": 12,
+  "limitations": "Same-host incremental B4 comparison with fresh processes and unflushed filesystem/GPU library caches. The median improvement is small and comes from loading, not model forward. The FireProt execution profile selects this sequence-only loader; the native profile retains the official factory. It does not qualify structure/function codecs, generation, other lengths, batch sizes, runtimes, architectures or mixed precision."
+}

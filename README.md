@@ -214,6 +214,12 @@ The subsequent [lazy FFN composition](docs/esmc-resident-gemm.md) adds another
 measured **1.0111x** over that pointwise route for resident64:
 **23.169 -> 22.915 s**, all three pairs faster and official same-batch outputs
 byte-identical. It has a separate experimental entry; single-group results remain mixed.
+A [larger-batch follow-up](docs/esmc-large-batch-followup.md) qualifies experimental
+B8/B16 HIP outputs against their own official grouping. B16 adds 1.0224x warm
+throughput over optimized B4, but complete invocation improves only **1.0025x**
+with one regressing pair. It is not promoted; the published B4 result remains
+**1.978x**. The refreshed optimized GPU profile attributes about **80%** of
+kernel time to GEMM and **9%** to attention.
 Warm forward excludes loading/export and is measured independently. See
 [exact-route commands and evidence](docs/esm-optimization.md). ESM3's separate
 64-input resident workload (sixteen B4 groups) improves **20.212 → 15.490 s

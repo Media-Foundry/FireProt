@@ -7318,3 +7318,81 @@ Local detect-changes reports critical impact via generic/empty symbols across
 unrelated Python flows; this is noisy graph reach, not established runtime
 dependence. Source review confirms edits in Rust monitor/inference/comparison,
 new C++ operation and tests; old monitor constructor and CLI defaults preserved.
+
+## 2026-10-16 ESMC larger-batch and refreshed profile follow-up
+
+Previous turn was progress: snapshot monitor deployed/pushed7879fb5. This turn
+measured new directions; no production path or binary is changed. Published
+nativeB4->current E2E remains24.235166989->12.250121529s1.978361352x.
+All GPU work completed, HIP6 only/PCI0000:8e:00.0; no live jobs remain.
+
+Fresh startup diagnostic root outputs/experiments/esmc-current-profile-20261016:
+Torch1.659463s, upstreamimports1.716442s, load_model2.227765s includingplacement
+1.317875s, firstB4forward1.290020s, exports0.036965s. Complete invocation12.357825s
+is instrumented diagnostic, NOT new E2E benchmark. Four outputs exact to official
+B4 reference. Fine diagnostic esmc-load-substeps-20261016 also exact4outputs:
+modelconstruction0.664052s, placement1.163559s, strictassignment0.014763s,
+model_to_eval0.185700s, tokenizerimport~1.7us, initialtokenization0.011477s.
+Tokenizer import is NOT a bottleneck; earlier unmeasured residual must not be
+attributed to tokenizer. Phases nested/overlapping, do not sum.
+
+Native batch screen root esmc-large-batch-20261016 uses first16distinct inputs
+from priorresident64 manifest, allN1000/nativeBF16/seed101. Same16inputs per
+observation, two warmups/route, nine observations/route in alternating orders,
+unflushed caches/model resident, full input/resource/checkpoint hashes before
+and after. Every timed forward checked against own official group output.
+Warmseconds: nativeB4 2.566689162, B8 2.418966169, B16 2.359909973;
+currentoptimizedB4 withpointwise+lazyFFN2.128590132. Cross-group comparison
+notbyteequal: maximumembeddingdelta vsB4 is1.75(B8),1.25(B16), tokens exact.
+Allper-item drift retained. Not biological/structure quality metrics.
+
+HIP prototype root esmc-large-batch-ops-20261016: Rust build service uses exact
+prior compile flags; only CABI bounds enlarged for ESMCheads40RoPE batch8/16
+and pointwise rows8016/16032. ESM3 bound unchanged. No kernel arithmetic changes.
+All48HIParchives exact vs48native same-group archives; residual intermediates
+also audited. B8/B16 keep native GEMM; B4fixedalgo4139 not used forlargergroups.
+Warmseconds matchedfollowup: B4 2.129119249,B8 2.128551486,B16 2.082487934.
+B16~1.02239xwarm;B8~1.00027x. PeakallocatedGiB B4 12.331,B8 12.582,B16 13.079.
+No hardware-counter CU/memory-vs-compute saturation claim.
+
+True-device-event profile (singleB4, no doublecounting CPUaten aggregates):
+Native total639.250ms: GEMM452.896ms70.85%,attention48.530ms7.59%,LN23.379ms3.66%.
+Optimized total531.922ms: GEMM425.058ms79.91%,attention48.530ms9.12%,LN23.327ms4.39%,
+other35.006ms6.58%. RemainingGPUhead is GEMM, not attention. Theseareinstrumented
+kernel times, separatefromwarm/E2Emeasurements. Fulltracespinnedin evidence.
+
+E2E root esmc-large-batch-e2e-20261016 with isolatedqualified-large-batch snapshot,
+samecurrentCLI1f5365... inbotharms, same16inputs/assets/worker. Onlyexplicit
+hip_esmc_large_batch resource admitslargergroups; productionB1/B2/B4 stays.
+B4profilefixedFFN1 vsB16profile0 (nativeGEMM). All6Rustmeasure-inference invocations
+and96archives sealed/independentlyrehashed/exactvsrespectiveofficialgrouping.
+Cross-group comparison intentionally NOT submitted to same-workload comparator;
+no numerical policy relaxed. ThreeAB/BA/ABpairs:
+B4 14.058182313,14.074871324,13.966921259s;
+B16 14.023622504,13.977752034,14.028632013s;
+pairedratios1.002464400,1.006948134,0.995601085;median1.002464400x.
+Forwardmedians2.824826423->2.772341732s. Onepair regresses; DONOTPROMOTE.
+
+CPU-only meta initialization screen root esmc-meta-construction-20261016:
+esmc_meta_init.py patches torch.nn.init routines only for tensor.is_meta,
+leaves real tensor init native and restores functions in finally. Threefresh
+processpairs, originalvsno-meta-init constructor0.656568896->0.579517213s,
+~77ms saved. Allmodule/state metadata, bufferbytes andRNGstateexact, noCUDAinit.
+This is only a constructor diagnostic; NO loaded-model/E2Equalification, no
+published flag. Do not promote it based on totalmodelconstruction0.66s or infer
+all0.66srecoverable. CPUhelper remains experimental.
+
+Maintained scripts experiments/plm/{profile_esmc_current_startup,profile_esmc_load_steps,
+screen_esmc_large_batch,build_esmc_large_batch_ops,screen_esmc_large_batch_ops,
+esmc_large_batch_scope,measure_esmc_large_batch_e2e,collect_esmc_large_batch_e2e,
+esmc_meta_init,screen_esmc_meta_init}.py. Eachroot/measured-scripts freezes
+originaldriver/helpers (initiallaunchpaths/tmp). Artifact receipts keepfull
+remoteheaderlists; repositorysummaryomitslistswhilepinningfullreceipt.
+Evidence provenance/esmc_large_batch_followup_20261016.json; doc
+ docs/esmc-large-batch-followup.md; READMErecordsnotpromoted/current1.978x.
+Nextcandidate: exactFFNGEMM tuning forB16/native reference. B16nativeGEMM differs
+fromB4default; priorCKfailurecannotimply success/failureatnewshape. Must first
+screenrealactivation, thenall-layer/officialsame-group parity, thenE2E. Do not
+assumechangingtile/APIgivesgain. Broadbatchadmission and meta-init not promoted.
+Source sync baseline7879fb5; backupinE2Eroot/top-source-backup; checkreceipt.
+Exclude runtime/outputs/Gitmetadata/Protenix/userdocs/isa; maintainedCLIunchanged.

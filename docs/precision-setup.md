@@ -140,6 +140,48 @@ fair-esm namespace, portable execution profile and model-specific route still
 required separate setup and validation; the qualification below completes that
 work without treating checkpoint availability alone as working inference.
 
+### Qualified native isolation monitor
+
+The maintained ESM2 and FireProt ESM3 profiles use the native AMD SMI helper at
+`runtime/fireprot-smi-probe` with the explicit `snapshot-v1` protocol. Each
+sample still opens a fresh AMD SMI session, enumerates every device, verifies
+all BDF mappings and reads every device's process list. It combines the former
+`amd-smi list` and `amd-smi process` subprocesses; it does not cache isolation
+state or weaken the external-process check.
+
+The Precision binary is built from
+`kernels/amd/tools/fireprot_smi_probe.cpp` (SHA-256
+`b73cdc829285498df5abf5654232a370410963d04708eaadfc403ad64b46d088`)
+against AMD SMI 27.0.0. Rebuild it from the repository root with:
+
+```bash
+/opt/rocm/llvm/bin/clang++ -O2 -std=c++17 -Wall -Wextra -Werror \
+  --ld-path=/opt/rocm/llvm/bin/ld.lld \
+  kernels/amd/tools/fireprot_smi_probe.cpp \
+  -I/opt/rocm/include -L/opt/rocm/lib -lamd_smi \
+  -Wl,-rpath,/opt/rocm/lib -o runtime/fireprot-smi-probe
+sha256sum runtime/fireprot-smi-probe
+```
+
+The qualified binary SHA-256 is
+`29e550384593d7880fb591213391ada0d728f3e589fd5edae7165d0449653c91`.
+Its normalized two-GPU list exactly matches `/usr/bin/amd-smi`, and a controlled
+GPU0 holder was detected by both implementations. The helper's combined query
+takes about 20 ms on this host, compared with about 220 ms for each official
+Python CLI query.
+
+Three fresh-process AB/BA/AB pairs isolate this monitoring treatment. ESM2-3B
+B4/N1000 improves from 19.437104 seconds median and 19.570121 seconds p95 to
+17.625852 and 17.641967 seconds: **1.102761x median** and **1.109294x p95**.
+ESM3-open B4/N1000 improves from 10.502244 seconds median and 11.142026 seconds
+p95 to 9.174322 and 9.208305 seconds: **1.144743x median** and **1.209998x
+p95**. Every one of the six paired ratios is above one. All 24 ESM2 and ESM3
+prediction archives remain bitwise exact, while median isolation sample counts
+increase from 19 to 44 for ESM2 and from 10 to 22 for ESM3. This is an E2E
+supervisor-overhead improvement, not a model-operator speed claim. Full evidence
+is in
+[`precision_plm_snapshot_monitor_20261017.json`](../provenance/precision_plm_snapshot_monitor_20261017.json).
+
 
 ### First independent native baseline
 

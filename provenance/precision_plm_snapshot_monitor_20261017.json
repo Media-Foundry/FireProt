@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "status": "precision_plm_snapshot_monitor_verified",
+  "host": "Precision",
+  "hip_device": 0,
+  "smi_device": 0,
+  "pci_address": "0000:53:00.0",
+  "architecture": "gfx1100",
+  "scope": "Replace separate official Python amd-smi list/process invocations with one native snapshot-v1 query for each fresh isolation sample. Model code, weights, arithmetic, request, seed and Rust acceptance remain unchanged.",
+  "probe": {
+    "path": "/media/990Pro/fireprot/runtime/fireprot-smi-probe",
+    "sha256": "29e550384593d7880fb591213391ada0d728f3e589fd5edae7165d0449653c91",
+    "source": {
+      "path": "kernels/amd/tools/fireprot_smi_probe.cpp",
+      "sha256": "b73cdc829285498df5abf5654232a370410963d04708eaadfc403ad64b46d088"
+    },
+    "compiler": {
+      "path": "/opt/rocm/core-10.0/lib/llvm/bin/clang-23",
+      "sha256": "241bf4da7ec39bc00b68ed74f6be751516d9892ed990e8c7fa372bad18500247"
+    },
+    "amd_smi": {
+      "version": "27.0.0",
+      "path": "/opt/rocm/core-10.0/lib/libamd_smi.so.27.0.0",
+      "sha256": "72cdd18cce1e6587ebf291515257fecd078b5df1d99ac4113c8f201f95ddfddf"
+    },
+    "build_command": "/opt/rocm/llvm/bin/clang++ -O2 -std=c++17 -Wall -Wextra -Werror --ld-path=/opt/rocm/llvm/bin/ld.lld kernels/amd/tools/fireprot_smi_probe.cpp -I/opt/rocm/include -L/opt/rocm/lib -lamd_smi -Wl,-rpath,/opt/rocm/lib -o runtime/fireprot-smi-probe"
+  },
+  "qualification": {
+    "devices": [
+      {"gpu": 0, "bdf": "0000:53:00.0"},
+      {"gpu": 1, "bdf": "0000:9e:00.0"}
+    ],
+    "normalized_list_sha256": "78a63b2619eea63e6352d134852b3ec6f2d96a46c7a3ee7569672093589ed0b3",
+    "official_and_native_list_equal": true,
+    "controlled_gpu0_holder_detected_by_both": true,
+    "fresh_session_per_sample": true,
+    "all_device_process_lists_checked": true,
+    "silent_fallback": false,
+    "timing_observation_seconds": {
+      "official_list_approx": 0.22,
+      "official_process_approx": 0.22,
+      "native_list_approx": 0.02,
+      "native_snapshot_approx": 0.02
+    }
+  },
+  "source_files": {
+    "configs/precision/plm-esm2-3b-native.json": "8e04fc582a1c16215bf036854d94e79f5f134eaf069e715e09bb49a7cff57cb4",
+    "configs/precision/plm-esm3-open-fireprot.json": "cfcd644f5b43eecbf02b44ca8f6c9f3f11c72cb9d88ae31c3e5cff1781d00e70",
+    "kernels/amd/tools/fireprot_smi_probe.cpp": "b73cdc829285498df5abf5654232a370410963d04708eaadfc403ad64b46d088"
+  },
+  "experiments": {
+    "esm2_3b": {
+      "workload": {"batch": 4, "length": 1000, "precision": "native FP32", "seed": 101},
+      "benchmark": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-snapshot-monitor-pairs-20261017-v1/benchmark/benchmark.json",
+        "sha256": "91b9f4f743a71fcc64c5b5b8be989eff7e6c5265c761d3644ce1ff1b672ecc6d"
+      },
+      "comparison": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-snapshot-monitor-pairs-20261017-v1/benchmark/comparison.json",
+        "sha256": "b9e44f9d78ea281e5b80ad69b5d21fef36bf941ebb50c0e94be531a5071d5f9e"
+      },
+      "profile_sha256": {
+        "baseline": "48765ae1f1e858f89149bd4e60072938b12584029047650da25846ebe1169254",
+        "candidate": "8e04fc582a1c16215bf036854d94e79f5f134eaf069e715e09bb49a7cff57cb4"
+      },
+      "performance": {
+        "baseline_seconds": {"min": 19.060121565, "median": 19.437103805, "p95": 19.570120587, "max": 19.570120587},
+        "candidate_seconds": {"min": 16.778467955, "median": 17.625852058, "p95": 17.641966901, "max": 17.641966901},
+        "median_speedup": 1.1027610887144552,
+        "p95_speedup": 1.109293578024495,
+        "paired_speedups": [1.1663830475754544, 1.081373059428864, 1.101753784828734]
+      },
+      "model_seconds": {
+        "baseline": [7.4418074669956695, 7.404886892996728, 7.341354334988864],
+        "candidate": [7.258015588013222, 7.278674311994109, 7.3082709459995385]
+      },
+      "isolation_samples": {"baseline": [19, 18, 19], "candidate": [43, 44, 44]},
+      "prediction_archives_compared": 12,
+      "all_arrays_bitwise_equal": true,
+      "all_pairs_faster": true
+    },
+    "esm3_open": {
+      "workload": {"batch": 4, "length": 1000, "precision": "native BF16", "seed": 101},
+      "benchmark": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-snapshot-monitor-pairs-20261017-v1/benchmark/benchmark.json",
+        "sha256": "fc61c45d990c3f225065f248673e90b3e3d20d907d531782de4f5628eff24ceb"
+      },
+      "comparison": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-snapshot-monitor-pairs-20261017-v1/benchmark/comparison.json",
+        "sha256": "67f5a4ca1f1261f30b1b3a8e41b3c3bd142f7003c23d6c0f36669ebe38255489"
+      },
+      "profile_sha256": {
+        "baseline": "6dda04d550e3fc47c356ba7c1f193f6e8204c7f11c78d9c9d84c16c1590da11c",
+        "candidate": "cfcd644f5b43eecbf02b44ca8f6c9f3f11c72cb9d88ae31c3e5cff1781d00e70"
+      },
+      "performance": {
+        "baseline_seconds": {"min": 10.422416957, "median": 10.502243937, "p95": 11.142026436, "max": 11.142026436},
+        "candidate_seconds": {"min": 9.092426827, "median": 9.174322066, "p95": 9.208304732, "max": 9.208304732},
+        "median_speedup": 1.1447433239695468,
+        "p95_speedup": 1.2099975793894047,
+        "paired_speedups": [1.2099975793894047, 1.1447433239695468, 1.1462744936314018]
+      },
+      "model_seconds": {
+        "baseline": [0.9922260999737773, 0.9695058420184068, 0.9684239950147457],
+        "candidate": [0.9390233760059346, 0.9400569080025889, 0.9387872839870397]
+      },
+      "isolation_samples": {"baseline": [10, 10, 10], "candidate": [22, 22, 22]},
+      "prediction_archives_compared": 12,
+      "all_arrays_bitwise_equal": true,
+      "all_pairs_faster": true
+    }
+  },
+  "limitations": [
+    "Qualified only on Precision for the pinned ESM2-3B and sequence-only ESM3-open B4/N1000 workloads.",
+    "The two monitoring reads inside snapshot-v1 are sequential and are not an atomic hardware snapshot.",
+    "The external runtime binary must match the recorded SHA-256; this evidence does not claim ABI portability beyond the qualified AMD SMI 27.0.0 host.",
+    "The measured gain is supervisor and process-query overhead, not a change to model operators or arithmetic."
+  ]
+}

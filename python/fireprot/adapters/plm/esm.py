@@ -17,6 +17,59 @@ def frameless_output(module, native, s, affine, affine_mask, sequence_id, chain_
 
 
 @contextmanager
+def esm3_frameless_scope(model, batch_size, architecture):
+    """Skip geometry whose all-false frame mask forces its input to zero."""
+    registry = OperationRegistry()
+    state = dict(implementation='esm3_frameless_exact_v1', batch_size=batch_size,
+                 architecture=architecture, geometry_calls=0)
+    changes = []
+
+    def invoke(callback):
+        return callback()
+
+    registry.register(operation='plm_esm_geometry', name='esm3_frameless_exact_v1',
+        function=invoke, priority=10, version='n1000-v1',
+        supports=lambda signature: dict(signature.attributes).get('eligible') == 'True')
+    try:
+        for block in model.transformer.blocks:
+            if not block.use_geom_attn:
+                continue
+            module = block.geom_attn
+            native = module.forward
+            def geometry(s, affine, affine_mask, sequence_id, chain_id,
+                         _module=module, _native=native):
+                eligible = (tuple(s.shape) == (batch_size, 1002, 1536)
+                    and s.dtype == torch.bfloat16 and s.is_cuda and s.device.index == 0
+                    and s.is_contiguous() and not model.training and not torch.is_grad_enabled()
+                    and not s.requires_grad and not s.is_conj() and not s.is_neg()
+                    and affine_mask.dtype == torch.bool and tuple(affine_mask.shape) in ((1, 1002), (batch_size, 1002))
+                    and not bool(affine_mask.any()))
+                signature = signature_from_tensor('plm_esm_geometry', s,
+                    architecture=architecture, mode='inference', mask='all_false', inplace=False,
+                    attributes=dict(eligible=eligible, model='esm3-open'))
+                selected = registry.resolve(signature)
+                if selected.implementation is None:
+                    return _native(s, affine, affine_mask, sequence_id, chain_id)
+                def candidate():
+                    output, used = frameless_output(_module, _native, s, affine, affine_mask,
+                                                    sequence_id, chain_id)
+                    if not used:
+                        raise RuntimeError('ESM3 frameless capability changed after selection')
+                    state['geometry_calls'] += 1
+                    return output
+                return selected.implementation.function(candidate)
+            changes.append((module, native))
+            module.forward = geometry
+        yield state
+        if state['geometry_calls'] != 1:
+            raise RuntimeError(f'ESM3 frameless coverage mismatch: {state["geometry_calls"]} != 1')
+    finally:
+        for module, native in reversed(changes):
+            module.forward = native
+        state['registry'] = registry.manifest()
+
+
+@contextmanager
 def esm_scope(model, request, batch_size):
     """Called only after the public scope checks hardware, runtime and N1000."""
     name = request['workload']['model_name']

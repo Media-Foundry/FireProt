@@ -1,0 +1,202 @@
+{
+  "schema_version": 1,
+  "status": "gfx1100_esm3_frameless_verified",
+  "host": "Precision",
+  "hip_device": 0,
+  "pci_address": "0000:53:00.0",
+  "architecture": "gfx1100",
+  "model": "esm3-open",
+  "workload": {
+    "batch": 4,
+    "length": 1000,
+    "precision": "native BF16",
+    "seed": 101
+  },
+  "runtime": {
+    "python": "3.12.7",
+    "torch": "2.13.0+rocm10.0.0",
+    "hip": "7.15.26333"
+  },
+  "implementation": "esm3_frameless_exact_v1",
+  "scope": "Sequence-only ESM3 with an all-false affine mask. The candidate skips geometric attention whose native masked output is positive zero and retains the native output projection. Qualified for N1000 B1/B4 on the pinned gfx1100 runtime.",
+  "benchmark": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-maintained-pairs-20261017-v2/measurements/benchmark.json",
+    "sha256": "1ae1f6b646c9e44b6d40f136b6119a7c4dcfd2eadffa33cf45375c3b2d60efc6"
+  },
+  "comparison": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-maintained-pairs-20261017-v2/measurements/comparison.json",
+    "sha256": "e4501fa2f754f0eb8829a3cec07d868be30f4378be9eeaf164972110f8a04553"
+  },
+  "warm_forward_screen": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-geometry-20261017-v1/results/report.json",
+    "sha256": "b96858ed71e5c1d40bd7eb759579556e48565f188efc50b3b348755e996849f5"
+  },
+  "maintained_qualification": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-maintained-pairs-20261017-v2/gfx11-esm3-final-candidate-0/accepted.json",
+    "sha256": "3198d4744fef32ae72ebe4a203e54800a2071d67bd040893209112d1776a27aa"
+  },
+  "source_files": {
+    "python/fireprot/adapters/plm/esm.py": "2cb8a5a9d6e5eff7bacee1110a9eb1bdc15b5a5bdd15282647d9451dca6d8d48",
+    "python/fireprot/adapters/plm/runtime.py": "81be7f22f94b510dbec08f32ba9e7a161b53c7e5b0a2e756817480d0eb67d8a6",
+    "crates/fireprot-core/src/request.rs": "17214d4e6580b0a6fa11ded7e66e9f3856709e6e24fa8766c9cea40ac57c3ca4",
+    "configs/requests/precision-esm3-open-b4-n1000-fireprot.json": "132f2f4e9b5e4e0b6ad88b7f82ee621b9374148a3919a8c152240e31d7b22c27"
+  },
+  "records": [
+    {
+      "pair": 0,
+      "arm": "baseline",
+      "run_id": "gfx11-esm3-final-baseline-0",
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-maintained-pairs-20261017-v2/measurements/measurement-000/invocation.json",
+        "sha256": "a275dea5818c44e007acf1e686d812433b9c10f62a7327f0f410d06edd2b289c"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-maintained-pairs-20261017-v2/gfx11-esm3-final-baseline-0/accepted.json",
+        "sha256": "53ac9527f4ebf54b0008086793a5bf9c93287836ab76f0e17952c23b3978ac08"
+      },
+      "e2e_seconds": 13.135625181,
+      "request_seconds": 6.895020243013278,
+      "model_forward_seconds": 2.592025002988521,
+      "operator_runtime": null
+    },
+    {
+      "pair": 0,
+      "arm": "candidate",
+      "run_id": "gfx11-esm3-final-candidate-0",
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-maintained-pairs-20261017-v2/measurements/measurement-001/invocation.json",
+        "sha256": "528415e762f2400bcb8bc9da8f5f87a38503a1f289cad49cf901453d4427f1d7"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-maintained-pairs-20261017-v2/gfx11-esm3-final-candidate-0/accepted.json",
+        "sha256": "3198d4744fef32ae72ebe4a203e54800a2071d67bd040893209112d1776a27aa"
+      },
+      "e2e_seconds": 10.852392979,
+      "request_seconds": 5.38606557098683,
+      "model_forward_seconds": 0.9886033440125175,
+      "operator_runtime": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-maintained-pairs-20261017-v2/gfx11-esm3-final-candidate-0/operator-runtime.json",
+        "sha256": "3f5c80ccf3af84df28a1763c09e013aadaec6c3b5d0c848780919c86a90b7dd6"
+      }
+    },
+    {
+      "pair": 1,
+      "arm": "candidate",
+      "run_id": "gfx11-esm3-final-candidate-1",
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-maintained-pairs-20261017-v2/measurements/measurement-002/invocation.json",
+        "sha256": "a6c5fe93cf030177f86e41d29772feab8fa14d81a6a024079c487f65a20e359d"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-maintained-pairs-20261017-v2/gfx11-esm3-final-candidate-1/accepted.json",
+        "sha256": "ee10fdf1febabbdf916bf36624618f88b31421da0f5e6dd61e81e48af921bec3"
+      },
+      "e2e_seconds": 10.953459786,
+      "request_seconds": 5.466352140007075,
+      "model_forward_seconds": 0.9875426850048825,
+      "operator_runtime": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-maintained-pairs-20261017-v2/gfx11-esm3-final-candidate-1/operator-runtime.json",
+        "sha256": "3f5c80ccf3af84df28a1763c09e013aadaec6c3b5d0c848780919c86a90b7dd6"
+      }
+    },
+    {
+      "pair": 1,
+      "arm": "baseline",
+      "run_id": "gfx11-esm3-final-baseline-1",
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-maintained-pairs-20261017-v2/measurements/measurement-003/invocation.json",
+        "sha256": "f38114fef9a9b798adb34a90acc24db844e9050a5f79067b3a96bae81fdc12e7"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-maintained-pairs-20261017-v2/gfx11-esm3-final-baseline-1/accepted.json",
+        "sha256": "a3b34fcb9c6fa5b116b20ef6c4bc33a187890a26961727de59470d7a8f954321"
+      },
+      "e2e_seconds": 12.436207255,
+      "request_seconds": 6.832379861996742,
+      "model_forward_seconds": 2.4386803829984274,
+      "operator_runtime": null
+    },
+    {
+      "pair": 2,
+      "arm": "baseline",
+      "run_id": "gfx11-esm3-final-baseline-2",
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-maintained-pairs-20261017-v2/measurements/measurement-004/invocation.json",
+        "sha256": "e8ef2e6076ecfb60cbe7d4a89d1957baeb7d2ff35beed5faeec65bc2eda2795a"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-maintained-pairs-20261017-v2/gfx11-esm3-final-baseline-2/accepted.json",
+        "sha256": "2ac84a595bedd28da7012ce73b3a88dbd41714c9a19c76074aae1924937872b3"
+      },
+      "e2e_seconds": 12.362049691,
+      "request_seconds": 6.8715598389972,
+      "model_forward_seconds": 2.3852887509856373,
+      "operator_runtime": null
+    },
+    {
+      "pair": 2,
+      "arm": "candidate",
+      "run_id": "gfx11-esm3-final-candidate-2",
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-maintained-pairs-20261017-v2/measurements/measurement-005/invocation.json",
+        "sha256": "f54fa04c61f8693c8aad5b5a861731353926d40dde669e7ea172e7af2ad963a9"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-maintained-pairs-20261017-v2/gfx11-esm3-final-candidate-2/accepted.json",
+        "sha256": "531cbb985be880f600733904561d615d822477b40f0afe0038b9d5b48e1a344b"
+      },
+      "e2e_seconds": 10.969215349,
+      "request_seconds": 5.424256555008469,
+      "model_forward_seconds": 0.9741417719924357,
+      "operator_runtime": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-maintained-pairs-20261017-v2/gfx11-esm3-final-candidate-2/operator-runtime.json",
+        "sha256": "3f5c80ccf3af84df28a1763c09e013aadaec6c3b5d0c848780919c86a90b7dd6"
+      }
+    }
+  ],
+  "performance": {
+    "baseline": {
+      "count": 3,
+      "min": 12.362049691,
+      "median": 12.436207255,
+      "p95": 13.135625181,
+      "max": 13.135625181,
+      "mean": 12.644627375666667
+    },
+    "candidate": {
+      "count": 3,
+      "min": 10.852392979,
+      "median": 10.953459786,
+      "p95": 10.969215349,
+      "max": 10.969215349,
+      "mean": 10.925022704666667
+    },
+    "median_speedup": 1.1353679566062909,
+    "p95_speedup": 1.1974990701771115,
+    "paired_speedups": [
+      1.2103897459683026,
+      1.1353679566062909,
+      1.1269766612911811
+    ],
+    "paired_summary": {
+      "count": 3,
+      "min": 1.1269766612911811,
+      "median": 1.1353679566062909,
+      "p95": 1.2103897459683026,
+      "max": 1.2103897459683026,
+      "mean": 1.1575781212885914
+    },
+    "observed_trend": "faster_median_and_p95",
+    "changes": {
+      "backend": {
+        "baseline": "native",
+        "candidate": "fireprot"
+      }
+    }
+  },
+  "all_arrays_exact": true,
+  "accepted_invocations_rehashed": 6,
+  "accepted_artifacts_rehashed": 63,
+  "prediction_archives_compared": 24,
+  "limitations": "The ratio is a same-host B4 comparison with fresh processes and unflushed caches. It does not qualify other lengths, B2, other models, architectures, runtimes, structure/function inputs, or generation."
+}

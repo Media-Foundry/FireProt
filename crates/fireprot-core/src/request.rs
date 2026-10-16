@@ -303,12 +303,6 @@ impl TryFrom<Request> for ValidatedRequest {
             return Err(RequestError::RunId);
         }
         request.workload.validate(request.backend)?;
-        if request.backend == Backend::Fireprot
-            && matches!(&request.workload, Workload::Plm { model_name, .. } if model_name == "esm3-open")
-            && !request.resources.contains_key("hip_esm")
-        {
-            return Err(RequestError::EmptyField("ESM3 FireProt requires hip_esm"));
-        }
         if request.source.root.as_os_str().is_empty() {
             return Err(RequestError::EmptyField("source.root"));
         }

@@ -49,10 +49,7 @@ fn validates_batch_bounds_and_model_backend_without_folding_fields() {
     value["workload"]["model_name"] = json!("esm3-open");
     value["workload"]["batch"] =
         json!({"items":4,"max_batch_size":4,"max_padded_tokens":4008,"grouping":"exact_length"});
-    assert!(
-        ValidatedRequest::try_from(serde_json::from_value::<Request>(value.clone()).unwrap())
-            .is_err()
-    );
+    ValidatedRequest::try_from(serde_json::from_value::<Request>(value.clone()).unwrap()).unwrap();
     value["resources"]["hip_esm"] = json!({"path":"/hip.so","sha256":"a".repeat(64)});
     ValidatedRequest::try_from(serde_json::from_value::<Request>(value).unwrap()).unwrap();
 }

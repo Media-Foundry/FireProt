@@ -168,3 +168,45 @@ target/release/fireprot esm /tmp/my-esm3.json configs/precision/plm-esm3-open-na
 The profile is byte-identical to the measured native profile. It selects HIP0
 through the request and contains no gfx90a operator resource. This example is
 specific to the initialized Precision paths and Python environment above.
+
+## Qualified gfx1100 ESM3 frameless route
+
+Sequence-only ESM3 supplies no structure frames, so its affine mask is entirely
+false. The upstream geometric-attention block still constructs pairwise geometry
+before masking its result to positive zero and applying `out_proj`. The explicit
+FireProt route selects `esm3_frameless_exact_v1` only for contiguous BF16
+`[B,1002,1536]` inputs on gfx1100 with the initialized Torch/HIP build. It skips
+the work forced to zero and retains the native output projection. Unsupported
+lengths, batch sizes, runtime versions, devices, layouts or masks are rejected by
+the qualified route.
+
+Warm-forward diagnostics passed exact token, embedding and logit checks for B1
+and B4. B1 improved from 0.411104440 to 0.070079198 seconds (`5.866283459x`),
+and B4 improved from 1.616895031 to 0.235678678 seconds (`6.860591059x`). These
+warm observations explain the operator opportunity; they are not E2E claims.
+
+Three fresh-process B4/N1000 native/FireProt pairs then passed complete Rust
+acceptance and all-array exact comparison across 24 prediction archives. Native
+E2E median and p95 were 12.436207255 and 13.135625181 seconds; the maintained
+route measured 10.953459786 and 10.969215349 seconds. Median speedup is
+**1.135367957x**, p95 speedup is **1.197499070x**, and all three paired ratios
+improve. Model-forward medians are 2.438680 versus 0.987543 seconds. Filesystem
+and GPU library caches were not flushed, and no asset transfer or concurrent GPU
+workload was present.
+
+The route is qualified only for sequence-only ESM3, N1000, B1/B4, native BF16,
+Torch `2.13.0+rocm10.0.0`, HIP `7.15.26333`, and gfx1100. It does not establish
+performance or compatibility for generation, structure/function inputs, other
+lengths, other batches, other runtimes or other architectures. Full evidence is
+in [`precision_esm3_frameless_gfx1100_20261017.json`](../provenance/precision_esm3_frameless_gfx1100_20261017.json).
+
+Run the explicit B4 entry after choosing a fresh `run_id` and unused
+`output_dir`:
+
+```bash
+cd /media/990Pro/fireprot
+cp configs/requests/precision-esm3-open-b4-n1000-fireprot.json /tmp/my-esm3-fireprot.json
+# Edit run_id and output_dir in /tmp/my-esm3-fireprot.json.
+target/release/fireprot esm /tmp/my-esm3-fireprot.json \
+  configs/precision/plm-esm3-open-native.json
+```

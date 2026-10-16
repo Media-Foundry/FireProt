@@ -12,9 +12,20 @@ def optimized_scope(model, request, length, batch_size=1):
     batch_mode = request['workload'].get('batch') is not None
     if batch_size not in ((1,2,4) if batch_mode else (1,)):
         raise ValueError('Qualified pLM batch sizes are 1, 2 and 4')
-    if length != 1000 or str(torch.__version__) != '2.12.0a0+git78258b9' or torch.version.hip != '7.14.60850':
-        raise ValueError('pLM optimization is qualified only for N1000 and the pinned ROCm Torch build')
+    if length != 1000:
+        raise ValueError('pLM optimization is qualified only for N1000')
     architecture = torch.cuda.get_device_properties(0).gcnArchName.split(':')[0]
+    if (name == 'esm3-open' and 'hip_esm' not in request.get('resources', {})
+            and architecture == 'gfx1100' and str(torch.__version__) == '2.13.0+rocm10.0.0'
+            and torch.version.hip == '7.15.26333'):
+        if batch_size not in (1, 4):
+            raise ValueError('gfx1100 ESM3 frameless optimization is qualified only for B1 and B4')
+        from .esm import esm3_frameless_scope
+        with esm3_frameless_scope(model, batch_size, architecture) as state:
+            yield state
+        return
+    if str(torch.__version__) != '2.12.0a0+git78258b9' or torch.version.hip != '7.14.60850':
+        raise ValueError('pLM optimization requires a qualified ROCm Torch build')
     if architecture != 'gfx90a':
         raise ValueError('pLM optimization requires gfx90a')
     if 'hip_esm' in request.get('resources', {}):

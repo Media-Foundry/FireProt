@@ -17,12 +17,11 @@ fn standalone_models_reject_folding_settings_and_unqualified_precision() {
         let mut candidate = r.clone();
         candidate["workload"]["model_name"] = json!(name);
         candidate["backend"] = json!("fireprot");
-        assert_eq!(
+        assert!(
             ValidatedRequest::try_from(
                 serde_json::from_value::<Request>(candidate.clone()).unwrap()
             )
-            .is_ok(),
-            name != "esm3-open"
+            .is_ok()
         );
         candidate["resources"] = json!({"hip_esm":pin});
         assert!(

@@ -220,6 +220,11 @@ throughput over optimized B4, but complete invocation improves only **1.0025x**
 with one regressing pair. It is not promoted; the published B4 result remains
 **1.978x**. The refreshed optimized GPU profile attributes about **80%** of
 kernel time to GEMM and **9%** to attention.
+A [B16 FFN follow-up](docs/esmc-b16-ffn.md) fixes an offline-selected hipBLASLt
+algorithm in a direct HIP library. All 80 projections and exported bytes match
+native B16. Warm forward improves **1.0163x**, but complete invocation adds only
+**1.0021x** for 16 inputs and **1.0041x** for 64 inputs, with a mixed resident
+paired trend. It remains experimental; the published B4 result is unchanged.
 Warm forward excludes loading/export and is measured independently. See
 [exact-route commands and evidence](docs/esm-optimization.md). ESM3's separate
 64-input resident workload (sixteen B4 groups) improves **20.212 → 15.490 s

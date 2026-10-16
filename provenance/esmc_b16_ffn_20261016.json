@@ -1,0 +1,905 @@
+{
+  "schema_version": 1,
+  "status": "qualified_experimental_not_promoted",
+  "reason": "Warm FFN gain, but E2E medians only 1.0021x and 1.0041x; resident64 paired trend mixed.",
+  "published_native_b4_speedup_unchanged": 1.978361352,
+  "root": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016",
+  "pins": {
+    "screen/report.json": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/screen/report.json",
+      "sha256": "470b9f9a97073a71949fa6f001b7c0baa6bfae317e1d358bf7ef3cdbc4596c7a"
+    },
+    "direct-screen/report.json": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/direct-screen/report.json",
+      "sha256": "4a6f17c085294379ba6a5eb2ea3c85dd838be0c25e8e2fe8ad9a3ae132ae9aa2"
+    },
+    "direct/build-receipt.json": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/direct/build-receipt.json",
+      "sha256": "0cd4a1d2bc455b3a5157a6db7ccf9af88a9d6138bf5e0538744c44f460ccf5ee"
+    },
+    "direct/build-spec.json": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/direct/build-spec.json",
+      "sha256": "5eb3ef97c3ace96508fd5b68d0c754809898f5ff96a8da9e761dcf0bc5bfcd60"
+    },
+    "direct/selection.json": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/direct/selection.json",
+      "sha256": "904b52d274bfe08330129f5342c01fd71958d13744333b592740f35d4c2ee0dd"
+    },
+    "direct/esmc_b16_lt.hip": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/direct/esmc_b16_lt.hip",
+      "sha256": "e7ff5f43d2761544ff58714ce75a9d6b49bade4dfba398757176a4b6bde3cefc"
+    },
+    "direct/library.json": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/direct/library.json",
+      "sha256": "1e2e73e9791266f04b9fae25fe5a736fb2c4f1df7e91125f470f7db4e92e97ff"
+    },
+    "deployment.json": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/deployment.json",
+      "sha256": "6818658411a7c314c070633163553a921b614c3a83d51b1a113c0a65f51ff504"
+    },
+    "benchmark-cli.json": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/benchmark-cli.json",
+      "sha256": "f33b3c749319aed6ec46f5ae3c1adb9defbca47d4f04c2a17d64a094fe36d15d"
+    },
+    "collected.json": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/collected.json",
+      "sha256": "9b316cab097d6ee02153660ea15948231044acd670d09f005dd7af26167043fd"
+    },
+    "measured-scripts.json": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/measured-scripts.json",
+      "sha256": "8d59b047688c91327c4522d0abef32aa13cd695d2902b81840b738dfec526c3b"
+    },
+    "native64-request.json": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/native64-request.json",
+      "sha256": "280b2e4b0af814c4a5bb0297cff73d87c0772fb356affa4a8a03298039ee00f8"
+    }
+  },
+  "offline_screen": {
+    "schema_version": 1,
+    "model": "ESMC bundled 6B",
+    "length": 1000,
+    "batch": 16,
+    "seed": 101,
+    "dtype": "native BF16",
+    "hip_device": 6,
+    "request": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-large-batch-e2e-20261016/pair-1-b16-request.json",
+      "sha256": "2499082c04e06622297c69dd13a2355a74450a87014849284bc6d5a59a6630c2"
+    },
+    "assets": [
+      {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/esmfold2/snapshot/model.safetensors.index.json",
+        "sha256": "5e1f94eb5cd4b0ff0bfdeae3dbf64be564ba34352fe6ef3a6ee9830f584134b2"
+      },
+      {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/esmfold2/snapshot/config.json",
+        "sha256": "72054c1af92f432ac2d8e0628ba08b377d04c6a8679b5128b798dbc7f644ddc8"
+      },
+      {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/esmfold2/snapshot/ccd.pkl",
+        "sha256": "9ff44b1927c6b9198e38ffe0928706827a09a350c15530beeeabebfa88038fc5"
+      },
+      {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/esmfold2/snapshot/model-00001-of-00006.safetensors",
+        "sha256": "a24f050e2a2f9746b43b435c53719afc575a374fa302731b6911356a3d8b5cac"
+      },
+      {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/esmfold2/snapshot/model-00002-of-00006.safetensors",
+        "sha256": "1af1615f6f6d1b3c0a24a63d9052a0ecad5b3831d1513c1a5fea73870c1bec73"
+      },
+      {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/esmfold2/snapshot/model-00003-of-00006.safetensors",
+        "sha256": "357b55ec56192fd01a1cfc39a5260caf2242503ac7c554f614e43c7a469f0ced"
+      },
+      {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/esmfold2/snapshot/model-00004-of-00006.safetensors",
+        "sha256": "f065aca1a13308bce41b78f728c28a0a29e3a9db6af531a74a258dbb06f8721b"
+      },
+      {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/esmfold2/snapshot/model-00005-of-00006.safetensors",
+        "sha256": "e0c507dce5b2ddb22f77305607b4332506137850c5378e98e9729345264668b7"
+      },
+      {
+        "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/esmfold2/snapshot/model-00006-of-00006.safetensors",
+        "sha256": "90015eb13bbeab54237b18d6748dbd47f4bfd108fdf45704d66e5c3a93f8df7c"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/kernel-cache/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e.so",
+        "sha256": "9624b8a166b7639e44fb3daa26abbe84ec8faa998f98f1beb0a7df057135b900"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/kernel-cache/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237.so",
+        "sha256": "7fe005660b21f806e4d15d772325243980db466be29e62ebb527884995484c61"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/kernel-cache/esmc_pointwise_compat_b10ad2bb108d08588a7c6641da0f76410e1d94d7b0af1c73e8ee9d698c8318ef/esmc_pointwise_compat_b10ad2bb108d08588a7c6641da0f76410e1d94d7b0af1c73e8ee9d698c8318ef.so",
+        "sha256": "4dc61ea82a1dbe58d5f71d6cfda948347755ab076e773f8e8b88300a4904d4e4"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-gemm-order-20261016/lt-kernel-cache/esmc_lt_fixed_0127bd4dd508f6bd2d25e5db77a5d59e3c47a90c681c2b272a84a6153709df6d/esmc_lt_fixed_0127bd4dd508f6bd2d25e5db77a5d59e3c47a90c681c2b272a84a6153709df6d.so",
+        "sha256": "7b554428ba5a79ed1ef2f107f8e4d8ba8e306352a8efa88c0b116f04f1fdedb4"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-large-batch-ops-20261016/kernel-cache/esmc_large_batch_87aa356b4204ec01a7c10034091f22f435a0602b7db15de60f93a2cfb6a8d2eb/esmc_large_batch_87aa356b4204ec01a7c10034091f22f435a0602b7db15de60f93a2cfb6a8d2eb.so",
+        "sha256": "55f989c7a63e050de7d4cd46d005c447a265a7c660854c8e68388a9904e6f74e"
+      },
+      {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-large-batch-e2e-20261016/input.json",
+        "sha256": "28e47f351c6f4fb342820083662611a2d7dfa032979061fa75f0c987130cc278"
+      }
+    ],
+    "script": {
+      "path": "/tmp/screen_esmc_b16_ffn_tunable.py",
+      "sha256": "cd48e65d95a5bd99e0acbf4e5b151d126f74f6dca4b7a5dd425153df2dfb3c5b"
+    },
+    "torch": "2.12.0a0+git78258b9",
+    "hip": "7.14.60850",
+    "boundary": "Warm B16 FFN and model forward; offline tuning excluded; not E2E.",
+    "cache_state": "Resident weights; two warmups per arm; unflushed caches; AB/BA/AB, three observations per arm per pair.",
+    "internal_tolerances": {
+      "atol": 1e-45,
+      "rtol": 1e-45
+    },
+    "acceptance": "Independent raw-byte equality, including signed zero.",
+    "native_reference_exact": true,
+    "tuning_seconds": 260.3365492760204,
+    "algorithms": [
+      [
+        "GemmTunableOp_BFloat16_TN",
+        "tn_13824_16032_2560_ld_2560_2560_13824",
+        "Gemm_Hipblaslt_3903",
+        8.866268157958984
+      ]
+    ],
+    "first_projection_exact": true,
+    "operator_pairs_ms": [
+      {
+        "baseline": [
+          9.404004096984863,
+          9.45070743560791,
+          9.441591262817383
+        ],
+        "candidate": [
+          9.395846366882324,
+          8.941768646240234,
+          8.944968223571777
+        ]
+      },
+      {
+        "candidate": [
+          8.938409805297852,
+          8.945768356323242,
+          9.090995788574219
+        ],
+        "baseline": [
+          9.40896224975586,
+          9.454385757446289,
+          9.456146240234375
+        ]
+      },
+      {
+        "baseline": [
+          9.414719581604004,
+          9.463982582092285,
+          9.454385757446289
+        ],
+        "candidate": [
+          9.042853355407715,
+          9.004145622253418,
+          8.980955123901367
+        ]
+      }
+    ],
+    "operator_medians_ms": {
+      "baseline": 9.45070743560791,
+      "candidate": 8.980955123901367
+    },
+    "all_80_projections_exact": true,
+    "full_model_exact": true,
+    "forward_pairs": [
+      {
+        "baseline": [
+          2.0826851750025526,
+          2.0829976859968156,
+          2.0840761510189623
+        ],
+        "candidate": [
+          2.0517345709959045,
+          2.0547855510376394,
+          2.053085191990249
+        ]
+      },
+      {
+        "candidate": [
+          2.0522856999887154,
+          2.0551722469972447,
+          2.0499786909203976
+        ],
+        "baseline": [
+          2.0832353840814903,
+          2.083231215015985,
+          2.0827198940096423
+        ]
+      },
+      {
+        "baseline": [
+          2.0837045999942347,
+          2.0833388570463285,
+          2.0834074940066785
+        ],
+        "candidate": [
+          2.0550145409069955,
+          2.050670630997047,
+          2.0497733230004087
+        ]
+      }
+    ],
+    "forward_medians": {
+      "baseline": 2.0832353840814903,
+      "candidate": 2.0522856999887154
+    },
+    "forward_speedup": 1.0150805923819208,
+    "passed": true,
+    "assets_rehashed_after": true
+  },
+  "direct_screen": {
+    "schema_version": 1,
+    "library": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/direct/kernel-cache/esmc_b16_lt_b865e3dd0903ecacc1ec93618ef3d6429cdede3f868572742565f4db7ed8d80c/esmc_b16_lt_b865e3dd0903ecacc1ec93618ef3d6429cdede3f868572742565f4db7ed8d80c.so",
+      "sha256": "7909222614b88973def269723fe5bd98e9e4efcdcf2bd3683c3ad6d9f23fd9e7"
+    },
+    "algorithm": 3903,
+    "request": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-large-batch-e2e-20261016/pair-1-b16-request.json",
+      "sha256": "2499082c04e06622297c69dd13a2355a74450a87014849284bc6d5a59a6630c2"
+    },
+    "script": {
+      "path": "/tmp/screen_esmc_b16_direct.py",
+      "sha256": "3a6080de8692d72d8d98a6739bd9dffe33370e5baa6b9da8e0f0327180753c75"
+    },
+    "scope": {
+      "path": "/tmp/esmc_b16_lt_scope.py",
+      "sha256": "0ba736b541430c462ccd867fee29312b76038c6c384dee766f4f02bd3589d5de"
+    },
+    "base_scope": {
+      "path": "/tmp/esmc_lt_lazy_scope.py",
+      "sha256": "6773ddb48c926e35460d3f8c6331532a03f65856745ef1d4c77f2f4a1bbba5c2"
+    },
+    "boundary": "Warm B16 forward; lazy direct FFN; no online tuning; not E2E.",
+    "seed": 101,
+    "hip_device": 6,
+    "dtype": "native BF16",
+    "pairs": [
+      {
+        "baseline": [
+          2.0874412519624457,
+          2.0899150129407644,
+          2.090920503018424
+        ],
+        "candidate": [
+          2.0517840849934146,
+          2.054110844968818,
+          2.048270225059241
+        ]
+      },
+      {
+        "candidate": [
+          2.050774384988472,
+          2.05072802095674,
+          2.0497205409919843
+        ],
+        "baseline": [
+          2.0848237019963562,
+          2.0839822739362717,
+          2.0839122690958902
+        ]
+      },
+      {
+        "baseline": [
+          2.083949525956996,
+          2.083634876064025,
+          2.0841919110389426
+        ],
+        "candidate": [
+          2.0519026429392397,
+          2.0480141539592296,
+          2.0515473659615964
+        ]
+      }
+    ],
+    "all_80_projections_exact": true,
+    "full_model_exact": true,
+    "initial_plan": {
+      "calls": 80,
+      "workspace_bytes": 0,
+      "plan_created": true,
+      "initialization_host_seconds": 0.0020721890032291412
+    },
+    "unsupported_rows": [
+      {
+        "rows": 0,
+        "status": -1
+      },
+      {
+        "rows": 1002,
+        "status": -1
+      },
+      {
+        "rows": 4008,
+        "status": -1
+      },
+      {
+        "rows": 8016,
+        "status": -1
+      },
+      {
+        "rows": 16031,
+        "status": -1
+      },
+      {
+        "rows": 16033,
+        "status": -1
+      }
+    ],
+    "medians": {
+      "baseline": 2.0841919110389426,
+      "candidate": 2.050774384988472
+    },
+    "speedup": 1.016295076774454,
+    "passed": true,
+    "assets_rehashed_after": true
+  },
+  "build_receipt_summary": {
+    "cache_hit": false,
+    "directory": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/direct/kernel-cache/esmc_b16_lt_b865e3dd0903ecacc1ec93618ef3d6429cdede3f868572742565f4db7ed8d80c",
+    "receipt": {
+      "artifacts": {
+        "esmc_b16_lt_b865e3dd0903ecacc1ec93618ef3d6429cdede3f868572742565f4db7ed8d80c.so": "7909222614b88973def269723fe5bd98e9e4efcdcf2bd3683c3ad6d9f23fd9e7"
+      },
+      "identity": {
+        "arguments": {
+          "compile": [
+            "-O3",
+            "-ffp-contract=off",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a"
+          ],
+          "fireprot_hip_process": [
+            "1",
+            "compiler",
+            "guard",
+            "[\"source\"]",
+            "600000",
+            "600000",
+            "/opt/rocm/bin/hipcc"
+          ],
+          "include": [
+            "/opt/rocm/include"
+          ],
+          "link": [
+            "-L/opt/rocm/lib",
+            "-lhipblaslt"
+          ]
+        },
+        "environment": {
+          "CPATH": null,
+          "CXXFLAGS": null,
+          "HIPCC_COMPILE_FLAGS_APPEND": null,
+          "HOME": "/home/pc",
+          "LD_LIBRARY_PATH": null,
+          "LIBRARY_PATH": null,
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+          "TMPDIR": null
+        },
+        "files": [
+          {
+            "canonical_path": "/opt/rocm/core-10.0/bin/hipcc",
+            "name": "compiler",
+            "sha256": "7b95d430bb8c4d4237f9b4935dbd6440e2067fde0979cc69bffb26ebd021464c"
+          },
+          {
+            "canonical_path": "/opt/rocm/core-10.0/lib/llvm/bin/clang-23",
+            "name": "clang",
+            "sha256": "241bf4da7ec39bc00b68ed74f6be751516d9892ed990e8c7fa372bad18500247"
+          },
+          {
+            "canonical_path": "/opt/rocm/core-10.0/lib/llvm/bin/lld",
+            "name": "linker",
+            "sha256": "844f375436675da8948a340a3bd8b7efabd4703422f9c01e3721f11f1ab777b4"
+          },
+          {
+            "canonical_path": "/media/IntelSSD/fireprot/target/release/fireprot-compiler-guard",
+            "name": "guard",
+            "sha256": "64429608d501a7c8e786affe9b96a616d34a2f1f5b1237a91429947b84d34b85"
+          },
+          {
+            "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/direct/esmc_b16_lt.hip",
+            "name": "source",
+            "sha256": "e7ff5f43d2761544ff58714ce75a9d6b49bade4dfba398757176a4b6bde3cefc"
+          },
+          {
+            "canonical_path": "/opt/rocm/core-10.0/lib/libhipblaslt.so.1.4",
+            "name": "hipblaslt",
+            "sha256": "1e8545626323f9b22c65d36492e1686b831cb85c8f7c8be3fc21c0d6cbb0d055"
+          }
+        ],
+        "package": "esmc_b16_lt",
+        "schema_version": 1,
+        "sha256": "b865e3dd0903ecacc1ec93618ef3d6429cdede3f868572742565f4db7ed8d80c",
+        "target": "gfx90a",
+        "trees": [
+          {
+            "name": "0",
+            "path": "/opt/rocm/include",
+            "suffixes": []
+          },
+          {
+            "name": "1",
+            "path": "/opt/rocm/llvm/lib/clang",
+            "suffixes": []
+          },
+          {
+            "name": "2",
+            "path": "/usr/include",
+            "suffixes": []
+          },
+          {
+            "name": "3",
+            "path": "/usr/lib/gcc",
+            "suffixes": []
+          }
+        ],
+        "versions": {
+          "abi": "c",
+          "hip": "7.14.60850",
+          "recipe": "esmc-b16-ffn-algo3903-v1",
+          "torch": "2.12.0a0+git78258b9"
+        }
+      },
+      "schema_version": 1
+    }
+  },
+  "selection": {
+    "algorithm": 3903,
+    "screen": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/screen/report.json",
+      "sha256": "470b9f9a97073a71949fa6f001b7c0baa6bfae317e1d358bf7ef3cdbc4596c7a"
+    },
+    "source_before": {
+      "path": "/media/IntelSSD/fireprot/experiments/plm/esmc_lt_fixed.hip",
+      "sha256": "86717f70a8a5a0aed5fc0d1b26e3903d7a2088b0f60dd1a14a96a20df756e011"
+    },
+    "source_after": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/direct/esmc_b16_lt.hip",
+      "sha256": "e7ff5f43d2761544ff58714ce75a9d6b49bade4dfba398757176a4b6bde3cefc"
+    },
+    "library": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/direct/kernel-cache/esmc_b16_lt_b865e3dd0903ecacc1ec93618ef3d6429cdede3f868572742565f4db7ed8d80c/esmc_b16_lt_b865e3dd0903ecacc1ec93618ef3d6429cdede3f868572742565f4db7ed8d80c.so",
+      "sha256": "7909222614b88973def269723fe5bd98e9e4efcdcf2bd3683c3ad6d9f23fd9e7"
+    }
+  },
+  "measured_scripts": {
+    "screen_esmc_b16_ffn_tunable.py": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/measured-scripts/screen_esmc_b16_ffn_tunable.py",
+      "sha256": "cd48e65d95a5bd99e0acbf4e5b151d126f74f6dca4b7a5dd425153df2dfb3c5b"
+    },
+    "build_esmc_b16_lt.py": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/measured-scripts/build_esmc_b16_lt.py",
+      "sha256": "dfaae782fdfa2bbbc19f21738f9411ec9795204007e1db17fd5161b63605d785"
+    },
+    "esmc_b16_lt_scope.py": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/measured-scripts/esmc_b16_lt_scope.py",
+      "sha256": "0ba736b541430c462ccd867fee29312b76038c6c384dee766f4f02bd3589d5de"
+    },
+    "screen_esmc_b16_direct.py": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/measured-scripts/screen_esmc_b16_direct.py",
+      "sha256": "3a6080de8692d72d8d98a6739bd9dffe33370e5baa6b9da8e0f0327180753c75"
+    },
+    "prepare_esmc_b16_ffn_pairs.py": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/measured-scripts/prepare_esmc_b16_ffn_pairs.py",
+      "sha256": "81a12472f93619f764ed9d4a5e61ce0233c039e41cbb06795c63f5041fa59a3f"
+    },
+    "collect_esmc_b16_ffn_pairs.py": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/measured-scripts/collect_esmc_b16_ffn_pairs.py",
+      "sha256": "39d507298d6a56865e982db8b893ced940f5ad843c075a2fa43709b3d1b41f5a"
+    },
+    "screen_esmc_large_batch.py": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/measured-scripts/screen_esmc_large_batch.py",
+      "sha256": "7eb1745b9eea6c62c641a9cece089ebac7a0b5624364554f6c40e6a9f67d85a1"
+    },
+    "esmc_lt_lazy_scope.py": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/measured-scripts/esmc_lt_lazy_scope.py",
+      "sha256": "6773ddb48c926e35460d3f8c6331532a03f65856745ef1d4c77f2f4a1bbba5c2"
+    },
+    "collect_esmc_pointwise_pairs.py": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/measured-scripts/collect_esmc_pointwise_pairs.py",
+      "sha256": "c01d50bf7865f8ac9d314bbc6ba0045713952347defc8b87f6dd2dfdb696205e"
+    }
+  },
+  "e2e": {
+    "schema_version": 1,
+    "cases": {
+      "16": {
+        "benchmark": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b16-pairs/measurements/benchmark.json",
+          "sha256": "51911eef7df4f8a34a2170829b9c04a70cdadd8dcd9a25537bde652e0bf1bb85"
+        },
+        "comparison": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b16-pairs/measurements/comparison.json",
+          "sha256": "a79352c1804277a2a02b4b75ddb6f6bfcb9f7ececb1c42a5197096abb5bf2141"
+        },
+        "reference_accepted": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/native64/accepted.json",
+          "sha256": "97a66fb438a58a6f06b6c190e24c36307176949dd0987e5c72027adf6d233838"
+        },
+        "all_arrays_exact": true,
+        "records": [
+          {
+            "slot": {
+              "arm": "baseline",
+              "pair": 0
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b16-pairs/measurements/measurement-000/invocation.json",
+              "sha256": "a2a88337989f5ef154a080e74f3a75ed05911430069b718168289e16499ed1d4"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b16-pairs/baseline-1/accepted.json",
+              "sha256": "e5b3d311c492328bdbacc51847e2b9498a661f604b44763c40d328a7894feb51"
+            },
+            "e2e_seconds": 14.054698544,
+            "model_forward_seconds": 2.809525710064918,
+            "plan_initialization_seconds": []
+          },
+          {
+            "slot": {
+              "arm": "candidate",
+              "pair": 0
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b16-pairs/measurements/measurement-001/invocation.json",
+              "sha256": "f2a42c10a11f8d641332b0b2ed3f311d828fc249130766b9fe0fe379c9feb69b"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b16-pairs/candidate-1/accepted.json",
+              "sha256": "aef0dfcda2eeb1276237008a7011376f0839acd3eb86c1d5dd3e3bae7320907e"
+            },
+            "e2e_seconds": 13.939492131,
+            "model_forward_seconds": 2.7269586749607697,
+            "plan_initialization_seconds": [
+              0.001942895003594458
+            ]
+          },
+          {
+            "slot": {
+              "arm": "candidate",
+              "pair": 1
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b16-pairs/measurements/measurement-002/invocation.json",
+              "sha256": "1687a5ee9dde4dc024f55a96885543dd66b556c027a416af3253cc2af2be5dc8"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b16-pairs/candidate-2/accepted.json",
+              "sha256": "e89b1d1a1e6823e75bfc0ef92b91c69426aa4e32b2d67ba4868bce853e63f53f"
+            },
+            "e2e_seconds": 14.023226532,
+            "model_forward_seconds": 2.731093856971711,
+            "plan_initialization_seconds": [
+              0.001964487018994987
+            ]
+          },
+          {
+            "slot": {
+              "arm": "baseline",
+              "pair": 1
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b16-pairs/measurements/measurement-003/invocation.json",
+              "sha256": "15a71158ca05dfa91257d3f51a4e838aebb9f41f55328071baf8c704cf6c4b78"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b16-pairs/baseline-2/accepted.json",
+              "sha256": "eec8815e4efc9b845becc30f6d9f68ed38d2d1afbdd93279e3aa7af70baa5fbf"
+            },
+            "e2e_seconds": 14.044837062,
+            "model_forward_seconds": 2.749707669019699,
+            "plan_initialization_seconds": []
+          },
+          {
+            "slot": {
+              "arm": "baseline",
+              "pair": 2
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b16-pairs/measurements/measurement-004/invocation.json",
+              "sha256": "ca5af333409f0e0b0adc96c73e10c31e612aa46bfac4fb05bd2ad5ea3a7f461a"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b16-pairs/baseline-3/accepted.json",
+              "sha256": "4ada9efd73baab0ef8a78e9af6ec48d245b9c88b93c0fe3eec2f9139ae3bb8a2"
+            },
+            "e2e_seconds": 14.019466418,
+            "model_forward_seconds": 2.76367447397206,
+            "plan_initialization_seconds": []
+          },
+          {
+            "slot": {
+              "arm": "candidate",
+              "pair": 2
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b16-pairs/measurements/measurement-005/invocation.json",
+              "sha256": "f57555b4b3a23873729171916c4023330bee969aad1277b887649d3701bc9cf8"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b16-pairs/candidate-3/accepted.json",
+              "sha256": "94f4c2fffa62a446eb728947acd2e8ea7308ca1f7669734070ef4384288d0bbd"
+            },
+            "e2e_seconds": 14.015487001,
+            "model_forward_seconds": 2.7627562540583313,
+            "plan_initialization_seconds": [
+              0.001939786016009748
+            ]
+          }
+        ],
+        "performance": {
+          "baseline": {
+            "count": 3,
+            "min": 14.019466418,
+            "median": 14.044837062,
+            "p95": 14.054698544,
+            "max": 14.054698544,
+            "mean": 14.039667341333333
+          },
+          "candidate": {
+            "count": 3,
+            "min": 13.939492131,
+            "median": 14.015487001,
+            "p95": 14.023226532,
+            "max": 14.023226532,
+            "mean": 13.992735221333334
+          },
+          "median_speedup": 1.0020941163869586,
+          "p95_speedup": 1.002244277515462,
+          "paired_speedups": [
+            1.0082647496707426,
+            1.0015410526208561,
+            1.0002839299840038
+          ],
+          "paired_summary": {
+            "count": 3,
+            "min": 1.0002839299840038,
+            "median": 1.0015410526208561,
+            "p95": 1.0082647496707426,
+            "max": 1.0082647496707426,
+            "mean": 1.0033632440918676
+          },
+          "observed_trend": "faster_median_and_p95",
+          "changes": {
+            "invocation.profile_sha256": {
+              "baseline": "f3d814b22f047fcddd11d9f67a0b009d5fbc39aeaaab316c1124142c2c640636",
+              "candidate": "e306ddf753780a7d842fa497a1ad8907c88cce7b3453081244d5604e1a5bf069"
+            },
+            "launch.environment.FIREPROT_ESMC_B16_FFN": {
+              "baseline": "0",
+              "candidate": "1"
+            }
+          }
+        },
+        "medians": {
+          "e2e_seconds": {
+            "baseline": 14.044837062,
+            "candidate": 14.015487001
+          },
+          "model_forward_seconds": {
+            "baseline": 2.76367447397206,
+            "candidate": 2.731093856971711
+          }
+        }
+      },
+      "64": {
+        "benchmark": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b64-pairs/measurements/benchmark.json",
+          "sha256": "c871d4725a9fc78a9b7f353f573a498ba9075bc47fb5ff28f1cc687cb1888a3e"
+        },
+        "comparison": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b64-pairs/measurements/comparison.json",
+          "sha256": "0993af54a92bc6b96c51de0932a2f7080cfddb607c5f25854683aea07cbecb2e"
+        },
+        "reference_accepted": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/native64/accepted.json",
+          "sha256": "97a66fb438a58a6f06b6c190e24c36307176949dd0987e5c72027adf6d233838"
+        },
+        "all_arrays_exact": true,
+        "records": [
+          {
+            "slot": {
+              "arm": "baseline",
+              "pair": 0
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b64-pairs/measurements/measurement-000/invocation.json",
+              "sha256": "ad7e8a2db9cbb0edd94a03fc9412a05136bc660554b51cf06989904424dabf3e"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b64-pairs/baseline-1/accepted.json",
+              "sha256": "00f32e49a997fb7a8aac21c60c9c21fe47ca644b86bd0ca624afdb350e8d2130"
+            },
+            "e2e_seconds": 21.758774476,
+            "model_forward_seconds": 8.997296117129736,
+            "plan_initialization_seconds": []
+          },
+          {
+            "slot": {
+              "arm": "candidate",
+              "pair": 0
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b64-pairs/measurements/measurement-001/invocation.json",
+              "sha256": "a35d4c0d97d33cc7613c7e49152eeb1b4d09653219e6cf1c56865ccedf465213"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b64-pairs/candidate-1/accepted.json",
+              "sha256": "1c217367b6d303f6e9580990fc1402d70e2322539677431cf8916db57d77a824"
+            },
+            "e2e_seconds": 21.776127796,
+            "model_forward_seconds": 8.877748543047346,
+            "plan_initialization_seconds": [
+              0.0019640070386230946,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": {
+              "arm": "candidate",
+              "pair": 1
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b64-pairs/measurements/measurement-002/invocation.json",
+              "sha256": "f35193c17784924bd5571ae070894ae0c03d265d56151320b7d92abe52efc371"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b64-pairs/candidate-2/accepted.json",
+              "sha256": "681c54efb311d5492b8dcc8bc53b8f9918ac9aa790735424ecbc446332051aca"
+            },
+            "e2e_seconds": 21.713882558,
+            "model_forward_seconds": 8.887730903108604,
+            "plan_initialization_seconds": [
+              0.0019785920158028603,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": {
+              "arm": "baseline",
+              "pair": 1
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b64-pairs/measurements/measurement-003/invocation.json",
+              "sha256": "be2a82343eb2d9f8e46c2512b1e12823bf75e4b261a770040886c9aad36d6ebf"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b64-pairs/baseline-2/accepted.json",
+              "sha256": "5ddecc6b687f781f4696a766a6cd79989a361c037f196b5bd0d2ddb48d5e497e"
+            },
+            "e2e_seconds": 21.865148049,
+            "model_forward_seconds": 9.041130362078547,
+            "plan_initialization_seconds": []
+          },
+          {
+            "slot": {
+              "arm": "baseline",
+              "pair": 2
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b64-pairs/measurements/measurement-004/invocation.json",
+              "sha256": "a26de50a2f85b34ea70c759a5b56ba57571bf567d11789c01b92293135e4b1d8"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b64-pairs/baseline-3/accepted.json",
+              "sha256": "00b1480b0b0094fe563265121bb774e1b8214ff9c679e73bc39bd95032a6cfa3"
+            },
+            "e2e_seconds": 22.110646163,
+            "model_forward_seconds": 9.029481031000614,
+            "plan_initialization_seconds": []
+          },
+          {
+            "slot": {
+              "arm": "candidate",
+              "pair": 2
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b64-pairs/measurements/measurement-005/invocation.json",
+              "sha256": "2f6dcc7130c029f006c15a18bc63ec232690a235e7af1a06041cd5fe3de7b2e5"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-b16-ffn-20261016/b64-pairs/candidate-3/accepted.json",
+              "sha256": "a0c411b62a8bab53168fb5ee54c426d20f6906f527df2b6603cbf21b5c4f2730"
+            },
+            "e2e_seconds": 21.815440713,
+            "model_forward_seconds": 8.8726504141232,
+            "plan_initialization_seconds": [
+              0.0019529309356585145,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "performance": {
+          "baseline": {
+            "count": 3,
+            "min": 21.758774476,
+            "median": 21.865148049,
+            "p95": 22.110646163,
+            "max": 22.110646163,
+            "mean": 21.911522895999997
+          },
+          "candidate": {
+            "count": 3,
+            "min": 21.713882558,
+            "median": 21.776127796,
+            "p95": 21.815440713,
+            "max": 21.815440713,
+            "mean": 21.768483689
+          },
+          "median_speedup": 1.0040879744017828,
+          "p95_speedup": 1.0135319498644866,
+          "paired_speedups": [
+            0.9992031035011105,
+            1.0069663032668594,
+            1.0135319498644866
+          ],
+          "paired_summary": {
+            "count": 3,
+            "min": 0.9992031035011105,
+            "median": 1.0069663032668594,
+            "p95": 1.0135319498644866,
+            "max": 1.0135319498644866,
+            "mean": 1.0065671188774856
+          },
+          "observed_trend": "faster_median_and_p95",
+          "changes": {
+            "invocation.profile_sha256": {
+              "baseline": "f3d814b22f047fcddd11d9f67a0b009d5fbc39aeaaab316c1124142c2c640636",
+              "candidate": "e306ddf753780a7d842fa497a1ad8907c88cce7b3453081244d5604e1a5bf069"
+            },
+            "launch.environment.FIREPROT_ESMC_B16_FFN": {
+              "baseline": "0",
+              "candidate": "1"
+            }
+          }
+        },
+        "medians": {
+          "e2e_seconds": {
+            "baseline": 21.865148049,
+            "candidate": 21.776127796
+          },
+          "model_forward_seconds": {
+            "baseline": 9.029481031000614,
+            "candidate": 8.877748543047346
+          }
+        }
+      }
+    }
+  },
+  "acceptance": {
+    "precision": "native BF16",
+    "seed": 101,
+    "hip_device": 6,
+    "pci": "0000:8e:00.0",
+    "reference": "Official same B16 grouping",
+    "e2e_invocations": 12,
+    "e2e_archives": 480,
+    "native_reference_archives": 64,
+    "all_exported_arrays_byte_exact": true
+  },
+  "limitation": "Development N1000 sequences; no folding quality or new direct-native speedup measurement; no online tuning; existing B4 default unchanged."
+}

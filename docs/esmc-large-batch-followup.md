@@ -114,10 +114,11 @@ buffer bytes and RNG state match; CUDA is never initialized. This small
 constructor-only gain has not been qualified on loaded model inference and is
 not enabled in a published profile.
 
-Next candidates should target exact GEMM behavior, including B16 FFN algorithm
-selection, before further broad batch admission. That direction is unmeasured;
-this report does not imply that CK or another GEMM will satisfy native byte
-parity. Historical CK failures remain valid for their tested shapes.
+The subsequent [B16 FFN experiment](esmc-b16-ffn.md) qualifies fixed hipBLASLt
+algorithm 3903 with native byte parity. Warm forward improves 1.0163x, but the
+16- and 64-input E2E ratios are only 1.0021x and 1.0041x, with a mixed resident
+paired trend. It remains experimental. Historical CK failures remain valid
+for their tested shapes.
 
 ## Reproduction
 

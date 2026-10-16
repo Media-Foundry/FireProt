@@ -7396,3 +7396,54 @@ screenrealactivation, thenall-layer/officialsame-group parity, thenE2E. Do not
 assumechangingtile/APIgivesgain. Broadbatchadmission and meta-init not promoted.
 Source sync baseline7879fb5; backupinE2Eroot/top-source-backup; checkreceipt.
 Exclude runtime/outputs/Gitmetadata/Protenix/userdocs/isa; maintainedCLIunchanged.
+
+
+## 2026-10-16 ESMC B16 fixed FFN follow-up
+
+Root outputs/experiments/esmc-b16-ffn-20261016; HIP6 only /PCI0000:8e:00.0.
+All GPU jobs completed; no experiment remains running. Local base5f3168e.
+No default profile, maintained model/runtime or binary changes this cycle.
+Published direct native B4 result remains24.235166989->12.250121529s1.978361352x.
+
+Offline Torch TunableOp on actual B16 FFN up/gate activation selects
+hipBLASLt3903: TN13824x16032x2560, BF16 inputs/output with FP32 accumulation.
+Tuning260.336549s excluded; max_tuning_duration10 means milliseconds/solution.
+Internal1e-45 tolerance is NOT acceptance; independent bytes including signed
+zero checked for all80 projections and fullmodel. Projection9.450707->8.980955ms;
+TunableOp warmforward2.083235->2.052286s1.01508x. Disabled online tuning outside
+screen. Rust-built direct HIP fixes3903 and rows16032, retains version/support
+checks. LibrarySHA7909222614b88973def269723fe5bd98e9e4efcdcf2bd3683c3ad6d9f23fd9e7.
+Lazy plan init2.072ms, workspace0 valid; unsupported6rowcounts rejected.
+Direct warmforward2.084191911->2.050774385s1.016295077x, all80/fullmodelexact.
+
+Frozenqualified-b16-ffn extends priorqualified-large-batch with gemm_b16.py,
+exactlibrarySHAguard, explicitFIREPROT_ESMC_B16_FFN0/1, nativeB16FFN control.
+Botharms samecurrentCLI1f5365..., HIPpointwise/RoPE, pinnedloading/importoverlap,
+hash8/localCPU/snapshotmonitor. SameB16grouping, N1000/nativeBF16/seed101,
+freshworkers/unflushedcaches/originalhashes/allexports. ThreeAB/BA/ABpairs each:
+-16inputs E2E14.044837062->14.015487001s1.002094116x;
+ paired1.008264750,1.001541053,1.000283930. Forward2.763674474->2.731093857s.
+-64inputs/fourgroups E2E21.865148049->21.776127796s1.004087974x;
+ paired0.999203104,1.006966303,1.013531950; one regression.
+ Forward9.029481031->8.877748543s.
+Decision retain experimental, do not promote these small/mixedE2Egains.
+Do not multiply theseincrementalB16ratios into publishednativeB4ratio.
+
+Independent collector validates12invocations480predictionarchives against64
+newofficialB16referencearchives; first16also match priornativeB16screen.
+Allbytesexact, identicalassetprovenance/grouping/PCI,80FFNcalls/group,
+plancreatedfirstgrouponly, reuseafter. Firstcollector startedtooearly and
+encountered missingfinalbenchmark.json; rerununchangedafterdrivercompleted,
+passed. This was observation timing, not model/benchmarkfailure.
+All9actualscripts frozen undermeasured-scripts; fullrawreceipts and source
+retainedremote; localcompactevidence pinsfullreceipt withoutlargeheaderlist.
+Docs/esmc-b16-ffn.md and provenance/esmc_b16_ffn_20261016.json record boundaries.
+
+InstalledCK and48directtilecases remain unqualified as previouslyrecorded;
+currentGEMM~80%ofGPUtime. B16batching andexactFFNtuning nowbothshowflatE2E.
+AnyfutureCKwork shouldtargetdifferenttile/accumulationschedule andrealactivation
+parity first, not repeat wholesale backendreplacement. No claimallpossible
+kernels exhausted. CPUmeta-init77msdiagnostic remains unqualified/unpromoted.
+Source sync baseline5f3168e; freshbackupinthisroot/top-source-backup; inspect
+source-sync-receipt.json for completion. Preserve userdocs/isa and exclude
+runtime/outputs/Gitmetadata/Protenix. No persistentCLI replacement needed.

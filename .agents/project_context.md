@@ -7447,3 +7447,103 @@ kernels exhausted. CPUmeta-init77msdiagnostic remains unqualified/unpromoted.
 Source sync baseline5f3168e; freshbackupinthisroot/top-source-backup; inspect
 source-sync-receipt.json for completion. Preserve userdocs/isa and exclude
 runtime/outputs/Gitmetadata/Protenix. No persistentCLI replacement needed.
+
+## 2026-10-16 Precision initialization and full-model E2E refresh (active)
+
+User requested .summary.md pushed, initialization at Precision:/media/990Pro/fireprot,
+home ESM asset scan and missing folding/pLM weights copied. Added .summary.md,
+committed/pushed0ee3a0a. Then user requested fresh E2E for all models in README and
+explicitly chose DiamondHill remeasurement with Precision separate native baselines.
+This task remains IN PROGRESS; do not report all transfers/folding runs complete.
+
+Precision SSHalias resolves10.4.142.105, userhusrcf, current wirelessnetwork;2.2TBfree.
+Toprepo clonedmaster0ee3a0a. LocalCargo1.97.1 build succeeded offline (13.55s) after
+onlinecratesindexhung; packagedCargo.lock dependencies via localcargo vendor under
+runtime/cargo-offline/vendor; globalCargo settings unchanged. CLI858d884d25645907b49138d157894aa3b308b97d0b2df719a2259ba767f4be77,
+bridge35f91647cd4fb79f296eda6d29b4bbe7ffb73e599f31417f43c00f048873dd4c.
+TorchBIO2.13.0+rocm10.0.0/HIP7.15.26333/Python3.12.7. Navi31/gfx1100, HIP0/SMI0/
+PCI0000:53:00.0 W7900; secondcardPCI0000:9e:00.0. No gfx90a binaries reused.
+
+Home scan found ESM2-3B and ESMFoldv1 in ~/Code/ProtBind/pypropel_unibio/tmp/
+uniprot_membrane_esmfold_20260721/esmfold_local/torchhub/hub/checkpoints;
+ESM3-open in ~/Code/ProtBind/ESM/hub/models--EvolutionaryScale--esm3-sm-open-v1/
+snapshots/2feda652c51c57f9797fc1b01f8d6181b38fb488/data/weights. Fullhashesmatchsource;
+copiedstable FireProt runtime paths, notsymlinks. ESM3codecweightsalreadyexisttoo.
+Oneunreadablecontainer systemdirectory, manycachedembeddings/adaptercheckpoint
+hits excluded. Fullscan/tmp/fireprot-precision-home-assets.json onPrecision huge;
+DO NOT print full; filteredweight-candidates/reusable JSONs are small.
+
+Assetmanifest49files52,778,669,198bytes; localreuse11,253,416,040;
+network41,525,253,158. Includes Protenix4models+ESM2/regression,AtlasFold/AtlasLM,
+ESMFold2sixshards+CCD/config,ESM3,OpenBind0,AF2fivePTMparams,ESMFoldv1,Protenixcommon.
+Allsourcehashesverified andexistingrequestpinschecked. No invalidpartial copied.
+Local/tmp/fireprot-precision-migration/{inventory,stage,transfer,verify,...}.py
+andtransfer-manifest.json; sourcecopyonDiamondHill/tmp/fireprot-precision-transfer.py,
+PID1989212, logs/tmp/fireprot-precision-transfer.log and-progress.jsonl.
+DirectrsynctoPrecision46missingfiles; --partial/--ignore-existing, nooverwrites.
+Localreuse3files independentlyhashedaftercopy. Finaldestination49hashcheckNOTDONE;
+Precision/tmp/fireprot-precision-verify.py writesruntime/migration-20261016/verified-assets.json.
+Do not rerun transferdriver concurrently. Verify existingcompletefiles before any
+restart; an interrupted --partial transfer could leave a partial finalfilename.
+
+IndependentPrecision sourcescloned: runtime/repos/{esm,atlasfold,openfold3}pinned
+43b4548,8ab3aca,7de748b respectively. Protenix/ clonedfromlocalcleanbb3be993bundle,
+fullGit history, upstreamorigin; no topgitlink. DiamondHill ProtenixHEADd3b4dirty
+butall248manifestfiles89.6MBexactmatchpinnedbb3be993export; no source tampering.
+
+PrecisionESM3nativeB4N1000 qualificationpassedRust+independentrehashed4archives.
+Initialstartupfailedbecauseoutputsparentmissing (fixedmkdir), noGPUfailure.
+Precisionruntime/precision-baselines-20261016 profiles/requestswrittenlocalnative;
+HIP0,BIOpython,officialfactory,offline,seed101,nativeBF16. Nooptimizedresource.
+Then threefreshmeasure-inference calls withasset senderpaused andDiamondHillGPUidle:
+12.593586844,11.883475650,11.885214524s; median11.885214524s;
+modelmedian2.370584047s. All12archives exactvs4qualificationarchives; no crosshost
+parity/speedupclaim. provenance/precision_esm3_native_baseline_20261016.json,
+docs/precision-setup.md andREADMEseparatetable. Measurementhelperfrozenunder
+Precisionruntime/migration-20261016/native_baseline.py. Source sender1997284
+brieflySIGSTOPthenSIGCONTwithfinally; nowresumed.
+
+DiamondHill freshroot outputs/experiments/e2e-refresh-20261016; frozen currentCLI
+1f5365... copiedasroot/fireprot. Only HIP6/PCI0000:8e:00.0; nooverlappingGPUtests.
+ThreeAB/BA/ABpairs,fullhashes/alloutputs,cachesunflushed,freshworkers. Preparation
+underexperiments/e2e_refresh. Reuseslastqualifiedfrozenworkers/algorithms permodel,
+notunqualifiednewkernels. BotharmscurrentCLI. Fullphysical/source/input/workload
+checks retained. Rustbenchmark-pairs unchanged; Base separateuserpolicy.
+
+FinishedfourpLMs,24invocations96archives independentlyrehashed andallbyteexact:
+ESMC24.089347380->12.266649244s1.963808282x;
+ESM2 35.481957635->15.488813214s2.290811900x;
+ESM3 11.830099648->11.067386583s1.068915372x;
+AtlasLM14.839205528->13.117877316s1.131220027x.
+provenance/e2e_refresh_plm_20261016.json (local),README newlatestsection andsummary
+updated; historicalwarm values retained separately. Originalcollectfile remote
+collected-latest.json andlocal/tmp/fireprot-refresh-plm-collected.json.
+
+Activefoldingrunner tool session45591, script/tmp/fireprot-e2e-refresh-run.py;
+waitingforcurrentAtlasLM6.128GBfile tofinish beforetiming. ItSIGSTOPs ONLYtransfer
+Pythonparent1989212, allowscurrentrsynctofinishnormally, waitschildzombie/exit,
+thenstartsGPU. Atthisnote AtlasLMtemp~3.79GB. SenderPID1997284 isactive; parentT.
+Runnercaseorderisplanorder, NOTargvorder: esmfold2-n1000,openfold3-n1536,
+mini-n1000,mini-n1536,mini-esm-n1000,atlasfold-n1000,atlasfold-n1536,tiny-n1000.
+Eachhasfreshspecand6invocations;logcase/driver.log,statuscase/driver-status.json.
+Onecasefailure recordedthencontinuesindependentmodels; don'tclaimfailedspeedup.
+FinallyresumesparenttransferwithSIGCONT. No secondfoldingrunner concurrently.
+Currenttransfertoolsession1573 remainsactive; do not restart it.
+
+Base preparedseparatelyroot/base-n1000/run.sh (NOTSTARTED),derivedfromprioraccepted
+finalnativepairs. SameFP32N1000C10/D200/S1seed101,hip6,currentCLI,oldnative/optimized
+profiles. Eachrunexact9arraysagainstoldarmanchors,constructionchecks;candidate
+unusedtemplatecheck; eachpairbase-driftalignedRMSD<=0.1A plusNEWexplicitimmediate
+check_base.py summaryconfidence<=0.001. Legacygateunchanged. Sourcehelpers
+prepare_base.py/check_base.py createfreshcopies. MustrunBaseonlyaftercurrentGPU
+queueends andpauseassettransferatcompletefileboundary again. SummarizefullBase
+resultsindependentlyandrecordlegacygatefailureifstillpresent; neverrelaxgenericgate.
+
+Pending: finish8foldstudies+Base, independentcollector, fix concretefailures,
+updateREADMEallfreshmodelratios/date/scientificconditions; finishtransferand49dest
+hashes; finalizePrecisionprovenance/setupstatus; safe commit/pushmasterandffpull
+Precision; syncDiamondHilldocs/scriptsaftercheckingpreimages. Keepdocs/isauntracked.
+Fullrefreshcollector verifiesrecords andexactwithinarm; strictcrossarm/CIF for
+plm/atlasfold/openfold3/esmfold2, normalProtenixRust gates; Base separatecollectorneeded.
+Currentlocalfilesnew/modifiedREADME,.summary,docs/precision-setup.md,experiments/
+e2e_refresh,twoprovenancefiles,context. No maintainedmodel/kernel/runtime edits.

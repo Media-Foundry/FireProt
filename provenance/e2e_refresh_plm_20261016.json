@@ -1,0 +1,1103 @@
+{
+  "schema_version": 1,
+  "root": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016",
+  "plan": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/plan.json",
+    "sha256": "dfb06690f5d5d9ed5d4c5f83107522fb1349553cec8e3812ac75c5db19741d82"
+  },
+  "cli": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/fireprot",
+    "sha256": "1f5365ecf4824f1b2d99ca88bcc25d36be57f434a78f1e6ff17f5bb95a55dce0"
+  },
+  "cases": {
+    "esmc-b4": {
+      "status": "verified",
+      "benchmark": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esmc-b4/measurements/benchmark.json",
+        "sha256": "f8c3359f6ad8896f4be502351fea40ebbcecdd25bbad35b9aa6064c91254e594"
+      },
+      "comparison": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esmc-b4/measurements/comparison.json",
+        "sha256": "fcf21414cca12a5f22f1ff4e5527c5654d364e09bd2bcc8bb109e63a4894a56b"
+      },
+      "performance": {
+        "baseline": {
+          "count": 3,
+          "min": 23.688457066,
+          "median": 24.08934738,
+          "p95": 24.532904588,
+          "max": 24.532904588,
+          "mean": 24.103569678
+        },
+        "candidate": {
+          "count": 3,
+          "min": 12.098722392,
+          "median": 12.266649244,
+          "p95": 12.399489228,
+          "max": 12.399489228,
+          "mean": 12.254953621333334
+        },
+        "median_speedup": 1.9638082821829155,
+        "p95_speedup": 1.9785415460985956,
+        "paired_speedups": [
+          1.9785415460985956,
+          1.9638082821829155,
+          1.9579304573236131
+        ],
+        "paired_summary": {
+          "count": 3,
+          "min": 1.9579304573236131,
+          "median": 1.9638082821829155,
+          "p95": 1.9785415460985956,
+          "max": 1.9785415460985956,
+          "mean": 1.9667600952017081
+        },
+        "observed_trend": "faster_median_and_p95",
+        "changes": {
+          "backend": {
+            "baseline": "native",
+            "candidate": "fireprot"
+          },
+          "invocation.profile_sha256": {
+            "baseline": "43fefda027a60bc415a605f4903fa7dfa1fa4f0c400fa3070637df41a976eabd",
+            "candidate": "1fc98ffdbc7a22b28fd989dde630f69a8b918b0980432058d033c5ea14d7ab47"
+          },
+          "launch.environment.FIREPROT_AMD_SMI_PROTOCOL": {
+            "baseline": null,
+            "candidate": "snapshot-v1"
+          },
+          "launch.environment.FIREPROT_ESMC_CPU_LOADING": {
+            "baseline": "0",
+            "candidate": "1"
+          },
+          "launch.environment.FIREPROT_ESMC_IMPORT_OVERLAP": {
+            "baseline": "0",
+            "candidate": "1"
+          },
+          "launch.environment.FIREPROT_PREFLIGHT_HASH_THREADS": {
+            "baseline": "4",
+            "candidate": "8"
+          },
+          "launch.environment.FIREPROT_WORKER_CPU_AFFINITY": {
+            "baseline": "inherit",
+            "candidate": "64-127,192-255"
+          },
+          "launch.inputs.amd-smi": {
+            "baseline": {
+              "canonical_path": "/opt/rocm/core-10.0/libexec/amdsmi_cli/amdsmi_cli.py",
+              "name": "amd-smi",
+              "sha256": "fed9e6cd65b4ecbc64e8453331ebaa288870c60178a5e714a153156d774a9613"
+            },
+            "candidate": {
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/build-cache/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00.so",
+              "name": "amd-smi",
+              "sha256": "29e550384593d7880fb591213391ada0d728f3e589fd5edae7165d0449653c91"
+            }
+          }
+        }
+      },
+      "all_exported_arrays_exact": true,
+      "within_arm_exact": true,
+      "full_cif_exact": null,
+      "records": [
+        {
+          "slot": {
+            "arm": "baseline",
+            "pair": 0
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esmc-b4/measurements/measurement-000/invocation.json",
+            "sha256": "e5dbd6e8eb9a94fe812136e9da3b4e88b633cf457c6b723b7a07f638dd0d2699"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esmc-b4/baseline-0/accepted.json",
+            "sha256": "611f12e7f83ba726e409aecaa1b14c13998cfcf79ec9d4c39cf5149ae6762088"
+          },
+          "e2e_seconds": 24.532904588,
+          "model_seconds": 1.4823328460333869,
+          "workload": {
+            "model": "plm",
+            "model_name": "esmc-fold2-6b",
+            "precision": "native",
+            "batch": {
+              "items": 4,
+              "max_batch_size": 4,
+              "max_padded_tokens": 4008,
+              "grouping": "length_sorted"
+            }
+          },
+          "seed": 101,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/configs/inputs/plm-batch-n1000.json",
+            "sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2"
+          },
+          "archives": 4,
+          "cif_files": 0
+        },
+        {
+          "slot": {
+            "arm": "candidate",
+            "pair": 0
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esmc-b4/measurements/measurement-001/invocation.json",
+            "sha256": "4b0a58f39709da8efb56bcf90bb328243cc67229c64805c981c2b776cb580b2c"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esmc-b4/candidate-0/accepted.json",
+            "sha256": "6f934f39ff4cee9215e8bb0dec738f45162ce2ecdc10096ae6259fb5d68491ec"
+          },
+          "e2e_seconds": 12.399489228,
+          "model_seconds": 1.3227628309978172,
+          "workload": {
+            "model": "plm",
+            "model_name": "esmc-fold2-6b",
+            "precision": "native",
+            "batch": {
+              "items": 4,
+              "max_batch_size": 4,
+              "max_padded_tokens": 4008,
+              "grouping": "length_sorted"
+            }
+          },
+          "seed": 101,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/configs/inputs/plm-batch-n1000.json",
+            "sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2"
+          },
+          "archives": 4,
+          "cif_files": 0
+        },
+        {
+          "slot": {
+            "arm": "candidate",
+            "pair": 1
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esmc-b4/measurements/measurement-002/invocation.json",
+            "sha256": "1d1c3479fc0601e8d09fec681bd2c64d5fef2043a9660ab979c3250ffc48572c"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esmc-b4/candidate-1/accepted.json",
+            "sha256": "38c70bcf32df4bb6fb5636bba06aeebec29d1c123ce569e26b444c48841f8645"
+          },
+          "e2e_seconds": 12.266649244,
+          "model_seconds": 1.3098969119600952,
+          "workload": {
+            "model": "plm",
+            "model_name": "esmc-fold2-6b",
+            "precision": "native",
+            "batch": {
+              "items": 4,
+              "max_batch_size": 4,
+              "max_padded_tokens": 4008,
+              "grouping": "length_sorted"
+            }
+          },
+          "seed": 101,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/configs/inputs/plm-batch-n1000.json",
+            "sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2"
+          },
+          "archives": 4,
+          "cif_files": 0
+        },
+        {
+          "slot": {
+            "arm": "baseline",
+            "pair": 1
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esmc-b4/measurements/measurement-003/invocation.json",
+            "sha256": "67e75f82ab6e88c41dcb7c7a3dd6a680078e5718ac5523712cf4512216bd7dde"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esmc-b4/baseline-1/accepted.json",
+            "sha256": "e7fe69d860d005094d06f5eb756a7ace5a0716aac6f24471ccf32c6e1f93b8ad"
+          },
+          "e2e_seconds": 24.08934738,
+          "model_seconds": 1.4479013909585774,
+          "workload": {
+            "model": "plm",
+            "model_name": "esmc-fold2-6b",
+            "precision": "native",
+            "batch": {
+              "items": 4,
+              "max_batch_size": 4,
+              "max_padded_tokens": 4008,
+              "grouping": "length_sorted"
+            }
+          },
+          "seed": 101,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/configs/inputs/plm-batch-n1000.json",
+            "sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2"
+          },
+          "archives": 4,
+          "cif_files": 0
+        },
+        {
+          "slot": {
+            "arm": "baseline",
+            "pair": 2
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esmc-b4/measurements/measurement-004/invocation.json",
+            "sha256": "ace52ef0a15ef0bdbba9348e765742210326b4432b26d4cdf91e70baa18a8063"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esmc-b4/baseline-2/accepted.json",
+            "sha256": "e316c3d3cd99dad2d84cd76554f37350a0cd70039a13e5ab8a246d35fb409797"
+          },
+          "e2e_seconds": 23.688457066,
+          "model_seconds": 1.4409512350102887,
+          "workload": {
+            "model": "plm",
+            "model_name": "esmc-fold2-6b",
+            "precision": "native",
+            "batch": {
+              "items": 4,
+              "max_batch_size": 4,
+              "max_padded_tokens": 4008,
+              "grouping": "length_sorted"
+            }
+          },
+          "seed": 101,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/configs/inputs/plm-batch-n1000.json",
+            "sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2"
+          },
+          "archives": 4,
+          "cif_files": 0
+        },
+        {
+          "slot": {
+            "arm": "candidate",
+            "pair": 2
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esmc-b4/measurements/measurement-005/invocation.json",
+            "sha256": "cb18c470aea804cb95be2e04abd832500b8e091c91d4f41b5bf5c954ab6d6127"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esmc-b4/candidate-2/accepted.json",
+            "sha256": "2dade429eaec4359059e47ee8a62a373237c5f59935e7b2481a2131e9ffe5484"
+          },
+          "e2e_seconds": 12.098722392,
+          "model_seconds": 1.3032745609525591,
+          "workload": {
+            "model": "plm",
+            "model_name": "esmc-fold2-6b",
+            "precision": "native",
+            "batch": {
+              "items": 4,
+              "max_batch_size": 4,
+              "max_padded_tokens": 4008,
+              "grouping": "length_sorted"
+            }
+          },
+          "seed": 101,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/configs/inputs/plm-batch-n1000.json",
+            "sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2"
+          },
+          "archives": 4,
+          "cif_files": 0
+        }
+      ],
+      "medians": {
+        "e2e_seconds": {
+          "baseline": 24.08934738,
+          "candidate": 12.266649244
+        },
+        "model_seconds": {
+          "baseline": 1.4479013909585774,
+          "candidate": 1.3098969119600952
+        }
+      }
+    },
+    "esm2-b4": {
+      "status": "verified",
+      "benchmark": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm2-b4/measurements/benchmark.json",
+        "sha256": "46912532c4454d8b42adec7fe718cbc8304ec5c412d51d2e9d85c60cad4a46bc"
+      },
+      "comparison": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm2-b4/measurements/comparison.json",
+        "sha256": "2916f7e8bad872f7033a21c08263dd9934110538e1e93380ab73d05ada029882"
+      },
+      "performance": {
+        "baseline": {
+          "count": 3,
+          "min": 35.470355951,
+          "median": 35.481957635,
+          "p95": 35.63420299,
+          "max": 35.63420299,
+          "mean": 35.52883885866667
+        },
+        "candidate": {
+          "count": 3,
+          "min": 15.473261265,
+          "median": 15.488813214,
+          "p95": 16.3129793,
+          "max": 16.3129793,
+          "mean": 15.758351259666666
+        },
+        "median_speedup": 2.290811900483675,
+        "p95_speedup": 2.1844080308493985,
+        "paired_speedups": [
+          2.290811900483675,
+          2.2923645728927724,
+          2.1844080308493985
+        ],
+        "paired_summary": {
+          "count": 3,
+          "min": 2.1844080308493985,
+          "median": 2.290811900483675,
+          "p95": 2.2923645728927724,
+          "max": 2.2923645728927724,
+          "mean": 2.2558615014086154
+        },
+        "observed_trend": "faster_median_and_p95",
+        "changes": {
+          "backend": {
+            "baseline": "native",
+            "candidate": "fireprot"
+          }
+        }
+      },
+      "all_exported_arrays_exact": true,
+      "within_arm_exact": true,
+      "full_cif_exact": null,
+      "records": [
+        {
+          "slot": {
+            "arm": "baseline",
+            "pair": 0
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm2-b4/measurements/measurement-000/invocation.json",
+            "sha256": "076d07bb1bccdb39d2a0a1b6940ead10abe5348c5f1aab91167d037bb2d22da7"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm2-b4/baseline-0/accepted.json",
+            "sha256": "0dbed2a4df89ce2673218a0e6596ffb8f46c805deacdac5de52bffb9837317dd"
+          },
+          "e2e_seconds": 35.481957635,
+          "model_seconds": 2.030179023044184,
+          "workload": {
+            "model": "plm",
+            "model_name": "esm2-3b",
+            "precision": "native",
+            "batch": {
+              "items": 4,
+              "max_batch_size": 4,
+              "max_padded_tokens": 4008,
+              "grouping": "length_sorted"
+            }
+          },
+          "seed": 101,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/configs/inputs/plm-batch-n1000.json",
+            "sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2"
+          },
+          "archives": 4,
+          "cif_files": 0
+        },
+        {
+          "slot": {
+            "arm": "candidate",
+            "pair": 0
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm2-b4/measurements/measurement-001/invocation.json",
+            "sha256": "07b25d202b4594c3ee228e5e59ea05aeb7084faf12083e16fbba901617c03a8f"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm2-b4/candidate-0/accepted.json",
+            "sha256": "1cecd03ef6e82752e1166f10ae32218cb9ae430d7145fb0560c1292fadabb47f"
+          },
+          "e2e_seconds": 15.488813214,
+          "model_seconds": 1.9434566750423983,
+          "workload": {
+            "model": "plm",
+            "model_name": "esm2-3b",
+            "precision": "native",
+            "batch": {
+              "items": 4,
+              "max_batch_size": 4,
+              "max_padded_tokens": 4008,
+              "grouping": "length_sorted"
+            }
+          },
+          "seed": 101,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/configs/inputs/plm-batch-n1000.json",
+            "sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2"
+          },
+          "archives": 4,
+          "cif_files": 0
+        },
+        {
+          "slot": {
+            "arm": "candidate",
+            "pair": 1
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm2-b4/measurements/measurement-002/invocation.json",
+            "sha256": "a00ec78df5aabed656f360ae3d80ca584e044a023c0548d851c71bc91963fd5a"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm2-b4/candidate-1/accepted.json",
+            "sha256": "89f14ebd7fab1af62406639d5ed34b45873859e22e569e1ebb3d98b0000310ad"
+          },
+          "e2e_seconds": 15.473261265,
+          "model_seconds": 1.9468735490227118,
+          "workload": {
+            "model": "plm",
+            "model_name": "esm2-3b",
+            "precision": "native",
+            "batch": {
+              "items": 4,
+              "max_batch_size": 4,
+              "max_padded_tokens": 4008,
+              "grouping": "length_sorted"
+            }
+          },
+          "seed": 101,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/configs/inputs/plm-batch-n1000.json",
+            "sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2"
+          },
+          "archives": 4,
+          "cif_files": 0
+        },
+        {
+          "slot": {
+            "arm": "baseline",
+            "pair": 1
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm2-b4/measurements/measurement-003/invocation.json",
+            "sha256": "b0fed1da1c85220a193f8c84bc92e26aa94881d5860b349f4d8cb61a91fd5008"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm2-b4/baseline-1/accepted.json",
+            "sha256": "cbca52b6c9e41153f8d9cfb04d70a52cf6a6d6dacb204bbb07e228062211a578"
+          },
+          "e2e_seconds": 35.470355951,
+          "model_seconds": 2.0545443519949913,
+          "workload": {
+            "model": "plm",
+            "model_name": "esm2-3b",
+            "precision": "native",
+            "batch": {
+              "items": 4,
+              "max_batch_size": 4,
+              "max_padded_tokens": 4008,
+              "grouping": "length_sorted"
+            }
+          },
+          "seed": 101,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/configs/inputs/plm-batch-n1000.json",
+            "sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2"
+          },
+          "archives": 4,
+          "cif_files": 0
+        },
+        {
+          "slot": {
+            "arm": "baseline",
+            "pair": 2
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm2-b4/measurements/measurement-004/invocation.json",
+            "sha256": "60877b30ee1856c641fd881f21f4d276f359b9f0154da1e31531d4d81119d35a"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm2-b4/baseline-2/accepted.json",
+            "sha256": "6d3b9add94ec0147fd6210d788e3075ccf5d2fe772098c30af456c0a36bf15b4"
+          },
+          "e2e_seconds": 35.63420299,
+          "model_seconds": 2.050377630046569,
+          "workload": {
+            "model": "plm",
+            "model_name": "esm2-3b",
+            "precision": "native",
+            "batch": {
+              "items": 4,
+              "max_batch_size": 4,
+              "max_padded_tokens": 4008,
+              "grouping": "length_sorted"
+            }
+          },
+          "seed": 101,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/configs/inputs/plm-batch-n1000.json",
+            "sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2"
+          },
+          "archives": 4,
+          "cif_files": 0
+        },
+        {
+          "slot": {
+            "arm": "candidate",
+            "pair": 2
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm2-b4/measurements/measurement-005/invocation.json",
+            "sha256": "7cf1c2c39d77ff26b0d8ab140b350f1211a8c054b3ca51d9a54e4d4e5707facd"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm2-b4/candidate-2/accepted.json",
+            "sha256": "4aba94f86b50f4ad1cc21ac9891255aec7305f59be9f770e0cb0a0af887a5f22"
+          },
+          "e2e_seconds": 16.3129793,
+          "model_seconds": 1.9970431959955022,
+          "workload": {
+            "model": "plm",
+            "model_name": "esm2-3b",
+            "precision": "native",
+            "batch": {
+              "items": 4,
+              "max_batch_size": 4,
+              "max_padded_tokens": 4008,
+              "grouping": "length_sorted"
+            }
+          },
+          "seed": 101,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/configs/inputs/plm-batch-n1000.json",
+            "sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2"
+          },
+          "archives": 4,
+          "cif_files": 0
+        }
+      ],
+      "medians": {
+        "e2e_seconds": {
+          "baseline": 35.481957635,
+          "candidate": 15.488813214
+        },
+        "model_seconds": {
+          "baseline": 2.050377630046569,
+          "candidate": 1.9468735490227118
+        }
+      }
+    },
+    "esm3-b4": {
+      "status": "verified",
+      "benchmark": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm3-b4/measurements/benchmark.json",
+        "sha256": "56533f749cba87ba696c9eaa5562ae775849fc3ea563bea72968a6e73e720142"
+      },
+      "comparison": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm3-b4/measurements/comparison.json",
+        "sha256": "e5e705d52f359007a83371b22cd3a12170fa61c956ecdc995b832ae008fdf7b6"
+      },
+      "performance": {
+        "baseline": {
+          "count": 3,
+          "min": 11.818075735,
+          "median": 11.830099648,
+          "p95": 13.335917779,
+          "max": 13.335917779,
+          "mean": 12.328031053999998
+        },
+        "candidate": {
+          "count": 3,
+          "min": 11.047944222,
+          "median": 11.067386583,
+          "p95": 11.207542351,
+          "max": 11.207542351,
+          "mean": 11.107624385333333
+        },
+        "median_speedup": 1.0689153721413835,
+        "p95_speedup": 1.1899056333086346,
+        "paired_speedups": [
+          1.2070949591186306,
+          1.0678289446537534,
+          1.0555480655350324
+        ],
+        "paired_summary": {
+          "count": 3,
+          "min": 1.0555480655350324,
+          "median": 1.0678289446537534,
+          "p95": 1.2070949591186306,
+          "max": 1.2070949591186306,
+          "mean": 1.1101573231024722
+        },
+        "observed_trend": "faster_median_and_p95",
+        "changes": {
+          "backend": {
+            "baseline": "native",
+            "candidate": "fireprot"
+          }
+        }
+      },
+      "all_exported_arrays_exact": true,
+      "within_arm_exact": true,
+      "full_cif_exact": null,
+      "records": [
+        {
+          "slot": {
+            "arm": "baseline",
+            "pair": 0
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm3-b4/measurements/measurement-000/invocation.json",
+            "sha256": "ba2a5acd924a92d58b641963d36c5a892a22dc0fd4daf7f098be1fdf29206062"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm3-b4/baseline-0/accepted.json",
+            "sha256": "b06bf9611e290b0e21bcfaf96fe811e4231cdb01d970010075dec264a82e35a3"
+          },
+          "e2e_seconds": 13.335917779,
+          "model_seconds": 2.7671895830426365,
+          "workload": {
+            "model": "plm",
+            "model_name": "esm3-open",
+            "precision": "native",
+            "batch": {
+              "items": 4,
+              "max_batch_size": 4,
+              "max_padded_tokens": 4008,
+              "grouping": "length_sorted"
+            }
+          },
+          "seed": 101,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/configs/inputs/plm-batch-n1000.json",
+            "sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2"
+          },
+          "archives": 4,
+          "cif_files": 0
+        },
+        {
+          "slot": {
+            "arm": "candidate",
+            "pair": 0
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm3-b4/measurements/measurement-001/invocation.json",
+            "sha256": "627234aec630e2cc61f1307085d2cd3de1e225c5f682c378ea36e09ef69ff703"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm3-b4/candidate-0/accepted.json",
+            "sha256": "a2d2262f6fab4321b4150642063bf321ba79d821147ebcd3bcd05e6c32ecb8c9"
+          },
+          "e2e_seconds": 11.047944222,
+          "model_seconds": 1.4206094739492983,
+          "workload": {
+            "model": "plm",
+            "model_name": "esm3-open",
+            "precision": "native",
+            "batch": {
+              "items": 4,
+              "max_batch_size": 4,
+              "max_padded_tokens": 4008,
+              "grouping": "length_sorted"
+            }
+          },
+          "seed": 101,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/configs/inputs/plm-batch-n1000.json",
+            "sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2"
+          },
+          "archives": 4,
+          "cif_files": 0
+        },
+        {
+          "slot": {
+            "arm": "candidate",
+            "pair": 1
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm3-b4/measurements/measurement-002/invocation.json",
+            "sha256": "efdf1203d953b9675248d338242f06e5aa1519fc2fab380d64b0192623ca0953"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm3-b4/candidate-1/accepted.json",
+            "sha256": "3b06e406bf060da8ae27bc048163bdac6717d532d01b79fc7a3522e806b5c89d"
+          },
+          "e2e_seconds": 11.067386583,
+          "model_seconds": 1.463993891957216,
+          "workload": {
+            "model": "plm",
+            "model_name": "esm3-open",
+            "precision": "native",
+            "batch": {
+              "items": 4,
+              "max_batch_size": 4,
+              "max_padded_tokens": 4008,
+              "grouping": "length_sorted"
+            }
+          },
+          "seed": 101,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/configs/inputs/plm-batch-n1000.json",
+            "sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2"
+          },
+          "archives": 4,
+          "cif_files": 0
+        },
+        {
+          "slot": {
+            "arm": "baseline",
+            "pair": 1
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm3-b4/measurements/measurement-003/invocation.json",
+            "sha256": "59cd4c723e43a5d3c6010c85435cf6e16283b6791cfa25eb6a60a5a51131ed28"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm3-b4/baseline-1/accepted.json",
+            "sha256": "dc547c72d8e4f1de2b8d411c505ca101ce5395ffbd9737141074f5967716a9ad"
+          },
+          "e2e_seconds": 11.818075735,
+          "model_seconds": 2.145385583047755,
+          "workload": {
+            "model": "plm",
+            "model_name": "esm3-open",
+            "precision": "native",
+            "batch": {
+              "items": 4,
+              "max_batch_size": 4,
+              "max_padded_tokens": 4008,
+              "grouping": "length_sorted"
+            }
+          },
+          "seed": 101,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/configs/inputs/plm-batch-n1000.json",
+            "sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2"
+          },
+          "archives": 4,
+          "cif_files": 0
+        },
+        {
+          "slot": {
+            "arm": "baseline",
+            "pair": 2
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm3-b4/measurements/measurement-004/invocation.json",
+            "sha256": "367ac990c3811fde1d40f03cf4c3b348ed52846fac61b2f41bfdc4c8838bf2c8"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm3-b4/baseline-2/accepted.json",
+            "sha256": "44e4a5e0b2042c6c2e77573260e0964eeb60a19d024ac32ae73a7e960abd9287"
+          },
+          "e2e_seconds": 11.830099648000001,
+          "model_seconds": 2.15338035102468,
+          "workload": {
+            "model": "plm",
+            "model_name": "esm3-open",
+            "precision": "native",
+            "batch": {
+              "items": 4,
+              "max_batch_size": 4,
+              "max_padded_tokens": 4008,
+              "grouping": "length_sorted"
+            }
+          },
+          "seed": 101,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/configs/inputs/plm-batch-n1000.json",
+            "sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2"
+          },
+          "archives": 4,
+          "cif_files": 0
+        },
+        {
+          "slot": {
+            "arm": "candidate",
+            "pair": 2
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm3-b4/measurements/measurement-005/invocation.json",
+            "sha256": "88ff884955c0db2c7a686ad47145308d0058840bc06b2a65506958a6f1c50176"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/esm3-b4/candidate-2/accepted.json",
+            "sha256": "3a4db1e4c428090e4d60af8faf006b34632ec13b8081fecec0f67182dda3fbb6"
+          },
+          "e2e_seconds": 11.207542351,
+          "model_seconds": 1.4603111159522086,
+          "workload": {
+            "model": "plm",
+            "model_name": "esm3-open",
+            "precision": "native",
+            "batch": {
+              "items": 4,
+              "max_batch_size": 4,
+              "max_padded_tokens": 4008,
+              "grouping": "length_sorted"
+            }
+          },
+          "seed": 101,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/configs/inputs/plm-batch-n1000.json",
+            "sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2"
+          },
+          "archives": 4,
+          "cif_files": 0
+        }
+      ],
+      "medians": {
+        "e2e_seconds": {
+          "baseline": 11.830099648000001,
+          "candidate": 11.067386583
+        },
+        "model_seconds": {
+          "baseline": 2.15338035102468,
+          "candidate": 1.4603111159522086
+        }
+      }
+    },
+    "atlaslm-b4": {
+      "status": "verified",
+      "benchmark": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/atlaslm-b4/measurements/benchmark.json",
+        "sha256": "b287f844d896429a2365656d17a75c8c1b2b9cc9e3bce2dd27b18a9cf5e0b4b6"
+      },
+      "comparison": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/atlaslm-b4/measurements/comparison.json",
+        "sha256": "5de1f73ec16143c15d36465c57cb0300656f2f7c8871c924cf0e77f6ee162ace"
+      },
+      "performance": {
+        "baseline": {
+          "count": 3,
+          "min": 14.815604973,
+          "median": 14.839205528,
+          "p95": 14.862520056,
+          "max": 14.862520056,
+          "mean": 14.839110185666668
+        },
+        "candidate": {
+          "count": 3,
+          "min": 13.072832233,
+          "median": 13.117877316,
+          "p95": 13.158554138,
+          "max": 13.158554138,
+          "mean": 13.116421228999998
+        },
+        "median_speedup": 1.1312200267264645,
+        "p95_speedup": 1.1294949201963758,
+        "paired_speedups": [
+          1.125929552564949,
+          1.136901307314436,
+          1.1312200267264645
+        ],
+        "paired_summary": {
+          "count": 3,
+          "min": 1.125929552564949,
+          "median": 1.1312200267264645,
+          "p95": 1.136901307314436,
+          "max": 1.136901307314436,
+          "mean": 1.1313502955352832
+        },
+        "observed_trend": "faster_median_and_p95",
+        "changes": {
+          "backend": {
+            "baseline": "native",
+            "candidate": "fireprot"
+          },
+          "launch.inputs.rust-bridge": {
+            "baseline": null,
+            "candidate": {
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/atlaslm-speed-20261016/qualified-assign/target/release/lib_fireprot_bridge.so",
+              "name": "rust-bridge",
+              "sha256": "2f4d3e438193567857cbe713e875c27a663cf2191116fcdfff9c9d8fa5c5493d"
+            }
+          }
+        }
+      },
+      "all_exported_arrays_exact": true,
+      "within_arm_exact": true,
+      "full_cif_exact": null,
+      "records": [
+        {
+          "slot": {
+            "arm": "baseline",
+            "pair": 0
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/atlaslm-b4/measurements/measurement-000/invocation.json",
+            "sha256": "0ecfdfc888fe7a3635beae2c0102889128fb5a71439ec14b326f932339037975"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/atlaslm-b4/baseline-0/accepted.json",
+            "sha256": "37ce42bcf7033f1f02a9795236cf1b4b7ae5533380483a8f555b4b5052129360"
+          },
+          "e2e_seconds": 14.815604973,
+          "model_seconds": 0.8662027700338513,
+          "workload": {
+            "model": "plm",
+            "model_name": "atlaslm-3b",
+            "precision": "native"
+          },
+          "seed": 102,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+            "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+          },
+          "archives": 1,
+          "cif_files": 0
+        },
+        {
+          "slot": {
+            "arm": "candidate",
+            "pair": 0
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/atlaslm-b4/measurements/measurement-001/invocation.json",
+            "sha256": "a56312f8087b99f3435854d03ed4bc57f594cdf0fbcfd52ee8fc7500205e1fd8"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/atlaslm-b4/candidate-0/accepted.json",
+            "sha256": "3fd8ee6170d1c6519ce7d319ddc590da38b3ae1b5a42e36b47fbd095b939d487"
+          },
+          "e2e_seconds": 13.158554138,
+          "model_seconds": 0.7582376620266587,
+          "workload": {
+            "model": "plm",
+            "model_name": "atlaslm-3b",
+            "precision": "native"
+          },
+          "seed": 102,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+            "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+          },
+          "archives": 1,
+          "cif_files": 0
+        },
+        {
+          "slot": {
+            "arm": "candidate",
+            "pair": 1
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/atlaslm-b4/measurements/measurement-002/invocation.json",
+            "sha256": "219d5fb08a1739ca7735e551df1a5e2cd26fcfdb6287295b3268da7ebb5a470c"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/atlaslm-b4/candidate-1/accepted.json",
+            "sha256": "2c5922c1bc5f5ff02ab295af0223bd890b0eb267f2704826c36357469fbe762f"
+          },
+          "e2e_seconds": 13.072832233,
+          "model_seconds": 0.7672429820522666,
+          "workload": {
+            "model": "plm",
+            "model_name": "atlaslm-3b",
+            "precision": "native"
+          },
+          "seed": 102,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+            "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+          },
+          "archives": 1,
+          "cif_files": 0
+        },
+        {
+          "slot": {
+            "arm": "baseline",
+            "pair": 1
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/atlaslm-b4/measurements/measurement-003/invocation.json",
+            "sha256": "26a09e8b7990f9a7b7c5bb83f375ad199100277fbe856593e510eb40e1e3ace4"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/atlaslm-b4/baseline-1/accepted.json",
+            "sha256": "45bbe33db0301e5982b87521ddc2b7860a7939aab89b713c52e05259843c33b9"
+          },
+          "e2e_seconds": 14.862520056,
+          "model_seconds": 0.8835589559748769,
+          "workload": {
+            "model": "plm",
+            "model_name": "atlaslm-3b",
+            "precision": "native"
+          },
+          "seed": 102,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+            "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+          },
+          "archives": 1,
+          "cif_files": 0
+        },
+        {
+          "slot": {
+            "arm": "baseline",
+            "pair": 2
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/atlaslm-b4/measurements/measurement-004/invocation.json",
+            "sha256": "85a23d360ca5c368734dcda55a69fdc2491b08676b04ee71d7f92e0894b0dc05"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/atlaslm-b4/baseline-2/accepted.json",
+            "sha256": "79f0fd77f2067c3441242bd7e715e8551306657f24f8e95334e7b486492ee3ea"
+          },
+          "e2e_seconds": 14.839205528,
+          "model_seconds": 0.8799937110161409,
+          "workload": {
+            "model": "plm",
+            "model_name": "atlaslm-3b",
+            "precision": "native"
+          },
+          "seed": 102,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+            "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+          },
+          "archives": 1,
+          "cif_files": 0
+        },
+        {
+          "slot": {
+            "arm": "candidate",
+            "pair": 2
+          },
+          "invocation": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/atlaslm-b4/measurements/measurement-005/invocation.json",
+            "sha256": "b1f80f65ee331cc94cdb6660c47e43c9927cf7d58d40a32f3ed5b75084bcfe6b"
+          },
+          "accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/e2e-refresh-20261016/atlaslm-b4/candidate-2/accepted.json",
+            "sha256": "934d47b25d53558ec619eefefeb658a9af79c73fe999c8b3845cfd44a9be7fe5"
+          },
+          "e2e_seconds": 13.117877316,
+          "model_seconds": 0.7642045120010152,
+          "workload": {
+            "model": "plm",
+            "model_name": "atlaslm-3b",
+            "precision": "native"
+          },
+          "seed": 102,
+          "input": {
+            "path": "/media/IntelSSD/fireprot/benchmarks/protenix/inputs/umem_L01000_462bb697ecdcce2f.json",
+            "sha256": "f4208459bd5644ed02f8e6926f3072546c5b6018a6d6ae9eee48bb7ab50514ac"
+          },
+          "archives": 1,
+          "cif_files": 0
+        }
+      ],
+      "medians": {
+        "e2e_seconds": {
+          "baseline": 14.839205528,
+          "candidate": 13.117877316
+        },
+        "model_seconds": {
+          "baseline": 0.8799937110161409,
+          "candidate": 0.7642045120010152
+        }
+      }
+    }
+  },
+  "scope": "Fresh 2026-10-16 complete Rust invocation; four N1000 inputs/B4; native precision; seed101; HIP6 PCI0000:8e:00.0; three AB/BA/AB pairs per model; full hashes/outputs; no simultaneous asset transfer. Independent archive rehash and byte equality passed."
+}

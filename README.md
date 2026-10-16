@@ -260,6 +260,43 @@ comparisons with per-run gates. Specifications and reproduction procedures are i
 Model forward time, worker request time and complete invocation E2E are different
 boundaries; `predictions.json` alone is not complete E2E evidence.
 
+## Latest E2E refresh — 2026-10-16
+
+The new DiamondHill refresh uses complete Rust invocations, fresh workers,
+three AB/BA/AB pairs per workload, full checkpoint verification and all outputs.
+Only HIP6 / PCI `0000:8e:00.0` is used. Asset transfers are paused during timing.
+Filesystem/GPU caches are unflushed. Scientific settings remain model-specific.
+
+| Standalone pLM, N1000 × 4 / B4 | Native median | Optimized median | E2E speedup |
+| --- | ---: | ---: | ---: |
+| ESMC bundled 6B | 24.089 s | 12.267 s | **1.964x** |
+| ESM2-3B | 35.482 s | 15.489 s | **2.291x** |
+| ESM3-open | 11.830 s | 11.067 s | **1.069x** |
+| AtlasLM-3B | 14.839 s | 13.118 s | **1.131x** |
+
+All 24 pLM invocations and 96 prediction archives pass independent rehashing
+and byte equality against the same-group native reference, including all
+requested embeddings/logits. Native precision is unchanged (ESM2 remains FP32).
+These fresh measurements supersede the historical pLM E2E values above; their
+warm-forward measurements remain separate historical observations.
+[Raw timings, pins and independent checks](provenance/e2e_refresh_plm_20261016.json).
+
+The folding refresh is in progress. The following folding table retains
+historical measurements until fresh paired acceptance completes. Precision is
+a separate gfx1100 deployment and will have its own native baseline records;
+DiamondHill speedups are not attributed to it.
+
+### Precision native baseline — separate host
+
+| Model / workload | GPU | Native E2E median | Optimized speedup |
+| --- | --- | ---: | --- |
+| ESM3-open, N1000 × 4 / B4, native BF16 | W7900 / gfx1100 | **11.885 s** | Not established |
+
+Three fresh runs retain full hashes and all outputs; all 12 prediction archives
+match the same-host native reference bitwise. Asset transmission is paused.
+Precision uses Torch 2.13/ROCm 10, so this is not a cross-host kernel comparison.
+[Initialization, assets and baseline details](docs/precision-setup.md).
+
 ## Measured speedups
 
 These are versioned comparisons, not a uniform benchmark of the current CLI.

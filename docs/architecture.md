@@ -64,6 +64,11 @@ asynchronous HIP transfers; event completion protects each buffer before reuse.
 `FIREPROT_ESMC_CPU_LOADING=0` retains the previous GPU-conversion loader.
 Full checkpoint hashes and strict state assignment remain required. See the
 [parameter equality and E2E evidence](esmc-loading.md).
+The standalone ESMC profile also enables `FIREPROT_ESMC_IMPORT_OVERLAP=1`:
+upstream CPU module imports occur after `ready` emission, overlapping Rust's
+unchanged verification. Construction, weight loading and inference still wait
+for a valid `start`. Other models retain sequential startup. See the
+[startup contract and measured E2E result](esmc-startup.md).
 ESM2 transfers stored FP16 weights before exact promotion to native FP32.
 These are tensor-boundary changes; Rust retains asset checks, grouping policy,
 operator selection, supervision, and exact-array acceptance. See

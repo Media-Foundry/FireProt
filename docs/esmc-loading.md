@@ -1,5 +1,10 @@
 # ESMC bounded pinned checkpoint loading
 
+This loader remains enabled. The later [import-overlap optimization](esmc-startup.md)
+adds another measured improvement and updates the public profile; the 1.365x
+direct-native result below is the historical loader-only composition. Its frozen
+profile is `configs/diamondhill/plm-esmc-fold2-6b-pinned-loading.json`.
+
 The standalone ESMC 6B exact profile now enables CPU BF16 conversion directly
 into two reusable pinned block buffers, followed by asynchronous HIP transfers.
 The original checkpoints and complete-file SHA-256 preflight remain unchanged.
@@ -71,7 +76,7 @@ Evidence: [loading qualification and E2E](../provenance/esmc_loading_20261016.js
 
 The existing request remains valid:
 `configs/requests/plm-esmc-fold2-6b-b4-n1000-exact.json`.
-Its profile, `configs/diamondhill/plm-esmc-fold2-6b-exact.json`, now sets
+Its historical profile, `configs/diamondhill/plm-esmc-fold2-6b-pinned-loading.json`, sets
 `FIREPROT_ESMC_CPU_LOADING=1` and points to the measured frozen deployment:
 
 ```text
@@ -85,7 +90,7 @@ cd /media/IntelSSD/fireprot
 cp configs/requests/plm-esmc-fold2-6b-b4-n1000-exact.json /tmp/esmc-request.json
 # Set a new run_id and an unused output_dir in /tmp/esmc-request.json.
 outputs/experiments/esmc-load-20261016/validation/qualified-loading/target/release/fireprot \
-  esm /tmp/esmc-request.json configs/diamondhill/plm-esmc-fold2-6b-exact.json
+  esm /tmp/esmc-request.json configs/diamondhill/plm-esmc-fold2-6b-pinned-loading.json
 ```
 
 For the old loader, set `FIREPROT_ESMC_CPU_LOADING=0` in a copied profile. Missing

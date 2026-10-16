@@ -6839,3 +6839,61 @@ FFN candidate compose without single-group startup regressions; profile remainin
 import/preflight/startup cost before more GEMM tuning. CPU staging/thread placement
 or transfer overlap may still have headroom. Preserve full checkpoint hashing and
 same-batch bitwise acceptance after every trial; use HIP6 only unless changed.
+
+## 2026-10-16 ESMC startup overlap: 1.440x direct-native E2E
+
+Active goal remains "consistently optimize the ESMC"; this cycle made progress.
+HIP6 only / PCI 0000:8e:00.0 / SMI4. All GPU experiments finished successfully.
+
+Experiment: `/media/IntelSSD/fireprot/outputs/experiments/esmc-startup-20261016`.
+One instrumented diagnostic isolated Torch import1.649s, HIP init0.147s,
+ready handshake1.178s, upstream ESMC import1.752s and checkpoint placement1.290s.
+It is not a paired performance comparison; tracing was off for formal runs.
+
+Selected change: after ready emission, import unchanged ESMC CPU definitions
+while Rust verifies execution identity/device. Imports run synchronously; no
+thread, weight loading, model construction or inference before valid start.
+Original source commit/path guard remains. Full resource hashes and Rust checks
+remain. No new GEMM/attention/CK route is included. Exact pinned loading remains.
+
+Three AB/BA/AB pairs per comparison, N1000x4/B4, seed101/native BF16/HIP6,
+fresh workers, unflushed caches, original full checkpoint SHA256 checks:
+- Previous pinned FireProt:18.173891662 ->16.997369422s,1.069217901x.
+  Pair ratios1.087256632,1.048834545,1.109435431.
+- Direct native:24.353150826 ->16.913511716s,1.439863657x.
+  Pair ratios1.431174853,1.394751367,1.443019298.
+All pairs faster; 12 invocations /48 archives independently rehashed and compared
+bitwise, also against earlier official same-batch output. HIP coverage160 per
+forward. Do not combine medians between these separately scheduled comparisons.
+Model forward medians incremental1.393950597 ->1.372709959s; direct-native
+1.519129524 ->1.369231019s. request_seconds starts after relocated imports,
+so its decrease is not a valid E2E acceleration metric.
+
+Frozen deployment: `outputs/experiments/esmc-startup-20261016/native/qualified-import-overlap`.
+Public profile configs/diamondhill/plm-esmc-fold2-6b-exact.json matches the measured
+candidate bytes, SHA2567c2752077b2fc950256d6ed5fb5c187a9ed5e1b072adfed0300007823c8cb825.
+It adds FIREPROT_ESMC_IMPORT_OVERLAP=1. Zero or absence preserves sequential
+startup; invalid values and opt-in for other models fail. Previous published
+profile saved as configs/diamondhill/plm-esmc-fold2-6b-pinned-loading.json.
+Both maintained changed worker files and local CLI/bridge binaries match the
+frozen deployment hashes. No Rust rebuild needed. Six CPU startup gate/selection
+tests and 13 existing OpenFold3 worker tests pass; shared ready test double now
+accepts the optional callback and asserts it is None for OpenFold3.
+
+Evidence: provenance/esmc_startup_20261016.json, docs/esmc-startup.md.
+Remote evidence.json includes diagnostic, incremental/native collections,
+measured scripts and deployment manifests. Earlier loader result1.365x remains
+historical; README now publishes direct-native1.440x. CK tiled GEMMs remain
+slower/inexact and are not promoted. Warm GEMM/graph evidence remains separate.
+
+Top-source sync prior baseline is fa188e4 (33 files previously verified under
+esmc-load-20261016/source-sync-receipt.json). For this cycle use a new backup
+under esmc-startup-20261016; inspect its source-sync-receipt.json to confirm
+completion. Do not overwrite frozen experiments, weights, outputs, Git metadata,
+Protenix or the user's untracked docs/isa.
+
+Next useful work: evaluate composition with the already exact direct FFN only
+if it improves fresh-process E2E; remaining startup hashing/import overhead needs
+proper boundary timing. Further CK effort must address exact accumulation and
+measured throughput, not repeat the rejected tile/permutation sweep. Preserve
+same-batch official bitwise gate and current HIP6 restriction.

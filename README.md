@@ -164,7 +164,7 @@ using native B4 as the reference. Every output array matches bitwise.
 
 | Standalone model, N1000 × 4 / B4 | Native → optimized E2E | Speedup | Warm forward speedup |
 | --- | ---: | ---: | ---: |
-| ESMC bundled 6B | 24.344 → 17.840 s | **1.365x** | 1.113x |
+| ESMC bundled 6B | 24.353 → 16.914 s | **1.440x** | 1.113x |
 | ESM2-3B | 38.461 → 16.464 s | **2.336x** | 1.068x |
 | ESM3-open | 12.384 → 11.461 s | **1.080x** | 2.395x |
 
@@ -173,7 +173,10 @@ The latest [ESMC loading route](docs/esmc-loading.md) converts directly into two
 reusable pinned BF16 buffers before asynchronous H2D. All 6.345 billion parameters
 and every exported array match bitwise; original checkpoint hashing remains.
 Its separate incremental comparison improves the preceding FireProt route by
-1.115x E2E. The 1.365x result above is measured directly against native.
+1.115x E2E. The subsequent [startup optimization](docs/esmc-startup.md) overlaps
+unchanged upstream module imports with Rust's ready verification, retaining the
+start gate before model construction or weight loading. It adds 1.069x over the
+pinned-loader route; the **1.440x** result above is measured directly against native.
 The ESMC CK follow-up found no acceptable improvement: the installed CK GEMM
 slowed B4 warm forward by 7.3%, and all 48 direct-tile cases failed bitwise
 projection equality. Production retains hipBLASLt; the E2E figures above are
@@ -278,7 +281,7 @@ This is an evidence-based work priority, not a forecast of additional speedup.
 
 | Model | Remaining opportunity and next step |
 | --- | --- |
-| **Standalone ESM/AtlasLM — measured N1000 routes** | Latest exact B4 complete invocation: **1.365x ESMC**, **2.336x ESM2**, **1.080x ESM3**; ESM3 warm forward **2.395x**. ESMC now uses bounded pinned loading; direct fixed GEMM has exact warm gains but mixed E2E evidence. AtlasLM retains its separate singleton/batch results. [ESMC loading](docs/esmc-loading.md), [other ESM results](docs/esm-optimization.md). |
+| **Standalone ESM/AtlasLM — measured N1000 routes** | Latest exact B4 complete invocation: **1.440x ESMC**, **2.336x ESM2**, **1.080x ESM3**; ESM3 warm forward **2.395x**. ESMC uses bounded pinned loading and import overlap; direct fixed GEMM has exact warm gains but mixed E2E evidence. AtlasLM retains its separate singleton/batch results. [ESMC startup](docs/esmc-startup.md), [other ESM results](docs/esm-optimization.md). |
 | **ESMFold2 + ESMC — qualified folding route** | Native versus opt-in packing reuse now gives **2.006x complete N1000 invocation** and **3.289x forward** with exact outputs. Profile the optimized route before testing fused HIP cast/layout packing; no additional gain is established. |
 | **OpenFold3 — current cycle closed** | Final QKV LDS padding trials gave no consistent gain. Non-forward attribution is recorded; a thread-cap comparison was rejected by the protected environment gate. The accepted E2E result remains **2.864x**. [Final trials](docs/openfold3-performance.md#final-bounded-trials-and-transition-to-esmfold2-2026-10-15). |
 | **Mini-ESM — exploratory profiling** | ESM2-3B loading/features execute outside the folding-forward timer. Establish a serial N1000 complete-invocation baseline and stage split before selecting kernels; its remaining headroom is unknown. |

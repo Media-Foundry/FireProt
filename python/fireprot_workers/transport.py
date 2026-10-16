@@ -19,7 +19,7 @@ class Channel:
         self.socket.sendall((json.dumps(envelope, allow_nan=False) + '\n').encode())
         self.sequence += 1
 
-    def ready(self, torch):
+    def ready(self, torch, prepare_cpu=None):
         torch.cuda.init()
         libraries = {line.split()[-1] for line in Path('/proc/self/maps').read_text().splitlines()
                      if '/libamdhip64.so' in line}
@@ -34,6 +34,8 @@ class Channel:
         architecture = torch.cuda.get_device_properties(0).gcnArchName.split(':')[0]
         self.emit(dict(event='ready', device=dict(worker_pid=os.getpid(), logical_device=0,
                        pci_address=pci.value.decode().lower(), architecture=architecture)))
+        if prepare_cpu is not None:
+            prepare_cpu()
         with self.socket.makefile('rb') as reader:
             start = reader.readline(4097)
         if len(start) > 4096 or json.loads(start) != {'schema_version': 1, 'command': 'start'}:

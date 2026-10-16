@@ -18,7 +18,21 @@ def main():
                 (request['workload']['model'] in ('esmfold2', 'plm') and request['backend'] == 'fireprot')):
             raise ValueError('Accelerated worker backends are not integrated yet')
         import torch
-        channel.ready(torch)
+        prepare_cpu = None
+        mode = os.environ.get('FIREPROT_ESMC_IMPORT_OVERLAP', '0')
+        if mode not in ('0', '1'):
+            raise ValueError('FIREPROT_ESMC_IMPORT_OVERLAP must be 0 or 1')
+        if mode == '1':
+            if request['workload']['model'] != 'plm' or request['workload']['model_name'] != 'esmc-fold2-6b':
+                raise ValueError('Import overlap is qualified only for standalone ESMC')
+            def prepare_cpu():
+                import esm
+                from .plm import ESM_COMMIT
+                if request['source']['commit'] != ESM_COMMIT or Path(esm.__file__).resolve().parent.parent != Path(request['source']['root']).resolve():
+                    raise ValueError('Biohub ESM imported source differs from its pin')
+                # Import definitions only. Model construction and weights wait for start.
+                from esm.models.esmc.model import EsmcModel
+        channel.ready(torch, prepare_cpu=prepare_cpu)
         if request['workload']['model'] == 'plm':
             if request['workload'].get('batch') is not None:
                 from .plm_batch import predict

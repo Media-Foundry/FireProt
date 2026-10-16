@@ -85,7 +85,9 @@ def test_worker_backend_admission(monkeypatch, tmp_path, backend, accepted):
     path.write_text(json.dumps({'backend': backend, 'workload': {'model': 'openfold3'}}))
     monkeypatch.setenv('FIREPROT_REQUEST', str(path))
     events, outputs, closed = [], [], []
-    channel = SimpleNamespace(ready=lambda torch: None, emit=events.append,
+    def ready(torch, prepare_cpu=None):
+        assert prepare_cpu is None
+    channel = SimpleNamespace(ready=ready, emit=events.append,
                               socket=SimpleNamespace(close=lambda: closed.append(True)))
     monkeypatch.setattr(entry, 'Channel', lambda request: channel)
     monkeypatch.setattr(openfold3, 'predict', lambda request, channel: {'model_called': True})

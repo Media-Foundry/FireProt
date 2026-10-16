@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "status": "gfx1100_esm2_published_gemm_verified",
+  "host": "Precision",
+  "hip_device": 0,
+  "pci_address": "0000:53:00.0",
+  "architecture": "gfx1100",
+  "model": "esm2-3b",
+  "workload": {
+    "batch": 4,
+    "length": 1000,
+    "padded_tokens": 4008,
+    "precision": "native FP32",
+    "seed": 101
+  },
+  "runtime": {
+    "python": "3.12.7",
+    "torch": "2.13.0+rocm10.0.0",
+    "hip": "7.15.26333",
+    "implementation": "gfx1100_esm2_exact_v2",
+    "qualified_gemm_calls": 216
+  },
+  "scope": "Load the already-qualified exact ESM2 C ABI library from a Rust-published, runtime-compatible bundle instead of revalidating its complete compiler and header-tree build identity in every fresh worker. Both arms execute identical library bytes and arithmetic.",
+  "bundle": {
+    "directory": "/media/990Pro/fireprot/runtime/kernels/esm2-gfx1100-exact-v2",
+    "manifest": {
+      "path": "/media/990Pro/fireprot/runtime/kernels/esm2-gfx1100-exact-v2/kernel.json",
+      "bytes": 656,
+      "sha256": "9394d872c9642bb0a617cd27268cb331b9bb76f2df88ceda85431112e3dec433"
+    },
+    "build_receipt": {
+      "path": "/media/990Pro/fireprot/runtime/kernels/esm2-gfx1100-exact-v2/build-receipt.json",
+      "bytes": 2084033,
+      "sha256": "7a170884094224f011793b342816236dd0eb26f1cefd96bd802249a1cf482360"
+    },
+    "library": {
+      "path": "/media/990Pro/fireprot/runtime/kernels/esm2-gfx1100-exact-v2/fireprot_esm2_gemm_415b14fac6e155f7f87778a42a426e075b622fe9802dc45b438adc181b2e0c9c.so",
+      "bytes": 24088,
+      "sha256": "b32e6af2d90a47d3858de9ace923c92d537406b49cfb2614ac20edac6964e690"
+    },
+    "build_identity_sha256": "415b14fac6e155f7f87778a42a426e075b622fe9802dc45b438adc181b2e0c9c",
+    "compatibility": {
+      "package": "fireprot_esm2_gemm",
+      "target": "gfx1100",
+      "torch": "2.13.0+rocm10.0.0",
+      "hip": "7.15.26333",
+      "c_abi": "esm2-periodic-stagger-gemm-v1"
+    }
+  },
+  "benchmark": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-published-gemm-pairs-20261017-v1/benchmark/benchmark.json",
+    "sha256": "8a977cdc24a918072c5316b5af9e657c42fe0df4b9f0b9c8f5a844a3bca499a3"
+  },
+  "comparison": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-published-gemm-pairs-20261017-v1/benchmark/comparison.json",
+    "sha256": "2902f75d2f27b87b65e432471cf34946131b479bc9fe25cc919ed6a43cb6751e"
+  },
+  "source_files": {
+    "python/fireprot/backends/amd/esm2_gemm.py": "c9d2695c9c225714ad8b1c063d23b389245863ebc9ed72a37976133ef9892878",
+    "tests/adapters/test_esm2_gfx1100.py": "05143ec31ab3bcda7fae09d5a028bf5465e3052251094b57b63aa57aa33da3c4",
+    "configs/precision/plm-esm2-3b-native.json": "82acf8d21dc181b6ea9a89ac12e1a948b221e3c47911b07c51341f428a5e4106"
+  },
+  "records": [
+    {"pair": 0, "arm": "baseline", "e2e_seconds": 16.980326923, "request_seconds": 11.35980056002154, "model_seconds": 7.327940019982634, "invocation_sha256": "9131407fc640c512317cde446f0fefb564fd85437c27db703c561a241c288d91", "accepted_sha256": "dba3e3b68a0c6c725b721a1f82ee314d11e21652d8c7203e1abe37caaa3df230"},
+    {"pair": 0, "arm": "candidate", "e2e_seconds": 12.808306601, "request_seconds": 7.255871463014046, "model_seconds": 3.432384836982237, "invocation_sha256": "841872fce0b2de5c7c3b05f89199a0d08bebdf4e0e794fbdfb0806e60b2b1dce", "accepted_sha256": "332ecc2f57665bb31617dfa571b5394c4a9046747c0a7a88b66e4bc5af6bb2a4"},
+    {"pair": 1, "arm": "candidate", "e2e_seconds": 13.738595238, "request_seconds": 7.479782383976271, "model_seconds": 3.459759760997258, "invocation_sha256": "53811c43d7be6d130952acbc25aaa7ba049655e3af05f0a4374df3b48d978867", "accepted_sha256": "8b96f9067a5d3c39c776df9c4de7cae7ea292b7a5603950eb4cd3857e1754ad3"},
+    {"pair": 1, "arm": "baseline", "e2e_seconds": 16.641991787, "request_seconds": 11.064358916017227, "model_seconds": 7.252484709984856, "invocation_sha256": "2d43301b06c7f022581f435612df75449614acff5f4247d24fb5a20faa2bb149", "accepted_sha256": "13559809a487680a16882da13175481b7900b730f7d5e64ff70be4d694c929d7"},
+    {"pair": 2, "arm": "baseline", "e2e_seconds": 17.569625653, "request_seconds": 11.330837789020734, "model_seconds": 7.338752243987983, "invocation_sha256": "0b96b55f4e2943c46f5d3c95a7c1eb6bf422444cb73fa9a75ec3d93f02751ded", "accepted_sha256": "3b7c284e5646fd3a2e0ac22d10204c8606369747275bfc16d0baa7e5e2554e92"},
+    {"pair": 2, "arm": "candidate", "e2e_seconds": 13.322593024, "request_seconds": 7.754053701006342, "model_seconds": 3.464065378997475, "invocation_sha256": "f5cc18cbf5b0fa8adb64ea289a34d58fe8d275fc557ae21f5ae80c7d33b5f530", "accepted_sha256": "2142a06f0f3c0947c51519f68efa662b037a57c527acf66deb044b36f5ca2cf8"}
+  ],
+  "performance": {
+    "baseline_seconds": {"count": 3, "min": 16.641991787, "median": 16.980326923, "p95": 17.569625653, "max": 17.569625653, "mean": 17.063981454333334},
+    "candidate_seconds": {"count": 3, "min": 12.808306601, "median": 13.322593024, "p95": 13.738595238, "max": 13.738595238, "mean": 13.289831621},
+    "median_speedup": 1.2745511997860155,
+    "p95_speedup": 1.2788516837881383,
+    "paired_speedups": [1.3257277056183423, 1.2113313987859111, 1.318784235272306],
+    "all_pairs_faster": true
+  },
+  "correctness": {
+    "prediction_archives_compared": 12,
+    "all_arrays_bitwise_equal": true,
+    "baseline_gemm_calls_per_run": 216,
+    "candidate_gemm_calls_per_run": 216,
+    "library_sha256_equal": true,
+    "build_identity_equal": true
+  },
+  "limitations": [
+    "Qualified only for the pinned Precision ESM2-3B B4/N1000 gfx1100 route and runtime versions.",
+    "The external bundle must retain the recorded manifest, receipt and library hashes.",
+    "The improvement removes repeated build-input verification and loading overhead; it is not a new GEMM arithmetic result."
+  ]
+}

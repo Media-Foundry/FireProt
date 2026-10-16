@@ -27,13 +27,20 @@ def load_extension() -> Any:
             import torch
             if str(torch.__version__) != '2.13.0+rocm10.0.0' or torch.version.hip != '7.15.26333':
                 raise RuntimeError('ESM2 gfx1100 GEMM requires its qualified Torch and HIP build')
-            root = pathlib.Path(os.environ.get('FIREPROT_ROCM_HOME', '/opt/rocm'))
-            from ._native_hip import load as build_native
-            source = KERNEL_ROOT / 'fireprot_esm2_gemm.hip'
-            _library, _build = build_native(
-                'fireprot_esm2_gemm', source, root, target='gfx1100',
-                compile_flags=['-ffp-contract=off'], extra_files=[__file__],
-                versions={'c_abi': 'esm2-periodic-stagger-gemm-v1'})
+            from ._published import select_c
+            published = select_c(
+                'fireprot_esm2_gemm', 'FIREPROT_ESM2_GEMM',
+                'esm2-periodic-stagger-gemm-v1')
+            if published is not None:
+                _library, _build = published
+            else:
+                root = pathlib.Path(os.environ.get('FIREPROT_ROCM_HOME', '/opt/rocm'))
+                from ._native_hip import load as build_native
+                source = KERNEL_ROOT / 'fireprot_esm2_gemm.hip'
+                _library, _build = build_native(
+                    'fireprot_esm2_gemm', source, root, target='gfx1100',
+                    compile_flags=['-ffp-contract=off'], extra_files=[__file__],
+                    versions={'c_abi': 'esm2-periodic-stagger-gemm-v1'})
             _entry = _library.fireprot_esm2_gemm
             _entry.argtypes = [ctypes.c_void_p] * 4 + [ctypes.c_int] * 3 + [ctypes.c_void_p]
             _entry.restype = ctypes.c_int

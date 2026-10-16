@@ -318,6 +318,36 @@ independently rehashed all six invocations, 66 declared artifacts and 24
 prediction archives. Full incremental evidence is in
 [`precision_esm2_mmap_gfx1100_20261017.json`](../provenance/precision_esm2_mmap_gfx1100_20261017.json).
 
+The exact gfx1100 compute route additionally replaces the 216 qualified FP32
+linear projections with a periodic-stagger HIP GEMM whose reduction order
+matches the native hipBLASLt result bit-for-bit. The first three-pair comparison
+measured 21.742772 seconds median and 21.860997 seconds p95 for native GEMMs,
+versus 19.102696 and 19.511886 seconds for the exact route: **1.138204x median**
+and **1.120394x p95**. All 12 output archives were bitwise exact. Its full
+operator evidence is in
+[`precision_esm2_exact_gemm_gfx1100_20261017.json`](../provenance/precision_esm2_exact_gemm_gfx1100_20261017.json).
+
+The maintained profile loads that same library from the Rust-published bundle
+at `runtime/kernels/esm2-gfx1100-exact-v2`, pinned by manifest SHA-256
+`9394d872c9642bb0a617cd27268cb331b9bb76f2df88ceda85431112e3dec433`.
+Acceptance rehashes the manifest, 2,084,033-byte build receipt and 24,088-byte
+library, and checks the package, gfx1100 target, Torch, HIP and C ABI identities.
+It therefore avoids rescanning compiler executables and the complete ROCm,
+Clang, system and GCC header trees in every fresh inference process without
+omitting the deployed-artifact checks.
+
+Three fresh-process AB/BA/AB pairs compared source-cache acceptance with the
+published bundle. E2E median and p95 improve from 16.980327 and 17.569626
+seconds to 13.322593 and 13.738595 seconds: **1.274551x median** and
+**1.278852x p95**. All three paired ratios improve. Model-forward medians,
+which include first use of the loader, decrease from 7.327940 to 3.459760
+seconds. All 12 prediction archives remain bitwise exact and both arms execute
+216 calls with build identity
+`415b14fac6e155f7f87778a42a426e075b622fe9802dc45b438adc181b2e0c9c`.
+This is loader/verification overhead removal, not a new arithmetic kernel.
+Full evidence is in
+[`precision_esm2_published_gemm_gfx1100_20261017.json`](../provenance/precision_esm2_published_gemm_gfx1100_20261017.json).
+
 Run either explicit B4 entry after choosing a fresh `run_id` and unused
 `output_dir`:
 

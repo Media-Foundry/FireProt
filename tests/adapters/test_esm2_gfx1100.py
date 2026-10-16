@@ -29,6 +29,23 @@ class ESM2Gfx1100SelectionTest(unittest.TestCase):
 
 
 class ESM2Gfx1100GemmTest(unittest.TestCase):
+    def test_published_c_bundle_bypasses_build_input_scan(self):
+        library = SimpleNamespace(fireprot_esm2_gemm=SimpleNamespace())
+        with mock.patch.multiple(esm2_gemm, _library=None, _entry=None,
+                                 _error=None, _build={}), \
+             mock.patch.object(torch, '__version__', '2.13.0+rocm10.0.0'), \
+             mock.patch.object(torch.version, 'hip', '7.15.26333'), \
+             mock.patch('fireprot.backends.amd._published.select_c',
+                        return_value=(library, {'mode': 'published'})) as select, \
+             mock.patch('fireprot.backends.amd._native_hip.load',
+                        side_effect=AssertionError('source build must not run')):
+            self.assertIs(esm2_gemm.load_extension(), library.fireprot_esm2_gemm)
+            select.assert_called_once_with(
+                'fireprot_esm2_gemm', 'FIREPROT_ESM2_GEMM',
+                'esm2-periodic-stagger-gemm-v1')
+            self.assertEqual(esm2_gemm.extension_status()['build'],
+                             {'mode': 'published'})
+
     def test_support_fails_closed_on_shape_dtype_and_bias(self):
         original = torch.is_grad_enabled
         torch.is_grad_enabled = lambda: False

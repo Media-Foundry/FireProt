@@ -272,12 +272,16 @@ Filesystem/GPU caches are unflushed. Scientific settings remain model-specific.
 | ESMC bundled 6B | 24.089 s | 12.267 s | **1.964x** |
 | ESM2-3B | 35.482 s | 15.489 s | **2.291x** |
 | ESM3-open | 11.830 s | 11.067 s | **1.069x** |
-| AtlasLM-3B | 14.839 s | 13.118 s | **1.131x** |
 
-All 24 pLM invocations and 96 prediction archives pass independent rehashing
+A separate **AtlasLM singleton N1000, seed102** comparison measures
+**14.839 -> 13.118 s (1.131x)**. Its initial B4 label was incorrect; the pinned
+request has no batch field. A fresh AtlasLM B4 comparison is pending.
+
+All 24 pLM invocations and 78 prediction archives pass independent rehashing
 and byte equality against the same-group native reference, including all
 requested embeddings/logits. Native precision is unchanged (ESM2 remains FP32).
-These fresh measurements supersede the historical pLM E2E values above; their
+These fresh ESM B4 and AtlasLM singleton measurements supersede their respective
+historical E2E values; the historical AtlasLM B4 result remains separate. Their
 warm-forward measurements remain separate historical observations.
 [Raw timings, pins and independent checks](provenance/e2e_refresh_plm_20261016.json).
 

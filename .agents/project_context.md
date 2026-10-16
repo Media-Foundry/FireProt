@@ -7547,3 +7547,16 @@ Fullrefreshcollector verifiesrecords andexactwithinarm; strictcrossarm/CIF for
 plm/atlasfold/openfold3/esmfold2, normalProtenixRust gates; Base separatecollectorneeded.
 Currentlocalfilesnew/modifiedREADME,.summary,docs/precision-setup.md,experiments/
 e2e_refresh,twoprovenancefiles,context. No maintainedmodel/kernel/runtime edits.
+
+
+### Immediate AtlasLM workload-label correction
+
+Recipe audit found the reused qualified-assign/atlaslm-3b-pairs.json is SINGLETON
+N1000 seed102, not B4. Timing14.839205528->13.117877316s1.131220027x is valid only
+for singleton. Previous note saying fourB4models/96archives is superseded:
+actual24invocations78archives (threeESMmodels*24 plusAtlasLM6). README/summary/
+pLMprovenance corrected; newpublickeyatlaslm-singleton retainsoriginalpaths.
+ESMC/2/3B4 results correct. Need add a trueAtlasLMB4 case usingB4request+latest
+qualified-assignprofile, threepairs, andqueueitafteractiveGPUstudies. Do not
+repeat the original mistakenly labelledcase. Add explicit expectedbatch assertions
+inpreparation/collector; request scientific fields are authoritative.

@@ -7118,3 +7118,80 @@ cost remains a separate candidate. A lazy FFN candidate remains disabled due mix
 single-group E2E; if tested with this resident path, measure full composition.
 Top-source sync baseline909c6b9; use a fresh backup in this experiment root and
 source-sync-receipt.json. Never sync weights, outputs, Git metadata or docs/isa.
+
+
+## 2026-10-16 ESMC resident64 lazy FFN composition and monitor diagnosis
+
+Goal remains active; previous pointwise turn was progress and this cycle adds
+verified resident64 progress. Worktree base15d8b7f. HIP6 only /PCI0000:8e:00.0 /
+SMI4. All GPU jobs finished and SMI4 idle. No default worker/binary/profile change.
+
+Root outputs/experiments/esmc-resident-gemm-20261016. New isolated deployment
+qualified-resident-gemm copies the prior frozen pointwise deployment, adds the
+unchanged esmc_lt_lazy_scope.py and a pinned hip_esmc_lt resource. Runtime enters
+lazy FFN scope plus existing residual4/SwiGLU8 scopes. Both arms retain pointwise,
+pinned loading/import overlap/hash8/localCPU; only fixed-GEMM flag/profile differ.
+Native library unchanged SHA7b554428ba5a79ed1ef2f107f8e4d8ba8e306352a8efa88c0b116f04f1fdedb4,
+from esmc-gemm-order-20261016 lt-kernel-cache. Algo4139 and support/version guards.
+
+Three AB/BA/AB complete invocation pairs each, N1000/B4/nativeBF16/seed101/HIP6,
+fresh workers/unflushed caches/full hashes/all exports:
+- Single B4:12.736230105->12.648519735s1.006934438x; paired1.008058162,
+  0.999944138,1.006934438. Second candidate0.705325ms slower; default unchanged.
+  Forward1.247356972->1.219238454s1.0231x.
+- Resident64:23.168709389->22.914642824s1.011087520x; paired1.036471629,
+  1.011087520,1.006121250, allfaster. Candidate max22.958893<baseline23.796241.
+  First baseline noticeably slower; do not use largest ratio as typical.
+  Forward9.789301544->9.283599057s1.0545x.
+Independent collector rehashes12invocations408archives+68native reference archives,
+476total, compares all bytes and identical asset provenance/grouping/physicalGPU.
+References unchanged: esmc-load.../validation/native-pairs/baseline-1 and
+esmc-pointwise.../validation/native64. All exact. Each group80directFFN calls,
+plan created only firstgroup (~2ms) then reused. Workspace is0 (valid support
+check result). Initial unused collector wrongly required>0; finalcollector
+corrected before execution. Original and final versions retained remotely.
+
+New optional configs/diamondhill/plm-esmc-fold2-6b-resident-gemm.json retains
+measured profile SHA49756ab6310a7898b2556212d74837dbbaf7df519997b78ddb598561ec67b004.
+Request configs/requests/plm-esmc-fold2-6b-resident64-gemm.json adds pinnedLt
+resource to unchanged prior64-input manifest. Frozen CLI+worker required;
+FIREPROT_ESMC_FIXED_GEMM=0 selects pointwise control. Prior pointwise profile stays
+unchanged and reproducible. Direct-native B4 remains1.911x; do not multiply ratios
+or claim new direct-native resident64 result. Evidence provenance/esmc_resident_gemm_20261016.json,
+docs/esmc-resident-gemm.md; README and pointwise doc link to successor.
+
+After GPU pairs+independent collector, one isolated defaultB4 monitor diagnostic
+wraps original /usr/bin/amd-smi and forwards arguments/stdout/stderr/status intact.
+No checks or monitor intervals changed. Root monitor-diagnostic includes wrapper,
+smi-calls.jsonl, report and prediction. Four outputs exact to official reference.
+7isolation samples cause8list calls median0.311816222s sum2.562860192s and
+7process calls median0.319324076s sum2.249629956s,4.812490148s total. Invocation
+12.825705630s/supervisor9.054242336s/forward1.307014560s is diagnostic, NOT benchmark.
+SMI calls overlap worker; total is NOT recoverable critical-path E2E savings.
+RealCLI SHA fed9e6cd65b4ecbc64e8453331ebaa288870c60178a5e714a153156d774a9613.
+
+Next substantial candidate: reduce SMI subprocess startup overhead while retaining
+every identity/process check and interval. Rust AmdSmiMonitor in device.rs uses
+separate list/process commands on every sample. It revalidates SMI->PCI eachsample;
+supervisor default monitor_interval250ms, timeout/process-group/output bounds in
+command.rs. Do NOT skip/reducechecks to manufacture speedup. No alternate monitor
+has been implemented/qualified yet. Need parity/failure/active-PID checks before
+E2E. Installed native lib /opt/rocm/lib/libamd_smi.so.27.0.0, header
+/opt/rocm/include/amd_smi/amdsmi.h. CLI /usr/bin/amd-smi resolves to
+/opt/rocm/core-10.0/libexec/amdsmi_cli/amdsmi_cli.py. Python binding:
+/opt/rocm/share/amd_smi/amdsmi/amdsmi_interface.py:1225 enumerates sockets then
+processorhandles in returned order (no extra sort there). :3657 uses
+amdsmi_get_gpu_process_list, excludes only its own PID, errors propagate.
+Header documents OUT_OF_RESOURCES retry/size growth, and a one-second timing
+warning for process-info validity; investigate exact PID-detection semantics,
+do not assume faster initialization is safe without active-process tests.
+Original monitor JSON needs only list gpu+bdf and process gpu+process_list with
+process_info.pid or sole No running processes detected sentinel. Native helper
+must preserve fail-closed behavior; Rust workspace forbids unsafe code.
+
+New scripts prepare_esmc_resident_gemm_pairs.py, collect_esmc_resident_gemm_pairs.py,
+profile_esmc_monitor.py. Frozen collector named *_final.py; latter imports frozen
+collect_esmc_pointwise_pairs.py helpers. Request inspect/Python syntax/diff checks
+passed. Top-source sync baseline15d8b7f; fresh backup in this experiment root,
+inspect source-sync-receipt.json for actual completion. Preserve docs/isa and
+exclude runtime/outputs/Gitmetadata/Protenix from source sync.

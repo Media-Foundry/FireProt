@@ -100,6 +100,9 @@ together. `FIREPROT_ESMC_POINTWISE=0` selects the measured control in that same
 deployment. The general public `plm-esmc-fold2-6b-exact.json` remains unchanged.
 
 Full evidence: [pointwise build, screen and E2E qualification](../provenance/esmc_pointwise_20261016.json).
+The subsequent [lazy FFN composition](esmc-resident-gemm.md) measures a further
+1.0111x for resident64 and exposes a separate experimental request/profile.
+The original pointwise entry above remains unchanged for reproduction.
 
 ## Retained setup failures
 

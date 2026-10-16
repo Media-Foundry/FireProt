@@ -202,6 +202,10 @@ byte-identical to official same-batch execution. A separate experimental
 [resident64 entry](docs/esmc-pointwise.md#experimental-resident64-entry) is available.
 One B4 group has no E2E gain (12.619 -> 12.644 s), so the default profile and
 the direct-native **1.911x** result above remain unchanged.
+The subsequent [lazy FFN composition](docs/esmc-resident-gemm.md) adds another
+measured **1.0111x** over that pointwise route for resident64:
+**23.169 -> 22.915 s**, all three pairs faster and official same-batch outputs
+byte-identical. It has a separate experimental entry; single-group results remain mixed.
 Warm forward excludes loading/export and is measured independently. See
 [exact-route commands and evidence](docs/esm-optimization.md). ESM3's separate
 64-input resident workload (sixteen B4 groups) improves **20.212 → 15.490 s

@@ -6668,3 +6668,35 @@ checks pass. GitNexus actual local index is named FireProt (capitalization matte
 17 affected flows include shared request admission and ESM dispatch/loading.
 The broader critical graph label was reviewed against these contracts and tests.
 No upstream edits, no Triton, no user ISA changes. No active goal was created.
+
+
+## 2026-10-16 ESMC CK follow-up: no promoted candidate
+
+Work remains on master. HIP6 only (PCI 0000:8e:00.0 / SMI4); all jobs finished
+and SMI4 reports no processes. Experiment:
+`/media/IntelSSD/fireprot/outputs/experiments/esmc-ck-20261016`.
+The qualified-v2 deployment and production dispatch were not modified.
+
+Installed Torch CK GEMM really dispatches XDL CShuffle v3 (profiler evidence),
+but chooses 128x128x64 for all eight N1000 B1/B4 projection shapes. With the
+existing exact HIP scope on both arms, warm forward is 170.982 -> 174.732 ms
+(B1, 0.979x), 576.751 -> 618.956 ms (B4, 0.932x). Native same-batch embedding
+max absolute differences are 1.1875 and 1.25; all values are finite. No acceptance.
+
+Six direct CK C ABI variants were built through Rust build-hip and tested on
+four first-block projections at B1/B4 (48 executed combinations). None pass
+bitwise projection equality. Best tile is 128x128/K32/MFMA32: up/gate alone is
+1.058x/1.081x; QKV, attention output and down are slower. No direct candidate
+advances to full-model acceptance. CK SDPA is not compiled into installed Torch;
+attention was not measured. Future custom CK work must address native-compatible
+accumulation order before promoting performance gains. Production B4 E2E stays
+23.795 -> 19.917 seconds (1.195x), from the prior validated cycle.
+
+Evidence: `provenance/esmc_ck_screen_20261016.json`; scripts and HIP source under
+`experiments/plm/{screen_esmc_ck.py,screen_esmc_ck_tiles.py,esmc_ck_tiles.hip}`.
+Remote artifact/source/report/trace hashes were verified; full build receipt is
+retained remotely. Build attempts exposed MFMA16 store-vector and K128 LDS
+constraints, corrected before GPU trials. An initial script used the monomer
+input reader and stopped before model loading; the measured script uses Rust's
+batch plan. No source synchronization into the remote top-level checkout was
+performed in this follow-up; only the new isolated experiment directory changed.

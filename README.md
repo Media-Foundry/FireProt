@@ -169,6 +169,10 @@ using native B4 as the reference. Every output array matches bitwise.
 | ESM3-open | 12.384 → 11.461 s | **1.080x** | 2.395x |
 
 These measurements preserve native precision; ESM2 still computes in FP32.
+The ESMC CK follow-up found no acceptable improvement: the installed CK GEMM
+slowed B4 warm forward by 7.3%, and all 48 direct-tile cases failed bitwise
+projection equality. Production retains hipBLASLt; the E2E figures above are
+unchanged. See [CK diagnostics](docs/esm-optimization.md#esmc-ck-follow-up-rejected-candidates).
 Warm forward excludes loading/export and is measured independently. See
 [exact-route commands and evidence](docs/esm-optimization.md). ESM3's separate
 64-input resident workload (sixteen B4 groups) improves **20.212 → 15.490 s

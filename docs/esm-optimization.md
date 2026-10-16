@@ -96,6 +96,68 @@ and ESM3 logits also change. These candidates fail the approved bitwise gate and
 are rejected. Explicitly selecting `cublaslt` reproduces the existing default and
 gives approximately 1.000x. No GEMM-backend change is promoted.
 
+### ESMC CK follow-up: rejected candidates
+
+The 2026-10-16 follow-up tested actual ESMC activations on HIP6 with the same
+four N1000 inputs, seed101 and native BF16. It used the frozen `qualified-v2`
+deployment. These are operator and warm-forward diagnostics, not complete
+invocation measurements. All timings use resident weights and unflushed caches.
+See [the complete CK evidence](../provenance/esmc_ck_screen_20261016.json).
+
+Selecting PyTorch's `preferred_blas_library("ck")` really dispatched CK kernels:
+the retained profiler traces identify `kernel_gemm_xdl_cshuffle_v3_multi_d`.
+All eight tested projection shapes selected the same 128x128x64 tile. Both
+forward arms retain the already qualified HIP RoPE/SwiGLU scope; each arm is
+checked against the official implementation with identical batch grouping.
+
+| Batch | Current FireProt warm forward | With installed CK GEMM | Ratio | Final embedding max absolute difference |
+| --- | ---: | ---: | ---: | ---: |
+| B1 | 170.982 ms | 174.732 ms | 0.979x | 1.1875 |
+| B4 | 576.751 ms | 618.956 ms | 0.932x | 1.25 |
+
+These are medians of nine observations per arm in three AB/BA/AB pairs,
+with two warmups per arm. Differences are embedding values, not coordinate
+distances. Outputs remain finite but fail bitwise acceptance.
+
+A separate C ABI experiment built six direct CK variants through Rust
+`build-hip`: 128x128 with K32/K64/K128, 256x128/K32, 128x256/K32,
+and 128x128/K64 with MFMA16 instead of MFMA32. It tested the first block's
+QKV, attention output, FFN up/gate and FFN down projections at B1 and B4.
+All **48 combinations executed**, and none reproduced the native projection
+output bitwise. Each timing pair includes four warmups and twenty calls per
+arm, using HIP events; three pairs alternate AB/BA/AB. The direct CK output
+buffer is preallocated, while `F.linear` allocates its result, so these numbers
+must not be interpreted as complete operator-integration or E2E gains.
+
+| Projection | Best tested speedup over hipBLASLt, B1 | B4 |
+| --- | ---: | ---: |
+| QKV | 0.939x | 0.945x |
+| Attention output | 0.908x | 0.860x |
+| FFN up/gate | 1.058x | 1.081x |
+| FFN down | 0.653x | 0.718x |
+
+The best variant in every row was 128x128/K32/MFMA32. The small up/gate gain
+fails the numerical gate; the other projections are slower. No direct variant
+advances to full-model acceptance. Larger tiles alone did not solve this case.
+The installed Torch build reports CK SDPA unavailable; CK attention was not
+measured, and no attention speedup is claimed.
+
+Production dispatch and the published **1.195x B4 complete-invocation result**
+remain unchanged. Further CK work should first establish a GEMM accumulation
+order that matches the native implementation, then test shape-specific scheduling
+or a BF16-rounding-preserving FFN epilogue. The present evidence does not rule
+out all CK implementations; it rejects the installed default and these six tiles.
+
+Reproduction sources are `experiments/plm/screen_esmc_ck.py`,
+`experiments/plm/esmc_ck_tiles.hip` and
+`experiments/plm/screen_esmc_ck_tiles.py`. The first script takes a batch request
+and a fresh output directory; the tile script additionally takes the built shared
+library before the output directory. Set `HIP_VISIBLE_DEVICES=6`, remove
+`CUDA_VISIBLE_DEVICES` and `ROCR_VISIBLE_DEVICES`, and use the exact profile's
+Python, environment and worker/source paths. Remote scripts, build specification,
+full build receipt, traces and reports are retained under
+`outputs/experiments/esmc-ck-20261016`; their SHA-256 values are in the evidence.
+
 ## Complete invocation and reproduction
 
 Final measurements use fresh processes on HIP6 / PCI `0000:8e:00.0`, seed101,

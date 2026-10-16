@@ -35,6 +35,8 @@ struct Settings {
     cache_state: String,
     treatment_description: String,
     expected_changes: BTreeMap<String, Difference>,
+    #[serde(default)]
+    monitor_treatment: bool,
 }
 
 #[derive(Serialize)]
@@ -70,23 +72,26 @@ fn compare(
             },
         )
     };
-    comparison::run(comparison::Specification::new(
-        if baseline_repeat {
-            format!(
-                "Baseline repeat consistency: {}",
-                settings.treatment_description
-            )
-        } else {
-            settings.treatment_description.clone()
-        },
-        if baseline_repeat {
-            BTreeMap::new()
-        } else {
-            settings.expected_changes.clone()
-        },
-        collection(a),
-        collection(b),
-    ))
+    comparison::run(
+        comparison::Specification::new(
+            if baseline_repeat {
+                format!(
+                    "Baseline repeat consistency: {}",
+                    settings.treatment_description
+                )
+            } else {
+                settings.treatment_description.clone()
+            },
+            if baseline_repeat {
+                BTreeMap::new()
+            } else {
+                settings.expected_changes.clone()
+            },
+            collection(a),
+            collection(b),
+        )
+        .with_monitor_treatment(settings.monitor_treatment && !baseline_repeat),
+    )
 }
 
 pub fn run(specification: Specification, destination: &Path) -> Result<Outcome> {
@@ -104,6 +109,9 @@ pub fn run(specification: Specification, destination: &Path) -> Result<Outcome> 
     }
     let cancelled = cancellation()?;
     let settings = specification.comparison;
+    if settings.monitor_treatment && settings.scope != TimingScope::EndToEnd {
+        return Err("monitor treatment requires end-to-end timing".into());
+    }
     let prepared =
         experiment::Plan::load(specification.execution)?.prepare(destination, |bytes| {
             inference::validate_profile(bytes).map_err(|e| std::io::Error::other(e.to_string()))

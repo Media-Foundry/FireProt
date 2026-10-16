@@ -77,7 +77,7 @@ The 64-input reference is an additional official native run, not an extra
 performance pair. All 476 archives pass; original checkpoint checks and the
 physical GPU identity remain verified. No numerical tolerance is relaxed.
 
-The published direct-native B4 E2E result remains **1.911x**. The new 1.0294x
+At this experiment's completion, the published direct-native B4 E2E result was **1.911x**. The new 1.0294x
 is incremental over current FireProt for a different, resident64 workload;
 do not multiply the ratios or claim a new direct-native resident64 ratio.
 
@@ -97,7 +97,8 @@ outputs/experiments/esmc-pointwise-20261016/validation/qualified-pointwise/targe
 This is a DiamondHill deployment example with pinned experiment assets, including
 the 64-sequence input manifest and native library. Use the frozen worker and CLI
 together. `FIREPROT_ESMC_POINTWISE=0` selects the measured control in that same
-deployment. The general public `plm-esmc-fold2-6b-exact.json` remains unchanged.
+deployment. This pointwise experiment did not change the public default. The later
+[native-monitor update](esmc-native-monitor.md) changes only that monitoring route.
 
 Full evidence: [pointwise build, screen and E2E qualification](../provenance/esmc_pointwise_20261016.json).
 The subsequent [lazy FFN composition](esmc-resident-gemm.md) measures a further

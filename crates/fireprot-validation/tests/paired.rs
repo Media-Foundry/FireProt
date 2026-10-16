@@ -104,6 +104,75 @@ fn declared_changes_must_match_exact_values_and_input_names_are_not_array_indice
 }
 
 #[test]
+fn monitor_replacement_requires_e2e_opt_in_and_exact_declaration() {
+    let mut a = series("a", &[10.]);
+    let mut b = series("b", &[5.]);
+    for (series, digest) in [(&mut a, "old"), (&mut b, "new")] {
+        let observation = &mut series.observations[0];
+        observation.scope = TimingScope::EndToEnd;
+        let mut launch: serde_json::Value =
+            serde_json::from_str(&observation.environment["launch"]).unwrap();
+        launch["inputs"]
+            .as_array_mut()
+            .unwrap()
+            .push(json!({"name":"amd-smi","sha256":digest}));
+        for name in ["hip-probe", "worker-entry"] {
+            launch["inputs"]
+                .as_array_mut()
+                .unwrap()
+                .push(json!({"name":name,"sha256":"same"}));
+        }
+        observation
+            .environment
+            .insert("launch".into(), launch.to_string());
+    }
+    assert!(paired::differences(&a, &b).is_err());
+    let changes = paired::differences_with_monitor_treatment(&a, &b, true).unwrap();
+    assert_eq!(changes.len(), 1);
+    assert!(changes.contains_key("launch.inputs.amd-smi"));
+    assert!(paired::compare(&a, &b, &changes).is_err());
+    assert!(paired::compare_with_monitor_treatment(&a, &b, &BTreeMap::new(), true).is_err());
+    assert!(paired::compare_with_monitor_treatment(&a, &b, &changes, true).is_ok());
+    let mut wrong = changes.clone();
+    wrong.get_mut("launch.inputs.amd-smi").unwrap().candidate = Some(json!("wrong"));
+    assert!(paired::compare_with_monitor_treatment(&a, &b, &wrong, true).is_err());
+
+    // Changing any other protected executable remains forbidden even with opt-in.
+    let copy = || TimingSeries {
+        schema_version: b.schema_version,
+        observations: b.observations.clone(),
+    };
+    for name in ["supervisor", "hip-probe", "worker-entry"] {
+        let mut protected = copy();
+        let o = &mut protected.observations[0];
+        let mut launch: serde_json::Value = serde_json::from_str(&o.environment["launch"]).unwrap();
+        let input = launch["inputs"]
+            .as_array_mut()
+            .unwrap()
+            .iter_mut()
+            .find(|v| v["name"] == name)
+            .unwrap();
+        input["sha256"] = json!("changed");
+        o.environment.insert("launch".into(), launch.to_string());
+        assert!(paired::differences_with_monitor_treatment(&a, &protected, true).is_err());
+    }
+    // A monitor cannot be added or removed under the replacement permission.
+    let mut missing = copy();
+    let o = &mut missing.observations[0];
+    let mut launch: serde_json::Value = serde_json::from_str(&o.environment["launch"]).unwrap();
+    launch["inputs"]
+        .as_array_mut()
+        .unwrap()
+        .retain(|v| v["name"] != "amd-smi");
+    o.environment.insert("launch".into(), launch.to_string());
+    assert!(paired::differences_with_monitor_treatment(&a, &missing, true).is_err());
+    assert!(paired::differences_with_monitor_treatment(&missing, &a, true).is_err());
+    a.observations[0].scope = TimingScope::Model;
+    b.observations[0].scope = TimingScope::Model;
+    assert!(paired::differences_with_monitor_treatment(&a, &b, true).is_err());
+}
+
+#[test]
 fn model_gates_keep_full_array_diagnostics_separate_from_protenix_acceptance() {
     use fireprot_validation::{
         array::{Array, DType},

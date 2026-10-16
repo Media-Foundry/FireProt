@@ -581,6 +581,14 @@ fn paired_cli_withholds_performance_when_resealed_finite_outputs_disagree() {
 fn benchmark_spec(root: &Path, mode: &str) -> Value {
     let (request, profile) = fixture(root);
     let mut other_profile = profile.clone();
+    if mode == "monitor" {
+        let source = fs::read_to_string(root.join("amd-smi")).unwrap();
+        executable(
+            &root.join("other-monitor"),
+            &(source + "\n# independently identified monitor fixture\n"),
+        );
+        other_profile["amd_smi"] = json!(root.join("other-monitor"));
+    }
     if mode == "numeric_failure" {
         let bad = root.join("bad-fixture");
         fs::create_dir(&bad).unwrap();
@@ -628,16 +636,28 @@ fn benchmark_spec(root: &Path, mode: &str) -> Value {
         );
         pairs.push(Value::Object(arms));
     }
-    let changes = if mode == "numeric_failure" {
+    let changes = if mode == "monitor" {
+        let identity = |name: &str| {
+            json!({"name":"amd-smi","canonical_path":root.join(name).canonicalize().unwrap(),
+            "sha256":sha256(&root.join(name)).unwrap()})
+        };
+        json!({"launch.inputs.amd-smi":{"baseline":identity("amd-smi"),"candidate":identity("other-monitor")},
+            "invocation.profile_sha256":{"baseline":pairs[0]["baseline"]["profile"]["sha256"],
+                                          "candidate":pairs[0]["candidate"]["profile"]["sha256"]}})
+    } else if mode == "numeric_failure" {
         json!({"launch.environment.FIREPROT_TEST_FIXTURE":{
         "baseline":profile["environment"]["FIREPROT_TEST_FIXTURE"],"candidate":other_profile["environment"]["FIREPROT_TEST_FIXTURE"]}})
     } else {
         json!({})
     };
-    json!({"schema_version":1,"execution":{"schema_version":1,"timeout_seconds":if mode=="deadline" {1} else {60},
+    let mut specification = json!({"schema_version":1,"execution":{"schema_version":1,"timeout_seconds":if mode=="deadline" {1} else {60},
         "invocation_timeout_seconds":30,"pairs":pairs},
         "comparison":{"scope":if mode=="numeric_failure" {"model"} else {"end_to_end"},
-            "cache_state":"synthetic scheduler fixture","treatment_description":"synthetic repeat comparison","expected_changes":changes}})
+            "cache_state":"synthetic scheduler fixture","treatment_description":"synthetic repeat comparison","expected_changes":changes}});
+    if mode == "monitor" {
+        specification["comparison"]["monitor_treatment"] = json!(true);
+    }
+    specification
 }
 
 fn benchmark_command(root: &Path, spec: &Value) -> Command {
@@ -647,6 +667,50 @@ fn benchmark_command(root: &Path, spec: &Value) -> Command {
         .current_dir(root)
         .args(["benchmark-pairs", "benchmark-spec.json", "benchmark"]);
     command
+}
+
+#[test]
+fn benchmark_monitor_treatment_is_explicit_and_preserves_all_archive_checks() {
+    let d = tempfile::tempdir().unwrap();
+    let root = d.path();
+    let mut spec = benchmark_spec(root, "monitor");
+    spec["execution"]["timeout_seconds"] = json!(180);
+    let output = benchmark_command(root, &spec).output().unwrap();
+    assert!(
+        output.status.success(),
+        "{}\n{}",
+        String::from_utf8_lossy(&output.stderr),
+        fs::read_to_string(root.join("benchmark/benchmark.json")).unwrap_or_default()
+    );
+    let report: Value =
+        serde_json::from_slice(&fs::read(root.join("benchmark/benchmark.json")).unwrap()).unwrap();
+    assert_eq!(report["phase"], "succeeded");
+    assert_eq!(report["checks"].as_array().unwrap().len(), 5);
+    let comparison: Value =
+        serde_json::from_slice(&fs::read(report["comparison"]["path"].as_str().unwrap()).unwrap())
+            .unwrap();
+    assert_eq!(comparison["monitor_treatment"], true);
+    assert_eq!(comparison["correctness_passed"], true);
+    assert_eq!(
+        comparison["performance"]["changes"],
+        spec["comparison"]["expected_changes"]
+    );
+}
+
+#[test]
+fn monitor_treatment_in_model_scope_is_rejected_before_any_launch() {
+    let d = tempfile::tempdir().unwrap();
+    let root = d.path();
+    let mut spec = benchmark_spec(root, "success");
+    spec["comparison"]["scope"] = json!("model");
+    spec["comparison"]["monitor_treatment"] = json!(true);
+    let output = benchmark_command(root, &spec).output().unwrap();
+    assert!(!output.status.success());
+    assert!(
+        String::from_utf8_lossy(&output.stderr).contains("monitor treatment requires end-to-end")
+    );
+    assert!(!root.join("benchmark").exists());
+    assert!(!root.join("bench-baseline-0").exists());
 }
 
 #[test]

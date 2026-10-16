@@ -2,8 +2,9 @@
 
 This experiment adds the previously exact lazy hipBLASLt FFN up/gate projection
 to the [residual/SwiGLU pointwise route](esmc-pointwise.md). It improves the
-measured resident64 workload slightly; the default single-group profile and its
-**1.911x direct-native E2E** result remain unchanged.
+measured resident64 workload slightly. At this experiment's completion the default
+single-group profile and its **1.911x direct-native E2E** result were unchanged.
+The subsequent [native-monitor update](esmc-native-monitor.md) is measured separately.
 
 ## Complete invocation
 

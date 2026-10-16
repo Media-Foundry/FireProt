@@ -87,6 +87,14 @@ authorization. The guard cannot move between threads. No Python affinity mutatio
 or unsafe post-fork callback is required. Launch settings and full verification
 remain recorded; the qualified ESMC mask is specific to DiamondHill.
 
+The ESMC profiles now use a qualified one-shot native AMD SMI query executable.
+Rust's existing monitor still owns identity matching, process isolation, sampling
+and failure policy. The C++ helper exposes only the required read-only SDK calls,
+without adding unsafe FFI to Rust. It is bound by the `amd-smi` launch input hash.
+Only explicit E2E comparisons may opt into `monitor_treatment`; exact identity
+changes remain mandatory and all other protected executables remain protected.
+See [monitor qualification and E2E evidence](esmc-native-monitor.md).
+
 ## Historical operator implementation
 
 The pre-migration implementation used `fireprot/ops`, `fireprot/backends/amd`, `fireprot/adapters/protenix` and `fireprot/validation`. Those Python boundaries now live under `python/fireprot`; Rust owns shared policy and maintained validation. Historical reproduction tools remain under `benchmarks/protenix`. The independent Protenix checkout exposes `fireprot` choices for triangle multiplication and triangle attention while retaining its upstream torch defaults.

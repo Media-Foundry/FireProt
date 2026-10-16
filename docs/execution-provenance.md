@@ -69,6 +69,14 @@ retargeted input or mismatched executable prevents successful acceptance.
 
 ## Scope and remaining work
 
+For an independently qualified monitor replacement, E2E comparison specifications
+may set `monitor_treatment: true` and declare exact `launch.inputs.amd-smi`
+identity changes. It defaults to false, cannot add/remove a monitor, and is
+rejected outside E2E timing. Other protected programs and scientific conditions
+remain immutable. Baseline-repeat checks retain default protection; all normal
+archive/content checks still run. This comparison option does not qualify a
+monitor implementation by itself. See the [native ESMC monitor](esmc-native-monitor.md).
+
 This is launch provenance on a trusted host, not a hermetic process sandbox or a
 complete Python package lock. It does not inventory all installed distributions,
 late-loaded shared libraries, driver state or external caches. Dynamic dependencies

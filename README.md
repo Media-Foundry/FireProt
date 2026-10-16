@@ -164,7 +164,7 @@ using native B4 as the reference. Every output array matches bitwise.
 
 | Standalone model, N1000 × 4 / B4 | Native → optimized E2E | Speedup | Warm forward speedup |
 | --- | ---: | ---: | ---: |
-| ESMC bundled 6B | 24.240 → 12.685 s | **1.911x** | 1.113x |
+| ESMC bundled 6B | 23.914 → 12.647 s | **1.891x** | 1.113x |
 | ESM2-3B | 38.461 → 16.464 s | **2.336x** | 1.068x |
 | ESM3-open | 12.384 → 11.461 s | **1.080x** | 2.395x |
 
@@ -179,8 +179,13 @@ start gate before model construction or weight loading. It adds 1.069x over the
 pinned-loader route. The latest [Rust host scheduling](docs/esmc-host-scheduling.md)
 uses eight full-file verification threads and worker CPU affinity local to HIP6.
 Its separate incremental comparisons improve E2E by 1.260x and 1.021x;
-the **1.911x** result above is measured directly against native, with no hashes
+that cycle's **1.911x** result was measured directly against native, with no hashes
 or outputs omitted. These host improvements are not GPU-kernel speedups.
+The current [native AMD SMI monitor](docs/esmc-native-monitor.md) preserves all
+device/process checks and improves E2E by **1.021x** for B4 and **1.025x** for
+resident64 over their respective current routes. The fresh direct-native B4
+comparison gives the **1.891x** shown above; earlier and current run medians are
+not combined. Every output remains bitwise equal, and isolation sampling increases.
 The ESMC CK follow-up found no acceptable improvement: the installed CK GEMM
 slowed B4 warm forward by 7.3%, and all 48 direct-tile cases failed bitwise
 projection equality. Production retains hipBLASLt; the E2E figures above are
@@ -200,8 +205,8 @@ For **64 N1000 inputs, sixteen B4 groups**, E2E improves **23.737 -> 23.059 s
 (1.0294x over current FireProt)**, with all three pairs faster and every output
 byte-identical to official same-batch execution. A separate experimental
 [resident64 entry](docs/esmc-pointwise.md#experimental-resident64-entry) is available.
-One B4 group has no E2E gain (12.619 -> 12.644 s), so the default profile and
-the direct-native **1.911x** result above remain unchanged.
+One B4 group has no E2E gain (12.619 -> 12.644 s), so pointwise fusion remains
+an experimental resident-batch option.
 The subsequent [lazy FFN composition](docs/esmc-resident-gemm.md) adds another
 measured **1.0111x** over that pointwise route for resident64:
 **23.169 -> 22.915 s**, all three pairs faster and official same-batch outputs

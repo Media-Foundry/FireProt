@@ -1,5 +1,9 @@
 # ESMC Rust host scheduling
 
+Historical cycle: the subsequent [native monitor](esmc-native-monitor.md) is now
+the public ESMC route. This document retains the original host-scheduling
+measurements and uses the preserved original-monitor profile for reproduction.
+
 The standalone ESMC B4 profile now uses eight Rust verification threads and a
 worker CPU mask local to HIP6. Full original asset hashing, native BF16 model
 semantics, output export and bitwise acceptance remain enabled. The qualified
@@ -77,7 +81,7 @@ qualification use the final build; each retains its own binary/source hashes.
 
 The existing request remains valid:
 `configs/requests/plm-esmc-fold2-6b-b4-n1000-exact.json`.
-The public profile `configs/diamondhill/plm-esmc-fold2-6b-exact.json` sets:
+The preserved profile `configs/diamondhill/plm-esmc-fold2-6b-host-scheduling.json` sets:
 
 ```json
 {
@@ -94,7 +98,7 @@ directory in a copied request. The reproducible command there is:
 ```bash
 cd /media/IntelSSD/fireprot
 outputs/experiments/esmc-host-20261016/native-final/qualified-hash8/target/release/fireprot \
-  esm /tmp/esmc-request.json configs/diamondhill/plm-esmc-fold2-6b-exact.json
+  esm /tmp/esmc-request.json configs/diamondhill/plm-esmc-fold2-6b-host-scheduling.json
 ```
 
 Use this measured CLI or rebuild the current Rust workspace; older CLIs reject

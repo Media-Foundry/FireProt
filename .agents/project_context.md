@@ -7195,3 +7195,59 @@ collect_esmc_pointwise_pairs.py helpers. Request inspect/Python syntax/diff chec
 passed. Top-source sync baseline15d8b7f; fresh backup in this experiment root,
 inspect source-sync-receipt.json for actual completion. Preserve docs/isa and
 exclude runtime/outputs/Gitmetadata/Protenix from source sync.
+
+## 2026-10-16 ESMC native AMD SMI monitor qualification
+
+Supersedes the preceding unimplemented-monitor note. Maintained source is
+kernels/amd/tools/fireprot_smi_probe.cpp, byte-identical to the measured frozen
+source (SHA0c4d36911febfa5290407af263d9c77751ecce6cb084f21ca570246c61460518).
+Remote root: outputs/experiments/esmc-native-monitor-20261016. HIP6 only,
+PCI0000:8e:00.0/SMI4, N1000/B4/nativeBF16/seed101, fresh workers, unflushed caches,
+full checkpoint hashes and exports. All GPU work completed before source sync.
+
+Three AB/BA/AB pairs per comparison:
+- Monitor-only B4:12.695922563->12.432902729s,1.021155143x; all pairs faster.
+- Monitor-only resident64/latest lazyFFN:22.793356963->22.232328395s,
+  1.025234809x; all pairs faster.
+- New direct original-native B4 comparison:23.913581708->12.646610640s,
+  1.890908354x. This replaces historical1.911x as current direct result;
+  do not multiply incremental ratios or mix medians across batches.
+Incremental forward medians B4 1.290276->1.303267s, resident64 9.252227->9.222229s:
+this is host overhead reduction, not a new GPU kernel gain. Isolation samples
+increase 8->11 (B4), median18->24 (resident64). All18invocations/432archives
+pass Rust acceptance and independent byte checks against official same-batch
+references. No model/precision/layer changes. Evidence:
+provenance/esmc_native_monitor_20261016.json; docs/esmc-native-monitor.md.
+
+Native SDK27.0.0 only. Original/native all8BDF mapping matches; 28fakeAPIcases,
+5bad-argument cases, two real HIP6 PID creation/removal lifecycles pass. Immediate
+native detection about0.185s. Controlled conflicting PID causes real Rust inference
+rejection before Start, no predictions/accepted receipt. Rust interval250ms,
+per-sample mapping verification, isolation, timeouts/output bounds unchanged.
+Comparison adds explicit default-false monitor_treatment only for E2E replacement
+of an existing amd-smi identity in both arms; exact differences required. Other
+protected inputs remain protected. Tests:5paired,15CLI integration,Clippy/fmt pass.
+Graph precommit analysis overlinks generic compare symbols across unrelated
+languages; source review and tests establish actual Rust comparison/benchmark scope.
+
+Native probe executable SHA714e1984c913bf51124555dde2b1d2e4c27b54744a7ee84b2250035cb846913f,
+build-v2 artifact has historical .so suffix despite being ELF executable.
+New maintained CLI SHA75871d7637f0383d095c7cbde7b6d684891a86eb26ed3445443be611a51f3fab;
+remote target/release/fireprot replacement verified with old executable backup
+and maintenance-bin-receipt.json. Bridge unchanged. Failed initial linker flag
+and holder missing rpath retained; final holder rebuilt only, no probe changes.
+Current public exact profile SHA2d48bdd26ce27cb13c028b424fbace4d4a5c5eec7d748986c2cd8b7a6b221281.
+Old profile preserved as plm-esmc-fold2-6b-host-scheduling.json; new optional
+plm-esmc-fold2-6b-resident-monitor.json pairs with existing resident64-gemm request.
+Historical experiment drivers use preserved host profile. Frozen measured scripts
+remain remote; maintained builder stages canonical native source before compilation.
+
+Next hypothesis: one fresh SDK snapshot containing both BDFs and PID sets could
+remove duplicate init in separate list/process queries. Not implemented/measured.
+Must preserve per-sample mapping and PID validation, explicit protocol selection,
+fail-closed behavior, no cached mapping or lower sampling rate. Qualify fault and
+active-process detection before any performance acceptance. CK attention remains
+unqualified under strict byte equality; do not promote on speed alone.
+Source sync baseline dd3c689; backup in this root/top-source-backup. Consult
+source-sync-receipt.json for verified completion. Exclude docs/isa, runtime,
+outputs, Git metadata and Protenix from source synchronization.

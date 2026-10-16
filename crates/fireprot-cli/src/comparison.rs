@@ -14,6 +14,8 @@ pub struct Specification {
     schema_version: u32,
     treatment_description: String,
     expected_changes: BTreeMap<String, paired::Difference>,
+    #[serde(default)]
+    monitor_treatment: bool,
     baseline: Collection,
     candidate: Collection,
 }
@@ -29,9 +31,15 @@ impl Specification {
             schema_version: 1,
             treatment_description,
             expected_changes,
+            monitor_treatment: false,
             baseline,
             candidate,
         }
+    }
+
+    pub(crate) fn with_monitor_treatment(mut self, enabled: bool) -> Self {
+        self.monitor_treatment = enabled;
+        self
     }
 }
 
@@ -47,6 +55,7 @@ pub struct Pair {
 pub struct Report {
     schema_version: u32,
     treatment_description: String,
+    monitor_treatment: bool,
     baseline: Collected,
     candidate: Collected,
     pairs: Vec<Pair>,
@@ -61,10 +70,11 @@ pub fn run(specification: Specification) -> Result<Report> {
     }
     let baseline = collection::collect(specification.baseline)?;
     let candidate = collection::collect(specification.candidate)?;
-    let performance = paired::compare(
+    let performance = paired::compare_with_monitor_treatment(
         &baseline.series,
         &candidate.series,
         &specification.expected_changes,
+        specification.monitor_treatment,
     )?;
     let mut pairs = Vec::new();
     let mut correctness_passed = true;
@@ -120,6 +130,7 @@ pub fn run(specification: Specification) -> Result<Report> {
     Ok(Report {
         schema_version: 1,
         treatment_description: specification.treatment_description,
+        monitor_treatment: specification.monitor_treatment,
         baseline,
         candidate,
         pairs,

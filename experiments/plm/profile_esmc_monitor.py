@@ -14,7 +14,7 @@ from collect_esmc_pointwise_pairs import archive, pin
 def main():
     root = Path('/media/IntelSSD/fireprot')
     work = Path(sys.argv[1]).resolve(); work.mkdir(exist_ok=False)
-    profile = json.loads((root/'configs/diamondhill/plm-esmc-fold2-6b-exact.json').read_text())
+    profile = json.loads((root/'configs/diamondhill/plm-esmc-fold2-6b-host-scheduling.json').read_text())
     request = json.loads((root/'configs/requests/plm-esmc-fold2-6b-b4-n1000-exact.json').read_text())
     real = Path(profile['amd_smi'])
     real_pin = pin(real)

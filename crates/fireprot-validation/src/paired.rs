@@ -208,6 +208,17 @@ pub fn differences(
     baseline: &TimingSeries,
     candidate: &TimingSeries,
 ) -> Result<BTreeMap<String, Difference>> {
+    differences_with_monitor_treatment(baseline, candidate, false)
+}
+
+/// Opt-in replacement of an existing AMD SMI monitor, for E2E experiments only.
+/// This does not establish monitor equivalence; independent qualification is
+/// required. Exact observed identities must still be declared by the caller.
+pub fn differences_with_monitor_treatment(
+    baseline: &TimingSeries,
+    candidate: &TimingSeries,
+    monitor_treatment: bool,
+) -> Result<BTreeMap<String, Difference>> {
     baseline.summarize()?;
     candidate.summarize()?;
     if baseline.observations.len() != candidate.observations.len() {
@@ -221,6 +232,9 @@ pub fn differences(
     }
     let a = &baseline.observations[0];
     let b = &candidate.observations[0];
+    if monitor_treatment && a.scope != crate::timing::TimingScope::EndToEnd {
+        return Err(error("monitor treatment requires end-to-end timing"));
+    }
     let mut request = b.request.clone();
     request.run_id.clone_from(&a.request.run_id);
     request.output_dir.clone_from(&a.request.output_dir);
@@ -286,7 +300,11 @@ pub fn differences(
     let input_keys: BTreeSet<_> = ai.keys().chain(bi.keys()).collect();
     for key in input_keys {
         if ai.get(key) != bi.get(key) {
-            if key != "rust-bridge" && !key.starts_with("amd-kernels/") {
+            let monitor_replacement = monitor_treatment
+                && key == "amd-smi"
+                && ai.contains_key(key)
+                && bi.contains_key(key);
+            if key != "rust-bridge" && !key.starts_with("amd-kernels/") && !monitor_replacement {
                 return Err(error(format!("protected launch input changed: {key}")));
             }
             difference(
@@ -336,7 +354,17 @@ pub fn compare(
     candidate: &TimingSeries,
     expected: &BTreeMap<String, Difference>,
 ) -> Result<Comparison> {
-    let changes = differences(baseline, candidate)?;
+    compare_with_monitor_treatment(baseline, candidate, expected, false)
+}
+
+/// Explicit E2E monitor treatment; default `compare` keeps monitors protected.
+pub fn compare_with_monitor_treatment(
+    baseline: &TimingSeries,
+    candidate: &TimingSeries,
+    expected: &BTreeMap<String, Difference>,
+    monitor_treatment: bool,
+) -> Result<Comparison> {
+    let changes = differences_with_monitor_treatment(baseline, candidate, monitor_treatment)?;
     if &changes != expected {
         return Err(error(format!(
             "treatment declaration differs from observed changes: {}",

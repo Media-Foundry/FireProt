@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "run_id": "plm-esmc-fold2-6b-resident64-pointwise",
+  "backend": "fireprot",
+  "seed": 101,
+  "hip_device": 6,
+  "workload": {
+    "model": "plm",
+    "model_name": "esmc-fold2-6b",
+    "precision": "native",
+    "batch": {
+      "items": 64,
+      "max_batch_size": 4,
+      "max_padded_tokens": 4008,
+      "grouping": "length_sorted"
+    }
+  },
+  "source": {
+    "root": "/media/PM982/engramfold/folding_e2e_20260921/repos/esm",
+    "commit": "43b4548b86762edfa747b07d5f440aad3c33acee"
+  },
+  "checkpoints": {
+    "model": {
+      "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/esmfold2/snapshot/model.safetensors.index.json",
+      "sha256": "5e1f94eb5cd4b0ff0bfdeae3dbf64be564ba34352fe6ef3a6ee9830f584134b2"
+    }
+  },
+  "resources": {
+    "model_config": {
+      "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/esmfold2/snapshot/config.json",
+      "sha256": "72054c1af92f432ac2d8e0628ba08b377d04c6a8679b5128b798dbc7f644ddc8"
+    },
+    "ccd": {
+      "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/esmfold2/snapshot/ccd.pkl",
+      "sha256": "9ff44b1927c6b9198e38ffe0928706827a09a350c15530beeeabebfa88038fc5"
+    },
+    "model_shard_00001": {
+      "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/esmfold2/snapshot/model-00001-of-00006.safetensors",
+      "sha256": "a24f050e2a2f9746b43b435c53719afc575a374fa302731b6911356a3d8b5cac"
+    },
+    "model_shard_00002": {
+      "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/esmfold2/snapshot/model-00002-of-00006.safetensors",
+      "sha256": "1af1615f6f6d1b3c0a24a63d9052a0ecad5b3831d1513c1a5fea73870c1bec73"
+    },
+    "model_shard_00003": {
+      "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/esmfold2/snapshot/model-00003-of-00006.safetensors",
+      "sha256": "357b55ec56192fd01a1cfc39a5260caf2242503ac7c554f614e43c7a469f0ced"
+    },
+    "model_shard_00004": {
+      "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/esmfold2/snapshot/model-00004-of-00006.safetensors",
+      "sha256": "f065aca1a13308bce41b78f728c28a0a29e3a9db6af531a74a258dbb06f8721b"
+    },
+    "model_shard_00005": {
+      "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/esmfold2/snapshot/model-00005-of-00006.safetensors",
+      "sha256": "e0c507dce5b2ddb22f77305607b4332506137850c5378e98e9729345264668b7"
+    },
+    "model_shard_00006": {
+      "path": "/media/PM982/engramfold/folding_e2e_20260921/weights/esmfold2/snapshot/model-00006-of-00006.safetensors",
+      "sha256": "90015eb13bbeab54237b18d6748dbd47f4bfd108fdf45704d66e5c3a93f8df7c"
+    },
+    "hip_batch": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/kernel-cache/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e.so",
+      "sha256": "9624b8a166b7639e44fb3daa26abbe84ec8faa998f98f1beb0a7df057135b900"
+    },
+    "hip_esm": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/kernel-cache/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237.so",
+      "sha256": "7fe005660b21f806e4d15d772325243980db466be29e62ebb527884995484c61"
+    },
+    "hip_esmc_pointwise": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/kernel-cache/esmc_pointwise_compat_b10ad2bb108d08588a7c6641da0f76410e1d94d7b0af1c73e8ee9d698c8318ef/esmc_pointwise_compat_b10ad2bb108d08588a7c6641da0f76410e1d94d7b0af1c73e8ee9d698c8318ef.so",
+      "sha256": "4dc61ea82a1dbe58d5f71d6cfda948347755ab076e773f8e8b88300a4904d4e4"
+    }
+  },
+  "input": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b64-pairs/input.json",
+    "sha256": "9ad988805c603e408787aa8d761c07f8a9dfebd77f2b85f84580315114118b59"
+  },
+  "output_dir": "/media/IntelSSD/fireprot/outputs/plm-esmc-fold2-6b-resident64-pointwise"
+}

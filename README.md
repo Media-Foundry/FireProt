@@ -194,6 +194,14 @@ A [composition follow-up](docs/esmc-gemm-composition.md) reduces fixed-FFN plan
 initialization from 263 ms to 2.1 ms by delaying it until after native QKV.
 Its B4 incremental E2E median improves 1.017x, with one slightly slower pair;
 it remains experimental and the public profile is unchanged.
+A further [HIP pointwise experiment](docs/esmc-pointwise.md) preserves every BF16
+rounding boundary while fusing residual scaling/addition and vectorizing SwiGLU.
+For **64 N1000 inputs, sixteen B4 groups**, E2E improves **23.737 -> 23.059 s
+(1.0294x over current FireProt)**, with all three pairs faster and every output
+byte-identical to official same-batch execution. A separate experimental
+[resident64 entry](docs/esmc-pointwise.md#experimental-resident64-entry) is available.
+One B4 group has no E2E gain (12.619 -> 12.644 s), so the default profile and
+the direct-native **1.911x** result above remain unchanged.
 Warm forward excludes loading/export and is measured independently. See
 [exact-route commands and evidence](docs/esm-optimization.md). ESM3's separate
 64-input resident workload (sixteen B4 groups) improves **20.212 → 15.490 s

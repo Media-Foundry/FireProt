@@ -1,0 +1,1661 @@
+{
+  "schema_version": 1,
+  "model": "esmc-fold2-6b",
+  "hip_device": 6,
+  "pci_address": "0000:8e:00.0",
+  "length": 1000,
+  "seed": 101,
+  "precision": "native BF16",
+  "decision": "Experimental resident64 opt-in only; existing single-group profile unchanged; no CK GEMM promoted.",
+  "experiment_root": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016",
+  "screen": {
+    "pin": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/screen-v2/report.json",
+      "sha256": "b55b71ec91ed9de6a1a6e2f6dbe9ad2c17dfc746004cf97aeaa038fc9848af4b"
+    },
+    "data": {
+      "model": "esmc-fold2-6b",
+      "seed": 101,
+      "hip_device": 6,
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "dtype": "native BF16",
+      "length": 1000,
+      "request_sha256": "a01afbc2684f860fa3c4603b0362407ef02bf0a65f96c8749b8ae09b6c391450",
+      "library_sha256": "4dc61ea82a1dbe58d5f71d6cfda948347755ab076e773f8e8b88300a4904d4e4",
+      "script_sha256": "247fdaee06edf568b78c35cb54e341616b6c4b71f325612ce9a36fd3a1d41b43",
+      "scope_sha256": "6f9801a5a1e8c205028e9f8394b3104fa283dcc14d28c80e51af08087f867cd0",
+      "boundary": "warm operators and forward; excludes loading and export; not E2E",
+      "cache_state": "resident model; warmed operators; caches not flushed",
+      "cases": [
+        {
+          "batch": 1,
+          "scaling_factor": 1.4907119849998598,
+          "operators": [
+            {
+              "kind": "residual",
+              "vector": 1,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.028928234179814657,
+                  "candidate": 0.020616567134857176
+                },
+                {
+                  "candidate": 0.02039793332417806,
+                  "baseline": 0.028826900323232017
+                },
+                {
+                  "baseline": 0.027222166458765667,
+                  "candidate": 0.019534265995025633
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.028826900323232017,
+                "candidate": 0.02039793332417806
+              },
+              "speedup": 1.413226519819189
+            },
+            {
+              "kind": "residual",
+              "vector": 2,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.027019566297531127,
+                  "candidate": 0.019246399402618408
+                },
+                {
+                  "candidate": 0.019177067279815673,
+                  "baseline": 0.026710367202758788
+                },
+                {
+                  "baseline": 0.026790332794189454,
+                  "candidate": 0.019395667314529418
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.026790332794189454,
+                "candidate": 0.019246399402618408
+              },
+              "speedup": 1.3919659586065078
+            },
+            {
+              "kind": "residual",
+              "vector": 4,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.026587732632954917,
+                  "candidate": 0.02330889900525411
+                },
+                {
+                  "candidate": 0.021453567345937095,
+                  "baseline": 0.02665703296661377
+                },
+                {
+                  "baseline": 0.026912933588027953,
+                  "candidate": 0.019171732664108276
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.02665703296661377,
+                "candidate": 0.021453567345937095
+              },
+              "speedup": 1.2425454721245748
+            },
+            {
+              "kind": "residual",
+              "vector": 8,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.026790332794189454,
+                  "candidate": 0.020254000027974447
+                },
+                {
+                  "candidate": 0.019065099954605102,
+                  "baseline": 0.026784966389338177
+                },
+                {
+                  "baseline": 0.026673032840092977,
+                  "candidate": 0.019363667567571005
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.026784966389338177,
+                "candidate": 0.019363667567571005
+              },
+              "speedup": 1.3832589459548394
+            },
+            {
+              "kind": "swiglu",
+              "vector": 1,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.06599216461181641,
+                  "candidate": 0.0662800669670105
+                },
+                {
+                  "candidate": 0.06623206535975139,
+                  "baseline": 0.06582156817118327
+                },
+                {
+                  "baseline": 0.06588019927342732,
+                  "candidate": 0.06606146494547525
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.06588019927342732,
+                "candidate": 0.06623206535975139
+              },
+              "speedup": 0.9946873756025447
+            },
+            {
+              "kind": "swiglu",
+              "vector": 2,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.06590686639149984,
+                  "candidate": 0.04835586547851563
+                },
+                {
+                  "candidate": 0.04837186733881633,
+                  "baseline": 0.06583756605784098
+                },
+                {
+                  "baseline": 0.06621606747309366,
+                  "candidate": 0.048334566752115886
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.06590686639149984,
+                "candidate": 0.04835586547851563
+              },
+              "speedup": 1.362954953640155
+            },
+            {
+              "kind": "swiglu",
+              "vector": 4,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.06596550146738688,
+                  "candidate": 0.04401076634724935
+                },
+                {
+                  "candidate": 0.04400543371836344,
+                  "baseline": 0.06592816511789958
+                },
+                {
+                  "baseline": 0.06578956842422486,
+                  "candidate": 0.04401609897613525
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.06592816511789958,
+                "candidate": 0.04401076634724935
+              },
+              "speedup": 1.4980008436508412
+            },
+            {
+              "kind": "swiglu",
+              "vector": 8,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.06590686639149984,
+                  "candidate": 0.0432003657023112
+                },
+                {
+                  "candidate": 0.04307779868443807,
+                  "baseline": 0.06622673273086548
+                },
+                {
+                  "baseline": 0.06550169785817464,
+                  "candidate": 0.04312040011088054
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.06590686639149984,
+                "candidate": 0.04312040011088054
+              },
+              "speedup": 1.5284381921787784
+            }
+          ],
+          "forwards": [
+            {
+              "mode": "residual",
+              "vector": 2,
+              "pairs": [
+                {
+                  "baseline": [
+                    0.17177972197532654,
+                    0.17207713902462274,
+                    0.17165384604595602
+                  ],
+                  "candidate": [
+                    0.17278471298050135,
+                    0.17001937399618328,
+                    0.1697377220261842
+                  ]
+                },
+                {
+                  "candidate": [
+                    0.16976997000165284,
+                    0.169788624974899,
+                    0.1698725449386984
+                  ],
+                  "baseline": [
+                    0.17160747293382883,
+                    0.17140949110034853,
+                    0.1715299489442259
+                  ]
+                },
+                {
+                  "baseline": [
+                    0.17224184109363705,
+                    0.1714157189708203,
+                    0.1713812609668821
+                  ],
+                  "candidate": [
+                    0.1698006798978895,
+                    0.17055273801088333,
+                    0.16975802497472614
+                  ]
+                }
+              ],
+              "audit": {
+                "residual_calls": 160,
+                "swiglu_calls": 0,
+                "audited": 160,
+                "vector": 2,
+                "mode": "residual"
+              },
+              "bitwise_equal": true,
+              "median_seconds": {
+                "baseline": 0.17160747293382883,
+                "candidate": 0.1698006798978895
+              },
+              "speedup": 1.0106406702083046
+            },
+            {
+              "mode": "swiglu",
+              "vector": 8,
+              "pairs": [
+                {
+                  "baseline": [
+                    0.1712058719713241,
+                    0.17132339102681726,
+                    0.1715290800202638
+                  ],
+                  "candidate": [
+                    0.16991382103879005,
+                    0.17301546304952353,
+                    0.17059263493865728
+                  ]
+                },
+                {
+                  "candidate": [
+                    0.17005548102315515,
+                    0.16992155800107867,
+                    0.17003885691519827
+                  ],
+                  "baseline": [
+                    0.17108598304912448,
+                    0.17136933491565287,
+                    0.17117188300471753
+                  ]
+                },
+                {
+                  "baseline": [
+                    0.1712995789712295,
+                    0.17106805997900665,
+                    0.17129249195568264
+                  ],
+                  "candidate": [
+                    0.16978252597618848,
+                    0.17059706302825361,
+                    0.1700524219777435
+                  ]
+                }
+              ],
+              "audit": {
+                "residual_calls": 0,
+                "swiglu_calls": 80,
+                "audited": 80,
+                "vector": 8,
+                "mode": "swiglu"
+              },
+              "bitwise_equal": true,
+              "median_seconds": {
+                "baseline": 0.17129249195568264,
+                "candidate": 0.1700524219777435
+              },
+              "speedup": 1.0072922806009867
+            }
+          ]
+        },
+        {
+          "batch": 4,
+          "scaling_factor": 1.4907119849998598,
+          "operators": [
+            {
+              "kind": "residual",
+              "vector": 1,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.08613423506418864,
+                  "candidate": 0.06554433504740396
+                },
+                {
+                  "candidate": 0.06562963326772055,
+                  "baseline": 0.08642746607462565
+                },
+                {
+                  "baseline": 0.08602763017018636,
+                  "candidate": 0.06538973251978557
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.08613423506418864,
+                "candidate": 0.06554433504740396
+              },
+              "speedup": 1.314136988374256
+            },
+            {
+              "kind": "residual",
+              "vector": 2,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.08579303423563639,
+                  "candidate": 0.052674301465352374
+                },
+                {
+                  "candidate": 0.052684998512268065,
+                  "baseline": 0.08672602971394856
+                },
+                {
+                  "baseline": 0.08640613555908203,
+                  "candidate": 0.052690335114796955
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.08640613555908203,
+                "candidate": 0.052684998512268065
+              },
+              "speedup": 1.6400519692329831
+            },
+            {
+              "kind": "residual",
+              "vector": 4,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.08587833245595296,
+                  "candidate": 0.04969940185546875
+                },
+                {
+                  "candidate": 0.04924619992574056,
+                  "baseline": 0.08558510144551595
+                },
+                {
+                  "baseline": 0.08628353277842203,
+                  "candidate": 0.049304866790771486
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.08587833245595296,
+                "candidate": 0.049304866790771486
+              },
+              "speedup": 1.7417820601845135
+            },
+            {
+              "kind": "residual",
+              "vector": 8,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.08631549676259359,
+                  "candidate": 0.05297820170720418
+                },
+                {
+                  "candidate": 0.05290356477101644,
+                  "baseline": 0.08580903212229411
+                },
+                {
+                  "baseline": 0.0858036994934082,
+                  "candidate": 0.05273830095926921
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.08580903212229411,
+                "candidate": 0.05290356477101644
+              },
+              "speedup": 1.6219896049293288
+            },
+            {
+              "kind": "swiglu",
+              "vector": 1,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.2557693004608154,
+                  "candidate": 0.25774192810058594
+                },
+                {
+                  "candidate": 0.25750734011332194,
+                  "baseline": 0.2564463933308919
+                },
+                {
+                  "baseline": 0.2563291072845459,
+                  "candidate": 0.2577738920847575
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.2563291072845459,
+                "candidate": 0.25774192810058594
+              },
+              "speedup": 0.9945184672650983
+            },
+            {
+              "kind": "swiglu",
+              "vector": 2,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.25641973813374835,
+                  "candidate": 0.18343265851338705
+                },
+                {
+                  "candidate": 0.1837312380472819,
+                  "baseline": 0.25634506543477376
+                },
+                {
+                  "baseline": 0.25615849494934084,
+                  "candidate": 0.18333670298258464
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.25634506543477376,
+                "candidate": 0.18343265851338705
+              },
+              "speedup": 1.3974886888316318
+            },
+            {
+              "kind": "swiglu",
+              "vector": 4,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.25697420438130697,
+                  "candidate": 0.1639943281809489
+                },
+                {
+                  "candidate": 0.16379706064860025,
+                  "baseline": 0.2555187384287516
+                },
+                {
+                  "baseline": 0.25595590273539226,
+                  "candidate": 0.16374376614888508
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.25595590273539226,
+                "candidate": 0.16379706064860025
+              },
+              "speedup": 1.5626403900159338
+            },
+            {
+              "kind": "swiglu",
+              "vector": 8,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.2573314030965169,
+                  "candidate": 0.15533080101013183
+                },
+                {
+                  "candidate": 0.15476029713948566,
+                  "baseline": 0.25719280242919923
+                },
+                {
+                  "baseline": 0.25603052775065105,
+                  "candidate": 0.1556559721628825
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.25719280242919923,
+                "candidate": 0.15533080101013183
+              },
+              "speedup": 1.6557746484061664
+            }
+          ],
+          "forwards": [
+            {
+              "mode": "residual",
+              "vector": 4,
+              "pairs": [
+                {
+                  "baseline": [
+                    0.5764175009680912,
+                    0.5766555879963562,
+                    0.5746094280621037
+                  ],
+                  "candidate": [
+                    0.5706932001048699,
+                    0.5688442820683122,
+                    0.5699640429811552
+                  ]
+                },
+                {
+                  "candidate": [
+                    0.571101168054156,
+                    0.5705277869710699,
+                    0.5674227859126404
+                  ],
+                  "baseline": [
+                    0.5762746899854392,
+                    0.5760307949967682,
+                    0.5738567300140858
+                  ]
+                },
+                {
+                  "baseline": [
+                    0.5744750750018284,
+                    0.5785180809907615,
+                    0.5756136099807918
+                  ],
+                  "candidate": [
+                    0.5702779239509255,
+                    0.5667226599762216,
+                    0.5698417950188741
+                  ]
+                }
+              ],
+              "audit": {
+                "residual_calls": 160,
+                "swiglu_calls": 0,
+                "audited": 160,
+                "vector": 4,
+                "mode": "residual"
+              },
+              "bitwise_equal": true,
+              "median_seconds": {
+                "baseline": 0.5760307949967682,
+                "candidate": 0.5699640429811552
+              },
+              "speedup": 1.0106440960448686
+            },
+            {
+              "mode": "swiglu",
+              "vector": 8,
+              "pairs": [
+                {
+                  "baseline": [
+                    0.5774117449764162,
+                    0.5753660359187052,
+                    0.5763227139832452
+                  ],
+                  "candidate": [
+                    0.5667097049299628,
+                    0.5664457660168409,
+                    0.5676157500129193
+                  ]
+                },
+                {
+                  "candidate": [
+                    0.5669417240424082,
+                    0.5637428559130058,
+                    0.5680442210286856
+                  ],
+                  "baseline": [
+                    0.5735151889966801,
+                    0.573529293993488,
+                    0.5738324389094487
+                  ]
+                },
+                {
+                  "baseline": [
+                    0.5748428381048143,
+                    0.5746213849633932,
+                    0.5748347310582176
+                  ],
+                  "candidate": [
+                    0.5671106149675325,
+                    0.5641925989184529,
+                    0.5692191730486229
+                  ]
+                }
+              ],
+              "audit": {
+                "residual_calls": 0,
+                "swiglu_calls": 80,
+                "audited": 80,
+                "vector": 8,
+                "mode": "swiglu"
+              },
+              "bitwise_equal": true,
+              "median_seconds": {
+                "baseline": 0.5748347310582176,
+                "candidate": 0.5669417240424082
+              },
+              "speedup": 1.0139220781979683
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "build": {
+    "pin": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/build-receipt-v4.json",
+      "sha256": "bb350c498cecd02dc9d4ac8bd22da724f84e1f3c5cfc3d31687742616b4832f5"
+    },
+    "summary": {
+      "cache_hit": false,
+      "directory": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/kernel-cache/esmc_pointwise_compat_b10ad2bb108d08588a7c6641da0f76410e1d94d7b0af1c73e8ee9d698c8318ef",
+      "receipt": {
+        "artifacts": {
+          "esmc_pointwise_compat_b10ad2bb108d08588a7c6641da0f76410e1d94d7b0af1c73e8ee9d698c8318ef.so": "4dc61ea82a1dbe58d5f71d6cfda948347755ab076e773f8e8b88300a4904d4e4"
+        },
+        "identity": {
+          "arguments": {
+            "compile": [
+              "-O3",
+              "-ffp-contract=off",
+              "-std=c++17",
+              "-fPIC",
+              "-shared",
+              "--offload-arch=gfx90a"
+            ],
+            "fireprot_hip_process": [
+              "1",
+              "compiler",
+              "guard",
+              "[\"source\",\"compat\"]",
+              "600000",
+              "600000",
+              "/opt/rocm/bin/hipcc"
+            ],
+            "include": [
+              "/opt/rocm/include",
+              "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/headers"
+            ],
+            "link": []
+          },
+          "environment": {
+            "CPATH": null,
+            "CXXFLAGS": null,
+            "HIPCC_COMPILE_FLAGS_APPEND": null,
+            "HOME": "/home/pc",
+            "LD_LIBRARY_PATH": null,
+            "LIBRARY_PATH": null,
+            "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+            "TMPDIR": null
+          },
+          "files": [
+            {
+              "canonical_path": "/opt/rocm/core-10.0/bin/hipcc",
+              "name": "compiler",
+              "sha256": "7b95d430bb8c4d4237f9b4935dbd6440e2067fde0979cc69bffb26ebd021464c"
+            },
+            {
+              "canonical_path": "/opt/rocm/core-10.0/lib/llvm/bin/clang-23",
+              "name": "clang",
+              "sha256": "241bf4da7ec39bc00b68ed74f6be751516d9892ed990e8c7fa372bad18500247"
+            },
+            {
+              "canonical_path": "/opt/rocm/core-10.0/lib/llvm/bin/lld",
+              "name": "linker",
+              "sha256": "844f375436675da8948a340a3bd8b7efabd4703422f9c01e3721f11f1ab777b4"
+            },
+            {
+              "canonical_path": "/media/IntelSSD/fireprot/target/release/fireprot-compiler-guard",
+              "name": "guard",
+              "sha256": "64429608d501a7c8e786affe9b96a616d34a2f1f5b1237a91429947b84d34b85"
+            },
+            {
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/esmc_pointwise.hip",
+              "name": "source",
+              "sha256": "4ea35577c46f9a342251f0991fc1b32c526d4863548eada1d26475a149796bc6"
+            },
+            {
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/esmc_pointwise_compat.hip",
+              "name": "compat",
+              "sha256": "c4ce2e0397d7cccd8ef0ef7db7bfe858a385094c4b5ddeb58011496cfa0b9f57"
+            },
+            {
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/fireprot_esm.hip",
+              "name": "qualified_esm",
+              "sha256": "9ee873eaa59f6cec9b29d920b87d30a1e4ab83259bda78f6095f3eab4d81fdaf"
+            }
+          ],
+          "package": "esmc_pointwise_compat",
+          "schema_version": 1,
+          "sha256": "b10ad2bb108d08588a7c6641da0f76410e1d94d7b0af1c73e8ee9d698c8318ef",
+          "target": "gfx90a",
+          "trees": [
+            {
+              "name": "0",
+              "path": "/opt/rocm/include",
+              "suffixes": []
+            },
+            {
+              "name": "1",
+              "path": "/opt/rocm/llvm/lib/clang",
+              "suffixes": []
+            },
+            {
+              "name": "2",
+              "path": "/usr/include",
+              "suffixes": []
+            },
+            {
+              "name": "3",
+              "path": "/usr/lib/gcc",
+              "suffixes": []
+            },
+            {
+              "name": "qualified_esm",
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/headers",
+              "suffixes": []
+            }
+          ],
+          "versions": {
+            "abi": "c",
+            "hip": "7.14.60850",
+            "recipe": "esmc-pointwise-compat-v2",
+            "torch": "2.12.0a0+git78258b9"
+          }
+        },
+        "schema_version": 1
+      }
+    },
+    "omitted_tree_file_entries": 9030,
+    "note": "The full tree file list remains in the hash-pinned remote build receipt; no build verification was omitted."
+  },
+  "build_spec": {
+    "pin": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/build-spec-v4.json",
+      "sha256": "6d2c33f7b19a6509026ec9b56280418756c9da7015f995e6a06ed13dd3e32f0d"
+    },
+    "data": {
+      "build": {
+        "schema_version": 1,
+        "package": "esmc_pointwise_compat",
+        "target": "gfx90a",
+        "files": [
+          {
+            "name": "compiler",
+            "path": "/opt/rocm/bin/hipcc"
+          },
+          {
+            "name": "clang",
+            "path": "/opt/rocm/llvm/bin/clang++"
+          },
+          {
+            "name": "linker",
+            "path": "/opt/rocm/llvm/bin/ld.lld"
+          },
+          {
+            "name": "guard",
+            "path": "/media/IntelSSD/fireprot/target/release/fireprot-compiler-guard"
+          },
+          {
+            "name": "source",
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/esmc_pointwise.hip"
+          },
+          {
+            "name": "compat",
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/esmc_pointwise_compat.hip"
+          },
+          {
+            "name": "qualified_esm",
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/fireprot_esm.hip"
+          }
+        ],
+        "trees": [
+          {
+            "name": "0",
+            "path": "/opt/rocm/include",
+            "suffixes": []
+          },
+          {
+            "name": "1",
+            "path": "/opt/rocm/llvm/lib/clang",
+            "suffixes": []
+          },
+          {
+            "name": "2",
+            "path": "/usr/include",
+            "suffixes": []
+          },
+          {
+            "name": "3",
+            "path": "/usr/lib/gcc",
+            "suffixes": []
+          },
+          {
+            "name": "qualified_esm",
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/headers",
+            "suffixes": []
+          }
+        ],
+        "arguments": {
+          "compile": [
+            "-O3",
+            "-ffp-contract=off",
+            "-std=c++17",
+            "-fPIC",
+            "-shared",
+            "--offload-arch=gfx90a"
+          ],
+          "include": [
+            "/opt/rocm/include",
+            "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/headers"
+          ],
+          "link": []
+        },
+        "environment": {
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+          "HOME": "/home/pc",
+          "TMPDIR": null,
+          "LD_LIBRARY_PATH": null,
+          "LIBRARY_PATH": null,
+          "CPATH": null,
+          "CXXFLAGS": null,
+          "HIPCC_COMPILE_FLAGS_APPEND": null
+        },
+        "versions": {
+          "recipe": "esmc-pointwise-compat-v2",
+          "abi": "c",
+          "torch": "2.12.0a0+git78258b9",
+          "hip": "7.14.60850"
+        }
+      },
+      "compiler": "compiler",
+      "guard": "guard",
+      "sources": [
+        "source",
+        "compat"
+      ],
+      "timeout_ms": 600000,
+      "lock_timeout_ms": 600000
+    }
+  },
+  "deployment": {
+    "pin": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/deployment-manifest.json",
+      "sha256": "c7d1d9d8b609560da134697abbee1f6ad1269705449d5b9922038551fd31abfe"
+    },
+    "data": {
+      "original": "/media/IntelSSD/fireprot/outputs/experiments/esmc-host-20261016/native-final/qualified-hash8",
+      "runtime_before": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/qualified-pointwise/python/fireprot/adapters/plm/runtime.py",
+        "sha256": "5ccb74c3766242733f40db3d6b115aa7635dd20d0b715a2573cb2d18fc92c85a"
+      },
+      "loader_before": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/qualified-pointwise/python/fireprot_workers/plm.py",
+        "sha256": "6b000089f8c192869daf0349016506285137d0087b72ab8df19c3939ce9d89d3"
+      },
+      "files": {
+        "fireprot/__init__.py": "5b7873ed933ddca405717e111da8a8142f5df877f028e08d2b5aadcc46b433b2",
+        "kernels/amd/README.md": "38378f78849000bf686bd342a19302cc42af68df0bdc9a7f89725a76099ebad5",
+        "kernels/amd/fireprot_amd_ops.cpp": "1c7fc9f4c770752375fed47abfe08d33cda76e40d11c740d7f8294e132cd3d43",
+        "kernels/amd/fireprot_amd_ops.cu": "748c11e089cbb5a3101912954b439179557b2b966aac340c76c538960063f949",
+        "kernels/amd/fireprot_ck_attention.cpp": "d50865b27a66956b391a331cc0daf9e33962c1fd1c0d93b3243fab9d25af016c",
+        "kernels/amd/fireprot_ck_ops.cpp": "f82f123bf12b6f9a5bea05acaac11dc2c646e126c6553dbdf24e9c81747829f0",
+        "kernels/amd/fireprot_esm.hip": "9ee873eaa59f6cec9b29d920b87d30a1e4ab83259bda78f6095f3eab4d81fdaf",
+        "kernels/amd/fireprot_esmc_rope.hip": "4407f58202b2b699d48db117749d1a6614201b939b1d84bff9f24b80eb3febbf",
+        "kernels/amd/fireprot_lt_bmm.cpp": "cc876b221fc91e0bf10f991ca8a641a395eab5a157779f525966ea73ae8491b9",
+        "kernels/amd/fireprot_mask_bias.cu": "0aff4c687fce58b491a40000b423de040c5f4695c42718e448b2127156a62cc3",
+        "kernels/amd/fireprot_pair_fusions.cpp": "0a21f6cf760a91427b95e4a9bdc6d4d7ff181e187d806f97fb73e00ee4ebf0d9",
+        "kernels/amd/fireprot_pair_qkv.cu": "53881fc24c4f4d9e183234bc9b312e6837d51d7afa68a937bfdb94e676197b4e",
+        "kernels/amd/fireprot_pair_softmax.cu": "45298f0edeb18ec3aa26411fdc2f75f57a70062b251687fa4b62a1256a90bdc9",
+        "kernels/amd/fireprot_pair_transpose.cu": "bc0779458326662c088c7cad564a0bb1c7ce5dcf7f03630c140e306665f00b9f",
+        "kernels/amd/fireprot_plm_batch.hip": "bcf0adc3a1e37904f6889beff7ba9d5c743251805d43917937f1806a3f27c024",
+        "kernels/amd/fireprot_plm_swiglu.hip": "9c23a60720ad6eb72c453b64d2bbed192c3cfd1a74319687b601876909dad4d1",
+        "kernels/amd/fireprot_softmax_fp32.cpp": "baca481263c9ddf0726a94a85fdb6bf70df46d5f558f8064781dc7230d675599",
+        "kernels/amd/tools/hip_device_probe.cpp": "b4e0d82420f8afcfd8caaebec185ff96bfc7cfaeec7acc62bf8a95f459c8c18b",
+        "python/fireprot/_paths.py": "f40eca4224217a461ed948b05e67f94a4ae9d6275de60a0d16443fe360aa05f7",
+        "python/fireprot/adapters/atlasfold/runtime.py": "4fd73e13371805e86a9e910c236fd48b22a37c8ca4c7b3f03a254072b08249ea",
+        "python/fireprot/adapters/esmfold2/__init__.py": "d48dc54e9661883317dbfd04b26c7f93fb8a969fcbbf20926cf2ae37d8aab1ae",
+        "python/fireprot/adapters/esmfold2/triangle.py": "ddc9c8c292ba2db84bc0f29debff45279c3c7675b82725c7df587e26c875e56e",
+        "python/fireprot/adapters/openfold3/__init__.py": "599f351fda9fe6c70fd69380417181dfe8d6bdf4fed4e61c4a28e06212aa3294",
+        "python/fireprot/adapters/openfold3/attention.py": "d8a884b9c018c436904a1e6774139e75915fae8c11189190425865a5780b9bd3",
+        "python/fireprot/adapters/plm/__init__.py": "8c1f1cac5b41f307baf3fa0b73d88f5e8ffce8ad353357fbabe808e18cceade7",
+        "python/fireprot/adapters/plm/esm.py": "b2a7650f5e44979837e5d25f0f54d766e0f3f1b83ccb546c97cf4fbea97e63c2",
+        "python/fireprot/adapters/plm/pointwise.py": "51b39d6b74ee5f5cb846ac450022ea779d322b5ee0f31be74b947326e7d5ce4a",
+        "python/fireprot/adapters/plm/runtime.py": "edfca5b8090dd953e1e11d9f04f00bbda407711b904a3c3a67918567950076cd",
+        "python/fireprot/adapters/protenix/base_n1000/__init__.py": "90784b66be85a2a6d22e8d283a625aaee52cfa4d894b366ab6cc378e50276784",
+        "python/fireprot/adapters/protenix/base_n1000/dual_storage.py": "5ada1f14d32ec371328cdcc549d941df7d4e8abb2b4d52757bfbb13c9db0d972",
+        "python/fireprot/adapters/protenix/base_n1000/global_bias.py": "22186eb8ee98c36e143394525ad6af7dd5f2a62f34b14dc063b9dcda3bba4e42",
+        "python/fireprot/adapters/protenix/base_n1000/local_bias.py": "2043279ccc3633bf6756ac6c5b6149674ebc0cc5a33c1f577d805cbf0d24d942",
+        "python/fireprot/adapters/protenix/base_n1000/transition.py": "d237607c75b7f070f088062a38cc33a32dd27713279ac16297ed8aca008fd8fa",
+        "python/fireprot/adapters/protenix/base_n1000/triangle_lt.py": "cdcc46002ab10487f4a6ebc8dcf7d91e8cacc9acdc60496c39a68b03c45cffe8",
+        "python/fireprot/adapters/protenix/construction.py": "869793822bb4a84841121793dc3226e7ec23fe34c86ee9da02e32c68c94ffe95",
+        "python/fireprot/adapters/protenix/features.py": "16cdca60229f853f3d4b3fbf891b6542add97ff00ad02ff4daccb0c86d1e7fda",
+        "python/fireprot/adapters/protenix/hooks.py": "237d6bc0e6f9971361675ddb06a00e425d055b2add4647e5640b17bfe0e49b2b",
+        "python/fireprot/adapters/protenix/runtime.py": "caf6233c43cde8ec2b651808a0a3e51b88c318064b8bbcfc33fb2fa5c6cea5f9",
+        "python/fireprot/backends/amd/_compile_native.py": "b94e4d9b3d4f81e111accf0251f2f3bd464e5938335ebae0fbddb7a9cfc4083c",
+        "python/fireprot/backends/amd/_native_build.py": "fa4909f6bbd1ad6f5b246c9cf335e01991bfec4f18ff8677dc94cf8168672d7d",
+        "python/fireprot/backends/amd/_native_hip.py": "60052815e80450203762c425a78d97d92583a9ae3297bc410a70d22aaed92dbd",
+        "python/fireprot/backends/amd/_published.py": "abf0ddd8eeacf9ca1e9e72742d357490b107940f8acdf88878019142d9b6fd8b",
+        "python/fireprot/backends/amd/attention_gate.py": "d306a6ea7f762930f89cd6f4572ac95207a691135d3401c3ea1d7fdaebf45c5e",
+        "python/fireprot/backends/amd/blas.py": "173f12ed8f15e88bc9ce3e784739f82b8044b2927f52bcdf3d52c749a38f7aba",
+        "python/fireprot/backends/amd/ck_attention.py": "f747f9a8a1b961e2d82d479c32f76ee5bc2e902f9059e89b4549d090b58621ed",
+        "python/fireprot/backends/amd/ck_extension.py": "285e2d73a28d64e0788a184d8219c5d80f77595a69e61520f3e75fa1d58f167d",
+        "python/fireprot/backends/amd/ck_gemm.py": "b907a2ce9d79830c4ed029ee3e18e6727e9058b7094fd38f79d93b6729575272",
+        "python/fireprot/backends/amd/extension.py": "c90efeb110a341d6b57497dc9eb336f0dada6fa8767cdc189ff8eef1a536fc8c",
+        "python/fireprot/backends/amd/lt_bmm.py": "80a6a56462896f83109309469e147be8c562638ceac6d94da8c42e363834ae38",
+        "python/fireprot/backends/amd/mask_bias.py": "3afebb7d3c42d553a7ef65f6d0b788595de5fb8e044e4ae608dc92655d0331b6",
+        "python/fireprot/backends/amd/pair_fusions.py": "05b539bff71eca6c37920c87ff390aab62a28ede3eb92a80abd1299ca8d9303c",
+        "python/fireprot/backends/amd/pair_layout.py": "6fe404093e96adcda22a5479036aa5f027e691b094bbfa4a71dc35c66c8fc49d",
+        "python/fireprot/backends/amd/qkv_projection.py": "6f6ad521b169df46c2e0ec3030195267decda3a7a1bbddac40a9f25b23b6fc02",
+        "python/fireprot/backends/amd/recycle.py": "ea6cd04d3b69ba8999cd3781d94d7d4736ff2b205be5d542153494f7923aefe5",
+        "python/fireprot/backends/amd/softmax_fp32.py": "52d1b222750b5f41f80f09865f619c76c8501d103dd3e5bd82537ae67c048e35",
+        "python/fireprot/backends/amd/transition_projection.py": "df749eaf3ab49a21f709f60a939b1c30294e2102546f7c03ffcac3ba8756614d",
+        "python/fireprot/backends/amd/triangle_attention.py": "30627afc9ea995230c9b1a971b44122dd72c96801a2faa93c6ae09e783e57c8c",
+        "python/fireprot/backends/amd/triangle_multiplication.py": "40effd005b978f70869e2cbd582a82501b069ca58555b84422b961b44cfda02a",
+        "python/fireprot/backends/amd/two_gcd_attention.py": "695db35251ba84a5d0ccc632c5c1cfcf970e4616fe442b42b7df5ee769a8da05",
+        "python/fireprot/ops/_bridge.py": "679d22330ca64b05c89a9c0a1da34e352731985ef1a12f458b1da7e03ceaa1c5",
+        "python/fireprot/ops/registry.py": "82cdb1cb2892d7571b765bde564651dcb92650c8350675e757e8359927419c8f",
+        "python/fireprot/validation/protenix.py": "cdf3279f708b147ec014af3ec5970e3c7920d325533763fb7cbf01faa3f1d61b",
+        "python/fireprot_workers/__init__.py": "4d3f99912815c2e067831f2217be7ce1128bf9316c223589247ff752a4030bfd",
+        "python/fireprot_workers/__main__.py": "85ebc2d680d0e895076fe8c6eef629613cfaa2a14539bc3a0d86631f16e83d2d",
+        "python/fireprot_workers/atlasfold.py": "c7f80e58043de8986f4a42519d058f27f0b2054de82bcd7ebdc1893130e030d5",
+        "python/fireprot_workers/esmc_cpu_loading.py": "fdb33412ee80a1ddffed8deeb6f9df13532273548e382dbcd57d21ce53aaf207",
+        "python/fireprot_workers/esmfold2.py": "b6eb9fd1346ded92f1cdd51a71b48fdc19bc779fb058da13e0055218ba5046c4",
+        "python/fireprot_workers/openfold3.py": "c30ab522f9a18cb5fa0f21a182d5d2ac33e85173becb4676489485f6eb7d140e",
+        "python/fireprot_workers/plm.py": "da89c524d5ee2268f8a7dbfd2b9f136b376f9c79b8c5ee4f139b17a8c8211d9a",
+        "python/fireprot_workers/plm_batch.py": "2c05e8c7ea4a7fe88f238887ac8e2e9a6a42896e069ace0964319963fe87100d",
+        "python/fireprot_workers/plm_loading.py": "51e1b25b53f2f798e695ceab5818e31d073448510ee37f9a6aebf4c5eafe81fe",
+        "python/fireprot_workers/protenix.py": "3f2d2f79759ee5a5f21917f6553feb7dcdd8adbac4594c59703193bb446d064f",
+        "python/fireprot_workers/protenix_esm.py": "0597c899caeee94327e7a2e797330875abd816cc59f36b8eeb7e4fd46a617182",
+        "python/fireprot_workers/transport.py": "646ae17ba0585fd0e05e4ea5ec2a3e7c9f9d9490354c86f5f3775c173bc127da",
+        "target/release/fireprot": "cef22319fbf98f62b22a3c8c991332ba2791976c8139372edb2205863aecf65b",
+        "target/release/lib_fireprot_bridge.so": "0c77ddc55f622d8afd40c02c40ec70babbf5ad8c6038e935f1e16b4e70d6820b",
+        "tests/adapters/test_esm_frameless.py": "064890657cc9008748ddb36dd1dbd52f06ea3de1b90fb2801c3f376d42384002"
+      }
+    }
+  },
+  "paired": {
+    "pin": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/collected.json",
+      "sha256": "0be2b9f321470fa689f87c1aa3b2b64ecaaaf9b834c18be7bf0d4b6e72ba1094"
+    },
+    "data": {
+      "schema_version": 1,
+      "cases": {
+        "4": {
+          "benchmark": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b4-pairs/measurements/benchmark.json",
+            "sha256": "053729505b4bd541f0dd16dbff85188a2a22d0df3513c3705759fb0e333b8e90"
+          },
+          "comparison": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b4-pairs/measurements/comparison.json",
+            "sha256": "376ece4e7d0f1c4d8f17553a3b7e621e2ac24c17b5cfbf60a56f0c24173a09fe"
+          },
+          "reference_accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/native-pairs/baseline-1/accepted.json",
+            "sha256": "e53fe18e5a98befb016f2e3a462a69dbc2f4160734e17642f87c211c30edc43e"
+          },
+          "all_arrays_exact": true,
+          "records": [
+            {
+              "slot": {
+                "arm": "baseline",
+                "pair": 0
+              },
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b4-pairs/measurements/measurement-000/invocation.json",
+                "sha256": "45e6b5400272597abe06414d86135812186ffa87cc5bf2b8de40dcf48621d112"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b4-pairs/baseline-1/accepted.json",
+                "sha256": "66621a303c2af58fb86f1349c0675a6b16c0dbec9ef88b496d4b13f961cc00a5"
+              },
+              "e2e_seconds": 12.741827449,
+              "model_forward_seconds": 1.307847700896673
+            },
+            {
+              "slot": {
+                "arm": "candidate",
+                "pair": 0
+              },
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b4-pairs/measurements/measurement-001/invocation.json",
+                "sha256": "72f6f1b3cf978b1aeeb48f08e1d876b7d3bf874586c8644011fe56d0a05679af"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b4-pairs/candidate-1/accepted.json",
+                "sha256": "b9ad128187c85846138233563fd0bbc6c44c5eb672459f9201cc61026f0481ad"
+              },
+              "e2e_seconds": 12.633164752,
+              "model_forward_seconds": 1.2302947420394048
+            },
+            {
+              "slot": {
+                "arm": "candidate",
+                "pair": 1
+              },
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b4-pairs/measurements/measurement-002/invocation.json",
+                "sha256": "4f26f0c1f037f0fdba8dbdac6487812a44b868792ca74e42ad3ccd0e7073a9cc"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b4-pairs/candidate-2/accepted.json",
+                "sha256": "7e17ec3febb5080473d7f6deb1249a32f8cd162ce0c3b86206bd1d4acc7961b2"
+              },
+              "e2e_seconds": 12.722611717,
+              "model_forward_seconds": 1.2680397549411282
+            },
+            {
+              "slot": {
+                "arm": "baseline",
+                "pair": 1
+              },
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b4-pairs/measurements/measurement-003/invocation.json",
+                "sha256": "08a8e15a978d628dfa3e6cf4e6c863e6c6520b2a991f78956506e4e84999a873"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b4-pairs/baseline-2/accepted.json",
+                "sha256": "dfacaea90ace100a1af6d731ce0b117c86c9f759ba1b33338a0f648859e14b3c"
+              },
+              "e2e_seconds": 12.607642591,
+              "model_forward_seconds": 1.2976271320367232
+            },
+            {
+              "slot": {
+                "arm": "baseline",
+                "pair": 2
+              },
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b4-pairs/measurements/measurement-004/invocation.json",
+                "sha256": "20eb8a58169330bc9874deeeb870fd417d3ea9a2960b01d42f1551737d2f4e1e"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b4-pairs/baseline-3/accepted.json",
+                "sha256": "6bfff713784dddcb00c2d741f066721ee8dd183f75d989f64eca40c00c7738d0"
+              },
+              "e2e_seconds": 12.619010931,
+              "model_forward_seconds": 1.2751522730104625
+            },
+            {
+              "slot": {
+                "arm": "candidate",
+                "pair": 2
+              },
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b4-pairs/measurements/measurement-005/invocation.json",
+                "sha256": "d146d8454869d510e755c611e200b78a15a384f59f5f23ad5e5791e5ed21d292"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b4-pairs/candidate-3/accepted.json",
+                "sha256": "77977d2aad0157cec2718af2b723e959f30dda7f579ceef5329a74672ad4b2b4"
+              },
+              "e2e_seconds": 12.644268313,
+              "model_forward_seconds": 1.2451978930039331
+            }
+          ],
+          "performance": {
+            "baseline": {
+              "count": 3,
+              "min": 12.607642591,
+              "median": 12.619010931,
+              "p95": 12.741827449,
+              "max": 12.741827449,
+              "mean": 12.656160323666667
+            },
+            "candidate": {
+              "count": 3,
+              "min": 12.633164752,
+              "median": 12.644268313,
+              "p95": 12.722611717,
+              "max": 12.722611717,
+              "mean": 12.666681594
+            },
+            "median_speedup": 0.9980024639326871,
+            "p95_speedup": 1.0015103606419369,
+            "paired_speedups": [
+              1.0086013836701366,
+              0.9909634021254946,
+              0.9980024639326871
+            ],
+            "paired_summary": {
+              "count": 3,
+              "min": 0.9909634021254946,
+              "median": 0.9980024639326871,
+              "p95": 1.0086013836701366,
+              "max": 1.0086013836701366,
+              "mean": 0.9991890832427728
+            },
+            "observed_trend": "mixed_or_unchanged",
+            "changes": {
+              "invocation.profile_sha256": {
+                "baseline": "b10fe56f27e102825bbee91adc97c95e76150b615d5b631c53697b0656ab4107",
+                "candidate": "6f3b1113ee4d292d9f76f7f720bad18377cc493cc2b6a526134822486abec495"
+              },
+              "launch.environment.FIREPROT_ESMC_POINTWISE": {
+                "baseline": "0",
+                "candidate": "1"
+              }
+            }
+          },
+          "medians": {
+            "e2e_seconds": {
+              "baseline": 12.619010931,
+              "candidate": 12.644268313
+            },
+            "model_forward_seconds": {
+              "baseline": 1.2976271320367232,
+              "candidate": 1.2451978930039331
+            }
+          }
+        },
+        "64": {
+          "benchmark": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b64-pairs/measurements/benchmark.json",
+            "sha256": "b9b123220939b74207c87072a1230c90bcea2d2777786dd71cc93ac48639b832"
+          },
+          "comparison": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b64-pairs/measurements/comparison.json",
+            "sha256": "83e326b596fc4cdff72c0f83966ebce456bb891bc685b521324e55f9a1d01ae8"
+          },
+          "reference_accepted": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/native64/accepted.json",
+            "sha256": "c18673e637bd57d5e12f93b67e05d62b0709ad8e51524b7766d16de3304513cd"
+          },
+          "all_arrays_exact": true,
+          "records": [
+            {
+              "slot": {
+                "arm": "baseline",
+                "pair": 0
+              },
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b64-pairs/measurements/measurement-000/invocation.json",
+                "sha256": "a231f50d2547df71414c4b26f82c754909f0e1f15348602d1fd2f50a4a4a2a8b"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b64-pairs/baseline-1/accepted.json",
+                "sha256": "96fc55000d9bcf6664d2c0d853a19b203034daa923d9b044c5deab86c03ec846"
+              },
+              "e2e_seconds": 23.736663141,
+              "model_forward_seconds": 9.930391093250364
+            },
+            {
+              "slot": {
+                "arm": "candidate",
+                "pair": 0
+              },
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b64-pairs/measurements/measurement-001/invocation.json",
+                "sha256": "4499042038e85820c913ac2f9252323abf455192e68b2ffc6fbe6d0662163728"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b64-pairs/candidate-1/accepted.json",
+                "sha256": "54c9cad95c0e324b8c7b2b2ce607afea0ba3feae55ecc4b12bdc2687e859a42a"
+              },
+              "e2e_seconds": 23.054728301,
+              "model_forward_seconds": 9.71555541176349
+            },
+            {
+              "slot": {
+                "arm": "candidate",
+                "pair": 1
+              },
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b64-pairs/measurements/measurement-002/invocation.json",
+                "sha256": "b38bc675562b73016d0636b5608dc1628ce278fa4a941d54b946177ba3773b97"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b64-pairs/candidate-2/accepted.json",
+                "sha256": "b08c40fe21578c008647a819045994a885f56e1a9415d97ab0051ad99c06387e"
+              },
+              "e2e_seconds": 23.063893675,
+              "model_forward_seconds": 9.734684543102048
+            },
+            {
+              "slot": {
+                "arm": "baseline",
+                "pair": 1
+              },
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b64-pairs/measurements/measurement-003/invocation.json",
+                "sha256": "e82f314b4a3cd62d0823abb9b4f544bb1bd694451b55ae60985fe47d300ea9c4"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b64-pairs/baseline-2/accepted.json",
+                "sha256": "73d24d3884d0c457c23f7000c4b159b19b00392f90f1d66680553ebcf7df3805"
+              },
+              "e2e_seconds": 23.754121944,
+              "model_forward_seconds": 9.939953375956975
+            },
+            {
+              "slot": {
+                "arm": "baseline",
+                "pair": 2
+              },
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b64-pairs/measurements/measurement-004/invocation.json",
+                "sha256": "cf1643ea4c2df9c77215a2bf2c00d9145bd8f195748f45af0fadb0352ea9641e"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b64-pairs/baseline-3/accepted.json",
+                "sha256": "5131ef3307096fdccb80f6f48b3bcf7becb461851a90fcd2cc30207f13f90b14"
+              },
+              "e2e_seconds": 23.646440935,
+              "model_forward_seconds": 9.944592568674125
+            },
+            {
+              "slot": {
+                "arm": "candidate",
+                "pair": 2
+              },
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b64-pairs/measurements/measurement-005/invocation.json",
+                "sha256": "65a01b3b62884cbe5d06c495c778923f687642881e4d3b3af78231c86ffe9c3e"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/b64-pairs/candidate-3/accepted.json",
+                "sha256": "1cf7b294f8898dfdc21fc594131f638c325b42088bbf544374efdd8e86e2fc51"
+              },
+              "e2e_seconds": 23.059462135,
+              "model_forward_seconds": 9.751437837257981
+            }
+          ],
+          "performance": {
+            "baseline": {
+              "count": 3,
+              "min": 23.646440935,
+              "median": 23.736663141,
+              "p95": 23.754121944,
+              "max": 23.754121944,
+              "mean": 23.712408673333336
+            },
+            "candidate": {
+              "count": 3,
+              "min": 23.054728301,
+              "median": 23.059462135,
+              "p95": 23.063893675,
+              "max": 23.063893675,
+              "mean": 23.05936137033333
+            },
+            "median_speedup": 1.0293675976497358,
+            "p95_speedup": 1.0299267885434353,
+            "paired_speedups": [
+              1.0295789579949386,
+              1.0299267885434353,
+              1.0254550082982672
+            ],
+            "paired_summary": {
+              "count": 3,
+              "min": 1.0254550082982672,
+              "median": 1.0295789579949386,
+              "p95": 1.0299267885434353,
+              "max": 1.0299267885434353,
+              "mean": 1.0283202516122136
+            },
+            "observed_trend": "faster_median_and_p95",
+            "changes": {
+              "invocation.profile_sha256": {
+                "baseline": "b10fe56f27e102825bbee91adc97c95e76150b615d5b631c53697b0656ab4107",
+                "candidate": "6f3b1113ee4d292d9f76f7f720bad18377cc493cc2b6a526134822486abec495"
+              },
+              "launch.environment.FIREPROT_ESMC_POINTWISE": {
+                "baseline": "0",
+                "candidate": "1"
+              }
+            }
+          },
+          "medians": {
+            "e2e_seconds": {
+              "baseline": 23.736663141,
+              "candidate": 23.059462135
+            },
+            "model_forward_seconds": {
+              "baseline": 9.939953375956975,
+              "candidate": 9.734684543102048
+            }
+          }
+        }
+      }
+    }
+  },
+  "sources": {
+    "esmc_pointwise.hip": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/esmc_pointwise.hip",
+      "sha256": "4ea35577c46f9a342251f0991fc1b32c526d4863548eada1d26475a149796bc6"
+    },
+    "esmc_pointwise_compat.hip": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/esmc_pointwise_compat.hip",
+      "sha256": "c4ce2e0397d7cccd8ef0ef7db7bfe858a385094c4b5ddeb58011496cfa0b9f57"
+    },
+    "fireprot_esm.hip": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/fireprot_esm.hip",
+      "sha256": "9ee873eaa59f6cec9b29d920b87d30a1e4ab83259bda78f6095f3eab4d81fdaf"
+    },
+    "esmc_pointwise_scope.py": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/esmc_pointwise_scope.py",
+      "sha256": "6f9801a5a1e8c205028e9f8394b3104fa283dcc14d28c80e51af08087f867cd0"
+    },
+    "screen_esmc_pointwise_v2.py": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/screen_esmc_pointwise_v2.py",
+      "sha256": "247fdaee06edf568b78c35cb54e341616b6c4b71f325612ce9a36fd3a1d41b43"
+    },
+    "validation/esmc_pointwise_scope.py": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/esmc_pointwise_scope.py",
+      "sha256": "51b39d6b74ee5f5cb846ac450022ea779d322b5ee0f31be74b947326e7d5ce4a"
+    },
+    "validation/prepare-measured.py": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/prepare-measured.py",
+      "sha256": "102fceed0d1403b2c26da1952336d092efee6e29b059556c2bb2ef4bc63b84b8"
+    },
+    "validation/collect_esmc_pointwise_pairs.py": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/collect_esmc_pointwise_pairs.py",
+      "sha256": "c01d50bf7865f8ac9d314bbc6ba0045713952347defc8b87f6dd2dfdb696205e"
+    }
+  },
+  "initial_screen": {
+    "pin": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/screen/report.json",
+      "sha256": "3b5ea1b8d6585fe946663501187932f6f5559d5f8a9fb6cf93bb31161aa3d2b5"
+    },
+    "data": {
+      "model": "esmc-fold2-6b",
+      "seed": 101,
+      "hip_device": 6,
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "dtype": "native BF16",
+      "length": 1000,
+      "request_sha256": "a01afbc2684f860fa3c4603b0362407ef02bf0a65f96c8749b8ae09b6c391450",
+      "library_sha256": "8f876036b2ce6e23e0923137fc0f90292454aaa6b477b801d57e1dde41167211",
+      "script_sha256": "333e79e56910459e0f5ae3a3e4137fad5e8ddea5f158f1d6fd7ab1db8a3eb186",
+      "scope_sha256": "6f9801a5a1e8c205028e9f8394b3104fa283dcc14d28c80e51af08087f867cd0",
+      "boundary": "warm operators and forward; excludes loading and export; not E2E",
+      "cache_state": "resident model; warmed operators; caches not flushed",
+      "cases": [
+        {
+          "batch": 1,
+          "scaling_factor": 1.4907119849998598,
+          "operators": [
+            {
+              "kind": "residual",
+              "vector": 1,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.029109499851862588,
+                  "candidate": 0.01993943254152934
+                },
+                {
+                  "candidate": 0.019662233193715413,
+                  "baseline": 0.028554999828338624
+                },
+                {
+                  "baseline": 0.02719016671180725,
+                  "candidate": 0.019971434275309244
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.028554999828338624,
+                "candidate": 0.01993943254152934
+              },
+              "speedup": 1.4320868845622865
+            },
+            {
+              "kind": "residual",
+              "vector": 2,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.027398099501927693,
+                  "candidate": 0.022407899300257366
+                },
+                {
+                  "candidate": 0.021202999353408813,
+                  "baseline": 0.02689696749051412
+                },
+                {
+                  "baseline": 0.026859633127848306,
+                  "candidate": 0.018809199333190918
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.02689696749051412,
+                "candidate": 0.021202999353408813
+              },
+              "speedup": 1.2685454091753243
+            },
+            {
+              "kind": "residual",
+              "vector": 4,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.026481099923451743,
+                  "candidate": 0.020344632863998412
+                },
+                {
+                  "candidate": 0.019640900691350303,
+                  "baseline": 0.026726333300272624
+                },
+                {
+                  "baseline": 0.02656636635462443,
+                  "candidate": 0.018899834156036376
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.02656636635462443,
+                "candidate": 0.019640900691350303
+              },
+              "speedup": 1.3526042808374898
+            },
+            {
+              "kind": "residual",
+              "vector": 8,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.026737032334009807,
+                  "candidate": 0.01955560048421224
+                },
+                {
+                  "candidate": 0.019427667061487835,
+                  "baseline": 0.02677963376045227
+                },
+                {
+                  "baseline": 0.026566400130589803,
+                  "candidate": 0.019209033250808714
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.026737032334009807,
+                "candidate": 0.019427667061487835
+              },
+              "speedup": 1.376234843297865
+            },
+            {
+              "kind": "swiglu",
+              "vector": 1,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.06630136569341023,
+                  "candidate": 0.0662853995958964
+                },
+                {
+                  "candidate": 0.06616810162862143,
+                  "baseline": 0.0660028338432312
+                },
+                {
+                  "baseline": 0.06565626462300618,
+                  "candidate": 0.06616276502609253
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.0660028338432312,
+                "candidate": 0.06616810162862143
+              },
+              "speedup": 0.9975023042625915
+            },
+            {
+              "kind": "swiglu",
+              "vector": 2,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.06590686639149984,
+                  "candidate": 0.04833986759185791
+                },
+                {
+                  "candidate": 0.04831323226292928,
+                  "baseline": 0.06604013442993165
+                },
+                {
+                  "baseline": 0.06583756605784098,
+                  "candidate": 0.04838786522547404
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.06590686639149984,
+                "candidate": 0.04833986759185791
+              },
+              "speedup": 1.3634060181538605
+            },
+            {
+              "kind": "swiglu",
+              "vector": 4,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.06607213417689005,
+                  "candidate": 0.04394676685333252
+                },
+                {
+                  "candidate": 0.04400543371836344,
+                  "baseline": 0.06597616672515869
+                },
+                {
+                  "baseline": 0.0661201000213623,
+                  "candidate": 0.04403743346532186
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.06607213417689005,
+                "candidate": 0.04400543371836344
+              },
+              "speedup": 1.501453993153536
+            },
+            {
+              "kind": "swiglu",
+              "vector": 8,
+              "bitwise_equal": true,
+              "pairs": [
+                {
+                  "baseline": 0.0663973331451416,
+                  "candidate": 0.04312040011088054
+                },
+                {
+                  "candidate": 0.04306710163752238,
+                  "baseline": 0.06594416697820028
+                },
+                {
+                  "baseline": 0.06605613231658936,
+                  "candidate": 0.04323240121205648
+                }
+              ],
+              "median_ms": {
+                "baseline": 0.06605613231658936,
+                "candidate": 0.04312040011088054
+              },
+              "speedup": 1.5318998002507278
+            }
+          ],
+          "forwards": [
+            {
+              "mode": "residual",
+              "vector": 8,
+              "pairs": [
+                {
+                  "baseline": [
+                    0.17529145197477192,
+                    0.17233159998431802,
+                    0.17146369197871536
+                  ],
+                  "candidate": [
+                    0.1702025110134855,
+                    0.17007329501211643,
+                    0.17010370502248406
+                  ]
+                },
+                {
+                  "candidate": [
+                    0.17012670694384724,
+                    0.17017338098958135,
+                    0.17013712297193706
+                  ],
+                  "baseline": [
+                    0.17149720003362745,
+                    0.17151688400190324,
+                    0.17157392401713878
+                  ]
+                },
+                {
+                  "baseline": [
+                    0.17150143906474113,
+                    0.17156498704571277,
+                    0.17179672594647855
+                  ],
+                  "candidate": [
+                    0.17003043100703508,
+                    0.17005089297890663,
+                    0.17001914395950735
+                  ]
+                }
+              ],
+              "audit": {
+                "residual_calls": 160,
+                "swiglu_calls": 0,
+                "audited": 160,
+                "vector": 8,
+                "mode": "residual"
+              },
+              "bitwise_equal": true,
+              "median_seconds": {
+                "baseline": 0.17156498704571277,
+                "candidate": 0.17010370502248406
+              },
+              "speedup": 1.0085905361263916
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "retained_setup_failures": [
+    "Initial screen stopped on missing SwiGLU scope coverage; corrected through compatible library ABI.",
+    "v2 build rejected undeclared include tree before compilation.",
+    "v3 build rejected missing staged header; v4 declares complete separate header tree."
+  ],
+  "acceptance": {
+    "measured_invocations": 12,
+    "measured_archives": 408,
+    "reference_archives": 68,
+    "all_archives_rehashed": 476,
+    "all_final_arrays_byte_equal": true
+  },
+  "cache_state": "Fresh E2E workers; resident-file and GPU caches not flushed; library built offline; full original checkpoint SHA256; no output cache.",
+  "full_evidence": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/evidence.json",
+    "sha256": "870b2fb6a08aa0f9a031400805f3de9f9a9389a071259a107aba7b1a7e007c12"
+  }
+}

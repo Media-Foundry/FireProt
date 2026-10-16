@@ -7053,3 +7053,68 @@ this cycle also restores the unchanged approved current Cargo.toml, bridge/CLI/
 validation manifests, LICENSE, THIRD_PARTY.md and licenses/*.txt, with explicit
 per-file preimages. patches/ck/LICENSE already matches current. No licensing terms
 are changed locally; this repairs the partial historical remote deployment.
+
+
+## 2026-10-16 ESMC exact HIP pointwise follow-up
+
+Active goal remains consistently optimize ESMC. This cycle adds measured progress
+for resident64 only. Master base909c6b9. HIP6 /PCI0000:8e:00.0 /SMI4 exclusively;
+all GPU runs finished before evidence collection. Existing default profile and
+maintained binary unchanged. User docs/isa remains untracked and untouched.
+
+Root: outputs/experiments/esmc-pointwise-20261016. Original handwritten HIP fuses
+residual divide/add with intermediate BF16 rounding; vector SwiGLU retains SiLU
+rounding. No CK GEMM or attention replacement. Original hipBLASLt/AOTriton remain.
+Four vector widths tested on real first-block activations at B1/B4; all exact.
+Warm 3-pair AB/BA/AB forward screens (2warmups+3observations per arm):
+B1 residual2 171.607->169.801ms1.01064x; SwiGLU8 171.292->170.052ms1.00729x.
+B4 residual4 576.031->569.964ms1.01064x; SwiGLU8 574.835->566.942ms1.01392x.
+B4 operator-only residual4 1.7418x /SwiGLU8 1.6558x. Each screen audits all160
+residual and80SwiGLU intermediate outputs; final tokens/embeddings byte-equal.
+Do not multiply warm ratios or equate single-kernel and E2E speedup.
+
+Composition residual4+SwiGLU8 on current hash8/localCPU/pinned/import-overlap path:
+- B4 E2E12.619010931->12.644268313s0.998002464x; mixed, default unchanged.
+  Model-forward1.297627132->1.245197893s1.0421x.
+- resident64 (16B4 groups) E2E23.736663141->23.059462135s1.029367598x;
+  all3faster, pair ratios1.029578958/1.029926789/1.025455008.
+  Model-forward9.939953376->9.734684543s1.0211x. Full E2E saving cannot all be
+  attributed to GPU arithmetic. Candidate max23.063894<baseline max23.754122.
+Both workloads N1000/nativeBF16/seed101/HIP6, fresh workers/unflushed caches,
+full original checkpoint SHA256 and all exports,3pairsAB/BA/AB each.
+Independent collector rehashes12invocations408archives plus68native references,
+476total; all arrays byte-identical to official same-batch outputs. B4 reference
+esmc-load-20261016/validation/native-pairs/baseline-1; new native64 reference under
+this root/validation/native64. That one native64 call is correctness only, not
+an independently paired native performance measurement. Direct-native B4 remains1.911x.
+
+New opt-in configs/diamondhill/plm-esmc-fold2-6b-pointwise.json keeps measured
+profile bytes SHA6f3b1113ee4d292d9f76f7f720bad18377cc493cc2b6a526134822486abec495.
+Request configs/requests/plm-esmc-fold2-6b-resident64-pointwise.json uses the pinned
+64sequence input and extra hip_esmc_pointwise library. CLI/worker deployment:
+this root/validation/qualified-pointwise. FIREPROT_ESMC_POINTWISE=0 is control,
+1 enables composition. Use frozen CLI+worker; top-level worker does not enable it.
+This is experimental resident64 opt-in, not universal/default promotion.
+
+Sources/scripts experiments/plm/esmc_pointwise{,_compat}.hip,
+esmc_pointwise_scope.py, screen_esmc_pointwise.py,
+prepare_esmc_pointwise_pairs.py, collect_esmc_pointwise_pairs.py.
+Rust build successful receipt build-receipt-v4.json; combined library identity
+esmc_pointwise_compat_b10ad2bb108d08588a7c6641da0f76410e1d94d7b0af1c73e8ee9d698c8318ef.
+Original failed screen kept under screen/ and screen.log: replacing FFN inside
+qualified scope violated SwiGLU count. Corrected screen-v2 uses compatible ABI;
+all80RoPE+80SwiGLU counts retained. Buildv2 undeclared include tree and v3 missing
+staged header rejected before GPU. V4 declares separate complete headers tree.
+No guards bypassed. Remote measured screen script named screen_esmc_pointwise_v2.py.
+Its scope is the original under root; final local scope appends E2E wrapper only.
+Frozen validation source has the appended wrapper and is recorded independently.
+
+Evidence provenance/esmc_pointwise_20261016.json and docs/esmc-pointwise.md;
+README updated. Rust request inspect, Python syntax, git diff checks passed.
+GitNexus CLI index refreshed; service index had stale warning so source verified.
+Next: small pointwise work now near flat for one-group E2E. Avoid repeating CK
+48tiles/permutations or graph trials. Larger GPU time remains GEMM; host residual
+cost remains a separate candidate. A lazy FFN candidate remains disabled due mixed
+single-group E2E; if tested with this resident path, measure full composition.
+Top-source sync baseline909c6b9; use a fresh backup in this experiment root and
+source-sync-receipt.json. Never sync weights, outputs, Git metadata or docs/isa.

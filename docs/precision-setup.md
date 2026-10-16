@@ -51,8 +51,15 @@ another project's temporary directory. Original files are preserved.
 ## Asset layout and migration
 
 The explicit manifest contains **49 files / 52,778,669,198 bytes**. Of this,
-**11,253,416,040 bytes** are reused locally and **41,525,253,158 bytes** are copied
-from DiamondHill. It includes model weights, snapshot metadata and required CCD
+**11,253,416,040 bytes** are reused locally and **41,525,253,158 bytes** require
+network transfer. DiamondHill is the initial transfer source. While its benchmarks
+run, a separate local-host relay downloads the pinned official ESMFold2 revision
+directly and streams it to Precision. Precision itself could not connect directly
+to Hugging Face; the local relay can. Each streamed file must match the same
+source-manifest size and full SHA-256 before atomic installation. Existing valid
+files are preserved, and subsequent rsync skips them. The relay reads no
+DiamondHill files and starts no process there. The manifest includes model
+weights, snapshot metadata and required CCD
 resources. Corrupt/partial historical downloads are excluded.
 
 | Assets | Destination relative to workspace |
@@ -74,6 +81,40 @@ verification; `verified-assets.json` is written only after every destination
 file passes complete SHA-256 verification. No checkpoint is added to Git.
 
 **Migration status: transfer and final destination verification are in progress.**
+
+### Detached Wi-Fi transfer
+
+The user selected continued Wi-Fi transfer. As of 2026-10-17, the transfer and
+final verifier run in detached tmux sessions and survive SSH disconnection:
+
+| Host | Session | Purpose |
+| --- | --- | --- |
+| DiamondHill | `fireprot-refresh-finalize` | Wait for the remaining GPU studies, independently verify their evidence, then release the transfer |
+| DiamondHill | `fireprot-precision-transfer` | Copy missing assets after release; retain partial rsync data for retry |
+| Precision | `fireprot-assets-verify` | Wait for all 49 files, then verify every complete SHA-256 |
+
+Inspect the sessions with:
+
+```bash
+ssh -t pc@10.120.16.5 tmux attach -t fireprot-precision-transfer
+ssh -t Precision tmux attach -t fireprot-assets-verify
+```
+
+Detach with `Ctrl-b`, then `d`; completed sessions exit. Durable logs and status
+files remain under DiamondHill's
+`outputs/experiments/e2e-refresh-20261016/` (`asset-transfer-tmux.log`,
+`asset-transfer-v2-status.json`, `finish-and-release-status.json`) and Precision's
+`runtime/migration-20261016/` (`verification-tmux.log`,
+`verification-progress.json`, `verified-assets.json`). A successful transfer
+status alone is insufficient: only `verified-assets.json` with status
+`all_files_sha256_verified` confirms migration completion.
+
+The replacement sender was moved into tmux while it was still waiting, with no
+active file-copy child. The old waiting verifier was replaced separately. The
+active public-download stream and model jobs were left running. The release
+watcher preserves the failed original experiments and requires successful
+replacement studies plus independent evidence checks. If it fails, inspect its
+log before resuming; do not bypass numerical acceptance to publish a speedup.
 
 ## Native GPU qualification
 

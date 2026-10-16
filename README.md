@@ -91,32 +91,24 @@ Other starting points:
 | --- | --- | --- |
 | Protenix Base N1000, opt-in composed route | `configs/requests/protenix-base-n1000-fireprot.json` | `configs/diamondhill/protenix-base-n1000-optimized.json` |
 | Protenix Base, earlier published route | `configs/requests/protenix-base-n1000-fireprot.json` | `configs/diamondhill/protenix-base-published.json` |
-| Protenix Mini N1000 | `configs/requests/protenix-n1000-fireprot.json` | `configs/diamondhill/protenix-fireprot.json` |
-| Protenix Mini N1536 | `configs/requests/protenix-n1536-fireprot.json` | `configs/diamondhill/protenix-fireprot.json` |
+| Protenix Mini N1000 | `configs/requests/protenix-n1000-fireprot.json` | `configs/diamondhill/protenix-all-published.json` |
+| Protenix Mini N1536 | `configs/requests/protenix-n1536-fireprot.json` | `configs/diamondhill/protenix-all-published.json` |
 | AtlasFold + AtlasLM-3B N1536 | `configs/requests/atlasfold-n1536-hip-fused.json` | `configs/diamondhill/atlasfold-all-published.json` |
 | OpenFold3 strict N1000 | `configs/requests/openfold3-n1000-hip-fused.json` | `configs/diamondhill/openfold3-hip-fused.json` |
 | OpenFold3 strict N1536 | `configs/requests/openfold3-n1536-hip-fused.json` | `configs/diamondhill/openfold3-hip-fused.json` |
 | Biohub ESMFold2 + ESMC N1000, experimental opt-in | `configs/requests/esmfold2-n1000-fireprot.json` | `configs/diamondhill/esmfold2-experimental.json` |
 
 The opt-in Base profile requires **N1000, FP32 C10/D200/S1** and uses maintained
-workers plus the published bundles and buffered bridge installed on DiamondHill.
-Both umem and 5ZMW outputs match their frozen optimized references bitwise
-through the Rust-selected maintained context. The latest three matched native
-comparisons, including unused-template omission, measure **381.968 -> 110.025 s
-complete invocation medians (3.472x, 71.20% less time)** on the umem N1000 input,
-with shared fast initialization. Model-forward medians are 357.795 -> 86.894 s
-(4.118x). Native-to-optimized outputs meet the explicit 0.1 Angstrom aligned-RMSD
-and 0.001 summary-confidence criteria; cross-arm arrays are not bitwise equal,
-and the unchanged legacy 0.001 Angstrom coordinate gate still fails.
-The separate three-pair template experiment measures **111.936 -> 110.248 s
-(1.0153x incremental)** with identical outputs. The latest direct result is
-measured independently; incremental ratios are not multiplied.
+workers plus the qualified bundles and buffered bridge installed on DiamondHill.
+It includes shared fast initialization and omission of unused template work.
+Native-to-optimized outputs meet the explicit **0.1 Å aligned-RMSD** and
+**0.001 summary-confidence** criteria. Cross-arm arrays are not bitwise equal;
+the unchanged legacy 0.001 Å coordinate gate still fails. Use the
+[latest complete-call table](#latest-e2e-refresh--2026-10-16) for measured speedups.
 See [Base entry and qualification](docs/protenix-base.md#maintained-n1000-optimization-entry).
 
-HIP Graph is **not enabled** in this profile. Three matched comparisons against
-maintained eager execution found no E2E gain (112.761 s eager versus 113.375 s
-Graph medians), despite bitwise-identical outputs. See the
-[Graph decision](docs/protenix-base.md#graph-versus-maintained-eager-three-pair-decision).
+HIP Graph is not enabled: three matched comparisons found no E2E gain despite
+bitwise-identical outputs. See the [Graph decision](docs/protenix-base.md#graph-versus-maintained-eager-three-pair-decision).
 
 The Mini examples explicitly use **C4/D1/S1**; they are not the upstream Mini
 D5 default. Review the workload before using an example as a scientific preset.
@@ -197,7 +189,9 @@ boundaries; `predictions.json` alone is not complete E2E evidence.
 
 The new DiamondHill refresh uses complete Rust invocations, fresh workers,
 three AB/BA/AB pairs per workload, full checkpoint verification and all outputs.
-Only HIP6 / PCI `0000:8e:00.0` is used. Asset transfers are paused during timing.
+Only HIP6 / PCI `0000:8e:00.0` is used. DiamondHill-sourced asset transfers are
+paused during timing; a later independent local-to-Precision relay uses neither
+DiamondHill storage nor its CPU.
 Filesystem/GPU caches are unflushed. Scientific settings remain model-specific.
 
 | Standalone pLM, N1000 × 4 / B4 | Native median | Optimized median | E2E speedup |
@@ -306,122 +300,28 @@ This is an evidence-based work priority, not a forecast of additional speedup.
 
 | Model | Remaining opportunity and next step |
 | --- | --- |
-| **Standalone ESM/AtlasLM — measured N1000 routes** | Latest exact B4 complete invocation: **1.911x ESMC**, **2.336x ESM2**, **1.080x ESM3**; ESM3 warm forward **2.395x**. ESMC adds eight-thread full verification and Rust worker CPU affinity to pinned loading/import overlap; direct fixed GEMM remains experimental. AtlasLM retains its separate singleton/batch results. [ESMC host scheduling](docs/esmc-host-scheduling.md), [other ESM results](docs/esm-optimization.md). |
-| **ESMFold2 + ESMC — qualified folding route** | Native versus opt-in packing reuse now gives **2.006x complete N1000 invocation** and **3.289x forward** with exact outputs. Profile the optimized route before testing fused HIP cast/layout packing; no additional gain is established. |
-| **OpenFold3 — current cycle closed** | Final QKV LDS padding trials gave no consistent gain. Non-forward attribution is recorded; a thread-cap comparison was rejected by the protected environment gate. The accepted E2E result remains **2.864x**. [Final trials](docs/openfold3-performance.md#final-bounded-trials-and-transition-to-esmfold2-2026-10-15). |
-| **Mini-ESM — exploratory profiling** | ESM2-3B loading/features execute outside the folding-forward timer. Establish a serial N1000 complete-invocation baseline and stage split before selecting kernels; its remaining headroom is unknown. |
-| **Mini-default — remeasure before porting** | Historical N1000 request/model medians are **27.949 / 15.391 s**. Measure the current Rust entry and check whether later Base/OpenFold3 ideas apply to its actual shapes and C4/D1 workload. No transferred gain is established. |
-| **AtlasFold + AtlasLM-3B — reopen only with a new hotspot** | The previous exact-operator cycle reached a practical plateau. Later layout/LM trials gave negligible gains or failed equality; preserve every stochastic LM pass. A fresh stage profile is needed before further tuning. |
-| **Protenix Base — retain the qualified route** | Sampled triangle BMMs reach about **99% MFMA activity**; Graph and gate-fusion follow-ups did not improve E2E. The N1000 cycle and batching investigation are closed at their measured scope. |
-| **Tiny / OpenFold2 / original ESMFold v1** | Tiny is outside the long-sequence priority; the planned adapters need integration and baselines before an optimization ranking. |
+| **Standalone ESM/AtlasLM** | Fresh ESM B4 complete-call medians are 11–15 s, while reported model forwards take 1.3–1.9 s. Loading, verification, startup and export dominate this small batch's remaining latency. Consider measured residency/host costs before more kernel tuning; exact CK trials remain unqualified. |
+| **ESMFold2 + ESMC** | Fresh E2E is 178.666 s versus an 81.682 s model forward. Accepted nested timers leave about 20.4 s elsewhere inside the worker request and 77.0 s outside it, similar in both arms. Profile verification/startup/acceptance before selecting more GPU kernels; these boundaries do not identify individual stages. [Timing evidence](docs/e2e-refresh-20261016.md#esmfold2-remaining-time-outside-the-model-forward). |
+| **OpenFold3** | The preceding QKV LDS-padding trials found no consistent E2E gain; the fresh strict-FP32 run is pending. Preserve the qualified composition until profiling identifies a new dominant cost. [Final trials](docs/openfold3-performance.md#final-bounded-trials-and-transition-to-esmfold2-2026-10-15). |
+| **Mini-ESM** | The fresh three-pair result is 118.396 → 83.048 s (1.426x), with folding-forward medians 47.848 → 11.549 s. Prioritize profiling ESM2 feature preparation/loading and the remaining invocation work; the complete-call difference is not an isolated LM timer. |
+| **Mini-default** | Fresh N1000 optimized E2E/forward medians are 33.122/14.757 s; N1536 medians are 51.180/31.931 s. About 18–19 s remains outside the reported forward boundary. Any transferred optimization needs validation for its C4/D1 shapes. |
+| **AtlasFold + AtlasLM-3B** | The previous exact-operator cycle reached small returns; later layout/LM trials gave negligible gains or failed equality. Preserve every stochastic LM pass and reprofile the refreshed route before further tuning. |
+| **Protenix Base** | Sampled triangle BMMs reached about 99% MFMA activity. Graph and gate-fusion trials did not improve E2E; the user closed this optimization direction. Retain the qualified route. |
+| **Tiny / OpenFold2 / original ESMFold v1** | Tiny remains outside the long-sequence optimization priority. OpenFold2 and original ESMFold v1 need integration and baselines before ranking. |
 
 See [optimization priorities and evidence](docs/performance-priorities.md).
 The latest narrow-projection screen is an operator experiment only; it adds
 no measured E2E gain to the OpenFold3 **2.864x** result.
 
-### Experimental Base N1000 cycle
+### Historical optimization experiments
 
-With fast initialization in both arms, native GPU computation takes **357.921 s**
-and full CK/HIP takes **146.035 / 146.199 s** complete invocation time: approximately
-**2.45x**, one baseline and two candidate observations. The candidate repeats match
-all nine arrays bitwise. Native-to-candidate aligned RMSD is **0.054688 Å**, within
-the user-authorized 0.1 Å coordinate criterion; the old confidence gate still fails.
-This is numerical regression, not experimental structure accuracy. Base FP32,
-C10/D200/S1, seed101, N1000, strict determinism, HIP7, unflushed caches.
-See [scope, profiles and separate raw-native baseline](docs/protenix-base.md#full-ckhip-cycle-and-revised-coordinate-assessment-2026-10-07).
-
-The historical 357.921 s control used FireProt dispatch with native Torch triangle
-operators and already omitted the all-valid mask's zero bias. It is not the same
-execution path as `backend=native`. The new maintained direct comparison uses
-the latter with shared fast initialization; its latest **3.472x** result is listed above.
-See the [baseline route audit](docs/protenix-base.md#strict-n1000-attention-isolation).
-
-The published-artifact route retains the identical HIP/CK binaries and avoids
-build-input scans during inference. **Three AB/BA/AB pairs** measure complete
-invocation medians **146.146 -> 133.437 s (1.095x incremental, 8.70% less time)**.
-All six outputs match all nine arrays bitwise. This is a loading-path gain over
-full CK/HIP, separate from the earlier native-GPU baseline. The experimental
-profile above pins both bundles. See
-[published Base deployment](docs/protenix-base.md#published-artifact-loading).
-
-Two later Base experiments use separate matched baselines, each with three pairs:
-
-| Increment | Complete invocation medians | Incremental speedup |
-| --- | ---: | ---: |
-| Scoped Torch hipBLASLt triangle contractions | 133.856 -> 131.123 s | **1.0208x** |
-| Buffered Rust parsing of published kernel receipts | 131.745 -> 122.459 s | **1.0758x** |
-
-The Lt experiment meets the user coordinate criterion while its legacy comparison
-still fails; the buffered-reading comparison preserves all nine arrays bitwise
-and passes unchanged gates. These use frozen experimental workers/bridges, beyond
-the published profile above. Do not multiply their ratios into an original-Torch
-claim. See [Lt evidence](docs/protenix-base.md#trained-lt-cost-diagnosis-and-torch-blas-reuse)
-and [receipt parsing](docs/protenix-base.md#receipt-parsing-diagnosis).
-
-
-Static diffusion bias reuse was subsequently qualified in the experimental Base
-worker. With global bias caching already enabled in both arms, **three local-bias
-cache pairs** measure **120.025 -> 113.318 s** complete invocation medians
-(**1.0592x incremental**, 5.59% less time). All six outputs match all nine arrays
-bitwise and unchanged Rust gates pass. This frozen worker is not yet the published
-profile's default. See [cache results](docs/protenix-base.md#static-diffusion-bias-audit).
-
-
-### Later OpenFold3 increments — separate baselines
-
-| N1536 experiment | Previous → candidate E2E median | Incremental speedup |
-| --- | ---: | ---: |
-| D16 coverage vs combined reuse | 628.689 → 540.848 s | **1.1624x** |
-| Retained workspace/mask handling vs D16/cache combination | 540.302 → 449.723 s | **1.2014x** |
-| Triangle multiplication copies + attention K packing vs workspace | 452.471 → 416.226 s | **1.0871x** |
-| Identical template-slot reuse vs triangle-memory combination | 419.239 → 387.985 s | **1.0806x** |
-| Exact HIP C128 LayerNorm vs template-reuse combination | 391.162 → 364.159 s | **1.0742x** |
-| Fused triangle gates/packing vs canonical-layout HIP normalization combination | 352.949 → 348.258 s | **1.0135x** |
-| Isolated single-item data preparation vs gate/packing combination | 349.971 → 341.782 s | **1.0240x** |
-| QK-softmax-PV fusion with PV-unroll4 vs isolated-data combination | 345.753 → 330.999 s | **1.0446x** |
-| HIP-packed global diffusion bias + grouped softmax vs unroll4 | 330.161 → 322.417 s | **1.0240x** |
-
-Each row has three pairs under the same strict R3/D200/S1 contract. The
-triangle comparison also reduces model forward time **356.595 → 321.699 s
-(1.1085x)**; all six outputs match all 11 arrays and full CIF bytes against the
-native, D16 and workspace anchors. N1000 fallback passes separately.
-The later template comparison reduces model forward **323.661 → 291.027 s
-(1.1121x)**; all six outputs match all 11 arrays and full CIF bytes against the
-qualified triangle-memory anchor. Its scope is N1536 and it remains experimental.
-See [complete evidence and reproduction scope](docs/openfold3-performance.md).
-
-A subsequent global-bias cache experiment measures329.492 ->320.447 s median
-(1.0282x), but one of three pairs regresses; it is **not promoted**. A separate
-HIP bias transpose plus grouped softmax screen reduces synthetic global attention
-from3.650 to1.470 ms with exact results. Full-model qualification and all six paired runs preserve all 11 arrays and
-complete CIF bytes. Three pairs measure **330.161 ->322.417 s E2E medians
-(1.0240x incremental, 2.35% less time)**; every pair improves. Retain this addition
-in the experimental composition. The attention ratio itself is not an E2E claim.
-See [diffusion experiment status](experiments/openfold3_diffusion/README.md#hip-packing-screen).
-
-**Do not multiply these incremental ratios into an original-Torch speedup.**
-The latest composition now has its own three-pair direct comparison: **950.891 →
-331.970 s complete invocation medians (2.864x, 65.09% less time)**. Model forward
-medians are **855.152 → 237.199 s (3.605x)**. Candidate observations span
-321.836–374.020 s; all are retained. Both arms use the common FireProt launcher,
-and the native route preserves upstream data-module defaults. This composition
-remains available through the frozen experimental entry, pending maintained integration.
-
-An earlier additional attention cycle rejected both exact candidates: native BMM
-into reused scores plus HIP softmax made complete attention approximately 11%
-slower, and double-LDS buffering made it approximately 1.3% slower. The validated
-triangle-memory combination is retained; neither rejected candidate is promoted.
-
-A later exact QK–softmax–PV fusion also failed its E2E gate: three pairs gave
-**341.626 ->342.072 s (0.9987x)** despite a 3.3–3.5% module replay gain. All six
-outputs match all 11 arrays and full CIF bytes. At that stage the isolated-data combination
-was retained; the initial index32 fusion was not promoted. Later unroll4 and
-global-softmax additions are measured separately in the table above. See the
-[paired decision](docs/openfold3-performance.md#qkv-index32-three-pair-n1536-e2e-rejection).
-
-C = Protenix cycles; R = additional recycles; D = diffusion steps; S = samples.
-Long inputs and the eight short development cases are regression/performance
-workloads, not an independent experimental structure-accuracy test set.
+Detailed experiments retain their original revisions, controls and timing
+boundaries in [Protenix Base](docs/protenix-base.md),
+[OpenFold3](docs/openfold3-performance.md), [AtlasFold](docs/atlasfold-performance.md),
+[Mini](docs/protenix-native-requests.md) and [ESMFold2](docs/esmfold2.md).
+Their incremental gains must not be multiplied or substituted for a fresh
+complete invocation comparison. The [Base reference-route audit](docs/protenix-base.md#strict-n1000-attention-isolation)
+explains why its older 357.921 s control differs from `backend=native`.
 
 ## Repository layout and documentation
 

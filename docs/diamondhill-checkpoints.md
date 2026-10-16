@@ -9,8 +9,9 @@ has not been independently verified in this task.
 Preferred SSH endpoint: `pc@10.120.16.5` (updated 2026-10-07).
 `10.120.16.9` is another interface on the same DiamondHill host; hostname and
 boot identity were checked before switching. FireProt workspace: `/media/IntelSSD/fireprot`.
-The current user restriction is **HIP_VISIBLE_DEVICES=7**; it supersedes
-the earlier authorization to use all eight GCDs.
+The 2026-10-16 refresh uses **HIP_VISIBLE_DEVICES=6**, following the user's later
+authorization of HIP6. Historical experiments also used HIP7. The current HIP6
+mapping is PCI `0000:8e:00.0`, SMI4; do not reuse an old ordinal assumption.
 Check device occupancy before execution and monitor benchmark isolation.
 
 ## ESMFold2 (current target, 2026-10-15)
@@ -40,9 +41,9 @@ See [ESMFold2 integration](esmfold2.md) and
 | AF2 model_3_ptm | 371746284 | `/home/pc/Code/colabfold/cache/params/params_model_3_ptm.npz` |
 | OpenFold3 / OpenBind-0 | 2287872989 | `/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt` |
 
-The user also reports AF2 `model_1_ptm` through `model_5_ptm` in the same
-parameter directory. This task has checked only `model_3_ptm`; compatibility
-with a future OpenFold adapter remains to be validated.
+All five AF2 files, `model_1_ptm` through `model_5_ptm`, are in the same parameter
+directory. The 2026-10-16 Precision migration manifest fully hashed all five;
+compatibility with a future OpenFold2 adapter remains to be validated.
 
 ## AtlasFold source and environment
 
@@ -95,29 +96,24 @@ ESM2-3B checkpoint and contact-regression companion under
 These files are separate from AtlasFold's AtlasLM checkpoint. All three are
 required by the Mini-ESM request contract.
 
-## Protenix Base-default v0.5.0: next target
+## Protenix Base-default v0.5.0
 
 User-supplied checkpoint, remote metadata verified on 2026-10-06:
 
 - Path: `/media/IntelSSD/fireprot/runtime/checkpoint/protenix_base_default_v0.5.0.pt`
 - Size: **1,474,265,486 bytes**.
 - The resolved path is identical to the supplied path.
-- Full SHA-256, checkpoint contents and model loading have not yet been verified.
-  Perform those checks after the running OpenFold3 benchmark to avoid additional
-  checkpoint I/O during timing.
+- Full SHA-256 and loading were subsequently verified; the maintained
+  [request](../configs/requests/protenix-base-n1000-fireprot.json) pins the file.
 
 This is a separate target from the measured Mini-default model. The local
 upstream model configuration selects 10 cycles and 200 diffusion steps for
 Base-default v0.5.0, versus Mini-default's 4 cycles and 5 steps. Confirm the full
 resolved configuration against the pinned runtime source before benchmarking;
 do not silently apply the Mini workload or transfer its speedup claims.
-The maintained worker currently accepts Mini-default, Mini-ESM and Tiny-default,
-so Base requires an explicit integration and validation step.
-
-Sequence: complete the current OpenFold3 cycle, the one additional attention
-cycle, and README clarification; then integrate Base and profile representative
-1000/1536-residue workloads with native and optimized outputs checked at matched
-scientific settings. Preserve these weights unchanged and outside Git.
+The maintained worker now supports Base and its qualified opt-in N1000
+composition. See [entry, numerical policy and performance](protenix-base.md).
+Preserve these weights unchanged and outside Git.
 
 ## Standalone language models (2026-10-15)
 
@@ -146,3 +142,13 @@ See [asset receipt](../provenance/esm3_assets_20261015.json) and
 [qualification](../provenance/esm3_qualification_20261015.json).
 The checkpoint is not added to Git. The standalone sequence-forward scope does
 not require the separate structure/function codec checkpoints.
+
+## Precision deployment (2026-10-16)
+
+The independent workspace is `Precision:/media/990Pro/fireprot`. Its home scan
+found published ESM2-3B, ESM3-open and original ESMFold v1 checkpoints; these
+three files were copied locally after full hash verification. Missing folding
+and language-model assets are transferred from the DiamondHill paths above.
+Destination layout, exact migration scope and final verification status are in
+[Precision setup](precision-setup.md). The source manifest has 49 regular files;
+weights and CCD resources remain under ignored `runtime/` on both hosts.

@@ -7660,3 +7660,145 @@ ESMFold2 arrays and entire CIF files are exact. Evidence saved locally in
 Remote `measured-scripts/collect-v3.py` is now the correct final collector.
 Original collector versions/logs remain. Run final collector after all GPU runs;
 archive exact helper pins before publishing final provenance.
+
+
+### Live queue and independent Precision relay (2026-10-17)
+
+OpenFold3 retry finished all three pairs with unchanged strict gates:
+956.613764652 / 319.987739499 s =2.989532556x; pair ratios2.962185592,
+2.986971211,3.023142036. Main scheduling parent1997786 resumed automatically.
+Mini-ESM N1000 also finished Rust gates:118.396248301 /83.048237717s =1.425632278x;
+aligned RMSD max0.000145803A, summary-confidence max0.000164032. Its model-forward
+medians47.848052482 /11.549273256s; worker-request107.030379716 /71.301459110s.
+AtlasFold N1000 finished; N1536 has started. Watch tool session28187 emits phase
+changes. Do NOT launch another DiamondHill GPU job. Transfer parent1989212 stays
+paused; Base watcher90863 follows main queue, then true AtlasLM B4 follows Base.
+Final independent v3 collector still required for these newly completed cases.
+
+Local master ea4f219 is pushed and Precision ff-synced. Uncommitted README cleanup,
+checkpoint-doc fixes, full OpenFold3 inventory diff, ESMFold2 nested timing evidence
+and two public-relay helpers remain. User docs/isa stays untracked/untouched.
+ESMFold2 nested-timers.json hashes accepted predictions/supervisor metadata. It
+shows optimized model81.682s, within-worker non-model20.394s, supervisor outside
+worker43.490s, outer minus supervisor33.520s (per-run component medians). Frozen
+worker hash b6eb9f... matches local. Local provenance stores all6raw observations.
+
+To overlap asset movement without DiamondHill I/O, a local→Precision relay uses
+the pinned official Biohub ESMFold2 revision. Precision direct HF fails; local
+curl works through local127.0.0.1:7897 proxy. Complete size/SHA256 checks precede
+atomic hard-link installation. Existing conflicts are never overwritten. Helpers:
+experiments/e2e_refresh/precision_receive.py (remote /tmp/fireprot-precision-receive.py)
+and precision_relay.py. Original sequential relay session6814 was intentionally
+stopped after CCD/config/image completed to try two disjoint shard streams. The
+second stream gave no aggregate bandwidth gain and was stopped too (session29922).
+Both incomplete temporary files were rejected and removed; no partial installed.
+ACTIVE public relay: tool session22638, manifest/tmp/fireprot-precision-migration/
+relay-1.json, log/tmp/fireprot-precision-public-relay-1.jsonl. It downloads ONLY
+shard1 plus four small remaining snapshot metadata files. It is still streaming
+shard1 (~1.7MB/s), expected to finish around01:30 local. Do not assume all6shards
+will be covered: original DiamondHill sender handles remaining files after timing.
+A later small shard6 relay could overlap Base if useful, but is optional.
+Precision receipts: runtime/migration-20261016/public-download-progress.jsonl;
+stream temporaries under incoming/. All49-file verifier session35351 still waits.
+Global "transfers paused" documentation now explicitly refers to the DiamondHill
+sender; the independent relay never reads DiamondHill assets. Update final
+migration evidence with public origins and verified destination hashes.
+
+
+### CRITICAL: asset transfer rescheduled after all GPU evidence checks
+
+Precision has only Wi-Fi UP; both Ethernet interfaces are DOWN. Original
+large-file rsync measured about1.54MiB/s. Lossless F32 shard sampling compressed
+to0.937x, so large compression gains are unavailable. An optional asynchronous
+question asks the user whether wired networking can be connected; continue Wi-Fi
+unless they provide a usable alternative. No network configuration was changed.
+
+To avoid an entire slow file blocking Base between the two GPU queues, old
+sender PID1989212 was SIGKILLed only while T with no active children (all children
+Z). Before retiring it, Precision fully rehashed ALL25 present final files,
+21,654,614,716bytes; all passed. Receipt is runtime/migration-20261016/
+existing-files-before-reschedule.json. Source recordroot/asset-transfer-reschedule.json.
+No active rsync was killed and no partial final file was accepted. Main and Base
+scripts skip their old-pid resume/pause when that proc is absent, so Base follows
+main immediately. Nested true AtlasLM B4 remains after Base.
+
+REPLACEMENT TRANSFER IS WAITING FOR AN EXPLICIT RELEASE MARKER. Tool session99345
+runs source/tmp/fireprot-precision-transfer-after-refresh.py ROOT MANIFEST_SHA.
+ManifestSHA7265a548c26a1812e88c9c60dbaa43fadf77ccbaeb2798edf3ff294985614c73.
+After ALL GPU trials and final collector/Base checks are complete, root MUST
+write ROOT/release-asset-transfer.json with {"all_gpu_work_complete":true,
+"ssh_target":"husrcf@Precision"}. Do not forget this step; until then no source
+asset copying occurs. New sender uses rsync -az, --partial-dir=.fireprot-partial,
+--ignore-existing, with3attempts/120s network backoff. Existing final files were
+fully checked; future public relay files are atomic and hash-checked. Rootlogs
+asset-transfer-v2.jsonl and asset-transfer-v2-status.json; final49-file destination
+verifier session35351 still authoritative. If user provides wired IP, first verify
+same-host identity and SSH trust before selecting it in release marker.
+
+Public relay session22638 remains active, ONLY shard1 plus4smallmetadata files.
+No other public stream runs. Precision partial files are under incoming; the
+aborted second stream was cleaned. This relay is independent of DiamondHill.
+AtlasFold N1000 completedRustgates:194.931637250 /93.190568081s =2.091752859x;
+all arrays exact. N1536 is now active. Finalv3collector needed for new cases.
+
+
+### CRITICAL: AtlasFold N1536 retry queued AFTER Base/AtlasLM
+
+Original AtlasFold N1536 completed first native/candidate invocations but the
+comparison rejected the treatment declaration: actual changes only backend;
+preparer incorrectly declared Rust bridge candidate-only. Actual execution shows
+identical0c77dd... bridge in BOTH arms. Chunked reference registers only chunked
+Torch attention (528calls), no HIP kernels or extension. Original failure retained.
+New helper retry_atlasfold_n1536.py prepares fresh3pairs in
+ROOT/atlasfold-n1536-declaration-retry, removes only the nonexistent bridge delta,
+keepsallmodelsettings/profiles/gates unchanged. Plan appends this replacement;
+localprepare.py fixed for future chunked controls. Tool session20753 runs remote
+/tmp/fireprot-e2e-refresh-retry-atlasfold.py, WAITING for Base driver-status.json.
+Base script includes AtlasLM B4 before its EXIT status, so retry starts AFTER
+Base/B4. If Base fails early, retry can still proceed independently after its
+status; inspect B4 separately. Main queue is done; Tinypassed64.802861744 /
+44.647237072s =1.451441702x. Base native0hasstarted.
+
+IMPORTANT watcher28187 exits when Base/B4statusesexist; that does NOT mean all
+GPUworkisdone now. Wait for session20753 and AtlasFold replacement status too.
+Do NOT create release-asset-transfer.json until ALL remaining trials and final
+v3collect/Basechecks are finished. Replacementtransfer99345 stillwaitsmarker.
+Originalsender1989212isretired; noDiamondHillassetcopyoccursduringthisqueue.
+Publicrelay22638 stillonlyfirstshard+4smallmetadata (otherhost, noDHdiskI/O).
+
+Public relay22638 FAILED with curl HTTP/2 CANCEL; incomplete shard1 was rejected and removed. Only5public files succeeded (CCD/config/image/README/gitattributes); no large shard1 exists. Localhelper nowforcesHTTP/1.1 for a bounded attempt on SMALLER shard6; original rsync V2 stillcoversallremainingassets. Inspect the new relay6session, not22638.
+
+### Detached migration and automatic release (2026-10-17 01:32 HKT)
+
+User explicitly selected continued Wi-Fi and requested tmux background transfer.
+DiamondHill waiting sender PID2078872 was replaced only after checking that the
+release marker/log were absent and it had no children. The same sender now runs
+in tmux `fireprot-precision-transfer`, logging root/asset-transfer-tmux.log.
+Old tool session99345 is obsolete; do NOT launch another sender.
+
+Precision waiting verifier child708569 (parent708567) was replaced only while it
+had no children and verified-assets.json did not exist. It now runs in tmux
+`fireprot-assets-verify` via runtime/migration-20261016/wait-and-verify.py, with
+verification-progress.json and verification-tmux.log. It has no 12-hour cutoff.
+Old verifier tool35351 is obsolete; do NOT launch another verifier.
+
+DiamondHill tmux `fireprot-refresh-finalize` runs the frozen helper
+measured-scripts/finish_and_release.py. It waits for Base/B4/corrected Atlas1536
+driver statuses, requires all three to succeed, then runs collect-v3.py and
+collect_base.py ONCE, verifies all13 ordinary cases plus Base, and atomically
+writes release-asset-transfer.json. Therefore root no longer needs to create
+that marker manually. The helper writes finish-and-release-status.json and
+finish-and-release.log; collector stdout/stderr goes to collect-v3.py.final.log
+and collect_base.py.final.log. On failure inspect partial artifacts; do not
+rerun Base collector blindly because it creates an exclusive diagnostic spec.
+
+All existing GPU jobs and the independent public relay were left running. Base
+had reached native pair2 (measurement004); AtlasLM B4 then corrected Atlas1536
+remain in their existing serial queue. Public shard6 was about1.1GB of1.48GB;
+not yet installed. Precision progress reported24 of49 files pending. Once final
+collector passes, fetch root/collected-latest.json and base-n1000/collected.json,
+publish all fresh rows in README/.summary and commit/pushmaster. Asset migration
+may remain detached at user request; report pending status until destination
+verified-assets.json confirms all49 full hashes. Do not wait on obsolete sender
+or verifier tool sessions. Update script-version evidence with finalizer/retry
+and detached transfer helpers without overwriting earlier frozen scripts.

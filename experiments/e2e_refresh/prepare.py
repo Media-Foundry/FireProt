@@ -73,6 +73,10 @@ def main():
   spec=dict(schema_version=1,execution=dict(pairs=[dict(baseline=dict(request=pin(b),profile=pin(p)),candidate=dict(request=pin(c),profile=pin(p)))]),comparison=dict(scope='end_to_end',expected_changes={
    'backend':dict(baseline=load(b)['backend'],candidate=load(c)['backend']),
    'launch.inputs.rust-bridge':dict(baseline=None,candidate=dict(name='rust-bridge',canonical_path=bridge['path'],sha256=bridge['sha256']))},treatment_description=f'{name}: original reference versus current published operators, including complete preprocessing and language-model work.'))
+  if load(b)['backend']=='chunked':
+   # The chunked Torch adapter already loads this same policy bridge.
+   # Equality is protected automatically; it is not a treatment difference.
+   del spec['comparison']['expected_changes']['launch.inputs.rust-bridge']
   prepare(name,spec,dict(baseline=pin(b),candidate=pin(c),profile=pin(p)))
  write(out/'plan.json',dict(schema_version=1,cli=pin(out/'fireprot'),hip_device=6,pci='0000:8e:00.0',cases=cases,base='Separate unchanged user aligned-coordinate policy; prepare independently.',excluded={'OpenFold2':'Not integrated','ESMFold-v1':'Not integrated','Tiny':'Separate L124 development case; not a long-sequence optimization.'}))
  print('Prepared',len(cases),'three-pair studies',flush=True)

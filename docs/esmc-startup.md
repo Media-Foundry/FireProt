@@ -1,5 +1,10 @@
 # ESMC import overlap
 
+Import overlap remains enabled. The later [Rust host scheduling](esmc-host-scheduling.md)
+adds full-file verification parallelism and worker CPU affinity, updating the
+public profile and direct-native B4 result to 1.911x. The 1.440x composition below
+is retained as `configs/diamondhill/plm-esmc-fold2-6b-startup.json`.
+
 The standalone ESMC profile now imports the unchanged upstream module definitions
 after emitting `ready`, while Rust verifies the worker and device. Model
 construction, checkpoint loading and inference still wait for the supervisor's
@@ -61,13 +66,13 @@ imports and is therefore unsuitable for estimating this E2E improvement.
 ## Entry point and fallback
 
 Use the existing request `configs/requests/plm-esmc-fold2-6b-b4-n1000-exact.json`
-with `configs/diamondhill/plm-esmc-fold2-6b-exact.json`. Copy the request and set a
+with the historical `configs/diamondhill/plm-esmc-fold2-6b-startup.json`. Copy the request and set a
 fresh `run_id` and unused `output_dir` first. On DiamondHill:
 
 ```bash
 cd /media/IntelSSD/fireprot
 outputs/experiments/esmc-startup-20261016/native/qualified-import-overlap/target/release/fireprot \
-  esm /tmp/esmc-request.json configs/diamondhill/plm-esmc-fold2-6b-exact.json
+  esm /tmp/esmc-request.json configs/diamondhill/plm-esmc-fold2-6b-startup.json
 ```
 
 The profile sets `FIREPROT_ESMC_IMPORT_OVERLAP=1` and points to that frozen

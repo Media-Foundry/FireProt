@@ -31,7 +31,7 @@ else:
 receipt = json.loads((work/'build-receipt.json').read_text())
 library = Path(receipt['directory'])/next(iter(receipt['receipt']['artifacts']))
 assert hashlib.sha256(library.read_bytes()).hexdigest() == receipt['receipt']['artifacts'][library.name]
-profile = json.loads((root/'configs/diamondhill/plm-esmc-fold2-6b-exact.json').read_text())
+profile = json.loads((root/'configs/diamondhill/plm-esmc-fold2-6b-startup.json').read_text())
 request_path = root/'configs/requests/plm-esmc-fold2-6b-b4-n1000-exact.json'
 request = json.loads(request_path.read_text())
 env = dict(os.environ, **profile['environment'], HIP_VISIBLE_DEVICES='6',

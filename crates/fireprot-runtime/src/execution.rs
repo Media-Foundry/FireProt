@@ -198,6 +198,13 @@ impl ExecutionRecord {
                 "worker executable disagrees with launch identity",
             ));
         }
+        #[cfg(target_os = "linux")]
+        crate::cpu_affinity::verify(
+            self.environment
+                .get(crate::cpu_affinity::ENV)
+                .map(String::as_str),
+            pid,
+        )?;
         Ok(())
     }
 }

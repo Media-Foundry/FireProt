@@ -6961,3 +6961,95 @@ esmc-composed-gemm-20261016; inspect source-sync-receipt.json for completion.
 Last startup-cycle receipt was verified15files, manifest SHA
 65a5af752b6dbbd3207f4b70afec43e60274400e63c93d42fb0553fa7e8937ff.
 Exclude user docs/isa, runtime, outputs, Git metadata and Protenix from source sync.
+
+## 2026-10-16 ESMC Rust host scheduling promoted: 1.911x native E2E
+
+Active goal remains consistently optimize ESMC. This cycle made verified progress.
+All experiments finished, HIP6 only /PCI0000:8e:00.0 /SMI4. No active GPU jobs remain.
+
+Initial CPU-affinity pilot root: outputs/experiments/esmc-affinity-20261016.
+Three AB/BA/AB pairs, N1000x4/B4/nativeBF16/seed101/HIP6, fresh workers/unflushed
+caches/full hashes:16.472502018 ->15.940836775s,1.033352405x. Pinned placement
+median1.531216005 ->1.238518285s. Baseline295 threads have full0-255mask;
+candidate165threads have local128CPU mask plus2runtime threads with fullmask.
+No memory policy changed; do not claim all runtime threads stay local forever.
+Python pilot is diagnostic only; production affinity is owned by Rust.
+
+Rust changes: preflight accepts1..=8 verification threads (default API still1),
+all bytes/metadata checks and all-thread join remain. Linux explicit setting
+FIREPROT_WORKER_CPU_AFFINITY is inherit or CPU IDs/ranges, checked against parent
+allowed mask. Safe nix APIs briefly constrain spawning thread, child inherits,
+parent restored immediately; !Send/!Sync guard prevents cross-thread restoration.
+Actual main-worker mask checked at Ready before Start. Restoration errors after
+spawn use failed-run archive/child-group cleanup. No unsafe code introduced.
+116 runtime/CLI tests passed (including every corrupt asset at4/6/8 threads,
+CPU parser/inheritance/restoration/mismatch/integration), then13supervisor tests
+again after final failure-path fix. Final Clippy -D warnings and fmt passed.
+
+Final experiment root: outputs/experiments/esmc-host-20261016.
+Separate3-pair comparisons, same conditions as pilot and fulloriginalhashes:
+- hash (first Rust build, CPU inherit both):16.299310276 ->12.935566580s,
+  1.260038374x; all3faster. Outside-supervisor median6.868876365 ->3.684118927s.
+- affinity-final (final build, hash8 both):12.870972778 ->12.601278254s,
+  1.021402156x; all3faster. Forward1.295485547 ->1.279739388s.
+- native-final (final build; native hash4/inherit/no CPU-loading/no import-overlap
+  versus FireProt hash8/local/pinned-loading/import-overlap):
+  24.240289029 ->12.685460939s,1.910871757x; pair ratios1.908117772,
+  1.927625735,1.851266584. Forward1.455630802 ->1.297212586s.
+Independent collectors rehash24invocations /96archives (includingpilot), compare
+all token/embedding bytes to officialsamebatchoutput, validateGPU/groups/HIPcalls
+and identicalassetprovenance. No skipped checkpoint files or derived checkpoint
+cache. Separate rows' medians must not be mixed or ratios multiplied.
+This is host/framework E2E improvement; no new CK/GEMM/graph promoted.
+
+Frozen promoted deployment: outputs/experiments/esmc-host-20261016/native-final/qualified-hash8.
+Public profile configs/diamondhill/plm-esmc-fold2-6b-exact.json matches measured
+SHA5ae3ccf72498db2a2e1622114b8f07237ab08ecbd38f666b8b932caf0aa8ebab.
+It adds hash8 and Rust CPU64-127,192-255 to existing pinned loading/import overlap.
+Request unchanged. Old1.440xprofile retained as plm-esmc-fold2-6b-startup.json.
+Final CLI SHAcef22319fbf98f62b22a3c8c991332ba2791976c8139372edb2205863aecf65b;
+bridge SHA0c77ddc55f622d8afd40c02c40ec70babbf5ad8c6038e935f1e16b4e70d6820b.
+MaintainedRustsource hashes and localbinaries verified against final build record.
+
+Remote top-level CLI/bridge were old and incompatible with hash8. fuser confirmed
+neither in use; both backed up and atomically replaced with measured final bytes.
+Receipt: esmc-host-20261016/maintenance-bin-receipt.json; backup maintenance-bin-backup.
+Old CLI SHA dfbbe3038421fc5f68dcaba80f4ad95aa8ad93960f29580ee990f5e68b69c817;
+old bridge SHA df7d1537c118d9ad495e820a17a8c9a5e98b8b4eb3bb0f1979317ab4fc23b3e6.
+No compiler guard, frozen deployment or runtime weights were overwritten.
+
+Evidence: provenance/esmc_host_scheduling_20261016.json; docs/esmc-host-scheduling.md.
+Early hash case retains firstbuild6ef7d88... and its source identity. Final cases
+use finalbuildaftererrorarchivefix. Early unused affinity/native staging dirs have
+no jobs; use affinity-final/native-final. SSH connections briefly timed out;
+existing handles were checked and completedGPUjobs were never restarted.
+
+Source-sync baseline is e6abebb. Use esmc-host-20261016/top-source-backup and inspect
+its source-sync-receipt.json for actual completion. Last cycle verified13files,
+manifest b5bcaaed44a2e992f3d8d917b75a863269c914c313b76dcf8c93284f6b9d2ca6.
+Exclude docs/isa, runtime, outputs, Gitmetadata, Protenix and built artifacts from
+source synchronization; binary deployment is separately receipted above.
+
+Next: profile remaining host cost with the new12.7s boundary before more tuning.
+Full preflight still~3.7s outside supervisor; check actual per-asset sizes and
+static-stride distribution before considering more workers or work balancing.
+Within worker, pinned placement/import/identity checks remain potential targets.
+A lazyFFN candidate already reduces planinit but has mixedE2E and remains disabled.
+No need to repeat rejected CK tiles, graph replay, cold algorithm serialization,
+or the completed NUMA pilot. Keep all original hashes and official bitwise gate.
+
+Reproduction fix in this cycle:10 experiment drivers now use preserved historical
+GPU-loading/pinned-loading/startup profiles rather than the moving public exact
+profile. This prevents older frozen CLIs (max4hash threads) from accidentally
+receiving the new8thread setting. Original measured scripts remain immutable in
+remote experiment roots; local driver hashes differ only where this profile
+reference was repaired. Final Rust build/source/profile pins are unchanged.
+
+Deployment reconciliation found runtime Cargo.toml and four workspace/member
+manifests still exactly at pre-license-change e6ac271^ (no unique remote edits),
+while core already expected license-file. Remote LICENSE/THIRD_PARTY and three
+licenses texts were absent, as was docs/execution-provenance.md. Source sync for
+this cycle also restores the unchanged approved current Cargo.toml, bridge/CLI/
+validation manifests, LICENSE, THIRD_PARTY.md and licenses/*.txt, with explicit
+per-file preimages. patches/ck/LICENSE already matches current. No licensing terms
+are changed locally; this repairs the partial historical remote deployment.

@@ -74,11 +74,18 @@ These are tensor-boundary changes; Rust retains asset checks, grouping policy,
 operator selection, supervision, and exact-array acceptance. See
 [ESM implementation and evidence](esm-optimization.md).
 
-Artifact preflight optionally verifies independent files with 1–4 Rust threads,
+Artifact preflight optionally verifies independent files with 1–8 Rust threads,
 selected explicitly by `FIREPROT_PREFLIGHT_HASH_THREADS` in the execution profile.
 The default remains serial. Every file retains full SHA-256 and before/after
 metadata checks; no worker launches until all checks succeed. This reduces the
 measured sharded ESMC startup cost without changing model arithmetic or precision.
+
+Explicit Linux worker placement uses `FIREPROT_WORKER_CPU_AFFINITY` (`inherit`,
+or comma-separated CPU IDs/ranges). Rust restores the spawn thread's affinity
+immediately after spawn and checks the main worker's actual mask before start
+authorization. The guard cannot move between threads. No Python affinity mutation
+or unsafe post-fork callback is required. Launch settings and full verification
+remain recorded; the qualified ESMC mask is specific to DiamondHill.
 
 ## Historical operator implementation
 

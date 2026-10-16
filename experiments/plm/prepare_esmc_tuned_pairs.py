@@ -62,7 +62,7 @@ def main():
             request['workload']['batch']['items']=count
         profiles={}
         for arm,flag in (('baseline','0'),('candidate','1')):
-            profile=json.loads((root/'configs/diamondhill/plm-esmc-fold2-6b-exact.json').read_text())
+            profile=json.loads((root/'configs/diamondhill/plm-esmc-fold2-6b-gpu-loading.json').read_text())
             profile['workers']=str(deployment/'python')
             profile['environment']['FIREPROT_BRIDGE_LIBRARY']=str(deployment/'target/release/lib_fireprot_bridge.so')
             profile['environment']['FIREPROT_ESMC_TUNED_GEMM']=flag

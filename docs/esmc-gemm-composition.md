@@ -3,6 +3,9 @@
 This follow-up tests direct hipBLASLt FFN up/gate dispatch on top of the
 qualified pinned loader and import overlap. It remains experimental: the public
 profile and its **1.440x direct-native B4 E2E** result are unchanged.
+That statement describes this historical GEMM cycle; the subsequent
+[host scheduling update](esmc-host-scheduling.md) publishes 1.911x without
+enabling either fixed-GEMM candidate.
 
 ## Complete invocation comparisons
 

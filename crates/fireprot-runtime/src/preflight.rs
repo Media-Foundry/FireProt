@@ -200,8 +200,8 @@ pub fn prepare_with_hash_threads(
     origin: SourceOrigin,
     hash_threads: usize,
 ) -> Result<PreparedRequest, String> {
-    if !(1..=4).contains(&hash_threads) {
-        return Err("artifact verification requires 1..=4 hash threads".into());
+    if !(1..=8).contains(&hash_threads) {
+        return Err("artifact verification requires 1..=8 hash threads".into());
     }
     let mut r = request.into_request();
     let root = r.source.root.canonicalize().map_err(|e| e.to_string())?;

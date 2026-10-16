@@ -157,6 +157,42 @@ fn success_requires_outputs_exit_monitor_and_content() {
         .is_err()
     );
 }
+#[cfg(target_os = "linux")]
+#[test]
+fn explicit_worker_affinity_is_recorded_verified_and_parent_restored() {
+    use nix::{
+        sched::{CpuSet, sched_getaffinity},
+        unistd::Pid,
+    };
+    let original = sched_getaffinity(Pid::from_raw(0)).unwrap();
+    let cpu = (0..CpuSet::count())
+        .find(|&cpu| original.is_set(cpu).unwrap())
+        .unwrap();
+    let dir = tempfile::tempdir().unwrap();
+    let output = dir.path().join("affinity");
+    let mut selected = worker("success");
+    selected.environment.push((
+        "FIREPROT_WORKER_CPU_AFFINITY".into(),
+        cpu.to_string().into(),
+    ));
+    let report = run(
+        &request(output.clone()),
+        &selected,
+        &mut monitor(),
+        &limits(),
+        &AtomicBool::new(false),
+        |_| Ok(()),
+    )
+    .unwrap();
+    assert_eq!(report.phase, Phase::Succeeded);
+    assert_eq!(sched_getaffinity(Pid::from_raw(0)).unwrap(), original);
+    let launch: serde_json::Value =
+        serde_json::from_slice(&std::fs::read(output.join("execution.json")).unwrap()).unwrap();
+    assert_eq!(
+        launch["environment"]["FIREPROT_WORKER_CPU_AFFINITY"],
+        cpu.to_string()
+    );
+}
 #[test]
 fn protocol_and_process_failures_never_succeed() {
     for mode in [

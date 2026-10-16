@@ -152,25 +152,43 @@ pub fn run(
         .stderr(Stdio::from(File::create(output.join("stderr.log"))?))
         .process_group(0);
     let started = Instant::now();
-    let mut child = ProcessGroup(command.spawn()?, false);
+    #[cfg(target_os = "linux")]
+    let mut affinity = crate::cpu_affinity::ScopedAffinity::enter(
+        execution
+            .environment
+            .get(crate::cpu_affinity::ENV)
+            .map(String::as_str),
+    )?;
+    let spawned = command.spawn().map(|child| ProcessGroup(child, false));
+    // Restore even when spawn fails. A post-spawn restoration error follows the
+    // normal failure/report path, which stops the child group before returning.
+    #[cfg(target_os = "linux")]
+    let restoration = affinity
+        .restore()
+        .map_err(|error| format!("restoring launch thread CPU affinity failed: {error}"));
+    #[cfg(not(target_os = "linux"))]
+    let restoration: Result<(), String> = Ok(());
+    let mut child = spawned?;
     let pid = child.0.id();
     let mut session = Session::new(request, pid).map_err(io::Error::other)?;
     let mut samples = 0;
     let mut device_verified = false;
-    let outcome = drive(
-        &mut child,
-        &listener,
-        &mut session,
-        monitor,
-        limits,
-        cancelled,
-        r.hip_device,
-        started,
-        &mut samples,
-        &execution,
-        worker,
-        &mut device_verified,
-    );
+    let outcome = restoration.and_then(|()| {
+        drive(
+            &mut child,
+            &listener,
+            &mut session,
+            monitor,
+            limits,
+            cancelled,
+            r.hip_device,
+            started,
+            &mut samples,
+            &execution,
+            worker,
+            &mut device_verified,
+        )
+    });
     // Stop the whole group before inspecting output files on either path.
     child.stop();
     let verification = outcome.and_then(|exit_code| {

@@ -47,7 +47,7 @@ main.write_text(s)
 for path in (transport,main):compile(path.read_text(),str(path),'exec')
 request=json.loads((root/'configs/requests/plm-esmc-fold2-6b-b4-n1000-exact.json').read_text())
 request.update(run_id='esmc-startup-diagnostic',output_dir=str(work/'prediction'),hip_device=6)
-profile=json.loads((root/'configs/diamondhill/plm-esmc-fold2-6b-exact.json').read_text())
+profile=json.loads((root/'configs/diamondhill/plm-esmc-fold2-6b-pinned-loading.json').read_text())
 profile['workers']=str(deployment/'python')
 profile['environment']['FIREPROT_BRIDGE_LIBRARY']=str(deployment/'target/release/lib_fireprot_bridge.so')
 profile['environment']['PYTHONPROFILEIMPORTTIME']='1'

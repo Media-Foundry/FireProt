@@ -26,6 +26,25 @@ The recorded map describes the environment at process creation. Model packages
 may subsequently modify their own environment. Temporary socket/run paths make
 separate request identities differ even when scientific inputs are the same.
 
+## Explicit worker CPU affinity
+
+On Linux, `FIREPROT_WORKER_CPU_AFFINITY` may be set in the profile environment
+to `inherit` or a comma-separated CPU list such as `64-127,192-255`. Absence
+preserves inherited affinity. Empty, malformed or out-of-range masks fail; an
+explicit mask must be contained in the spawning thread's allowed CPU set.
+
+Rust briefly applies the requested mask to the spawning thread so the worker
+inherits it, then restores that thread before supervision proceeds. The guard
+cannot move between threads and also restores on spawn failure. A restoration
+failure after spawn follows the normal failed-run archive and child-group
+cleanup path. The workspace's prohibition of unsafe code remains in effect.
+
+The requested setting is part of the hashed launch environment. Before authorizing
+Start, Rust reads the main worker's actual affinity and rejects a mismatch.
+This is not a guarantee that every thread created by a model runtime retains
+the mask forever. No memory-placement policy or system-wide CPU setting changes.
+CPU lists are host-specific; the ESMC profile's list was measured on DiamondHill.
+
 ## Identity contents
 
 - Absolute invocation path, preserving `venv/bin/python` spelling.

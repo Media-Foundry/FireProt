@@ -2,6 +2,8 @@
 pub mod artifacts;
 #[cfg(unix)]
 pub mod batch;
+#[cfg(target_os = "linux")]
+pub(crate) mod cpu_affinity;
 pub mod environment_inventory;
 #[cfg(target_os = "linux")]
 pub mod installation;

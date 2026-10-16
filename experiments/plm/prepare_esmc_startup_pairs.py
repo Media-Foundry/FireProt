@@ -60,7 +60,7 @@ write(work/'deployment-manifest.json', dict(original=str(original), files={
 request = json.loads((root/'configs/requests/plm-esmc-fold2-6b-b4-n1000-exact.json').read_text())
 profiles = {}
 for arm, flag in (('baseline', '0'), ('candidate', '1')):
-    profile = json.loads((root/'configs/diamondhill/plm-esmc-fold2-6b-exact.json').read_text())
+    profile = json.loads((root/'configs/diamondhill/plm-esmc-fold2-6b-pinned-loading.json').read_text())
     profile['workers'] = str(deployment/'python')
     profile['environment']['FIREPROT_BRIDGE_LIBRARY'] = str(deployment/'target/release/lib_fireprot_bridge.so')
     profile['environment']['FIREPROT_ESMC_IMPORT_OVERLAP'] = flag

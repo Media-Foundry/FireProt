@@ -120,7 +120,7 @@ fn parallel_hashes_preserve_provenance_and_reject_each_corrupted_asset() {
         );
     }
     let serial = prepare(checked(r.clone()), SourceOrigin::GitCheckout).unwrap();
-    for threads in [2, 4] {
+    for threads in [2, 4, 6, 8] {
         let parallel =
             prepare_with_hash_threads(checked(r.clone()), SourceOrigin::GitCheckout, threads)
                 .unwrap();
@@ -141,13 +141,16 @@ fn parallel_hashes_preserve_provenance_and_reject_each_corrupted_asset() {
     for path in paths {
         let original = fs::read(&path).unwrap();
         fs::write(&path, b"corrupted").unwrap();
-        let error = prepare_with_hash_threads(checked(r.clone()), SourceOrigin::GitCheckout, 4)
-            .err()
-            .unwrap();
-        assert!(error.contains("artifact digest mismatch"), "{error}");
+        for threads in [4, 6, 8] {
+            let error =
+                prepare_with_hash_threads(checked(r.clone()), SourceOrigin::GitCheckout, threads)
+                    .err()
+                    .unwrap();
+            assert!(error.contains("artifact digest mismatch"), "{error}");
+        }
         fs::write(&path, original).unwrap();
     }
-    for threads in [0, 5, usize::MAX] {
+    for threads in [0, 9, usize::MAX] {
         assert!(
             prepare_with_hash_threads(checked(r.clone()), SourceOrigin::GitCheckout, threads)
                 .is_err()

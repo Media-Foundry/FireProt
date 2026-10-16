@@ -133,10 +133,10 @@ checkpoint loading. No DiamondHill HIP/CK operator bundle is loaded.
 Independent native timing is recorded under
 `runtime/precision-baselines-20261016/`, with fresh workers, complete hashes and
 asset transmission paused. Optimized gfx1100 inference and its numerical parity
-must be qualified before reporting a Precision speedup. ESM2's fair-esm namespace,
-other model environments, portable execution profiles and model-specific kernels
-still require separate setup/validation; checkpoint availability alone is not
-working inference for every model.
+must be qualified before reporting a Precision speedup. At that stage ESM2's
+fair-esm namespace, portable execution profile and model-specific route still
+required separate setup and validation; the qualification below completes that
+work without treating checkpoint availability alone as working inference.
 
 
 ### First independent native baseline
@@ -209,4 +209,51 @@ cp configs/requests/precision-esm3-open-b4-n1000-fireprot.json /tmp/my-esm3-fire
 # Edit run_id and output_dir in /tmp/my-esm3-fireprot.json.
 target/release/fireprot esm /tmp/my-esm3-fireprot.json \
   configs/precision/plm-esm3-open-native.json
+```
+
+## Qualified gfx1100 ESM2 exact-loading route
+
+Precision has the published ESM2-3B checkpoint at
+`runtime/checkpoint/esm2_t36_3B_UR50D.pt` (5,678,116,398 bytes, SHA-256
+`7de8b4082ba15891959ab368b77ce3886697af1efb16d3c9e9e7b0c5d3f07500`) and
+the contact-regression companion at
+`runtime/checkpoint/esm2_t36_3B_UR50D-contact-regression.pt` (SHA-256
+`4da500eab246481dc9c8c95bc7b1d02f2803d761c380b0e95186d4a07d0fc84e`).
+The request uses the official fair-esm `v2.0.0` source at commit
+`0b59d87ebef95948c735b1f7aad463dc6dfa991b`; all 30 package Python files match
+the original pinned manifest. This isolated checkout prevents the installed
+fair-esm and Biohub ESM distributions from colliding in the shared `esm`
+namespace.
+
+The FireProt entry constructs ESM2 on the meta device, assigns the published
+FP16 checkpoint tensors without a duplicate initialized model, transfers them to
+the GPU, and then performs the native FP32 promotion. It also omits the
+per-layer attention-head mean that the caller discards. The capability is
+fail-closed to ESM2-3B, N1000 B4, gfx1100, Torch `2.13.0+rocm10.0.0`, HIP
+`7.15.26333`, inference mode and the absence of a separate `hip_esm` library.
+GEMMs, attention, GELU and all exported heads otherwise remain native FP32.
+
+Three fresh-process AB/BA/AB pairs passed complete Rust acceptance. Native E2E
+median and p95 were 38.907886942 and 39.040355459 seconds; the exact-loading
+route measured 22.430914554 and 22.693239074 seconds. Median speedup is
+**1.734565341x**, p95 speedup is **1.720351834x**, and all three paired ratios
+improve. Model-forward medians are 10.346957 versus 10.192840 seconds, confirming
+that most of the gain is loading rather than a substituted compute path. All 12
+paired prediction comparisons are bitwise exact for tokens, embeddings and
+logits. The verifier independently rehashed all six accepted invocations and 63
+declared artifacts. Full evidence is in
+[`precision_esm2_exact_loading_gfx1100_20261017.json`](../provenance/precision_esm2_exact_loading_gfx1100_20261017.json).
+
+Run either explicit B4 entry after choosing a fresh `run_id` and unused
+`output_dir`:
+
+```bash
+cd /media/990Pro/fireprot
+cp configs/requests/precision-esm2-3b-b4-n1000-native.json /tmp/my-esm2-native.json
+cp configs/requests/precision-esm2-3b-b4-n1000-fireprot.json /tmp/my-esm2-fireprot.json
+# Edit run_id and output_dir in both files.
+target/release/fireprot esm /tmp/my-esm2-native.json \
+  configs/precision/plm-esm2-3b-native.json
+target/release/fireprot esm /tmp/my-esm2-fireprot.json \
+  configs/precision/plm-esm2-3b-native.json
 ```

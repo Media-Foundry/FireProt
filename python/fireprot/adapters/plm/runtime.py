@@ -6,6 +6,16 @@ import torch
 from fireprot.ops.registry import OperationRegistry, signature_from_tensor
 
 
+def gfx1100_esm2_exact_route(
+        name, resources, architecture, torch_version, hip_version, batch_size):
+    """Select the source-only ESM2 route only on its qualified runtime."""
+    return (name == 'esm2-3b' and 'hip_esm' not in resources
+            and architecture == 'gfx1100'
+            and torch_version == '2.13.0+rocm10.0.0'
+            and hip_version == '7.15.26333'
+            and batch_size == 4)
+
+
 @contextmanager
 def optimized_scope(model, request, length, batch_size=1):
     name = request['workload']['model_name']
@@ -24,9 +34,13 @@ def optimized_scope(model, request, length, batch_size=1):
         with esm3_frameless_scope(model, batch_size, architecture) as state:
             yield state
         return
-    if str(torch.__version__) != '2.12.0a0+git78258b9' or torch.version.hip != '7.14.60850':
+    gfx1100_esm2 = gfx1100_esm2_exact_route(
+        name, request.get('resources', {}), architecture,
+        str(torch.__version__), torch.version.hip, batch_size)
+    if (not gfx1100_esm2 and
+            (str(torch.__version__) != '2.12.0a0+git78258b9' or torch.version.hip != '7.14.60850')):
         raise ValueError('pLM optimization requires a qualified ROCm Torch build')
-    if architecture != 'gfx90a':
+    if not gfx1100_esm2 and architecture != 'gfx90a':
         raise ValueError('pLM optimization requires gfx90a')
     if 'hip_esm' in request.get('resources', {}):
         from .esm import esm_scope

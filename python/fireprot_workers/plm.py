@@ -69,8 +69,16 @@ def load_model(request, sequence):
             model, alphabet = load_model_and_alphabet_core('esm2_t36_3B_UR50D', data, regress)
         # Published ESM2 stores FP16 weights; its native constructor loads them
         # into FP32 parameters. Preserve that promotion after meta assignment.
-        if request['backend'] == 'fireprot' and 'hip_esm' in request.get('resources', {}):
-            # The checkpoint is FP16. Transfer it before the exact FP32 promotion
+        from fireprot.adapters.plm.runtime import gfx1100_esm2_exact_route
+        architecture = torch.cuda.get_device_properties(0).gcnArchName.split(':')[0]
+        transfer_before_promotion = (
+            request['backend'] == 'fireprot' and
+            ('hip_esm' in request.get('resources', {}) or gfx1100_esm2_exact_route(
+                name, request.get('resources', {}), architecture,
+                str(torch.__version__), torch.version.hip,
+                request['workload'].get('batch', {}).get('max_batch_size', 1))))
+        if transfer_before_promotion:
+            # The checkpoint is FP16. Transfer before the exact FP32 promotion
             # to halve H2D weight traffic while keeping native FP32 inference.
             model = model.cuda().float().eval()
         else:

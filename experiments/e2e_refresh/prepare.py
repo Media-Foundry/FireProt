@@ -28,7 +28,7 @@ def main():
   'esmc-b4':'esmc-snapshot-monitor-20261016/native-pairs/spec.json',
   'esm2-b4':'esm-speed-20261016/esm2-3b-pairs/spec.json',
   'esm3-b4':'esm-speed-20261016/esm3-open-pairs/spec.json',
-  'atlaslm-b4':'atlaslm-speed-20261016/qualified-assign/atlaslm-3b-pairs.json',
+  'atlaslm-singleton':'atlaslm-speed-20261016/qualified-assign/atlaslm-3b-pairs.json',
   'esmfold2-n1000':'esmfold2-integration-recovery3-20261015/n1000-pairs/specification.json',
   'openfold3-n1536':'openfold3-direct-native-latest-20261010/pairs.json',
  }
@@ -37,6 +37,10 @@ def main():
   arms={}
   for arm in ('baseline','candidate'):
    req=checked(old[arm]['request']);profile=checked(old[arm]['profile'])
+   if req['workload']['model']=='plm':
+    expected=1 if name=='atlaslm-singleton' else 4
+    assert req['workload'].get('batch',{}).get('items',1)==expected,name
+    assert req['seed']==(102 if req['workload']['model_name']=='atlaslm-3b' else 101),name
    req['hip_device']=6
    arms[arm]=(req,write(case/f'{arm}-profile.json',profile))
   pairs=[]

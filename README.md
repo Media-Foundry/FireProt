@@ -134,111 +134,44 @@ three-model Protenix smoke manifest. See [batch inference](docs/batch-inference.
 ## Standalone protein language models
 
 Use `fireprot esm REQUEST PROFILE` for ESMC/ESM2/ESM3 sequence inference and
-`fireprot atlaslm REQUEST PROFILE` for AtlasLM. These entries export embeddings
-and available sequence logits independently of folding. ESMC, ESM2 and AtlasLM
-have N1000 native/opt-in exact-output qualification. ESM3 native N1000 outputs
-match the official model factory bitwise. At N1000, complete invocation improves
-**36.047 → 23.951 s (1.505x) for ESMC**, primarily through parallel full-file
-asset verification, and **39.304 → 18.827 s (2.088x) for ESM2**, primarily through
-checkpoint-covered initialization. All retained outputs are bitwise equal.
-AtlasLM now improves **15.915 → 15.046 s (1.058x)** with eager GPU weight
-assignment and HIP RoPE/SwiGLU; packaged warm forward improves **1.112x**.
-The earlier ESM3 singleton loader comparison selects the official factory at
-**13.489 s** over the local loader (14.564 s). The new ESM3 operator route is
-measured separately below.
-These results do not change folding speedup rows.
-See [commands, native precision and performance scope](docs/protein-language-models.md).
+`fireprot atlaslm REQUEST PROFILE` for AtlasLM. These commands export embeddings
+and available sequence logits independently of folding. ESM3 currently uses its
+sequence-only path. See [commands and precision](docs/protein-language-models.md).
 
-**Model-resident pLM batches** are also available through the same commands.
-An explicit `workload.batch` and pinned sequence manifest load the model once,
-with Rust controlling length grouping and microbatch limits. All four native
-entries pass equal-length B4, mixed-length B4 and resident B1 output checks.
-N1000 HIP batches for AtlasLM/ESMC and the ESM2 optimization retain bitwise
-equality to the official implementation with the **same batch grouping**;
-singleton-to-batch drift is reported separately. See
-[batch inputs, commands and measured scope](docs/plm-batch.md).
-The latest ESM cycle adds exact HIP activations, ESM3's guarded sequence-only
-geometry simplification, and faster ESMC/ESM2 checkpoint placement. Three AB/BA/AB
-pairs on HIP6 give these **complete invocation** medians for four N1000 inputs,
-using native B4 as the reference. Every output array matches bitwise.
+For real GPU batches, provide an explicit `workload.batch` and pinned sequence
+manifest. Rust controls length grouping and microbatch limits; the worker loads
+the model once. All four native entries pass equal-length B4, mixed-length B4
+and resident B1 checks. Compare optimized outputs with the official implementation
+using **the same batch grouping**; singleton-to-batch rounding is a separate
+measurement. See [batch inputs and examples](docs/plm-batch.md).
 
-| Standalone model, N1000 × 4 / B4 | Native → optimized E2E | Speedup | Warm forward speedup |
-| --- | ---: | ---: | ---: |
-| ESMC bundled 6B | 24.235 → 12.250 s | **1.978x** | 1.113x |
-| ESM2-3B | 38.461 → 16.464 s | **2.336x** | 1.068x |
-| ESM3-open | 12.384 → 11.461 s | **1.080x** | 2.395x |
+Fresh direct-native E2E results are in the [latest table](#latest-e2e-refresh--2026-10-16).
+They include loading, full checkpoint hashes and all output exports. Native
+precision is preserved; ESM2 remains FP32. These are standalone pLM results,
+not folding speedups. Warm-forward results exclude loading/export and must not
+be substituted for complete invocation results.
 
-These measurements preserve native precision; ESM2 still computes in FP32.
-The latest [ESMC loading route](docs/esmc-loading.md) converts directly into two
-reusable pinned BF16 buffers before asynchronous H2D. All 6.345 billion parameters
-and every exported array match bitwise; original checkpoint hashing remains.
-Its separate incremental comparison improves the preceding FireProt route by
-1.115x E2E. The subsequent [startup optimization](docs/esmc-startup.md) overlaps
-unchanged upstream module imports with Rust's ready verification, retaining the
-start gate before model construction or weight loading. It adds 1.069x over the
-pinned-loader route. The latest [Rust host scheduling](docs/esmc-host-scheduling.md)
-uses eight full-file verification threads and worker CPU affinity local to HIP6.
-Its separate incremental comparisons improve E2E by 1.260x and 1.021x;
-that cycle's **1.911x** result was measured directly against native, with no hashes
-or outputs omitted. These host improvements are not GPU-kernel speedups.
-The preceding [native AMD SMI monitor](docs/esmc-native-monitor.md) preserves all
-device/process checks and improves E2E by **1.021x** for B4 and **1.025x** for
-resident64 over their respective current routes. The fresh direct-native B4
-comparison gave **1.891x**. The current [combined snapshot monitor](docs/esmc-snapshot-monitor.md)
-adds **1.0225x** for B4 and **1.0107x** for resident64, with every pair faster.
-Its fresh direct-native comparison gives the **1.978x** shown above. These separate
-measurement batches are not combined or multiplied. Every output remains bitwise
-equal, and isolation sampling increases without changing the scheduling interval.
-The ESMC CK follow-up found no acceptable improvement: the installed CK GEMM
-slowed B4 warm forward by 7.3%, and all 48 direct-tile cases failed bitwise
-projection equality. Production retains hipBLASLt; the E2E figures above are
-unchanged. See [CK diagnostics](docs/esm-optimization.md#esmc-ck-follow-up-rejected-candidates).
-A subsequent [fixed-GEMM experiment](docs/esmc-gemm-followup.md) preserves exact
-outputs and improves ESMC B4 warm forward by 1.052x over the preceding GPU-loading route.
-Incremental E2E medians are only 1.009x for four inputs and 1.025x for 64 inputs,
-with mixed paired results; it remains experimental and does not change the
-published direct-native ratios.
-A [composition follow-up](docs/esmc-gemm-composition.md) reduces fixed-FFN plan
-initialization from 263 ms to 2.1 ms by delaying it until after native QKV.
-Its B4 incremental E2E median improves 1.017x, with one slightly slower pair;
-it remains experimental and the public profile is unchanged.
-A further [HIP pointwise experiment](docs/esmc-pointwise.md) preserves every BF16
-rounding boundary while fusing residual scaling/addition and vectorizing SwiGLU.
-For **64 N1000 inputs, sixteen B4 groups**, E2E improves **23.737 -> 23.059 s
-(1.0294x over current FireProt)**, with all three pairs faster and every output
-byte-identical to official same-batch execution. A separate experimental
-[resident64 entry](docs/esmc-pointwise.md#experimental-resident64-entry) is available.
-One B4 group has no E2E gain (12.619 -> 12.644 s), so pointwise fusion remains
-an experimental resident-batch option.
-The subsequent [lazy FFN composition](docs/esmc-resident-gemm.md) adds another
-measured **1.0111x** over that pointwise route for resident64:
-**23.169 -> 22.915 s**, all three pairs faster and official same-batch outputs
-byte-identical. It has a separate experimental entry; single-group results remain mixed.
-A [larger-batch follow-up](docs/esmc-large-batch-followup.md) qualifies experimental
-B8/B16 HIP outputs against their own official grouping. B16 adds 1.0224x warm
-throughput over optimized B4, but complete invocation improves only **1.0025x**
-with one regressing pair. It is not promoted; the published B4 result remains
-**1.978x**. The refreshed optimized GPU profile attributes about **80%** of
-kernel time to GEMM and **9%** to attention.
-A [B16 FFN follow-up](docs/esmc-b16-ffn.md) fixes an offline-selected hipBLASLt
-algorithm in a direct HIP library. All 80 projections and exported bytes match
-native B16. Warm forward improves **1.0163x**, but complete invocation adds only
-**1.0021x** for 16 inputs and **1.0041x** for 64 inputs, with a mixed resident
-paired trend. It remains experimental; the published B4 result is unchanged.
-Warm forward excludes loading/export and is measured independently. See
-[exact-route commands and evidence](docs/esm-optimization.md). ESM3's separate
-64-input resident workload (sixteen B4 groups) improves **20.212 → 15.490 s
-complete invocation, 1.305x**, with all 64 outputs retained and bitwise exact.
-ESMC's earlier
-operator-only B4 composition had no E2E gain (0.964x); the new loading composition
-supersedes that result. The initial ESM2 B4 result (2.015x) remains historical.
-AtlasLM retains **16.045 → 15.053 s (1.066x)** for the same B4 comparison boundary.
-These comparisons do not measure replacing four independent loads with one batch.
-That separate AtlasLM comparison is now measured: four **already optimized**
-singleton invocations total **58.967 s**, versus **15.204 s** for one optimized B4
-invocation (**3.879x aggregate throughput**, three AB/BA/AB pairs). Each arm
-matches its own official grouping bitwise. This is a four-sequence workload
-result, not a 3.879x improvement to single-sequence latency or folding.
+The retained ESM routes combine qualified HIP operations with checkpoint placement
+and Rust host scheduling improvements. The detailed experiments remain available:
+
+- [ESM operators and direct-native experiments](docs/esm-optimization.md).
+- [ESMC pinned loading](docs/esmc-loading.md), [startup](docs/esmc-startup.md),
+  [host scheduling](docs/esmc-host-scheduling.md) and
+  [combined monitor](docs/esmc-snapshot-monitor.md).
+- Experimental resident-batch [HIP pointwise](docs/esmc-pointwise.md) and
+  [FFN composition](docs/esmc-resident-gemm.md) entries.
+
+The latest CK tests did not pass the required exact-output acceptance. The
+published ESMC route retains hipBLASLt. B16 grouping and fixed FFN algorithms
+also delivered only marginal complete-call gains with mixed paired trends;
+they remain experimental. See [CK diagnostics](docs/esm-optimization.md#esmc-ck-follow-up-rejected-candidates),
+[larger batches](docs/esmc-large-batch-followup.md) and [B16 FFN results](docs/esmc-b16-ffn.md).
+
+For context, an earlier three-pair AtlasLM study compared four **already optimized**
+singleton calls (58.967 s total) with one optimized B4 call (15.204 s): **3.879x
+aggregate throughput**. Each arm matched its own official grouping. That result
+measures amortized loading across four sequences; it is not a single-sequence
+latency improvement or a folding speedup.
 
 ## Outputs and measurement
 
@@ -285,10 +218,22 @@ historical E2E values; the historical AtlasLM B4 result remains separate. Their
 warm-forward measurements remain separate historical observations.
 [Raw timings, pins and independent checks](provenance/e2e_refresh_plm_20261016.json).
 
-The folding refresh is in progress. The following folding table retains
-historical measurements until fresh paired acceptance completes. Precision is
-a separate gfx1100 deployment and will have its own native baseline records;
-DiamondHill speedups are not attributed to it.
+The following folding rows have completed three pairs and independent evidence
+verification. Remaining connected models are still running; their historical
+results are listed separately below.
+
+| Folding model / workload | Native median | Optimized median | E2E speedup | Acceptance |
+| --- | ---: | ---: | ---: | --- |
+| Protenix Mini N1000, FP32 C4/D1/S1 | 71.042 s | 33.122 s | **2.145x** | Existing coordinate/summary-confidence gates; not bitwise equal |
+| Protenix Mini N1536, FP32 C4/D1/S1 | 167.120 s | 51.180 s | **3.265x** | Existing coordinate/summary-confidence gates; not bitwise equal |
+| ESMFold2 + ESMC N1000, native precision, loops3/sampling50/S1 | 368.783 s | 178.666 s | **2.064x** | All arrays and complete CIF bytes exact |
+
+[Workloads, native-reference scope and acceptance](docs/e2e-refresh-20261016.md);
+[folding timings and numerical diagnostics](provenance/e2e_refresh_folding_20261016.json).
+The first OpenFold3 attempt rejected a stale environment inventory before model
+execution; a retry retains full inventory coverage and identical numerical gates.
+Precision is a separate gfx1100 deployment; DiamondHill speedups are not
+attributed to it.
 
 ### Precision native baseline — separate host
 
@@ -308,7 +253,7 @@ Ratios are reference time divided by optimized time. All workloads retain the
 same scientific settings within their comparison; filesystem/kernel caches are
 warm or unflushed as specified in the linked evidence.
 
-### Latest direct native comparison per model and length
+### Historical direct comparisons — earlier boundaries and revisions
 
 ESMFold2 evidence added on **2026-10-15**; other rows retain the historical
 measurements reviewed on 2026-10-10. Base, OpenFold3 and ESMFold2 measure the complete

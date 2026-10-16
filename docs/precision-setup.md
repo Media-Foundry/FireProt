@@ -78,7 +78,7 @@ file passes complete SHA-256 verification. No checkpoint is added to Git.
 ## Native GPU qualification
 
 The local HIP identity probe maps HIP0 to SMI0, PCI `0000:53:00.0`, gfx1100.
-Both devices were idle before the first qualification. The native ESM3 B4/N1000
+AMD SMI reported no running processes on either device before the first qualification. The native ESM3 B4/N1000
 entry passes Rust acceptance on this GPU, with four exported predictions.
 That functional run overlapped asset copying and is excluded from performance
 claims. A missing `outputs/` parent caused an earlier startup failure before
@@ -111,3 +111,19 @@ DiamondHill has no GPU experiment running during these observations.
 This is a native baseline, with **no optimized speedup ratio**. Torch/HIP differ
 from DiamondHill, so cross-host timing is not an operator-only comparison.
 [Timing and acceptance receipts](../provenance/precision_esm3_native_baseline_20261016.json).
+
+
+### Run the qualified native entry
+
+On Precision, copy the request and choose a fresh run ID/output directory:
+
+```bash
+cd /media/990Pro/fireprot
+cp configs/requests/precision-esm3-open-b4-n1000-native.json /tmp/my-esm3.json
+# Edit run_id and output_dir in /tmp/my-esm3.json before each invocation.
+target/release/fireprot esm /tmp/my-esm3.json configs/precision/plm-esm3-open-native.json
+```
+
+The profile is byte-identical to the measured native profile. It selects HIP0
+through the request and contains no gfx90a operator resource. This example is
+specific to the initialized Precision paths and Python environment above.

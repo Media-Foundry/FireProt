@@ -7560,3 +7560,103 @@ ESMC/2/3B4 results correct. Need add a trueAtlasLMB4 case usingB4request+latest
 qualified-assignprofile, threepairs, andqueueitafteractiveGPUstudies. Do not
 repeat the original mistakenly labelledcase. Add explicit expectedbatch assertions
 inpreparation/collector; request scientific fields are authoritative.
+
+### Queue and evidence continuation after b0cd4f6 / ba292e0
+
+Latestpushedmasterba292e0 correctsAtlasLMsingletonlabel; Precisionffpulledsame.
+ESMC/2/3freshB4valuesunchanged. FourcompletedpLMstudies=24calls78archives, not96.
+TrueAtlasLMB4 usesseed102 (sameasofficialpriorB4requests), not101. Failedpreparer
+assertion(seed101)occurredbeforeGPUwork; archivedunderroot/atlaslm-b4-preparation-rejected-seed.
+Correctcaseatlaslm-b4-refresh nowpreparedandrootplanincludes13cases; oldcase renamed
+inplan toatlaslm-singleton withdirectory='atlaslm-b4',expected_items1,expected_seed102.
+ESMcasesexpected_items4,seed101; trueAtlasLMB4expected_items4,seed102.
+Finalall-modelcollector MUST use updated collect-v2.py (handlesdirectoryalias and
+explicitbatch/seedassertions); originalcollect.py frozenforinitialpLMrun.
+Maintainedlocalcollect.py isv2. Root/measured-scripts includesactualdrivers and
+prepare_base_original.py; prepare_base.py islabelledreproductionrevision, not
+actualinitialpreparer. scripts.json records thatdistinction; updateitsnewv2pins
+beforefinalevidencecollection. Neveroverwritealreadymeasuredsourcecopies.
+
+AtlatestcheckESMFold2completed4/6calls;native0E2E368.783039265s,firsttwooptimized
+calls exactvsnative. Native2(index4)running. Queue tool45591, remotePID1997786.
+SourceAtlasLMfilecompletedat6,128,042,331bytes; transferparent1989212stillT while
+foldqueueactive. Senderchildfinished. NativebaselinePrecisioncompletedbefore
+foldqueuebegan: median11.885214524s, model2.370584047s,all12archiveexactvsqual.
+Precisioncurrenttorch/hipversionsinprovenance. FullassettransferNOTCOMPLETE.
+AutoPrecision49fileverifier toolsession35351 waitsforcompletefiles andsizes then
+fullhashes; donotstartduplicateverifier. Sourcecopyoriginaltoolsession1573live.
+
+Baseautoqueue toolsession90863, /tmp/fireprot-e2e-refresh-base-after.py waitsfor
+PID1997786exit andall8foldstatuses. Thenpausestransferatcompletefileboundary and
+runsroot/base-n1000/run.sh, preservingexistinggates. AddedtrueAtlasLMB4asSEPARATE
+studyatENDofBase run.sh via/tmp/fireprot-e2e-refresh-run.py root atlaslm-b4-refresh;
+Base6timingsunchanged. Originalbase-onlydriver preservedrun.base-only.sh.
+preparation.json driverhashupdatedbeforeanyBasework andpost_base_studypinpinned.
+NestedB4runnerresumestransferafteritsowncompletecalls; outerBasefinallyalsoCONT,
+noGPUjobafterresumption. Per-B4failure retainedinitsdriver-status; no fabricated
+success. collect_base.pypreparedlocalandfrozenroot/measured-scripts, imports
+samefoldercollect.py helpers; addslegacycompare-runsreport WITHOUTrelaxing its
+thresholdand separatelychecksuseralignedRMSD/confidence. ExecuteonlyafterBaseend.
+
+Newlocaluncommittedhelpersrun_base_after.py,collect_base.py,prepare_atlaslm_b4.py,
+plusbatchassertionsinprepare.py/collect.py andthiscontextupdate. No runtime/model
+changes. Needcommit/pushafterresultcollection; userdocs/isa preserveduntracked.
+Precision sourcesallnowready(Protenixbb3be993bundle,ESM43b4548,Atlas8ab3aca,OF37de748b).
+Weightsandfullmodelenvironmentqualificationstilldistinct. Source .9outboundwifi
+transfertested .5binding16MiB4.169s,no clearreason tointerruptcurrentstream;
+currentcopyresumeafterqueueunchanged. CLICPUbuild/ESM3nativequalified; otherPrecision
+adaptersnotclaimedready. Finalsource/destmanifestreceiptstillrequired.
+
+### OpenFold3 inventory failure and boundary audit (active)
+
+ESMFold2fresh3pairsfinishedRustaccepted: native median368.783039265s,
+optimized178.665536691s,2.064097229x; pairs2.055687434,2.057138864,2.067427230.
+IndependentfullCIF/archiverehashstillpendingfinalcollector (Rustexactgatepassed).
+OpenFold3firstnativeattemptfailedpreStartat17.56s: environment files/topology
+mismatch. Noacceptedprediction orspeedup. Oldinventory isopenfold3-environment-
+audit-20261009/current.json (da8089...). Itsunusedexperimental/rust-bridgeentry
+pinsmaintainedtarget/release/lib_fireprot_bridge.so asdf7d1537..., whereascurrent
+file0c77ddc5... (knownrecentframeworkupdates). ActualOpenFold3candidatebridge is
+separaterecovered.../lib_fireprot_bridge.so e021ec5d... unchanged. Atleastthat
+inventoryentrychanged; mustauditALLdifferences, do NOT simplydropinventory.
+
+Mainqueuecontinuedmini-n1000. RootthenSIGSTOPPEDONLYschedulingparentPID1997786;
+currentRustbenchmarkchildcontinuesitswholethreepairsuninterrupted. Tool33313
+runs/tmp/fireprot-e2e-refresh-audit-environment.py root1997786: waitsallparentdirect
+childrenfinished/zombie (modelboundary), capturesEXACToldinventoryspec viaRust,
+writesroot/openfold3-environment-refresh/{spec,current,diff}.json. Oncaptureerror
+resumesparentautomatically. OnsuccessKEEPSschedulerTforrootreview. Basewatcher
+90863 waitsparentexit, cannotstart. Transferparent1989212alsoT/noactiveassetcopy.
+Afteraudit review, preparefreshOpenFold3retryprofilesbothpinningnewfullinventory
+withidenticalcoverageandupdatedprofilehashdeclarations. Preservefailedcase.
+RunretryONLYwhilemainparentTandcurrentRustchildfinished; thenfinallyCONT1997786
+toresumeremainingqueue. AlternativelyresumeandqueueOF3afterBase, butnooverlap.
+Recordchangedfiles/versions; numericalguardsunchanged. CurrentMiniresultscheck
+benchmark.json becauseparenthasnotyetwrittendriver-statuswhilepaused.
+
+
+### Reviewed inventory retry and collector correction (2026-10-16, live)
+
+The full inventory audit completed: identical 157,886-entry scope; 14 added/14
+removed names and 58 changed entries. All changes are host OS libraries/loader
+or the unused maintained bridge. Qualified model environments and operator
+bundles are unchanged. Retry runs in `openfold3-n1536-refreshed-env` through
+`/tmp/fireprot-e2e-refresh-retry-openfold3.py` (tool session 37857). It holds the
+main scheduling parent 1997786 stopped and always resumes it in `finally`.
+The previous Mini N1536 child is complete/zombie. Do not launch another GPU run.
+Base watcher 90863 remains waiting for the main queue; transfer parent1989212
+remains paused. Audit watcher33313 is complete. All49sourceassets are regular
+files, with no source symlinks.
+
+Collector v2 mistakenly required within-arm byte equality for Mini. The existing
+Rust Mini tolerance gates passed; v3 reports exactness separately and retains all
+Rust checks. Do not label Mini arrays exact. Paired aligned RMSDs are at most
+0.000104 A (N1000) and0.000138 A (N1536); summary confidence at most3.82e-6 and
+2.68e-5. Full floating PAE/PDE diagnostics are retained. V3 verified Mini N1000
+71.041936810/33.122263191s (2.144839451x), Mini N1536 167.119518110/51.179958653s
+(3.265331245x), and ESMFold2 368.783039265/178.665536691s (2.064097229x).
+ESMFold2 arrays and entire CIF files are exact. Evidence saved locally in
+`provenance/e2e_refresh_folding_20261016.json`; more models still pending.
+Remote `measured-scripts/collect-v3.py` is now the correct final collector.
+Original collector versions/logs remain. Run final collector after all GPU runs;
+archive exact helper pins before publishing final provenance.

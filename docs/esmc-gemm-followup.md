@@ -3,6 +3,9 @@
 Historical experiment: the subsequent [bounded pinned loader](esmc-loading.md)
 is now promoted with 1.365x direct-native B4 E2E. The mixed GEMM/graph results
 below remain separate and are not composed into that claim.
+The later [startup/FFN composition trial](esmc-gemm-composition.md) tests the
+current 1.440x route, diagnoses plan initialization, and retains a lazy-plan
+candidate with mixed E2E results.
 
 This experiment continues the [ESMC CK investigation](esm-optimization.md#esmc-ck-follow-up-rejected-candidates).
 It uses HIP6 / PCI `0000:8e:00.0`, the pinned Biohub ESMC 6B checkpoint,

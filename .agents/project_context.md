@@ -6897,3 +6897,67 @@ if it improves fresh-process E2E; remaining startup hashing/import overhead need
 proper boundary timing. Further CK effort must address exact accumulation and
 measured throughput, not repeat the rejected tile/permutation sweep. Preserve
 same-batch official bitwise gate and current HIP6 restriction.
+
+## 2026-10-16 ESMC fixed-FFN composition and lazy initialization
+
+Goal remains active: consistently optimize ESMC. This cycle produced new evidence
+and a lazy-plan implementation, but did not promote a new default. HIP6 only,
+PCI0000:8e:00.0 / SMI4. All experiment processes are terminal.
+
+Remote root: outputs/experiments/esmc-composed-gemm-20261016 on DiamondHill.
+Current public profile stays on esmc-startup-20261016/native/qualified-import-overlap,
+with published native B4 E2E1.440x. No production worker/profile/request changed.
+
+Composed existing exact direct FFN algorithm4139 with pinned loading/import overlap.
+Three AB/BA/AB pairs per workload, nativeBF16/N1000/seed101/HIP6, fresh workers,
+unflushed caches, full resource hashes and all output exports:
+- Eager plan, B4:16.841608484 ->16.930650029s,0.994740808x.
+  Forward1.384409664 ->1.480894102s; two slower pairs.
+- Eager plan, resident64 /sixteen B4:27.716254104 ->27.757427986s,0.998516654x.
+  Forward10.103925516 ->9.700391856s; no complete-call gain.
+- Lazy plan, B4:16.601334464 ->16.323932038s,1.016993603x.
+  Paired ratios1.016993603,1.013631034,0.999163635; last pair13.963ms slower.
+  Forward1.370878016 ->1.337035827s (~1.025x). Candidate max slightly worse.
+These are separate incremental comparisons, not new native ratios. Do not multiply
+ratios or combine medians. Lazy remains experimental because E2E is mixed.
+
+Initialization: eager host median262.935ms B4 /265.331ms resident64. Diagnostic
+C++ timings put251.565/254.814ms in getAlgosFromIndex. Same-version 24-byte algorithm
+serialization is documented by installed header. Cold restoration fails the
+retained matmulIsAlgoSupported check (wrapper -9) twice, with no model run.
+Warm restore succeeds at1.823/1.878ms; every80 projection and final output exact.
+This suggests an initialization dependency, but private library cause is unproven.
+Do not bypass support checks or promote cold restoration.
+
+Implemented experiments/plm/esmc_lt_lazy_scope.py: defer indexed plan creation
+until first FFN after original native QKV. No serialization used. Existing shape,
+precision, source/kernel pins and support checks retained. First plan host timing
+2.124/2.106/2.348ms; median2.124ms. Per-group plan reuse remains. Original library
+unchanged SHA7b554428ba5a79ed1ef2f107f8e4d8ba8e306352a8efa88c0b116f04f1fdedb4.
+Eager frozen deployment root/qualified-fixed; lazy root/lazy/qualified-fixed.
+
+Independent collectors rehash18 invocations /432 archives and check exact arrays,
+GPU identity and per-group80 direct projections /160 HIP calls. B4 additionally
+matches retained official same-batch output; resident64 additionally matches old
+exact FireProt resident64, not a newly measured native resident64 run. Both C++
+indexed and warm-restored probe forwards also check all80 projections individually.
+
+Evidence: provenance/esmc_composed_gemm_20261016.json, docs/esmc-gemm-composition.md.
+First startup-probe driver intentionally stopped on cold restore failure; its log
+is retained. startup-probe-v2 reuses the same verified library and explicitly
+records accepted index runs /rejected fresh restores; warm restoration is checked
+inside each accepted index run. Do not restart either directory or overwrite it.
+
+Next concrete hypothesis: NUMA locality of pinned buffers and CPU conversion.
+Read-only sysfs confirms HIP6 NUMA node1, local CPUs64-127,192-255, numactl installed.
+No affinity gain measured yet. Restrict experiments to own worker/process affinity,
+keep full original hashing and bitwise outputs, compare current profile against
+NUMA-local CPU placement with explicit recorded treatment. Current pinned placement
+was1.290s in prior diagnostic. Do not repeat CK tile/permutation sweeps or claim
+that a warm FFN saving guarantees E2E savings.
+
+Top-source sync baseline7a70cf5. This cycle requires a new backup under
+esmc-composed-gemm-20261016; inspect source-sync-receipt.json for completion.
+Last startup-cycle receipt was verified15files, manifest SHA
+65a5af752b6dbbd3207f4b70afec43e60274400e63c93d42fb0553fa7e8937ff.
+Exclude user docs/isa, runtime, outputs, Git metadata and Protenix from source sync.

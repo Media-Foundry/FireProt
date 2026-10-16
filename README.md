@@ -186,6 +186,10 @@ outputs and improves ESMC B4 warm forward by 1.052x over the preceding GPU-loadi
 Incremental E2E medians are only 1.009x for four inputs and 1.025x for 64 inputs,
 with mixed paired results; it remains experimental and does not change the
 published direct-native ratios.
+A [composition follow-up](docs/esmc-gemm-composition.md) reduces fixed-FFN plan
+initialization from 263 ms to 2.1 ms by delaying it until after native QKV.
+Its B4 incremental E2E median improves 1.017x, with one slightly slower pair;
+it remains experimental and the public profile is unchanged.
 Warm forward excludes loading/export and is measured independently. See
 [exact-route commands and evidence](docs/esm-optimization.md). ESM3's separate
 64-input resident workload (sixteen B4 groups) improves **20.212 → 15.490 s

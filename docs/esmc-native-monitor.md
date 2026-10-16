@@ -85,16 +85,16 @@ the independent qualification above does.
 
 ## Entry and fallback
 
-The existing B4 request remains valid. The public
-`configs/diamondhill/plm-esmc-fold2-6b-exact.json` now uses the measured native
-probe. Copy the request and select a fresh run ID/output directory:
+The existing B4 request remains valid. The preserved
+`configs/diamondhill/plm-esmc-fold2-6b-native-monitor.json` uses this measured native
+probe. The current default has advanced to the [combined snapshot protocol](esmc-snapshot-monitor.md). Copy the request and select a fresh run ID/output directory:
 
 ```bash
 cd /media/IntelSSD/fireprot
 cp configs/requests/plm-esmc-fold2-6b-b4-n1000-exact.json /tmp/esmc-b4.json
 # Edit run_id and output_dir in the copied request.
 outputs/experiments/esmc-native-monitor-20261016/fireprot-bench \
-  esm /tmp/esmc-b4.json configs/diamondhill/plm-esmc-fold2-6b-exact.json
+  esm /tmp/esmc-b4.json configs/diamondhill/plm-esmc-fold2-6b-native-monitor.json
 ```
 
 For resident64, pair `configs/requests/plm-esmc-fold2-6b-resident64-gemm.json`

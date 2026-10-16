@@ -254,3 +254,28 @@ fn model_gates_keep_full_array_diagnostics_separate_from_protenix_acceptance() {
     a.remove("coordinates");
     assert!(paired::compare_prediction(&workload, &prediction, &a, &prediction, &b).is_err());
 }
+
+#[test]
+fn monitor_protocol_change_requires_explicit_e2e_treatment() {
+    let mut a = series("a", &[10.]);
+    let mut b = series("b", &[9.]);
+    let mut launch: serde_json::Value =
+        serde_json::from_str(&b.observations[0].environment["launch"]).unwrap();
+    launch["environment"]["FIREPROT_AMD_SMI_PROTOCOL"] = json!("snapshot-v1");
+    b.observations[0]
+        .environment
+        .insert("launch".into(), launch.to_string());
+    assert!(paired::differences(&a, &b).is_err());
+    assert!(paired::differences_with_monitor_treatment(&a, &b, true).is_err());
+    a.observations[0].scope = TimingScope::EndToEnd;
+    b.observations[0].scope = TimingScope::EndToEnd;
+    assert!(paired::differences(&a, &b).is_err());
+    let changes = paired::differences_with_monitor_treatment(&a, &b, true).unwrap();
+    assert_eq!(changes.len(), 1);
+    assert_eq!(
+        changes["launch.environment.FIREPROT_AMD_SMI_PROTOCOL"].candidate,
+        Some(json!("snapshot-v1"))
+    );
+    assert!(paired::compare_with_monitor_treatment(&a, &b, &changes, true).is_ok());
+    assert!(paired::compare_with_monitor_treatment(&a, &b, &BTreeMap::new(), true).is_err());
+}

@@ -136,3 +136,13 @@ shape. Cancellation and timeout are rechecked after pre-Start validation and aft
 output validation, before authorizing work or accepting predictions. Synchronous
 hashing can delay reaching those checkpoints; it is not an interruptible filesystem
 snapshot or a concurrency sandbox.
+
+## Combined native monitor protocol
+
+`FIREPROT_AMD_SMI_PROTOCOL` is explicitly selected from the profile environment
+and retained in execution identity. Its accepted values are `cli` (default) and
+`snapshot-v1`. A protocol difference is protected unless an E2E comparison enables
+`monitor_treatment` and declares the exact difference. The combined native probe
+remains pinned as the `amd-smi` input. It returns a new device/PID observation
+per sample; Rust still checks physical mapping and process isolation. See
+[snapshot protocol qualification](esmc-snapshot-monitor.md).

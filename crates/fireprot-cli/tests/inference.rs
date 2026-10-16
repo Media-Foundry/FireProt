@@ -860,3 +860,47 @@ fn benchmark_cancellation_and_global_deadline_stop_later_jobs_and_reap_workers()
         }
     }
 }
+
+#[test]
+fn explicit_snapshot_protocol_is_used_and_recorded() {
+    let d = tempfile::tempdir().unwrap();
+    let root = d.path();
+    let (request, mut profile) = fixture(root);
+    profile["environment"]["FIREPROT_AMD_SMI_PROTOCOL"] = json!("snapshot-v1");
+    executable(
+        &root.join("amd-smi"),
+        r#"#!/usr/bin/python3
+import json,sys
+if sys.argv[1]=='list':print(json.dumps([dict(gpu=2,bdf='0000:93:00.0')]))
+else:
+    assert sys.argv[1]=='snapshot-v1'
+    print(json.dumps(dict(schema_version=1,devices=[dict(gpu=2,bdf='0000:93:00.0',process_list=[dict(process_info='No running processes detected')])])))
+"#,
+    );
+    let result = infer(root, &request, &profile);
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    let report: Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(report["phase"], "succeeded");
+    let launch: Value =
+        serde_json::from_slice(&fs::read(root.join("run/execution.json")).unwrap()).unwrap();
+    assert_eq!(
+        launch["environment"]["FIREPROT_AMD_SMI_PROTOCOL"],
+        "snapshot-v1"
+    );
+}
+
+#[test]
+fn invalid_snapshot_protocol_is_rejected_before_inference() {
+    let d = tempfile::tempdir().unwrap();
+    let root = d.path();
+    let (request, mut profile) = fixture(root);
+    profile["environment"]["FIREPROT_AMD_SMI_PROTOCOL"] = json!("autodetect");
+    let result = infer(root, &request, &profile);
+    assert!(!result.status.success());
+    assert!(String::from_utf8_lossy(&result.stderr).contains("unknown AMD SMI protocol"));
+    assert!(!root.join("run").exists());
+}

@@ -101,10 +101,46 @@ pub fn process_ids(payload: &Value, selected: u32) -> Result<BTreeSet<u32>, Stri
     Ok(pids)
 }
 
+/// Explicit protocol selection; never inferred from executable names or output.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub enum SmiProtocol {
+    #[default]
+    Cli,
+    SnapshotV1,
+}
+impl TryFrom<&str> for SmiProtocol {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        match value {
+            "cli" => Ok(Self::Cli),
+            "snapshot-v1" => Ok(Self::SnapshotV1),
+            _ => Err("unknown AMD SMI protocol".into()),
+        }
+    }
+}
+
+/// Validate a fresh combined query before filtering the worker PID. Every row's
+/// process payload is checked, including devices other than the selected GPU.
+fn snapshot_ids(payload: &Value, device: &PhysicalDevice) -> Result<BTreeSet<u32>, String> {
+    let object = payload.as_object().ok_or("invalid SMI snapshot envelope")?;
+    if object.len() != 2 || payload["schema_version"].as_u64() != Some(1) {
+        return Err("unsupported SMI snapshot envelope".into());
+    }
+    let rows = &payload["devices"];
+    if smi_device(rows, &device.pci_address)? != device.smi_device {
+        return Err("SMI physical device mapping changed".into());
+    }
+    for row in rows.as_array().ok_or("invalid SMI snapshot devices")? {
+        process_ids(rows, index(&row["gpu"])?)?;
+    }
+    process_ids(rows, device.smi_device)
+}
+
 pub struct AmdSmiMonitor {
     hip_probe: PathBuf,
     amd_smi: PathBuf,
     timeout: Duration,
+    protocol: SmiProtocol,
     selected: Option<PhysicalDevice>,
     worker_pid: Option<u32>,
 }
@@ -114,9 +150,14 @@ impl AmdSmiMonitor {
             hip_probe,
             amd_smi,
             timeout,
+            protocol: SmiProtocol::Cli,
             selected: None,
             worker_pid: None,
         }
+    }
+    pub fn with_protocol(mut self, protocol: SmiProtocol) -> Self {
+        self.protocol = protocol;
+        self
     }
     pub fn selected(&self) -> Option<&PhysicalDevice> {
         self.selected.as_ref()
@@ -174,13 +215,17 @@ impl DeviceMonitor for AmdSmiMonitor {
         if self.worker_pid != Some(worker_pid) {
             return Err("monitor worker PID changed".into());
         }
-        // Revalidate SMI indexing each sample: device reorder/disappearance fails.
-        if smi_device(&self.smi("list")?, &device.pci_address)? != device.smi_device {
-            return Err("SMI physical device mapping changed".into());
-        }
-        Ok(process_ids(&self.smi("process")?, device.smi_device)?
-            .into_iter()
-            .filter(|&pid| pid != worker_pid)
-            .collect())
+        // Both protocols revalidate SMI indexing on every sample. SnapshotV1
+        // queries a fresh SDK session once and never falls back on errors.
+        let ids = match self.protocol {
+            SmiProtocol::Cli => {
+                if smi_device(&self.smi("list")?, &device.pci_address)? != device.smi_device {
+                    return Err("SMI physical device mapping changed".into());
+                }
+                process_ids(&self.smi("process")?, device.smi_device)?
+            }
+            SmiProtocol::SnapshotV1 => snapshot_ids(&self.smi("snapshot-v1")?, device)?,
+        };
+        Ok(ids.into_iter().filter(|&pid| pid != worker_pid).collect())
     }
 }

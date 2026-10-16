@@ -284,6 +284,11 @@ pub fn differences_with_monitor_treatment(
     let env_keys: BTreeSet<_> = ae.keys().chain(be.keys()).collect();
     for key in env_keys {
         if ae.get(key) != be.get(key) {
+            if key == "FIREPROT_AMD_SMI_PROTOCOL" && !monitor_treatment {
+                return Err(error(
+                    "monitor protocol change requires explicit E2E treatment",
+                ));
+            }
             if !key.starts_with("FIREPROT_") {
                 return Err(error(format!(
                     "protected launch environment changed: {key}"

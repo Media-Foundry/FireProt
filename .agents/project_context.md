@@ -7251,3 +7251,70 @@ unqualified under strict byte equality; do not promote on speed alone.
 Source sync baseline dd3c689; backup in this root/top-source-backup. Consult
 source-sync-receipt.json for verified completion. Exclude docs/isa, runtime,
 outputs, Git metadata and Protenix from source synchronization.
+
+## 2026-10-16 ESMC combined snapshot monitoring
+
+The previous turn was progress (native monitor measured, deployed, committed and
+pushed as9c63daf). This turn implements the next hypothesis: explicit fresh
+snapshot-v1 query combines BDF and PID reads in one SDK session per sample.
+No persistent session/cached mapping. Reads are sequential, not hardware atomic.
+Rust default remains Cli; explicit profile environment FIREPROT_AMD_SMI_PROTOCOL
+selects cli/snapshot-v1, unknown values fail before inference. Batch validates all
+profiles first. Every sample checks version, mapping and all PID rows, then filters
+verified worker PID. Same250ms scheduling, command timeout/output bound and killpg.
+Initial independent HIP identity uses list. No fallback on snapshot errors.
+
+Remote root outputs/experiments/esmc-snapshot-monitor-20261016, only HIP6,
+PCI0000:8e:00.0/SMI4. N1000/B4/nativeBF16/seed101; fresh workers, unflushed caches,
+all original checkpoint hashes and exports. Three AB/BA/AB pairs per comparison:
+- B4 separate-native->snapshot:12.631936588->12.353836547s,1.022511229x.
+  Pairs1.054120478,1.019342855,1.019330140; firstpair larger than others.
+- Resident64/lazyFFN:22.472783670->22.235783454s,1.010658505x.
+  Pairs1.013762567,1.004934023,1.024103831; allfaster.
+- Direct nativeB4->fullcomposition:24.235166989->12.250121529s,1.978361352x.
+  Pairs1.925436188,1.992162731,1.864362022. Native22.715069290..24.404235563s;
+  candidate12.183829657..12.586845069s. Do not attribute whole change vs prior
+  1.891x to snapshot; baseline changed too. Do not multiply ratios.
+Incremental forward B4 1.292854151->1.273523269s; resident64 9.258098461->9.226570968s.
+No GPU arithmetic changes. Query median350.933->176.103ms. Isolation sample
+medians11->15 (B4),24->34 (resident64). Monitor overhead is now a small E2E target.
+All18invocations432archives pass Rust and independent byte comparison to official
+same-batch references. No direct-native resident64 ratio claimed.
+
+Qualification28fakeSDKcases+5badargs, all8BDF mapping, two realHIP6 PIDlifecycles,
+realRust rejection of externalHIP6 PID beforeStart/no predictions. Rust tests
+cover envelope, mapping, selected/unselected malformed PID rows, timeout/exit,
+no fallback; CLI17tests, paired6tests, runtime device+monitor tests, Clippy/fmt.
+Paired comparison now explicitly protects FIREPROT_AMD_SMI_PROTOCOL changes
+unless monitor_treatment=true and E2E, with exact declaration required.
+Final comparison-only guard was added after incremental runs; inference/runtime
+unchanged. Incremental frozenfireprot-bench identity in benchmark-cli.json,
+finalfireprot-final in final-cli.json and final-build.json. Direct native pairs
+use finalCLI in both arms. final-policy.json records identical revalidation of
+incremental reports by finalCLI; inspect actual receipt for completion.
+FinalCLI SHA1f5365ecf4824f1b2d99ca88bcc25d36be57f434a78f1e6ff17f5bb95a55dce0.
+Nativeprobe SHA29e550384593d7880fb591213391ada0d728f3e589fd5edae7165d0449653c91.
+New B4 measured profileSHA1fc98ffdbc7a22b28fd989dde630f69a8b918b0980432058d033c5ea14d7ab47.
+OldB4profile preserved plm-esmc-fold2-6b-native-monitor.json; publicexact now
+snapshot. Newresidentprofile plm-esmc-fold2-6b-resident-snapshot.json; prior
+resident-monitor remains preserved. Historical snapshotprepare uses preserved
+native-monitor baseline; frozen measuredprepare remains remote unchanged.
+
+Evidence provenance/esmc_snapshot_monitor_20261016.json, docs/esmc-snapshot-monitor.md.
+MCPGitNexus transportclosed; local index refresh/CLIimpact fallback used. Struct
+analysis resolves no callers and is UNKNOWN, not proof of no impact. Source
+review identifies CLI inference/batch and runtime monitor callers; tests cover
+both old default/new path. Use localCLI detect-changes precommit.
+Source sync baseline9c63daf; new root/top-source-backup and source-sync-receipt.json.
+MaintainedCLI upgrade verified; old75871d... retained with backup/receipt. Preserve
+userdocs/isa; no weights/outputs/Gitmetadata/Protenix in source sync.
+Next work: inspect remaining ESMC startup/forward costs before selecting another
+optimization. Do not keep removing checks for tiny monitor savings. Larger GPU
+microbatch capability may be worth checking against existing qualification,
+with official same-grouping byte equality and separate sequential diagnostics;
+no new larger-batch gain has been measured. CK remains unqualified/slow as recorded.
+
+Local detect-changes reports critical impact via generic/empty symbols across
+unrelated Python flows; this is noisy graph reach, not established runtime
+dependence. Source review confirms edits in Rust monitor/inference/comparison,
+new C++ operation and tests; old monitor constructor and CLI defaults preserved.

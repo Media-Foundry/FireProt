@@ -93,7 +93,11 @@ and failure policy. The C++ helper exposes only the required read-only SDK calls
 without adding unsafe FFI to Rust. It is bound by the `amd-smi` launch input hash.
 Only explicit E2E comparisons may opt into `monitor_treatment`; exact identity
 changes remain mandatory and all other protected executables remain protected.
-See [monitor qualification and E2E evidence](esmc-native-monitor.md).
+The ESMC profile's explicit `FIREPROT_AMD_SMI_PROTOCOL=snapshot-v1` combines
+fresh device mapping and PID queries in one native SDK session per sample.
+Rust validates the versioned envelope and all device/PID rows on every sample;
+other profiles retain separate queries. See [snapshot qualification and E2E
+evidence](esmc-snapshot-monitor.md) and the [preceding experiment](esmc-native-monitor.md).
 
 ## Historical operator implementation
 

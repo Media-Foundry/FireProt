@@ -1,0 +1,1594 @@
+{
+  "schema_version": 1,
+  "model": "ESMC bundled 6B",
+  "length": 1000,
+  "batch_size": 4,
+  "seed": 101,
+  "dtype": "native BF16",
+  "hip_device": 6,
+  "pci_address": "0000:8e:00.0",
+  "experiment_root": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016",
+  "decision": "Promote snapshot-v1 after qualification, all-pair E2E improvement, strict output acceptance and final-policy replay.",
+  "qualification": {
+    "schema_version": 1,
+    "binaries": {
+      "native": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/build-cache/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00.so",
+        "sha256": "29e550384593d7880fb591213391ada0d728f3e589fd5edae7165d0449653c91"
+      },
+      "fake": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/build-cache/esmc_snapshot_fake_471b972ee5fc60c1e61cc6e49de31481086be8b3f8492efd67e9635c3ca58371/esmc_snapshot_fake_471b972ee5fc60c1e61cc6e49de31481086be8b3f8492efd67e9635c3ca58371.so",
+        "sha256": "3f04a5629cd0b9e33e6de301ab526a03a8e17d02a5db7f517973ccf0ba81f7c5"
+      },
+      "hold": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-native-monitor-20261016/build-v2/build-cache/esmc_smi_hold_88fd7a8119b4007bce6eb4ef1370802297f8ed82eea9e291b8bee5127e871057/esmc_smi_hold_88fd7a8119b4007bce6eb4ef1370802297f8ed82eea9e291b8bee5127e871057.so",
+        "sha256": "5ac0666ee025668ba20d6e3c69fed058beb01a5be37c1a623eaecd5bc7197886"
+      }
+    },
+    "script": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/test_esmc_snapshot_probe.py",
+      "sha256": "b82a95429f74291f04af60fca9d4f4bab4edf6e5f08fec2e715f6fe619c77a56"
+    },
+    "faults": [
+      {
+        "case": "active",
+        "returncode": 0,
+        "stderr": ""
+      },
+      {
+        "case": "empty",
+        "returncode": 0,
+        "stderr": ""
+      },
+      {
+        "case": "resize",
+        "returncode": 0,
+        "stderr": ""
+      },
+      {
+        "case": "init_error",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: init: AMD SMI status 1"
+      },
+      {
+        "case": "shutdown_error",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: shutdown: AMD SMI status 1"
+      },
+      {
+        "case": "version_error",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: library version: AMD SMI status 1"
+      },
+      {
+        "case": "unsupported_version",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: this probe requires qualified AMD SMI 27.0.0"
+      },
+      {
+        "case": "socket_error",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: socket count: AMD SMI status 1"
+      },
+      {
+        "case": "zero_sockets",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: invalid socket count"
+      },
+      {
+        "case": "too_many_sockets",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: invalid socket count"
+      },
+      {
+        "case": "socket_growth",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: socket count changed beyond capacity"
+      },
+      {
+        "case": "processor_error",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: processor count: AMD SMI status 1"
+      },
+      {
+        "case": "zero_processors",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: no AMD GPU processors"
+      },
+      {
+        "case": "too_many_processors",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: invalid processor count"
+      },
+      {
+        "case": "processor_growth",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: processor count changed beyond capacity"
+      },
+      {
+        "case": "null_processor",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: null or duplicate processor"
+      },
+      {
+        "case": "duplicate_processor",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: null or duplicate processor"
+      },
+      {
+        "case": "bdf_error",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: device BDF: AMD SMI status 1"
+      },
+      {
+        "case": "large_domain",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: BDF domain exceeds Rust protocol"
+      },
+      {
+        "case": "duplicate_bdf",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: duplicate device BDF"
+      },
+      {
+        "case": "process_error",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: process list: AMD SMI status 1"
+      },
+      {
+        "case": "second_device_error",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: process list: AMD SMI status 1"
+      },
+      {
+        "case": "zero_pid",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: zero or duplicate PID"
+      },
+      {
+        "case": "duplicate_pid",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: zero or duplicate PID"
+      },
+      {
+        "case": "bad_resize",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: invalid process resize request"
+      },
+      {
+        "case": "oversize_resize",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: invalid process resize request"
+      },
+      {
+        "case": "continuous_growth",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: process list kept growing"
+      },
+      {
+        "case": "success_overflow",
+        "returncode": 1,
+        "stderr": "fireprot-smi-probe: process count exceeds capacity"
+      }
+    ],
+    "parity": [
+      {
+        "operation": "list",
+        "pairs": [
+          {
+            "official": 0.3005422039423138,
+            "native": 0.17234479601029307
+          },
+          {
+            "native": 0.17610482894815505,
+            "official": 0.30318702501244843
+          },
+          {
+            "official": 0.30330692301504314,
+            "native": 0.1747173109324649
+          }
+        ],
+        "median_seconds": {
+          "official": 0.30318702501244843,
+          "native": 0.1747173109324649
+        }
+      },
+      {
+        "operation": "process",
+        "pairs": [
+          {
+            "official": 0.2981350300833583,
+            "native": 0.18505945708602667
+          },
+          {
+            "native": 0.18425722606480122,
+            "official": 0.3021157269831747
+          },
+          {
+            "official": 0.3085958550218493,
+            "native": 0.17610417900141329
+          }
+        ],
+        "median_seconds": {
+          "official": 0.3021157269831747,
+          "native": 0.18425722606480122
+        }
+      }
+    ],
+    "holders": [
+      {
+        "trial": 0,
+        "pid": 1953115,
+        "queries": [
+          {
+            "native": true,
+            "seconds": 0.1839466040255502,
+            "started_after_ready_seconds": 7.800990715622902e-07,
+            "pids": [
+              1953115
+            ]
+          },
+          {
+            "native": false,
+            "seconds": 0.3077465610112995,
+            "started_after_ready_seconds": 0.18402958603110164,
+            "pids": [
+              1953115
+            ]
+          },
+          {
+            "native": true,
+            "seconds": 0.18544767203275114,
+            "started_after_ready_seconds": 0.4918526690453291,
+            "pids": [
+              1953115
+            ]
+          },
+          {
+            "native": false,
+            "seconds": 0.3047144040465355,
+            "started_after_ready_seconds": 0.6773712770082057,
+            "pids": [
+              1953115
+            ]
+          }
+        ],
+        "removal_seconds": 0.17652203410398215,
+        "passed": true
+      },
+      {
+        "trial": 1,
+        "pid": 1953135,
+        "queries": [
+          {
+            "native": true,
+            "seconds": 0.18348004505969584,
+            "started_after_ready_seconds": 9.600771591067314e-07,
+            "pids": [
+              1953135
+            ]
+          },
+          {
+            "native": false,
+            "seconds": 0.30782052502036095,
+            "started_after_ready_seconds": 0.1835406250320375,
+            "pids": [
+              1953135
+            ]
+          },
+          {
+            "native": true,
+            "seconds": 0.18500695494003594,
+            "started_after_ready_seconds": 0.49142721702810377,
+            "pids": [
+              1953135
+            ]
+          },
+          {
+            "native": false,
+            "seconds": 0.30933761806227267,
+            "started_after_ready_seconds": 0.6765060069737956,
+            "pids": [
+              1953135
+            ]
+          }
+        ],
+        "removal_seconds": 0.175314664025791,
+        "passed": true
+      }
+    ],
+    "official": {
+      "path": "/usr/bin/amd-smi",
+      "sha256": "fed9e6cd65b4ecbc64e8453331ebaa288870c60178a5e714a153156d774a9613"
+    },
+    "invalid_argument_cases": 5,
+    "device_mapping": {
+      "0": "0000:11:00.0",
+      "1": "0000:14:00.0",
+      "2": "0000:32:00.0",
+      "3": "0000:35:00.0",
+      "4": "0000:8e:00.0",
+      "5": "0000:93:00.0",
+      "6": "0000:ae:00.0",
+      "7": "0000:b3:00.0"
+    },
+    "previous_native": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-native-monitor-20261016/build-v2/build-cache/esmc_smi_native_52010524b19dfa211b74f9f295c4a5fcb0f260e63674c8522717c67b7094d1c2/esmc_smi_native_52010524b19dfa211b74f9f295c4a5fcb0f260e63674c8522717c67b7094d1c2.so",
+      "sha256": "714e1984c913bf51124555dde2b1d2e4c27b54744a7ee84b2250035cb846913f"
+    },
+    "combined_query_pairs": [
+      {
+        "previous_native": 0.3525497898226604,
+        "snapshot": 0.17585440597031265
+      },
+      {
+        "snapshot": 0.17610326001886278,
+        "previous_native": 0.35040574497543275
+      },
+      {
+        "previous_native": 0.35093301290180534,
+        "snapshot": 0.1812066660495475
+      }
+    ],
+    "passed": true
+  },
+  "isolation": {
+    "passed": true,
+    "exit_code": 1,
+    "controlled_pid": 1953959,
+    "supervisor": {
+      "run_id": "esmc-snapshot-monitor-conflict",
+      "phase": "failed",
+      "worker_pid": 1954082,
+      "elapsed_seconds": 2.455434196,
+      "isolation_samples": 1,
+      "failure": "external GPU processes: [1953959]",
+      "announced_device": {
+        "worker_pid": 1954082,
+        "logical_device": 0,
+        "pci_address": "0000:8e:00.0",
+        "architecture": "gfx90a"
+      },
+      "device_verified": true,
+      "physical_device": {
+        "hip_device": 6,
+        "smi_device": 4,
+        "pci_address": "0000:8e:00.0",
+        "architecture": "gfx90a"
+      },
+      "execution_sha256": "53f2f00182101af12555e17480eee43bfd1fbc853f494a14ac1988f285f3a579"
+    },
+    "supervisor_pin": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/isolation-check/rejected/supervisor.json",
+      "sha256": "0931782f0c3a67f01a7cc003a54e1dd31a5601ad46f6d8c0b114dfda0e499cce"
+    },
+    "request": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/isolation-check/request.json",
+      "sha256": "43cb963daf7166cd2832840324d9aebcc6eb8fc36407e747d71252b66e06a004"
+    },
+    "profile": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/isolation-check/profile.json",
+      "sha256": "1fc98ffdbc7a22b28fd989dde630f69a8b918b0980432058d033c5ea14d7ab47"
+    },
+    "script": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/check_esmc_snapshot_isolation.py",
+      "sha256": "ed1c2ae8050486cc49f3614d93556899edb86db55eacccc2a3b87e13a4a79396"
+    },
+    "scope": "Expected rejection with a controlled test process; no performance observation."
+  },
+  "incremental": {
+    "schema_version": 1,
+    "cases": {
+      "4": {
+        "benchmark": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b4-pairs/measurements/benchmark.json",
+          "sha256": "c02baa55c205ef51763d7a73706af84e4c4033de9e17efc017727ac1ba368d20"
+        },
+        "comparison": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b4-pairs/measurements/comparison.json",
+          "sha256": "c7446c1b139b6d116facf40c79b3e48a13ccbdd5e287d6dcfb9cc627bddd5152"
+        },
+        "reference_accepted": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/native-pairs/baseline-1/accepted.json",
+          "sha256": "e53fe18e5a98befb016f2e3a462a69dbc2f4160734e17642f87c211c30edc43e"
+        },
+        "all_arrays_exact": true,
+        "records": [
+          {
+            "slot": {
+              "arm": "baseline",
+              "pair": 0
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b4-pairs/measurements/measurement-000/invocation.json",
+              "sha256": "fa97ba68af901678fe001ffc00aee4811ba9ab5d9d424673a8c8cd675122e247"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b4-pairs/baseline-1/accepted.json",
+              "sha256": "eba9562685d74eeedd071f011cd5c96d53c26af9b74d929dd5d5e3fbb3cb6562"
+            },
+            "e2e_seconds": 12.637733835,
+            "supervisor_seconds": 8.880275255,
+            "model_forward_seconds": 1.321354775922373,
+            "isolation_samples": 11,
+            "monitor": {
+              "name": "amd-smi",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-native-monitor-20261016/build-v2/build-cache/esmc_smi_native_52010524b19dfa211b74f9f295c4a5fcb0f260e63674c8522717c67b7094d1c2/esmc_smi_native_52010524b19dfa211b74f9f295c4a5fcb0f260e63674c8522717c67b7094d1c2.so",
+              "sha256": "714e1984c913bf51124555dde2b1d2e4c27b54744a7ee84b2250035cb846913f"
+            }
+          },
+          {
+            "slot": {
+              "arm": "candidate",
+              "pair": 0
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b4-pairs/measurements/measurement-001/invocation.json",
+              "sha256": "21c367b73f3565a7ae463fe354d1340f68cee253549ba7b563c87cc18390c8bf"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b4-pairs/candidate-1/accepted.json",
+              "sha256": "a28bb9659364d8ea2938a0111b7315c1384561b620f0d169941c154f435d4159"
+            },
+            "e2e_seconds": 11.988889404,
+            "supervisor_seconds": 8.354482471,
+            "model_forward_seconds": 1.273523268988356,
+            "isolation_samples": 14,
+            "monitor": {
+              "name": "amd-smi",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/build-cache/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00.so",
+              "sha256": "29e550384593d7880fb591213391ada0d728f3e589fd5edae7165d0449653c91"
+            }
+          },
+          {
+            "slot": {
+              "arm": "candidate",
+              "pair": 1
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b4-pairs/measurements/measurement-002/invocation.json",
+              "sha256": "1f829fc20e294375095ad504208e68e4cd2d4f57416ac4c98b5a2ac4017f97e1"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b4-pairs/candidate-2/accepted.json",
+              "sha256": "dd585453181d94625ef472bcfb89c7a7beaa32963772f4a53056ca616d26f5e1"
+            },
+            "e2e_seconds": 12.353836547,
+            "supervisor_seconds": 8.567744507,
+            "model_forward_seconds": 1.3584053199738264,
+            "isolation_samples": 15,
+            "monitor": {
+              "name": "amd-smi",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/build-cache/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00.so",
+              "sha256": "29e550384593d7880fb591213391ada0d728f3e589fd5edae7165d0449653c91"
+            }
+          },
+          {
+            "slot": {
+              "arm": "baseline",
+              "pair": 1
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b4-pairs/measurements/measurement-003/invocation.json",
+              "sha256": "eebf32170d34cde7eff7566e0349e1ee6701d59e9ba1bc29352247e99005588f"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b4-pairs/baseline-2/accepted.json",
+              "sha256": "6259c3a1caf3ed04298a9ba3e272a1beffb364749d954628584e5f33ba9242cb"
+            },
+            "e2e_seconds": 12.592795021,
+            "supervisor_seconds": 8.818525614,
+            "model_forward_seconds": 1.2707350871060044,
+            "isolation_samples": 11,
+            "monitor": {
+              "name": "amd-smi",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-native-monitor-20261016/build-v2/build-cache/esmc_smi_native_52010524b19dfa211b74f9f295c4a5fcb0f260e63674c8522717c67b7094d1c2/esmc_smi_native_52010524b19dfa211b74f9f295c4a5fcb0f260e63674c8522717c67b7094d1c2.so",
+              "sha256": "714e1984c913bf51124555dde2b1d2e4c27b54744a7ee84b2250035cb846913f"
+            }
+          },
+          {
+            "slot": {
+              "arm": "baseline",
+              "pair": 2
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b4-pairs/measurements/measurement-004/invocation.json",
+              "sha256": "0f02068f7c3d66cf7b988f1f775f9a5b3f4c46381eaff43f426815a16e52aa50"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b4-pairs/baseline-3/accepted.json",
+              "sha256": "b8411b0d3867406380dd41a698d1ded62734849ecf3c0b03f12fd638aa445d13"
+            },
+            "e2e_seconds": 12.631936588,
+            "supervisor_seconds": 8.837797906,
+            "model_forward_seconds": 1.2928541509900242,
+            "isolation_samples": 11,
+            "monitor": {
+              "name": "amd-smi",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-native-monitor-20261016/build-v2/build-cache/esmc_smi_native_52010524b19dfa211b74f9f295c4a5fcb0f260e63674c8522717c67b7094d1c2/esmc_smi_native_52010524b19dfa211b74f9f295c4a5fcb0f260e63674c8522717c67b7094d1c2.so",
+              "sha256": "714e1984c913bf51124555dde2b1d2e4c27b54744a7ee84b2250035cb846913f"
+            }
+          },
+          {
+            "slot": {
+              "arm": "candidate",
+              "pair": 2
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b4-pairs/measurements/measurement-005/invocation.json",
+              "sha256": "626e2b51606c321bff3cc93c15a6a173ea6f8738793107d647d224dc2e7b54e4"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b4-pairs/candidate-3/accepted.json",
+              "sha256": "a9cc650cccd4a892ffb42c5b39825513e4e8057f3a3a43ab8196419e267f1364"
+            },
+            "e2e_seconds": 12.392389957,
+            "supervisor_seconds": 8.589842527,
+            "model_forward_seconds": 1.2697086849948391,
+            "isolation_samples": 15,
+            "monitor": {
+              "name": "amd-smi",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/build-cache/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00.so",
+              "sha256": "29e550384593d7880fb591213391ada0d728f3e589fd5edae7165d0449653c91"
+            }
+          }
+        ],
+        "performance": {
+          "baseline": {
+            "count": 3,
+            "min": 12.592795021,
+            "median": 12.631936588,
+            "p95": 12.637733835,
+            "max": 12.637733835,
+            "mean": 12.620821814666668
+          },
+          "candidate": {
+            "count": 3,
+            "min": 11.988889404,
+            "median": 12.353836547,
+            "p95": 12.392389957,
+            "max": 12.392389957,
+            "mean": 12.245038636
+          },
+          "median_speedup": 1.0225112287945508,
+          "p95_speedup": 1.0197979468731464,
+          "paired_speedups": [
+            1.0541204784809775,
+            1.0193428554029258,
+            1.019330139854475
+          ],
+          "paired_summary": {
+            "count": 3,
+            "min": 1.019330139854475,
+            "median": 1.0193428554029258,
+            "p95": 1.0541204784809775,
+            "max": 1.0541204784809775,
+            "mean": 1.0309311579127927
+          },
+          "observed_trend": "faster_median_and_p95",
+          "changes": {
+            "invocation.profile_sha256": {
+              "baseline": "2d48bdd26ce27cb13c028b424fbace4d4a5c5eec7d748986c2cd8b7a6b221281",
+              "candidate": "1fc98ffdbc7a22b28fd989dde630f69a8b918b0980432058d033c5ea14d7ab47"
+            },
+            "launch.environment.FIREPROT_AMD_SMI_PROTOCOL": {
+              "baseline": null,
+              "candidate": "snapshot-v1"
+            },
+            "launch.inputs.amd-smi": {
+              "baseline": {
+                "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-native-monitor-20261016/build-v2/build-cache/esmc_smi_native_52010524b19dfa211b74f9f295c4a5fcb0f260e63674c8522717c67b7094d1c2/esmc_smi_native_52010524b19dfa211b74f9f295c4a5fcb0f260e63674c8522717c67b7094d1c2.so",
+                "name": "amd-smi",
+                "sha256": "714e1984c913bf51124555dde2b1d2e4c27b54744a7ee84b2250035cb846913f"
+              },
+              "candidate": {
+                "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/build-cache/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00.so",
+                "name": "amd-smi",
+                "sha256": "29e550384593d7880fb591213391ada0d728f3e589fd5edae7165d0449653c91"
+              }
+            }
+          }
+        },
+        "medians": {
+          "e2e_seconds": {
+            "baseline": 12.631936588,
+            "candidate": 12.353836547
+          },
+          "supervisor_seconds": {
+            "baseline": 8.837797906,
+            "candidate": 8.567744507
+          },
+          "model_forward_seconds": {
+            "baseline": 1.2928541509900242,
+            "candidate": 1.273523268988356
+          },
+          "isolation_samples": {
+            "baseline": 11,
+            "candidate": 15
+          }
+        }
+      },
+      "64": {
+        "benchmark": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b64-pairs/measurements/benchmark.json",
+          "sha256": "23ef695b001ca3e7678d235ce91d257f457cc1e46b0497b8014d68a43a953f6b"
+        },
+        "comparison": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b64-pairs/measurements/comparison.json",
+          "sha256": "34a0e36e0de9287ab9e1aff44c851203fbd26934aaa1b31d4e7cf3557594a632"
+        },
+        "reference_accepted": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-pointwise-20261016/validation/native64/accepted.json",
+          "sha256": "c18673e637bd57d5e12f93b67e05d62b0709ad8e51524b7766d16de3304513cd"
+        },
+        "all_arrays_exact": true,
+        "records": [
+          {
+            "slot": {
+              "arm": "baseline",
+              "pair": 0
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b64-pairs/measurements/measurement-000/invocation.json",
+              "sha256": "ded6eb6ae87a78f26d44eea5157f0fe37b35f562e96f4dfe232f8b9522a4a7fe"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b64-pairs/baseline-1/accepted.json",
+              "sha256": "51052942c1c8f8f8c293b7d913504e9977247a73357780c30cda34d3164140ad"
+            },
+            "e2e_seconds": 22.47278367,
+            "supervisor_seconds": 18.457410372,
+            "model_forward_seconds": 9.223293287097476,
+            "isolation_samples": 24,
+            "monitor": {
+              "name": "amd-smi",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-native-monitor-20261016/build-v2/build-cache/esmc_smi_native_52010524b19dfa211b74f9f295c4a5fcb0f260e63674c8522717c67b7094d1c2/esmc_smi_native_52010524b19dfa211b74f9f295c4a5fcb0f260e63674c8522717c67b7094d1c2.so",
+              "sha256": "714e1984c913bf51124555dde2b1d2e4c27b54744a7ee84b2250035cb846913f"
+            }
+          },
+          {
+            "slot": {
+              "arm": "candidate",
+              "pair": 0
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b64-pairs/measurements/measurement-001/invocation.json",
+              "sha256": "1047fe542fce7d14e49bc753ec1accdd513656788914d010a270df94c2fdd044"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b64-pairs/candidate-1/accepted.json",
+              "sha256": "5facff6fa9103b48aed6b428685727b2827b3ae6735e790041c4e4b1b7acb81c"
+            },
+            "e2e_seconds": 22.167699235,
+            "supervisor_seconds": 18.149777173,
+            "model_forward_seconds": 9.247405698988587,
+            "isolation_samples": 34,
+            "monitor": {
+              "name": "amd-smi",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/build-cache/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00.so",
+              "sha256": "29e550384593d7880fb591213391ada0d728f3e589fd5edae7165d0449653c91"
+            }
+          },
+          {
+            "slot": {
+              "arm": "candidate",
+              "pair": 1
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b64-pairs/measurements/measurement-002/invocation.json",
+              "sha256": "ff446563d0b26709d8c2f8e739668ef2c05297b707656b34700ee2855c58ce89"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b64-pairs/candidate-2/accepted.json",
+              "sha256": "cf67a9df3c7737944eec7da48b21707a1ebe105679f1e4b113b05faf2886cdaf"
+            },
+            "e2e_seconds": 22.294400094,
+            "supervisor_seconds": 18.234363397,
+            "model_forward_seconds": 9.221843432984315,
+            "isolation_samples": 34,
+            "monitor": {
+              "name": "amd-smi",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/build-cache/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00.so",
+              "sha256": "29e550384593d7880fb591213391ada0d728f3e589fd5edae7165d0449653c91"
+            }
+          },
+          {
+            "slot": {
+              "arm": "baseline",
+              "pair": 1
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b64-pairs/measurements/measurement-003/invocation.json",
+              "sha256": "073f57d5a6d52f453cf4c583d8c43c76f879666ba8076d05bcf8f3ff0bf07448"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b64-pairs/baseline-2/accepted.json",
+              "sha256": "954b7e52a87e198f0844386b662b1d0871c644b0c4269a57a00bd647d8332e35"
+            },
+            "e2e_seconds": 22.404401184,
+            "supervisor_seconds": 18.373468484,
+            "model_forward_seconds": 9.258098460850306,
+            "isolation_samples": 24,
+            "monitor": {
+              "name": "amd-smi",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-native-monitor-20261016/build-v2/build-cache/esmc_smi_native_52010524b19dfa211b74f9f295c4a5fcb0f260e63674c8522717c67b7094d1c2/esmc_smi_native_52010524b19dfa211b74f9f295c4a5fcb0f260e63674c8522717c67b7094d1c2.so",
+              "sha256": "714e1984c913bf51124555dde2b1d2e4c27b54744a7ee84b2250035cb846913f"
+            }
+          },
+          {
+            "slot": {
+              "arm": "baseline",
+              "pair": 2
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b64-pairs/measurements/measurement-004/invocation.json",
+              "sha256": "43dbea9a4dace66ca88dc9811b2429e0d8719efaee153bcabaf6cad1284803b8"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b64-pairs/baseline-3/accepted.json",
+              "sha256": "786a314f8ff653443795b9dc118d09da1a76f7f78c2c57cc5672f04465bc218c"
+            },
+            "e2e_seconds": 22.771751022,
+            "supervisor_seconds": 18.824092731,
+            "model_forward_seconds": 9.300618232926354,
+            "isolation_samples": 25,
+            "monitor": {
+              "name": "amd-smi",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-native-monitor-20261016/build-v2/build-cache/esmc_smi_native_52010524b19dfa211b74f9f295c4a5fcb0f260e63674c8522717c67b7094d1c2/esmc_smi_native_52010524b19dfa211b74f9f295c4a5fcb0f260e63674c8522717c67b7094d1c2.so",
+              "sha256": "714e1984c913bf51124555dde2b1d2e4c27b54744a7ee84b2250035cb846913f"
+            }
+          },
+          {
+            "slot": {
+              "arm": "candidate",
+              "pair": 2
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b64-pairs/measurements/measurement-005/invocation.json",
+              "sha256": "1f0c6e4ac64cafae408ebb5a56e12a6150c9fdac747b2128d8032af216594073"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b64-pairs/candidate-3/accepted.json",
+              "sha256": "1ca4d7b526d92d60cce2829e5ad21495647b7adc448b643cbe191b895ec58923"
+            },
+            "e2e_seconds": 22.235783454,
+            "supervisor_seconds": 18.204129504,
+            "model_forward_seconds": 9.226570967934094,
+            "isolation_samples": 34,
+            "monitor": {
+              "name": "amd-smi",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/build-cache/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00.so",
+              "sha256": "29e550384593d7880fb591213391ada0d728f3e589fd5edae7165d0449653c91"
+            }
+          }
+        ],
+        "performance": {
+          "baseline": {
+            "count": 3,
+            "min": 22.404401184,
+            "median": 22.47278367,
+            "p95": 22.771751022,
+            "max": 22.771751022,
+            "mean": 22.549645292
+          },
+          "candidate": {
+            "count": 3,
+            "min": 22.167699235,
+            "median": 22.235783454,
+            "p95": 22.294400094,
+            "max": 22.294400094,
+            "mean": 22.232627594333334
+          },
+          "median_speedup": 1.0106585053092594,
+          "p95_speedup": 1.021411247936134,
+          "paired_speedups": [
+            1.013762566505698,
+            1.0049340233213813,
+            1.024103831066208
+          ],
+          "paired_summary": {
+            "count": 3,
+            "min": 1.0049340233213813,
+            "median": 1.013762566505698,
+            "p95": 1.024103831066208,
+            "max": 1.024103831066208,
+            "mean": 1.014266806964429
+          },
+          "observed_trend": "faster_median_and_p95",
+          "changes": {
+            "invocation.profile_sha256": {
+              "baseline": "c9e1ab0b55a354b5e4e44471a344bcad495d41a7b56b4afd1db00bf02b66c49a",
+              "candidate": "bf5e228667e0b1fa9b89baf989249c3d9579b417cef7d51b2e08e25d19fae6cd"
+            },
+            "launch.environment.FIREPROT_AMD_SMI_PROTOCOL": {
+              "baseline": null,
+              "candidate": "snapshot-v1"
+            },
+            "launch.inputs.amd-smi": {
+              "baseline": {
+                "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-native-monitor-20261016/build-v2/build-cache/esmc_smi_native_52010524b19dfa211b74f9f295c4a5fcb0f260e63674c8522717c67b7094d1c2/esmc_smi_native_52010524b19dfa211b74f9f295c4a5fcb0f260e63674c8522717c67b7094d1c2.so",
+                "name": "amd-smi",
+                "sha256": "714e1984c913bf51124555dde2b1d2e4c27b54744a7ee84b2250035cb846913f"
+              },
+              "candidate": {
+                "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/build-cache/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00.so",
+                "name": "amd-smi",
+                "sha256": "29e550384593d7880fb591213391ada0d728f3e589fd5edae7165d0449653c91"
+              }
+            }
+          }
+        },
+        "medians": {
+          "e2e_seconds": {
+            "baseline": 22.47278367,
+            "candidate": 22.235783454
+          },
+          "supervisor_seconds": {
+            "baseline": 18.457410372,
+            "candidate": 18.204129504
+          },
+          "model_forward_seconds": {
+            "baseline": 9.258098460850306,
+            "candidate": 9.226570967934094
+          },
+          "isolation_samples": {
+            "baseline": 24,
+            "candidate": 34
+          }
+        }
+      }
+    },
+    "runtime_library": {
+      "path": "/opt/rocm/lib/libamd_smi.so.27.0.0",
+      "sha256": "72cdd18cce1e6587ebf291515257fecd078b5df1d99ac4113c8f201f95ddfddf"
+    }
+  },
+  "direct": {
+    "schema_version": 1,
+    "cases": {
+      "4": {
+        "benchmark": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/native-pairs/measurements/benchmark.json",
+          "sha256": "e07333a0b0c2aa6fab1329e1b77ada78f464c526b28543efb8aa35e2534756cc"
+        },
+        "comparison": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/native-pairs/measurements/comparison.json",
+          "sha256": "b979126f7ad273e5c6a278cde1e28e83a34a7748a3fbc8fbfa2ff7ed9bca695f"
+        },
+        "reference_accepted": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/native-pairs/baseline-1/accepted.json",
+          "sha256": "e53fe18e5a98befb016f2e3a462a69dbc2f4160734e17642f87c211c30edc43e"
+        },
+        "all_arrays_exact": true,
+        "records": [
+          {
+            "slot": {
+              "arm": "baseline",
+              "pair": 0
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/native-pairs/measurements/measurement-000/invocation.json",
+              "sha256": "59e51bc45ee6fb85edbdb9e460485c66f7f09bda930cd98338a585437249a223"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/native-pairs/baseline-1/accepted.json",
+              "sha256": "1dc2f3eccfc2ca3f6236f1711b3b5ef7b2d585c0680d615c2ad555cea342ec28"
+            },
+            "e2e_seconds": 24.235166989,
+            "supervisor_seconds": 17.389014206,
+            "model_forward_seconds": 1.4305804079631343,
+            "isolation_samples": 17,
+            "monitor": {
+              "name": "amd-smi",
+              "canonical_path": "/opt/rocm/core-10.0/libexec/amdsmi_cli/amdsmi_cli.py",
+              "sha256": "fed9e6cd65b4ecbc64e8453331ebaa288870c60178a5e714a153156d774a9613"
+            }
+          },
+          {
+            "slot": {
+              "arm": "candidate",
+              "pair": 0
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/native-pairs/measurements/measurement-001/invocation.json",
+              "sha256": "3828d07b4b84f80475c1b52d99212e845846c4c8b8c64f32de0672b4b7c7c076"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/native-pairs/candidate-1/accepted.json",
+              "sha256": "88a78e5462c03727355ff3e6deb1d8ed66b65b7bd13770f78b8cbddbc34743c8"
+            },
+            "e2e_seconds": 12.586845069,
+            "supervisor_seconds": 8.916864758,
+            "model_forward_seconds": 1.291098480927758,
+            "isolation_samples": 16,
+            "monitor": {
+              "name": "amd-smi",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/build-cache/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00.so",
+              "sha256": "29e550384593d7880fb591213391ada0d728f3e589fd5edae7165d0449653c91"
+            }
+          },
+          {
+            "slot": {
+              "arm": "candidate",
+              "pair": 1
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/native-pairs/measurements/measurement-002/invocation.json",
+              "sha256": "7af014d695593bb2bb7f90c99a4372c9c883e77493d457ab784188f6e903a37d"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/native-pairs/candidate-2/accepted.json",
+              "sha256": "1d143824533c6337068b23b6080db1556137e557e628f67c404cef58fdd3a215"
+            },
+            "e2e_seconds": 12.250121529,
+            "supervisor_seconds": 8.488079082,
+            "model_forward_seconds": 1.2700680600246415,
+            "isolation_samples": 15,
+            "monitor": {
+              "name": "amd-smi",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/build-cache/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00.so",
+              "sha256": "29e550384593d7880fb591213391ada0d728f3e589fd5edae7165d0449653c91"
+            }
+          },
+          {
+            "slot": {
+              "arm": "baseline",
+              "pair": 1
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/native-pairs/measurements/measurement-003/invocation.json",
+              "sha256": "58afa43302963751896fc0dc1e8168b3e70ee429874440d4b4c5cfaed5738381"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/native-pairs/baseline-2/accepted.json",
+              "sha256": "8d0d6f337a4930cc63258e7e275fbb6668ec7d02f99e8ecf8b2dbc27ddba74c9"
+            },
+            "e2e_seconds": 24.404235563,
+            "supervisor_seconds": 17.308528018,
+            "model_forward_seconds": 1.5211965469643474,
+            "isolation_samples": 17,
+            "monitor": {
+              "name": "amd-smi",
+              "canonical_path": "/opt/rocm/core-10.0/libexec/amdsmi_cli/amdsmi_cli.py",
+              "sha256": "fed9e6cd65b4ecbc64e8453331ebaa288870c60178a5e714a153156d774a9613"
+            }
+          },
+          {
+            "slot": {
+              "arm": "baseline",
+              "pair": 2
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/native-pairs/measurements/measurement-004/invocation.json",
+              "sha256": "1b55191ac87b0199e2f0b884b28f6307ccfa2d33c2e5acfe129869c428c1aee7"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/native-pairs/baseline-3/accepted.json",
+              "sha256": "53ebbb67199760ad646aae63cd162e4439f8d4d85fcf76fbb63c6472fef30fb2"
+            },
+            "e2e_seconds": 22.71506929,
+            "supervisor_seconds": 15.7921956,
+            "model_forward_seconds": 1.4456391050480306,
+            "isolation_samples": 15,
+            "monitor": {
+              "name": "amd-smi",
+              "canonical_path": "/opt/rocm/core-10.0/libexec/amdsmi_cli/amdsmi_cli.py",
+              "sha256": "fed9e6cd65b4ecbc64e8453331ebaa288870c60178a5e714a153156d774a9613"
+            }
+          },
+          {
+            "slot": {
+              "arm": "candidate",
+              "pair": 2
+            },
+            "invocation": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/native-pairs/measurements/measurement-005/invocation.json",
+              "sha256": "8fb43b56f51229188b1c2d51bd7e350d7d439feec5d56bd3920995e915896b2a"
+            },
+            "accepted": {
+              "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/native-pairs/candidate-3/accepted.json",
+              "sha256": "7a9749225de307dde49a4ecb5424d3e1c28d1f4e0c20119f2a61cf63bf4070dd"
+            },
+            "e2e_seconds": 12.183829657,
+            "supervisor_seconds": 8.474834555,
+            "model_forward_seconds": 1.2850890000117943,
+            "isolation_samples": 15,
+            "monitor": {
+              "name": "amd-smi",
+              "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/build-cache/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00.so",
+              "sha256": "29e550384593d7880fb591213391ada0d728f3e589fd5edae7165d0449653c91"
+            }
+          }
+        ],
+        "performance": {
+          "baseline": {
+            "count": 3,
+            "min": 22.71506929,
+            "median": 24.235166989,
+            "p95": 24.404235563,
+            "max": 24.404235563,
+            "mean": 23.784823947333333
+          },
+          "candidate": {
+            "count": 3,
+            "min": 12.183829657,
+            "median": 12.250121529,
+            "p95": 12.586845069,
+            "max": 12.586845069,
+            "mean": 12.340265418333335
+          },
+          "median_speedup": 1.9783613518957768,
+          "p95_speedup": 1.9388683525711234,
+          "paired_speedups": [
+            1.9254361880316235,
+            1.992162731220852,
+            1.8643620215873147
+          ],
+          "paired_summary": {
+            "count": 3,
+            "min": 1.8643620215873147,
+            "median": 1.9254361880316235,
+            "p95": 1.992162731220852,
+            "max": 1.992162731220852,
+            "mean": 1.9273203136132635
+          },
+          "observed_trend": "faster_median_and_p95",
+          "changes": {
+            "backend": {
+              "baseline": "native",
+              "candidate": "fireprot"
+            },
+            "invocation.profile_sha256": {
+              "baseline": "43fefda027a60bc415a605f4903fa7dfa1fa4f0c400fa3070637df41a976eabd",
+              "candidate": "1fc98ffdbc7a22b28fd989dde630f69a8b918b0980432058d033c5ea14d7ab47"
+            },
+            "launch.environment.FIREPROT_AMD_SMI_PROTOCOL": {
+              "baseline": null,
+              "candidate": "snapshot-v1"
+            },
+            "launch.environment.FIREPROT_ESMC_CPU_LOADING": {
+              "baseline": "0",
+              "candidate": "1"
+            },
+            "launch.environment.FIREPROT_ESMC_IMPORT_OVERLAP": {
+              "baseline": "0",
+              "candidate": "1"
+            },
+            "launch.environment.FIREPROT_PREFLIGHT_HASH_THREADS": {
+              "baseline": "4",
+              "candidate": "8"
+            },
+            "launch.environment.FIREPROT_WORKER_CPU_AFFINITY": {
+              "baseline": "inherit",
+              "candidate": "64-127,192-255"
+            },
+            "launch.inputs.amd-smi": {
+              "baseline": {
+                "canonical_path": "/opt/rocm/core-10.0/libexec/amdsmi_cli/amdsmi_cli.py",
+                "name": "amd-smi",
+                "sha256": "fed9e6cd65b4ecbc64e8453331ebaa288870c60178a5e714a153156d774a9613"
+              },
+              "candidate": {
+                "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/build-cache/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00.so",
+                "name": "amd-smi",
+                "sha256": "29e550384593d7880fb591213391ada0d728f3e589fd5edae7165d0449653c91"
+              }
+            }
+          }
+        },
+        "medians": {
+          "e2e_seconds": {
+            "baseline": 24.235166989,
+            "candidate": 12.250121529
+          },
+          "supervisor_seconds": {
+            "baseline": 17.308528018,
+            "candidate": 8.488079082
+          },
+          "model_forward_seconds": {
+            "baseline": 1.4456391050480306,
+            "candidate": 1.2850890000117943
+          },
+          "isolation_samples": {
+            "baseline": 17,
+            "candidate": 15
+          }
+        }
+      }
+    },
+    "runtime_library": {
+      "path": "/opt/rocm/lib/libamd_smi.so.27.0.0",
+      "sha256": "72cdd18cce1e6587ebf291515257fecd078b5df1d99ac4113c8f201f95ddfddf"
+    }
+  },
+  "final_policy": {
+    "passed": true,
+    "cli": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/fireprot-final",
+      "sha256": "1f5365ecf4824f1b2d99ca88bcc25d36be57f434a78f1e6ff17f5bb95a55dce0"
+    },
+    "reports": [
+      {
+        "count": 4,
+        "spec": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b4-pairs/final-policy-spec.json",
+          "sha256": "db9c084232149c37c4b3d737c0639613619b476ad83673a153bf562b354406c0"
+        },
+        "report": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b4-pairs/final-policy-report.json",
+          "sha256": "f1963b1135544fe49791e805bcf35919fd62b1717bd18d34d532307a721a5788"
+        },
+        "unchanged_report": true
+      },
+      {
+        "count": 64,
+        "spec": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b64-pairs/final-policy-spec.json",
+          "sha256": "fdead6345db84ed013c3dfbaf6d71164a34e9e38da4f91de899bbd305d6c6f76"
+        },
+        "report": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/b64-pairs/final-policy-report.json",
+          "sha256": "d41cab4ec2c7c7ec1d2562371e41d200561adcb6e4c9e4007037be843d8498ea"
+        },
+        "unchanged_report": true
+      }
+    ]
+  },
+  "builds": {
+    "native": {
+      "receipt_pin": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/native-build-receipt.json",
+        "sha256": "c6094e3e225e602f03970fb9ced266191619e5318717bd1cdf16489229e18961"
+      },
+      "receipt": {
+        "cache_hit": false,
+        "directory": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/build-cache/esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00",
+        "receipt": {
+          "artifacts": {
+            "esmc_snapshot_native_30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00.so": "29e550384593d7880fb591213391ada0d728f3e589fd5edae7165d0449653c91"
+          },
+          "identity": {
+            "arguments": {
+              "compile": [
+                "-O2",
+                "-std=c++17",
+                "-Wall",
+                "-Wextra",
+                "-Werror",
+                "--ld-path=/opt/rocm/llvm/bin/ld.lld"
+              ],
+              "fireprot_hip_process": [
+                "1",
+                "compiler",
+                "guard",
+                "[\"source\"]",
+                "600000",
+                "600000",
+                "/opt/rocm/llvm/bin/clang++"
+              ],
+              "include": [
+                "/opt/rocm/include"
+              ],
+              "link": [
+                "-L/opt/rocm/lib",
+                "-lamd_smi",
+                "-Wl,-rpath,/opt/rocm/lib"
+              ]
+            },
+            "environment": {
+              "CPATH": null,
+              "CXXFLAGS": null,
+              "HIPCC_COMPILE_FLAGS_APPEND": null,
+              "HOME": "/home/pc",
+              "LD_LIBRARY_PATH": null,
+              "LIBRARY_PATH": null,
+              "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+              "TMPDIR": null
+            },
+            "files": [
+              {
+                "canonical_path": "/opt/rocm/core-10.0/lib/llvm/bin/clang-23",
+                "name": "compiler",
+                "sha256": "241bf4da7ec39bc00b68ed74f6be751516d9892ed990e8c7fa372bad18500247"
+              },
+              {
+                "canonical_path": "/opt/rocm/core-10.0/lib/llvm/bin/clang-23",
+                "name": "clang",
+                "sha256": "241bf4da7ec39bc00b68ed74f6be751516d9892ed990e8c7fa372bad18500247"
+              },
+              {
+                "canonical_path": "/opt/rocm/core-10.0/lib/llvm/bin/lld",
+                "name": "linker",
+                "sha256": "844f375436675da8948a340a3bd8b7efabd4703422f9c01e3721f11f1ab777b4"
+              },
+              {
+                "canonical_path": "/media/IntelSSD/fireprot/target/release/fireprot-compiler-guard",
+                "name": "guard",
+                "sha256": "64429608d501a7c8e786affe9b96a616d34a2f1f5b1237a91429947b84d34b85"
+              },
+              {
+                "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/fireprot_smi_probe.cpp",
+                "name": "source",
+                "sha256": "b73cdc829285498df5abf5654232a370410963d04708eaadfc403ad64b46d088"
+              },
+              {
+                "canonical_path": "/opt/rocm/core-10.0/lib/libamd_smi.so.27.0.0",
+                "name": "amd-smi-library",
+                "sha256": "72cdd18cce1e6587ebf291515257fecd078b5df1d99ac4113c8f201f95ddfddf"
+              }
+            ],
+            "package": "esmc_snapshot_native",
+            "schema_version": 1,
+            "sha256": "30804f69c9d022427f1454f09b71d50c2aa7c624a3eb69c5eac912bda703db00",
+            "target": "x86_64",
+            "trees": [
+              {
+                "name": "0",
+                "path": "/opt/rocm/include",
+                "suffixes": []
+              },
+              {
+                "name": "1",
+                "path": "/opt/rocm/llvm/lib/clang",
+                "suffixes": []
+              },
+              {
+                "name": "2",
+                "path": "/usr/include",
+                "suffixes": []
+              },
+              {
+                "name": "3",
+                "path": "/usr/lib/gcc",
+                "suffixes": []
+              }
+            ],
+            "versions": {
+              "abi": "c",
+              "hip": "7.14.60850",
+              "recipe": "esmc-snapshot-native-v1",
+              "torch": "2.12.0a0+git78258b9"
+            }
+          },
+          "schema_version": 1
+        }
+      },
+      "omitted_tree_files": 9029
+    },
+    "fake": {
+      "receipt_pin": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/fake-build-receipt.json",
+        "sha256": "73f974f340e5adf3455dfe891e1af3e622b8dd696668ec85749535bfa06002b3"
+      },
+      "receipt": {
+        "cache_hit": false,
+        "directory": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/build-cache/esmc_snapshot_fake_471b972ee5fc60c1e61cc6e49de31481086be8b3f8492efd67e9635c3ca58371",
+        "receipt": {
+          "artifacts": {
+            "esmc_snapshot_fake_471b972ee5fc60c1e61cc6e49de31481086be8b3f8492efd67e9635c3ca58371.so": "3f04a5629cd0b9e33e6de301ab526a03a8e17d02a5db7f517973ccf0ba81f7c5"
+          },
+          "identity": {
+            "arguments": {
+              "compile": [
+                "-O2",
+                "-std=c++17",
+                "-Wall",
+                "-Wextra",
+                "-Werror",
+                "--ld-path=/opt/rocm/llvm/bin/ld.lld"
+              ],
+              "fireprot_hip_process": [
+                "1",
+                "compiler",
+                "guard",
+                "[\"source\",\"fake\"]",
+                "600000",
+                "600000",
+                "/opt/rocm/llvm/bin/clang++"
+              ],
+              "include": [
+                "/opt/rocm/include"
+              ],
+              "link": []
+            },
+            "environment": {
+              "CPATH": null,
+              "CXXFLAGS": null,
+              "HIPCC_COMPILE_FLAGS_APPEND": null,
+              "HOME": "/home/pc",
+              "LD_LIBRARY_PATH": null,
+              "LIBRARY_PATH": null,
+              "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+              "TMPDIR": null
+            },
+            "files": [
+              {
+                "canonical_path": "/opt/rocm/core-10.0/lib/llvm/bin/clang-23",
+                "name": "compiler",
+                "sha256": "241bf4da7ec39bc00b68ed74f6be751516d9892ed990e8c7fa372bad18500247"
+              },
+              {
+                "canonical_path": "/opt/rocm/core-10.0/lib/llvm/bin/clang-23",
+                "name": "clang",
+                "sha256": "241bf4da7ec39bc00b68ed74f6be751516d9892ed990e8c7fa372bad18500247"
+              },
+              {
+                "canonical_path": "/opt/rocm/core-10.0/lib/llvm/bin/lld",
+                "name": "linker",
+                "sha256": "844f375436675da8948a340a3bd8b7efabd4703422f9c01e3721f11f1ab777b4"
+              },
+              {
+                "canonical_path": "/media/IntelSSD/fireprot/target/release/fireprot-compiler-guard",
+                "name": "guard",
+                "sha256": "64429608d501a7c8e786affe9b96a616d34a2f1f5b1237a91429947b84d34b85"
+              },
+              {
+                "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/fireprot_smi_probe.cpp",
+                "name": "source",
+                "sha256": "b73cdc829285498df5abf5654232a370410963d04708eaadfc403ad64b46d088"
+              },
+              {
+                "canonical_path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/esmc_smi_fake.cpp",
+                "name": "fake",
+                "sha256": "a8ee0533b022959d8b17ef82e58717ddba054412b0c7163f887d3e2e50cbb7d4"
+              }
+            ],
+            "package": "esmc_snapshot_fake",
+            "schema_version": 1,
+            "sha256": "471b972ee5fc60c1e61cc6e49de31481086be8b3f8492efd67e9635c3ca58371",
+            "target": "x86_64",
+            "trees": [
+              {
+                "name": "0",
+                "path": "/opt/rocm/include",
+                "suffixes": []
+              },
+              {
+                "name": "1",
+                "path": "/opt/rocm/llvm/lib/clang",
+                "suffixes": []
+              },
+              {
+                "name": "2",
+                "path": "/usr/include",
+                "suffixes": []
+              },
+              {
+                "name": "3",
+                "path": "/usr/lib/gcc",
+                "suffixes": []
+              }
+            ],
+            "versions": {
+              "abi": "c",
+              "hip": "7.14.60850",
+              "recipe": "esmc-snapshot-fake-v1",
+              "torch": "2.12.0a0+git78258b9"
+            }
+          },
+          "schema_version": 1
+        }
+      },
+      "omitted_tree_files": 9029
+    }
+  },
+  "benchmark_cli": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/fireprot-bench",
+    "sha256": "6ff9bb9c0b61cce0f5bb3dd61a218b4bde4b3eb235419aedb04bfcf751678ff6"
+  },
+  "final_cli": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/fireprot-final",
+    "sha256": "1f5365ecf4824f1b2d99ca88bcc25d36be57f434a78f1e6ff17f5bb95a55dce0"
+  },
+  "rust_build": {
+    "base_commit": "9c63dafc20be1f2863b8b51dcba3464a22222594",
+    "command": "cargo build --release -p fireprot-cli --locked",
+    "binary": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/fireprot-bench",
+      "sha256": "6ff9bb9c0b61cce0f5bb3dd61a218b4bde4b3eb235419aedb04bfcf751678ff6"
+    },
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "sources": {
+      "crates/fireprot-bridge/src/build.rs": "2fdc2afbc8c2874a1f65f137aa8e26b6bde8e0a70b97cc1c60a388ffe6e890c2",
+      "crates/fireprot-bridge/src/lib.rs": "039a5ea6fc0d7ccfe9214162d35183cc86e89dc2d97342e4d67ba146abd0c21b",
+      "crates/fireprot-bridge/src/workspace.rs": "dd9802237a8b282149e581148329f7f688ce1436454967651f4053e553350281",
+      "crates/fireprot-cli/src/app.rs": "18d31b45aa57b8b105233bc631b88664a2b78bccb33f0f9b77af5e29882d2809",
+      "crates/fireprot-cli/src/args.rs": "19bae98fa1e9bd67e6103007af9a4fdd747c11cf33190c7ba9f2347e12b92666",
+      "crates/fireprot-cli/src/benchmark.rs": "12ba66823ad98b88e5dc20a55f44c5dba9aeb01ff1ce9fce754467d132cdad48",
+      "crates/fireprot-cli/src/collection.rs": "aa971b9234cbf175eb3213a0f88e70b92b2308b297d6e0923b18a6ca397ff08d",
+      "crates/fireprot-cli/src/comparison.rs": "73aa3f5ca6ce2505e89bd10f5b0579ec97bfa5e2348ea402ed64e3c11dd1082f",
+      "crates/fireprot-cli/src/inference.rs": "2def4a6822ba2a74c4fa312e945f36f5e97632a0b4459ed4424e9a29cf2936ee",
+      "crates/fireprot-cli/src/main.rs": "a751102670081f14c17bad7ff72ac3aa08bfdccdf01a12815560c2eefec8ee0f",
+      "crates/fireprot-cli/src/support.rs": "c37d43576b2c5f726b51825faaeba65b7dcd7d62a2752523c5d68cdd7010a676",
+      "crates/fireprot-core/src/lib.rs": "9064f66112cb111f0a305556e611a72276e3d60c1d529ac4e5512a81f1af0cd9",
+      "crates/fireprot-core/src/plm_batch.rs": "9af74f5a161fb0240568e21351ed09affaa39b147a36dbb68148bb25515ec314",
+      "crates/fireprot-core/src/protocol.rs": "0747c15823e3fa9bd6160c98894f51b6eb0b1c2af87b55ca0216a2b99b018056",
+      "crates/fireprot-core/src/registry.rs": "e8126028302455022bc4640445b3773cc5f118de4da78f163b6c9c67d0b71a56",
+      "crates/fireprot-core/src/request.rs": "e75bc093b5522538ae56b8de19b8ed273550a34a3016ed9c3ab14e571858c791",
+      "crates/fireprot-core/src/workspace.rs": "7f8175aa5db709b7ab886089507c684a0ee4ce97cdfa489e2a4b671c01b3dcfc",
+      "crates/fireprot-runtime/src/artifacts.rs": "475de663ffe9dc7d77c53c9f5eda06403f96934aec52019a58630ed5141436cc",
+      "crates/fireprot-runtime/src/batch.rs": "e3189a5cf0fb7394eff650391a758ab998abdea4dbd4f0675ba5d5a7599d9577",
+      "crates/fireprot-runtime/src/bin/fireprot-compiler-guard.rs": "c9a7a618f45ff1af1c6e4c1453eb61c14dd3c737075ae1e454f77213b669df69",
+      "crates/fireprot-runtime/src/build.rs": "993457c3f72c19d488461fa795ef4958f1d1c79b85dddc8a6e7b208ccd12766f",
+      "crates/fireprot-runtime/src/build_cache.rs": "412abee7753426b63fe25bce7fa87a683b67c0698532e0d05f340258c343ee1a",
+      "crates/fireprot-runtime/src/build_dynamic.rs": "b72d5229884a274ef3eafa10b30bcdfa9c3279f2458e1388d1227a096b400235",
+      "crates/fireprot-runtime/src/build_process.rs": "7f584cdb99c59734bdb21b36fc47745e67e60aa9594521346175fae9b9ad1912",
+      "crates/fireprot-runtime/src/build_tree.rs": "d0ee1de4b1c0dee8748cd65a31ce496f6816b03f550213a65c4d38e011157af2",
+      "crates/fireprot-runtime/src/command.rs": "5f900ac31df8bbc81e4b28ff84734944e422a8a1b25f07efce35525bb57a9f0f",
+      "crates/fireprot-runtime/src/cpu_affinity.rs": "f7740494422fe57cf9dde1707a1e4dc196d34988fcfeda266b82d80e2d7aa97c",
+      "crates/fireprot-runtime/src/device.rs": "d3954006fb5c33153e4c85f76f7526e47ed6a71f82da5bc262a65faca4ae5cbb",
+      "crates/fireprot-runtime/src/environment_inventory/scan.rs": "11f093107319f8b6e65486dc56e5b10144b0ff34e3bec90b28b331154f60d414",
+      "crates/fireprot-runtime/src/environment_inventory.rs": "96d3d348708d1829500fe38b147a748eda136e2f85aaad629a40c53ec0b05256",
+      "crates/fireprot-runtime/src/execution.rs": "c8f86e278284fa171582c218d01fa548fba6989da16921d470228f2d177c97d6",
+      "crates/fireprot-runtime/src/experiment.rs": "bb8826ce312e94ec096f33f614e4848362f6ed9eb531b5e11b90dbcbaf0edbfd",
+      "crates/fireprot-runtime/src/hip_build.rs": "82c3d28c88a93db1d92e6356b99c97c9f54d014364a24b47af58c5ec90f285ce",
+      "crates/fireprot-runtime/src/installation.rs": "4d664ef2cbcae88b7dd6bc6c1045d1a837d4f169ffc195b8d0c8ad00529e31cd",
+      "crates/fireprot-runtime/src/invocation.rs": "4c4456224c325a015dafb3dccadb628bf2367e33dc6c14e8230e3a9568000322",
+      "crates/fireprot-runtime/src/kernel_bundle.rs": "332ed029900233bd5cf54d13f360160a1aa562ee423f74446fda2e8564aec9cc",
+      "crates/fireprot-runtime/src/lib.rs": "8b48b3c81cd2559449272ebd12c64d2903db264b7961161183b0b6cd427e492c",
+      "crates/fireprot-runtime/src/measured_run.rs": "e09c9ba54dc9ea4897142ff6fc4e24cd67bb1808f16b39be78447e1fee62242d",
+      "crates/fireprot-runtime/src/preflight.rs": "d4dc4743d4ffa469d653495ad678953145353c5598a3a6ec2013bce15153bc79",
+      "crates/fireprot-runtime/src/run_archive.rs": "9f32a46c93edadfe3b1625f9fe548e92162890c0816a348e734ec1431447a407",
+      "crates/fireprot-runtime/src/supervisor.rs": "47aa9e570dc1885a59f68952e7b49cbe0615c6ce9a4756661aa338f62408da98",
+      "crates/fireprot-runtime/src/torch_build.rs": "93473ddd337f4a086a3b1b3fcba62fdfdfbdc44e6a6bbcd02e8c817cbfcb8984",
+      "crates/fireprot-validation/src/array.rs": "8fe8bc6a1e809ebed5b2778375e7cd1654f901b738039f5e66621ada02efb075",
+      "crates/fireprot-validation/src/atlasfold.rs": "3def03d624d9fb34552ccf14d993830ce28cfeb5d93cdd7bbc00989c0d1c6262",
+      "crates/fireprot-validation/src/bundle.rs": "9a8510e9968de3176835a8c8c0e6ff93fe1a2cbcb96afffe04d6691da161168b",
+      "crates/fireprot-validation/src/esmfold2.rs": "d6d37a902d319ac2457587c4032e53df81ebda59e2accde3b4acf0f89e79c30b",
+      "crates/fireprot-validation/src/esmfold2_tests.rs": "94f988238e46edfdb49513f96f472b1eb4b4495c61b515b11a6ef913431c9778",
+      "crates/fireprot-validation/src/lib.rs": "6d0ec6fdd2d031f53f4da7c1dcade5ef4542c207c0994a33f8cdd6e4e0c8d2e3",
+      "crates/fireprot-validation/src/metrics.rs": "82c6d29fcf0700e7a658a4f211b582c21023dbf5bbf795fd20a7cace85ccad02",
+      "crates/fireprot-validation/src/numpy.rs": "4489c87cef6edd1c4c883160a3b8f4eba897bdd73aad1d16883915b69cbe913a",
+      "crates/fireprot-validation/src/paired.rs": "c72270cd17d01973dd9e9bd7ebfd63b47ffadb7129aa328b8277d17e903cf2a9",
+      "crates/fireprot-validation/src/plm.rs": "e9e22aacd32f62cc045978dd1e608b9f51e96ba7f0c355c70c156f641ac55349",
+      "crates/fireprot-validation/src/structure.rs": "395d761433618394a300a1fe2a18888ee1540e6a3897bbc06485bf099037c1b2",
+      "crates/fireprot-validation/src/timing.rs": "4579c698cae8d187819116693fa03fcf2b922a5c63632ca2e59b56f4ea942e5a"
+    }
+  },
+  "final_build": {
+    "base_commit": "9c63dafc20be1f2863b8b51dcba3464a22222594",
+    "command": "cargo build --release -p fireprot-cli --locked",
+    "binary": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/fireprot-final",
+      "sha256": "1f5365ecf4824f1b2d99ca88bcc25d36be57f434a78f1e6ff17f5bb95a55dce0"
+    },
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "sources": {
+      "crates/fireprot-bridge/src/build.rs": "2fdc2afbc8c2874a1f65f137aa8e26b6bde8e0a70b97cc1c60a388ffe6e890c2",
+      "crates/fireprot-bridge/src/lib.rs": "039a5ea6fc0d7ccfe9214162d35183cc86e89dc2d97342e4d67ba146abd0c21b",
+      "crates/fireprot-bridge/src/workspace.rs": "dd9802237a8b282149e581148329f7f688ce1436454967651f4053e553350281",
+      "crates/fireprot-cli/src/app.rs": "18d31b45aa57b8b105233bc631b88664a2b78bccb33f0f9b77af5e29882d2809",
+      "crates/fireprot-cli/src/args.rs": "19bae98fa1e9bd67e6103007af9a4fdd747c11cf33190c7ba9f2347e12b92666",
+      "crates/fireprot-cli/src/benchmark.rs": "12ba66823ad98b88e5dc20a55f44c5dba9aeb01ff1ce9fce754467d132cdad48",
+      "crates/fireprot-cli/src/collection.rs": "aa971b9234cbf175eb3213a0f88e70b92b2308b297d6e0923b18a6ca397ff08d",
+      "crates/fireprot-cli/src/comparison.rs": "73aa3f5ca6ce2505e89bd10f5b0579ec97bfa5e2348ea402ed64e3c11dd1082f",
+      "crates/fireprot-cli/src/inference.rs": "2def4a6822ba2a74c4fa312e945f36f5e97632a0b4459ed4424e9a29cf2936ee",
+      "crates/fireprot-cli/src/main.rs": "a751102670081f14c17bad7ff72ac3aa08bfdccdf01a12815560c2eefec8ee0f",
+      "crates/fireprot-cli/src/support.rs": "c37d43576b2c5f726b51825faaeba65b7dcd7d62a2752523c5d68cdd7010a676",
+      "crates/fireprot-core/src/lib.rs": "9064f66112cb111f0a305556e611a72276e3d60c1d529ac4e5512a81f1af0cd9",
+      "crates/fireprot-core/src/plm_batch.rs": "9af74f5a161fb0240568e21351ed09affaa39b147a36dbb68148bb25515ec314",
+      "crates/fireprot-core/src/protocol.rs": "0747c15823e3fa9bd6160c98894f51b6eb0b1c2af87b55ca0216a2b99b018056",
+      "crates/fireprot-core/src/registry.rs": "e8126028302455022bc4640445b3773cc5f118de4da78f163b6c9c67d0b71a56",
+      "crates/fireprot-core/src/request.rs": "e75bc093b5522538ae56b8de19b8ed273550a34a3016ed9c3ab14e571858c791",
+      "crates/fireprot-core/src/workspace.rs": "7f8175aa5db709b7ab886089507c684a0ee4ce97cdfa489e2a4b671c01b3dcfc",
+      "crates/fireprot-runtime/src/artifacts.rs": "475de663ffe9dc7d77c53c9f5eda06403f96934aec52019a58630ed5141436cc",
+      "crates/fireprot-runtime/src/batch.rs": "e3189a5cf0fb7394eff650391a758ab998abdea4dbd4f0675ba5d5a7599d9577",
+      "crates/fireprot-runtime/src/bin/fireprot-compiler-guard.rs": "c9a7a618f45ff1af1c6e4c1453eb61c14dd3c737075ae1e454f77213b669df69",
+      "crates/fireprot-runtime/src/build.rs": "993457c3f72c19d488461fa795ef4958f1d1c79b85dddc8a6e7b208ccd12766f",
+      "crates/fireprot-runtime/src/build_cache.rs": "412abee7753426b63fe25bce7fa87a683b67c0698532e0d05f340258c343ee1a",
+      "crates/fireprot-runtime/src/build_dynamic.rs": "b72d5229884a274ef3eafa10b30bcdfa9c3279f2458e1388d1227a096b400235",
+      "crates/fireprot-runtime/src/build_process.rs": "7f584cdb99c59734bdb21b36fc47745e67e60aa9594521346175fae9b9ad1912",
+      "crates/fireprot-runtime/src/build_tree.rs": "d0ee1de4b1c0dee8748cd65a31ce496f6816b03f550213a65c4d38e011157af2",
+      "crates/fireprot-runtime/src/command.rs": "5f900ac31df8bbc81e4b28ff84734944e422a8a1b25f07efce35525bb57a9f0f",
+      "crates/fireprot-runtime/src/cpu_affinity.rs": "f7740494422fe57cf9dde1707a1e4dc196d34988fcfeda266b82d80e2d7aa97c",
+      "crates/fireprot-runtime/src/device.rs": "d3954006fb5c33153e4c85f76f7526e47ed6a71f82da5bc262a65faca4ae5cbb",
+      "crates/fireprot-runtime/src/environment_inventory/scan.rs": "11f093107319f8b6e65486dc56e5b10144b0ff34e3bec90b28b331154f60d414",
+      "crates/fireprot-runtime/src/environment_inventory.rs": "96d3d348708d1829500fe38b147a748eda136e2f85aaad629a40c53ec0b05256",
+      "crates/fireprot-runtime/src/execution.rs": "c8f86e278284fa171582c218d01fa548fba6989da16921d470228f2d177c97d6",
+      "crates/fireprot-runtime/src/experiment.rs": "bb8826ce312e94ec096f33f614e4848362f6ed9eb531b5e11b90dbcbaf0edbfd",
+      "crates/fireprot-runtime/src/hip_build.rs": "82c3d28c88a93db1d92e6356b99c97c9f54d014364a24b47af58c5ec90f285ce",
+      "crates/fireprot-runtime/src/installation.rs": "4d664ef2cbcae88b7dd6bc6c1045d1a837d4f169ffc195b8d0c8ad00529e31cd",
+      "crates/fireprot-runtime/src/invocation.rs": "4c4456224c325a015dafb3dccadb628bf2367e33dc6c14e8230e3a9568000322",
+      "crates/fireprot-runtime/src/kernel_bundle.rs": "332ed029900233bd5cf54d13f360160a1aa562ee423f74446fda2e8564aec9cc",
+      "crates/fireprot-runtime/src/lib.rs": "8b48b3c81cd2559449272ebd12c64d2903db264b7961161183b0b6cd427e492c",
+      "crates/fireprot-runtime/src/measured_run.rs": "e09c9ba54dc9ea4897142ff6fc4e24cd67bb1808f16b39be78447e1fee62242d",
+      "crates/fireprot-runtime/src/preflight.rs": "d4dc4743d4ffa469d653495ad678953145353c5598a3a6ec2013bce15153bc79",
+      "crates/fireprot-runtime/src/run_archive.rs": "9f32a46c93edadfe3b1625f9fe548e92162890c0816a348e734ec1431447a407",
+      "crates/fireprot-runtime/src/supervisor.rs": "47aa9e570dc1885a59f68952e7b49cbe0615c6ce9a4756661aa338f62408da98",
+      "crates/fireprot-runtime/src/torch_build.rs": "93473ddd337f4a086a3b1b3fcba62fdfdfbdc44e6a6bbcd02e8c817cbfcb8984",
+      "crates/fireprot-validation/src/array.rs": "8fe8bc6a1e809ebed5b2778375e7cd1654f901b738039f5e66621ada02efb075",
+      "crates/fireprot-validation/src/atlasfold.rs": "3def03d624d9fb34552ccf14d993830ce28cfeb5d93cdd7bbc00989c0d1c6262",
+      "crates/fireprot-validation/src/bundle.rs": "9a8510e9968de3176835a8c8c0e6ff93fe1a2cbcb96afffe04d6691da161168b",
+      "crates/fireprot-validation/src/esmfold2.rs": "d6d37a902d319ac2457587c4032e53df81ebda59e2accde3b4acf0f89e79c30b",
+      "crates/fireprot-validation/src/esmfold2_tests.rs": "94f988238e46edfdb49513f96f472b1eb4b4495c61b515b11a6ef913431c9778",
+      "crates/fireprot-validation/src/lib.rs": "6d0ec6fdd2d031f53f4da7c1dcade5ef4542c207c0994a33f8cdd6e4e0c8d2e3",
+      "crates/fireprot-validation/src/metrics.rs": "82c6d29fcf0700e7a658a4f211b582c21023dbf5bbf795fd20a7cace85ccad02",
+      "crates/fireprot-validation/src/numpy.rs": "4489c87cef6edd1c4c883160a3b8f4eba897bdd73aad1d16883915b69cbe913a",
+      "crates/fireprot-validation/src/paired.rs": "076fddbd7501aa7cfe3ebea838decab58b4467a822e0e7aa77b9afc5b8c36468",
+      "crates/fireprot-validation/src/plm.rs": "e9e22aacd32f62cc045978dd1e608b9f51e96ba7f0c355c70c156f641ac55349",
+      "crates/fireprot-validation/src/structure.rs": "395d761433618394a300a1fe2a18888ee1540e6a3897bbc06485bf099037c1b2",
+      "crates/fireprot-validation/src/timing.rs": "4579c698cae8d187819116693fa03fcf2b922a5c63632ca2e59b56f4ea942e5a"
+    },
+    "difference_from_incremental_cli": "Comparison policy additionally rejects monitor-protocol changes unless explicit E2E monitor_treatment is enabled; inference/runtime code unchanged."
+  },
+  "runtime_library": {
+    "path": "/opt/rocm/lib/libamd_smi.so.27.0.0",
+    "sha256": "72cdd18cce1e6587ebf291515257fecd078b5df1d99ac4113c8f201f95ddfddf"
+  },
+  "sources": [
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/build_esmc_snapshot_probe.py",
+      "sha256": "8864ece610d0d059edaceae1b6fc27cdc5f81bfb35feab4875e5add9f9d7f504"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/check_esmc_snapshot_isolation.py",
+      "sha256": "ed1c2ae8050486cc49f3614d93556899edb86db55eacccc2a3b87e13a4a79396"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/collect_esmc_pointwise_pairs.py",
+      "sha256": "c01d50bf7865f8ac9d314bbc6ba0045713952347defc8b87f6dd2dfdb696205e"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/collect_esmc_snapshot_pairs.py",
+      "sha256": "f03a6fbdae9344937ff5b00d946ab7c24394b441a7d628b67cf8c5d10e4c9a4e"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/esmc_smi_fake.cpp",
+      "sha256": "a8ee0533b022959d8b17ef82e58717ddba054412b0c7163f887d3e2e50cbb7d4"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/fireprot_smi_probe.cpp",
+      "sha256": "b73cdc829285498df5abf5654232a370410963d04708eaadfc403ad64b46d088"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/prepare_esmc_snapshot_native_pairs.py",
+      "sha256": "5d9a3e73a1257bc9888643f80c3153ca3ae3033b94152fb2aeb2de749cfe2c57"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/prepare_esmc_snapshot_pairs.py",
+      "sha256": "a23b86ea145305d850070dcf74d95ba2d83233316390ab838d5f84a2883fcbe0"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/publish_evidence.py",
+      "sha256": "1181a1bea5ae8e9434e0b67094fc76ad40148679cc5ab0737ca4a65cf4755f1a"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/revalidate_esmc_snapshot_pairs.py",
+      "sha256": "c759b0721255254f8fb7de36305fab97e2b6ef98219e70c5fdad20f7b7785091"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/run_esmc_snapshot_pairs.py",
+      "sha256": "adbab641154b0dc98e932337d4f0a8fca1642d84e8a863262e4a6b9784c029b3"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/test_esmc_snapshot_probe.py",
+      "sha256": "b82a95429f74291f04af60fca9d4f4bab4edf6e5f08fec2e715f6fe619c77a56"
+    }
+  ],
+  "acceptance": {
+    "invocations": 18,
+    "prediction_archives": 432,
+    "official_same_batch_bytes_exact": true,
+    "rust_final_policy_replay_identical": true
+  },
+  "tests": {
+    "runtime_device": 4,
+    "runtime_monitor": 2,
+    "cli_integration": 17,
+    "paired": 6,
+    "clippy": "passed -D warnings",
+    "format": "passed"
+  },
+  "policy": {
+    "scheduling_interval_ms": 250,
+    "fresh_sdk_session_each_sample": true,
+    "atomic_hardware_snapshot": false,
+    "bdf_and_all_pid_rows_checked": true,
+    "timeout_and_output_limits_unchanged": true,
+    "default_protocol": "cli"
+  },
+  "unabridged_evidence": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-snapshot-monitor-20261016/evidence.json",
+    "sha256": "71ff8f8e845b8e54d52c5a29bb703e41bf958927dccc8d6ab56ab1690c1da7a2"
+  }
+}

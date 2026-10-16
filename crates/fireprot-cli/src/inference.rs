@@ -4,7 +4,7 @@ use fireprot_core::request::ArtifactRef;
 use fireprot_runtime::{
     build::BuildFile,
     build_tree::BuildTree,
-    device::AmdSmiMonitor,
+    device::{AmdSmiMonitor, SmiProtocol},
     execution,
     preflight::{SourceOrigin, prepare_with_hash_threads},
     supervisor::{self, Limits, RunReport, WorkerCommand},
@@ -32,8 +32,19 @@ struct Execution {
 }
 
 pub(crate) fn validate_profile(bytes: &[u8]) -> Result<()> {
-    let _: Execution = serde_json::from_slice(bytes)?;
+    let execution: Execution = serde_json::from_slice(bytes)?;
+    monitor_protocol(&execution)?;
     Ok(())
+}
+
+fn monitor_protocol(execution: &Execution) -> Result<SmiProtocol> {
+    Ok(SmiProtocol::try_from(
+        execution
+            .environment
+            .get("FIREPROT_AMD_SMI_PROTOCOL")
+            .map(String::as_str)
+            .unwrap_or("cli"),
+    )?)
 }
 
 pub fn run(request: &Path, profile: &Path) -> Result<RunReport> {
@@ -68,6 +79,9 @@ pub fn run_batch(path: &Path) -> Result<fireprot_runtime::batch::BatchReport> {
         .iter()
         .map(|job| serde_json::from_slice(job.profile()))
         .collect::<std::result::Result<_, _>>()?;
+    for profile in &profiles {
+        monitor_protocol(profile)?;
+    }
     Ok(batch::execute(&plan, &cancelled, |index, job| {
         run_loaded(job.request().clone(), profiles[index].clone(), &cancelled)
             .map_err(|e| e.to_string())
@@ -82,6 +96,7 @@ fn run_loaded(
     if cancelled.load(Ordering::Relaxed) {
         return Err("inference cancelled".into());
     }
+    let protocol = monitor_protocol(&execution)?;
     let origin = match execution.source_manifest {
         Some(manifest) => SourceOrigin::Exported { manifest },
         None => SourceOrigin::GitCheckout,
@@ -207,7 +222,8 @@ fn run_loaded(
         identity_trees,
         environment_inventory: execution.environment_inventory,
     };
-    let mut monitor = AmdSmiMonitor::new(hip_probe, amd_smi, Duration::from_secs(10));
+    let mut monitor =
+        AmdSmiMonitor::new(hip_probe, amd_smi, Duration::from_secs(10)).with_protocol(protocol);
     let report = supervisor::run(
         &prepared,
         &worker,

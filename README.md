@@ -164,7 +164,7 @@ using native B4 as the reference. Every output array matches bitwise.
 
 | Standalone model, N1000 × 4 / B4 | Native → optimized E2E | Speedup | Warm forward speedup |
 | --- | ---: | ---: | ---: |
-| ESMC bundled 6B | 23.914 → 12.647 s | **1.891x** | 1.113x |
+| ESMC bundled 6B | 24.235 → 12.250 s | **1.978x** | 1.113x |
 | ESM2-3B | 38.461 → 16.464 s | **2.336x** | 1.068x |
 | ESM3-open | 12.384 → 11.461 s | **1.080x** | 2.395x |
 
@@ -181,11 +181,14 @@ uses eight full-file verification threads and worker CPU affinity local to HIP6.
 Its separate incremental comparisons improve E2E by 1.260x and 1.021x;
 that cycle's **1.911x** result was measured directly against native, with no hashes
 or outputs omitted. These host improvements are not GPU-kernel speedups.
-The current [native AMD SMI monitor](docs/esmc-native-monitor.md) preserves all
+The preceding [native AMD SMI monitor](docs/esmc-native-monitor.md) preserves all
 device/process checks and improves E2E by **1.021x** for B4 and **1.025x** for
 resident64 over their respective current routes. The fresh direct-native B4
-comparison gives the **1.891x** shown above; earlier and current run medians are
-not combined. Every output remains bitwise equal, and isolation sampling increases.
+comparison gave **1.891x**. The current [combined snapshot monitor](docs/esmc-snapshot-monitor.md)
+adds **1.0225x** for B4 and **1.0107x** for resident64, with every pair faster.
+Its fresh direct-native comparison gives the **1.978x** shown above. These separate
+measurement batches are not combined or multiplied. Every output remains bitwise
+equal, and isolation sampling increases without changing the scheduling interval.
 The ESMC CK follow-up found no acceptable improvement: the installed CK GEMM
 slowed B4 warm forward by 7.3%, and all 48 direct-tile cases failed bitwise
 projection equality. Production retains hipBLASLt; the E2E figures above are

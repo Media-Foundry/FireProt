@@ -105,11 +105,13 @@ std::set<uint32_t> pids(amdsmi_processor_handle handle) {
 }
 int main(int argc, char** argv) {
     if (argc != 3 || std::string(argv[2]) != "--json" ||
-        (std::string(argv[1]) != "list" && std::string(argv[1]) != "process")) {
-        std::cerr << "Usage: fireprot-smi-probe {list|process} --json\n";
+        (std::string(argv[1]) != "list" && std::string(argv[1]) != "process" &&
+         std::string(argv[1]) != "snapshot-v1")) {
+        std::cerr << "Usage: fireprot-smi-probe {list|process|snapshot-v1} --json\n";
         return 64;
     }
     try {
+        const bool snapshot = std::string(argv[1]) == "snapshot-v1";
         Session session;
         amdsmi_version_t version{};
         checked(amdsmi_get_lib_version(&version), "library version");
@@ -118,14 +120,15 @@ int main(int argc, char** argv) {
         auto handles = devices();
         std::set<std::string> addresses;
         std::ostringstream out;
+        if (snapshot) out << "{\"schema_version\":1,\"devices\":";
         out << '[';
         for (size_t i = 0; i < handles.size(); ++i) {
             const auto address = bdf(handles[i]);
             require(addresses.insert(address).second, "duplicate device BDF");
             if (i) out << ',';
             out << "{\"gpu\":" << i;
-            if (std::string(argv[1]) == "list") out << ",\"bdf\":\"" << address << '"';
-            else {
+            if (snapshot || std::string(argv[1]) == "list") out << ",\"bdf\":\"" << address << '"';
+            if (snapshot || std::string(argv[1]) == "process") {
                 const auto values = pids(handles[i]);
                 out << ",\"process_list\":[";
                 if (values.empty()) out << "{\"process_info\":\"No running processes detected\"}";
@@ -139,7 +142,9 @@ int main(int argc, char** argv) {
             }
             out << '}';
         }
-        out << "]\n";
+        out << ']';
+        if (snapshot) out << '}';
+        out << '\n';
         session.finish();
         // Emit only after every query and shutdown succeeds: no partial success.
         std::cout << out.str();

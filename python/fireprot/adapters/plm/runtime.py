@@ -1,6 +1,7 @@
 """Opt-in N1000 pLM operations with Rust capability selection and exact arithmetic."""
 from contextlib import contextmanager
 import ctypes
+import os
 from pathlib import Path
 import torch
 from fireprot.ops.registry import OperationRegistry, signature_from_tensor
@@ -37,6 +38,10 @@ def optimized_scope(model, request, length, batch_size=1):
     gfx1100_esm2 = gfx1100_esm2_exact_route(
         name, request.get('resources', {}), architecture,
         str(torch.__version__), torch.version.hip, batch_size)
+    esm2_gemm_setting = os.environ.get('FIREPROT_ESM2_GEMM', '1')
+    if gfx1100_esm2 and esm2_gemm_setting not in ('0', '1'):
+        raise ValueError('FIREPROT_ESM2_GEMM must be 0 or 1')
+    gfx1100_esm2_gemm = gfx1100_esm2 and esm2_gemm_setting == '1'
     if (not gfx1100_esm2 and
             (str(torch.__version__) != '2.12.0a0+git78258b9' or torch.version.hip != '7.14.60850')):
         raise ValueError('pLM optimization requires a qualified ROCm Torch build')
@@ -50,7 +55,9 @@ def optimized_scope(model, request, length, batch_size=1):
     if name == 'esm3-open':
         raise ValueError('ESM3 acceleration requires the qualified hip_esm resource')
     registry = OperationRegistry()
-    state = dict(implementation='unused_attention_mean' if name == 'esm2-3b' else 'hip_bf16_rope', calls=0)
+    state = dict(implementation=(
+        'gfx1100_esm2_exact_v2' if gfx1100_esm2_gemm else
+        'unused_attention_mean' if name == 'esm2-3b' else 'hip_bf16_rope'), calls=0)
     changes = []
     library = None
     swiglu_library = None
@@ -81,6 +88,19 @@ def optimized_scope(model, request, length, batch_size=1):
 
     try:
         if name == 'esm2-3b':
+            native_linear = torch.nn.functional.linear
+            from fireprot.backends.amd import esm2_gemm
+            if gfx1100_esm2_gemm:
+                if esm2_gemm.load_extension() is None:
+                    status = esm2_gemm.extension_status()
+                    raise RuntimeError(f'ESM2 gfx1100 GEMM extension unavailable: {status["error"]}')
+                state['gemm_calls'] = 0
+                state['gemm_build'] = esm2_gemm.extension_status()['build']
+                def exact_linear(x, weight, bias=None):
+                    output, used = esm2_gemm.linear(x, weight, bias, native_linear)
+                    state['gemm_calls'] += int(used)
+                    return output
+                torch.nn.functional.linear = exact_linear
             for layer in model.layers:
                 module = layer.self_attn
                 native = module.forward
@@ -172,9 +192,13 @@ def optimized_scope(model, request, length, batch_size=1):
         expected = 36 if name == 'esm2-3b' else 80 if name == 'esmc-fold2-6b' else 48
         if state['calls'] != expected:
             raise RuntimeError(f'pLM optimized coverage mismatch: {state["calls"]} != {expected}')
+        if gfx1100_esm2_gemm and state['gemm_calls'] != 216:
+            raise RuntimeError(f'ESM2 gfx1100 GEMM coverage mismatch: {state["gemm_calls"]} != 216')
         if swiglu_library is not None and state['swiglu_calls'] != 48:
             raise RuntimeError(f'AtlasLM SwiGLU coverage mismatch: {state["swiglu_calls"]} != 48')
     finally:
+        if name == 'esm2-3b' and gfx1100_esm2_gemm:
+            torch.nn.functional.linear = native_linear
         for module,native in reversed(changes):
             module.forward=native
         state['registry']=registry.manifest()

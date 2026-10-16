@@ -60,3 +60,34 @@ def test_native_loader_retains_abi_and_link_flags(module,tmp_path,monkeypatch):
     monkeypatch.setattr(_native_hip,'load',fail)
     assert module.load_extension() is None
     assert 'rejected native receipt' in module.extension_status()['error']
+
+
+def test_native_loader_accepts_explicit_target_and_compile_flags(tmp_path, monkeypatch):
+    source = tmp_path / 'kernel.hip'
+    source.write_text('extern "C" int kernel() { return 0; }\n')
+    root = tmp_path / 'rocm'
+    (root / 'bin').mkdir(parents=True)
+    (root / 'llvm/bin').mkdir(parents=True)
+    (root / 'lib').mkdir(parents=True)
+    (root / 'include').mkdir(parents=True)
+    for path in (root / 'bin/hipcc', root / 'llvm/bin/clang++', root / 'llvm/bin/ld.lld',
+                 root / 'lib/libamdhip64.so'):
+        path.touch()
+    monkeypatch.setattr(torch.version, 'hip', 'fixture')
+    seen = {}
+    def build_hip(spec, cache):
+        seen.update(json.loads(spec)['build'])
+        directory = tmp_path / 'artifact'
+        directory.mkdir()
+        library = directory / 'kernel.so'
+        library.touch()
+        return json.dumps(dict(directory=str(directory), receipt=dict(artifacts={'kernel.so': 'sha'})))
+    monkeypatch.setattr(bridge, 'build_hip', build_hip)
+    monkeypatch.setattr(_native_hip.ctypes, 'CDLL', lambda path: path)
+    monkeypatch.setattr(_native_hip.shutil, 'which', lambda name: '/usr/bin/ldd')
+    actual, _ = _native_hip.load('kernel', source, root, target='gfx1100',
+                                  compile_flags=['-ffp-contract=off'])
+    assert actual.endswith('kernel.so')
+    assert seen['target'] == 'gfx1100'
+    assert '--offload-arch=gfx1100' in seen['arguments']['compile']
+    assert '-ffp-contract=off' in seen['arguments']['compile']

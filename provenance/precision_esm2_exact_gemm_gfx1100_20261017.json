@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "status": "gfx1100_esm2_exact_gemm_verified",
+  "host": "Precision",
+  "hip_device": 0,
+  "pci_address": "0000:53:00.0",
+  "architecture": "gfx1100",
+  "model": "esm2-3b",
+  "workload": {
+    "batch": 4,
+    "length": 1000,
+    "padded_tokens": 4008,
+    "precision": "native FP32",
+    "seed": 101
+  },
+  "runtime": {
+    "python": "3.12.7",
+    "torch": "2.13.0+rocm10.0.0",
+    "hip": "7.15.26333",
+    "fair_esm": "2.0.0",
+    "fair_esm_commit": "0b59d87ebef95948c735b1f7aad463dc6dfa991b"
+  },
+  "implementation": "gfx1100_esm2_exact_v2",
+  "scope": "Replace the 216 qualified contiguous FP32 linear projections in the 36 ESM2-3B transformer layers with a gfx1100 HIP kernel that preserves hipBLASLt's periodic staggered K reduction order. The capability gate is restricted to the measured N1000 B4 tensor shapes and pinned runtime.",
+  "kernel_design": {
+    "reduction": "DepthU 8 with a 32-way, 64-element periodic K stagger matching the qualified native hipBLASLt reduction order",
+    "reuse": "Eight output row groups separated by 256 rows share each stagger order within a block",
+    "compile_flags": [
+      "--offload-arch=gfx1100",
+      "-ffp-contract=off"
+    ],
+    "qualified_gemm_calls": 216,
+    "qualified_weight_shapes": [
+      [2560, 2560],
+      [10240, 2560],
+      [2560, 10240]
+    ]
+  },
+  "checkpoints": {
+    "model": {
+      "path": "/media/990Pro/fireprot/runtime/checkpoint/esm2_t36_3B_UR50D.pt",
+      "sha256": "7de8b4082ba15891959ab368b77ce3886697af1efb16d3c9e9e7b0c5d3f07500"
+    },
+    "contact_regression": {
+      "path": "/media/990Pro/fireprot/runtime/checkpoint/esm2_t36_3B_UR50D-contact-regression.pt",
+      "sha256": "4da500eab246481dc9c8c95bc7b1d02f2803d761c380b0e95186d4a07d0fc84e"
+    }
+  },
+  "benchmark": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-gemm-pairs-20261017-v2/benchmark/benchmark.json",
+    "sha256": "d9cb4fb2f85933ecda1916526b3e7084afe7f657e92888c92c84c93357aaaaa7"
+  },
+  "comparison": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-gemm-pairs-20261017-v2/benchmark/comparison.json",
+    "sha256": "59ab0b102a1ab275fb7d714132b43fa554aec65bf79fb09abcc980be84fc42f3"
+  },
+  "c_abi_library": {
+    "path": "/media/990Pro/fireprot/runtime/torch_extensions/rust-v1/fireprot_esm2_gemm_415b14fac6e155f7f87778a42a426e075b622fe9802dc45b438adc181b2e0c9c/fireprot_esm2_gemm_415b14fac6e155f7f87778a42a426e075b622fe9802dc45b438adc181b2e0c9c.so",
+    "sha256": "b32e6af2d90a47d3858de9ace923c92d537406b49cfb2614ac20edac6964e690"
+  },
+  "source_files": {
+    "kernels/amd/fireprot_esm2_gemm.hip": "f0dd32ffeca3fff7fde8e33fa77f5fd63c73aff2e9492c416df1a99710e4e3fd",
+    "python/fireprot/backends/amd/esm2_gemm.py": "e678694019888ea469c1741e776db92201436c3e611694d77682d7225b87c4e8",
+    "python/fireprot/backends/amd/_native_hip.py": "fe56d20d0435e1bcd9c7d4b1c750dfc38ad1f1ced0f1f9fc9aa840f9709a4a35",
+    "python/fireprot/adapters/plm/runtime.py": "d1b8554c4da7f32d87becc0ff91728b28089320719d60af8e9362070f5921d33",
+    "tests/adapters/test_esm2_gfx1100.py": "6ef29947be8837855ef75ebc5878bc84540ab1b7a77821ce943c7be9aed173a7",
+    "tests/operators/test_rust_hip_build.py": "76b9e94d0a80960f10ff2c436928a8b5354c233b87310997965d976899b5f9d4",
+    "configs/precision/plm-esm2-3b-native.json": "48765ae1f1e858f89149bd4e60072938b12584029047650da25846ebe1169254",
+    "configs/requests/precision-esm2-3b-b4-n1000-fireprot.json": "5346e3997b92297cedef8b9e9e9144610e2d19bbe18b03dfeb084208981b2c12"
+  },
+  "records": [
+    {
+      "pair": 0,
+      "arm": "baseline",
+      "run_id": "gfx11-esm2-gemm-v2-baseline-0",
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-gemm-pairs-20261017-v2/benchmark/measurement-000/invocation.json",
+        "sha256": "e007e696bfca931b3e09ba98f9ab1265e3fc224a7c855fdb9f3eddad4793578b"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-gemm-pairs-20261017-v2/gfx11-esm2-gemm-v2-baseline-0/accepted.json",
+        "sha256": "06d84fd8707403b132fb014cb4735ef7ca30e6d70501cc8f47e49cf2ad435171"
+      },
+      "e2e_seconds": 21.742771569,
+      "request_seconds": 14.20541214599507,
+      "model_seconds": 9.963486777996877
+    },
+    {
+      "pair": 0,
+      "arm": "candidate",
+      "run_id": "gfx11-esm2-gemm-v2-candidate-0",
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-gemm-pairs-20261017-v2/benchmark/measurement-001/invocation.json",
+        "sha256": "6eaa821c23ef221468962430a461edc0d5adb8d6822a5d1fffe818828d09e35e"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-gemm-pairs-20261017-v2/gfx11-esm2-gemm-v2-candidate-0/accepted.json",
+        "sha256": "e721760d6112e700f8e28e8f384d393fbe414856bb260e0748b5e2a7717822b0"
+      },
+      "operator_runtime": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-gemm-pairs-20261017-v2/gfx11-esm2-gemm-v2-candidate-0/operator-runtime.json",
+        "sha256": "68b7379eb7ed13edd5e67661c213c57723eb359e9d4564bdbc7ec92dfb6bb0e2"
+      },
+      "e2e_seconds": 18.287948865,
+      "request_seconds": 11.532278773986036,
+      "model_seconds": 7.43401569800335,
+      "gemm_calls": 216
+    },
+    {
+      "pair": 1,
+      "arm": "candidate",
+      "run_id": "gfx11-esm2-gemm-v2-candidate-1",
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-gemm-pairs-20261017-v2/benchmark/measurement-002/invocation.json",
+        "sha256": "6c49cb81b97be70cf7c5c6e5689b30aa3bde78c82ec286ad967cdb4093cec6e9"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-gemm-pairs-20261017-v2/gfx11-esm2-gemm-v2-candidate-1/accepted.json",
+        "sha256": "4b2b7d35e3c9571d551b0f6b0b64d99cd7b5c8f315f344390e51cd1d5a0e2129"
+      },
+      "operator_runtime": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-gemm-pairs-20261017-v2/gfx11-esm2-gemm-v2-candidate-1/operator-runtime.json",
+        "sha256": "68b7379eb7ed13edd5e67661c213c57723eb359e9d4564bdbc7ec92dfb6bb0e2"
+      },
+      "e2e_seconds": 19.102695746,
+      "request_seconds": 11.667515689012362,
+      "model_seconds": 7.441533013014123,
+      "gemm_calls": 216
+    },
+    {
+      "pair": 1,
+      "arm": "baseline",
+      "run_id": "gfx11-esm2-gemm-v2-baseline-1",
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-gemm-pairs-20261017-v2/benchmark/measurement-003/invocation.json",
+        "sha256": "c36a6e73ad1a05204865d54d396f2b44fc7b7d5db9298d0f24a9a7a4976aa5e8"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-gemm-pairs-20261017-v2/gfx11-esm2-gemm-v2-baseline-1/accepted.json",
+        "sha256": "fc21d324180d7495e1dc085ffc1be605e588fd95fcff58af32830deb3b0d743d"
+      },
+      "e2e_seconds": 20.845467052,
+      "request_seconds": 14.042524846998276,
+      "model_seconds": 10.052669358003186
+    },
+    {
+      "pair": 2,
+      "arm": "baseline",
+      "run_id": "gfx11-esm2-gemm-v2-baseline-2",
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-gemm-pairs-20261017-v2/benchmark/measurement-004/invocation.json",
+        "sha256": "ec30a2d4b443eecd3a9def1b81d252dbc6e25181a771c8c752a1ff0a2f9ebb47"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-gemm-pairs-20261017-v2/gfx11-esm2-gemm-v2-baseline-2/accepted.json",
+        "sha256": "f9c97984256eb4d7aee5ba9422e311c4ad8d2dee87b546742ceba725a8fd4d17"
+      },
+      "e2e_seconds": 21.860996594,
+      "request_seconds": 14.450755017023766,
+      "model_seconds": 10.146000175009249
+    },
+    {
+      "pair": 2,
+      "arm": "candidate",
+      "run_id": "gfx11-esm2-gemm-v2-candidate-2",
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-gemm-pairs-20261017-v2/benchmark/measurement-005/invocation.json",
+        "sha256": "1a889494ca16dbbc5e23053377a3c352a51c1292783b5054c6e933323ee8ec9a"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-gemm-pairs-20261017-v2/gfx11-esm2-gemm-v2-candidate-2/accepted.json",
+        "sha256": "3666a835ebe31e331d9f74b8e47b23b0c21dfc4a21c6ca52d99645b8c911ec53"
+      },
+      "operator_runtime": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-gemm-pairs-20261017-v2/gfx11-esm2-gemm-v2-candidate-2/operator-runtime.json",
+        "sha256": "68b7379eb7ed13edd5e67661c213c57723eb359e9d4564bdbc7ec92dfb6bb0e2"
+      },
+      "e2e_seconds": 19.51188634,
+      "request_seconds": 11.72032985999249,
+      "model_seconds": 7.496709921018919,
+      "gemm_calls": 216
+    }
+  ],
+  "performance": {
+    "baseline": {
+      "count": 3,
+      "min": 20.845467052,
+      "median": 21.742771569,
+      "p95": 21.860996594,
+      "max": 21.860996594,
+      "mean": 21.483078405
+    },
+    "candidate": {
+      "count": 3,
+      "min": 18.287948865,
+      "median": 19.102695746,
+      "p95": 19.51188634,
+      "max": 19.51188634,
+      "mean": 18.967510317
+    },
+    "median_speedup": 1.1382043591178914,
+    "p95_speedup": 1.1203938057585057,
+    "paired_speedups": [
+      1.188912530842206,
+      1.0912316946871192,
+      1.1203938057585057
+    ],
+    "observed_trend": "faster_median_and_p95",
+    "changes": {
+      "launch.environment.FIREPROT_ESM2_GEMM": {
+        "baseline": "0",
+        "candidate": "1"
+      }
+    }
+  },
+  "request_seconds_medians": {
+    "baseline": 14.20541214599507,
+    "candidate": 11.667515689012362
+  },
+  "model_seconds_medians": {
+    "baseline": 10.052669358003186,
+    "candidate": 7.441533013014123
+  },
+  "correctness_passed": true,
+  "all_arrays_exact": true,
+  "paired_prediction_archives_compared": 12,
+  "limitations": "Same-host B4 N1000 comparison with fresh processes and unflushed filesystem/GPU library caches. The compiled library was warm before measurement. It does not qualify other sequence lengths, batch sizes, tensor layouts, runtimes, architectures or precisions. Only the three declared transformer projection shapes use the custom kernel; all unsupported operations fail closed to native PyTorch."
+}

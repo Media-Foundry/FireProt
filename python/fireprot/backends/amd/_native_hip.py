@@ -9,7 +9,8 @@ from fireprot._paths import REPOSITORY_ROOT
 import shutil
 
 
-def load(package, source, root, *, link_flags=(), libraries=(), extra_files=(), versions=None):
+def load(package, source, root, *, target='gfx90a', compile_flags=(),
+         link_flags=(), libraries=(), extra_files=(), versions=None):
     import torch
     from fireprot.ops._bridge import bridge
 
@@ -33,11 +34,12 @@ def load(package, source, root, *, link_flags=(), libraries=(), extra_files=(), 
         'CPLUS_INCLUDE_PATH','LIBRARY_PATH','LD_LIBRARY_PATH','ROCM_HOME','HIP_PATH',
         'HIP_CLANG_PATH','HIPCC_COMPILE_FLAGS_APPEND','HIPCC_LINK_FLAGS_APPEND')}
     environment.update(LC_ALL='C', HIP_VISIBLE_DEVICES='')
-    spec = dict(build=dict(schema_version=1, package=package, target='gfx90a',
+    spec = dict(build=dict(schema_version=1, package=package, target=target,
         files=[dict(name=str(p),path=str(p)) for p in paths],
         trees=[dict(name=f'dependency-{i}',path=str(p),suffixes=[]) for i,p in enumerate(roots)],
         dynamic_inputs=dict(inspector=inspector,objects=[str(p) for p in [*tools,*libraries]]),
-        arguments=dict(compile=['-O3','-std=c++17','-fPIC','-shared','--offload-arch=gfx90a'],
+        arguments=dict(compile=['-O3','-std=c++17','-fPIC','-shared',f'--offload-arch={target}',
+                               *compile_flags],
                        include=[str(root/'include')], link=list(link_flags)),
         environment=environment,
         versions=dict(recipe='hip-cabi-1',abi='c',torch=str(torch.__version__),

@@ -54,8 +54,17 @@ def load_model(request, sequence):
         if declared != {p.resolve() for p in root.rglob('*.py')}:
             raise ValueError('ESM2 requires the complete pinned fair-esm source file set')
         regression = request['resources']['contact_regression']['path']
+        gfx1100_exact = False
+        if request['backend'] == 'fireprot':
+            from fireprot.adapters.plm.runtime import gfx1100_esm2_exact_route
+            architecture = torch.cuda.get_device_properties(0).gcnArchName.split(':')[0]
+            gfx1100_exact = gfx1100_esm2_exact_route(
+                name, request.get('resources', {}), architecture,
+                str(torch.__version__), torch.version.hip,
+                request['workload'].get('batch', {}).get('max_batch_size', 1))
         # Published fair-esm weights contain an argparse configuration object.
-        data = torch.load(checkpoint, map_location='cpu', weights_only=False)
+        data = torch.load(checkpoint, map_location='cpu', weights_only=False,
+                          mmap=gfx1100_exact)
         regress = torch.load(regression, map_location='cpu', weights_only=False)
         if request['backend'] == 'fireprot':
             from esm.pretrained import _load_model_and_alphabet_core_v2
@@ -69,14 +78,9 @@ def load_model(request, sequence):
             model, alphabet = load_model_and_alphabet_core('esm2_t36_3B_UR50D', data, regress)
         # Published ESM2 stores FP16 weights; its native constructor loads them
         # into FP32 parameters. Preserve that promotion after meta assignment.
-        from fireprot.adapters.plm.runtime import gfx1100_esm2_exact_route
-        architecture = torch.cuda.get_device_properties(0).gcnArchName.split(':')[0]
         transfer_before_promotion = (
             request['backend'] == 'fireprot' and
-            ('hip_esm' in request.get('resources', {}) or gfx1100_esm2_exact_route(
-                name, request.get('resources', {}), architecture,
-                str(torch.__version__), torch.version.hip,
-                request['workload'].get('batch', {}).get('max_batch_size', 1))))
+            ('hip_esm' in request.get('resources', {}) or gfx1100_exact))
         if transfer_before_promotion:
             # The checkpoint is FP16. Transfer before the exact FP32 promotion
             # to halve H2D weight traffic while keeping native FP32 inference.

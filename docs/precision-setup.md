@@ -233,6 +233,13 @@ fail-closed to ESM2-3B, N1000 B4, gfx1100, Torch `2.13.0+rocm10.0.0`, HIP
 `7.15.26333`, inference mode and the absence of a separate `hip_esm` library.
 GEMMs, attention, GELU and all exported heads otherwise remain native FP32.
 
+The qualified route now also opens the main checkpoint with PyTorch's
+memory-mapped deserializer. This is selected by the same fail-closed gfx1100
+capability check; native ESM2 and unqualified FireProt runtimes retain ordinary
+loading. The checkpoint tensors are still assigned to the meta-constructed
+model and materialized by the existing GPU transfer, so inference arithmetic is
+unchanged.
+
 Three fresh-process AB/BA/AB pairs passed complete Rust acceptance. Native E2E
 median and p95 were 38.907886942 and 39.040355459 seconds; the exact-loading
 route measured 22.430914554 and 22.693239074 seconds. Median speedup is
@@ -243,6 +250,17 @@ paired prediction comparisons are bitwise exact for tokens, embeddings and
 logits. The verifier independently rehashed all six accepted invocations and 63
 declared artifacts. Full evidence is in
 [`precision_esm2_exact_loading_gfx1100_20261017.json`](../provenance/precision_esm2_exact_loading_gfx1100_20261017.json).
+
+An incremental three-pair AB/BA/AB comparison isolated ordinary versus
+memory-mapped deserialization inside that exact-loading route. Ordinary loading
+measured 22.421679226 seconds median and 22.534246987 seconds p95;
+memory-mapped loading measured 21.642948619 and 22.174811107 seconds. The
+incremental median speedup is **1.035980800x**, p95 speedup is
+**1.016209197x**, and all three paired ratios improve. All 12 paired prediction
+comparisons remain bitwise exact for tokens, embeddings and logits. The verifier
+independently rehashed all six invocations, 66 declared artifacts and 24
+prediction archives. Full incremental evidence is in
+[`precision_esm2_mmap_gfx1100_20261017.json`](../provenance/precision_esm2_mmap_gfx1100_20261017.json).
 
 Run either explicit B4 entry after choosing a fresh `run_id` and unused
 `output_dir`:

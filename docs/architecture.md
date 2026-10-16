@@ -57,8 +57,13 @@ See [standalone pLM inference](protein-language-models.md).
 The optional `hip_esm` resource selects the qualified N1000 ESM extension.
 ESM3 admission requires this pin; its sequence-only geometric attention may
 bypass intermediate work only when the native all-invalid-frame mask would
-zero every vector before the preserved output projection. ESMC loads and packs
-one checkpoint block at a time on GPU through the upstream weight mapping.
+zero every vector before the preserved output projection. ESMC applies the
+upstream weight mapping one checkpoint block at a time. Its published exact
+profile enables direct CPU BF16 conversion into two reusable pinned buffers and
+asynchronous HIP transfers; event completion protects each buffer before reuse.
+`FIREPROT_ESMC_CPU_LOADING=0` retains the previous GPU-conversion loader.
+Full checkpoint hashes and strict state assignment remain required. See the
+[parameter equality and E2E evidence](esmc-loading.md).
 ESM2 transfers stored FP16 weights before exact promotion to native FP32.
 These are tensor-boundary changes; Rust retains asset checks, grouping policy,
 operator selection, supervision, and exact-array acceptance. See

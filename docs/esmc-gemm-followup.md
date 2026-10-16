@@ -1,5 +1,9 @@
 # ESMC GEMM and HIP graph follow-up
 
+Historical experiment: the subsequent [bounded pinned loader](esmc-loading.md)
+is now promoted with 1.365x direct-native B4 E2E. The mixed GEMM/graph results
+below remain separate and are not composed into that claim.
+
 This experiment continues the [ESMC CK investigation](esm-optimization.md#esmc-ck-follow-up-rejected-candidates).
 It uses HIP6 / PCI `0000:8e:00.0`, the pinned Biohub ESMC 6B checkpoint,
 N1000 inputs, seed101 and native BF16. Acceptance remains raw-byte equality
@@ -79,8 +83,9 @@ Model-forward medians within the complete calls are 1.343 -> 1.479 s for one B4
 group and 9.996 -> 9.618 s for sixteen groups. First-use costs outweigh the warm
 kernel saving in the single-group model boundary. The small single-group E2E
 median difference therefore does not establish a robust model speedup. The
-candidate remains experimental; default dispatch and the published 1.195x
-direct-native B4 E2E result remain unchanged.
+candidate remains experimental. At completion of that experiment, default
+dispatch and the then-published 1.195x direct-native B4 E2E result were unchanged;
+the later loader update is documented separately above.
 
 Full evidence: [ESMC GEMM follow-up](../provenance/esmc_gemm_followup_20261016.json).
 

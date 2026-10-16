@@ -6769,3 +6769,73 @@ complete invocations after a loader candidate passes. Original weights remain
 immutable and full-file preflight remains enabled. Do not run CPU hashing/build
 alongside formal GPU timing. Direct QKV algorithm selection is a secondary
 steady-state opportunity, but loading dominates the one-group E2E boundary.
+
+
+## 2026-10-16 ESMC pinned loader promoted: 1.365x native E2E
+
+The active goal remains "consistently optimize the ESMC". This cycle made
+verified progress; do not mark the broad goal complete solely from these results.
+HIP6 only / PCI 0000:8e:00.0 / SMI4. All GPU runs and independent collection
+finished; SMI4 is idle. No upstream or checkpoint files were modified.
+
+Experiment: `/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016`.
+Source checkpoint headers contain 1,042 ESMC FP32 tensors /25,381,120,000 bytes.
+CPU conversion before H2D halves parameter payload to12,690,560,000 bytes.
+The selected implementation casts directly into two reusable pinned block slots,
+waits for each slot's HIP event before overwriting it, and synchronizes before
+releasing staging or closing source files. No derived checkpoint cache is used.
+Every one of802 native parameter tensors /6,345,280,000 parameters matches
+bytewise, as do native B4 tokens/embeddings. The synchronous CPU path and the
+extra-copy pinned path also pass equality but are not selected.
+
+Fresh-process load_model diagnostics (Torch/CUDA init excluded, lazy model
+imports inside load_model included): current GPU conversion5.958132s; CPU BF16
+synchronous6.044871s; extra-copy pinned async5.708022s; reused pinned direct
+conversion4.347325s. These are single diagnostic observations, not E2E ratios.
+Peak GPU allocation12.890GB current versus12.906GB selected; selected process
+peak RSS26,718,644KiB versus26,101,744KiB current (includes file mappings/caches).
+
+Two independently scheduled three-pair AB/BA/AB E2E comparisons, N1000x4/B4,
+seed101/native BF16/HIP6, unflushed caches, full4-thread checkpoint verification:
+- Current FireProt GPU loader:20.893728901 ->18.734573152s,1.115249797x.
+  Paired ratios1.115633486,1.115249797,1.123418405; every pair improves.
+- Direct original native:24.343564747 ->17.839632115s,1.364577733x.
+  Paired ratios1.335166252,1.380698805,1.341950672; every pair improves.
+Do not mix medians between the separately scheduled groups or multiply ratios.
+Model-forward medians current comparison1.330509555 ->1.369786305s; direct native
+comparison1.482633968 ->1.320024949s. No new GEMM/attention/graph change is included.
+All12 invocations /48 archives independently rehashed and compared bytewise,
+including cross-group equality, requested heads, GPU identity and HIP coverage.
+
+Final frozen deployment:
+`outputs/experiments/esmc-load-20261016/validation/qualified-loading` on DiamondHill.
+Maintained `python/fireprot_workers/plm_loading.py` and new
+`python/fireprot_workers/esmc_cpu_loading.py` match its bytes exactly, as do local
+Rust CLI/bridge binaries. The public exact ESMC profile now matches the measured
+candidate profile bytes, SHA256
+51f22cc553397637b0fa54fbec851c7dd9c954f127d827a46c6de16c58f05d0f.
+It sets FIREPROT_ESMC_CPU_LOADING=1. Zero or absence retains the old GPU loader;
+invalid values fail. Three CPU selection tests and Rust request inspect pass.
+The historical profile is configs/diamondhill/plm-esmc-fold2-6b-gpu-loading.json.
+The model request, scientific workload and original resource pins are unchanged.
+Other models and ESMFold2 folding are unaffected. No Rust rebuild was necessary.
+
+Documentation: docs/esmc-loading.md; evidence:
+provenance/esmc_loading_20261016.json. Remote evidence.json includes raw pilot,
+qualification, E2E and frozen-source hashes. CPU-loading experiment v1 sources
+remain in its root; v2 retains the selected implementation's original scripts.
+The current pilot driver points to the historical GPU-loading profile so the
+new default profile cannot silently change its reference. No jobs remain live.
+
+Top-source synchronization must verify old hashes against the last mirrored
+4d35fff tree, back up every replaced file before any write, and verify all new
+hashes. Inspect the experiment's source-sync-receipt.json for its actual status;
+do not infer success from this context entry. Exclude weights, outputs, Git,
+Protenix and the user's untracked docs/isa. Frozen measured deployments remain
+immutable regardless of top-source synchronization.
+
+Remaining useful directions: measure whether this loader and the exact direct
+FFN candidate compose without single-group startup regressions; profile remaining
+import/preflight/startup cost before more GEMM tuning. CPU staging/thread placement
+or transfer overlap may still have headroom. Preserve full checkpoint hashing and
+same-batch bitwise acceptance after every trial; use HIP6 only unless changed.

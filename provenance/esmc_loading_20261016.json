@@ -1,0 +1,634 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-16",
+  "baseline_commit": "01cf506",
+  "status": "qualified bounded pinned loader; native inference precision and output bits preserved",
+  "experiment": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016",
+  "checkpoint_dtype_counts": {
+    "F32": 1042
+  },
+  "checkpoint_parameter_payload_bytes": {
+    "F32": 25381120000
+  },
+  "bf16_parameter_payload_bytes": 12690560000,
+  "reports": {
+    "qualification": {
+      "model": "esmc-fold2-6b",
+      "mode": "qualify",
+      "hip_device": 6,
+      "seed": 101,
+      "batch": 4,
+      "length": 1000,
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "precision": "native BF16",
+      "input_sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2",
+      "boundary": "loader diagnostic, excludes process import/CUDA initialization; not E2E",
+      "cache_state": "fresh process; file cache not flushed; no converted checkpoint cache",
+      "script_sha256": "77026c0538bef153893e5d7c405a9693f7ef587cd27d020e1b78cb1506d49ba6",
+      "loader_sha256": "7592882688e3b312687a3a03a1a4ff1d6f82d2c7954d0be6e482b8f23b15e767",
+      "cases": [
+        {
+          "mode": "cpu_bf16",
+          "parameter_tensors": 802,
+          "parameter_elements": 6345280000,
+          "differing_parameters": [],
+          "output_exact": {
+            "tokens": true,
+            "embeddings": true
+          },
+          "finite": true
+        },
+        {
+          "mode": "pinned_bf16",
+          "parameter_tensors": 802,
+          "parameter_elements": 6345280000,
+          "differing_parameters": [],
+          "output_exact": {
+            "tokens": true,
+            "embeddings": true
+          },
+          "finite": true
+        }
+      ]
+    },
+    "qualification_direct": {
+      "model": "esmc-fold2-6b",
+      "mode": "qualify_direct",
+      "hip_device": 6,
+      "seed": 101,
+      "batch": 4,
+      "length": 1000,
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "precision": "native BF16",
+      "input_sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2",
+      "boundary": "loader diagnostic, excludes process import/CUDA initialization; not E2E",
+      "cache_state": "fresh process; file cache not flushed; no converted checkpoint cache",
+      "script_sha256": "476b7e200db3c8157beea4e22510592831b7eddf0614fb6d951b5be6d12d1e83",
+      "loader_sha256": "fdb33412ee80a1ddffed8deeb6f9df13532273548e382dbcd57d21ce53aaf207",
+      "cases": [
+        {
+          "mode": "pinned_direct",
+          "parameter_tensors": 802,
+          "parameter_elements": 6345280000,
+          "differing_parameters": [],
+          "output_exact": {
+            "tokens": true,
+            "embeddings": true
+          },
+          "finite": true
+        }
+      ]
+    },
+    "gpu_pilot": {
+      "model": "esmc-fold2-6b",
+      "mode": "gpu_bf16",
+      "hip_device": 6,
+      "seed": 101,
+      "batch": 4,
+      "length": 1000,
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "precision": "native BF16",
+      "input_sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2",
+      "boundary": "loader diagnostic, excludes process import/CUDA initialization; not E2E",
+      "cache_state": "fresh process; file cache not flushed; no converted checkpoint cache",
+      "script_sha256": "77026c0538bef153893e5d7c405a9693f7ef587cd27d020e1b78cb1506d49ba6",
+      "loader_sha256": "7592882688e3b312687a3a03a1a4ff1d6f82d2c7954d0be6e482b8f23b15e767",
+      "loader_seconds": 5.958131950930692,
+      "peak_gpu_bytes": 12890051584,
+      "peak_host_rss_kib": 26101744,
+      "output_exact": true
+    },
+    "cpu_pilot": {
+      "model": "esmc-fold2-6b",
+      "mode": "cpu_bf16",
+      "hip_device": 6,
+      "seed": 101,
+      "batch": 4,
+      "length": 1000,
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "precision": "native BF16",
+      "input_sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2",
+      "boundary": "loader diagnostic, excludes process import/CUDA initialization; not E2E",
+      "cache_state": "fresh process; file cache not flushed; no converted checkpoint cache",
+      "script_sha256": "77026c0538bef153893e5d7c405a9693f7ef587cd27d020e1b78cb1506d49ba6",
+      "loader_sha256": "7592882688e3b312687a3a03a1a4ff1d6f82d2c7954d0be6e482b8f23b15e767",
+      "loader_seconds": 6.044870677986182,
+      "peak_gpu_bytes": 12906042368,
+      "peak_host_rss_kib": 25947180,
+      "output_exact": true
+    },
+    "pinned_pilot": {
+      "model": "esmc-fold2-6b",
+      "mode": "pinned_bf16",
+      "hip_device": 6,
+      "seed": 101,
+      "batch": 4,
+      "length": 1000,
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "precision": "native BF16",
+      "input_sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2",
+      "boundary": "loader diagnostic, excludes process import/CUDA initialization; not E2E",
+      "cache_state": "fresh process; file cache not flushed; no converted checkpoint cache",
+      "script_sha256": "77026c0538bef153893e5d7c405a9693f7ef587cd27d020e1b78cb1506d49ba6",
+      "loader_sha256": "7592882688e3b312687a3a03a1a4ff1d6f82d2c7954d0be6e482b8f23b15e767",
+      "loader_seconds": 5.708021970000118,
+      "peak_gpu_bytes": 12906042368,
+      "peak_host_rss_kib": 26485748,
+      "output_exact": true
+    },
+    "reused_pinned_pilot": {
+      "model": "esmc-fold2-6b",
+      "mode": "pinned_direct",
+      "hip_device": 6,
+      "seed": 101,
+      "batch": 4,
+      "length": 1000,
+      "torch": "2.12.0a0+git78258b9",
+      "hip": "7.14.60850",
+      "precision": "native BF16",
+      "input_sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2",
+      "boundary": "loader diagnostic, excludes process import/CUDA initialization; not E2E",
+      "cache_state": "fresh process; file cache not flushed; no converted checkpoint cache",
+      "script_sha256": "476b7e200db3c8157beea4e22510592831b7eddf0614fb6d951b5be6d12d1e83",
+      "loader_sha256": "fdb33412ee80a1ddffed8deeb6f9df13532273548e382dbcd57d21ce53aaf207",
+      "loader_seconds": 4.347325036069378,
+      "peak_gpu_bytes": 12906042368,
+      "peak_host_rss_kib": 26718644,
+      "output_exact": true
+    },
+    "e2e": {
+      "schema_version": 1,
+      "hip_device": 6,
+      "batch_size": 4,
+      "length": 1000,
+      "models": {
+        "current": {
+          "benchmark": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/current-pairs/measurements/benchmark.json",
+            "sha256": "a654b012b6201a6144f2a44cb5aeefe0790c1d81ba688e39b4455267d61d82c9"
+          },
+          "comparison": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/current-pairs/measurements/comparison.json",
+            "sha256": "4f931e7ca7f68895bb4a918443af78d346e7f15dc4d538a5f70eec8bc4f7f1ab"
+          },
+          "records": [
+            {
+              "index": 0,
+              "slot": {
+                "arm": "baseline",
+                "pair": 0
+              },
+              "run_id": "esmc-load-current-baseline-1",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/current-pairs/measurements/measurement-000/invocation.json",
+                "sha256": "eeb600163f69f31761dbe6d234cd968600ddbd0e996aef1a49b781987b59965c"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/current-pairs/baseline-1/accepted.json",
+                "sha256": "a3878534679ccbfb3149501ded6304ffa841b71eaa2172c66db4df26e374ea40"
+              },
+              "e2e_seconds": 20.934579435,
+              "model_forward_seconds": 1.3299549469957128,
+              "request_seconds": 7.0989129120716825
+            },
+            {
+              "index": 1,
+              "slot": {
+                "arm": "candidate",
+                "pair": 0
+              },
+              "run_id": "esmc-load-current-candidate-1",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/current-pairs/measurements/measurement-001/invocation.json",
+                "sha256": "e45bddf3c25a7f6ec31300fc13e99727a4dfa04abb24ef95dfc76ea4a085dc80"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/current-pairs/candidate-1/accepted.json",
+                "sha256": "e7643f4d2766115dfdd43e9a08c1e3dbeda66975cbbc4b266125443e78a4d6ae"
+              },
+              "e2e_seconds": 18.764746396,
+              "model_forward_seconds": 1.3949742820113897,
+              "request_seconds": 5.702370995073579
+            },
+            {
+              "index": 2,
+              "slot": {
+                "arm": "candidate",
+                "pair": 1
+              },
+              "run_id": "esmc-load-current-candidate-2",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/current-pairs/measurements/measurement-002/invocation.json",
+                "sha256": "af997dedff74ed427842303c812d2ff5054ac727c38a8c302073288ce286f148"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/current-pairs/candidate-2/accepted.json",
+                "sha256": "f4838a0057f07093a7d167d2ece0e9e73ac1f42cb33d1ae7750a54bf83ae3bb8"
+              },
+              "e2e_seconds": 18.734573152,
+              "model_forward_seconds": 1.3687013919698074,
+              "request_seconds": 5.664884811034426
+            },
+            {
+              "index": 3,
+              "slot": {
+                "arm": "baseline",
+                "pair": 1
+              },
+              "run_id": "esmc-load-current-baseline-2",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/current-pairs/measurements/measurement-003/invocation.json",
+                "sha256": "4631dd39b6b0c989edb62e39db7cef1aac8799d17a33db3c9e6fecdfe928ff97"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/current-pairs/baseline-2/accepted.json",
+                "sha256": "5d6812290a8a980b0f76d9f7007048aedde959f303c3cc5b343ab12837f32bac"
+              },
+              "e2e_seconds": 20.893728901,
+              "model_forward_seconds": 1.3305095550604165,
+              "request_seconds": 7.112541745067574
+            },
+            {
+              "index": 4,
+              "slot": {
+                "arm": "baseline",
+                "pair": 2
+              },
+              "run_id": "esmc-load-current-baseline-3",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/current-pairs/measurements/measurement-004/invocation.json",
+                "sha256": "9f8849c68c4e0c5fa912649dcfe0661cd2eb54174e81f6690f68929a076bbfb6"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/current-pairs/baseline-3/accepted.json",
+                "sha256": "9f835b9101cdaf439186d94a8cee349b160990614891d4fefe9bfd380d1a2d76"
+              },
+              "e2e_seconds": 20.581007489,
+              "model_forward_seconds": 1.3804288569372147,
+              "request_seconds": 7.137886016978882
+            },
+            {
+              "index": 5,
+              "slot": {
+                "arm": "candidate",
+                "pair": 2
+              },
+              "run_id": "esmc-load-current-candidate-3",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/current-pairs/measurements/measurement-005/invocation.json",
+                "sha256": "ac729eb7910bf68e4dbc84feeb2853773dec8bc8dc023877500a98cfafd0e7a4"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/current-pairs/candidate-3/accepted.json",
+                "sha256": "8a04a6bac611fec97f83a7383cf53204b996573970f13e1c6d0d47e7fac0d660"
+              },
+              "e2e_seconds": 18.319984261,
+              "model_forward_seconds": 1.3697863050037995,
+              "request_seconds": 5.7613583949860185
+            }
+          ],
+          "performance": {
+            "baseline": {
+              "count": 3,
+              "min": 20.581007489,
+              "median": 20.893728901,
+              "p95": 20.934579435,
+              "max": 20.934579435,
+              "mean": 20.803105275
+            },
+            "candidate": {
+              "count": 3,
+              "min": 18.319984261,
+              "median": 18.734573152,
+              "p95": 18.764746396,
+              "max": 18.764746396,
+              "mean": 18.606434602999997
+            },
+            "median_speedup": 1.1152497968051918,
+            "p95_speedup": 1.115633485964006,
+            "paired_speedups": [
+              1.115633485964006,
+              1.1152497968051918,
+              1.1234184045023075
+            ],
+            "paired_summary": {
+              "count": 3,
+              "min": 1.1152497968051918,
+              "median": 1.115633485964006,
+              "p95": 1.1234184045023075,
+              "max": 1.1234184045023075,
+              "mean": 1.118100562423835
+            },
+            "observed_trend": "faster_median_and_p95",
+            "changes": {
+              "invocation.profile_sha256": {
+                "baseline": "6cb1e66ee86e4817134ae952978e4cb01d0bea3f52a0efdf7d253ce6695e90cb",
+                "candidate": "51f22cc553397637b0fa54fbec851c7dd9c954f127d827a46c6de16c58f05d0f"
+              },
+              "launch.environment.FIREPROT_ESMC_CPU_LOADING": {
+                "baseline": "0",
+                "candidate": "1"
+              }
+            }
+          },
+          "all_arrays_exact": true,
+          "model_forward_medians": {
+            "baseline": 1.3305095550604165,
+            "candidate": 1.3697863050037995
+          }
+        },
+        "native": {
+          "benchmark": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/native-pairs/measurements/benchmark.json",
+            "sha256": "893e6f04b68827cf74e612292143ad1b3f424ea0ac5303a86b2a17170660c608"
+          },
+          "comparison": {
+            "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/native-pairs/measurements/comparison.json",
+            "sha256": "b05cafcd7296670ee7c5fb81bf3a64aea292ade74abc25b402c42e22ddc2f4a9"
+          },
+          "records": [
+            {
+              "index": 0,
+              "slot": {
+                "arm": "baseline",
+                "pair": 0
+              },
+              "run_id": "esmc-load-native-baseline-1",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/native-pairs/measurements/measurement-000/invocation.json",
+                "sha256": "a096816af10e6c2626bb2fb077b09bbb9f4a6d05e1d6151c071334a8ea45525a"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/native-pairs/baseline-1/accepted.json",
+                "sha256": "e53fe18e5a98befb016f2e3a462a69dbc2f4160734e17642f87c211c30edc43e"
+              },
+              "e2e_seconds": 23.78946993,
+              "model_forward_seconds": 1.4455238949740306,
+              "request_seconds": 12.073700480046682
+            },
+            {
+              "index": 1,
+              "slot": {
+                "arm": "candidate",
+                "pair": 0
+              },
+              "run_id": "esmc-load-native-candidate-1",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/native-pairs/measurements/measurement-001/invocation.json",
+                "sha256": "0192ffcb5a9ee72edbaada27470d09b45c052ca0e25ebc90fe47808d41c6fa7a"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/native-pairs/candidate-1/accepted.json",
+                "sha256": "bb4e59fde0b9aac1b0bbc96e82badbebfda63b5fc7da7e74bd40a627784bd235"
+              },
+              "e2e_seconds": 17.81760878,
+              "model_forward_seconds": 1.320024948916398,
+              "request_seconds": 5.471019275020808
+            },
+            {
+              "index": 2,
+              "slot": {
+                "arm": "candidate",
+                "pair": 1
+              },
+              "run_id": "esmc-load-native-candidate-2",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/native-pairs/measurements/measurement-002/invocation.json",
+                "sha256": "a089a443a544c8da749de37d7b9dadcdc35c9aacb999628676b1bdf1edc6324a"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/native-pairs/candidate-2/accepted.json",
+                "sha256": "0fbfdb6d8da5ea2a919ed0a394ff0c415003f72f5e35429620da7c06f833a02a"
+              },
+              "e2e_seconds": 17.839632115,
+              "model_forward_seconds": 1.298007810022682,
+              "request_seconds": 5.471124929026701
+            },
+            {
+              "index": 3,
+              "slot": {
+                "arm": "baseline",
+                "pair": 1
+              },
+              "run_id": "esmc-load-native-baseline-2",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/native-pairs/measurements/measurement-003/invocation.json",
+                "sha256": "dd2e8f23cac4c43bf3a3d24ec0ac5a872dbcb3e7292b58d89058e3aadb53e950"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/native-pairs/baseline-2/accepted.json",
+                "sha256": "2d597cddffa9ef6f4592a6c218959295bcce0a911055380306f3d8d98331f6d5"
+              },
+              "e2e_seconds": 24.631158742,
+              "model_forward_seconds": 1.4826339680003002,
+              "request_seconds": 11.23779640707653
+            },
+            {
+              "index": 4,
+              "slot": {
+                "arm": "baseline",
+                "pair": 2
+              },
+              "run_id": "esmc-load-native-baseline-3",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/native-pairs/measurements/measurement-004/invocation.json",
+                "sha256": "59600ae415435eee13e73643ace0597fce862126b82fd64f46c7f3c29ca36af6"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/native-pairs/baseline-3/accepted.json",
+                "sha256": "4ca350158f7138aac65e4b00af64f3f6b95bc1fce137a63339f11acb2be6618f"
+              },
+              "e2e_seconds": 24.343564747,
+              "model_forward_seconds": 1.4874611109262332,
+              "request_seconds": 11.118538032984361
+            },
+            {
+              "index": 5,
+              "slot": {
+                "arm": "candidate",
+                "pair": 2
+              },
+              "run_id": "esmc-load-native-candidate-3",
+              "invocation": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/native-pairs/measurements/measurement-005/invocation.json",
+                "sha256": "af9c372b3958c60a3f7ba9d09246ea36a7c1483dcda1706b5d923997f9065fa7"
+              },
+              "accepted": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esmc-load-20261016/validation/native-pairs/candidate-3/accepted.json",
+                "sha256": "3c4e0cb6a83e06049679ad3ab3b0ce3703baab65f4821689db26cd74be5015f2"
+              },
+              "e2e_seconds": 18.14043187,
+              "model_forward_seconds": 1.3924243879737332,
+              "request_seconds": 5.623197688953951
+            }
+          ],
+          "performance": {
+            "baseline": {
+              "count": 3,
+              "min": 23.78946993,
+              "median": 24.343564747,
+              "p95": 24.631158742,
+              "max": 24.631158742,
+              "mean": 24.254731139666667
+            },
+            "candidate": {
+              "count": 3,
+              "min": 17.81760878,
+              "median": 17.839632115,
+              "p95": 18.14043187,
+              "max": 18.14043187,
+              "mean": 17.93255758833333
+            },
+            "median_speedup": 1.3645777328856088,
+            "p95_speedup": 1.3578044292723885,
+            "paired_speedups": [
+              1.3351662517533398,
+              1.380698804954028,
+              1.34195067247867
+            ],
+            "paired_summary": {
+              "count": 3,
+              "min": 1.3351662517533398,
+              "median": 1.34195067247867,
+              "p95": 1.380698804954028,
+              "max": 1.380698804954028,
+              "mean": 1.3526052430620126
+            },
+            "observed_trend": "faster_median_and_p95",
+            "changes": {
+              "backend": {
+                "baseline": "native",
+                "candidate": "fireprot"
+              },
+              "invocation.profile_sha256": {
+                "baseline": "6cb1e66ee86e4817134ae952978e4cb01d0bea3f52a0efdf7d253ce6695e90cb",
+                "candidate": "51f22cc553397637b0fa54fbec851c7dd9c954f127d827a46c6de16c58f05d0f"
+              },
+              "launch.environment.FIREPROT_ESMC_CPU_LOADING": {
+                "baseline": "0",
+                "candidate": "1"
+              }
+            }
+          },
+          "all_arrays_exact": true,
+          "model_forward_medians": {
+            "baseline": 1.4826339680003002,
+            "candidate": 1.320024948916398
+          }
+        }
+      },
+      "scope": "Two separate three-pair AB/BA/AB comparisons: incremental against current FireProt and directly against native. N1000 x4, identical B4 grouping, native BF16, seed101, HIP6, fresh workers, unflushed caches. Full original checkpoint hashing and all requested exports included. No converted checkpoint cache, singleton or folding speedup claim."
+    }
+  },
+  "deployment_manifest": {
+    "original": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/qualified-v2",
+    "loader_before_sha256": "773a2c67b476280fdf9beab50b5db2cc24a137c82644b9489ff5a327dff2721a",
+    "files": {
+      "fireprot/__init__.py": "5b7873ed933ddca405717e111da8a8142f5df877f028e08d2b5aadcc46b433b2",
+      "kernels/amd/README.md": "38378f78849000bf686bd342a19302cc42af68df0bdc9a7f89725a76099ebad5",
+      "kernels/amd/fireprot_amd_ops.cpp": "1c7fc9f4c770752375fed47abfe08d33cda76e40d11c740d7f8294e132cd3d43",
+      "kernels/amd/fireprot_amd_ops.cu": "748c11e089cbb5a3101912954b439179557b2b966aac340c76c538960063f949",
+      "kernels/amd/fireprot_ck_attention.cpp": "d50865b27a66956b391a331cc0daf9e33962c1fd1c0d93b3243fab9d25af016c",
+      "kernels/amd/fireprot_ck_ops.cpp": "f82f123bf12b6f9a5bea05acaac11dc2c646e126c6553dbdf24e9c81747829f0",
+      "kernels/amd/fireprot_esm.hip": "9ee873eaa59f6cec9b29d920b87d30a1e4ab83259bda78f6095f3eab4d81fdaf",
+      "kernels/amd/fireprot_esmc_rope.hip": "4407f58202b2b699d48db117749d1a6614201b939b1d84bff9f24b80eb3febbf",
+      "kernels/amd/fireprot_lt_bmm.cpp": "cc876b221fc91e0bf10f991ca8a641a395eab5a157779f525966ea73ae8491b9",
+      "kernels/amd/fireprot_mask_bias.cu": "0aff4c687fce58b491a40000b423de040c5f4695c42718e448b2127156a62cc3",
+      "kernels/amd/fireprot_pair_fusions.cpp": "0a21f6cf760a91427b95e4a9bdc6d4d7ff181e187d806f97fb73e00ee4ebf0d9",
+      "kernels/amd/fireprot_pair_qkv.cu": "53881fc24c4f4d9e183234bc9b312e6837d51d7afa68a937bfdb94e676197b4e",
+      "kernels/amd/fireprot_pair_softmax.cu": "45298f0edeb18ec3aa26411fdc2f75f57a70062b251687fa4b62a1256a90bdc9",
+      "kernels/amd/fireprot_pair_transpose.cu": "bc0779458326662c088c7cad564a0bb1c7ce5dcf7f03630c140e306665f00b9f",
+      "kernels/amd/fireprot_plm_batch.hip": "bcf0adc3a1e37904f6889beff7ba9d5c743251805d43917937f1806a3f27c024",
+      "kernels/amd/fireprot_plm_swiglu.hip": "9c23a60720ad6eb72c453b64d2bbed192c3cfd1a74319687b601876909dad4d1",
+      "kernels/amd/fireprot_softmax_fp32.cpp": "baca481263c9ddf0726a94a85fdb6bf70df46d5f558f8064781dc7230d675599",
+      "kernels/amd/tools/hip_device_probe.cpp": "b4e0d82420f8afcfd8caaebec185ff96bfc7cfaeec7acc62bf8a95f459c8c18b",
+      "python/fireprot/_paths.py": "f40eca4224217a461ed948b05e67f94a4ae9d6275de60a0d16443fe360aa05f7",
+      "python/fireprot/adapters/atlasfold/runtime.py": "4fd73e13371805e86a9e910c236fd48b22a37c8ca4c7b3f03a254072b08249ea",
+      "python/fireprot/adapters/esmfold2/__init__.py": "d48dc54e9661883317dbfd04b26c7f93fb8a969fcbbf20926cf2ae37d8aab1ae",
+      "python/fireprot/adapters/esmfold2/triangle.py": "ddc9c8c292ba2db84bc0f29debff45279c3c7675b82725c7df587e26c875e56e",
+      "python/fireprot/adapters/openfold3/__init__.py": "599f351fda9fe6c70fd69380417181dfe8d6bdf4fed4e61c4a28e06212aa3294",
+      "python/fireprot/adapters/openfold3/attention.py": "d8a884b9c018c436904a1e6774139e75915fae8c11189190425865a5780b9bd3",
+      "python/fireprot/adapters/plm/__init__.py": "8c1f1cac5b41f307baf3fa0b73d88f5e8ffce8ad353357fbabe808e18cceade7",
+      "python/fireprot/adapters/plm/esm.py": "b2a7650f5e44979837e5d25f0f54d766e0f3f1b83ccb546c97cf4fbea97e63c2",
+      "python/fireprot/adapters/plm/runtime.py": "5ccb74c3766242733f40db3d6b115aa7635dd20d0b715a2573cb2d18fc92c85a",
+      "python/fireprot/adapters/protenix/base_n1000/__init__.py": "90784b66be85a2a6d22e8d283a625aaee52cfa4d894b366ab6cc378e50276784",
+      "python/fireprot/adapters/protenix/base_n1000/dual_storage.py": "5ada1f14d32ec371328cdcc549d941df7d4e8abb2b4d52757bfbb13c9db0d972",
+      "python/fireprot/adapters/protenix/base_n1000/global_bias.py": "22186eb8ee98c36e143394525ad6af7dd5f2a62f34b14dc063b9dcda3bba4e42",
+      "python/fireprot/adapters/protenix/base_n1000/local_bias.py": "2043279ccc3633bf6756ac6c5b6149674ebc0cc5a33c1f577d805cbf0d24d942",
+      "python/fireprot/adapters/protenix/base_n1000/transition.py": "d237607c75b7f070f088062a38cc33a32dd27713279ac16297ed8aca008fd8fa",
+      "python/fireprot/adapters/protenix/base_n1000/triangle_lt.py": "cdcc46002ab10487f4a6ebc8dcf7d91e8cacc9acdc60496c39a68b03c45cffe8",
+      "python/fireprot/adapters/protenix/construction.py": "869793822bb4a84841121793dc3226e7ec23fe34c86ee9da02e32c68c94ffe95",
+      "python/fireprot/adapters/protenix/features.py": "16cdca60229f853f3d4b3fbf891b6542add97ff00ad02ff4daccb0c86d1e7fda",
+      "python/fireprot/adapters/protenix/hooks.py": "237d6bc0e6f9971361675ddb06a00e425d055b2add4647e5640b17bfe0e49b2b",
+      "python/fireprot/adapters/protenix/runtime.py": "caf6233c43cde8ec2b651808a0a3e51b88c318064b8bbcfc33fb2fa5c6cea5f9",
+      "python/fireprot/backends/amd/_compile_native.py": "b94e4d9b3d4f81e111accf0251f2f3bd464e5938335ebae0fbddb7a9cfc4083c",
+      "python/fireprot/backends/amd/_native_build.py": "fa4909f6bbd1ad6f5b246c9cf335e01991bfec4f18ff8677dc94cf8168672d7d",
+      "python/fireprot/backends/amd/_native_hip.py": "60052815e80450203762c425a78d97d92583a9ae3297bc410a70d22aaed92dbd",
+      "python/fireprot/backends/amd/_published.py": "abf0ddd8eeacf9ca1e9e72742d357490b107940f8acdf88878019142d9b6fd8b",
+      "python/fireprot/backends/amd/attention_gate.py": "d306a6ea7f762930f89cd6f4572ac95207a691135d3401c3ea1d7fdaebf45c5e",
+      "python/fireprot/backends/amd/blas.py": "173f12ed8f15e88bc9ce3e784739f82b8044b2927f52bcdf3d52c749a38f7aba",
+      "python/fireprot/backends/amd/ck_attention.py": "f747f9a8a1b961e2d82d479c32f76ee5bc2e902f9059e89b4549d090b58621ed",
+      "python/fireprot/backends/amd/ck_extension.py": "285e2d73a28d64e0788a184d8219c5d80f77595a69e61520f3e75fa1d58f167d",
+      "python/fireprot/backends/amd/ck_gemm.py": "b907a2ce9d79830c4ed029ee3e18e6727e9058b7094fd38f79d93b6729575272",
+      "python/fireprot/backends/amd/extension.py": "c90efeb110a341d6b57497dc9eb336f0dada6fa8767cdc189ff8eef1a536fc8c",
+      "python/fireprot/backends/amd/lt_bmm.py": "80a6a56462896f83109309469e147be8c562638ceac6d94da8c42e363834ae38",
+      "python/fireprot/backends/amd/mask_bias.py": "3afebb7d3c42d553a7ef65f6d0b788595de5fb8e044e4ae608dc92655d0331b6",
+      "python/fireprot/backends/amd/pair_fusions.py": "05b539bff71eca6c37920c87ff390aab62a28ede3eb92a80abd1299ca8d9303c",
+      "python/fireprot/backends/amd/pair_layout.py": "6fe404093e96adcda22a5479036aa5f027e691b094bbfa4a71dc35c66c8fc49d",
+      "python/fireprot/backends/amd/qkv_projection.py": "6f6ad521b169df46c2e0ec3030195267decda3a7a1bbddac40a9f25b23b6fc02",
+      "python/fireprot/backends/amd/recycle.py": "ea6cd04d3b69ba8999cd3781d94d7d4736ff2b205be5d542153494f7923aefe5",
+      "python/fireprot/backends/amd/softmax_fp32.py": "52d1b222750b5f41f80f09865f619c76c8501d103dd3e5bd82537ae67c048e35",
+      "python/fireprot/backends/amd/transition_projection.py": "df749eaf3ab49a21f709f60a939b1c30294e2102546f7c03ffcac3ba8756614d",
+      "python/fireprot/backends/amd/triangle_attention.py": "30627afc9ea995230c9b1a971b44122dd72c96801a2faa93c6ae09e783e57c8c",
+      "python/fireprot/backends/amd/triangle_multiplication.py": "40effd005b978f70869e2cbd582a82501b069ca58555b84422b961b44cfda02a",
+      "python/fireprot/backends/amd/two_gcd_attention.py": "695db35251ba84a5d0ccc632c5c1cfcf970e4616fe442b42b7df5ee769a8da05",
+      "python/fireprot/ops/_bridge.py": "679d22330ca64b05c89a9c0a1da34e352731985ef1a12f458b1da7e03ceaa1c5",
+      "python/fireprot/ops/registry.py": "82cdb1cb2892d7571b765bde564651dcb92650c8350675e757e8359927419c8f",
+      "python/fireprot/validation/protenix.py": "cdf3279f708b147ec014af3ec5970e3c7920d325533763fb7cbf01faa3f1d61b",
+      "python/fireprot_workers/__init__.py": "4d3f99912815c2e067831f2217be7ce1128bf9316c223589247ff752a4030bfd",
+      "python/fireprot_workers/__main__.py": "0bf8765e3d105c0826bb9989fe6a54cd1c087c041f8c9611785747b3e1fca33b",
+      "python/fireprot_workers/atlasfold.py": "c7f80e58043de8986f4a42519d058f27f0b2054de82bcd7ebdc1893130e030d5",
+      "python/fireprot_workers/esmc_cpu_loading.py": "fdb33412ee80a1ddffed8deeb6f9df13532273548e382dbcd57d21ce53aaf207",
+      "python/fireprot_workers/esmfold2.py": "b6eb9fd1346ded92f1cdd51a71b48fdc19bc779fb058da13e0055218ba5046c4",
+      "python/fireprot_workers/openfold3.py": "c30ab522f9a18cb5fa0f21a182d5d2ac33e85173becb4676489485f6eb7d140e",
+      "python/fireprot_workers/plm.py": "6b000089f8c192869daf0349016506285137d0087b72ab8df19c3939ce9d89d3",
+      "python/fireprot_workers/plm_batch.py": "2c05e8c7ea4a7fe88f238887ac8e2e9a6a42896e069ace0964319963fe87100d",
+      "python/fireprot_workers/plm_loading.py": "51e1b25b53f2f798e695ceab5818e31d073448510ee37f9a6aebf4c5eafe81fe",
+      "python/fireprot_workers/protenix.py": "3f2d2f79759ee5a5f21917f6553feb7dcdd8adbac4594c59703193bb446d064f",
+      "python/fireprot_workers/protenix_esm.py": "0597c899caeee94327e7a2e797330875abd816cc59f36b8eeb7e4fd46a617182",
+      "python/fireprot_workers/transport.py": "2dd4d0a979e6f6a72ebf94806fa3324742f560dad1b9836097432fe4dfd7e3a4",
+      "target/release/fireprot": "d189deb19f50e440437225e079a00dab215275301cac6a243d5175c4c95062f9",
+      "target/release/lib_fireprot_bridge.so": "564e1c24d4a48e641900dfb2ffe74006cdf1d7c8dbb3a2ed083b3e653430ea25",
+      "tests/adapters/test_esm_frameless.py": "064890657cc9008748ddb36dd1dbd52f06ea3de1b90fb2801c3f376d42384002"
+    }
+  },
+  "files": {
+    "qualify/report.json": "1292eec215b90de1e28b225cda512fb80038a2b4ffe96c59b85222443d880091",
+    "v2/qualify/report.json": "ab5ef5d768444d06d67232d1900d7f0cd517bef3b7944ce852b23eabc74862b2",
+    "pilot-gpu_bf16/report.json": "f784532ea08df8ce5f8e887c946be94858a74c5d5c120762873930405ffb8e82",
+    "pilot-cpu_bf16/report.json": "bcc3ba612f92a89a0498579382d1dcea4889bc62910b551d629f0910b0ed1714",
+    "pilot-pinned_bf16/report.json": "2dd1c3dde8a2b0a2a3bdcaa8f9bf7602f2f362804b76076e56dc0a7896a28c1a",
+    "v2/pilot/report.json": "f56dfda242538b38a640ff9ca98c7b77a4312d8c830f2a98c5824b111dee1ba4",
+    "validation/collected.json": "7f352e85a150df5567d38abcd457d209230906fc7ec5f93c9e71d363e22b9526",
+    "esmc_cpu_loading.py": "7592882688e3b312687a3a03a1a4ff1d6f82d2c7954d0be6e482b8f23b15e767",
+    "screen_esmc_cpu_loading.py": "77026c0538bef153893e5d7c405a9693f7ef587cd27d020e1b78cb1506d49ba6",
+    "run_esmc_load_pilots.py": "ec645538a697b4a28e8d109eefda0d6cfc0bdd42f60fa2cc7ef9a514e6fef8ce",
+    "v2/esmc_cpu_loading.py": "fdb33412ee80a1ddffed8deeb6f9df13532273548e382dbcd57d21ce53aaf207",
+    "v2/screen_esmc_cpu_loading.py": "476b7e200db3c8157beea4e22510592831b7eddf0614fb6d951b5be6d12d1e83",
+    "validation/esmc_cpu_loading.py": "fdb33412ee80a1ddffed8deeb6f9df13532273548e382dbcd57d21ce53aaf207",
+    "validation/prepare_esmc_loading_pairs.py": "cbcb54835600051948d313e7586c649aaf48b307844a506eb14eb95b78525e80",
+    "validation/collect_esmc_loading_pairs.py": "3075637d2a62024baedcb0c3d6ece5aad63afbb1e9188a00447de658dedb982b",
+    "validation/deployment-manifest.json": "3af5977611b4fe0b311c0bdc2fff5888a0c7a20dd35ae076fe4903cc4995f4ef",
+    "validation/current-pairs/spec.json": "642b8d791e73fa4efdbc6445e83eaac73eb953ed603b663e7247207aab9f675b",
+    "validation/current-pairs/candidate-profile.json": "51f22cc553397637b0fa54fbec851c7dd9c954f127d827a46c6de16c58f05d0f",
+    "validation/current-pairs/measurements/benchmark.json": "a654b012b6201a6144f2a44cb5aeefe0790c1d81ba688e39b4455267d61d82c9",
+    "validation/native-pairs/spec.json": "44e33a97ef2256d2bdd72c0f1befa2d24c7e70522cc85a87d08fce88076cef44",
+    "validation/native-pairs/candidate-profile.json": "51f22cc553397637b0fa54fbec851c7dd9c954f127d827a46c6de16c58f05d0f",
+    "validation/native-pairs/measurements/benchmark.json": "893e6f04b68827cf74e612292143ad1b3f424ea0ac5303a86b2a17170660c608"
+  }
+}

@@ -1,5 +1,11 @@
 # Standalone ESM optimization
 
+Latest ESMC update: [bounded pinned loading](esmc-loading.md) gives **1.365x
+direct-native B4 E2E** with exact parameters and outputs. The ESMC tables below
+record the preceding GPU-loading cycle (1.195x). Its historical profile is
+`configs/diamondhill/plm-esmc-fold2-6b-gpu-loading.json`; the current `-exact`
+profile selects the newer frozen deployment. ESM2/ESM3 results below remain current.
+
 This cycle targets ESMC bundled 6B, ESM2-3B, and ESM3-open sequence inference on
 gfx90a. It does not change folding-model speedup claims. The numerical reference
 is the official implementation with **the same batch grouping**, padding, native
@@ -142,8 +148,8 @@ advances to full-model acceptance. Larger tiles alone did not solve this case.
 The installed Torch build reports CK SDPA unavailable; CK attention was not
 measured, and no attention speedup is claimed.
 
-Production dispatch and the published **1.195x B4 complete-invocation result**
-remain unchanged. Further CK work should first establish a GEMM accumulation
+That CK experiment left production dispatch and the then-published **1.195x B4
+complete-invocation result** unchanged. Further CK work should first establish a GEMM accumulation
 order that matches the native implementation, then test shape-specific scheduling
 or a BF16-rounding-preserving FFN epilogue. The present evidence does not rule
 out all CK implementations; it rejects the installed default and these six tiles.
@@ -204,7 +210,7 @@ invocation. All examples select HIP6 and N1000 native precision.
 
 | Model | Request | Profile |
 | --- | --- | --- |
-| ESMC, four inputs / B4 | `configs/requests/plm-esmc-fold2-6b-b4-n1000-exact.json` | `configs/diamondhill/plm-esmc-fold2-6b-exact.json` |
+| ESMC, preceding GPU-loading cycle / B4 | `configs/requests/plm-esmc-fold2-6b-b4-n1000-exact.json` | `configs/diamondhill/plm-esmc-fold2-6b-gpu-loading.json` |
 | ESM2, four inputs / B4 | `configs/requests/plm-esm2-3b-b4-n1000-exact.json` | `configs/diamondhill/plm-esm2-3b-exact.json` |
 | ESM3, four inputs / B4 | `configs/requests/plm-esm3-open-b4-n1000-exact.json` | `configs/diamondhill/plm-esm3-open-exact.json` |
 | ESM3, 64 inputs / sixteen B4 groups | `configs/requests/plm-esm3-open-resident64-n1000-exact.json` | `configs/diamondhill/plm-esm3-open-exact.json` |

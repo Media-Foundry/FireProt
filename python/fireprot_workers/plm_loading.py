@@ -2,7 +2,7 @@
 from contextlib import ExitStack
 
 
-def streamed_esmc_state(root, mapping, published_to_native):
+def _gpu_streamed_esmc_state(root, mapping, published_to_native):
     """Convert one block at a time with the native, exact row-concatenation map."""
     import torch
     from safetensors import safe_open
@@ -30,3 +30,14 @@ def streamed_esmc_state(root, mapping, published_to_native):
             state.update(converted)
             del raw, converted, tensor
     return state
+
+
+def streamed_esmc_state(root, mapping, published_to_native):
+    import os
+    mode = os.environ.get('FIREPROT_ESMC_CPU_LOADING', '0')
+    if mode == '0':
+        return _gpu_streamed_esmc_state(root, mapping, published_to_native)
+    if mode != '1':
+        raise ValueError('FIREPROT_ESMC_CPU_LOADING must be 0 or 1')
+    from .esmc_cpu_loading import reused_pinned_esmc_state
+    return reused_pinned_esmc_state(root, mapping, published_to_native)

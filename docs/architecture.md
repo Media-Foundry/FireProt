@@ -54,6 +54,16 @@ sequence logits match the pinned official model factory bitwise. Generation and
 auxiliary structure/function codec workflows are outside this contract.
 See [standalone pLM inference](protein-language-models.md).
 
+The optional `hip_esm` resource selects the qualified N1000 ESM extension.
+ESM3 admission requires this pin; its sequence-only geometric attention may
+bypass intermediate work only when the native all-invalid-frame mask would
+zero every vector before the preserved output projection. ESMC loads and packs
+one checkpoint block at a time on GPU through the upstream weight mapping.
+ESM2 transfers stored FP16 weights before exact promotion to native FP32.
+These are tensor-boundary changes; Rust retains asset checks, grouping policy,
+operator selection, supervision, and exact-array acceptance. See
+[ESM implementation and evidence](esm-optimization.md).
+
 Artifact preflight optionally verifies independent files with 1–4 Rust threads,
 selected explicitly by `FIREPROT_PREFLIGHT_HASH_THREADS` in the execution profile.
 The default remains serial. Every file retains full SHA-256 and before/after

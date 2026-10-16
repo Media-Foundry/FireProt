@@ -17,6 +17,13 @@ def optimized_scope(model, request, length, batch_size=1):
     architecture = torch.cuda.get_device_properties(0).gcnArchName.split(':')[0]
     if architecture != 'gfx90a':
         raise ValueError('pLM optimization requires gfx90a')
+    if 'hip_esm' in request.get('resources', {}):
+        from .esm import esm_scope
+        with esm_scope(model, request, batch_size) as state:
+            yield state
+        return
+    if name == 'esm3-open':
+        raise ValueError('ESM3 acceleration requires the qualified hip_esm resource')
     registry = OperationRegistry()
     state = dict(implementation='unused_attention_mean' if name == 'esm2-3b' else 'hip_bf16_rope', calls=0)
     changes = []

@@ -18,9 +18,16 @@ fn standalone_models_reject_folding_settings_and_unqualified_precision() {
         candidate["workload"]["model_name"] = json!(name);
         candidate["backend"] = json!("fireprot");
         assert_eq!(
-            ValidatedRequest::try_from(serde_json::from_value::<Request>(candidate).unwrap())
-                .is_ok(),
+            ValidatedRequest::try_from(
+                serde_json::from_value::<Request>(candidate.clone()).unwrap()
+            )
+            .is_ok(),
             name != "esm3-open"
+        );
+        candidate["resources"] = json!({"hip_esm":pin});
+        assert!(
+            ValidatedRequest::try_from(serde_json::from_value::<Request>(candidate).unwrap())
+                .is_ok()
         );
     }
     for (key, value) in [("model_name", "unknown"), ("precision", "bfloat16")] {

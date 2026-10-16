@@ -143,8 +143,9 @@ asset verification, and **39.304 → 18.827 s (2.088x) for ESM2**, primarily thr
 checkpoint-covered initialization. All retained outputs are bitwise equal.
 AtlasLM now improves **15.915 → 15.046 s (1.058x)** with eager GPU weight
 assignment and HIP RoPE/SwiGLU; packaged warm forward improves **1.112x**.
-ESM3 selects the official loader at **13.489 s**, which outperforms the earlier
-local loader (14.564 s); no speedup over the official ESM3 implementation is claimed.
+The earlier ESM3 singleton loader comparison selects the official factory at
+**13.489 s** over the local loader (14.564 s). The new ESM3 operator route is
+measured separately below.
 These results do not change folding speedup rows.
 See [commands, native precision and performance scope](docs/protein-language-models.md).
 
@@ -156,12 +157,27 @@ N1000 HIP batches for AtlasLM/ESMC and the ESM2 optimization retain bitwise
 equality to the official implementation with the **same batch grouping**;
 singleton-to-batch drift is reported separately. See
 [batch inputs, commands and measured scope](docs/plm-batch.md).
-For the same four-sequence N1000 batch, complete invocation improves
-**16.045 → 15.053 s (1.066x) for AtlasLM** and
-**40.347 → 20.026 s (2.015x) for ESM2**. ESMC's B4 HIP route does not improve
-complete invocation (**0.964x**), so native remains recommended for a single B4
-job. These comparisons use native B4 as the reference and do not measure the
-benefit of replacing four independent model loads with one resident batch.
+The latest ESM cycle adds exact HIP activations, ESM3's guarded sequence-only
+geometry simplification, and faster ESMC/ESM2 checkpoint placement. Three AB/BA/AB
+pairs on HIP6 give these **complete invocation** medians for four N1000 inputs,
+using native B4 as the reference. Every output array matches bitwise.
+
+| Standalone model, N1000 × 4 / B4 | Native → optimized E2E | Speedup | Warm forward speedup |
+| --- | ---: | ---: | ---: |
+| ESMC bundled 6B | 23.795 → 19.917 s | **1.195x** | 1.113x |
+| ESM2-3B | 38.461 → 16.464 s | **2.336x** | 1.068x |
+| ESM3-open | 12.384 → 11.461 s | **1.080x** | 2.395x |
+
+These measurements preserve native precision; ESM2 still computes in FP32.
+Warm forward excludes loading/export and is measured independently. See
+[exact-route commands and evidence](docs/esm-optimization.md). ESM3's separate
+64-input resident workload (sixteen B4 groups) improves **20.212 → 15.490 s
+complete invocation, 1.305x**, with all 64 outputs retained and bitwise exact.
+ESMC's earlier
+operator-only B4 composition had no E2E gain (0.964x); the new loading composition
+supersedes that result. The initial ESM2 B4 result (2.015x) remains historical.
+AtlasLM retains **16.045 → 15.053 s (1.066x)** for the same B4 comparison boundary.
+These comparisons do not measure replacing four independent loads with one batch.
 That separate AtlasLM comparison is now measured: four **already optimized**
 singleton invocations total **58.967 s**, versus **15.204 s** for one optimized B4
 invocation (**3.879x aggregate throughput**, three AB/BA/AB pairs). Each arm
@@ -248,7 +264,7 @@ This is an evidence-based work priority, not a forecast of additional speedup.
 
 | Model | Remaining opportunity and next step |
 | --- | --- |
-| **Standalone ESM/AtlasLM — measured N1000 routes** | Complete invocation improves **1.505x ESMC**, **2.088x ESM2**, and **1.058x AtlasLM**, with exact outputs. AtlasLM packaged warm forward improves **1.112x**. ESM3 uses its faster official loader; no gain over official ESM3 is claimed. [Scope](docs/protein-language-models.md). |
+| **Standalone ESM/AtlasLM — measured N1000 routes** | Latest exact B4 complete invocation: **1.195x ESMC**, **2.336x ESM2**, **1.080x ESM3**; ESM3 warm forward **2.395x**. Projection GEMMs remain the main ESMC/ESM2 compute cost; tested BLAS replacements fail exact equality. AtlasLM retains its separate singleton/batch results. [Scope](docs/esm-optimization.md). |
 | **ESMFold2 + ESMC — qualified folding route** | Native versus opt-in packing reuse now gives **2.006x complete N1000 invocation** and **3.289x forward** with exact outputs. Profile the optimized route before testing fused HIP cast/layout packing; no additional gain is established. |
 | **OpenFold3 — current cycle closed** | Final QKV LDS padding trials gave no consistent gain. Non-forward attribution is recorded; a thread-cap comparison was rejected by the protected environment gate. The accepted E2E result remains **2.864x**. [Final trials](docs/openfold3-performance.md#final-bounded-trials-and-transition-to-esmfold2-2026-10-15). |
 | **Mini-ESM — exploratory profiling** | ESM2-3B loading/features execute outside the folding-forward timer. Establish a serial N1000 complete-invocation baseline and stage split before selecting kernels; its remaining headroom is unknown. |

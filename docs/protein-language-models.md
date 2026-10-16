@@ -3,6 +3,8 @@
 For model-resident multi-sequence inference, explicit GPU microbatching and its
 separate numerical/performance contract, see [pLM batches](plm-batch.md).
 The single-sequence results below retain their original scope.
+For the latest ESMC/ESM2/ESM3 exact operator and loading route, see
+[ESM optimization](esm-optimization.md).
 
 FireProt provides separate Rust commands for protein language model inference:
 
@@ -24,7 +26,8 @@ Protenix JSON input, 1–1,000 residues, using the 20 standard amino acids or `X
 It does not truncate inputs or silently split long sequences. The optimized
 route is qualified only for the N1000 workload on gfx90a with the recorded
 ROCm/PyTorch build. Native inference supports the declared shorter inputs.
-Multiple-sequence batching and masked-token/generation tasks are not connected.
+Multiple sequences use the separate explicit [batch contract](plm-batch.md).
+Masked-token/generation tasks are not connected.
 
 ```json
 "workload": {

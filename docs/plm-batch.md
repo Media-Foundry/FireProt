@@ -5,6 +5,10 @@ microbatches. It supports standalone AtlasLM-3B, ESMC-fold2-6B, ESM2-3B and
 ESM3-open. It does not change folding or the heterogeneous `infer-batch` command,
 which still launches independent requests.
 
+The latest ESMC/ESM2/ESM3 operator and loading cycle is documented in
+[ESM optimization](esm-optimization.md), including ESM3's opt-in sequence-only
+geometry simplification. The dated results below preserve the initial batch cycle.
+
 ## Input and request
 
 Use the existing `fireprot esm REQUEST PROFILE` or
@@ -68,8 +72,8 @@ nonfinite tensors and unverified artifacts fail acceptance. A failed worker
 cannot seal a partially successful batch.
 
 The native backend uses native model operators. Experimental FireProt batches
-are restricted to N1000 and actual group sizes 1, 2 or 4 for AtlasLM, ESMC and
-ESM2. Other shapes fail explicitly; ESM3 has no FireProt operator backend.
+are restricted to N1000 and actual group sizes 1, 2 or 4 for AtlasLM, ESMC,
+ESM2 and the new `hip_esm` ESM3 route. Other shapes fail explicitly.
 Operator qualification and complete-invocation performance are separate gates.
 
 ## Initial native batching screen, 2026-10-16

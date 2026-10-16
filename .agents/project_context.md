@@ -6602,3 +6602,69 @@ do NOT claim complete pre-sync backups. No weights, frozen deployment or model
 outputs were in the source list. Incident disclosed to user and recorded in
 provenance/plm_batch_source_sync_incident_20261016.json. Future dependent
 mutations MUST inspect tool exit_code and throw/stop on nonzero.
+
+
+### ESMC / ESM2 / ESM3 exact optimization completed (2026-10-16)
+
+User requested continued optimization of all three ESM models. This cycle used
+HIP6 only (PCI 0000:8e:00.0 / SMI4). All own GPU work has finished; HIP6 is idle.
+The strict reference remains official same-grouping output bytes; singleton
+versus batch drift is a separate existing report. Work remains on master.
+
+New explicit resource hip_esm selects kernels/amd/fireprot_esm.hip and the scoped
+adapter python/fireprot/adapters/plm/esm.py. ESM3 FireProt admission now requires
+this pin; old requests retain previous routes. N1000 B1/B2/B4, gfx90a, native
+precision, Torch 2.12.0a0+git78258b9 / HIP 7.14.60850 only. ESMC uses exact BF16
+RoPE plus SwiGLU; ESM2 uses exact FP32 GELU plus the previously qualified unused
+attention-mean omission; ESM3 uses exact BF16 RoPE/SwiGLU plus a guarded
+all-invalid-frame geometry simplification retaining native zero-input out_proj.
+All heads, native GEMMs/attention, tokens and grouping remain. Do not generalize
+ESM3 sequence-only qualification to structure-conditioned or generation calls.
+
+ESMC's profile shows GEMMs dominate. Its loader now uses the upstream
+published_to_native mapping on one GPU block at a time, converting to native
+BF16 before exact row concatenation and releasing temporary parts per block.
+Diagnostic load 10.9665 -> 5.4503 s; peak 12.795 -> 12.890 decimal GB. Whole-GPU
+FP32 packing was faster but used 43.626 GB; BF16 all-at-once used 21.640 GB.
+Those high-memory variants are not selected. ESM2 transfers stored FP16 weights
+before promotion on GPU to native FP32: diagnostic 7.408 -> 5.343 s, loading
+peak 11.508 -> 11.400 GB. Inference remains FP32. ESM3 keeps the official factory.
+
+Maintained scope warm AB/BA/AB (nine observations/arm, two warmups/arm/pair):
+ESMC B1/B2/B4 1.1501 / 1.1376 / 1.1135x; ESM2 1.0648 / 1.0675 / 1.0681x;
+ESM3 2.2204 / 2.2817 / 2.3953x. Every array exact. Independently paired B4
+increment over previous FireProt operators: ESMC 574.333 -> 568.985 ms, 1.0094x;
+ESM2 876.000 -> 838.984 ms, 1.0441x. Do not multiply these ratios. Alternate
+BLAS cublas/rocBLAS changes all three models' outputs and is rejected; explicit
+cublaslt just reproduces current default at about 1.000x.
+
+Final complete Rust invocation comparisons, three AB/BA/AB pairs each, N1000,
+seed101, native precision, fresh processes, unflushed caches, no output cache:
+- ESMC N1000 x 4 / B4: 23.795089486 -> 19.916732481 s, 1.194728579x.
+- ESM2 N1000 x 4 / B4: 38.461337132 -> 16.463957907 s, 2.336093019x.
+- ESM3 N1000 x 4 / B4: 12.383835161 -> 11.461301233 s, 1.080491203x.
+- ESM3 64 N1000 inputs / sixteen B4 groups, one load: 20.211988712 ->
+  15.490191705 s, 1.304824956x aggregate E2E.
+Every pair improves. Full independent collection rehashes all 24 accepted
+invocations and 456 output archives, verifies HIP6 PCI identity, and compares
+all arrays bitwise. These are standalone pLM results; folding ratios unchanged.
+ESMC parallel full-file hashing is shared in both arms; ESM2 ratio includes
+its older meta initialization improvement as well as this cycle's additions.
+
+Frozen final deployment: outputs/experiments/esm-speed-20261016/qualified-v2.
+Do not mutate qualified-v1/v2 or old trials. New library SHA
+7fe005660b21f806e4d15d772325243980db466be29e62ebb527884995484c61;
+Rust build recipe/receipt are in the experiment's trials-v2 directory. All seven
+local CLI/bridge/worker/kernel identities match the measured final deployment.
+Public requests: configs/requests/plm-{esm3-open,esmc-fold2-6b,esm2-3b}-b4-n1000-exact.json;
+profiles: configs/diamondhill/plm-{model}-exact.json. ESM3 also has
+plm-esm3-open-resident64-n1000-exact.json and its pinned development manifest.
+Use the explicit frozen CLI in docs/esm-optimization.md, not an old installed CLI.
+Evidence: provenance/esm_optimization_diagnostics_20261016.json and
+provenance/esm_optimization_e2e_20261016.json. README includes the new B4 ratios.
+196 Rust tests / 49 suites passed, affected crates Clippy clean, two geometry
+fallback tests passed, all four public requests pass Rust inspect. Python syntax
+checks pass. GitNexus actual local index is named FireProt (capitalization matters);
+17 affected flows include shared request admission and ESM dispatch/loading.
+The broader critical graph label was reviewed against these contracts and tests.
+No upstream edits, no Triton, no user ISA changes. No active goal was created.

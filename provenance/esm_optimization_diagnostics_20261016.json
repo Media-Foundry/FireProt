@@ -1,0 +1,3557 @@
+{
+  "schema_version": 1,
+  "hip_device": 6,
+  "architecture": "gfx90a",
+  "seed": 101,
+  "length": 1000,
+  "torch": "2.12.0a0+git78258b9",
+  "hip": "7.14.60850",
+  "precision": "native",
+  "boundary": "Warm diagnostics and single-observation loading screens; complete invocation results are separate.",
+  "cache_state": "unflushed; warm operators use two warmups per arm per pair; no output cache",
+  "inputs": "Distinct deterministic N1000 development-sequence rotations, not an independent biological test set.",
+  "models": {
+    "esm3-open": {
+      "profile": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esm3-open-profile/report.json",
+        "sha256": "f8063d71fed29d4dcf20e64e802f3e5a65644233b6dc23669e614912a5bd0943"
+      },
+      "profile_aten_rows": [
+        {
+          "batch": 1,
+          "rows": [
+            {
+              "key": "aten::linalg_vector_norm",
+              "count": 1,
+              "self_device_us": 31614.947999999997,
+              "self_cpu_us": 29.96099999999933,
+              "shapes": [
+                [
+                  1,
+                  256,
+                  1002,
+                  1002,
+                  3
+                ],
+                [],
+                [],
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::mm",
+              "count": 48,
+              "self_device_us": 13464.519000000022,
+              "self_cpu_us": 2298.890000000054,
+              "shapes": [
+                [
+                  1002,
+                  1536
+                ],
+                [
+                  1536,
+                  8192
+                ]
+              ]
+            },
+            {
+              "key": "aten::mm",
+              "count": 48,
+              "self_device_us": 6887.2169999999805,
+              "self_cpu_us": 2239.8229999998957,
+              "shapes": [
+                [
+                  1002,
+                  1536
+                ],
+                [
+                  1536,
+                  4608
+                ]
+              ]
+            },
+            {
+              "key": "aten::_flash_attention_forward",
+              "count": 48,
+              "self_device_us": 6818.761999999989,
+              "self_cpu_us": 1112.1590000001415,
+              "shapes": [
+                [
+                  1,
+                  1002,
+                  24,
+                  64
+                ],
+                [
+                  1,
+                  1002,
+                  24,
+                  64
+                ],
+                [
+                  1,
+                  1002,
+                  24,
+                  64
+                ],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::mm",
+              "count": 48,
+              "self_device_us": 5681.089000000029,
+              "self_cpu_us": 2156.5999999999167,
+              "shapes": [
+                [
+                  1002,
+                  4096
+                ],
+                [
+                  4096,
+                  1536
+                ]
+              ]
+            },
+            {
+              "key": "aten::copy_",
+              "count": 405,
+              "self_device_us": 4424.22600000014,
+              "self_cpu_us": 2817.318000000124,
+              "shapes": [
+                [
+                  1,
+                  1002,
+                  1536
+                ],
+                [
+                  1,
+                  1002,
+                  1536
+                ],
+                []
+              ]
+            },
+            {
+              "key": "aten::cat",
+              "count": 197,
+              "self_device_us": 4088.0810000000497,
+              "self_cpu_us": 1896.2060000000752,
+              "shapes": [
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::sub",
+              "count": 1,
+              "self_device_us": 4001.269000000002,
+              "self_cpu_us": 24.131000000001222,
+              "shapes": [
+                [
+                  1,
+                  256,
+                  1002,
+                  1,
+                  3
+                ],
+                [
+                  1,
+                  256,
+                  1,
+                  1002,
+                  3
+                ],
+                []
+              ]
+            },
+            {
+              "key": "aten::mm",
+              "count": 48,
+              "self_device_us": 3741.4730000000136,
+              "self_cpu_us": 2546.481000000098,
+              "shapes": [
+                [
+                  1002,
+                  1536
+                ],
+                [
+                  1536,
+                  1536
+                ]
+              ]
+            },
+            {
+              "key": "aten::mul",
+              "count": 192,
+              "self_device_us": 3146.1919999999527,
+              "self_cpu_us": 1915.4870000000674,
+              "shapes": [
+                [
+                  1,
+                  1002,
+                  24,
+                  64
+                ],
+                [
+                  1002,
+                  1,
+                  64
+                ]
+              ]
+            },
+            {
+              "key": "aten::mul",
+              "count": 2,
+              "self_device_us": 2576.8240000000005,
+              "self_cpu_us": 21.762000000002445,
+              "shapes": [
+                [
+                  1,
+                  256,
+                  1002,
+                  1002
+                ],
+                [
+                  256,
+                  1,
+                  1
+                ]
+              ]
+            },
+            {
+              "key": "aten::sub",
+              "count": 1,
+              "self_device_us": 2422.322,
+              "self_cpu_us": 8.387000000000626,
+              "shapes": [
+                [
+                  1,
+                  256,
+                  1002,
+                  1002
+                ],
+                [
+                  1,
+                  256,
+                  1002,
+                  1002
+                ],
+                []
+              ]
+            }
+          ]
+        },
+        {
+          "batch": 4,
+          "rows": [
+            {
+              "key": "aten::linalg_vector_norm",
+              "count": 1,
+              "self_device_us": 127171.20399999998,
+              "self_cpu_us": 51.91100000000188,
+              "shapes": [
+                [
+                  4,
+                  256,
+                  1002,
+                  1002,
+                  3
+                ],
+                [],
+                [],
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::mm",
+              "count": 48,
+              "self_device_us": 42968.70499999996,
+              "self_cpu_us": 2616.110000000179,
+              "shapes": [
+                [
+                  4008,
+                  1536
+                ],
+                [
+                  1536,
+                  8192
+                ]
+              ]
+            },
+            {
+              "key": "aten::mm",
+              "count": 48,
+              "self_device_us": 25793.641999999993,
+              "self_cpu_us": 2666.4140000000707,
+              "shapes": [
+                [
+                  4008,
+                  1536
+                ],
+                [
+                  1536,
+                  4608
+                ]
+              ]
+            },
+            {
+              "key": "aten::mm",
+              "count": 48,
+              "self_device_us": 23661.147000000026,
+              "self_cpu_us": 2595.0630000000383,
+              "shapes": [
+                [
+                  4008,
+                  4096
+                ],
+                [
+                  4096,
+                  1536
+                ]
+              ]
+            },
+            {
+              "key": "aten::_flash_attention_forward",
+              "count": 48,
+              "self_device_us": 18737.639999999996,
+              "self_cpu_us": 1135.0939999999327,
+              "shapes": [
+                [
+                  4,
+                  1002,
+                  24,
+                  64
+                ],
+                [
+                  4,
+                  1002,
+                  24,
+                  64
+                ],
+                [
+                  4,
+                  1002,
+                  24,
+                  64
+                ],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::sub",
+              "count": 1,
+              "self_device_us": 16018.669000000002,
+              "self_cpu_us": 36.619000000004235,
+              "shapes": [
+                [
+                  4,
+                  256,
+                  1002,
+                  1,
+                  3
+                ],
+                [
+                  4,
+                  256,
+                  1,
+                  1002,
+                  3
+                ],
+                []
+              ]
+            },
+            {
+              "key": "aten::copy_",
+              "count": 405,
+              "self_device_us": 13149.079000000198,
+              "self_cpu_us": 3088.180999999927,
+              "shapes": [
+                [
+                  4,
+                  1002,
+                  1536
+                ],
+                [
+                  4,
+                  1002,
+                  1536
+                ],
+                []
+              ]
+            },
+            {
+              "key": "aten::cat",
+              "count": 197,
+              "self_device_us": 11560.41900000006,
+              "self_cpu_us": 2116.5099999999893,
+              "shapes": [
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::mul",
+              "count": 2,
+              "self_device_us": 11307.099999999977,
+              "self_cpu_us": 33.258999999998196,
+              "shapes": [
+                [
+                  4,
+                  256,
+                  1002,
+                  1002
+                ],
+                [
+                  256,
+                  1,
+                  1
+                ]
+              ]
+            },
+            {
+              "key": "aten::add",
+              "count": 1,
+              "self_device_us": 9707.361000000004,
+              "self_cpu_us": 13.206000000000131,
+              "shapes": [
+                [
+                  4,
+                  256,
+                  1002,
+                  1002
+                ],
+                [
+                  4,
+                  1,
+                  1002,
+                  1002
+                ],
+                []
+              ]
+            },
+            {
+              "key": "aten::sub",
+              "count": 1,
+              "self_device_us": 9675.693,
+              "self_cpu_us": 13.194999999999709,
+              "shapes": [
+                [
+                  4,
+                  256,
+                  1002,
+                  1002
+                ],
+                [
+                  4,
+                  256,
+                  1002,
+                  1002
+                ],
+                []
+              ]
+            },
+            {
+              "key": "aten::bmm",
+              "count": 1,
+              "self_device_us": 9430.982999999978,
+              "self_cpu_us": 74.85399999999754,
+              "shapes": [
+                [
+                  1024,
+                  1002,
+                  3
+                ],
+                [
+                  1024,
+                  3,
+                  1002
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "warm_artifact": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esm3-open-packaged/report.json",
+        "sha256": "53396c52f006721f5219135c2969a1c760c35561754117cf2d36b5231344c1ca"
+      },
+      "warm": {
+        "model": "esm3-open",
+        "hip_device": 6,
+        "seed": 101,
+        "precision": "native",
+        "boundary": "warm packaged forward including context entry/exit; not complete invocation",
+        "reference": "native identical batch grouping; maintained ESM scope",
+        "cases": [
+          {
+            "batch_size": 1,
+            "pairs": [
+              {
+                "native": [
+                  0.11844990600366145,
+                  0.11833382595796138,
+                  0.11827857594471425
+                ],
+                "candidate": [
+                  0.053431591019034386,
+                  0.053185945958830416,
+                  0.05316358502022922
+                ]
+              },
+              {
+                "candidate": [
+                  0.05330935295205563,
+                  0.05313292401842773,
+                  0.05317040195222944
+                ],
+                "native": [
+                  0.11829168105032295,
+                  0.11848489299882203,
+                  0.11836851399857551
+                ]
+              },
+              {
+                "native": [
+                  0.11850864498410374,
+                  0.1183949849801138,
+                  0.11824806593358517
+                ],
+                "candidate": [
+                  0.05358600802719593,
+                  0.05351483204867691,
+                  0.05365160491783172
+                ]
+              }
+            ],
+            "medians": {
+              "native": 0.11836851399857551,
+              "candidate": 0.05330935295205563
+            },
+            "speedup": 2.220408004295823,
+            "all_arrays_bitwise_equal": true,
+            "runtime": {
+              "implementation": "hip_esm_exact_v1",
+              "library": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/kernel-cache/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237.so",
+                "sha256": "7fe005660b21f806e4d15d772325243980db466be29e62ebb527884995484c61"
+              },
+              "batch_size": 1,
+              "rope_calls": 48,
+              "swiglu_calls": 48,
+              "geometry_calls": 1,
+              "gelu_calls": 0,
+              "calls": 96,
+              "registry": {
+                "implementations": {
+                  "plm_esm": [
+                    {
+                      "name": "hip_esm_exact_v1",
+                      "priority": 10,
+                      "version": "n1000-v1"
+                    }
+                  ]
+                },
+                "selection_counts": [
+                  {
+                    "operation": "plm_esm",
+                    "implementation": "hip_esm_exact_v1",
+                    "count": 96
+                  }
+                ],
+                "decisions": [
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "bfloat16",
+                      "shape": [
+                        1,
+                        1002,
+                        24,
+                        64
+                      ],
+                      "strides": [
+                        1539072,
+                        1536,
+                        64,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "rope",
+                        "model": "esm3-open"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  },
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "bfloat16",
+                      "shape": [
+                        1,
+                        1002,
+                        8192
+                      ],
+                      "strides": [
+                        8208384,
+                        8192,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "swiglu",
+                        "model": "esm3-open"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  }
+                ],
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/qualified-v1/target/release/lib_fireprot_bridge.so",
+                  "sha256": "564e1c24d4a48e641900dfb2ffe74006cdf1d7c8dbb3a2ed083b3e653430ea25"
+                }
+              }
+            }
+          },
+          {
+            "batch_size": 2,
+            "pairs": [
+              {
+                "native": [
+                  0.21692348399665207,
+                  0.21407291502691805,
+                  0.2162239069584757
+                ],
+                "candidate": [
+                  0.09500449406914413,
+                  0.09450872603338212,
+                  0.09455833793617785
+                ]
+              },
+              {
+                "candidate": [
+                  0.09539662697352469,
+                  0.09457465296145529,
+                  0.09471898304764181
+                ],
+                "native": [
+                  0.21634780406020582,
+                  0.21608315606135875,
+                  0.21675751102156937
+                ]
+              },
+              {
+                "native": [
+                  0.21618077205494046,
+                  0.215748192043975,
+                  0.2160200870130211
+                ],
+                "candidate": [
+                  0.09474435402080417,
+                  0.09482152701821178,
+                  0.09492035303264856
+                ]
+              }
+            ],
+            "medians": {
+              "native": 0.21618077205494046,
+              "candidate": 0.09474435402080417
+            },
+            "speedup": 2.2817272257455152,
+            "all_arrays_bitwise_equal": true,
+            "runtime": {
+              "implementation": "hip_esm_exact_v1",
+              "library": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/kernel-cache/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237.so",
+                "sha256": "7fe005660b21f806e4d15d772325243980db466be29e62ebb527884995484c61"
+              },
+              "batch_size": 2,
+              "rope_calls": 48,
+              "swiglu_calls": 48,
+              "geometry_calls": 1,
+              "gelu_calls": 0,
+              "calls": 96,
+              "registry": {
+                "implementations": {
+                  "plm_esm": [
+                    {
+                      "name": "hip_esm_exact_v1",
+                      "priority": 10,
+                      "version": "n1000-v1"
+                    }
+                  ]
+                },
+                "selection_counts": [
+                  {
+                    "operation": "plm_esm",
+                    "implementation": "hip_esm_exact_v1",
+                    "count": 96
+                  }
+                ],
+                "decisions": [
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "bfloat16",
+                      "shape": [
+                        2,
+                        1002,
+                        24,
+                        64
+                      ],
+                      "strides": [
+                        1539072,
+                        1536,
+                        64,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "rope",
+                        "model": "esm3-open"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  },
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "bfloat16",
+                      "shape": [
+                        2,
+                        1002,
+                        8192
+                      ],
+                      "strides": [
+                        8208384,
+                        8192,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "swiglu",
+                        "model": "esm3-open"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  }
+                ],
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/qualified-v1/target/release/lib_fireprot_bridge.so",
+                  "sha256": "564e1c24d4a48e641900dfb2ffe74006cdf1d7c8dbb3a2ed083b3e653430ea25"
+                }
+              }
+            }
+          },
+          {
+            "batch_size": 4,
+            "pairs": [
+              {
+                "native": [
+                  0.39936253102496266,
+                  0.3978231259388849,
+                  0.40344430308323354
+                ],
+                "candidate": [
+                  0.16780409403145313,
+                  0.16769439203199,
+                  0.1679198540514335
+                ]
+              },
+              {
+                "candidate": [
+                  0.1724471600027755,
+                  0.16830128093715757,
+                  0.16779613704420626
+                ],
+                "native": [
+                  0.3983560419874266,
+                  0.4020644820993766,
+                  0.40201495005749166
+                ]
+              },
+              {
+                "native": [
+                  0.4029019019799307,
+                  0.40914101293310523,
+                  0.40194340399466455
+                ],
+                "candidate": [
+                  0.1681421659886837,
+                  0.1678185589844361,
+                  0.16783709300216287
+                ]
+              }
+            ],
+            "medians": {
+              "native": 0.40201495005749166,
+              "candidate": 0.16783709300216287
+            },
+            "speedup": 2.39526878633623,
+            "all_arrays_bitwise_equal": true,
+            "runtime": {
+              "implementation": "hip_esm_exact_v1",
+              "library": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/kernel-cache/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237.so",
+                "sha256": "7fe005660b21f806e4d15d772325243980db466be29e62ebb527884995484c61"
+              },
+              "batch_size": 4,
+              "rope_calls": 48,
+              "swiglu_calls": 48,
+              "geometry_calls": 1,
+              "gelu_calls": 0,
+              "calls": 96,
+              "registry": {
+                "implementations": {
+                  "plm_esm": [
+                    {
+                      "name": "hip_esm_exact_v1",
+                      "priority": 10,
+                      "version": "n1000-v1"
+                    }
+                  ]
+                },
+                "selection_counts": [
+                  {
+                    "operation": "plm_esm",
+                    "implementation": "hip_esm_exact_v1",
+                    "count": 96
+                  }
+                ],
+                "decisions": [
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "bfloat16",
+                      "shape": [
+                        4,
+                        1002,
+                        24,
+                        64
+                      ],
+                      "strides": [
+                        1539072,
+                        1536,
+                        64,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "rope",
+                        "model": "esm3-open"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  },
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "bfloat16",
+                      "shape": [
+                        4,
+                        1002,
+                        8192
+                      ],
+                      "strides": [
+                        8208384,
+                        8192,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "swiglu",
+                        "model": "esm3-open"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  }
+                ],
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/qualified-v1/target/release/lib_fireprot_bridge.so",
+                  "sha256": "564e1c24d4a48e641900dfb2ffe74006cdf1d7c8dbb3a2ed083b3e653430ea25"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "blas_artifact": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esm3-open-blas/report.json",
+        "sha256": "ad5605c9ae0d47318f683080ab878386c2822c79c3ffc54015c2a8e0f70d39f1"
+      },
+      "blas": {
+        "model": "esm3-open",
+        "hip_device": 6,
+        "batch": 4,
+        "length": 1000,
+        "precision": "native",
+        "cases": [
+          {
+            "choice": "cublas",
+            "exact": {
+              "tokens": true,
+              "embeddings": false,
+              "logits": false
+            },
+            "max_abs": {
+              "tokens": 0.0,
+              "embeddings": 160.0,
+              "logits": 0.5
+            }
+          },
+          {
+            "choice": "cublaslt",
+            "exact": {
+              "tokens": true,
+              "embeddings": true,
+              "logits": true
+            },
+            "max_abs": {
+              "tokens": 0.0,
+              "embeddings": 0.0,
+              "logits": 0.0
+            },
+            "pairs": [
+              {
+                "baseline": [
+                  0.402574755018577,
+                  0.4126508339541033,
+                  0.4025761049706489
+                ],
+                "candidate": [
+                  0.4030228399205953,
+                  0.4018348619574681,
+                  0.4022446199087426
+                ]
+              },
+              {
+                "candidate": [
+                  0.4011918460018933,
+                  0.3976921720895916,
+                  0.4019772730534896
+                ],
+                "baseline": [
+                  0.4020324540324509,
+                  0.4022332429885864,
+                  0.39780622301623225
+                ]
+              },
+              {
+                "baseline": [
+                  0.3981134459609166,
+                  0.40579638606868684,
+                  0.3979865999426693
+                ],
+                "candidate": [
+                  0.4005633839406073,
+                  0.4021842509973794,
+                  0.4006288410164416
+                ]
+              }
+            ],
+            "medians": {
+              "baseline": 0.4022332429885864,
+              "candidate": 0.4018348619574681
+            },
+            "speedup": 1.0009914048501858
+          }
+        ],
+        "original": "_BlasBackend.Cublaslt"
+      }
+    },
+    "esmc-fold2-6b": {
+      "profile": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esmc-fold2-6b-profile/report.json",
+        "sha256": "185b80d8b5599c89eb8f75a13e1628cb4edda89c912f372ce1171dcaacaebe2b"
+      },
+      "profile_aten_rows": [
+        {
+          "batch": 1,
+          "rows": [
+            {
+              "key": "aten::mm",
+              "count": 80,
+              "self_device_us": 60713.136,
+              "self_cpu_us": 3632.9690000000733,
+              "shapes": [
+                [
+                  1002,
+                  2560
+                ],
+                [
+                  2560,
+                  13824
+                ]
+              ]
+            },
+            {
+              "key": "aten::mm",
+              "count": 80,
+              "self_device_us": 31514.106999999996,
+              "self_cpu_us": 3594.8240000000287,
+              "shapes": [
+                [
+                  1002,
+                  2560
+                ],
+                [
+                  2560,
+                  7680
+                ]
+              ]
+            },
+            {
+              "key": "aten::mm",
+              "count": 80,
+              "self_device_us": 25939.333000000053,
+              "self_cpu_us": 3422.228999999994,
+              "shapes": [
+                [
+                  1002,
+                  6912
+                ],
+                [
+                  6912,
+                  2560
+                ]
+              ]
+            },
+            {
+              "key": "aten::_flash_attention_forward",
+              "count": 80,
+              "self_device_us": 16802.63799999999,
+              "self_cpu_us": 1774.2579999999734,
+              "shapes": [
+                [
+                  1,
+                  1002,
+                  40,
+                  64
+                ],
+                [
+                  1,
+                  1002,
+                  40,
+                  64
+                ],
+                [
+                  1,
+                  1002,
+                  40,
+                  64
+                ],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::mm",
+              "count": 80,
+              "self_device_us": 13042.395999999993,
+              "self_cpu_us": 4059.411999999974,
+              "shapes": [
+                [
+                  1002,
+                  2560
+                ],
+                [
+                  2560,
+                  2560
+                ]
+              ]
+            },
+            {
+              "key": "aten::cat",
+              "count": 320,
+              "self_device_us": 9521.035000000065,
+              "self_cpu_us": 3113.7019999999006,
+              "shapes": [
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::mul",
+              "count": 320,
+              "self_device_us": 7375.88099999981,
+              "self_cpu_us": 3105.9040000001182,
+              "shapes": [
+                [
+                  1,
+                  1002,
+                  40,
+                  64
+                ],
+                [
+                  1002,
+                  1,
+                  64
+                ]
+              ]
+            },
+            {
+              "key": "aten::silu",
+              "count": 80,
+              "self_device_us": 4445.996999999963,
+              "self_cpu_us": 1258.7679999999568,
+              "shapes": [
+                [
+                  1,
+                  1002,
+                  6912
+                ]
+              ]
+            },
+            {
+              "key": "aten::mul",
+              "count": 80,
+              "self_device_us": 4279.005000000039,
+              "self_cpu_us": 714.5179999999623,
+              "shapes": [
+                [
+                  1,
+                  1002,
+                  6912
+                ],
+                [
+                  1,
+                  1002,
+                  6912
+                ]
+              ]
+            },
+            {
+              "key": "aten::native_layer_norm",
+              "count": 160,
+              "self_device_us": 3675.304999999874,
+              "self_cpu_us": 1988.3950000000286,
+              "shapes": [
+                [
+                  1,
+                  1002,
+                  2560
+                ],
+                [],
+                [
+                  2560
+                ],
+                [
+                  2560
+                ],
+                []
+              ]
+            },
+            {
+              "key": "aten::native_layer_norm",
+              "count": 161,
+              "self_device_us": 3577.8980000001234,
+              "self_cpu_us": 1985.5989999998455,
+              "shapes": [
+                [
+                  1,
+                  1002,
+                  2560
+                ],
+                [],
+                [
+                  2560
+                ],
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::copy_",
+              "count": 160,
+              "self_device_us": 3112.000000000143,
+              "self_cpu_us": 1849.8869999999836,
+              "shapes": [
+                [
+                  1,
+                  1002,
+                  2560
+                ],
+                [
+                  1,
+                  1002,
+                  2560
+                ],
+                []
+              ]
+            }
+          ]
+        },
+        {
+          "batch": 4,
+          "rows": [
+            {
+              "key": "aten::mm",
+              "count": 80,
+              "self_device_us": 219502.36100000003,
+              "self_cpu_us": 3804.912000000023,
+              "shapes": [
+                [
+                  4008,
+                  2560
+                ],
+                [
+                  2560,
+                  13824
+                ]
+              ]
+            },
+            {
+              "key": "aten::mm",
+              "count": 80,
+              "self_device_us": 106200.986,
+              "self_cpu_us": 3839.6889999999294,
+              "shapes": [
+                [
+                  4008,
+                  2560
+                ],
+                [
+                  2560,
+                  7680
+                ]
+              ]
+            },
+            {
+              "key": "aten::mm",
+              "count": 80,
+              "self_device_us": 93169.06500000038,
+              "self_cpu_us": 3720.5219999999117,
+              "shapes": [
+                [
+                  4008,
+                  6912
+                ],
+                [
+                  6912,
+                  2560
+                ]
+              ]
+            },
+            {
+              "key": "aten::_flash_attention_forward",
+              "count": 80,
+              "self_device_us": 48602.48500000009,
+              "self_cpu_us": 1955.5360000003236,
+              "shapes": [
+                [
+                  4,
+                  1002,
+                  40,
+                  64
+                ],
+                [
+                  4,
+                  1002,
+                  40,
+                  64
+                ],
+                [
+                  4,
+                  1002,
+                  40,
+                  64
+                ],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::mm",
+              "count": 80,
+              "self_device_us": 40631.12500000036,
+              "self_cpu_us": 4251.573000000035,
+              "shapes": [
+                [
+                  4008,
+                  2560
+                ],
+                [
+                  2560,
+                  2560
+                ]
+              ]
+            },
+            {
+              "key": "aten::cat",
+              "count": 320,
+              "self_device_us": 30597.86100000063,
+              "self_cpu_us": 3154.1649999999136,
+              "shapes": [
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::mul",
+              "count": 320,
+              "self_device_us": 21437.995000000865,
+              "self_cpu_us": 3154.8640000000287,
+              "shapes": [
+                [
+                  4,
+                  1002,
+                  40,
+                  64
+                ],
+                [
+                  1002,
+                  1,
+                  64
+                ]
+              ]
+            },
+            {
+              "key": "aten::silu",
+              "count": 80,
+              "self_device_us": 13508.310999999647,
+              "self_cpu_us": 1259.4919999999502,
+              "shapes": [
+                [
+                  4,
+                  1002,
+                  6912
+                ]
+              ]
+            },
+            {
+              "key": "aten::mul",
+              "count": 80,
+              "self_device_us": 12548.175000000314,
+              "self_cpu_us": 692.4209999998825,
+              "shapes": [
+                [
+                  4,
+                  1002,
+                  6912
+                ],
+                [
+                  4,
+                  1002,
+                  6912
+                ]
+              ]
+            },
+            {
+              "key": "aten::native_layer_norm",
+              "count": 160,
+              "self_device_us": 11913.756999999698,
+              "self_cpu_us": 2025.8150000002847,
+              "shapes": [
+                [
+                  4,
+                  1002,
+                  2560
+                ],
+                [],
+                [
+                  2560
+                ],
+                [
+                  2560
+                ],
+                []
+              ]
+            },
+            {
+              "key": "aten::native_layer_norm",
+              "count": 161,
+              "self_device_us": 11461.599999999733,
+              "self_cpu_us": 2104.1149999999207,
+              "shapes": [
+                [
+                  4,
+                  1002,
+                  2560
+                ],
+                [],
+                [
+                  2560
+                ],
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::add",
+              "count": 160,
+              "self_device_us": 8413.755999999823,
+              "self_cpu_us": 1331.0879999998874,
+              "shapes": [
+                [
+                  4,
+                  1002,
+                  2560
+                ],
+                [
+                  4,
+                  1002,
+                  2560
+                ],
+                []
+              ]
+            }
+          ]
+        }
+      ],
+      "warm_artifact": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esmc-fold2-6b-packaged/report.json",
+        "sha256": "9f99ca67df07b17487b90fae2f07922527da5ca07b3b0327cec4fa871d315ce2"
+      },
+      "warm": {
+        "model": "esmc-fold2-6b",
+        "hip_device": 6,
+        "seed": 101,
+        "precision": "native",
+        "boundary": "warm packaged forward including context entry/exit; not complete invocation",
+        "reference": "native identical batch grouping; maintained ESM scope",
+        "cases": [
+          {
+            "batch_size": 1,
+            "pairs": [
+              {
+                "native": [
+                  0.19711380801163614,
+                  0.19689026603009552,
+                  0.19706458505243063
+                ],
+                "candidate": [
+                  0.17124285898171365,
+                  0.1713565191021189,
+                  0.17136224696878344
+                ]
+              },
+              {
+                "candidate": [
+                  0.17134719295427203,
+                  0.17129978898447007,
+                  0.17144439893309027
+                ],
+                "native": [
+                  0.19703996391035616,
+                  0.19687995896674693,
+                  0.19668221904430538
+                ]
+              },
+              {
+                "native": [
+                  0.19702052103821188,
+                  0.2071679140208289,
+                  0.19731872691772878
+                ],
+                "candidate": [
+                  0.17114079499151558,
+                  0.17129381198901683,
+                  0.17132454097736627
+                ]
+              }
+            ],
+            "medians": {
+              "native": 0.19703996391035616,
+              "candidate": 0.17132454097736627
+            },
+            "speedup": 1.1500977197212345,
+            "all_arrays_bitwise_equal": true,
+            "runtime": {
+              "implementation": "hip_esm_exact_v1",
+              "library": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/kernel-cache/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237.so",
+                "sha256": "7fe005660b21f806e4d15d772325243980db466be29e62ebb527884995484c61"
+              },
+              "batch_size": 1,
+              "rope_calls": 80,
+              "swiglu_calls": 80,
+              "geometry_calls": 0,
+              "gelu_calls": 0,
+              "calls": 160,
+              "registry": {
+                "implementations": {
+                  "plm_esm": [
+                    {
+                      "name": "hip_esm_exact_v1",
+                      "priority": 10,
+                      "version": "n1000-v1"
+                    }
+                  ]
+                },
+                "selection_counts": [
+                  {
+                    "operation": "plm_esm",
+                    "implementation": "hip_esm_exact_v1",
+                    "count": 160
+                  }
+                ],
+                "decisions": [
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "bfloat16",
+                      "shape": [
+                        1,
+                        1002,
+                        40,
+                        64
+                      ],
+                      "strides": [
+                        2565120,
+                        2560,
+                        64,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "rope",
+                        "model": "esmc-fold2-6b"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  },
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "bfloat16",
+                      "shape": [
+                        1,
+                        1002,
+                        2560
+                      ],
+                      "strides": [
+                        2565120,
+                        2560,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "swiglu",
+                        "model": "esmc-fold2-6b"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  }
+                ],
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/qualified-v1/target/release/lib_fireprot_bridge.so",
+                  "sha256": "564e1c24d4a48e641900dfb2ffe74006cdf1d7c8dbb3a2ed083b3e653430ea25"
+                }
+              }
+            }
+          },
+          {
+            "batch_size": 2,
+            "pairs": [
+              {
+                "native": [
+                  0.3256433909991756,
+                  0.3256112119415775,
+                  0.32559534802567214
+                ],
+                "candidate": [
+                  0.286799979978241,
+                  0.29478358500637114,
+                  0.2862663749838248
+                ]
+              },
+              {
+                "candidate": [
+                  0.28621133405249566,
+                  0.28600015793927014,
+                  0.28604436304885894
+                ],
+                "native": [
+                  0.32560796302277595,
+                  0.32554914290085435,
+                  0.3253488630289212
+                ]
+              },
+              {
+                "native": [
+                  0.33472137595526874,
+                  0.32594493601936847,
+                  0.32522561599034816
+                ],
+                "candidate": [
+                  0.2863246750785038,
+                  0.28600271698087454,
+                  0.2860090850153938
+                ]
+              }
+            ],
+            "medians": {
+              "native": 0.32560796302277595,
+              "candidate": 0.28621133405249566
+            },
+            "speedup": 1.1376487381280795,
+            "all_arrays_bitwise_equal": true,
+            "runtime": {
+              "implementation": "hip_esm_exact_v1",
+              "library": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/kernel-cache/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237.so",
+                "sha256": "7fe005660b21f806e4d15d772325243980db466be29e62ebb527884995484c61"
+              },
+              "batch_size": 2,
+              "rope_calls": 80,
+              "swiglu_calls": 80,
+              "geometry_calls": 0,
+              "gelu_calls": 0,
+              "calls": 160,
+              "registry": {
+                "implementations": {
+                  "plm_esm": [
+                    {
+                      "name": "hip_esm_exact_v1",
+                      "priority": 10,
+                      "version": "n1000-v1"
+                    }
+                  ]
+                },
+                "selection_counts": [
+                  {
+                    "operation": "plm_esm",
+                    "implementation": "hip_esm_exact_v1",
+                    "count": 160
+                  }
+                ],
+                "decisions": [
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "bfloat16",
+                      "shape": [
+                        2,
+                        1002,
+                        40,
+                        64
+                      ],
+                      "strides": [
+                        2565120,
+                        2560,
+                        64,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "rope",
+                        "model": "esmc-fold2-6b"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  },
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "bfloat16",
+                      "shape": [
+                        2,
+                        1002,
+                        2560
+                      ],
+                      "strides": [
+                        2565120,
+                        2560,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "swiglu",
+                        "model": "esmc-fold2-6b"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  }
+                ],
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/qualified-v1/target/release/lib_fireprot_bridge.so",
+                  "sha256": "564e1c24d4a48e641900dfb2ffe74006cdf1d7c8dbb3a2ed083b3e653430ea25"
+                }
+              }
+            }
+          },
+          {
+            "batch_size": 4,
+            "pairs": [
+              {
+                "native": [
+                  0.6356987190665677,
+                  0.6382614079630002,
+                  0.6470169760286808
+                ],
+                "candidate": [
+                  0.5758475289912894,
+                  0.5711403649765998,
+                  0.5684820989845321
+                ]
+              },
+              {
+                "candidate": [
+                  0.582556206965819,
+                  0.5737398910569027,
+                  0.570556158083491
+                ],
+                "native": [
+                  0.6358436790760607,
+                  0.6341211369726807,
+                  0.6402197569841519
+                ]
+              },
+              {
+                "native": [
+                  0.6388534429715946,
+                  0.6392585719004273,
+                  0.6402486569713801
+                ],
+                "candidate": [
+                  0.5741220279596746,
+                  0.5708532949211076,
+                  0.5746072100009769
+                ]
+              }
+            ],
+            "medians": {
+              "native": 0.6388534429715946,
+              "candidate": 0.5737398910569027
+            },
+            "speedup": 1.113489671765274,
+            "all_arrays_bitwise_equal": true,
+            "runtime": {
+              "implementation": "hip_esm_exact_v1",
+              "library": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/kernel-cache/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237.so",
+                "sha256": "7fe005660b21f806e4d15d772325243980db466be29e62ebb527884995484c61"
+              },
+              "batch_size": 4,
+              "rope_calls": 80,
+              "swiglu_calls": 80,
+              "geometry_calls": 0,
+              "gelu_calls": 0,
+              "calls": 160,
+              "registry": {
+                "implementations": {
+                  "plm_esm": [
+                    {
+                      "name": "hip_esm_exact_v1",
+                      "priority": 10,
+                      "version": "n1000-v1"
+                    }
+                  ]
+                },
+                "selection_counts": [
+                  {
+                    "operation": "plm_esm",
+                    "implementation": "hip_esm_exact_v1",
+                    "count": 160
+                  }
+                ],
+                "decisions": [
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "bfloat16",
+                      "shape": [
+                        4,
+                        1002,
+                        40,
+                        64
+                      ],
+                      "strides": [
+                        2565120,
+                        2560,
+                        64,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "rope",
+                        "model": "esmc-fold2-6b"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  },
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "bfloat16",
+                      "shape": [
+                        4,
+                        1002,
+                        2560
+                      ],
+                      "strides": [
+                        2565120,
+                        2560,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "swiglu",
+                        "model": "esmc-fold2-6b"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  }
+                ],
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/qualified-v1/target/release/lib_fireprot_bridge.so",
+                  "sha256": "564e1c24d4a48e641900dfb2ffe74006cdf1d7c8dbb3a2ed083b3e653430ea25"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "blas_artifact": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esmc-fold2-6b-blas/report.json",
+        "sha256": "7131cb5f6bc9dd8fb4f57841f1105f4d58eea5b3dab5d3e9a71a5c2544215632"
+      },
+      "blas": {
+        "model": "esmc-fold2-6b",
+        "hip_device": 6,
+        "batch": 4,
+        "length": 1000,
+        "precision": "native",
+        "cases": [
+          {
+            "choice": "cublas",
+            "exact": {
+              "tokens": true,
+              "embeddings": false
+            },
+            "max_abs": {
+              "tokens": 0.0,
+              "embeddings": 1.5
+            }
+          },
+          {
+            "choice": "cublaslt",
+            "exact": {
+              "tokens": true,
+              "embeddings": true
+            },
+            "max_abs": {
+              "tokens": 0.0,
+              "embeddings": 0.0
+            },
+            "pairs": [
+              {
+                "baseline": [
+                  0.6349579859524965,
+                  0.6374682940077037,
+                  0.6354832539800555
+                ],
+                "candidate": [
+                  0.6384386670542881,
+                  0.6391268670558929,
+                  0.6349979920778424
+                ]
+              },
+              {
+                "candidate": [
+                  0.6394765160512179,
+                  0.6398236459353939,
+                  0.6398340919986367
+                ],
+                "baseline": [
+                  0.6394760460825637,
+                  0.6454110540216789,
+                  0.6411977380048484
+                ]
+              },
+              {
+                "baseline": [
+                  0.6347895240178332,
+                  0.6378926159814,
+                  0.640295471996069
+                ],
+                "candidate": [
+                  0.6378604869823903,
+                  0.6371561430860311,
+                  0.63733111100737
+                ]
+              }
+            ],
+            "medians": {
+              "baseline": 0.6378926159814,
+              "candidate": 0.6384386670542881
+            },
+            "speedup": 0.9991447086445946
+          }
+        ],
+        "original": "_BlasBackend.Cublaslt"
+      },
+      "increment_artifact": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esmc-fold2-6b-increment/report.json",
+        "sha256": "2418d57d51e358c435287f1c61feab7861bef9c53fd5b90f854a82566d40a3c4"
+      },
+      "increment": {
+        "model": "esmc-fold2-6b",
+        "hip_device": 6,
+        "seed": 101,
+        "precision": "native",
+        "boundary": "warm packaged forward including context entry/exit; not complete invocation",
+        "reference": "previous qualified FireProt operators; all outputs also compared to native grouping",
+        "cases": [
+          {
+            "batch_size": 4,
+            "pairs": [
+              {
+                "native": [
+                  0.5744879910489544,
+                  0.5782809529919177,
+                  0.5884460799861699
+                ],
+                "candidate": [
+                  0.5696428149240091,
+                  0.5702347289770842,
+                  0.5670775260077789
+                ]
+              },
+              {
+                "candidate": [
+                  0.5678727409103885,
+                  0.5701847060117871,
+                  0.5692621970083565
+                ],
+                "native": [
+                  0.5735051730880514,
+                  0.5766650949371979,
+                  0.574332604999654
+                ]
+              },
+              {
+                "native": [
+                  0.5742606600979343,
+                  0.5731568740447983,
+                  0.5739608339499682
+                ],
+                "candidate": [
+                  0.5676571349613369,
+                  0.5689136480214074,
+                  0.5689848640467972
+                ]
+              }
+            ],
+            "medians": {
+              "native": 0.574332604999654,
+              "candidate": 0.5689848640467972
+            },
+            "speedup": 1.0093987402666953,
+            "all_arrays_bitwise_equal": true,
+            "runtime": {
+              "implementation": "hip_esm_exact_v1",
+              "library": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/kernel-cache/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237.so",
+                "sha256": "7fe005660b21f806e4d15d772325243980db466be29e62ebb527884995484c61"
+              },
+              "batch_size": 4,
+              "rope_calls": 80,
+              "swiglu_calls": 80,
+              "geometry_calls": 0,
+              "gelu_calls": 0,
+              "calls": 160,
+              "registry": {
+                "implementations": {
+                  "plm_esm": [
+                    {
+                      "name": "hip_esm_exact_v1",
+                      "priority": 10,
+                      "version": "n1000-v1"
+                    }
+                  ]
+                },
+                "selection_counts": [
+                  {
+                    "operation": "plm_esm",
+                    "implementation": "hip_esm_exact_v1",
+                    "count": 160
+                  }
+                ],
+                "decisions": [
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "bfloat16",
+                      "shape": [
+                        4,
+                        1002,
+                        40,
+                        64
+                      ],
+                      "strides": [
+                        2565120,
+                        2560,
+                        64,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "rope",
+                        "model": "esmc-fold2-6b"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  },
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "bfloat16",
+                      "shape": [
+                        4,
+                        1002,
+                        2560
+                      ],
+                      "strides": [
+                        2565120,
+                        2560,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "swiglu",
+                        "model": "esmc-fold2-6b"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  }
+                ],
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/qualified-v2/target/release/lib_fireprot_bridge.so",
+                  "sha256": "564e1c24d4a48e641900dfb2ffe74006cdf1d7c8dbb3a2ed083b3e653430ea25"
+                }
+              }
+            }
+          }
+        ],
+        "baseline_library": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/kernel-cache/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e.so",
+          "sha256": "9624b8a166b7639e44fb3daa26abbe84ec8faa998f98f1beb0a7df057135b900"
+        }
+      }
+    },
+    "esm2-3b": {
+      "profile": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esm2-3b-profile/report.json",
+        "sha256": "1c72136d538a24149afc27138f1203373335cb52e984d030897c663be3951d7c"
+      },
+      "profile_aten_rows": [
+        {
+          "batch": 1,
+          "rows": [
+            {
+              "key": "aten::addmm",
+              "count": 145,
+              "self_device_us": 61046.39899999996,
+              "self_cpu_us": 6366.8329999998605,
+              "shapes": [
+                [
+                  2560
+                ],
+                [
+                  1002,
+                  2560
+                ],
+                [
+                  2560,
+                  2560
+                ],
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::addmm",
+              "count": 36,
+              "self_device_us": 56616.26800000002,
+              "self_cpu_us": 1621.5680000000043,
+              "shapes": [
+                [
+                  2560
+                ],
+                [
+                  1002,
+                  10240
+                ],
+                [
+                  10240,
+                  2560
+                ],
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::addmm",
+              "count": 36,
+              "self_device_us": 56162.50899999996,
+              "self_cpu_us": 1679.4869999999637,
+              "shapes": [
+                [
+                  10240
+                ],
+                [
+                  1002,
+                  2560
+                ],
+                [
+                  2560,
+                  10240
+                ],
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::bmm",
+              "count": 36,
+              "self_device_us": 14136.766000000012,
+              "self_cpu_us": 1758.235999999933,
+              "shapes": [
+                [
+                  40,
+                  1002,
+                  64
+                ],
+                [
+                  40,
+                  64,
+                  1002
+                ]
+              ]
+            },
+            {
+              "key": "aten::_softmax",
+              "count": 36,
+              "self_device_us": 10876.182999999985,
+              "self_cpu_us": 399.4659999999967,
+              "shapes": [
+                [
+                  40,
+                  1002,
+                  1002
+                ],
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::bmm",
+              "count": 36,
+              "self_device_us": 8971.603000000008,
+              "self_cpu_us": 1480.8149999999855,
+              "shapes": [
+                [
+                  40,
+                  1002,
+                  1002
+                ],
+                [
+                  40,
+                  1002,
+                  64
+                ]
+              ]
+            },
+            {
+              "key": "aten::mean",
+              "count": 36,
+              "self_device_us": 5613.927000000011,
+              "self_cpu_us": 710.5289999999927,
+              "shapes": [
+                [
+                  40,
+                  1,
+                  1002,
+                  1002
+                ],
+                [],
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::mul",
+              "count": 36,
+              "self_device_us": 3622.971999999976,
+              "self_cpu_us": 268.661000000021,
+              "shapes": [
+                [
+                  1002,
+                  1,
+                  10240
+                ],
+                [
+                  1002,
+                  1,
+                  10240
+                ]
+              ]
+            },
+            {
+              "key": "aten::mul",
+              "count": 144,
+              "self_device_us": 3417.8169999998736,
+              "self_cpu_us": 1453.3259999999977,
+              "shapes": [
+                [
+                  40,
+                  1002,
+                  64
+                ],
+                [
+                  1,
+                  1002,
+                  64
+                ]
+              ]
+            },
+            {
+              "key": "aten::cat",
+              "count": 72,
+              "self_device_us": 2451.8440000001583,
+              "self_cpu_us": 728.3769999999627,
+              "shapes": [
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::erf",
+              "count": 36,
+              "self_device_us": 2373.986999999941,
+              "self_cpu_us": 273.24399999997695,
+              "shapes": [
+                [
+                  1002,
+                  1,
+                  10240
+                ]
+              ]
+            },
+            {
+              "key": "aten::native_layer_norm",
+              "count": 73,
+              "self_device_us": 2357.4719999998356,
+              "self_cpu_us": 977.6019999999116,
+              "shapes": [
+                [
+                  1002,
+                  1,
+                  2560
+                ],
+                [],
+                [
+                  2560
+                ],
+                [
+                  2560
+                ],
+                []
+              ]
+            }
+          ]
+        },
+        {
+          "batch": 4,
+          "rows": [
+            {
+              "key": "aten::addmm",
+              "count": 144,
+              "self_device_us": 217448.65699999992,
+              "self_cpu_us": 7024.951000000142,
+              "shapes": [
+                [
+                  2560
+                ],
+                [
+                  4008,
+                  2560
+                ],
+                [
+                  2560,
+                  2560
+                ],
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::addmm",
+              "count": 36,
+              "self_device_us": 213244.36499999993,
+              "self_cpu_us": 1835.3699999999626,
+              "shapes": [
+                [
+                  2560
+                ],
+                [
+                  4008,
+                  10240
+                ],
+                [
+                  10240,
+                  2560
+                ],
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::addmm",
+              "count": 36,
+              "self_device_us": 211659.33999999997,
+              "self_cpu_us": 1904.183000000044,
+              "shapes": [
+                [
+                  10240
+                ],
+                [
+                  4008,
+                  2560
+                ],
+                [
+                  2560,
+                  10240
+                ],
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::bmm",
+              "count": 36,
+              "self_device_us": 55146.88300000021,
+              "self_cpu_us": 1942.6690000000176,
+              "shapes": [
+                [
+                  160,
+                  1002,
+                  64
+                ],
+                [
+                  160,
+                  64,
+                  1002
+                ]
+              ]
+            },
+            {
+              "key": "aten::_softmax",
+              "count": 36,
+              "self_device_us": 40523.371000000145,
+              "self_cpu_us": 427.25100000002703,
+              "shapes": [
+                [
+                  160,
+                  1002,
+                  1002
+                ],
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::bmm",
+              "count": 36,
+              "self_device_us": 33457.29399999991,
+              "self_cpu_us": 1669.86800000004,
+              "shapes": [
+                [
+                  160,
+                  1002,
+                  1002
+                ],
+                [
+                  160,
+                  1002,
+                  64
+                ]
+              ]
+            },
+            {
+              "key": "aten::mean",
+              "count": 36,
+              "self_device_us": 20968.37499999978,
+              "self_cpu_us": 742.735999999999,
+              "shapes": [
+                [
+                  40,
+                  4,
+                  1002,
+                  1002
+                ],
+                [],
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::mul",
+              "count": 36,
+              "self_device_us": 14079.183999999772,
+              "self_cpu_us": 293.7650000000085,
+              "shapes": [
+                [
+                  1002,
+                  4,
+                  10240
+                ],
+                [
+                  1002,
+                  4,
+                  10240
+                ]
+              ]
+            },
+            {
+              "key": "aten::mul",
+              "count": 144,
+              "self_device_us": 9982.004999999446,
+              "self_cpu_us": 1655.1560000000104,
+              "shapes": [
+                [
+                  160,
+                  1002,
+                  64
+                ],
+                [
+                  1,
+                  1002,
+                  64
+                ]
+              ]
+            },
+            {
+              "key": "aten::erf",
+              "count": 36,
+              "self_device_us": 8774.864999999969,
+              "self_cpu_us": 295.1819999999916,
+              "shapes": [
+                [
+                  1002,
+                  4,
+                  10240
+                ]
+              ]
+            },
+            {
+              "key": "aten::add",
+              "count": 36,
+              "self_device_us": 8595.897000000063,
+              "self_cpu_us": 346.86700000000474,
+              "shapes": [
+                [
+                  1002,
+                  4,
+                  10240
+                ],
+                [],
+                []
+              ]
+            },
+            {
+              "key": "aten::div",
+              "count": 36,
+              "self_device_us": 8549.029999999668,
+              "self_cpu_us": 361.1569999999674,
+              "shapes": [
+                [
+                  1002,
+                  4,
+                  10240
+                ],
+                []
+              ]
+            }
+          ]
+        }
+      ],
+      "warm_artifact": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esm2-3b-packaged/report.json",
+        "sha256": "c402f9873b4f4b8c197a19a91dbb84d16f56623fc439fcce217d21f810247618"
+      },
+      "warm": {
+        "model": "esm2-3b",
+        "hip_device": 6,
+        "seed": 101,
+        "precision": "native",
+        "boundary": "warm packaged forward including context entry/exit; not complete invocation",
+        "reference": "native identical batch grouping; maintained ESM scope",
+        "cases": [
+          {
+            "batch_size": 1,
+            "pairs": [
+              {
+                "native": [
+                  0.24321390700060874,
+                  0.24317296093795449,
+                  0.24283551902044564
+                ],
+                "candidate": [
+                  0.22853968606796116,
+                  0.2282122609904036,
+                  0.22858819994144142
+                ]
+              },
+              {
+                "candidate": [
+                  0.22809767094440758,
+                  0.22819079796317965,
+                  0.22793998499400914
+                ],
+                "native": [
+                  0.2428258820436895,
+                  0.24752308998722583,
+                  0.24263647792395204
+                ]
+              },
+              {
+                "native": [
+                  0.24270525306928903,
+                  0.2428723949706182,
+                  0.242902175989002
+                ],
+                "candidate": [
+                  0.22803205298259854,
+                  0.2278405900578946,
+                  0.22797730204183608
+                ]
+              }
+            ],
+            "medians": {
+              "native": 0.2428723949706182,
+              "candidate": 0.22809767094440758
+            },
+            "speedup": 1.0647736733349265,
+            "all_arrays_bitwise_equal": true,
+            "runtime": {
+              "implementation": "hip_esm_exact_v1",
+              "library": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/kernel-cache/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237.so",
+                "sha256": "7fe005660b21f806e4d15d772325243980db466be29e62ebb527884995484c61"
+              },
+              "batch_size": 1,
+              "rope_calls": 0,
+              "swiglu_calls": 0,
+              "geometry_calls": 0,
+              "gelu_calls": 37,
+              "calls": 37,
+              "registry": {
+                "implementations": {
+                  "plm_esm": [
+                    {
+                      "name": "hip_esm_exact_v1",
+                      "priority": 10,
+                      "version": "n1000-v1"
+                    }
+                  ]
+                },
+                "selection_counts": [
+                  {
+                    "operation": "plm_esm",
+                    "implementation": "hip_esm_exact_v1",
+                    "count": 37
+                  }
+                ],
+                "decisions": [
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "float32",
+                      "shape": [
+                        1,
+                        1002,
+                        2560
+                      ],
+                      "strides": [
+                        2565120,
+                        2560,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "gelu",
+                        "model": "esm2-3b"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  },
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "float32",
+                      "shape": [
+                        1002,
+                        1,
+                        10240
+                      ],
+                      "strides": [
+                        10240,
+                        10240,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "gelu",
+                        "model": "esm2-3b"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  }
+                ],
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/qualified-v1/target/release/lib_fireprot_bridge.so",
+                  "sha256": "564e1c24d4a48e641900dfb2ffe74006cdf1d7c8dbb3a2ed083b3e653430ea25"
+                }
+              }
+            }
+          },
+          {
+            "batch_size": 2,
+            "pairs": [
+              {
+                "native": [
+                  0.4579486419679597,
+                  0.4583231109427288,
+                  0.45789237099234015
+                ],
+                "candidate": [
+                  0.429193454911001,
+                  0.429266448947601,
+                  0.42902212508488446
+                ]
+              },
+              {
+                "candidate": [
+                  0.42899358400609344,
+                  0.4289751909673214,
+                  0.42901637603063136
+                ],
+                "native": [
+                  0.45801067899446934,
+                  0.4580724280094728,
+                  0.4579712429549545
+                ]
+              },
+              {
+                "native": [
+                  0.4581354559632018,
+                  0.457985098939389,
+                  0.45794542296789587
+                ],
+                "candidate": [
+                  0.42894754000008106,
+                  0.43217042996548116,
+                  0.4293840980390087
+                ]
+              }
+            ],
+            "medians": {
+              "native": 0.457985098939389,
+              "candidate": 0.42902212508488446
+            },
+            "speedup": 1.0675092778694666,
+            "all_arrays_bitwise_equal": true,
+            "runtime": {
+              "implementation": "hip_esm_exact_v1",
+              "library": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/kernel-cache/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237.so",
+                "sha256": "7fe005660b21f806e4d15d772325243980db466be29e62ebb527884995484c61"
+              },
+              "batch_size": 2,
+              "rope_calls": 0,
+              "swiglu_calls": 0,
+              "geometry_calls": 0,
+              "gelu_calls": 37,
+              "calls": 37,
+              "registry": {
+                "implementations": {
+                  "plm_esm": [
+                    {
+                      "name": "hip_esm_exact_v1",
+                      "priority": 10,
+                      "version": "n1000-v1"
+                    }
+                  ]
+                },
+                "selection_counts": [
+                  {
+                    "operation": "plm_esm",
+                    "implementation": "hip_esm_exact_v1",
+                    "count": 37
+                  }
+                ],
+                "decisions": [
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "float32",
+                      "shape": [
+                        2,
+                        1002,
+                        2560
+                      ],
+                      "strides": [
+                        2565120,
+                        2560,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "gelu",
+                        "model": "esm2-3b"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  },
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "float32",
+                      "shape": [
+                        1002,
+                        2,
+                        10240
+                      ],
+                      "strides": [
+                        20480,
+                        10240,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "gelu",
+                        "model": "esm2-3b"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  }
+                ],
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/qualified-v1/target/release/lib_fireprot_bridge.so",
+                  "sha256": "564e1c24d4a48e641900dfb2ffe74006cdf1d7c8dbb3a2ed083b3e653430ea25"
+                }
+              }
+            }
+          },
+          {
+            "batch_size": 4,
+            "pairs": [
+              {
+                "native": [
+                  0.8956515990430489,
+                  0.894909476977773,
+                  0.8951638289727271
+                ],
+                "candidate": [
+                  0.8389932990539819,
+                  0.8377333970274776,
+                  0.8425962770124897
+                ]
+              },
+              {
+                "candidate": [
+                  0.8389995869947597,
+                  0.8377306979382411,
+                  0.8379031479125842
+                ],
+                "native": [
+                  0.8952867760090157,
+                  0.8951494339853525,
+                  0.8950063829543069
+                ]
+              },
+              {
+                "native": [
+                  0.8947707649786025,
+                  0.9004651859868318,
+                  0.895089024095796
+                ],
+                "candidate": [
+                  0.8381297989981249,
+                  0.837711165077053,
+                  0.8380642720730975
+                ]
+              }
+            ],
+            "medians": {
+              "native": 0.8951494339853525,
+              "candidate": 0.8380642720730975
+            },
+            "speedup": 1.0681154940193847,
+            "all_arrays_bitwise_equal": true,
+            "runtime": {
+              "implementation": "hip_esm_exact_v1",
+              "library": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/kernel-cache/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237.so",
+                "sha256": "7fe005660b21f806e4d15d772325243980db466be29e62ebb527884995484c61"
+              },
+              "batch_size": 4,
+              "rope_calls": 0,
+              "swiglu_calls": 0,
+              "geometry_calls": 0,
+              "gelu_calls": 37,
+              "calls": 37,
+              "registry": {
+                "implementations": {
+                  "plm_esm": [
+                    {
+                      "name": "hip_esm_exact_v1",
+                      "priority": 10,
+                      "version": "n1000-v1"
+                    }
+                  ]
+                },
+                "selection_counts": [
+                  {
+                    "operation": "plm_esm",
+                    "implementation": "hip_esm_exact_v1",
+                    "count": 37
+                  }
+                ],
+                "decisions": [
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "float32",
+                      "shape": [
+                        4,
+                        1002,
+                        2560
+                      ],
+                      "strides": [
+                        2565120,
+                        2560,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "gelu",
+                        "model": "esm2-3b"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  },
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "float32",
+                      "shape": [
+                        1002,
+                        4,
+                        10240
+                      ],
+                      "strides": [
+                        40960,
+                        10240,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "gelu",
+                        "model": "esm2-3b"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  }
+                ],
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/qualified-v1/target/release/lib_fireprot_bridge.so",
+                  "sha256": "564e1c24d4a48e641900dfb2ffe74006cdf1d7c8dbb3a2ed083b3e653430ea25"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "blas_artifact": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esm2-3b-blas/report.json",
+        "sha256": "704d12a00c3de3c60ced450e2069feb426603c2641c1dfdfdf74719178b1d4b3"
+      },
+      "blas": {
+        "model": "esm2-3b",
+        "hip_device": 6,
+        "batch": 4,
+        "length": 1000,
+        "precision": "native",
+        "cases": [
+          {
+            "choice": "cublas",
+            "exact": {
+              "tokens": true,
+              "embeddings": false,
+              "logits": false
+            },
+            "max_abs": {
+              "tokens": 0.0,
+              "embeddings": 2.384185791015625e-05,
+              "logits": 7.62939453125e-05
+            }
+          },
+          {
+            "choice": "cublaslt",
+            "exact": {
+              "tokens": true,
+              "embeddings": true,
+              "logits": true
+            },
+            "max_abs": {
+              "tokens": 0.0,
+              "embeddings": 0.0,
+              "logits": 0.0
+            },
+            "pairs": [
+              {
+                "baseline": [
+                  0.8959276230307296,
+                  0.8958424719749019,
+                  0.8960339559707791
+                ],
+                "candidate": [
+                  0.8958990229293704,
+                  0.8956613159971312,
+                  0.8955037100240588
+                ]
+              },
+              {
+                "candidate": [
+                  0.8956453009741381,
+                  0.8955272920429707,
+                  0.8954751610290259
+                ],
+                "baseline": [
+                  0.8956638548988849,
+                  0.8953384980559349,
+                  0.8956023259088397
+                ]
+              },
+              {
+                "baseline": [
+                  0.8953944690292701,
+                  0.8977484300266951,
+                  0.8957310719415545
+                ],
+                "candidate": [
+                  0.8954149320488796,
+                  0.8954446410061792,
+                  0.8987331880489364
+                ]
+              }
+            ],
+            "medians": {
+              "baseline": 0.8957310719415545,
+              "candidate": 0.8955272920429707
+            },
+            "speedup": 1.0002275529739793
+          }
+        ],
+        "original": "_BlasBackend.Cublaslt"
+      },
+      "increment_artifact": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esm2-3b-increment/report.json",
+        "sha256": "185e55a909b7eb0a5862a83e44e133b9acc0a6f95f260db8daa0783d187894a5"
+      },
+      "increment": {
+        "model": "esm2-3b",
+        "hip_device": 6,
+        "seed": 101,
+        "precision": "native",
+        "boundary": "warm packaged forward including context entry/exit; not complete invocation",
+        "reference": "previous qualified FireProt operators; all outputs also compared to native grouping",
+        "cases": [
+          {
+            "batch_size": 4,
+            "pairs": [
+              {
+                "native": [
+                  0.8762167129898444,
+                  0.8797630009939894,
+                  0.8762395050143823
+                ],
+                "candidate": [
+                  0.8392056350130588,
+                  0.8389839630108327,
+                  0.8393794849980623
+                ]
+              },
+              {
+                "candidate": [
+                  0.8388836869271472,
+                  0.8391493040835485,
+                  0.8389488949906081
+                ],
+                "native": [
+                  0.8760158329969272,
+                  0.8757695680251345,
+                  0.8760002380004153
+                ]
+              },
+              {
+                "native": [
+                  0.87556922796648,
+                  0.8758453620830551,
+                  0.8756932649994269
+                ],
+                "candidate": [
+                  0.8389494239818305,
+                  0.838772464892827,
+                  0.8425376669038087
+                ]
+              }
+            ],
+            "medians": {
+              "native": 0.8760002380004153,
+              "candidate": 0.8389839630108327
+            },
+            "speedup": 1.0441203606046814,
+            "all_arrays_bitwise_equal": true,
+            "runtime": {
+              "implementation": "hip_esm_exact_v1",
+              "library": {
+                "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/kernel-cache/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237.so",
+                "sha256": "7fe005660b21f806e4d15d772325243980db466be29e62ebb527884995484c61"
+              },
+              "batch_size": 4,
+              "rope_calls": 0,
+              "swiglu_calls": 0,
+              "geometry_calls": 0,
+              "gelu_calls": 37,
+              "calls": 37,
+              "registry": {
+                "implementations": {
+                  "plm_esm": [
+                    {
+                      "name": "hip_esm_exact_v1",
+                      "priority": 10,
+                      "version": "n1000-v1"
+                    }
+                  ]
+                },
+                "selection_counts": [
+                  {
+                    "operation": "plm_esm",
+                    "implementation": "hip_esm_exact_v1",
+                    "count": 37
+                  }
+                ],
+                "decisions": [
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "float32",
+                      "shape": [
+                        4,
+                        1002,
+                        2560
+                      ],
+                      "strides": [
+                        2565120,
+                        2560,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "gelu",
+                        "model": "esm2-3b"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  },
+                  {
+                    "signature": {
+                      "operation": "plm_esm",
+                      "device_type": "cuda",
+                      "architecture": "gfx90a",
+                      "dtype": "float32",
+                      "shape": [
+                        1002,
+                        4,
+                        10240
+                      ],
+                      "strides": [
+                        40960,
+                        10240,
+                        1
+                      ],
+                      "layout": "contiguous",
+                      "mode": "inference",
+                      "mask": "native",
+                      "inplace": false,
+                      "attributes": {
+                        "eligible": "True",
+                        "kind": "gelu",
+                        "model": "esm2-3b"
+                      }
+                    },
+                    "selected": "hip_esm_exact_v1",
+                    "rejected": []
+                  }
+                ],
+                "policy_engine": {
+                  "name": "fireprot-core",
+                  "bridge_abi": 1,
+                  "library": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/qualified-v2/target/release/lib_fireprot_bridge.so",
+                  "sha256": "564e1c24d4a48e641900dfb2ffe74006cdf1d7c8dbb3a2ed083b3e653430ea25"
+                }
+              }
+            }
+          }
+        ],
+        "baseline_library": {
+          "path": "/media/IntelSSD/fireprot/outputs/experiments/plm-batch-20261016/kernel-cache/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e/fireprot_plm_batch_b9e14386116c4d02bca5f56c3cba8a5b511dfa6313427c2dc8d4f9aaa446229e.so",
+          "sha256": "9624b8a166b7639e44fb3daa26abbe84ec8faa998f98f1beb0a7df057135b900"
+        }
+      }
+    }
+  },
+  "loaders": {
+    "esm2-cpu_float": {
+      "artifact": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esm2-transfer-cpu_float/report.json",
+        "sha256": "9b2d4ee5c53faec390ef81e7cf9a4b8c30a6dd667cd6b3881dbac0201517ca45"
+      },
+      "result": {
+        "mode": "cpu_float",
+        "load_seconds": 7.4079727249918506,
+        "load_peak_bytes": 11508431872,
+        "exact": {
+          "tokens": true,
+          "embeddings": true,
+          "logits": true
+        },
+        "boundary": "loader diagnostic only; import/CUDA initialization excluded; no E2E claim"
+      }
+    },
+    "esm2-gpu_float": {
+      "artifact": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esm2-transfer-gpu_float/report.json",
+        "sha256": "85928a7a665d7110927ba95cf154e11216a84a8becf48b097b0386b91aa1feef"
+      },
+      "result": {
+        "mode": "gpu_float",
+        "load_seconds": 5.342619247036055,
+        "load_peak_bytes": 11399686144,
+        "exact": {
+          "tokens": true,
+          "embeddings": true,
+          "logits": true
+        },
+        "boundary": "loader diagnostic only; import/CUDA initialization excluded; no E2E claim"
+      }
+    },
+    "esm2-combined": {
+      "artifact": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esm2-transfer-combined/report.json",
+        "sha256": "00c0ffacda2b4a6de02c044f499f49e2f477d7b819742dda1eca7dc69feaf3f1"
+      },
+      "result": {
+        "mode": "combined",
+        "load_seconds": 6.7810963509837165,
+        "load_peak_bytes": 11508431872,
+        "exact": {
+          "tokens": true,
+          "embeddings": true,
+          "logits": true
+        },
+        "boundary": "loader diagnostic only; import/CUDA initialization excluded; no E2E claim"
+      }
+    },
+    "esmc-cpu_layout": {
+      "artifact": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esmc-transfer-cpu_layout/report.json",
+        "sha256": "93c60cca15a4ab1a670503cdd505e9c2a3bf71f4c1a65000d0ab27b18c8b0d33"
+      },
+      "result": {
+        "mode": "cpu_layout",
+        "load_seconds": 10.966520933085121,
+        "load_peak_bytes": 12795466752,
+        "exact": {
+          "tokens": true,
+          "embeddings": true
+        },
+        "boundary": "loader diagnostic only; import/CUDA initialization excluded; no E2E claim"
+      }
+    },
+    "esmc-gpu_layout": {
+      "artifact": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esmc-transfer-gpu_layout/report.json",
+        "sha256": "4048bbede4b7aca38d81ece2569d23e48ca59e6745dd48533df54c1d5c528f04"
+      },
+      "result": {
+        "mode": "gpu_layout",
+        "load_seconds": 6.042997648008168,
+        "load_peak_bytes": 43626342400,
+        "exact": {
+          "tokens": true,
+          "embeddings": true
+        },
+        "boundary": "loader diagnostic only; import/CUDA initialization excluded; no E2E claim"
+      }
+    },
+    "esmc-gpu_bf16_layout": {
+      "artifact": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esmc-transfer-gpu_bf16_layout/report.json",
+        "sha256": "e842dfd0a9a9b5f783e4f308a06379f2c28fd82cbe51c9e83aee8a8000b335a3"
+      },
+      "result": {
+        "mode": "gpu_bf16_layout",
+        "load_seconds": 5.487467468017712,
+        "load_peak_bytes": 21639894016,
+        "exact": {
+          "tokens": true,
+          "embeddings": true
+        },
+        "boundary": "loader diagnostic only; import/CUDA initialization excluded; no E2E claim"
+      }
+    },
+    "esmc-streamed_gpu_bf16": {
+      "artifact": {
+        "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esmc-transfer-streamed_gpu_bf16/report.json",
+        "sha256": "c391e4b851860cf6fd6748f5e83d692a6520fbedd05320c72a59881938156803"
+      },
+      "result": {
+        "mode": "streamed_gpu_bf16",
+        "load_seconds": 5.450271354988217,
+        "load_peak_bytes": 12890051584,
+        "exact": {
+          "tokens": true,
+          "embeddings": true
+        },
+        "boundary": "loader diagnostic only; import/CUDA initialization excluded; no E2E claim"
+      }
+    }
+  },
+  "build": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/trials-v2/build-receipt.json",
+    "sha256": "af7e62e5392db987b948ce80e06a2161a973b3bb685d3d4f7759340f66053fa2"
+  },
+  "library": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/kernel-cache/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237/fireprot_esm_aa1b8acaf6c21a0efde4c7d0deb2eaf845a4871098440078fea66a5cfe724237.so",
+    "sha256": "7fe005660b21f806e4d15d772325243980db466be29e62ebb527884995484c61"
+  },
+  "deployment": {
+    "target/release/fireprot": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/qualified-v2/target/release/fireprot",
+      "sha256": "d189deb19f50e440437225e079a00dab215275301cac6a243d5175c4c95062f9"
+    },
+    "target/release/lib_fireprot_bridge.so": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/qualified-v2/target/release/lib_fireprot_bridge.so",
+      "sha256": "564e1c24d4a48e641900dfb2ffe74006cdf1d7c8dbb3a2ed083b3e653430ea25"
+    },
+    "python/fireprot/adapters/plm/esm.py": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/qualified-v2/python/fireprot/adapters/plm/esm.py",
+      "sha256": "b2a7650f5e44979837e5d25f0f54d766e0f3f1b83ccb546c97cf4fbea97e63c2"
+    },
+    "python/fireprot/adapters/plm/runtime.py": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/qualified-v2/python/fireprot/adapters/plm/runtime.py",
+      "sha256": "5ccb74c3766242733f40db3d6b115aa7635dd20d0b715a2573cb2d18fc92c85a"
+    },
+    "python/fireprot_workers/plm.py": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/qualified-v2/python/fireprot_workers/plm.py",
+      "sha256": "6b000089f8c192869daf0349016506285137d0087b72ab8df19c3939ce9d89d3"
+    },
+    "python/fireprot_workers/plm_loading.py": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/qualified-v2/python/fireprot_workers/plm_loading.py",
+      "sha256": "773a2c67b476280fdf9beab50b5db2cc24a137c82644b9489ff5a327dff2721a"
+    },
+    "kernels/amd/fireprot_esm.hip": {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/qualified-v2/kernels/amd/fireprot_esm.hip",
+      "sha256": "9ee873eaa59f6cec9b29d920b87d30a1e4ab83259bda78f6095f3eab4d81fdaf"
+    }
+  },
+  "scripts": [
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/collect_esm_diagnostics.py",
+      "sha256": "97f8c2dee9089081623166ba9f7043282942706f361bd99e2525ea2044b533f7"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/collect_esm_pairs.py",
+      "sha256": "52c17cf418b682dae30ca688a2493623b01c4a1b050b2aee0eb0dee5dde06d4f"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esm2_transfer_screen.py",
+      "sha256": "877986683939929e4f58afccc9a85e70d2adef01ace0f59463c48982b33c2072"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esm_stream_loading.py",
+      "sha256": "773a2c67b476280fdf9beab50b5db2cc24a137c82644b9489ff5a327dff2721a"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esm_trials.py",
+      "sha256": "4d2f5729c15b17f2a9ec070343bbd8a48a0ca046ba4e8e2e3732899e67bc1ad0"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esmc_bf16_layout_screen.py",
+      "sha256": "30dfc6eb806ac56e4df536b7a0852b7efc828af6c48469bcb30f50fcbfe692c4"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esmc_streamed_load_screen.py",
+      "sha256": "9b47bf3cd4fd3b1a9f88c1cafa9586b5d86828fa45f3538e635e711d7e17f6e9"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/esmc_transfer_screen.py",
+      "sha256": "533ed54d60fe51830e9daf66557bf13ebe1d510ec85acefb20f5ee6b332a2036"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/prepare_esm_pairs.py",
+      "sha256": "c653a6175a730a53f7f180c50663e4933d2df59112dced25640a494e21033a9d"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/profile_esm.py",
+      "sha256": "fa899f7d603b52f89aae97a8c338ddc96097741d10c6c7464a9ee3f3123603bc"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/run_esm_profiles.py",
+      "sha256": "3b1ebb12f311db77d2c1f5c7872858edad98f5fa61210054d2b0dab3fa209aec"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/run_esm_qualification.py",
+      "sha256": "aa0b84afe76969f1f1a3516283a4839cfbf4b2f9972f102e5d841bf051009ea0"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/screen_esm_blas.py",
+      "sha256": "67a1d3940d439d5e2ff667de15c927d319982b21a978a30458916ce012900f4c"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/screen_esm_increment.py",
+      "sha256": "c5f82e2a60116838d0e9386c01b7c11879e5c06f6caf533f9365bf76c82384d0"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/screen_esm_packaged.py",
+      "sha256": "92bdae0baa95ae99d41246b6ef111a710d20a58b06ffb0190bb2371a5d84ad51"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/screen_esm_trials.py",
+      "sha256": "bde2fd59cdab2713243f3c62d123124186d76d997b27e946447a78d608f797de"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/trials-v2/esm_trials.py",
+      "sha256": "d99e07fede002050bb8df70238c86b1b6f4c656887bb4fc1f31d63ca51355fa6"
+    },
+    {
+      "path": "/media/IntelSSD/fireprot/outputs/experiments/esm-speed-20261016/trials-v2/screen_esm_trials.py",
+      "sha256": "bde2fd59cdab2713243f3c62d123124186d76d997b27e946447a78d608f797de"
+    }
+  ]
+}

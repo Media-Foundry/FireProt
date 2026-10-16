@@ -69,7 +69,12 @@ def load_model(request, sequence):
             model, alphabet = load_model_and_alphabet_core('esm2_t36_3B_UR50D', data, regress)
         # Published ESM2 stores FP16 weights; its native constructor loads them
         # into FP32 parameters. Preserve that promotion after meta assignment.
-        model = model.float().eval().cuda()
+        if request['backend'] == 'fireprot' and 'hip_esm' in request.get('resources', {}):
+            # The checkpoint is FP16. Transfer it before the exact FP32 promotion
+            # to halve H2D weight traffic while keeping native FP32 inference.
+            model = model.cuda().float().eval()
+        else:
+            model = model.float().eval().cuda()
         if model.num_layers != 36 or model.embed_dim != 2560:
             raise ValueError('Expected ESM2 3B architecture')
         _, _, tokens = alphabet.get_batch_converter()([('query', sequence)])
@@ -88,7 +93,7 @@ def load_model(request, sequence):
             from esm.models.esmc.checkpoint_layout import published_to_native
             from esm.models.esmc.tokenizer import EsmcTokenizer
             from .esmfold2 import model_directory
-            asset_request = dict(request, resources={k:v for k,v in request['resources'].items() if k not in ('hip_rope', 'hip_batch')})
+            asset_request = dict(request, resources={k:v for k,v in request['resources'].items() if k not in ('hip_rope', 'hip_batch', 'hip_esm')})
             root = model_directory(asset_request)
             cfg = EsmcConfig.from_dict(json.loads((root / 'config.json').read_text())['esmc_config'])
             if (cfg.hidden_size, cfg.num_hidden_layers, cfg.num_attention_heads) != (2560, 80, 40):
@@ -97,14 +102,18 @@ def load_model(request, sequence):
             with torch.device('meta'):
                 model = EsmcModel(cfg)
             mapping = json.loads(checkpoint.read_text())['weight_map']
-            raw = {}
-            for shard in sorted({v for k, v in mapping.items() if k.startswith('esmc.')}):
-                with safe_open(root / shard, framework='pt', device='cpu') as handle:
-                    for key in handle.keys():
-                        if key.startswith('esmc.'):
-                            raw[key[5:]] = handle.get_tensor(key)
-            model.load_state_dict(published_to_native(raw), strict=True, assign=True)
-            del raw
+            if request['backend'] == 'fireprot' and 'hip_esm' in request.get('resources', {}):
+                from .plm_loading import streamed_esmc_state
+                model.load_state_dict(streamed_esmc_state(root, mapping, published_to_native), strict=True, assign=True)
+            else:
+                raw = {}
+                for shard in sorted({v for k, v in mapping.items() if k.startswith('esmc.')}):
+                    with safe_open(root / shard, framework='pt', device='cpu') as handle:
+                        for key in handle.keys():
+                            if key.startswith('esmc.'):
+                                raw[key[5:]] = handle.get_tensor(key)
+                model.load_state_dict(published_to_native(raw), strict=True, assign=True)
+                del raw
             model = model.to(device='cuda', dtype=torch.bfloat16).eval()
             tokens = EsmcTokenizer()(sequence, return_tensors='pt')['input_ids'].cuda()
             def forward():

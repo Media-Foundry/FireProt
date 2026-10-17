@@ -455,12 +455,22 @@ runner and CLI imports pass. The prepared native request/profile are
 `configs/precision/openfold3-native.json`; request inspection is CPU-only and
 does not establish that inference works.
 
-The 2,287,872,989-byte OpenBind-0 checkpoint is still absent. Its expected SHA-256
-is `bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4`.
-The existing whole-asset transfer remains held behind a failed
-`atlaslm-b4-refresh` finalization gate on DiamondHill. That gate and its waiting
-sender have not been changed. Full trained-model qualification on Precision
-therefore remains pending.
+The 2,287,872,989-byte OpenBind-0 checkpoint is now installed at
+`runtime/weights/openbind0/of3-ob-2025-06-30-174k.pt`, with independently verified
+source and destination SHA-256
+`bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4`.
+The original migration verified other assets, but its replacement sender waited
+for a release that never arrived after `atlaslm-b4-refresh` finalization failed.
+There was no OpenFold3 checkpoint or partial file on Precision at inspection.
+The user subsequently authorized this single checkpoint transfer; rsync completed
+and the staging file was hash-verified before exclusive installation.
+
+The general transfer gate and waiting sender remain unchanged. Twenty-two other
+manifest files are still pending by existence/size checks, so this does not claim
+completion of the 49-file migration. Full trained-model qualification remains
+pending, but is no longer blocked on the OpenBind-0 checkpoint. See
+[`precision_openfold3_checkpoint_20261017.json`](../provenance/precision_openfold3_checkpoint_20261017.json)
+for the transfer diagnosis and verification receipts.
 
 The first operator experiment ports the FP32 mask/bias/softmax fusion to
 Torch's **wave32** reduction order on gfx1100. The gfx90a wave64 implementation

@@ -257,11 +257,14 @@ events on warmed operators, include deterministic allocation filling, and use
 four alternating samples per arm, each averaging three calls. Clocks and thermal
 state are not fixed. Bias packing remains inside the candidate timing.
 
-No full OpenFold3 model has been qualified on Precision. Its pinned OpenBind-0
-checkpoint is absent; the existing asset sender is waiting on the unrelated
-failed AtlasLM finalization gate. A separate venv now imports the model, runner
-and CLI; the native request passes schema inspection and its profile is prepared. Next gates are
-verified checkpoint placement, a same-host native reference, explicit observed
+No full OpenFold3 model has been qualified on Precision. The pinned OpenBind-0
+checkpoint has now been transferred under separate user authorization and its
+complete source/destination hashes verified; see
+`provenance/precision_openfold3_checkpoint_20261017.json`. The general asset
+sender still waits on the unrelated failed AtlasLM finalization gate.
+A separate venv imports the model, runner and CLI; the native request passes
+schema inspection and its profile is prepared. Next gates are a same-host native
+reference, explicit observed
 shape coverage, all 11 arrays and complete CIF equality, followed by controlled
 fresh-process E2E pairs. Do not replace these gates with the synthetic results.
 See `provenance/precision_openfold3_softmax_gfx1100_20261017.json` for hashes,

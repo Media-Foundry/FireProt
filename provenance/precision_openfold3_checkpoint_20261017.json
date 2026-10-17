@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "status": "openfold3_checkpoint_source_and_destination_sha256_verified",
+  "scope": "Explicitly authorized single OpenFold3 checkpoint transfer; not completion of the 49-file migration",
+  "source_host": "DiamondHill",
+  "source_path": "/media/PM982/engramfold/folding_e2e_20260921/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+  "destination_host": "Precision",
+  "destination_path": "/media/990Pro/fireprot/runtime/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+  "bytes": 2287872989,
+  "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4",
+  "source_hash_checked_before_transfer": true,
+  "staged_file_hash_checked_before_installation": true,
+  "installed_file_hash_checked": true,
+  "independent_sha256sum_of_final_file_passed": true,
+  "transfer_helper_sha256": "de3df291c4e30bb6805ce10c3c9213c1b2ac79537559912c02aeb17f23f9b8d3",
+  "installation": "Exclusive hard-link installation from the verified staging file; final file was not overwritten; staging link removed after final verification",
+  "transfer": "rsync -a --partial-dir=.rsync-partial --timeout=90 --info=progress2 --outbuf=L --protect-args over SSH with keepalive; detached tmux job",
+  "resumed_attempt": {
+    "initial_compressed_attempt_stalled_at_bytes": 1657274368,
+    "seconds_without_progress_before_interruption": 147,
+    "initial_attempt_exit_code": 20,
+    "action": "Sent SIGINT only to the verified owned rsync PID; retained the partial file and resumed without compression with bounded I/O timeout and SSH keepalive",
+    "initial_attempt_receipt": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-priority-transfer-20261017-v1/attempt-1-status.json"
+  },
+  "rsync_exit_code": 0,
+  "source_receipt": {
+    "path": "/media/IntelSSD/fireprot/outputs/experiments/openfold3-priority-transfer-20261017-v1/status.json",
+    "sha256": "c403927a1e958eb976b228b2228f6fad5df77f677ca0d423070398ac0920fa67"
+  },
+  "destination_receipt": {
+    "path": "/media/990Pro/fireprot/runtime/migration-20261016/openfold3-priority-20261017-v1/status.json",
+    "sha256": "b4cb442e512607321586f3a290382cf8ac58c4915faf4e19d8a55cdc4298b250"
+  },
+  "previous_migration_diagnosis": {
+    "historical_verified_files_before_reschedule": 25,
+    "historical_verified_bytes_before_reschedule": 21654614716,
+    "old_sender_retired_at_complete_file_boundary": true,
+    "replacement_sender_status": "Waiting for explicit release after all GPU trials and evidence checks",
+    "release_gate_status": "failed: AssertionError('atlaslm-b4-refresh')",
+    "openfold3_destination_before_this_transfer": "Neither final checkpoint nor staging partial present",
+    "interpretation": "Earlier migration made verified progress on other files. The replacement sender had not started this checkpoint because its release gate failed; no evidence that this checkpoint was transferred and corrupted.",
+    "existing_general_release_gate_and_sender_changed": false
+  },
+  "remaining_migration_files_by_existence_and_size": 22,
+  "full_migration_sha256_verification_complete": false,
+  "full_openfold3_inference_qualified": false,
+  "next_gate": "Same-host native model qualification using the prepared N1000 strict FP32 R3/D200/S1 entry, then candidate all-array/CIF parity and controlled E2E pairs"
+}

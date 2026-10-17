@@ -204,3 +204,65 @@ separate GCDs, so their timings are diagnostic only. See
 Keep the copied workers for reproduction. The library, inventory and bridge
 are also bound by the still-running conditioning diagnostic and must remain
 unchanged. Maintained request admission and its E2E result remain pending.
+
+## Precision gfx1100 wave32 experiment
+
+The 2026-10-17 Precision experiment is separate from the historical gfx90a
+qualification above. `gfx1100_softmax.hip` retains the mask-add, bias-add,
+exponential and division sequence but reproduces the installed Torch wave32
+reduction order. It is compiled for gfx1100 only, with contraction and fast math
+disabled. The maintained wave64 kernel and runtime gates are unchanged.
+
+The quick screen passes 32 probability checks. The full sweep passes all 288
+checks across four wave counts, optional eight-row bias reuse, direct/packed
+biases, both triangle orientations, N1000/N1536, noncontiguous masks and fully
+masked rows. All ten complete upstream attention comparisons are bitwise exact.
+Alternating warm QK/softmax/PV timings improve by 1.253--1.638x in the tested
+synthetic cases. The probability-only benchmark restores the native input with
+a clone, so its larger ratios are not realistic attention-speed claims.
+
+`gfx1100_scope.py` provides an explicitly hash-pinned experimental dispatcher.
+It accepts only FP32 inference at the recorded Torch/HIP/gfx1100 runtime with
+four heads, head width 32, and `(outer batch, length)` in
+`{(1,1000), (1,1536), (8,1000), (8,1536), (128,1536)}`. Other signatures use the
+upstream function. The scoped screen passes 28 cases: 20 submitted HIP launches,
+eight fallbacks, both precision flags, broadcast masks, restoration after a
+deliberate exception and rejection of a wrong library digest. The Rust registry
+still owns dispatch selection; this loader is experimental and is not a
+published production artifact.
+
+Reproduce on Precision from `/media/990Pro/fireprot`, selecting unused output
+directories. Keep other GPU jobs and checkpoint transfers out of timed screens:
+
+```bash
+mkdir -p runtime/kernels/openfold3-gfx1100-softmax-rebuild
+/opt/rocm/bin/hipcc -O3 -std=c++17 --offload-arch=gfx1100 \
+  -fno-fast-math -ffp-contract=off -shared -fPIC \
+  experiments/hip_softmax/gfx1100_softmax.hip \
+  -o runtime/kernels/openfold3-gfx1100-softmax-rebuild/wave32.so
+sha256sum runtime/kernels/openfold3-gfx1100-softmax-rebuild/wave32.so
+/home/husrcf/anaconda3/envs/BIO/bin/python \
+  experiments/hip_softmax/gfx1100_softmax_screen.py \
+  runtime/kernels/openfold3-gfx1100-softmax-rebuild/wave32.so NEW_SCREEN_OUTPUT
+/home/husrcf/anaconda3/envs/BIO/bin/python \
+  experiments/hip_softmax/gfx1100_scope_screen.py \
+  runtime/kernels/openfold3-gfx1100-softmax-rebuild/wave32.so \
+  SHA256_FROM_PREVIOUS_COMMAND NEW_SCOPE_OUTPUT
+```
+
+The scripts pin GPU visibility to HIP0 / PCI `0000:53:00.0`, strict deterministic
+FP32 and seed101. The broader screen records idle-device snapshots before and
+after execution, not continuous Rust-supervisor isolation. Timings are device
+events on warmed operators, include deterministic allocation filling, and use
+four alternating samples per arm, each averaging three calls. Clocks and thermal
+state are not fixed. Bias packing remains inside the candidate timing.
+
+No full OpenFold3 model has been qualified on Precision. Its pinned OpenBind-0
+checkpoint is absent; the existing asset sender is waiting on the unrelated
+failed AtlasLM finalization gate. A separate venv now imports the model, runner
+and CLI; the native request passes schema inspection and its profile is prepared. Next gates are
+verified checkpoint placement, a same-host native reference, explicit observed
+shape coverage, all 11 arrays and complete CIF equality, followed by controlled
+fresh-process E2E pairs. Do not replace these gates with the synthetic results.
+See `provenance/precision_openfold3_softmax_gfx1100_20261017.json` for hashes,
+raw report paths, environment preparation and representative timings.

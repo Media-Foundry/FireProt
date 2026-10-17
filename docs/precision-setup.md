@@ -443,3 +443,52 @@ target/release/fireprot esm /tmp/my-esm2-native.json \
 target/release/fireprot esm /tmp/my-esm2-fireprot.json \
   configs/precision/plm-esm2-3b-native.json
 ```
+
+## OpenFold3 gfx1100 preparation and experimental softmax
+
+OpenFold3/OpenBind-0 development resumed on Precision on 2026-10-17. The pinned
+source `7de748b7bc93adb5af0a4032d5e9f208b6e1325f` is present. The isolated
+`runtime/venvs/openfold3-gfx1100` environment inherits BIO's ROCm Torch and adds
+the missing OpenFold3 inference dependencies without changing BIO. Model,
+runner and CLI imports pass. The prepared native request/profile are
+`configs/requests/precision-openfold3-n1000-native.json` and
+`configs/precision/openfold3-native.json`; request inspection is CPU-only and
+does not establish that inference works.
+
+The 2,287,872,989-byte OpenBind-0 checkpoint is still absent. Its expected SHA-256
+is `bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4`.
+The existing whole-asset transfer remains held behind a failed
+`atlaslm-b4-refresh` finalization gate on DiamondHill. That gate and its waiting
+sender have not been changed. Full trained-model qualification on Precision
+therefore remains pending.
+
+The first operator experiment ports the FP32 mask/bias/softmax fusion to
+Torch's **wave32** reduction order on gfx1100. The gfx90a wave64 implementation
+and maintained compatibility checks remain unchanged. All 32 quick cases and
+288 variant checks are bitwise exact, including both triangle-bias orientations,
+strided masks, nonzero biases and fully masked NaN outputs. Ten complete
+QK/softmax/PV comparisons also pass bitwise equality with the pinned upstream
+attention. Representative alternating warm device timings are:
+
+| Length / outer attention chunk | Bias orientation | Native attention | Candidate | Ratio |
+| --- | --- | ---: | ---: | ---: |
+| N1000 / 8 | Starting, zero mask | 2.926 ms | 2.320 ms | 1.261x |
+| N1536 / 8 | Ending, zero mask | 8.352 ms | 5.926 ms | 1.409x |
+| N1536 / 128 | Starting, partial mask | 95.117 ms | 72.408 ms | 1.314x |
+| N1536 / 128 | Ending, partial mask | 118.610 ms | 72.421 ms | 1.638x |
+
+The outer chunk is an attention batch dimension, not a protein batch count.
+These are synthetic operator measurements, not trained-layer, model-forward or
+E2E speedups. Full attention timing includes fresh QK, allocations, bias packing
+when selected, softmax and PV. The separate softmax-only sweep includes an input
+restoration clone in its native arm and must not be used as a realistic speedup.
+
+An explicitly hash-pinned experimental dispatcher passes 28 additional checks:
+20 submitted HIP calls and eight native fallbacks. It restores the upstream
+function after normal execution and exceptions and rejects a wrong library
+hash. The experiment accepts only screened N1000/N1536 FP32 signatures; no
+maintained optimized OpenFold3 profile is enabled on gfx1100. Scripts, kernel
+build command and next gates are in
+[`experiments/hip_softmax/README.md`](../experiments/hip_softmax/README.md#precision-gfx1100-wave32-experiment).
+The evidence is pinned in
+[`precision_openfold3_softmax_gfx1100_20261017.json`](../provenance/precision_openfold3_softmax_gfx1100_20261017.json).

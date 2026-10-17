@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "status": "gfx1100_esm3_followup_no_additional_promotion",
+  "host": "Precision",
+  "hip_device": 0,
+  "pci_address": "0000:53:00.0",
+  "architecture": "gfx1100",
+  "model": "esm3-open",
+  "workload": {
+    "batch": 4,
+    "length": 1000,
+    "padded_tokens": 4008,
+    "precision": "native BF16",
+    "seed": 101
+  },
+  "runtime": {
+    "torch": "2.13.0+rocm10.0.0",
+    "hip": "7.15.26333",
+    "esm_commit": "43b4548b86762edfa747b07d5f440aad3c33acee"
+  },
+  "checkpoint": {
+    "path": "/media/990Pro/fireprot/runtime/weights/esm3-open/snapshot/data/weights/esm3_sm_open_v1.pth",
+    "sha256": "5ead5a135c658068db6a4f1b933e72d6110992c4668822e1c0e2dcc53e38acd9"
+  },
+  "maintained_profile": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-exact-warm-profile-20261017-v1/report.json",
+    "sha256": "c93542bb71efea1a99076fd4e091a4242461333fc9e4e7ad7db07c0055bb2c2f",
+    "load_seconds": 3.4107643050083425,
+    "warm_seconds": 0.23521322998567484,
+    "profiled_seconds": 0.240375455992762,
+    "dominant_device_time_us": {
+      "gemm_8192_by_1536": 56739.22200000005,
+      "gemm_4608_by_1536": 33194.21400000002,
+      "gemm_1536_by_4096": 29391.893000000106,
+      "gemm_1536_by_1536": 12149.4590000001,
+      "flash_attention": 24870.83999999996
+    }
+  },
+  "linear_backend_screen": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-linear-backend-screen-20261017-v1/report.json",
+    "sha256": "41519ed77cdc4c781bfc1a609b517094aecaf9355a06c9ff5236b4b70baa75cb",
+    "rocblas": {
+      "decision": "rejected: not bitwise exact",
+      "unequal_elements_across_48_calls": {
+        "1536_by_1536": 319590,
+        "4608_by_1536": 538133,
+        "8192_by_1536": 1001670,
+        "1536_by_4096": 1167493
+      }
+    }
+  },
+  "tunable_exact_screen": {
+    "report": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-tunable-exact-screen-20261017-v1/report.json",
+      "sha256": "329dec05b703193496d9b801160ceef08cbf5b1de7659e8448009ce4a7131453"
+    },
+    "csv": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-tunable-exact-screen-20261017-v1/tunable.csv",
+      "sha256": "ef8c514eb27bcdbd0b634089f0cc4c77ace393cd9bcdfd0d2d711673dc1ce3c8"
+    },
+    "validation": "near-zero ATOL/RTOL followed by direct bitwise checks on captured model activations",
+    "selected_solutions": {
+      "8192_by_1536": ["Default", 1.1044340133666992],
+      "4608_by_1536": ["Default", 0.6361766854921976],
+      "1536_by_4096": ["Default", 0.5498766700426737],
+      "1536_by_1536": ["Default", 0.19133099913597107]
+    },
+    "all_selected_outputs_bitwise_exact": true,
+    "decision": "no change: every dominant shape retains the existing default hipBLASLt solution"
+  },
+  "sdpa_screen": {
+    "operator": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-sdpa-screen-20261017-v2/report.json",
+      "sha256": "bcf6fcdbf87d9c1837d1ace046f9c5a50c2ca1cf895f025b49bf2322e16f8527",
+      "shape": [4, 24, 1002, 64],
+      "default_median_ms": 0.5250970125198364,
+      "efficient_median_ms": 0.45368701219558716,
+      "efficient_speedup": 1.1573992607341028,
+      "efficient_bitwise_exact": true,
+      "math_median_ms": 13.197754859924316,
+      "math_unequal_elements": 543007,
+      "ck_available": false
+    },
+    "complete_model": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-efficient-model-screen-20261017-v1/report.json",
+      "sha256": "9ae4d2f532765db188b1ebb0b10d69a718784198ccba3d22ff752ff1d44d8bfb",
+      "flash_median_seconds": 0.23186125449137762,
+      "efficient_median_seconds": 0.23200723600166384,
+      "speedup": 0.999370788977094,
+      "all_outputs_bitwise_exact": true
+    },
+    "decision": "rejected: the isolated exact gain disappears across the complete 48-layer forward"
+  },
+  "pointwise_screen": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-pointwise-current-pairs-20261017-v1/benchmark/comparison.json",
+    "sha256": "d10495d486aea42d629707907b2fa14e9cd2c1fc0b889687e78a639dceaf8387",
+    "correctness_passed": true,
+    "median_speedup": 0.9956746806638941,
+    "p95_speedup": 1.051691593887197,
+    "observed_trend": "mixed_or_unchanged",
+    "decision": "rejected: the exact RoPE/SwiGLU route misses the median performance gate"
+  },
+  "sequence_head_screen": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-sequence-head-pairs-20261017-v1/benchmark/comparison.json",
+    "sha256": "4273a7263f4b4a5ace1f1babba1c318a17be31f2d280a2bb076a2306e23f8037",
+    "correctness_passed": true,
+    "all_arrays_exact": true,
+    "baseline_median_seconds": 10.544940528,
+    "candidate_median_seconds": 10.463528619,
+    "median_speedup": 1.0077805405771214,
+    "p95_speedup": 1.0527296123780099,
+    "paired_speedups": [
+      1.0527296123780099,
+      1.0077805405771214,
+      0.9972894456184241
+    ],
+    "model_seconds": {
+      "baseline": [0.9914853500085883, 0.9599757340038195, 0.9601760750229005],
+      "candidate": [0.9795935220026877, 0.9597009900026023, 0.954124704003334]
+    },
+    "decision": "not promoted: the descriptive trend is small, one E2E pair regresses, and absolute model-forward changes are 0.3-11.9 ms"
+  },
+  "safetensors_screen": {
+    "directory": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-safetensors-screen-20261017-v1",
+    "pth_load_state_seconds": [1.5267387729836628, 0.839170983992517, 0.8274911649932619],
+    "safetensors_load_state_seconds": [1.8093100269907154, 1.8035979509877507, 1.7947954520059284],
+    "warm_pth_median_seconds": 0.839170983992517,
+    "safetensors_median_seconds": 1.8035979509877507,
+    "all_output_hashes_equal": true,
+    "derived_checkpoint_removed": true,
+    "decision": "rejected: derived safetensors loading is 2.149x slower than the pinned PyTorch checkpoint after warm filesystem state"
+  },
+  "remaining_directions": [
+    "An exact custom BF16 GEMM would need to reproduce the selected hipBLASLt reduction order while outperforming its four default solutions; ordinary rocBLAS cannot satisfy the exactness gate.",
+    "The next non-GEMM opportunity is a complete-model fusion of rotary/cat/copy/layer-normalization work; isolated pointwise or SDPA substitution has insufficient end-to-end leverage.",
+    "Loading improvements must beat direct GPU restoration of the pinned .pth checkpoint without adding a second 2.7 GB maintained weight artifact."
+  ],
+  "production_changes": false,
+  "limitations": "These diagnostics qualify only the pinned ESM3-open B4/N1000 sequence-only workload on Precision gfx1100 with Torch 2.13.0+rocm10.0.0 and HIP 7.15.26333. Operator timings are diagnostic; only the cited three-pair reports are E2E comparisons."
+}

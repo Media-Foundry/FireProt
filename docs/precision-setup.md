@@ -280,6 +280,23 @@ performance or compatibility for generation, structure/function inputs, other
 lengths, other batches, other runtimes or other architectures. Full evidence is
 in [`precision_esm3_frameless_gfx1100_20261017.json`](../provenance/precision_esm3_frameless_gfx1100_20261017.json).
 
+Follow-up searches did not find another production-worthy exact operator. The
+four dominant BF16 GEMMs account for about 132 ms of the 240 ms profiled warm
+forward, but rocBLAS changes their results and TunableOp selects the existing
+default hipBLASLt solution for every shape under exact validation. A forced
+memory-efficient SDPA is exact and looks 1.157x faster in isolation, but the
+complete 48-layer forward is a tie at 231.861 ms versus 232.007 ms. The exact
+RoPE/SwiGLU pointwise route also misses the E2E median gate at 0.995675x.
+
+Omitting five output heads unused by this sequence-only caller has a descriptive
+three-pair trend of 1.007781x median and 1.052730x p95, but one pair regresses
+and absolute model-forward changes are only 0.3--11.9 ms. It remains a diagnostic
+rather than a deployment change. An exact derived safetensors checkpoint is
+also rejected because its warm load median is 1.803598 seconds versus 0.839171
+seconds for the pinned PyTorch checkpoint; the 2.7 GB derived file was removed.
+All follow-up artifacts and decisions are recorded in
+[`precision_esm3_followup_screens_gfx1100_20261017.json`](../provenance/precision_esm3_followup_screens_gfx1100_20261017.json).
+
 Run the explicit B4 entry after choosing a fresh `run_id` and unused
 `output_dir`:
 

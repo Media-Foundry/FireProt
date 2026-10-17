@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "status": "diagnostics_complete_no_production_promotion",
+  "host": "Precision",
+  "base_commit": "b5cfb9e",
+  "device": {"hip_device": 0, "pci": "0000:53:00.0", "architecture": "gfx1100"},
+  "workload": {"model": "esm3-open", "length": 1000, "batch_sizes": [1, 4], "seed": 101, "precision": "native BF16", "interface": "sequence only; all native output heads retained"},
+  "runtime": {"torch": "2.13.0+rocm10.0.0", "hip": "7.15.26333", "esm_commit": "43b4548b86762edfa747b07d5f440aad3c33acee"},
+  "input_sha256": "c5f342f9d3a64ad75c392fdbd4370e90654a0949ac50e3b3151cf4b1e54e54c2",
+  "checkpoint": {
+    "path": "/media/990Pro/fireprot/runtime/weights/esm3-open/snapshot/data/weights/esm3_sm_open_v1.pth",
+    "sha256": "5ead5a135c658068db6a4f1b933e72d6110992c4668822e1c0e2dcc53e38acd9",
+    "independently_rehashed_this_session": true
+  },
+  "graph": {
+    "script": "experiments/plm/precision_esm3_graph_screen.py",
+    "script_sha256": "2ed4642d076614e7720cb09611ffb2ee49ef99fa69e277e219361d4985ea28f6",
+    "report": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-graph-screen-20261017-v2/report.json",
+    "report_sha256": "4000c73fb23a432bdc55b8d437f7c0badf570172e914c7dfe7487439f771d322",
+    "exactness": "tokens, embeddings and logits compared as bytes; initial, changed-token and restored-token replay plus every timed output",
+    "samples_per_arm_per_batch": 8,
+    "order": "AB/BA repeated four times",
+    "replay_includes_input_copy": true,
+    "capture_scope": "original sequence-only ESM3 forward; fixed frameless mask validated eagerly; host mask reduction and registry dispatch omitted during capture/replay",
+    "b1": {
+      "eager_median_seconds": 0.06972219501039945,
+      "graph_median_seconds": 0.06703861951245926,
+      "speedup": 1.0400302917550597,
+      "additional_side_stream_warmup_and_capture_seconds": 0.1755021970020607,
+      "estimated_replays_to_amortize_setup": 66
+    },
+    "b4": {
+      "eager_median_seconds": 0.23125979000178631,
+      "graph_median_seconds": 0.22922581649618223,
+      "speedup": 1.008873230496871,
+      "additional_side_stream_warmup_and_capture_seconds": 0.5066759000183083,
+      "estimated_replays_to_amortize_setup": 250
+    },
+    "decision": "Not promoted: small resident-only improvement with setup cost; no single-request E2E benefit established. B1 repeated same-shape workloads remain a possible future application."
+  },
+  "residual_fusion": {
+    "script": "experiments/plm/esm3_residual_screen.py",
+    "script_sha256": "dacef9b8760fb543af665150db10ed2ff8b807c2fa002c05ecedb327c011f7eb",
+    "kernel_source": "experiments/plm/esm3_residual.hip",
+    "kernel_source_sha256": "76587623fcb9cac4529ce78fcf53167f0912c8d1e91215077e150d945be2ddff",
+    "library": "/media/990Pro/fireprot/runtime/kernels/esm3-residual-screen-20261017/residual-vector.so",
+    "library_sha256": "c06ca3b6f79b1b7e6817bb0c021196f96e19ec288e51f2280de040425460f445",
+    "compile_command": "/opt/rocm/bin/hipcc -O3 -std=c++17 --offload-arch=gfx1100 -fno-fast-math -ffp-contract=off -shared -fPIC experiments/plm/esm3_residual.hip -o runtime/kernels/esm3-residual-screen-20261017/residual-vector.so",
+    "report": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-residual-screen-20261017-v4/report.json",
+    "report_sha256": "c42fcffdcd08887eced59639b76f40f79a6c23ee1c4ff7ee2dee1f6c20287b80",
+    "exact_operator_sites_per_variant": 97,
+    "all_exported_arrays_bitwise_exact": true,
+    "samples_per_arm_per_variant": 8,
+    "order": "AB/BA repeated four times for each variant",
+    "variants": [
+      {"unroll": 1, "baseline_median_seconds": 0.23483462998410687, "candidate_median_seconds": 0.23595316799764987, "speedup": 0.9952594914362237},
+      {"unroll": 4, "baseline_median_seconds": 0.23637002949544694, "candidate_median_seconds": 0.23767387800035067, "speedup": 0.9945141278634676},
+      {"unroll": 8, "baseline_median_seconds": 0.23779653100064024, "candidate_median_seconds": 0.2388649815111421, "speedup": 0.9955269688183572},
+      {"unroll": 16, "description": "eight BF16 values per 16-byte vector load", "baseline_median_seconds": 0.23904654700891115, "candidate_median_seconds": 0.2378822580067208, "speedup": 1.0048943919229043}
+    ],
+    "decision": "Not promoted: scalar variants regress; vector variant saves only 1.164 ms, below a convincing model-level margin."
+  },
+  "weight_layout": {
+    "script": "experiments/plm/esm3_layout_screen.py",
+    "script_sha256": "1860a363fd5c5ba0a104528b8fa955c155d86e5d29e7706033c0945cfae6aeb0",
+    "report": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-layout-screen-20261017-v1/report.json",
+    "report_sha256": "cd8b24ddd0e296778b1c3e0152adad076f6bc86dc76bae02094c3b7ce6e937de",
+    "treatment": "weight.t().contiguous().t(); identical weight values with column-major storage; native hipBLASLt dispatch",
+    "calls_per_shape": 48,
+    "exact_calls_per_shape": 0,
+    "unequal_elements": {"4608x1536": 512160, "1536x1536": 281254, "8192x1536": 932424, "1536x4096": 1003985},
+    "isolated_speedups": {"4608x1536": 0.8536178324438567, "1536x1536": 0.8331780437209649, "8192x1536": 0.8199271140595419, "1536x4096": 0.8503136336470392},
+    "timing_boundary": "warm isolated GEMMs; weight conversion excluded; not whole-model timing",
+    "decision": "Rejected: every tested projection changes arithmetic results and each shape is slower."
+  },
+  "reproduction": {
+    "working_directory": "/media/990Pro/fireprot",
+    "python": "/home/husrcf/anaconda3/envs/BIO/bin/python",
+    "environment": "PYTHONPATH=python; scripts apply the selected profile environment and pin HIP_VISIBLE_DEVICES=0",
+    "request": "configs/requests/precision-esm3-open-b4-n1000-fireprot.json",
+    "profile": "configs/precision/plm-esm3-open-fireprot.json",
+    "commands": [
+      "PYTHONPATH=python /home/husrcf/anaconda3/envs/BIO/bin/python experiments/plm/precision_esm3_graph_screen.py configs/requests/precision-esm3-open-b4-n1000-fireprot.json configs/precision/plm-esm3-open-fireprot.json NEW_GRAPH_OUTPUT",
+      "PYTHONPATH=python /home/husrcf/anaconda3/envs/BIO/bin/python experiments/plm/esm3_residual_screen.py configs/requests/precision-esm3-open-b4-n1000-fireprot.json configs/precision/plm-esm3-open-fireprot.json runtime/kernels/esm3-residual-screen-20261017/residual-vector.so NEW_RESIDUAL_OUTPUT",
+      "PYTHONPATH=python /home/husrcf/anaconda3/envs/BIO/bin/python experiments/plm/esm3_layout_screen.py configs/requests/precision-esm3-open-b4-n1000-fireprot.json configs/precision/plm-esm3-open-fireprot.json NEW_LAYOUT_OUTPUT"
+    ]
+  },
+  "excluded_diagnostics": {
+    "graph_v1": "Stopped before model execution because the pinned upstream import path was missing; fixed in v2.",
+    "residual_v1_v2": "Preliminary scalar and vector screens; superseded by the complete v4 matrix using the retained source and library.",
+    "residual_v3": "A checkpoint rehash overlapped part of this diagnostic; excluded from performance conclusions and repeated serially as v4."
+  },
+  "limitations": "Warm diagnostics only, with filesystem/GPU caches unflushed and no controlled clock or thermal setting. Idle-device snapshots before/after screens do not provide continuous isolation evidence equivalent to the Rust supervisor. No formal E2E promotion benchmark was warranted by these outcomes. No claims for structure inputs, other lengths, runtimes or devices.",
+  "production_changes": false
+}

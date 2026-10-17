@@ -297,6 +297,28 @@ seconds for the pinned PyTorch checkpoint; the 2.7 GB derived file was removed.
 All follow-up artifacts and decisions are recorded in
 [`precision_esm3_followup_screens_gfx1100_20261017.json`](../provenance/precision_esm3_followup_screens_gfx1100_20261017.json).
 
+A further resident-model screen captures the original sequence-only forward in
+a HIP Graph, preserving all output heads and validating the constant frameless
+mask before capture. Tokens, embeddings and logits remain bitwise exact at B1
+and B4, including replay with different tokens and restoration of the original
+tokens. Eight alternating measurements per arm give B1 medians of 69.722 ms
+eager versus 67.039 ms replay (1.0400x), and B4 medians of 231.260 versus
+229.226 ms (1.0089x). Replay includes copying the input tokens. Additional
+side-stream warmup and capture cost 175.502 ms at B1 and 506.676 ms at B4;
+simple break-even estimates are 66 and 250 replays, respectively. These are
+resident diagnostics, not single-request E2E improvements. Graph is not enabled
+in the maintained worker.
+
+Handwritten HIP residual kernels fuse scaling and addition while retaining the
+intermediate BF16 rounding. All 97 residual sites and complete exported arrays
+pass byte equality. Scalar/unrolled variants are slower; 16-byte vector loads
+produce only a sub-percent whole-model improvement. That margin does not justify
+a production route. Changing the four dominant BF16 projection weights to
+column-major storage is also rejected: none of the 48 calls per shape is exact,
+and isolated GEMMs are slower. No production configuration changes result from
+these screens. Evidence, limitations and reproduction commands are recorded in
+[`precision_esm3_graph_residual_layout_20261017.json`](../provenance/precision_esm3_graph_residual_layout_20261017.json).
+
 Run the explicit B4 entry after choosing a fresh `run_id` and unused
 `output_dir`:
 

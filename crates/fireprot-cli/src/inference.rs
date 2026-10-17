@@ -6,7 +6,7 @@ use fireprot_runtime::{
     build_tree::BuildTree,
     device::{AmdSmiMonitor, SmiProtocol},
     execution,
-    preflight::{SourceOrigin, prepare_with_hash_threads},
+    preflight::{SourceOrigin, prepare_with_concurrent_source, prepare_with_hash_threads},
     supervisor::{self, Limits, RunReport, WorkerCommand},
 };
 use fireprot_validation::bundle;
@@ -34,6 +34,7 @@ struct Execution {
 pub(crate) fn validate_profile(bytes: &[u8]) -> Result<()> {
     let execution: Execution = serde_json::from_slice(bytes)?;
     monitor_protocol(&execution)?;
+    concurrent_source_verification(&execution)?;
     Ok(())
 }
 
@@ -45,6 +46,18 @@ fn monitor_protocol(execution: &Execution) -> Result<SmiProtocol> {
             .map(String::as_str)
             .unwrap_or("cli"),
     )?)
+}
+
+fn concurrent_source_verification(execution: &Execution) -> Result<bool> {
+    match execution
+        .environment
+        .get("FIREPROT_PREFLIGHT_CONCURRENT_SOURCE")
+        .map(String::as_str)
+    {
+        None | Some("0") => Ok(false),
+        Some("1") => Ok(true),
+        Some(_) => Err("FIREPROT_PREFLIGHT_CONCURRENT_SOURCE must be 0 or 1".into()),
+    }
 }
 
 pub fn run(request: &Path, profile: &Path) -> Result<RunReport> {
@@ -81,6 +94,7 @@ pub fn run_batch(path: &Path) -> Result<fireprot_runtime::batch::BatchReport> {
         .collect::<std::result::Result<_, _>>()?;
     for profile in &profiles {
         monitor_protocol(profile)?;
+        concurrent_source_verification(profile)?;
     }
     Ok(batch::execute(&plan, &cancelled, |index, job| {
         run_loaded(job.request().clone(), profiles[index].clone(), &cancelled)
@@ -97,6 +111,7 @@ fn run_loaded(
         return Err("inference cancelled".into());
     }
     let protocol = monitor_protocol(&execution)?;
+    let concurrent_source = concurrent_source_verification(&execution)?;
     let origin = match execution.source_manifest {
         Some(manifest) => SourceOrigin::Exported { manifest },
         None => SourceOrigin::GitCheckout,
@@ -109,7 +124,11 @@ fn run_loaded(
         .map(|value| value.parse::<usize>())
         .transpose()?
         .unwrap_or(1);
-    let prepared = prepare_with_hash_threads(request, origin, hash_threads)?;
+    let prepared = if concurrent_source {
+        prepare_with_concurrent_source(request, origin, hash_threads)?
+    } else {
+        prepare_with_hash_threads(request, origin, hash_threads)?
+    };
     let workers = execution.workers.canonicalize()?;
     let root = prepared.request().as_request().source.root.clone();
     let framework = workers

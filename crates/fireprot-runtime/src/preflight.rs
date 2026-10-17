@@ -189,6 +189,36 @@ fn verify_artifact(artifact: &ArtifactRef) -> Result<VerifiedArtifact, String> {
     })
 }
 
+fn verify_source(
+    root: &Path,
+    commit: &str,
+    origin: SourceOrigin,
+) -> Result<(SourceManifest, Option<VerifiedArtifact>), String> {
+    match origin {
+        SourceOrigin::GitCheckout => Ok((export_source(root, commit)?, None)),
+        SourceOrigin::Exported { manifest } => {
+            let verified = verify_artifact(&manifest)?;
+            // Verify the exact bytes parsed, not a second unverified file read.
+            let bytes = fs::read(&verified.path).map_err(|e| e.to_string())?;
+            if digest(&bytes) != verified.sha256 {
+                return Err("source manifest changed".into());
+            }
+            let source: SourceManifest =
+                serde_json::from_slice(&bytes).map_err(|e| e.to_string())?;
+            if source.schema_version != 1 || source.commit != commit || source.files.is_empty() {
+                return Err("source manifest version, commit or file list is invalid".into());
+            }
+            for (path, expected) in &source.files {
+                let (bytes, executable) = file_bytes(root, path)?;
+                if digest(&bytes) != expected.sha256 || executable != expected.executable {
+                    return Err(format!("exported source differs: {}", path.display()));
+                }
+            }
+            Ok((source, Some(verified)))
+        }
+    }
+}
+
 pub fn prepare(request: ValidatedRequest, origin: SourceOrigin) -> Result<PreparedRequest, String> {
     prepare_with_hash_threads(request, origin, 1)
 }
@@ -200,38 +230,52 @@ pub fn prepare_with_hash_threads(
     origin: SourceOrigin,
     hash_threads: usize,
 ) -> Result<PreparedRequest, String> {
+    prepare_with_options(request, origin, hash_threads, false)
+}
+
+/// Overlap source verification with independent input, checkpoint and resource hashing.
+/// Both results are joined and checked before the request can be prepared.
+pub fn prepare_with_concurrent_source(
+    request: ValidatedRequest,
+    origin: SourceOrigin,
+    hash_threads: usize,
+) -> Result<PreparedRequest, String> {
+    prepare_with_options(request, origin, hash_threads, true)
+}
+
+fn prepare_with_options(
+    request: ValidatedRequest,
+    origin: SourceOrigin,
+    hash_threads: usize,
+    concurrent_source: bool,
+) -> Result<PreparedRequest, String> {
     if !(1..=8).contains(&hash_threads) {
         return Err("artifact verification requires 1..=8 hash threads".into());
     }
     let mut r = request.into_request();
     let root = r.source.root.canonicalize().map_err(|e| e.to_string())?;
-    let (source, exported_manifest) = match origin {
-        SourceOrigin::GitCheckout => (export_source(&root, &r.source.commit)?, None),
-        SourceOrigin::Exported { manifest } => {
-            let verified = verify_artifact(&manifest)?;
-            // Verify the exact bytes parsed, not a second unverified file read.
-            let bytes = fs::read(&verified.path).map_err(|e| e.to_string())?;
-            if digest(&bytes) != verified.sha256 {
-                return Err("source manifest changed".into());
-            }
-            let m: SourceManifest = serde_json::from_slice(&bytes).map_err(|e| e.to_string())?;
-            if m.schema_version != 1 || m.commit != r.source.commit || m.files.is_empty() {
-                return Err("source manifest version, commit or file list is invalid".into());
-            }
-            for (path, expected) in &m.files {
-                let (bytes, executable) = file_bytes(&root, path)?;
-                if digest(&bytes) != expected.sha256 || executable != expected.executable {
-                    return Err(format!("exported source differs: {}", path.display()));
-                }
-            }
-            (m, Some(verified))
-        }
-    };
     let artifacts: Vec<_> = std::iter::once(&r.input)
         .chain(r.checkpoints.values())
         .chain(r.resources.values())
         .collect();
-    let mut verified = verify_artifacts(&artifacts, hash_threads)?.into_iter();
+    let (source_result, artifacts_result) = if concurrent_source {
+        std::thread::scope(|scope| {
+            let source = scope.spawn(|| verify_source(&root, &r.source.commit, origin));
+            let artifacts = verify_artifacts(&artifacts, hash_threads);
+            let source = source
+                .join()
+                .map_err(|_| "source verification thread panicked".to_string())
+                .and_then(|result| result);
+            (source, artifacts)
+        })
+    } else {
+        (
+            verify_source(&root, &r.source.commit, origin),
+            verify_artifacts(&artifacts, hash_threads),
+        )
+    };
+    let (source, exported_manifest) = source_result?;
+    let mut verified = artifacts_result?.into_iter();
     let input = verified.next().ok_or("missing input verification")?;
     let checkpoints: BTreeMap<_, _> = r
         .checkpoints

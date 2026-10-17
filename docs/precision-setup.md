@@ -182,6 +182,30 @@ supervisor-overhead improvement, not a model-operator speed claim. Full evidence
 is in
 [`precision_plm_snapshot_monitor_20261017.json`](../provenance/precision_plm_snapshot_monitor_20261017.json).
 
+### Qualified concurrent preflight verification
+
+The maintained ESM2 and FireProt ESM3 profiles set
+`FIREPROT_PREFLIGHT_CONCURRENT_SOURCE=1`. Preflight still reads and verifies
+every byte of the pinned model source, input, checkpoint and named resources.
+The only scheduling change is that source verification runs on a scoped thread
+while the caller hashes the independent artifacts. Both tasks are joined and
+must succeed before a prepared request can exist; a panic, changed source file
+or corrupt artifact still rejects the run. The default remains serial for
+profiles that do not explicitly select this treatment.
+
+On Precision, source verification alone takes about 0.20 seconds for Biohub ESM
+and 0.25--0.27 seconds for fair-esm. Three fresh-process AB/BA/AB pairs isolate
+the overlap while retaining the qualified snapshot monitor and model routes.
+ESM3-open B4/N1000 improves from 9.789266 seconds median and 10.225945 seconds
+p95 to 9.305478 and 9.312227 seconds: **1.051990x median** and **1.098120x
+p95**. ESM2-3B improves from 13.800290 seconds median and 15.225389 seconds p95
+to 12.977287 and 13.739414 seconds: **1.063419x median** and **1.108154x p95**.
+All six paired ratios are above one, and all 24 paired prediction archives are
+bitwise exact. The observed E2E differences include normal fresh-process
+variation and should not be relabeled as source-verification time alone. Full
+evidence is in
+[`precision_plm_concurrent_preflight_20261017.json`](../provenance/precision_plm_concurrent_preflight_20261017.json).
+
 
 ### First independent native baseline
 

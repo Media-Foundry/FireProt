@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "status": "precision_plm_concurrent_preflight_verified",
+  "host": "Precision",
+  "hip_device": 0,
+  "pci_address": "0000:53:00.0",
+  "architecture": "gfx1100",
+  "treatment": {
+    "environment": "FIREPROT_PREFLIGHT_CONCURRENT_SOURCE=1",
+    "description": "Run complete pinned source verification on a scoped thread while the caller completely hashes independent input, checkpoint and resource artifacts.",
+    "safety": "Both operations are joined and must succeed before PreparedRequest construction. No bytes, digests, source checks, artifact checks, model operations or output checks are omitted or cached.",
+    "default_without_explicit_profile_setting": "serial"
+  },
+  "runtime": {
+    "measured_fireprot_cli_sha256": "beba1bd7e9194f0ff1fb390a687a6a1dfdad3b1541441c41e5ae71d9a5184c60",
+    "esm3_python": "3.12.7",
+    "esm3_torch": "2.13.0+rocm10.0.0",
+    "esm3_hip": "7.15.26333"
+  },
+  "esm3": {
+    "workload": {
+      "model": "esm3-open",
+      "batch": 4,
+      "length": 1000,
+      "precision": "native BF16",
+      "seed": 101
+    },
+    "benchmark": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-concurrent-preflight-pairs-20261017-v1/benchmark/benchmark.json",
+      "sha256": "a6d144eda66ec795ba056970ace612312c5348dcb3506dbfc34564d654f0e2f1"
+    },
+    "comparison": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm3-concurrent-preflight-pairs-20261017-v1/benchmark/comparison.json",
+      "sha256": "e120bb565665876e07a3130fbeb8c6ac71282ae7cfc8d4592cf8709a8494a7ea"
+    },
+    "baseline_seconds": {
+      "count": 3,
+      "min": 9.444019402,
+      "median": 9.789265931,
+      "p95": 10.225944634,
+      "max": 10.225944634
+    },
+    "candidate_seconds": {
+      "count": 3,
+      "min": 9.232402984,
+      "median": 9.305477843,
+      "p95": 9.312226551,
+      "max": 9.312226551
+    },
+    "median_speedup": 1.0519896018412345,
+    "p95_speedup": 1.0981202592093164,
+    "paired_speedups": [
+      1.09891666032953,
+      1.0512272094527997,
+      1.0229210551539765
+    ],
+    "all_arrays_exact": true,
+    "paired_prediction_archives": 12
+  },
+  "esm2": {
+    "workload": {
+      "model": "esm2-3b",
+      "batch": 4,
+      "length": 1000,
+      "precision": "native",
+      "seed": 101
+    },
+    "benchmark": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-concurrent-preflight-pairs-20261017-v1/benchmark/benchmark.json",
+      "sha256": "27bf60856a5ad06f1b7400d354094e0456676c8c43ab231d137e16076e04aadb"
+    },
+    "comparison": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-concurrent-preflight-pairs-20261017-v1/benchmark/comparison.json",
+      "sha256": "cda2ead1bab362fa1febe555dca04cac88dd7b07b0976f7b1e89ccf0cc520269"
+    },
+    "baseline_seconds": {
+      "count": 3,
+      "min": 13.457677531,
+      "median": 13.800290289,
+      "p95": 15.225388689,
+      "max": 15.225388689
+    },
+    "candidate_seconds": {
+      "count": 3,
+      "min": 12.946186915,
+      "median": 12.977287251,
+      "p95": 13.739414288,
+      "max": 13.739414288
+    },
+    "median_speedup": 1.0634187270484114,
+    "p95_speedup": 1.1081541301435134,
+    "paired_speedups": [
+      1.0370177734921435,
+      1.1081541301435134,
+      1.0659733541318177
+    ],
+    "all_arrays_exact": true,
+    "paired_prediction_archives": 12
+  },
+  "source_files": {
+    "crates/fireprot-cli/src/inference.rs": "a8f4864dec9503f9cad81473751ffc4135a9af35237916aec15549a082c91ca7",
+    "crates/fireprot-cli/tests/inference.rs": "89cb5415e66eb2f2678b5e1ac5816a1896b2aa1cb644c0f8acbacd40f05c9a20",
+    "crates/fireprot-runtime/src/preflight.rs": "d969bfed46b3dbf240167fa3f688528c573e2b11e079104f97ef87b8b68331c9",
+    "crates/fireprot-runtime/tests/preflight.rs": "9e549c591d39ed52ce9b4aafd2dd4e20add57b1a0aa5fdba3620f0d49b4cb6d4",
+    "configs/precision/plm-esm2-3b-native.json": "aa61768377542276fd3d088f44a29e22707d405be90bc21bda61fa957d1598cc",
+    "configs/precision/plm-esm3-open-fireprot.json": "381a1a97939d3ae2726d0936e2f8e10516afb9ee270b02571b45d4e35c9b9556"
+  },
+  "verification": {
+    "preflight_targeted_tests": "9 passed",
+    "cli_inference_tests": "18 passed",
+    "full_rust_workspace_tests": "208 passed, 1 ignored hardware-only test",
+    "cargo_clippy_release_workspace_all_targets": "passed with warnings denied",
+    "cargo_fmt_check": "passed",
+    "accepted_invocations": 12,
+    "paired_prediction_archives_compared": 24,
+    "correctness_policy": "all-arrays-exact-v1"
+  },
+  "limitations": "Same-host fresh-process AB/BA/AB observations with filesystem caches unflushed. The measured E2E differences include normal process and I/O variation and are not estimates of source-verification duration alone. Qualification covers the maintained Precision ESM2-3B and FireProt ESM3 B4/N1000 profiles, not arbitrary models or hosts."
+}

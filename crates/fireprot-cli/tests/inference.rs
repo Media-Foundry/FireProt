@@ -904,3 +904,18 @@ fn invalid_snapshot_protocol_is_rejected_before_inference() {
     assert!(String::from_utf8_lossy(&result.stderr).contains("unknown AMD SMI protocol"));
     assert!(!root.join("run").exists());
 }
+
+#[test]
+fn invalid_concurrent_source_setting_is_rejected_before_inference() {
+    let d = tempfile::tempdir().unwrap();
+    let root = d.path();
+    let (request, mut profile) = fixture(root);
+    profile["environment"]["FIREPROT_PREFLIGHT_CONCURRENT_SOURCE"] = json!("yes");
+    let result = infer(root, &request, &profile);
+    assert!(!result.status.success());
+    assert!(
+        String::from_utf8_lossy(&result.stderr)
+            .contains("FIREPROT_PREFLIGHT_CONCURRENT_SOURCE must be 0 or 1")
+    );
+    assert!(!root.join("run").exists());
+}

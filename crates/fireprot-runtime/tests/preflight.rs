@@ -77,6 +77,55 @@ fn pins_actual_source_input_and_weights() {
 }
 
 #[test]
+fn concurrent_source_verification_preserves_results_and_failures() {
+    let f = Fixture::new();
+    let request = f.request();
+    let serial = prepare(checked(request.clone()), SourceOrigin::GitCheckout).unwrap();
+    let concurrent =
+        prepare_with_concurrent_source(checked(request.clone()), SourceOrigin::GitCheckout, 1)
+            .unwrap();
+    assert_eq!(
+        serde_json::to_value(serial.provenance()).unwrap(),
+        serde_json::to_value(concurrent.provenance()).unwrap()
+    );
+    assert_eq!(
+        serde_json::to_value(serial.request().as_request()).unwrap(),
+        serde_json::to_value(concurrent.request().as_request()).unwrap()
+    );
+
+    let manifest = f.export();
+    let serial = prepare(
+        checked(request.clone()),
+        SourceOrigin::Exported {
+            manifest: manifest.clone(),
+        },
+    )
+    .unwrap();
+    let concurrent = prepare_with_concurrent_source(
+        checked(request.clone()),
+        SourceOrigin::Exported { manifest },
+        2,
+    )
+    .unwrap();
+    assert_eq!(
+        serde_json::to_value(serial.provenance()).unwrap(),
+        serde_json::to_value(concurrent.provenance()).unwrap()
+    );
+
+    fs::write(f.root.join("model.py"), b"changed\n").unwrap();
+    assert!(
+        prepare_with_concurrent_source(checked(request.clone()), SourceOrigin::GitCheckout, 1)
+            .is_err()
+    );
+    fs::write(f.root.join("model.py"), b"source\n").unwrap();
+    let mut corrupt = request;
+    corrupt.checkpoints.values_mut().next().unwrap().sha256 = "0".repeat(64);
+    assert!(
+        prepare_with_concurrent_source(checked(corrupt), SourceOrigin::GitCheckout, 1).is_err()
+    );
+}
+
+#[test]
 fn named_model_resources_are_hashed_and_cannot_change_silently() {
     let f = Fixture::new();
     let path = f.dir.path().join("ccd");

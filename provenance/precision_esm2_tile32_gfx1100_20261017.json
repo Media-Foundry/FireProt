@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "status": "gfx1100_esm2_tile32_verified",
+  "host": "Precision",
+  "hip_device": 0,
+  "pci_address": "0000:53:00.0",
+  "architecture": "gfx1100",
+  "model": "esm2-3b",
+  "workload": {
+    "batch": 4,
+    "length": 1000,
+    "padded_tokens": 4008,
+    "precision": "native FP32",
+    "seed": 101
+  },
+  "runtime": {
+    "python": "3.12.7",
+    "torch": "2.13.0+rocm10.0.0",
+    "hip": "7.15.26333",
+    "fair_esm": "2.0.0",
+    "fair_esm_commit": "0b59d87ebef95948c735b1f7aad463dc6dfa991b"
+  },
+  "implementation": "gfx1100_esm2_exact_v2",
+  "scope": "Increase the qualified periodic-stagger ESM2 GEMM K tile from 16 to 32 while retaining the same accumulator update order, projection shapes and fail-closed N1000 B4 gfx1100 capability.",
+  "kernel_design": {
+    "groups_per_block": 8,
+    "columns_per_thread": 4,
+    "k_tile_baseline": 16,
+    "k_tile_candidate": 32,
+    "reduction_order": "unchanged per accumulator",
+    "synchronization_effect": "half as many K-tile block-wide synchronization pairs",
+    "compile_flags": [
+      "--offload-arch=gfx1100",
+      "-ffp-contract=off"
+    ],
+    "qualified_gemm_calls": 216,
+    "qualified_weight_shapes": [
+      [2560, 2560],
+      [10240, 2560],
+      [2560, 10240]
+    ]
+  },
+  "checkpoints": {
+    "model": {
+      "path": "/media/990Pro/fireprot/runtime/checkpoint/esm2_t36_3B_UR50D.pt",
+      "sha256": "7de8b4082ba15891959ab368b77ce3886697af1efb16d3c9e9e7b0c5d3f07500"
+    },
+    "contact_regression": {
+      "path": "/media/990Pro/fireprot/runtime/checkpoint/esm2_t36_3B_UR50D-contact-regression.pt",
+      "sha256": "4da500eab246481dc9c8c95bc7b1d02f2803d761c380b0e95186d4a07d0fc84e"
+    }
+  },
+  "published_bundle": {
+    "directory": "/media/990Pro/fireprot/runtime/kernels/esm2-gfx1100-exact-v3",
+    "manifest": {
+      "path": "/media/990Pro/fireprot/runtime/kernels/esm2-gfx1100-exact-v3/kernel.json",
+      "sha256": "fc030bdb248b64e3270d5599d257664042cffe5cfa62da1b545379b18931e065",
+      "bytes": 656
+    },
+    "build_receipt": {
+      "path": "/media/990Pro/fireprot/runtime/kernels/esm2-gfx1100-exact-v3/build-receipt.json",
+      "sha256": "aea8915784382f22ca82b06d0b1a1e0f14f4021a9df293108c9b6601808bcd7a",
+      "bytes": 2084033
+    },
+    "library": {
+      "path": "/media/990Pro/fireprot/runtime/kernels/esm2-gfx1100-exact-v3/fireprot_esm2_gemm_88e0b48fbc835d1d3bef8cf0d1dee28ab748bd465b24ce8e4a54f396c81f3ed2.so",
+      "sha256": "69eb73d21681751b7f75b798479b8805ada2e4c2e9ca74899bca614a648b5f26",
+      "bytes": 26904
+    },
+    "build_identity_sha256": "88e0b48fbc835d1d3bef8cf0d1dee28ab748bd465b24ce8e4a54f396c81f3ed2",
+    "c_abi": "esm2-periodic-stagger-gemm-v1"
+  },
+  "operator_screen": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-periodic-tile-screen-20261017-v2/report.jsonl",
+    "sha256": "de68030a867c41005ac516745c5a63c68ae5ef7a179780a1f1cccda652b520d2",
+    "tested_variants": 30,
+    "all_variants_bitwise_exact": true,
+    "selected_variant": {
+      "variant": 19,
+      "groups_per_block": 8,
+      "columns_per_thread": 4,
+      "k_tile": 32,
+      "shape_medians_ms": [3.977, 17.006, 17.486],
+      "baseline_k16_shape_medians_ms": [4.604, 18.514, 18.889]
+    }
+  },
+  "warm_profile": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-tile32-warm-profile-20261017-v1/report.json",
+    "sha256": "f9c91eb8038ee073eb463717ea26225ee54ed553f1d23d3f4c35ce49e4a2af22",
+    "previous_published_warm_seconds": 2.95537,
+    "tile32_warm_seconds": 2.7509866099862847,
+    "warm_speedup": 1.07429,
+    "tile32_profiled_seconds": 2.767540908011142,
+    "gemm_calls": 216
+  },
+  "benchmark": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-tile32-pairs-20261017-v1/benchmark/benchmark.json",
+    "sha256": "036df41414d81d236f115de517abeec554fcb07a630fe6d8e3c5658045c9457d"
+  },
+  "comparison": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-tile32-pairs-20261017-v1/benchmark/comparison.json",
+    "sha256": "88acf726bf6905dd91a309749eadcd132b2b1913bf539e61656f33575abd3cad"
+  },
+  "order": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-tile32-pairs-20261017-v1/benchmark/order.jsonl",
+    "sha256": "04bf8d3c1d35c1b06862b7d3efdd2ff60a502ed2213cb67cf3ec0a77c4c4f7f4",
+    "sequence": ["baseline", "candidate", "candidate", "baseline", "baseline", "candidate"]
+  },
+  "performance": {
+    "baseline": {
+      "count": 3,
+      "min": 12.635547292,
+      "median": 13.496006972,
+      "p95": 13.599281719,
+      "max": 13.599281719,
+      "mean": 13.243611994333332
+    },
+    "candidate": {
+      "count": 3,
+      "min": 12.437815186,
+      "median": 12.528525948,
+      "p95": 13.295885644,
+      "max": 13.295885644,
+      "mean": 12.754075592666666
+    },
+    "median_speedup": 1.077222254877833,
+    "p95_speedup": 1.0228187939580327,
+    "paired_speedups": [
+      1.0850785905864802,
+      0.9503351360202177,
+      1.0854654231027818
+    ],
+    "observed_trend": "faster_median_and_p95",
+    "order_effect_note": "The first arm in each pair was slower regardless of treatment; all three candidate model-forward measurements improved. No observation was discarded."
+  },
+  "request_seconds": {
+    "baseline": [7.485116450989153, 7.2848874109913595, 7.596385131007992],
+    "candidate": [7.087273648008704, 7.286998964991653, 7.157509747019503]
+  },
+  "model_seconds": {
+    "baseline": [3.443066872016061, 3.426590093993582, 3.4768191280018073],
+    "candidate": [3.228556962014409, 3.2578900670050643, 3.249851486994885],
+    "all_paired_candidates_faster": true
+  },
+  "correctness_passed": true,
+  "all_arrays_exact": true,
+  "paired_prediction_archives_compared": 12,
+  "candidate_gemm_calls_per_run": 216,
+  "followup_screen": {
+    "wide_variant_screen": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-periodic-wide-screen-20261017-v2/report.jsonl",
+      "sha256": "873b63fa364204fe9ef3e6eaaa2fff8327584fe4656306df040189f97785f079",
+      "all_tested_variants_bitwise_exact": true
+    },
+    "groups_per_block_16_profile": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-esm2-gpb16-warm-profile-20261017-v1/report.json",
+      "sha256": "b5da70bfa611a389fa7621ea8c7bc99e65091621e1dc7ecfd9724c269a0202db",
+      "warm_seconds": 2.7393113120051567,
+      "profiled_seconds": 2.7503642280062195,
+      "decision": "not promoted: 12-17 ms whole-model difference is below a robust acceptance margin and does not justify superseding the already accepted K32/GPB8 result"
+    }
+  },
+  "source_files": {
+    "kernels/amd/fireprot_esm2_gemm.hip": "008fcce4d36fbb499c8b33c274ec68428e706e9fa3910940e56d34096da8c106",
+    "python/fireprot/backends/amd/esm2_gemm.py": "c9d2695c9c225714ad8b1c063d23b389245863ebc9ed72a37976133ef9892878",
+    "python/fireprot/adapters/plm/runtime.py": "d1b8554c4da7f32d87becc0ff91728b28089320719d60af8e9362070f5921d33",
+    "configs/precision/plm-esm2-3b-native.json": "c2f2fcd25ba7f6a2f05e7b91b11ffeb453621833dc45e5e869765b083260e6b9",
+    "configs/requests/precision-esm2-3b-b4-n1000-fireprot.json": "5346e3997b92297cedef8b9e9e9144610e2d19bbe18b03dfeb084208981b2c12"
+  },
+  "limitations": "Same-host B4 N1000 comparison with fresh processes and unflushed filesystem/GPU library caches. With three pairs, nearest-rank p95 is the maximum. One E2E pair favored K16, while median, p95 and all three model-forward pairs favored K32. This does not qualify other sequence lengths, batch sizes, layouts, runtimes, architectures or precisions."
+}

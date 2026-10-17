@@ -351,8 +351,8 @@ and **1.120394x p95**. All 12 output archives were bitwise exact. Its full
 operator evidence is in
 [`precision_esm2_exact_gemm_gfx1100_20261017.json`](../provenance/precision_esm2_exact_gemm_gfx1100_20261017.json).
 
-The maintained profile loads that same library from the Rust-published bundle
-at `runtime/kernels/esm2-gfx1100-exact-v2`, pinned by manifest SHA-256
+The initial maintained profile loaded that same library from the Rust-published
+bundle at `runtime/kernels/esm2-gfx1100-exact-v2`, pinned by manifest SHA-256
 `9394d872c9642bb0a617cd27268cb331b9bb76f2df88ceda85431112e3dec433`.
 Acceptance rehashes the manifest, 2,084,033-byte build receipt and 24,088-byte
 library, and checks the package, gfx1100 target, Torch, HIP and C ABI identities.
@@ -371,6 +371,25 @@ seconds. All 12 prediction archives remain bitwise exact and both arms execute
 This is loader/verification overhead removal, not a new arithmetic kernel.
 Full evidence is in
 [`precision_esm2_published_gemm_gfx1100_20261017.json`](../provenance/precision_esm2_published_gemm_gfx1100_20261017.json).
+
+The current maintained kernel doubles its K tile from 16 to 32 without changing
+the per-accumulator reduction sequence. This halves the block-wide
+synchronization count while preserving exact FP32 output. The published bundle
+is `runtime/kernels/esm2-gfx1100-exact-v3`, pinned by manifest SHA-256
+`fc030bdb248b64e3270d5599d257664042cffe5cfa62da1b545379b18931e065`.
+Acceptance also rehashes its 2,084,033-byte build receipt and 26,904-byte
+library.
+
+Three fresh-process AB/BA/AB pairs compared the published K16 and K32 bundles.
+E2E median and p95 improve from 13.496007 and 13.599282 seconds to 12.528526
+and 13.295886 seconds: **1.077222x median** and **1.022819x p95**. One paired
+wall-clock ratio is below one because the first arm in every pair paid the same
+startup/order penalty; the declared acceptance trend is nevertheless
+`faster_median_and_p95`. All three candidate model-forward measurements improve
+over their paired K16 measurements, from 3.443067/3.426590/3.476819 seconds to
+3.228557/3.257890/3.249851 seconds. All 12 prediction archives remain bitwise
+exact and both arms execute 216 qualified GEMMs. Full evidence is in
+[`precision_esm2_tile32_gfx1100_20261017.json`](../provenance/precision_esm2_tile32_gfx1100_20261017.json).
 
 Run either explicit B4 entry after choosing a fresh `run_id` and unused
 `output_dir`:

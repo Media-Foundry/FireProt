@@ -7,7 +7,9 @@
 namespace {
 constexpr int kGroupsPerBlock = 8;
 constexpr int kColsPerThread = 4;
-constexpr int kTileK = 16;
+// A 32-value K tile preserves the qualified per-accumulator reduction order
+// while halving block-wide synchronization frequency versus the v1 kernel.
+constexpr int kTileK = 32;
 constexpr int kThreadsX = 32;
 constexpr int kThreadsY = 8;
 constexpr int kTileN = kThreadsX * kColsPerThread;

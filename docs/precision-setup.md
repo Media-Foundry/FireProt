@@ -467,8 +467,8 @@ and the staging file was hash-verified before exclusive installation.
 
 The general transfer gate and waiting sender remain unchanged. Twenty-two other
 manifest files are still pending by existence/size checks, so this does not claim
-completion of the 49-file migration. Full trained-model qualification remains
-pending, but is no longer blocked on the OpenBind-0 checkpoint. See
+completion of the 49-file migration. The same-host native N1000 full-model
+entry now passes; its experimental follow-up is described below. See
 [`precision_openfold3_checkpoint_20261017.json`](../provenance/precision_openfold3_checkpoint_20261017.json)
 for the transfer diagnosis and verification receipts.
 
@@ -502,3 +502,40 @@ build command and next gates are in
 [`experiments/hip_softmax/README.md`](../experiments/hip_softmax/README.md#precision-gfx1100-wave32-experiment).
 The evidence is pinned in
 [`precision_openfold3_softmax_gfx1100_20261017.json`](../provenance/precision_openfold3_softmax_gfx1100_20261017.json).
+
+### OpenFold3 N1000 full-model follow-up
+
+The first maintained native invocation completes in 326.240543 seconds, with
+288.395946 seconds of model forward, and passes Rust output/isolation acceptance.
+Settings remain OpenBind-0 N1000, strict deterministic FP32 with memory filling,
+R3/four trunk passes, D200/S1, seed101, query-only MSA and no templates.
+
+The first frozen candidate reproduces all outputs but submits zero HIP calls:
+the real triangle chunks are 256 and 232 rows, outside the original synthetic
+whitelist. That series was cancelled after the first pair; its small timing
+difference is not an optimization result. The 1000-row autotuner probes and D16
+heads remain native in the corrected experiment. A 12-case complete-attention
+screen qualifies H4/D32 at the two real sizes, and a zero-launch guard prevents
+another all-native candidate from being accepted as an accelerated forward.
+
+Three fresh-process AB/BA/AB pairs pass all Rust gates. Complete invocation
+medians are **322.388348 s native versus 285.978419 s candidate (1.127317x)**;
+p95 values are 322.522234 and 287.990005 s (1.119908x). Every paired ratio
+improves: 1.119908, 1.127317 and 1.128889. Model-forward medians improve from
+290.049754 to 254.290548 s (1.140623x). No observation is removed.
+
+The independent audit rehashes all accepted outputs and replays the Rust
+comparison against the maintained native reference: all six predictions match
+in all 11 arrays and complete CIF bytes. Each candidate submits 1,696 HIP calls.
+The successful series is `outputs/experiments/gfx11-of3-pairs-20261017-v2`;
+the superseded zero-coverage diagnostic remains under the corresponding `v1`.
+
+The experiment uses one frozen worker tree and a hash-pinned wave32 library;
+the maintained OpenFold3 worker and gfx90a profile remain unchanged. This is not
+production promotion: the inherited venv still needs a complete environment
+content inventory, the raw library needs publication, and N1536 full-model
+qualification remains separate. Caches are unflushed, clocks are not locked,
+and AMD SMI samples report throttling in both arms. Three-pair trends are
+descriptive, not statistical significance. Raw controls, failed coverage trial,
+successful run receipts and independent audits are linked from
+[`precision_openfold3_model_gfx1100_20261017.json`](../provenance/precision_openfold3_model_gfx1100_20261017.json).

@@ -1,0 +1,385 @@
+{
+  "schema_version": 1,
+  "status": "experimental_gfx1100_n1000_full_model_and_three_pairs_passed",
+  "summary_builder": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/summarize-evidence.py",
+    "sha256": "8c4129143cea8669d17dcaff17186074093785d8f53687df6bdb52ca79b0ad9e"
+  },
+  "host": "Precision",
+  "architecture": "gfx1100",
+  "hip_device": 0,
+  "pci_address": "0000:53:00.0",
+  "base_repository_revision": "2387502ce4e26c92e20679a1d3bc7544f8f62a14",
+  "workload": {
+    "model": "openfold3",
+    "model_name": "openbind-0",
+    "recycles": 3,
+    "diffusion_steps": 200,
+    "samples": 1,
+    "precision": "float32",
+    "deterministic": true
+  },
+  "seed": 101,
+  "source": {
+    "root": "/media/990Pro/fireprot/runtime/repos/openfold3",
+    "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+  },
+  "checkpoints": {
+    "model": {
+      "path": "/media/990Pro/fireprot/runtime/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+      "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+    }
+  },
+  "input": {
+    "path": "/media/990Pro/fireprot/benchmarks/openfold3/inputs/umem_L01000_462bb697ecdcce2f.json",
+    "sha256": "2715542db697dbd2dd5021063173f6e91a405ac0f46a46a69b748c815826ae5b"
+  },
+  "runtime": {
+    "torch": "2.13.0+rocm10.0.0",
+    "hip": "7.15.26333",
+    "python": "3.12.7"
+  },
+  "precision": "Strict deterministic FP32 with deterministic memory filling; no MSA server or templates",
+  "initial_native": {
+    "invocation": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-openfold3-model-20261017-v1/native-measurement/invocation.json",
+      "sha256": "c51caca1fa5a5f7845534472925f33e474af108502d4d5d2948072f010f37fc7"
+    },
+    "accepted": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-openfold3-model-20261017-v1/native-prediction/accepted.json",
+      "sha256": "5265b3daedfc30c478d3a794e88e07b5c615b33a8667ad9a3dd0d6ffeb603a4c"
+    },
+    "e2e_seconds": 326.24054331,
+    "model_seconds": 288.39594581801794
+  },
+  "rejected_initial_integration": {
+    "reason": "The synthetic shape whitelist missed real N1000 chunks; all 8167 attention calls used native fallback, with zero HIP launches despite exact output.",
+    "action": "Sent SIGINT only to the owned Rust benchmark after observing zero coverage. Remaining jobs were cancelled/skipped; no speedup claim from v1.",
+    "benchmark": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v1/paired/benchmark.json",
+      "sha256": "c47c5202dc760ea76c7e14587fd6403ebe5da199c02950634fa226a9eb424d25"
+    },
+    "audit": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v1/audit-final.json",
+      "sha256": "ada5b98d5feaeafb0d3fcaf1d9dd56f174572f195d35c940e963a3189f2b9ecb"
+    }
+  },
+  "implementation": {
+    "scope": "Frozen experimental worker only; maintained worker/profile and gfx90a gates unchanged",
+    "new_outer_chunks": [
+      232,
+      256
+    ],
+    "heads": 4,
+    "head_width": 32,
+    "native_fallbacks": "1000-row autotuner probes, D16 and unmatched signatures",
+    "zero_launch_forward_rejected": true,
+    "dispatcher": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/python/fireprot_workers/gfx1100_scope.py",
+      "sha256": "2ca9ac366e0747351e002a811100090e2dbd8b8d915dca3bfbfee4a4e7676873"
+    },
+    "worker": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/python/fireprot_workers/openfold3.py",
+      "sha256": "7bed36ed1347f2c12ea18cfb01aabc82366bc8521ba9a96c9704568255314c98"
+    },
+    "library": {
+      "path": "/media/990Pro/fireprot/runtime/kernels/openfold3-gfx1100-softmax-screen-20261017/wave32-v1.so",
+      "sha256": "df2c109098b48b019dc95bd120503af301d6d4cec5762f0bbc1fedab05303ad5"
+    },
+    "bridge": {
+      "path": "/media/990Pro/fireprot/target/release/lib_fireprot_bridge.so",
+      "sha256": "4651cdd1bb9fece995091bc3dc655bd1d058de135f97efd2bb519ac7a94f7b5e"
+    },
+    "preparation": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/preparation.json",
+      "sha256": "2e38dfc54949e22d1293adbb75e3ce2a44bcea468cba6677b9fd398ad600fa1e"
+    }
+  },
+  "real_shape_screen": {
+    "report": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-model-shapes-20261017-v2/report.json",
+      "sha256": "8c7fcdf98a3bc3f0d84cfc5e28d421eae6ecbdea57b32ac01e59a59a2985e4c6"
+    },
+    "cases": 12,
+    "all_exact": true,
+    "scope": "Synthetic complete attention; not model/E2E"
+  },
+  "experiment": {
+    "order": "AB/BA/AB; fresh process per invocation; no observation removed",
+    "benchmark": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/paired/benchmark.json",
+      "sha256": "7ee2581e0c9e973edb8218a8dcf10dd79760a3f064a846e35da7f38eb8fbd178"
+    },
+    "comparison": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/paired/comparison.json",
+      "sha256": "96dd6325aed6c0bc5ada81a231256e0975b93afc75a0c944cb199b8be7e1702a"
+    },
+    "audit": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/audit-final.json",
+      "sha256": "a709b70bd45ae55b15d5800920f1d366bf7981ba50f6c1f605d27720ad4561c3"
+    },
+    "records": [
+      {
+        "run_id": "gfx11-of3-n1000-gfx11-of3-pairs-20261017-v2-baseline-0",
+        "backend": "native",
+        "e2e_seconds": 322.522234324,
+        "model_seconds": 290.0497543189849,
+        "request_seconds": 313.6908743119857,
+        "all_11_arrays_exact": true,
+        "full_cif_exact": true,
+        "invocation": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/paired/measurement-000/invocation.json",
+          "sha256": "f2d5c9a82be611b48de5fb5c3c585bd6cff739ac954847d842bc99db4aacc57b"
+        },
+        "accepted": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/prediction-baseline-0/accepted.json",
+          "sha256": "d6b9da6e6740b85e49334e4e49d46f9fb07cb8813db0df4f252b8c703cd07126"
+        },
+        "npz": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/prediction-baseline-0/sample-0.npz",
+          "sha256": "4fc46b3cbf861f4a5efe88e08fa4c6120b85781e4cc8da1578e40ce7ce08d62d"
+        },
+        "cif": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/prediction-baseline-0/native/umem_L01000_462bb697ecdcce2f/seed_101/umem_L01000_462bb697ecdcce2f_seed_101_sample_1_model.cif",
+          "sha256": "16f5d9b98d96a4f7004e5a2711dbabfc272c0bb5d8922903c5ec3c47ff036813"
+        }
+      },
+      {
+        "run_id": "gfx11-of3-n1000-gfx11-of3-pairs-20261017-v2-candidate-0",
+        "backend": "hip_fused",
+        "e2e_seconds": 287.990005246,
+        "model_seconds": 254.9255904360034,
+        "request_seconds": 279.782253109006,
+        "all_11_arrays_exact": true,
+        "full_cif_exact": true,
+        "invocation": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/paired/measurement-001/invocation.json",
+          "sha256": "394a1f0cf5977cb8a6dcc23272e78701c7b6027b905c2e35e9bf3f7598f41038"
+        },
+        "accepted": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/prediction-candidate-0/accepted.json",
+          "sha256": "ab0757e5ca0babf15ebabec5c956050bf2bf87e8f927faa67c7fa19ba636401e"
+        },
+        "npz": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/prediction-candidate-0/sample-0.npz",
+          "sha256": "4fc46b3cbf861f4a5efe88e08fa4c6120b85781e4cc8da1578e40ce7ce08d62d"
+        },
+        "cif": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/prediction-candidate-0/native/umem_L01000_462bb697ecdcce2f/seed_101/umem_L01000_462bb697ecdcce2f_seed_101_sample_1_model.cif",
+          "sha256": "16f5d9b98d96a4f7004e5a2711dbabfc272c0bb5d8922903c5ec3c47ff036813"
+        },
+        "launches_submitted": 1696,
+        "variant_calls": {
+          "n1000-b256-w1-r0-packed0": 636,
+          "n1000-b232-w1-r0-packed0": 212,
+          "n1000-b256-w8-r1-packed0": 636,
+          "n1000-b232-w8-r1-packed0": 212
+        },
+        "operator_runtime": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/prediction-candidate-0/operator-runtime.json",
+          "sha256": "189cb5c1d8abb74541de2e366fd670b90bf53d4bd01ed200a5ed8b2319250d24"
+        }
+      },
+      {
+        "run_id": "gfx11-of3-n1000-gfx11-of3-pairs-20261017-v2-candidate-1",
+        "backend": "hip_fused",
+        "e2e_seconds": 285.978419313,
+        "model_seconds": 254.2905478850007,
+        "request_seconds": 277.7901356090151,
+        "all_11_arrays_exact": true,
+        "full_cif_exact": true,
+        "invocation": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/paired/measurement-002/invocation.json",
+          "sha256": "bd41f43de2a0feb4750670ddd7b52948a97cac3fd74a1a103d76dae4193b0b6a"
+        },
+        "accepted": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/prediction-candidate-1/accepted.json",
+          "sha256": "3127cf3b09724b0cb0554cd3f5f22f7a5ce494e566f3950174b6b6e053993d4d"
+        },
+        "npz": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/prediction-candidate-1/sample-0.npz",
+          "sha256": "4fc46b3cbf861f4a5efe88e08fa4c6120b85781e4cc8da1578e40ce7ce08d62d"
+        },
+        "cif": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/prediction-candidate-1/native/umem_L01000_462bb697ecdcce2f/seed_101/umem_L01000_462bb697ecdcce2f_seed_101_sample_1_model.cif",
+          "sha256": "16f5d9b98d96a4f7004e5a2711dbabfc272c0bb5d8922903c5ec3c47ff036813"
+        },
+        "launches_submitted": 1696,
+        "variant_calls": {
+          "n1000-b256-w1-r0-packed0": 636,
+          "n1000-b232-w1-r0-packed0": 212,
+          "n1000-b256-w8-r1-packed0": 636,
+          "n1000-b232-w8-r1-packed0": 212
+        },
+        "operator_runtime": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/prediction-candidate-1/operator-runtime.json",
+          "sha256": "189cb5c1d8abb74541de2e366fd670b90bf53d4bd01ed200a5ed8b2319250d24"
+        }
+      },
+      {
+        "run_id": "gfx11-of3-n1000-gfx11-of3-pairs-20261017-v2-baseline-1",
+        "backend": "native",
+        "e2e_seconds": 322.388347599,
+        "model_seconds": 290.4551775100117,
+        "request_seconds": 314.2301910800161,
+        "all_11_arrays_exact": true,
+        "full_cif_exact": true,
+        "invocation": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/paired/measurement-003/invocation.json",
+          "sha256": "15a24a3b1b2faad9a1dd2911b72eb856f8d4ee928de7f58673bf48357c8e0a56"
+        },
+        "accepted": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/prediction-baseline-1/accepted.json",
+          "sha256": "94527f3c9ae27edf8caa6eb8f33e2c38b72fb006ee1865f93244274bb3398af5"
+        },
+        "npz": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/prediction-baseline-1/sample-0.npz",
+          "sha256": "4fc46b3cbf861f4a5efe88e08fa4c6120b85781e4cc8da1578e40ce7ce08d62d"
+        },
+        "cif": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/prediction-baseline-1/native/umem_L01000_462bb697ecdcce2f/seed_101/umem_L01000_462bb697ecdcce2f_seed_101_sample_1_model.cif",
+          "sha256": "16f5d9b98d96a4f7004e5a2711dbabfc272c0bb5d8922903c5ec3c47ff036813"
+        }
+      },
+      {
+        "run_id": "gfx11-of3-n1000-gfx11-of3-pairs-20261017-v2-baseline-2",
+        "backend": "native",
+        "e2e_seconds": 321.67229426,
+        "model_seconds": 289.5282415469992,
+        "request_seconds": 313.6120538559917,
+        "all_11_arrays_exact": true,
+        "full_cif_exact": true,
+        "invocation": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/paired/measurement-004/invocation.json",
+          "sha256": "ee4be6489e80017ed70f19ebf4a59ad64f63995690774b0d703c16a03db21b1a"
+        },
+        "accepted": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/prediction-baseline-2/accepted.json",
+          "sha256": "2fe739c3cde21c919e0417ae079e52756f3e50d98b2d7051433feb70fe1bbec5"
+        },
+        "npz": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/prediction-baseline-2/sample-0.npz",
+          "sha256": "4fc46b3cbf861f4a5efe88e08fa4c6120b85781e4cc8da1578e40ce7ce08d62d"
+        },
+        "cif": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/prediction-baseline-2/native/umem_L01000_462bb697ecdcce2f/seed_101/umem_L01000_462bb697ecdcce2f_seed_101_sample_1_model.cif",
+          "sha256": "16f5d9b98d96a4f7004e5a2711dbabfc272c0bb5d8922903c5ec3c47ff036813"
+        }
+      },
+      {
+        "run_id": "gfx11-of3-n1000-gfx11-of3-pairs-20261017-v2-candidate-2",
+        "backend": "hip_fused",
+        "e2e_seconds": 284.945980194,
+        "model_seconds": 252.80758832397987,
+        "request_seconds": 277.1524058470095,
+        "all_11_arrays_exact": true,
+        "full_cif_exact": true,
+        "invocation": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/paired/measurement-005/invocation.json",
+          "sha256": "8800821dfb6a16875b05796986d68e0bb7f4dd534b09419f2fe05e8502623a0d"
+        },
+        "accepted": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/prediction-candidate-2/accepted.json",
+          "sha256": "c9a523ff9070fbbdf1101b0e0672924b614a84000e90af04b7bac04a173bb59d"
+        },
+        "npz": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/prediction-candidate-2/sample-0.npz",
+          "sha256": "4fc46b3cbf861f4a5efe88e08fa4c6120b85781e4cc8da1578e40ce7ce08d62d"
+        },
+        "cif": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/prediction-candidate-2/native/umem_L01000_462bb697ecdcce2f/seed_101/umem_L01000_462bb697ecdcce2f_seed_101_sample_1_model.cif",
+          "sha256": "16f5d9b98d96a4f7004e5a2711dbabfc272c0bb5d8922903c5ec3c47ff036813"
+        },
+        "launches_submitted": 1696,
+        "variant_calls": {
+          "n1000-b256-w1-r0-packed0": 636,
+          "n1000-b232-w1-r0-packed0": 212,
+          "n1000-b256-w8-r1-packed0": 636,
+          "n1000-b232-w8-r1-packed0": 212
+        },
+        "operator_runtime": {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/prediction-candidate-2/operator-runtime.json",
+          "sha256": "189cb5c1d8abb74541de2e366fd670b90bf53d4bd01ed200a5ed8b2319250d24"
+        }
+      }
+    ],
+    "performance": {
+      "baseline": {
+        "count": 3,
+        "min": 321.67229426,
+        "median": 322.388347599,
+        "p95": 322.522234324,
+        "max": 322.522234324,
+        "mean": 322.194292061
+      },
+      "candidate": {
+        "count": 3,
+        "min": 284.945980194,
+        "median": 285.978419313,
+        "p95": 287.990005246,
+        "max": 287.990005246,
+        "mean": 286.30480158433335
+      },
+      "median_speedup": 1.1273170485152928,
+      "p95_speedup": 1.1199077344663495,
+      "paired_speedups": [
+        1.1199077344663495,
+        1.1273170485152928,
+        1.1288886898527069
+      ],
+      "paired_summary": {
+        "count": 3,
+        "min": 1.1199077344663495,
+        "median": 1.1273170485152928,
+        "p95": 1.1288886898527069,
+        "max": 1.1288886898527069,
+        "mean": 1.1253711576114496
+      },
+      "observed_trend": "faster_median_and_p95",
+      "changes": {
+        "backend": {
+          "baseline": "native",
+          "candidate": "hip_fused"
+        },
+        "launch.inputs.rust-bridge": {
+          "baseline": null,
+          "candidate": {
+            "canonical_path": "/media/990Pro/fireprot/target/release/lib_fireprot_bridge.so",
+            "name": "rust-bridge",
+            "sha256": "4651cdd1bb9fece995091bc3dc655bd1d058de135f97efd2bb519ac7a94f7b5e"
+          }
+        }
+      }
+    },
+    "model_forward": {
+      "native_median_seconds": 290.0497543189849,
+      "candidate_median_seconds": 254.2905478850007,
+      "median_speedup": 1.1406234196725071
+    }
+  },
+  "verification": {
+    "all_11_arrays_exact": true,
+    "all_complete_cifs_exact": true,
+    "accepted_outputs_independently_rehashed": true,
+    "copied_preparation_files_rehashed": 91,
+    "candidate_launches_per_run": 1696
+  },
+  "telemetry": [
+    {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/telemetry-baseline0-start.json",
+      "sha256": "8e0c614497c2dfcbda8b028a81c312ad1acd9329c1283ee4bed465be5066c7ad"
+    },
+    {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-pairs-20261017-v2/telemetry-candidate1-start.json",
+      "sha256": "efc87fdfc8f5449abc3d8a65b5bacccaf0cf9c489b789d47947ad198b1f08b91"
+    }
+  ],
+  "limitations": [
+    "Only this N1000 workload/runtime/device is measured; no N1536 full-model claim.",
+    "Complete environment content inventory is not qualified; BIO packages are inherited by the venv.",
+    "Experimental raw library loader is hash-pinned but not a Rust-published production bundle.",
+    "Filesystem and GPU caches were not flushed; clocks were not fixed; AMD SMI reported THROTTLED in both sampled arms.",
+    "Three-pair median/p95 trends are descriptive, not statistical significance or automatic production promotion.",
+    "The unrelated 49-file migration gate remains unchanged."
+  ]
+}

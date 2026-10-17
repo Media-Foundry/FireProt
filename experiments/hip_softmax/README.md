@@ -221,8 +221,8 @@ Alternating warm QK/softmax/PV timings improve by 1.253--1.638x in the tested
 synthetic cases. The probability-only benchmark restores the native input with
 a clone, so its larger ratios are not realistic attention-speed claims.
 
-`gfx1100_scope.py` provides an explicitly hash-pinned experimental dispatcher.
-It accepts only FP32 inference at the recorded Torch/HIP/gfx1100 runtime with
+The initial `gfx1100_scope.py` provided an explicitly hash-pinned experimental dispatcher.
+It accepted only FP32 inference at the recorded Torch/HIP/gfx1100 runtime with
 four heads, head width 32, and `(outer batch, length)` in
 `{(1,1000), (1,1536), (8,1000), (8,1536), (128,1536)}`. Other signatures use the
 upstream function. The scoped screen passes 28 cases: 20 submitted HIP launches,
@@ -257,15 +257,65 @@ events on warmed operators, include deterministic allocation filling, and use
 four alternating samples per arm, each averaging three calls. Clocks and thermal
 state are not fixed. Bias packing remains inside the candidate timing.
 
-No full OpenFold3 model has been qualified on Precision. The pinned OpenBind-0
-checkpoint has now been transferred under separate user authorization and its
+The pinned OpenBind-0 checkpoint was transferred under separate user authorization and its
 complete source/destination hashes verified; see
 `provenance/precision_openfold3_checkpoint_20261017.json`. The general asset
 sender still waits on the unrelated failed AtlasLM finalization gate.
-A separate venv imports the model, runner and CLI; the native request passes
-schema inspection and its profile is prepared. Next gates are a same-host native
-reference, explicit observed
-shape coverage, all 11 arrays and complete CIF equality, followed by controlled
-fresh-process E2E pairs. Do not replace these gates with the synthetic results.
+A separate venv now runs the complete strict deterministic FP32 N1000 model.
+Its first maintained native invocation passed Rust acceptance in 326.240543 s,
+including 288.395946 s of model forward. See the full-model follow-up below;
+synthetic operator results do not replace its numerical and E2E gates.
 See `provenance/precision_openfold3_softmax_gfx1100_20261017.json` for hashes,
 raw report paths, environment preparation and representative timings.
+
+### Real model chunks and complete invocation follow-up
+
+The first frozen-worker candidate was exact but performed zero HIP launches:
+all 8,167 attention calls fell back to native. Its actual N1000 chunks included
+256 and 232 outer rows, outside the synthetic whitelist. That benchmark was
+cancelled after its first pair and is retained as a coverage diagnostic, not
+an optimization result (`outputs/experiments/gfx11-of3-pairs-20261017-v1`).
+
+`gfx1100_model_shapes.py` checks these two real chunk sizes with both bias
+orientations and zero, partial and nonzero masks. All 12 complete-attention
+checks are exact, with 1.23--1.40x synthetic device-event ratios. The dispatcher
+now additionally accepts `(232,1000)` and `(256,1000)` with H4/D32 FP32.
+The 1000-row autotuner probes, D16 heads and other unmatched calls remain native;
+no upstream chunk tuning or scientific settings are changed.
+
+`prepare_gfx1100_model.py` freezes both arms into one worker tree, binds the
+existing library hash, adds a zero-HIP-launch failure guard, and prepares a
+three-pair AB/BA/AB specification. Rust owns all execution and acceptance.
+`audit_gfx1100_model.py` independently rehashes outputs and replays Rust array
+comparisons, additionally checking complete CIF bytes and actual HIP coverage.
+
+The corrected `gfx11-of3-pairs-20261017-v2` series passes all three fresh-process
+AB/BA/AB pairs with strict FP32/R3/D200/S1/seed101 unchanged. Complete invocation
+medians are **322.388348 -> 285.978419 s (1.127317x)**, and forward medians are
+**290.049754 -> 254.290548 s (1.140623x)**. Every E2E pair improves. All six
+accepted predictions match the maintained native reference in all 11 arrays and
+complete CIF bytes; each candidate executes 1,696 HIP calls. Independent
+rehashing and Rust comparison replay pass. Full timings, identities and limits:
+`provenance/precision_openfold3_model_gfx1100_20261017.json`.
+
+Reproduce using a new absolute experiment directory, preserving the pinned
+library and native reference. The preparation refuses to overwrite a directory:
+
+```bash
+python3 experiments/hip_softmax/prepare_gfx1100_model.py \
+  /media/990Pro/fireprot /media/990Pro/fireprot/outputs/experiments/NEW_EXPERIMENT
+target/release/fireprot benchmark-pairs \
+  outputs/experiments/NEW_EXPERIMENT/pairs.json \
+  outputs/experiments/NEW_EXPERIMENT/paired
+python3 experiments/hip_softmax/audit_gfx1100_model.py \
+  /media/990Pro/fireprot \
+  /media/990Pro/fireprot/outputs/experiments/NEW_EXPERIMENT \
+  /media/990Pro/fireprot/outputs/experiments/gfx11-openfold3-model-20261017-v1/native-prediction \
+  /media/990Pro/fireprot/outputs/experiments/NEW_EXPERIMENT/audit.json
+```
+
+This remains experimental: the raw library is not a Rust-published production
+bundle, the inherited venv needs a complete environment inventory, and N1536
+trained-model qualification is separate. Clocks/caches were not fixed; AMD SMI
+reported throttling in samples from both arms. Do not automatically enable the
+maintained gfx90a profile on gfx1100.

@@ -1,8 +1,9 @@
 """Experimental OpenFold3 gfx1100 dispatch; not a maintained production route.
 
-Only synthetic operator gates have passed. Full trained-model parity and Rust
-E2E qualification are required before promotion. Explicit library hashes are
-mandatory; this module neither compiles nor discovers a library implicitly.
+Qualification is recorded per experiment in provenance, not inferred from this
+module's presence. Full trained-model parity and Rust E2E qualification are
+required before promotion. Explicit library hashes are mandatory; this module
+neither compiles nor discovers a library implicitly.
 """
 import ctypes
 import hashlib
@@ -15,7 +16,10 @@ from fireprot.backends.amd.softmax_fp32 import compatible_tensors
 from fireprot.ops.registry import signature_from_tensor
 
 
-CASES = {(1, 1000), (1, 1536), (8, 1000), (8, 1536), (128, 1536)}
+# N1000 model traces also contain outer chunks 256 and 232. Keep the 1000-row
+# autotuner probe native, and retain native fallback for untested shapes.
+CASES = {(1, 1000), (1, 1536), (8, 1000), (8, 1536), (128, 1536),
+         (232, 1000), (256, 1000)}
 
 
 class Gfx1100Softmax:

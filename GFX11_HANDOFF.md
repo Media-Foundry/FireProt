@@ -1,9 +1,10 @@
 # FireProt gfx11 handoff
 
-Snapshot: 2026-10-17 UTC. Base repository revision: `2387502` (`master`).
-The checkpoint receipt and preceding twelve optimization commits are on GitHub.
-This document supersedes the 2026-10-16 snapshot. Its original bytes are retained
-at `outputs/experiments/gfx11-openfold3-model-20261017-v1/GFX11_HANDOFF.before.md`.
+Snapshot: 2026-10-18 UTC. Reuse experiment base revision: `f4288f4` (`master`).
+The checkpoint and preceding full-model softmax qualification are on GitHub.
+This document includes the 2026-10-18 reuse follow-up. The original 2026-10-16
+snapshot is retained at
+`outputs/experiments/gfx11-openfold3-model-20261017-v1/GFX11_HANDOFF.before.md`.
 
 ## Workspace and rules
 
@@ -101,6 +102,63 @@ at `outputs/experiments/gfx11-openfold3-model-20261017-v1/GFX11_HANDOFF.before.m
   were not fixed; an initial AMD SMI snapshot reported throttling. Do not
   attribute a whole-invocation timing difference solely to the softmax kernel.
 
+## OpenFold3 gfx1100 reuse follow-up (2026-10-18)
+
+- Root: `outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1`. It copies the
+  qualified v2 softmax worker; neither that immutable tree nor the maintained
+  worker/profile was changed. Strict FP32/N1000/R3/D200/S1/seed101 is unchanged.
+- Three cumulative full-model cycles passed all 11 arrays and full CIF bytes
+  against the same maintained native reference:
+
+  | Mode | Added treatment | Single E2E | Single forward |
+  | --- | --- | ---: | ---: |
+  | 1 | Rollout-local pair conditioning | 263.543519 s | 230.005665 s |
+  | 2 | Plus static atom representations | 260.604323 s | 228.905371 s |
+  | 3 | Plus exact duplicate-template slots | 241.414822 s | 208.841154 s |
+
+- These individual timings are diagnostics, not repeated ablation speedups.
+  Each enabled pair/atom cache records 200 calls, one miss, 199 hits and zero
+  fallbacks. Mode 3 records nine eligible template calls and 27 reused slots.
+  The no-template input still has internal padded slots; distinct slot/mask
+  bits, including signed-zero differences, retain native execution.
+- Pair/atom reuse is scoped to a single rollout and requires the pinned
+  immutable-input source contract. Identity keys do not detect arbitrary
+  in-place changes. Time-dependent single conditioning and noisy-coordinate
+  projection are recomputed at every step; the native template reduction stays.
+- All three cycle allocator peaks are 38,636,892,160 allocated and
+  40,909,144,064 reserved bytes, reset just before forward. Pair/atom tensors
+  retained by caches are 512,000,000 / 69,620,736 bytes; these are not additive
+  whole-model peak costs. No hardware-memory or whole-invocation peak claim.
+- The copied N1000 template guard passes all six boundary/fallback checks.
+  Composition tests cover all four modes, unsupported devices, wrong hit counts,
+  zero template coverage and exception restoration.
+- **Final three-pair AB/BA/AB comparison: passed.** Previous softmax-only versus
+  combined reuse invocation medians are **283.614466 / 239.334872 s (1.185011x,
+  15.6126% less time)**. Forward medians are **252.733066 / 208.135715 s
+  (1.214271x)**. All three pairs improve: 1.190806, 1.183716 and 1.193164x.
+  This is an incremental result, not a direct native speedup; never multiply it
+  by the preceding softmax study's ratio.
+- All nine accepted predictions (three cycles plus six paired runs) match all
+  11 arrays and complete CIF bytes against the original maintained native run.
+  Every run submits 1,696 HIP softmax calls. All six paired allocator peaks equal
+  the cycle peaks above; no peak-memory reduction is claimed. Fifty CPU tests
+  pass: 21 conditioning, 12 composition and 17 maintained worker/scope tests.
+- Evidence: `provenance/precision_openfold3_reuse_gfx1100_20261018.json`.
+  Final audit SHA-256:
+  `ef510e390565fc63dc829e727b55435f88994091ecef66c2d74e027a4cff9039`.
+  Benchmark SHA-256:
+  `b8681756cb67a4bbf16b52eb5099b93acc7b9a2efb4e9d1ea83b99011d4d6919`.
+  All three cycle tmux sessions and `fireprot-of3-reuse-pairs` have completed;
+  inspect durable receipts instead of restarting them.
+- Caches were unflushed, clocks unlocked, and the retained cycle-3 SMI sample
+  reports `THROTTLED`. Three-sample p95 is the observed maximum, not a confidence
+  bound. Complete environment inventory and raw-kernel publication remain open;
+  neither production promotion nor N1536 qualification is claimed.
+- Reproduction and exact treatment declarations:
+  `experiments/hip_softmax/README.md`, `prepare_gfx1100_reuse.py`,
+  `prepare_gfx1100_reuse_pairs.py`, `audit_gfx1100_reuse.py` and
+  `collect_gfx1100_reuse.py` in that directory. Never reuse an output directory.
+
 ## Native entries
 
 ```bash
@@ -153,7 +211,8 @@ serially; do not add overlapping jobs there.
 
 1. Inspect durable OpenFold3 receipts and any existing tmux job before launching
    another GPU workload. Never overlap runs on HIP0.
-2. N1000 full-model and three-pair gates now pass for the frozen experiment.
+2. N1000 full-model and three-pair gates now pass for both frozen softmax and
+   the subsequent pair/atom/template reuse composition.
    Before enabling a maintained gfx1100 OpenFold3 profile, publish the kernel
    through Rust, complete the environment inventory, and requalify the packaged
    route with actual HIP coverage and all-array/CIF checks.

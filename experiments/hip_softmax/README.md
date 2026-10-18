@@ -319,3 +319,83 @@ bundle, the inherited venv needs a complete environment inventory, and N1536
 trained-model qualification is separate. Clocks/caches were not fixed; AMD SMI
 reported throttling in samples from both arms. Do not automatically enable the
 maintained gfx90a profile on gfx1100.
+
+### Precision gfx1100 rollout-local reuse cycles (2026-10-18)
+
+`prepare_gfx1100_reuse.py` copies the already qualified wave32 worker into a
+new immutable experiment tree. Mode 0 retains softmax only; mode 1 adds the
+source-pinned pair-conditioning cache, mode 2 adds static atom representations,
+and mode 3 adds exact duplicate-template reuse. The original conditioning
+helpers and N1536 template experiment are unchanged. Only the frozen template
+copy's five N1536 shape literals are specialized to N1000.
+
+The pair/atom caches live for one diffusion rollout and must each record 200
+calls, one miss, 199 hits and no fallbacks. Time-dependent single conditioning
+and noisy-coordinate projections still execute at every diffusion step. These
+caches require the audited immutable-input source contract; identity keys do
+not detect arbitrary in-place mutation. Template reuse compares all bits and
+masks (including signed zero and NaN payloads), preserves the first native
+calculation and final reduction, and falls back for distinct slots. This
+query-only/no-template workload still has internal padded template slots.
+
+`gfx1100_reuse.py` composes the contexts and restores them on exit, including
+exceptions. It fails on missing cache coverage or zero template reuse in mode 3.
+The frozen transport seals all reuse diagnostics into accepted outputs.
+`audit_gfx1100_reuse.py` independently rehashes frozen code/library/controls and
+accepted outputs, replays Rust comparison of all 11 arrays against the original
+maintained native result, and compares full CIF bytes. Forward-scoped allocator
+peaks are diagnostic, not whole-invocation or hardware memory measurements.
+
+Run each cycle serially and require its audit to pass before adding the next
+optimization. Substitute a new absolute root for `NEW_REUSE` below:
+
+```bash
+python3 experiments/hip_softmax/prepare_gfx1100_reuse.py \
+  /media/990Pro/fireprot /media/990Pro/fireprot/outputs/experiments/NEW_REUSE
+# First run the copied N1000 template guard screen on idle HIP0.
+HIP_VISIBLE_DEVICES=0 \
+PYTHONPATH=/media/990Pro/fireprot/outputs/experiments/NEW_REUSE/python/fireprot_workers \
+runtime/venvs/openfold3-gfx1100/bin/python \
+  outputs/experiments/NEW_REUSE/template_guard_screen.py \
+  /media/990Pro/fireprot/outputs/experiments/NEW_REUSE/template-guard
+# Repeat these two commands for i=1, then 2, then 3; inspect each audit.
+target/release/fireprot measure-inference \
+  outputs/experiments/NEW_REUSE/measure-1.json \
+  outputs/experiments/NEW_REUSE/measurement-1
+python3 experiments/hip_softmax/audit_gfx1100_reuse.py \
+  /media/990Pro/fireprot /media/990Pro/fireprot/outputs/experiments/NEW_REUSE \
+  /media/990Pro/fireprot/outputs/experiments/NEW_REUSE/audit-cycle1.json
+# Only after all three cycle audits pass:
+python3 experiments/hip_softmax/prepare_gfx1100_reuse_pairs.py \
+  /media/990Pro/fireprot/outputs/experiments/NEW_REUSE
+target/release/fireprot benchmark-pairs \
+  outputs/experiments/NEW_REUSE/pairs.json outputs/experiments/NEW_REUSE/paired
+python3 experiments/hip_softmax/audit_gfx1100_reuse.py \
+  /media/990Pro/fireprot /media/990Pro/fireprot/outputs/experiments/NEW_REUSE \
+  /media/990Pro/fireprot/outputs/experiments/NEW_REUSE/audit-final.json
+```
+
+Both paired arms use the same frozen worker, library and `hip_fused` backend.
+Only the mode variable and corresponding profile digest differ. The AB/BA/AB
+comparison is incremental against the previous softmax-only route, **not** a
+direct native comparison; do not multiply historical ratios. Rust owns launch,
+device isolation, scientific-setting checks and acceptance. The existing
+production-publication, environment-inventory and N1536 limitations still apply.
+
+The completed `gfx11-of3-reuse-cycles-20261018-v1` experiment passes all three
+cycle gates and all three paired comparisons. Cycle E2E observations are
+263.543519, 260.604323 and 241.414822 seconds; these are not repeated ablations.
+Paired invocation medians are **283.614466 -> 239.334872 s (1.185011x,
+15.6126% less time)**, with forward medians **252.733066 -> 208.135715 s
+(1.214271x)**. All three paired ratios improve: 1.190806, 1.183716 and 1.193164x.
+No observation is discarded. Rust reports `faster_median_and_p95`.
+
+All nine predictions pass independent rehashing, all 11 bitwise array checks
+and full CIF equality against the maintained native reference. Every run
+submits 1,696 HIP calls. Each mode-3 run records 199 pair hits, 199 atom hits
+and 27 reused template slots across nine eligible calls. Allocator peaks are
+identical across all nine runs: 38,636,892,160 allocated / 40,909,144,064 reserved
+bytes. No memory reduction is established. The six template-guard checks and
+50 CPU tests pass. Full controls, timings, pins and limitations are retained in
+`provenance/precision_openfold3_reuse_gfx1100_20261018.json`, produced by
+`collect_gfx1100_reuse.py` after the final audit and test log are present.

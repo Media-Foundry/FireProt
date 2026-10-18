@@ -1,0 +1,661 @@
+{
+  "host": "Precision",
+  "architecture": "gfx1100",
+  "hip_device": 0,
+  "pci_address": "0000:53:00.0",
+  "workload": {
+    "model": "openfold3",
+    "model_name": "openbind-0",
+    "recycles": 3,
+    "diffusion_steps": 200,
+    "samples": 1,
+    "precision": "float32",
+    "deterministic": true
+  },
+  "seed": 101,
+  "source": {
+    "root": "/media/990Pro/fireprot/runtime/repos/openfold3",
+    "commit": "7de748b7bc93adb5af0a4032d5e9f208b6e1325f"
+  },
+  "checkpoints": {
+    "model": {
+      "path": "/media/990Pro/fireprot/runtime/weights/openbind0/of3-ob-2025-06-30-174k.pt",
+      "sha256": "bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4"
+    }
+  },
+  "input": {
+    "path": "/media/990Pro/fireprot/benchmarks/openfold3/inputs/umem_L01000_462bb697ecdcce2f.json",
+    "sha256": "2715542db697dbd2dd5021063173f6e91a405ac0f46a46a69b748c815826ae5b"
+  },
+  "runtime": {
+    "torch": "2.13.0+rocm10.0.0",
+    "hip": "7.15.26333",
+    "python": "3.12.7"
+  },
+  "precision": "Strict deterministic FP32 with deterministic memory filling; no MSA server or templates",
+  "schema_version": 1,
+  "status": "three_cycles_and_three_pairs_passed",
+  "date_utc": "2026-10-18",
+  "base_repository_revision": "f4288f4cd7cc061f198a983e0ea6a90bfa381136",
+  "summary_builder": {
+    "path": "/media/990Pro/fireprot/experiments/hip_softmax/collect_gfx1100_reuse.py",
+    "sha256": "8b40a6d39aa1a6208f00b2f89d8ac75f6eba408e2269e5fbe4396aa81d0fc102"
+  },
+  "previous_softmax_evidence": {
+    "path": "/media/990Pro/fireprot/provenance/precision_openfold3_model_gfx1100_20261017.json",
+    "sha256": "276891810cf994e9fe8e67c666cc2a8f2cefab477c7381b12e5914fe1fc8598d"
+  },
+  "boundary": "Incremental mode 0 softmax-only versus mode 3 composed reuse, not direct native speedup",
+  "experiment_root": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1",
+  "preparation": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/preparation.json",
+    "sha256": "a833ad5ebcb6e9c3701dfd85ce1e9e5cda572a1fbe0856fbc74b038dedf3a788"
+  },
+  "paired_preparation": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/paired-preparation.json",
+    "sha256": "15cfe18c63f01aedca30a3287ee981f42de2376625cf7ba3a101a769aa1d4949"
+  },
+  "specification": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/pairs.json",
+    "sha256": "ff3d65ce88276d8e1ca23951eb776acfc430f988d226f6d239539343502a026d"
+  },
+  "benchmark": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/paired/benchmark.json",
+    "sha256": "b8681756cb67a4bbf16b52eb5099b93acc7b9a2efb4e9d1ea83b99011d4d6919"
+  },
+  "comparison": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/paired/comparison.json",
+    "sha256": "775cb851c97296f794531219756d361bd54ff44952b56c3f7ee7f43486726581"
+  },
+  "final_audit": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/audit-final.json",
+    "sha256": "ef510e390565fc63dc829e727b55435f88994091ecef66c2d74e027a4cff9039"
+  },
+  "native_reference": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-openfold3-model-20261017-v1/native-prediction/accepted.json",
+    "sha256": "5265b3daedfc30c478d3a794e88e07b5c615b33a8667ad9a3dd0d6ffeb603a4c"
+  },
+  "template_guard": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/template-guard/screen.json",
+    "sha256": "85b1c06f44c3d1cf29a3756cd52b4263483139225dec88ab4350bbad70fd5121"
+  },
+  "unit_tests": {
+    "passed": 50,
+    "log": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/tests.log",
+      "sha256": "511de86e523e64a4bc6ff7ccaf22dfb30f5794b312b08f843ac2b04cca82e8d9"
+    },
+    "scope": "21 conditioning tests, 12 composition tests, 17 maintained worker/scope tests"
+  },
+  "diagnostic_cycles": [
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/measurement-1/invocation.json",
+        "sha256": "460bf5931aaecea5633a6a1c653ed5c8cdfaa8607599313eb23a9a33c422627e"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-cycle-1/accepted.json",
+        "sha256": "940d30bb05cb2a64c27111a5a17f3250d52a268960af9bdb4d3b74de0b57a080"
+      },
+      "run_id": "gfx11-of3-reuse-cycles-20261018-v1-cycle-1",
+      "mode": 1,
+      "e2e_seconds": 263.543518733,
+      "model_seconds": 230.00566471199272,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "launches_submitted": 1696,
+      "npz": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-cycle-1/sample-0.npz",
+        "sha256": "4fc46b3cbf861f4a5efe88e08fa4c6120b85781e4cc8da1578e40ce7ce08d62d"
+      },
+      "cif": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-cycle-1/native/umem_L01000_462bb697ecdcce2f/seed_101/umem_L01000_462bb697ecdcce2f_seed_101_sample_1_model.cif",
+        "sha256": "16f5d9b98d96a4f7004e5a2711dbabfc272c0bb5d8922903c5ec3c47ff036813"
+      },
+      "reuse_receipt": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-cycle-1/reuse-runtime.json",
+        "sha256": "3bef6445b76293880a04d0aa6b718636924fad3e4274adcb6001b375ad5bd92e"
+      },
+      "caches": {
+        "pair": [
+          {
+            "calls": 200,
+            "hits": 199,
+            "misses": 1,
+            "fallbacks": 0,
+            "completed": true,
+            "effective_chunks": [
+              1024
+            ],
+            "retained_pair_bytes": 512000000
+          }
+        ]
+      },
+      "template_counts": null,
+      "forward_allocator_peak_bytes": {
+        "peak_allocated_bytes": 38636892160,
+        "peak_reserved_bytes": 40909144064
+      }
+    },
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/measurement-2/invocation.json",
+        "sha256": "3e6e09035c0b9ba098a6eee8782a73fb4673731213413c44fcdee69cf3d3c363"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-cycle-2/accepted.json",
+        "sha256": "e5e0f0f37ecf5674e1c4bd53bd2785c35047d4b826890eedb68d5e11fcf936c7"
+      },
+      "run_id": "gfx11-of3-reuse-cycles-20261018-v1-cycle-2",
+      "mode": 2,
+      "e2e_seconds": 260.604323248,
+      "model_seconds": 228.90537084604148,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "launches_submitted": 1696,
+      "npz": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-cycle-2/sample-0.npz",
+        "sha256": "4fc46b3cbf861f4a5efe88e08fa4c6120b85781e4cc8da1578e40ce7ce08d62d"
+      },
+      "cif": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-cycle-2/native/umem_L01000_462bb697ecdcce2f/seed_101/umem_L01000_462bb697ecdcce2f_seed_101_sample_1_model.cif",
+        "sha256": "16f5d9b98d96a4f7004e5a2711dbabfc272c0bb5d8922903c5ec3c47ff036813"
+      },
+      "reuse_receipt": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-cycle-2/reuse-runtime.json",
+        "sha256": "0c878082b163dd5f9271fdaf954844258b1fafa0e162424cc0521eef7950e99c"
+      },
+      "caches": {
+        "pair": [
+          {
+            "calls": 200,
+            "hits": 199,
+            "misses": 1,
+            "fallbacks": 0,
+            "completed": true,
+            "effective_chunks": [
+              1024
+            ],
+            "retained_pair_bytes": 512000000
+          }
+        ],
+        "atom": [
+          {
+            "calls": 200,
+            "hits": 199,
+            "misses": 1,
+            "fallbacks": 0,
+            "completed": true,
+            "retained_bytes": 69620736
+          }
+        ]
+      },
+      "template_counts": null,
+      "forward_allocator_peak_bytes": {
+        "peak_allocated_bytes": 38636892160,
+        "peak_reserved_bytes": 40909144064
+      }
+    },
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/measurement-3/invocation.json",
+        "sha256": "7e58331bd8e2767e3dd602159f55c3ed85b99ebfe7b635c327c37531a0321636"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-cycle-3/accepted.json",
+        "sha256": "974a89a1fded1295705a2ce02f851d3ececa746745e4f7670e44e636489f0755"
+      },
+      "run_id": "gfx11-of3-reuse-cycles-20261018-v1-cycle-3",
+      "mode": 3,
+      "e2e_seconds": 241.414821556,
+      "model_seconds": 208.8411541680107,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "launches_submitted": 1696,
+      "npz": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-cycle-3/sample-0.npz",
+        "sha256": "4fc46b3cbf861f4a5efe88e08fa4c6120b85781e4cc8da1578e40ce7ce08d62d"
+      },
+      "cif": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-cycle-3/native/umem_L01000_462bb697ecdcce2f/seed_101/umem_L01000_462bb697ecdcce2f_seed_101_sample_1_model.cif",
+        "sha256": "16f5d9b98d96a4f7004e5a2711dbabfc272c0bb5d8922903c5ec3c47ff036813"
+      },
+      "reuse_receipt": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-cycle-3/reuse-runtime.json",
+        "sha256": "dc1bb73045732ec705f811df3f00a52b883996ee028fd6a4da662ab2791e5b17"
+      },
+      "caches": {
+        "pair": [
+          {
+            "calls": 200,
+            "hits": 199,
+            "misses": 1,
+            "fallbacks": 0,
+            "completed": true,
+            "effective_chunks": [
+              1024
+            ],
+            "retained_pair_bytes": 512000000
+          }
+        ],
+        "atom": [
+          {
+            "calls": 200,
+            "hits": 199,
+            "misses": 1,
+            "fallbacks": 0,
+            "completed": true,
+            "retained_bytes": 69620736
+          }
+        ]
+      },
+      "template_counts": {
+        "eligible": 9,
+        "distinct": 0,
+        "unsupported": 0,
+        "reused_slots": 27
+      },
+      "forward_allocator_peak_bytes": {
+        "peak_allocated_bytes": 38636892160,
+        "peak_reserved_bytes": 40909144064
+      }
+    }
+  ],
+  "paired_runs": [
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/paired/measurement-000/invocation.json",
+        "sha256": "ab488b67cc577b801dbf37c6d2d4feb189d960258ce544bef62802bc66a458fd"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-baseline-0/accepted.json",
+        "sha256": "5c08c476e8eca6e8b8f893d2976e6d12423fe649bada4044f678b2629163a03c"
+      },
+      "run_id": "gfx11-of3-reuse-cycles-20261018-v1-paired-baseline-0",
+      "mode": 0,
+      "e2e_seconds": 285.698612403,
+      "model_seconds": 253.89475202799076,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "launches_submitted": 1696,
+      "npz": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-baseline-0/sample-0.npz",
+        "sha256": "4fc46b3cbf861f4a5efe88e08fa4c6120b85781e4cc8da1578e40ce7ce08d62d"
+      },
+      "cif": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-baseline-0/native/umem_L01000_462bb697ecdcce2f/seed_101/umem_L01000_462bb697ecdcce2f_seed_101_sample_1_model.cif",
+        "sha256": "16f5d9b98d96a4f7004e5a2711dbabfc272c0bb5d8922903c5ec3c47ff036813"
+      },
+      "reuse_receipt": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-baseline-0/reuse-runtime.json",
+        "sha256": "5bfbcc1a55c49751204e00e2518e1c084dc77f1a2cfea2f06bb7872b62a05904"
+      },
+      "caches": {},
+      "template_counts": null,
+      "forward_allocator_peak_bytes": {
+        "peak_allocated_bytes": 38636892160,
+        "peak_reserved_bytes": 40909144064
+      }
+    },
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/paired/measurement-001/invocation.json",
+        "sha256": "a363d2c9ad5ab1ba3182accc14f5442a4c1f1535d05698e5db1421680bc3a4b5"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-candidate-0/accepted.json",
+        "sha256": "eb22aa6bf050f9517d8e0944909ec02052649a7bdc32b915d27ca8c1003bf231"
+      },
+      "run_id": "gfx11-of3-reuse-cycles-20261018-v1-paired-candidate-0",
+      "mode": 3,
+      "e2e_seconds": 239.920380828,
+      "model_seconds": 208.37794036598643,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "launches_submitted": 1696,
+      "npz": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-candidate-0/sample-0.npz",
+        "sha256": "4fc46b3cbf861f4a5efe88e08fa4c6120b85781e4cc8da1578e40ce7ce08d62d"
+      },
+      "cif": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-candidate-0/native/umem_L01000_462bb697ecdcce2f/seed_101/umem_L01000_462bb697ecdcce2f_seed_101_sample_1_model.cif",
+        "sha256": "16f5d9b98d96a4f7004e5a2711dbabfc272c0bb5d8922903c5ec3c47ff036813"
+      },
+      "reuse_receipt": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-candidate-0/reuse-runtime.json",
+        "sha256": "dc1bb73045732ec705f811df3f00a52b883996ee028fd6a4da662ab2791e5b17"
+      },
+      "caches": {
+        "pair": [
+          {
+            "calls": 200,
+            "hits": 199,
+            "misses": 1,
+            "fallbacks": 0,
+            "completed": true,
+            "effective_chunks": [
+              1024
+            ],
+            "retained_pair_bytes": 512000000
+          }
+        ],
+        "atom": [
+          {
+            "calls": 200,
+            "hits": 199,
+            "misses": 1,
+            "fallbacks": 0,
+            "completed": true,
+            "retained_bytes": 69620736
+          }
+        ]
+      },
+      "template_counts": {
+        "eligible": 9,
+        "distinct": 0,
+        "unsupported": 0,
+        "reused_slots": 27
+      },
+      "forward_allocator_peak_bytes": {
+        "peak_allocated_bytes": 38636892160,
+        "peak_reserved_bytes": 40909144064
+      }
+    },
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/paired/measurement-002/invocation.json",
+        "sha256": "ff6d1c6a6909fa5c4fbce7fc854d77aa5e22ce242460ddca1b0a659befbb280e"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-candidate-1/accepted.json",
+        "sha256": "9fec9d021f279d8f87fe9513cfcb3b3c291b1da6aad4cce58e68262f79455e5b"
+      },
+      "run_id": "gfx11-of3-reuse-cycles-20261018-v1-paired-candidate-1",
+      "mode": 3,
+      "e2e_seconds": 239.334872304,
+      "model_seconds": 208.13571470300667,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "launches_submitted": 1696,
+      "npz": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-candidate-1/sample-0.npz",
+        "sha256": "4fc46b3cbf861f4a5efe88e08fa4c6120b85781e4cc8da1578e40ce7ce08d62d"
+      },
+      "cif": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-candidate-1/native/umem_L01000_462bb697ecdcce2f/seed_101/umem_L01000_462bb697ecdcce2f_seed_101_sample_1_model.cif",
+        "sha256": "16f5d9b98d96a4f7004e5a2711dbabfc272c0bb5d8922903c5ec3c47ff036813"
+      },
+      "reuse_receipt": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-candidate-1/reuse-runtime.json",
+        "sha256": "dc1bb73045732ec705f811df3f00a52b883996ee028fd6a4da662ab2791e5b17"
+      },
+      "caches": {
+        "pair": [
+          {
+            "calls": 200,
+            "hits": 199,
+            "misses": 1,
+            "fallbacks": 0,
+            "completed": true,
+            "effective_chunks": [
+              1024
+            ],
+            "retained_pair_bytes": 512000000
+          }
+        ],
+        "atom": [
+          {
+            "calls": 200,
+            "hits": 199,
+            "misses": 1,
+            "fallbacks": 0,
+            "completed": true,
+            "retained_bytes": 69620736
+          }
+        ]
+      },
+      "template_counts": {
+        "eligible": 9,
+        "distinct": 0,
+        "unsupported": 0,
+        "reused_slots": 27
+      },
+      "forward_allocator_peak_bytes": {
+        "peak_allocated_bytes": 38636892160,
+        "peak_reserved_bytes": 40909144064
+      }
+    },
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/paired/measurement-003/invocation.json",
+        "sha256": "25fe99d89e854d0e3086c8240345d67e7fc14d70d713fa3519ef721f31a72bbf"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-baseline-1/accepted.json",
+        "sha256": "bbd5b22328540b89ee0bc6616a8249e21a798db414d25227dc519002cc9ca3e4"
+      },
+      "run_id": "gfx11-of3-reuse-cycles-20261018-v1-paired-baseline-1",
+      "mode": 0,
+      "e2e_seconds": 283.304484545,
+      "model_seconds": 252.7330661320011,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "launches_submitted": 1696,
+      "npz": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-baseline-1/sample-0.npz",
+        "sha256": "4fc46b3cbf861f4a5efe88e08fa4c6120b85781e4cc8da1578e40ce7ce08d62d"
+      },
+      "cif": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-baseline-1/native/umem_L01000_462bb697ecdcce2f/seed_101/umem_L01000_462bb697ecdcce2f_seed_101_sample_1_model.cif",
+        "sha256": "16f5d9b98d96a4f7004e5a2711dbabfc272c0bb5d8922903c5ec3c47ff036813"
+      },
+      "reuse_receipt": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-baseline-1/reuse-runtime.json",
+        "sha256": "5bfbcc1a55c49751204e00e2518e1c084dc77f1a2cfea2f06bb7872b62a05904"
+      },
+      "caches": {},
+      "template_counts": null,
+      "forward_allocator_peak_bytes": {
+        "peak_allocated_bytes": 38636892160,
+        "peak_reserved_bytes": 40909144064
+      }
+    },
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/paired/measurement-004/invocation.json",
+        "sha256": "8b5221ba26c7a729180fd9ab1c24d7b3043a6a499bfaf11acc5d4e0422e35e93"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-baseline-2/accepted.json",
+        "sha256": "70cb241496622988a2b468bee45d745090f550dfb1304301a44c64b9fb0c14f7"
+      },
+      "run_id": "gfx11-of3-reuse-cycles-20261018-v1-paired-baseline-2",
+      "mode": 0,
+      "e2e_seconds": 283.614465937,
+      "model_seconds": 252.600004722015,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "launches_submitted": 1696,
+      "npz": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-baseline-2/sample-0.npz",
+        "sha256": "4fc46b3cbf861f4a5efe88e08fa4c6120b85781e4cc8da1578e40ce7ce08d62d"
+      },
+      "cif": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-baseline-2/native/umem_L01000_462bb697ecdcce2f/seed_101/umem_L01000_462bb697ecdcce2f_seed_101_sample_1_model.cif",
+        "sha256": "16f5d9b98d96a4f7004e5a2711dbabfc272c0bb5d8922903c5ec3c47ff036813"
+      },
+      "reuse_receipt": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-baseline-2/reuse-runtime.json",
+        "sha256": "5bfbcc1a55c49751204e00e2518e1c084dc77f1a2cfea2f06bb7872b62a05904"
+      },
+      "caches": {},
+      "template_counts": null,
+      "forward_allocator_peak_bytes": {
+        "peak_allocated_bytes": 38636892160,
+        "peak_reserved_bytes": 40909144064
+      }
+    },
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/paired/measurement-005/invocation.json",
+        "sha256": "bf9edec1132f2daea8a6cda93e9565036b9bc54a540f68bbc9e13a2940170e4a"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-candidate-2/accepted.json",
+        "sha256": "21cc8bf41455c499f270134aee612ff2e2b165e677798b9d549868ffd67ee911"
+      },
+      "run_id": "gfx11-of3-reuse-cycles-20261018-v1-paired-candidate-2",
+      "mode": 3,
+      "e2e_seconds": 237.699467966,
+      "model_seconds": 207.70634971902473,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "launches_submitted": 1696,
+      "npz": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-candidate-2/sample-0.npz",
+        "sha256": "4fc46b3cbf861f4a5efe88e08fa4c6120b85781e4cc8da1578e40ce7ce08d62d"
+      },
+      "cif": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-candidate-2/native/umem_L01000_462bb697ecdcce2f/seed_101/umem_L01000_462bb697ecdcce2f_seed_101_sample_1_model.cif",
+        "sha256": "16f5d9b98d96a4f7004e5a2711dbabfc272c0bb5d8922903c5ec3c47ff036813"
+      },
+      "reuse_receipt": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/prediction-paired-candidate-2/reuse-runtime.json",
+        "sha256": "dc1bb73045732ec705f811df3f00a52b883996ee028fd6a4da662ab2791e5b17"
+      },
+      "caches": {
+        "pair": [
+          {
+            "calls": 200,
+            "hits": 199,
+            "misses": 1,
+            "fallbacks": 0,
+            "completed": true,
+            "effective_chunks": [
+              1024
+            ],
+            "retained_pair_bytes": 512000000
+          }
+        ],
+        "atom": [
+          {
+            "calls": 200,
+            "hits": 199,
+            "misses": 1,
+            "fallbacks": 0,
+            "completed": true,
+            "retained_bytes": 69620736
+          }
+        ]
+      },
+      "template_counts": {
+        "eligible": 9,
+        "distinct": 0,
+        "unsupported": 0,
+        "reused_slots": 27
+      },
+      "forward_allocator_peak_bytes": {
+        "peak_allocated_bytes": 38636892160,
+        "peak_reserved_bytes": 40909144064
+      }
+    }
+  ],
+  "end_to_end_performance": {
+    "baseline": {
+      "count": 3,
+      "min": 283.304484545,
+      "median": 283.614465937,
+      "p95": 285.698612403,
+      "max": 285.698612403,
+      "mean": 284.205854295
+    },
+    "candidate": {
+      "count": 3,
+      "min": 237.699467966,
+      "median": 239.334872304,
+      "p95": 239.920380828,
+      "max": 239.920380828,
+      "mean": 238.98490703266665
+    },
+    "median_speedup": 1.185011039999038,
+    "p95_speedup": 1.1908059307717531,
+    "paired_speedups": [
+      1.1908059307717531,
+      1.1837158614526946,
+      1.1931640754768857
+    ],
+    "paired_summary": {
+      "count": 3,
+      "min": 1.1837158614526946,
+      "median": 1.1908059307717531,
+      "p95": 1.1931640754768857,
+      "max": 1.1931640754768857,
+      "mean": 1.1892286225671111
+    },
+    "observed_trend": "faster_median_and_p95",
+    "changes": {
+      "invocation.profile_sha256": {
+        "baseline": "9c3d0020f8e5ea5ceb8b345514e67df5c0deb8df5cc0e03bf589fbb491f68c9d",
+        "candidate": "0d45ab397656ec32da1960dea0360b25431ca075a02fb7e64815c48e191a46ea"
+      },
+      "launch.environment.FIREPROT_GFX1100_REUSE_MODE": {
+        "baseline": "0",
+        "candidate": "3"
+      }
+    }
+  },
+  "model_forward": {
+    "baseline": {
+      "seconds": [
+        253.89475202799076,
+        252.7330661320011,
+        252.600004722015
+      ],
+      "median": 252.7330661320011
+    },
+    "candidate": {
+      "seconds": [
+        208.37794036598643,
+        208.13571470300667,
+        207.70634971902473
+      ],
+      "median": 208.13571470300667
+    },
+    "median_speedup": 1.2142705373396938
+  },
+  "implementation": {
+    "pair": "Rollout-local immutable pair conditioning; native first miss, 199 hits; recompute time-dependent single branch",
+    "atom": "Rollout-local static cl/plm; native first miss, 199 hits; recompute noisy-coordinate projection",
+    "template": "Frozen N1000 guard specialization; compare exact slot/mask bits, retain first native calculation and native reduction",
+    "maintained_worker_changed": false,
+    "precision_or_work_reduced": false
+  },
+  "telemetry": {
+    "cycle3": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-reuse-cycles-20261018-v1/gpu-cycle3.json",
+      "sha256": "9fe52511aff2a05de312b06ad693a3e53e1c1c17f63e2b17a372385b3a4a11ed"
+    },
+    "memory_scope": "Torch allocator peaks reset immediately before forward; not whole-invocation/hardware peak"
+  },
+  "limitations": [
+    "Only one N1000 query-only/no-template input, FP32/R3/D200/S1/seed101 on this gfx1100 device.",
+    "Pair/atom identity keys require source-pinned immutable rollout inputs and cannot detect arbitrary in-place mutation.",
+    "Internal padded template slots were identical; this does not establish gains for distinct real templates.",
+    "Single cycle timings are diagnostics, not independently repeated ablation results.",
+    "Only the composed reuse-versus-softmax comparison has three alternating pairs; do not multiply historical speedups.",
+    "Caches unflushed, clocks unlocked; the retained cycle-3 AMD SMI snapshot reports THROTTLED.",
+    "Three-sample p95 is the observed maximum; descriptive trends are not statistical significance.",
+    "Complete inherited-environment content inventory and Rust publication of the raw HIP library remain open.",
+    "Frozen experiment only; no maintained route promotion or N1536 full-model claim.",
+    "General asset migration gate and waiting jobs remain unchanged."
+  ]
+}

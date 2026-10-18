@@ -539,3 +539,44 @@ and AMD SMI samples report throttling in both arms. Three-pair trends are
 descriptive, not statistical significance. Raw controls, failed coverage trial,
 successful run receipts and independent audits are linked from
 [`precision_openfold3_model_gfx1100_20261017.json`](../provenance/precision_openfold3_model_gfx1100_20261017.json).
+
+### OpenFold3 N1000 reuse follow-up (2026-10-18)
+
+Three cumulative experiments add rollout-local pair-conditioning reuse, static
+atom-representation reuse, and bitwise-identical template-slot reuse to the
+previous wave32 worker. The caches require the source-pinned immutable rollout
+contract and retain the first native calculation; time-dependent conditioning
+and noisy-coordinate projections still execute at all 200 diffusion steps.
+Template slots and masks must match bitwise, including signed zeros and NaN
+payloads. Distinct slots remain native and the original final reduction stays.
+
+All three full-model cycles pass. Single invocation timings are 263.543519,
+260.604323 and 241.414822 seconds; these are diagnostics, not repeated ablations.
+The final three-pair AB/BA/AB comparison uses the same frozen worker and library
+in both arms, changing only the reuse mode and profile digest:
+
+| Scope | Previous softmax only | Combined reuse | Median speedup |
+| --- | ---: | ---: | ---: |
+| Complete invocation | 283.614466 s | 239.334872 s | 1.185011x |
+| Model forward | 252.733066 s | 208.135715 s | 1.214271x |
+
+Invocation time decreases 15.6126%. All three pairs improve (1.190806, 1.183716,
+1.193164x); the p95 ratio is 1.190806x, with three-sample p95 equal to the maximum.
+This is incremental to the previous softmax route, not a direct native speedup;
+do not multiply results from different studies.
+
+Independent replay checks all nine accepted predictions against the original
+maintained native result: all 11 arrays and complete CIF bytes are identical.
+Every run submits 1,696 HIP calls; each enabled pair/atom cache records one miss
+and 199 hits, and each template-enabled run reuses 27 slots in nine calls.
+All nine forward-scoped allocator peaks are equal (38,636,892,160 allocated /
+40,909,144,064 reserved bytes). This establishes no memory reduction. Six GPU
+template guard/fallback checks and 50 CPU tests pass.
+
+The maintained route remains unchanged. Only this N1000 query-only/no-template
+workload is measured; padded internal template slots were identical. Identity
+cache keys do not detect arbitrary in-place mutation. Clocks/caches were not
+fixed and a retained SMI snapshot reports throttling. Complete environment
+inventory, Rust kernel publication and N1536 qualification remain separate.
+Reproduction: [experimental README](../experiments/hip_softmax/README.md#precision-gfx1100-rollout-local-reuse-cycles-2026-10-18).
+Evidence: [`precision_openfold3_reuse_gfx1100_20261018.json`](../provenance/precision_openfold3_reuse_gfx1100_20261018.json).

@@ -1,0 +1,607 @@
+{
+  "schema_version": 1,
+  "host": "Precision",
+  "architecture": "gfx1100",
+  "device": "W7900, HIP0, PCI 0000:53:00.0",
+  "workload": {
+    "model": "OpenFold3/OpenBind-0",
+    "length": 1000,
+    "precision": "strict deterministic FP32",
+    "recycles": 3,
+    "trunk_passes": 4,
+    "diffusion_steps": 200,
+    "samples": 1,
+    "seed": 101,
+    "msa": "query only",
+    "templates": "none; internal padded slots retained"
+  },
+  "preparation": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-copy-20261019-v1/preparation.json",
+    "sha256": "0bd475686be5f45e949ebd32494e547f58db59f45e627e47f298aee5614e8afd"
+  },
+  "final_audit": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-copy-20261019-v1/audit-final.json",
+    "sha256": "5147bf281f7c6a1760814916a09afdfb2438f026588168b5b449fe3aa88e3dd8"
+  },
+  "collector": {
+    "path": "/media/990Pro/fireprot/experiments/triangle_memory/collect_gfx1100_copy.py",
+    "sha256": "77dc5eae83175209f7199a38df99d35636af16572d67febe82890440a3570cd2"
+  },
+  "benchmark": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-copy-20261019-v1/paired/benchmark.json",
+    "sha256": "1407f47a50e81a16234f7546c62a253e4979ab1a8d504540942dba971da4b17c"
+  },
+  "comparison": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-copy-20261019-v1/paired/comparison.json",
+    "sha256": "65609e39f880bccc64f011fd3a90b147e9851b28be9c762e77021a0ac80001a1"
+  },
+  "native_reference": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-openfold3-model-20261017-v1/native-prediction/accepted.json",
+    "sha256": "5265b3daedfc30c478d3a794e88e07b5c615b33a8667ad9a3dd0d6ffeb603a4c"
+  },
+  "operator_screen": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-copy-20261019-v1/screen.json",
+    "sha256": "bd70b9a41ea3f0e553eb0437457cc88e9ecd3a6a789e0807a3e2980ea0014b4d"
+  },
+  "operator_results": [
+    {
+      "mode": "row",
+      "chunk": 256,
+      "offset": 0,
+      "exact": true,
+      "samples_ms": {
+        "native": [
+          3.0553669929504395,
+          3.31797194480896,
+          3.506855010986328
+        ],
+        "hip": [
+          0.49488699436187744,
+          0.49450698494911194,
+          0.4994179904460907
+        ]
+      },
+      "medians_ms": {
+        "native": 3.31797194480896,
+        "hip": 0.49488699436187744
+      },
+      "speedup": 6.704504225428788
+    },
+    {
+      "mode": "column",
+      "chunk": 256,
+      "offset": 0,
+      "exact": true,
+      "samples_ms": {
+        "native": [
+          3.8259758949279785,
+          3.795815944671631,
+          3.8456170558929443
+        ],
+        "hip": [
+          0.731531023979187,
+          0.7321410179138184,
+          0.7311310172080994
+        ]
+      },
+      "medians_ms": {
+        "native": 3.8259758949279785,
+        "hip": 0.731531023979187
+      },
+      "speedup": 5.230093829946483
+    },
+    {
+      "mode": "bmm",
+      "chunk": 256,
+      "offset": 0,
+      "exact": true,
+      "samples_ms": {
+        "native": [
+          3.778817892074585,
+          3.61865496635437,
+          3.642014980316162
+        ],
+        "hip": [
+          0.5354880094528198,
+          0.5347679853439331,
+          0.5304880142211914
+        ]
+      },
+      "medians_ms": {
+        "native": 3.642014980316162,
+        "hip": 0.5347679853439331
+      },
+      "speedup": 6.810458142840806
+    },
+    {
+      "mode": "norm",
+      "chunk": 256,
+      "offset": 0,
+      "exact": true,
+      "samples_ms": {
+        "native": [
+          0.5129680037498474,
+          0.5140079855918884,
+          0.5127679705619812
+        ],
+        "hip": [
+          0.5056470036506653,
+          0.506928026676178,
+          0.5072979927062988
+        ]
+      },
+      "medians_ms": {
+        "native": 0.5129680037498474,
+        "hip": 0.506928026676178
+      },
+      "speedup": 1.011914861194936
+    },
+    {
+      "mode": "row",
+      "chunk": 256,
+      "offset": 512,
+      "exact": true,
+      "samples_ms": {
+        "native": [
+          3.264647960662842,
+          3.2717690467834473,
+          3.14672589302063
+        ],
+        "hip": [
+          0.4938569962978363,
+          0.4950070083141327,
+          0.4941770136356354
+        ]
+      },
+      "medians_ms": {
+        "native": 3.264647960662842,
+        "hip": 0.4941770136356354
+      },
+      "speedup": 6.606231918083343
+    },
+    {
+      "mode": "column",
+      "chunk": 256,
+      "offset": 512,
+      "exact": true,
+      "samples_ms": {
+        "native": [
+          2.9783239364624023,
+          2.9819250106811523,
+          2.8239219188690186
+        ],
+        "hip": [
+          0.7253609895706177,
+          0.7281799912452698,
+          0.7260209918022156
+        ]
+      },
+      "medians_ms": {
+        "native": 2.9783239364624023,
+        "hip": 0.7260209918022156
+      },
+      "speedup": 4.102255954155337
+    },
+    {
+      "mode": "bmm",
+      "chunk": 256,
+      "offset": 512,
+      "exact": true,
+      "samples_ms": {
+        "native": [
+          3.4234108924865723,
+          3.1344070434570312,
+          3.13032603263855
+        ],
+        "hip": [
+          0.528298020362854,
+          0.5296880006790161,
+          0.5228269696235657
+        ]
+      },
+      "medians_ms": {
+        "native": 3.1344070434570312,
+        "hip": 0.528298020362854
+      },
+      "speedup": 5.933028182282811
+    },
+    {
+      "mode": "norm",
+      "chunk": 256,
+      "offset": 512,
+      "exact": true,
+      "samples_ms": {
+        "native": [
+          0.5092880129814148,
+          0.5092869997024536,
+          0.5096480250358582
+        ],
+        "hip": [
+          0.49616798758506775,
+          0.4961870014667511,
+          0.49490800499916077
+        ]
+      },
+      "medians_ms": {
+        "native": 0.5092880129814148,
+        "hip": 0.49616798758506775
+      },
+      "speedup": 1.0264427083661813
+    },
+    {
+      "mode": "row",
+      "chunk": 232,
+      "offset": 768,
+      "exact": true,
+      "samples_ms": {
+        "native": [
+          2.7530810832977295,
+          2.763880968093872,
+          2.747641086578369
+        ],
+        "hip": [
+          0.438167005777359,
+          0.4406769871711731,
+          0.4394960105419159
+        ]
+      },
+      "medians_ms": {
+        "native": 2.7530810832977295,
+        "hip": 0.4394960105419159
+      },
+      "speedup": 6.264177642711869
+    },
+    {
+      "mode": "column",
+      "chunk": 232,
+      "offset": 768,
+      "exact": true,
+      "samples_ms": {
+        "native": [
+          2.8311619758605957,
+          2.959723949432373,
+          2.961603879928589
+        ],
+        "hip": [
+          0.6872810125350952,
+          0.6874399781227112,
+          0.682449996471405
+        ]
+      },
+      "medians_ms": {
+        "native": 2.959723949432373,
+        "hip": 0.6872810125350952
+      },
+      "speedup": 4.306424730861073
+    },
+    {
+      "mode": "bmm",
+      "chunk": 232,
+      "offset": 768,
+      "exact": true,
+      "samples_ms": {
+        "native": [
+          2.816361904144287,
+          2.8205618858337402,
+          2.8542020320892334
+        ],
+        "hip": [
+          0.4710269868373871,
+          0.4692870080471039,
+          0.46904700994491577
+        ]
+      },
+      "medians_ms": {
+        "native": 2.8205618858337402,
+        "hip": 0.4692870080471039
+      },
+      "speedup": 6.010313171829021
+    },
+    {
+      "mode": "norm",
+      "chunk": 232,
+      "offset": 768,
+      "exact": true,
+      "samples_ms": {
+        "native": [
+          0.45852598547935486,
+          0.45880699157714844,
+          0.45952698588371277
+        ],
+        "hip": [
+          0.44138598442077637,
+          0.4404270052909851,
+          0.4417870044708252
+        ]
+      },
+      "medians_ms": {
+        "native": 0.45880699157714844,
+        "hip": 0.44138598442077637
+      },
+      "speedup": 1.0394688725316763
+    }
+  ],
+  "all_11_arrays_exact": true,
+  "full_cif_exact": true,
+  "paired_runs": [
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-copy-20261019-v1/paired/measurement-000/invocation.json",
+        "sha256": "1aea7c950c8a6fc91f9c1abfcf30e7c8cd6f6ba66159f4efd221f9e4dabd0834"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-copy-20261019-v1/prediction-baseline-0/accepted.json",
+        "sha256": "5b732712a2125d10d133c3a5cdc0ac263b9123b0ab57dc2af098b9c011ca32fd"
+      },
+      "enabled": false,
+      "e2e_seconds": 238.181972754,
+      "model_seconds": 208.23445039096987,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "copy": {
+        "enabled": false,
+        "completed": true,
+        "library_sha256": "4c1b9b677ab31ebc812cedc1f00143096fe30f5bc637b6b90e3464c1f1f7ed84",
+        "counts": {
+          "accepted": 0,
+          "fallback": 448
+        },
+        "copies": 0,
+        "copy_fallbacks": 0
+      },
+      "softmax_launches": 1696,
+      "peak_allocated_bytes": 38636892160,
+      "peak_reserved_bytes": 40909144064
+    },
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-copy-20261019-v1/paired/measurement-001/invocation.json",
+        "sha256": "081ab92a7e1fa509a0da994bb0f588d88181cc4062d98d38b021a8ee87594d02"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-copy-20261019-v1/prediction-candidate-0/accepted.json",
+        "sha256": "ec837432d87ed0ea97f598e05778849b128d640657d95cba305dce67fbb3b5d3"
+      },
+      "enabled": true,
+      "e2e_seconds": 231.214273181,
+      "model_seconds": 201.26235317799728,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "copy": {
+        "enabled": true,
+        "completed": true,
+        "library_sha256": "4c1b9b677ab31ebc812cedc1f00143096fe30f5bc637b6b90e3464c1f1f7ed84",
+        "counts": {
+          "accepted": 430,
+          "fallback": 18
+        },
+        "copies": 3440,
+        "copy_fallbacks": 1720
+      },
+      "softmax_launches": 1696,
+      "peak_allocated_bytes": 38636892160,
+      "peak_reserved_bytes": 40909144064
+    },
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-copy-20261019-v1/paired/measurement-002/invocation.json",
+        "sha256": "e2795de59a044b8caef5129967914cc7749ea560d14aec47233e51160ba50423"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-copy-20261019-v1/prediction-candidate-1/accepted.json",
+        "sha256": "69805f4465a5217a2397e54e51ad05d4539005300e23b8cf6b97bc48ac1784a0"
+      },
+      "enabled": true,
+      "e2e_seconds": 231.14351824,
+      "model_seconds": 201.09580785501748,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "copy": {
+        "enabled": true,
+        "completed": true,
+        "library_sha256": "4c1b9b677ab31ebc812cedc1f00143096fe30f5bc637b6b90e3464c1f1f7ed84",
+        "counts": {
+          "accepted": 430,
+          "fallback": 18
+        },
+        "copies": 3440,
+        "copy_fallbacks": 1720
+      },
+      "softmax_launches": 1696,
+      "peak_allocated_bytes": 38636892160,
+      "peak_reserved_bytes": 40909144064
+    },
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-copy-20261019-v1/paired/measurement-003/invocation.json",
+        "sha256": "b90d8209cc044a58bdf3d41e981bcebb3ff8b50b0ad1c8bb73bcdd6968a912c3"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-copy-20261019-v1/prediction-baseline-1/accepted.json",
+        "sha256": "bead9e7955ff07e709285e8dd00ab1b47947065a971571e1e410e439d389f910"
+      },
+      "enabled": false,
+      "e2e_seconds": 237.663087304,
+      "model_seconds": 207.88903718697838,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "copy": {
+        "enabled": false,
+        "completed": true,
+        "library_sha256": "4c1b9b677ab31ebc812cedc1f00143096fe30f5bc637b6b90e3464c1f1f7ed84",
+        "counts": {
+          "accepted": 0,
+          "fallback": 448
+        },
+        "copies": 0,
+        "copy_fallbacks": 0
+      },
+      "softmax_launches": 1696,
+      "peak_allocated_bytes": 38636892160,
+      "peak_reserved_bytes": 40909144064
+    },
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-copy-20261019-v1/paired/measurement-004/invocation.json",
+        "sha256": "c8ab36ebbad19baf72951fcc692316afecd3b1e49299cdb16442c037046ddfc0"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-copy-20261019-v1/prediction-baseline-2/accepted.json",
+        "sha256": "515d14d3222010415df9c4e8af63bd77499dab80801a6d3d26826080ceb548fa"
+      },
+      "enabled": false,
+      "e2e_seconds": 238.69876624,
+      "model_seconds": 208.61588236904936,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "copy": {
+        "enabled": false,
+        "completed": true,
+        "library_sha256": "4c1b9b677ab31ebc812cedc1f00143096fe30f5bc637b6b90e3464c1f1f7ed84",
+        "counts": {
+          "accepted": 0,
+          "fallback": 448
+        },
+        "copies": 0,
+        "copy_fallbacks": 0
+      },
+      "softmax_launches": 1696,
+      "peak_allocated_bytes": 38636892160,
+      "peak_reserved_bytes": 40909144064
+    },
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-copy-20261019-v1/paired/measurement-005/invocation.json",
+        "sha256": "4ac23ca5f543a4f5902bf2804b53cd546081ef9594e2487b09c641beeefc2a15"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-copy-20261019-v1/prediction-candidate-2/accepted.json",
+        "sha256": "cc8535818e676e7cd84696090fc337a1ba10a73f18baed444e5b2bdb94dfe6f8"
+      },
+      "enabled": true,
+      "e2e_seconds": 231.364204285,
+      "model_seconds": 201.05955412401818,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "copy": {
+        "enabled": true,
+        "completed": true,
+        "library_sha256": "4c1b9b677ab31ebc812cedc1f00143096fe30f5bc637b6b90e3464c1f1f7ed84",
+        "counts": {
+          "accepted": 430,
+          "fallback": 18
+        },
+        "copies": 3440,
+        "copy_fallbacks": 1720
+      },
+      "softmax_launches": 1696,
+      "peak_allocated_bytes": 38636892160,
+      "peak_reserved_bytes": 40909144064
+    }
+  ],
+  "diagnostic_cycle": [
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-copy-20261019-v1/measurement-cycle/invocation.json",
+        "sha256": "d71ea23c5300796e88639acd256e184d729375d27035507480d9eb92cd84ac7a"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-copy-20261019-v1/prediction-cycle/accepted.json",
+        "sha256": "90519108bf41321ce7ddc3a846cb07e1f9a8fd30511020b8577b6ff79762b61f"
+      },
+      "enabled": true,
+      "e2e_seconds": 232.323185836,
+      "model_seconds": 201.81962525099516,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "copy": {
+        "enabled": true,
+        "completed": true,
+        "library_sha256": "4c1b9b677ab31ebc812cedc1f00143096fe30f5bc637b6b90e3464c1f1f7ed84",
+        "counts": {
+          "accepted": 430,
+          "fallback": 18
+        },
+        "copies": 3440,
+        "copy_fallbacks": 1720
+      },
+      "softmax_launches": 1696,
+      "peak_allocated_bytes": 38636892160,
+      "peak_reserved_bytes": 40909144064
+    }
+  ],
+  "end_to_end_performance": {
+    "baseline": {
+      "count": 3,
+      "min": 237.663087304,
+      "median": 238.181972754,
+      "p95": 238.69876624,
+      "max": 238.69876624,
+      "mean": 238.18127543266664
+    },
+    "candidate": {
+      "count": 3,
+      "min": 231.14351824,
+      "median": 231.214273181,
+      "p95": 231.364204285,
+      "max": 231.364204285,
+      "mean": 231.24066523533335
+    },
+    "median_speedup": 1.0301352484738064,
+    "p95_speedup": 1.0317013687474537,
+    "paired_speedups": [
+      1.0301352484738064,
+      1.0282057187397773,
+      1.0317013687474537
+    ],
+    "paired_summary": {
+      "count": 3,
+      "min": 1.0282057187397773,
+      "median": 1.0301352484738064,
+      "p95": 1.0317013687474537,
+      "max": 1.0317013687474537,
+      "mean": 1.0300141119870125
+    },
+    "observed_trend": "faster_median_and_p95",
+    "changes": {
+      "invocation.profile_sha256": {
+        "baseline": "6746ac10da9e8afe84fd91c7df0c2c931ba63a365c0a465804a27e2ac1a92167",
+        "candidate": "4f061cd1b4d59527df9347b8ab32377ef4bc2641834de2a3f333e24a0a88cb94"
+      },
+      "launch.environment.FIREPROT_GFX1100_COPY": {
+        "baseline": "0",
+        "candidate": "1"
+      }
+    }
+  },
+  "model_forward": {
+    "baseline": 208.23445039096987,
+    "candidate": 201.09580785501748,
+    "speedup": 1.0354987138324587
+  },
+  "implementation": "Native arithmetic retained; tiled uint32 HIP transpose for N1000/chunk256 and tail232, explicit native BMM operand packing and pre-normalization layout materialization.",
+  "limitations": [
+    "Incremental comparison against qualified gfx1100 softmax/pair/atom/template reuse, not direct native E2E.",
+    "Single N1000 development input; no independent biological accuracy evaluation or N1536 qualification.",
+    "Fresh workers, unflushed caches, prebuilt kernels, no concurrent GPU jobs or asset transfers.",
+    "Clocks unlocked; hardware telemetry is sampled, not a controlled-frequency study.",
+    "Three-sample p95 is the observed maximum, not a confidence bound.",
+    "Allocator peaks cover forward only; not hardware/whole-invocation memory peaks.",
+    "Frozen experiment; inherited environment inventory and maintained route promotion remain open."
+  ],
+  "gpu-cycle.json": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-copy-20261019-v1/gpu-cycle.json",
+    "sha256": "3aa7f92eaa7de379b1b95357d545c58a612b1991913e2339eaebd88e08ef9226"
+  },
+  "gpu-after.json": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-copy-20261019-v1/gpu-after.json",
+    "sha256": "b1d4ddee8edaf511859f7656ec4125609db9d0bedd8a7282c46a48dc05bb0302"
+  }
+}

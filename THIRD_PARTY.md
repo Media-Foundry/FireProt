@@ -25,6 +25,7 @@ entirety, including FireProt modifications, under
 | `experiments/conditioning_reuse/verified_atom_reuse.py` | `layers/sequence_local_atom_attention.py` |
 | `experiments/conditioning_reuse/atom_cache.py` | `layers/sequence_local_atom_attention.py` |
 | `experiments/triangle_memory/replay.py` | Source-pinned experimental substitutions in `layers/triangular_multiplicative_update.py`; preserves the upstream arithmetic |
+| `experiments/triangle_memory/gfx1100_copy.py` | Guarded gfx1100/N1000 substitutions in the same source-pinned triangle method; preserves native arithmetic |
 
 The file headers retain the applicable upstream copyright holders and describe
 the modifications. The OpenFold 3 exception permits combination with original

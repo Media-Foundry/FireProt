@@ -7802,3 +7802,38 @@ may remain detached at user request; report pending status until destination
 verified-assets.json confirms all49 full hashes. Do not wait on obsolete sender
 or verifier tool sessions. Update script-version evidence with finalizer/retry
 and detached transfer helpers without overwriting earlier frozen scripts.
+
+
+### Precision gfx1100 copy follow-up completed (2026-10-19)
+
+Read GFX11_HANDOFF.md for current state; earlier notes about only native ESM3
+are superseded. Synced master23133ea, then profiled the qualified OF3 softmax
+plus pair/atom/template reuse. Diagnostic all11arrays/CIF exact; pairformer
+inclusive151.445s versus diffusion rollout30.265s. New gfx1100 Rust-built
+uint32 tiled transpose specializes N1000/chunk256/tail232 without changing
+FP32 arithmetic or strict fill. Twelve GPU operator cases and six local CPU/meta
+guard/restoration tests passed.
+
+Frozenroot Precision outputs/experiments/gfx11-of3-copy-20261019-v1: one cycle
+plus six AB/BA/AB calls all independently exact versus maintained native,
+including fullCIF. Candidate coverage430triangles/3440HIPcopies/1720nativecopy
+fallbacks; existing1696softmaxcalls and cache coverage unchanged. Complete E2E
+medians238.181972754/231.214273181s = 1.030135248x incremental over reuse; forward
+208.234450391/201.095807855s. All forward allocator peaks unchanged.
+Clocks unlocked; sampled THROTTLED. No maintained worker/kernel mutation or
+production promotion. Provenance/README/summary/handoff updated. Preserve
+user docs/isa untracked. Next examine owned-score softmax allocation/filling
+(current ABI rejects aliasing) or C128 LayerNorm with exact gfx1100 reduction.
+No new gain from these untested follow-ups.
+
+The two copy tmux jobs and profile job completed. Do not restart them. General
+asset migration was not released; the prior AtlasLM B4 finalization failure
+remains separate. Existing immutable experiments and numerical gates preserved.
+
+GitNexus staged detection labelled401flows critical through repeated references
+to the Markdown heading "FireProt gfx11 handoff". Manual scope review confirmed
+no staged changes under crates/python/kernels/configs/scripts and no imports of
+new gfx1100_copy/gfx1100_profile helpers from those maintained paths. The new
+code is isolated experimental preparation/profiling/audit and opt-in copied
+workers; source review plus the six CPU/meta and complete GPU gates establish
+the reviewed scope. Do not infer production deployment from the graph label.

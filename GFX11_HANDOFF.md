@@ -1,10 +1,40 @@
 # FireProt gfx11 handoff
 
-Snapshot: 2026-10-18 UTC. Reuse experiment base revision: `f4288f4` (`master`).
-The checkpoint and preceding full-model softmax qualification are on GitHub.
-This document includes the 2026-10-18 reuse follow-up. The original 2026-10-16
+Snapshot: 2026-10-19 UTC. Latest copy experiment base revision: `23133ea` (`master`).
+The checkpoint, softmax and reuse qualifications are on GitHub.
+This document also includes the 2026-10-19 copy follow-up. The original 2026-10-16
 snapshot is retained at
 `outputs/experiments/gfx11-openfold3-model-20261017-v1/GFX11_HANDOFF.before.md`.
+
+## Latest completed follow-up — 2026-10-19
+
+- HIP layout copies passed all three AB/BA/AB pairs and the independent final
+  audit. Previous softmax/reuse: **238.181973 s**; added copies: **231.214273 s**;
+  **1.030135x incremental** (2.9254% less time). This is not a native-total
+  ratio. Forward: 208.234450 -> 201.095808 s.
+- All seven accepted predictions match native in all 11 arrays and complete
+  CIF bytes. Each candidate: 430 selected triangles, 3,440 HIP copies,
+  1,720 native copy fallbacks, unchanged 1,696 HIP softmax submissions.
+- Evidence: `provenance/precision_openfold3_copy_gfx1100_20261019.json`.
+  Frozen root: `outputs/experiments/gfx11-of3-copy-20261019-v1`; final
+  `audit-final.json` and `driver-status.json` passed. Copy tmux jobs completed;
+  inspect receipts and current device occupancy before any new GPU job.
+- Profiling the preceding composition found pairformer 151.445 s versus diffusion
+  rollout 30.265 s (instrumented inclusive intervals). All profiled outputs were
+  exact. `provenance/precision_openfold3_profile_gfx1100_20261019.json` records
+  raw trace hashes and scope. Main optimization priority remains the trunk.
+- Twelve GPU copy cases and six local CPU/meta guard tests passed. Native
+  arithmetic and strict FP32/N1000/R3/D200/S1/seed101 are unchanged; original
+  maintained workers and earlier immutable experiments were preserved.
+- Forward allocator peaks remain 38,636,892,160 allocated / 40,909,144,064 reserved
+  bytes. Clocks were unlocked; a sampled SMI record reports THROTTLED.
+- Next candidate: reduce attention-score allocation/filling using explicitly
+  owned QK scores; the current wave32 ABI rejects aliasing, so a new entry needs
+  bitwise operator and full-model gates before timing. C128 normalization is
+  another measured cost. Neither follow-up has a new speedup claim.
+- General migration remains behind its previous failed AtlasLM gate; no sender
+  was resumed or bypassed. Production promotion still needs complete environment
+  inventory and publication. N1536 remains separately unqualified on gfx1100.
 
 ## Workspace and rules
 

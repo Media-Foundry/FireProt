@@ -1,0 +1,199 @@
+{
+  "host": "Precision",
+  "architecture": "gfx1100",
+  "physical_pci": "0000:53:00.0",
+  "hip_device": 0,
+  "workload": {
+    "model": "openfold3",
+    "model_name": "openbind-0",
+    "recycles": 3,
+    "diffusion_steps": 200,
+    "samples": 1,
+    "precision": "float32",
+    "deterministic": true
+  },
+  "seed": 101,
+  "stage_inclusive_seconds": {
+    "input_embedder": 1.411255126953125,
+    "layer_norm_z": 0.022303942680358887,
+    "linear_z": 0.007231218099594116,
+    "template_embedder": 7.359663452148438,
+    "msa_module_embedder": 0.09281517595052717,
+    "msa_module": 14.209979248046874,
+    "layer_norm_s": 0.00012512199953198432,
+    "linear_s": 0.0001886419989168644,
+    "pairformer_stack": 151.44530078125,
+    "diffusion_module": 28.956154510498056,
+    "sample_diffusion": 30.265294921875,
+    "aux_heads": 4.1856396484375
+  },
+  "traces": [
+    {
+      "module": "pairformer_stack.blocks.1",
+      "call": 2,
+      "trace": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-profile-20261019-v1/prediction/pairformer_block.chrome.json",
+        "sha256": "1753e337cab337f0b743b69d1e88a50cbf64d0b7d8ec87c540a9c0766f181230"
+      },
+      "kernel_time_ms": 778.8188779999999,
+      "top_kernels": [
+        {
+          "name": "Cijk_Ailk_Bljk_SB_MT32x16x16_SN_1LDSB0_AMAS0_BL1_BS1_EPS1_GLVWA1_GLVWB1_GRVW1_GSU1_GSUASB_ISA1100_IU1_K1_KLA_LBSPPA0_LBSPPB0_LPA0_LPB0_LRVW1_MIAV0_MMFGLC_NLCA1_NLCB1_PGR1_PLR1_SIA1_SS0_SU32_SUM3_SUS128_SVW4_TT2_2_TLDS0_UMLDSA0_UMLDSB0_USFGROn1_VAW1_VSn1_VW1_VWB1_WSGRA0_WSGRB0_WS32_WG16_8_1_WGM4.kd",
+          "milliseconds": 115.345177,
+          "fraction": 0.14810269789068983
+        },
+        {
+          "name": "void fused_wave32<1000, 8>(float const*, float const*, float const*, float*, int, long, long, long, long, long, bool) [clone .kd]",
+          "milliseconds": 112.858633,
+          "fraction": 0.14490998637554856
+        },
+        {
+          "name": "void at::native::elementwise_kernel_manual_unroll<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}) [clone .kd]",
+          "milliseconds": 97.58337499999995,
+          "fraction": 0.12529662256081053
+        },
+        {
+          "name": "Cijk_Ailk_Bljk_SB_MT64x64x8_SN_1LDSB0_AMAS3_BL1_BS1_EPS1_GLVWA4_GLVWB4_GRVW4_GSU1_GSUASB_ISA1100_IU1_K1_KLA_LBSPPA0_LBSPPB0_LPA0_LPB0_LRVW4_MIAV0_MMFGLC_NLCA1_NLCB1_PGR1_PLR1_SIA1_SS0_SU32_SUM3_SUS128_SVW4_TT8_8_TLDS0_UMLDSA0_UMLDSB0_USFGROn1_VAW1_VSn1_VW4_VWB4_WSGRA0_WSGRB0_WS32_WG8_8_1_WGM1.kd",
+          "milliseconds": 72.913978,
+          "fraction": 0.09362122575564998
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<float>, std::array<char*, 1ul> >(int, at::native::FillFunctor<float>, std::array<char*, 1ul>) [clone .kd]",
+          "milliseconds": 63.03285399999996,
+          "fraction": 0.08093390617580788
+        },
+        {
+          "name": "void at::native::(anonymous namespace)::vectorized_layer_norm_kernel<float, float, false>(int, float, float const*, float const*, float const*, float*, float*, float*) [clone .kd]",
+          "milliseconds": 60.410086,
+          "fraction": 0.07756628364624722
+        },
+        {
+          "name": "void fused_wave32<1000, 1>(float const*, float const*, float const*, float*, int, long, long, long, long, long, bool) [clone .kd]",
+          "milliseconds": 60.104673999999996,
+          "fraction": 0.07717413598698106
+        },
+        {
+          "name": "Cijk_Alik_Bljk_SB_MT128x128x16_SN_1LDSB0_AMAS3_BL1_BS1_EPS0_GLVWA4_GLVWB4_GRVW4_GSU1_GSUASB_ISA1100_IU1_K1_KLA_LBSPPA0_LBSPPB0_LPA0_LPB0_LRVW4_MIAV0_MMFGLC_NLCA1_NLCB1_PGR1_PLR1_SIA1_SS0_SU32_SUM3_SUS128_SVW4_TT8_16_TLDS0_UMLDSA0_UMLDSB0_USFGROn1_VAW1_VSn1_VW4_VWB4_WSGRA0_WSGRB0_WS32_WG16_8_1_WGM4.kd",
+          "milliseconds": 46.761513000000015,
+          "fraction": 0.06004157618788488
+        },
+        {
+          "name": "Cijk_Ailk_Bljk_SB_MT64x64x8_SN_1LDSB0_AMAS0_BL1_BS1_EPS1_GLVWA1_GLVWB1_GRVW1_GSU1_GSUASB_ISA1100_IU1_K1_KLA_LBSPPA0_LBSPPB0_LPA0_LPB0_LRVW1_MIAV0_MMFGLC_NLCA1_NLCB1_PGR1_PLR1_SIA1_SS0_SU32_SUM3_SUS128_SVW4_TT4_4_TLDS0_UMLDSA0_UMLDSB0_USFGROn1_VAW1_VSn1_VW1_VWB1_WSGRA0_WSGRB0_WS32_WG16_16_1_WGM4.kd",
+          "milliseconds": 46.70048,
+          "fraction": 0.05996321008541347
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 3ul> >(int, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 3ul>) [clone .kd]",
+          "milliseconds": 27.141963,
+          "fraction": 0.03485016063003034
+        },
+        {
+          "name": "void at::native::elementwise_kernel_manual_unroll<128, 4, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}) [clone .kd]",
+          "milliseconds": 13.083159999999998,
+          "fraction": 0.016798719663289927
+        },
+        {
+          "name": "Cijk_Alik_Bljk_SB_MT128x256x8_SN_1LDSB0_AMAS3_BL1_BS1_EPS0_GLVWA4_GLVWB4_GRVW4_GSU1_GSUASB_ISA1100_IU1_K1_KLA_LBSPPA0_LBSPPB0_LPA0_LPB0_LRVW4_MIAV0_MMFGLC_NLCA1_NLCB1_PGR1_PLR1_SIA1_SS0_SU0_SUM0_SUS0_SVW4_TT8_16_TLDS0_UMLDSA0_UMLDSB0_USFGROn1_VAW1_VSn1_VW4_VWB4_WSGRA0_WSGRB0_WS32_WG16_16_1_WGM8.kd",
+          "milliseconds": 12.340257000000001,
+          "fraction": 0.015844835492033364
+        }
+      ]
+    },
+    {
+      "module": "diffusion_module",
+      "call": 5,
+      "trace": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-profile-20261019-v1/prediction/diffusion_step.chrome.json",
+        "sha256": "972fbca3b5feebc3f402a750cb6fe92ecc10cf4f8cb479a953eb4da9a20d703d"
+      },
+      "kernel_time_ms": 129.35400199999998,
+      "top_kernels": [
+        {
+          "name": "Cijk_Alik_Bljk_SB_MT128x128x16_SN_1LDSB0_AMAS3_BL1_BS1_EPS0_GLVWA4_GLVWB4_GRVW4_GSU1_GSUASB_ISA1100_IU1_K1_KLA_LBSPPA0_LBSPPB0_LPA0_LPB0_LRVW4_MIAV0_MMFGLC_NLCA1_NLCB1_PGR1_PLR1_SIA1_SS0_SU32_SUM3_SUS128_SVW4_TT8_16_TLDS0_UMLDSA0_UMLDSB0_USFGROn1_VAW1_VSn1_VW4_VWB4_WSGRA0_WSGRB0_WS32_WG16_8_1_WGM4.kd",
+          "milliseconds": 38.9812,
+          "fraction": 0.30135287194284105
+        },
+        {
+          "name": "void at::native::(anonymous namespace)::vectorized_layer_norm_kernel<float, float, false>(int, float, float const*, float const*, float const*, float*, float*, float*) [clone .kd]",
+          "milliseconds": 17.02741699999999,
+          "fraction": 0.13163424970802212
+        },
+        {
+          "name": "void at::native::elementwise_kernel_manual_unroll<128, 4, at::native::gpu_kernel_impl_nocast<at::native::CUDAFunctor_add<float> >(at::TensorIteratorBase&, at::native::CUDAFunctor_add<float> const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::CUDAFunctor_add<float> >(at::TensorIteratorBase&, at::native::CUDAFunctor_add<float> const&)::{lambda(int, bool)#1}) [clone .kd]",
+          "milliseconds": 15.987559999999998,
+          "fraction": 0.12359540294702284
+        },
+        {
+          "name": "Cijk_Alik_Bljk_SB_MT128x64x16_SN_1LDSB0_AMAS3_BL1_BS1_EPS1_GLVWA4_GLVWB4_GRVW4_GSU1_GSUASB_ISA1100_IU1_K1_KLA_LBSPPA0_LBSPPB0_LPA0_LPB0_LRVW4_MIAV0_MMFGLC_NLCA1_NLCB1_PGR1_PLR1_SIA1_SS0_SU32_SUM3_SUS128_SVW4_TT8_8_TLDS0_UMLDSA0_UMLDSB0_USFGROn1_VAW1_VSn1_VW4_VWB4_WSGRA0_WSGRB0_WS32_WG16_8_1_WGM8.kd",
+          "milliseconds": 9.519447999999999,
+          "fraction": 0.07359221866208669
+        },
+        {
+          "name": "Cijk_Alik_Bljk_SB_MT128x128x8_SN_1LDSB0_AMAS3_BL1_BS1_EPS0_GLVWA4_GLVWB4_GRVW4_GSU1_GSUASB_ISA1100_IU1_K1_KLA_LBSPPA0_LBSPPB0_LPA0_LPB0_LRVW4_MIAV0_MMFGLC_NLCA1_NLCB1_PGR1_PLR1_SIA1_SS0_SU0_SUM0_SUS0_SVW4_TT8_16_TLDS0_UMLDSA0_UMLDSB0_USFGROn1_VAW1_VSn1_VW4_VWB4_WSGRA0_WSGRB0_WS32_WG16_8_1_WGM4.kd",
+          "milliseconds": 6.472282,
+          "fraction": 0.050035421401187115
+        },
+        {
+          "name": "Cijk_Alik_Bljk_SB_MT128x64x16_SN_1LDSB0_AMAS3_BL1_BS1_EPS1_GLVWA4_GLVWB4_GRVW4_GSU1_GSUASB_ISA1100_IU1_K1_KLA_LBSPPA0_LBSPPB0_LPA0_LPB0_LRVW4_MIAV0_MMFGLC_NLCA1_NLCB1_PGR1_PLR1_SIA1_SS0_SU32_SUM3_SUS128_SVW4_TT8_8_TLDS0_UMLDSA0_UMLDSB0_USFGROn1_VAW1_VSn1_VW4_VWB4_WSGRA0_WSGRB0_WS32_WG16_8_1_WGM1.kd",
+          "milliseconds": 6.427018000000001,
+          "fraction": 0.04968549794075951
+        },
+        {
+          "name": "void (anonymous namespace)::softmax_warp_forward<float, float, float, 10, false, false, 32>(float*, float const*, int, int, int, bool const*, int, bool) [clone .kd]",
+          "milliseconds": 4.293635,
+          "fraction": 0.033192904228815434
+        },
+        {
+          "name": "Cijk_Alik_Bljk_SB_MT128x64x8_SN_1LDSB0_AMAS3_BL1_BS1_EPS0_GLVWA4_GLVWB4_GRVW4_GSU1_GSUASB_ISA1100_IU1_K1_KLA_LBSPPA0_LBSPPB0_LPA0_LPB0_LRVW4_MIAV0_MMFGLC_NLCA1_NLCB1_PGR1_PLR1_SIA1_SS0_SU0_SUM0_SUS0_SVW4_TT8_8_TLDS0_UMLDSA0_UMLDSB0_USFGROn1_VAW1_VSn1_VW4_VWB4_WSGRA0_WSGRB0_WS32_WG16_8_1_WGM1.kd",
+          "milliseconds": 3.6943460000000004,
+          "fraction": 0.028559966780154204
+        },
+        {
+          "name": "Cijk_Alik_Bljk_SB_MT128x128x16_SN_1LDSB0_AMAS3_BL1_BS1_EPS1_GLVWA4_GLVWB4_GRVW4_GSU1_GSUASB_ISA1100_IU1_K1_KLA_LBSPPA0_LBSPPB0_LPA0_LPB0_LRVW4_MIAV0_MMFGLC_NLCA1_NLCB1_PGR1_PLR1_SIA1_SS0_SU32_SUM3_SUS128_SVW4_TT8_8_TLDS0_UMLDSA0_UMLDSB0_USFGROn1_VAW1_VSn1_VW4_VWB4_WSGRA0_WSGRB0_WS32_WG16_16_1_WGM4.kd",
+          "milliseconds": 3.690222000000001,
+          "fraction": 0.028528085277176048
+        },
+        {
+          "name": "Cijk_Ailk_Bljk_SB_MT64x64x16_SN_1LDSB0_AMAS3_BL1_BS1_EPS1_GLVWA4_GLVWB4_GRVW4_GSU1_GSUASB_ISA1100_IU1_K1_KLA_LBSPPA0_LBSPPB0_LPA0_LPB0_LRVW4_MIAV0_MMFGLC_NLCA1_NLCB1_PGR1_PLR1_SIA1_SS0_SU32_SUM3_SUS128_SVW4_TT8_8_TLDS0_UMLDSA0_UMLDSB0_USFGROn1_VAW1_VSn1_VW4_VWB4_WSGRA0_WSGRB0_WS32_WG8_8_1_WGM8.kd",
+          "milliseconds": 3.4645009999999994,
+          "fraction": 0.026783098678307606
+        },
+        {
+          "name": "Cijk_Alik_Bljk_SB_MT128x256x16_SN_1LDSB0_AMAS3_BL1_BS1_EPS0_GLVWA4_GLVWB4_GRVW4_GSU1_GSUASB_ISA1100_IU1_K1_KLA_LBSPPA0_LBSPPB0_LPA0_LPB0_LRVW4_MIAV0_MMFGLC_NLCA1_NLCB1_PGR1_PLR1_SIA1_SS0_SU32_SUM3_SUS128_SVW4_TT8_16_TLDS0_UMLDSA0_UMLDSB0_USFGROn1_VAW1_VSn1_VW4_VWB4_WSGRA0_WSGRB0_WS32_WG16_16_1_WGM4.kd",
+          "milliseconds": 2.753281,
+          "fraction": 0.021284853637539566
+        },
+        {
+          "name": "void at::native::elementwise_kernel_manual_unroll<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int, bool)#1}) [clone .kd]",
+          "milliseconds": 2.0801459999999996,
+          "fraction": 0.016081033194473564
+        }
+      ]
+    }
+  ],
+  "audit": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-profile-20261019-v1/audit.json",
+    "sha256": "fcb6191cb695d5a7dd5361663a84ee23e2960f406f441b60d9ced69bc5738545"
+  },
+  "preparation": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-profile-20261019-v1/preparation.json",
+    "sha256": "4d13ba704bc31dfda58d1011128c8056540c156cb78a3b3cd4efb7bcf99cf542"
+  },
+  "invocation": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-profile-20261019-v1/measurement-profile/invocation.json",
+    "sha256": "617e19057f6ec11bd82194baa262885a7c2dc83faf9a0b0d90907a36902624f9"
+  },
+  "accepted": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-profile-20261019-v1/prediction/accepted.json",
+    "sha256": "6c01d35f5c044f73a0ce26515afbc816c423c80e5b91fd6993d360a416884c63"
+  },
+  "all_11_arrays_exact": true,
+  "full_cif_exact": true,
+  "limits": [
+    "Diagnostic instrumentation; timings are not E2E benchmark results.",
+    "Nested module durations overlap and must not be summed.",
+    "Sampled traces do not establish CU saturation or compute/memory bounds.",
+    "Profiled calls contain instrumentation overhead; no E2E speedup is inferred.",
+    "Top-level diffusion_module time is nested within sample_diffusion."
+  ]
+}

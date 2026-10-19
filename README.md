@@ -3,6 +3,7 @@
 **Protein structure inference for AMD GPUs, focused on long sequences.**
 FireProt combines model-specific adapters with qualified HIP/CK kernels. Measured
 long-protein workloads currently include 1,000 and 1,536 residues on gfx90a MI250.
+Separate gfx1100 W7900 qualifications are reported below.
 
 The maintained entry point is the **Rust CLI**. Rust owns request validation,
 operator selection, builds/caches, process and GPU supervision, numerical acceptance,
@@ -229,16 +230,28 @@ execution; a retry retains full inventory coverage and identical numerical gates
 Precision is a separate gfx1100 deployment; DiamondHill speedups are not
 attributed to it.
 
-### Precision native baseline — separate host
+### Precision gfx1100 results — separate host
 
-| Model / workload | GPU | Native E2E median | Optimized speedup |
-| --- | --- | ---: | --- |
-| ESM3-open, N1000 × 4 / B4, native BF16 | W7900 / gfx1100 | **11.885 s** | Not established |
+Precision uses W7900 / gfx1100 with Torch 2.13/ROCm 10. The following are
+separate three-pair studies; each row keeps its own control and revision.
 
-Three fresh runs retain full hashes and all outputs; all 12 prediction archives
-match the same-host native reference bitwise. Asset transmission is paused.
-Precision uses Torch 2.13/ROCm 10, so this is not a cross-host kernel comparison.
-[Initialization, assets and baseline details](docs/precision-setup.md).
+| Workload / comparison | Control median | Candidate median | E2E speedup |
+| --- | ---: | ---: | ---: |
+| ESM3-open B4/N1000, native → frameless sequence route | 12.436 s | 10.953 s | **1.135x** |
+| ESM2-3B B4/N1000, native → exact-loading route | 38.908 s | 22.431 s | **1.735x** |
+| OpenFold3 N1000, native → wave32 softmax | 322.388 s | 285.978 s | **1.127x** |
+| OpenFold3 N1000, softmax → added pair/atom/template reuse | 283.614 s | 239.335 s | **1.185x incremental** |
+| OpenFold3 N1000, reuse composition → added HIP layout copies | 238.182 s | 231.214 s | **1.030x incremental** |
+
+All listed studies preserve same-host native output bytes. OpenFold3 also
+preserves all 11 arrays and complete CIF bytes, using strict FP32/R3/D200/S1.
+Its optimized workers remain frozen experiments. Later ESM2 GEMM/loading and
+ESM3 host-path increments have separate evidence; these rows do not claim a
+fresh direct-native comparison of every subsequent composition. Never multiply
+ratios across studies or transfer DiamondHill results to this host.
+The initial ESM3-only native baseline (11.885 s) remains a separate earlier study.
+[Precision entries and detailed evidence](docs/precision-setup.md);
+[current gfx11 handoff](GFX11_HANDOFF.md).
 
 ## Measured speedups
 

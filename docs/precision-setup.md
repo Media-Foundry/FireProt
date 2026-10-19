@@ -580,3 +580,42 @@ fixed and a retained SMI snapshot reports throttling. Complete environment
 inventory, Rust kernel publication and N1536 qualification remain separate.
 Reproduction: [experimental README](../experiments/hip_softmax/README.md#precision-gfx1100-rollout-local-reuse-cycles-2026-10-18).
 Evidence: [`precision_openfold3_reuse_gfx1100_20261018.json`](../provenance/precision_openfold3_reuse_gfx1100_20261018.json).
+
+## Exact gfx1100 triangle layout copies (2026-10-19)
+
+A separately accepted diagnostic of the previous composition measured 151.445 s
+in four pairformer passes and 30.265 s in the diffusion rollout. These inclusive
+GPU-event intervals include instrumentation; denoiser time is nested within the
+rollout. A sampled steady block attributes 12.5% of kernel time to its largest
+direct-copy kernel, 8.1% to its largest fill kernel and 7.8% to LayerNorm.
+[Profile and native-parity evidence](../provenance/precision_openfold3_profile_gfx1100_20261019.json).
+
+The candidate adds a Rust-built gfx1100 tiled bit-copy kernel for N1000 triangle
+projection writes and explicit native operand/layout packing. It retains native
+FP32 arithmetic, strict deterministic memory filling, R3/four passes, D200/S1,
+seed101, query-only MSA and the same no-template input. Twelve GPU operator cases
+pass bit-pattern, tail232, canary, stream and fallback checks. Six local CPU/meta
+tests cover scope restoration and admission failures.
+
+| Scope | Previous softmax/reuse | Added HIP copies | Median speedup |
+| --- | ---: | ---: | ---: |
+| Complete invocation | 238.181973 s | 231.214273 s | 1.030135x |
+| Model forward | 208.234450 s | 201.095808 s | 1.035499x |
+
+Three fresh-worker AB/BA/AB pairs reduce complete invocation time by 2.9254%.
+Paired ratios: 1.030135x, 1.028206x, 1.031701x. All seven accepted predictions (one diagnostic cycle
+and six paired calls) match the maintained native reference in all 11 arrays
+and full CIF bytes. Each candidate selects 430 triangle calls and submits
+3,440 HIP copies; 1,720 copy calls retain native fallback. The existing
+1,696 HIP softmax submissions and pair/atom/template reuse coverage are unchanged.
+
+All six paired forward allocator peaks remain 38,636,892,160 allocated and
+40,909,144,064 reserved bytes. No memory reduction is claimed. Caches were
+unflushed and clocks unlocked; the retained cycle snapshot reports THROTTLED
+(90 C hotspot, 98 C memory). This is an incremental comparison against the
+previous optimized composition, not a new direct-native ratio. Three-sample p95
+is the observed maximum. The route remains experimental; complete environment
+inventory, maintained publication and N1536 qualification remain open.
+
+[Reproduction and scope](../experiments/triangle_memory/GFX1100.md);
+[all timings, hashes and independent audit](../provenance/precision_openfold3_copy_gfx1100_20261019.json).

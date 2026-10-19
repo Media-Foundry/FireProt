@@ -7864,3 +7864,30 @@ commit changes only isolated experiments, evidence and documentation, with no
 maintained imports. Precision had unrelated uncommitted gfx1100 publication
 work at final inspection; preserve it. Frozen workers isolate this study from
 those concurrent source edits.
+
+## Precision default promotion by explicit user decision (2026-10-19)
+
+User selected ordinary verification with optional strict full-environment scan,
+then said to stop additional runs and promote directly. The active N1536 native
+baseline was terminated after about849s; Rust records failure/cancellation,
+candidate never started. GPU released. Do not restart those controls or launch
+more model regressions without a new user request. Ordinary N1000/N124 pairs
+were not run. Strict N124 packaged pair passed all11arrays and fullCIF, with
+zero HIP/no reuse intentionally. Published screen passed54checks/42HIP/12native,
+exception restoration and wrong manifest rejection. Prior N1000 frozen
+three-pair evidence remains separate, not a new maintained-package model result.
+
+N1000 recommended request/profile now precision-openfold3-n1000-default.json
+and configs/precision/openfold3-default.json. Promoted scope is out-of-place
+wave32 softmax plus pair/atom/template reuse ONLY; private-score/layout-copy
+experiments remain separate. N1536 default request explicitly selects native;
+manually selecting hip_fused for that length remains unqualified full-model use.
+Strict profile adds only inventory; explicit native still bypasses composition.
+No generic CLI or DiamondHill default changed, no migration gate released.
+
+Root outputs/experiments/gfx11-of3-promotion-20261019-v1 retains stagedsourcepins,
+publication, successful v2screen, v3environmentinventory/discovery/exclusions,
+strict124audit and canceled1536records. Collector's explicit user-override flag
+records promotion WITHOUT claiming all-three-length audit passed. Keep failure
+and cancellation records. Provenance precision_openfold3_promotion_gfx1100_20261019.json,
+GFX11_HANDOFF.md and docs/precision-setup.md describe scope and usage.

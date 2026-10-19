@@ -399,3 +399,93 @@ bytes. No memory reduction is established. The six template-guard checks and
 50 CPU tests pass. Full controls, timings, pins and limitations are retained in
 `provenance/precision_openfold3_reuse_gfx1100_20261018.json`, produced by
 `collect_gfx1100_reuse.py` after the final audit and test log are present.
+
+## Maintained gfx1100 publication and default qualification (2026-10-19)
+
+The Precision default promotes the earlier **out-of-place softmax plus
+pair/atom/template reuse** composition, not the later layout-copy/private-score
+experiments. It uses maintained modules under
+`python/fireprot/adapters/openfold3/gfx1100`, the published-only loader
+`python/fireprot/backends/amd/softmax_gfx1100.py`, and
+`kernels/amd/fireprot_softmax_gfx1100.hip`. Rust owns build/publication, registry
+selection, full-model supervision, numerical acceptance and array comparison.
+Python helpers only describe the build, execute tensor screens and audit evidence.
+
+To build on this prepared host, use a fresh receipt directory:
+
+```bash
+HIP_VISIBLE_DEVICES= PYTHONDONTWRITEBYTECODE=1 \
+PYTHONPATH=/media/990Pro/fireprot/python \
+FIREPROT_BRIDGE_LIBRARY=/media/990Pro/fireprot/target/release/lib_fireprot_bridge.so \
+runtime/venvs/openfold3-gfx1100/bin/python \
+  experiments/hip_softmax/build_gfx1100_published.py /absolute/NEW_BUILD_RECEIPT
+# The helper prints the Rust cache entry. Substitute it and a NEW destination:
+target/release/fireprot publish-kernel /absolute/CACHE_ENTRY /absolute/NEW_BUNDLE
+```
+
+Record the returned manifest digest in a new profile before testing. Never
+overwrite the qualified bundle or substitute a new digest without qualification.
+The maintained loader requires an explicitly pinned bundle and never falls back
+to a raw library or just-in-time compilation. Its `softmax-gfx1100-v1` ABI is
+out-of-place; the later private-score ABI is distinct and not interchangeable.
+
+The installed bundle can be screened on idle HIP0 with a fresh JSON destination:
+
+```bash
+HIP_VISIBLE_DEVICES=0 PYTHONDONTWRITEBYTECODE=1 \
+PYTHONPATH=/media/990Pro/fireprot/python:/media/990Pro/fireprot/runtime/repos/openfold3 \
+FIREPROT_BRIDGE_LIBRARY=/media/990Pro/fireprot/target/release/lib_fireprot_bridge.so \
+FIREPROT_SOFTMAX_GFX1100_BUNDLE=/media/990Pro/fireprot/runtime/kernels/openfold3-gfx1100-softmax-v1 \
+FIREPROT_SOFTMAX_GFX1100_BUNDLE_SHA256=dc8716ef683a43fc5c1c4438966754b7d50e0f3dae46dc24ec5ec7524fa7acf8 \
+runtime/venvs/openfold3-gfx1100/bin/python \
+  experiments/hip_softmax/screen_gfx1100_published.py /absolute/NEW_SCREEN.json
+```
+
+The 54 exact cases include N124 fallback, all seven HIP batch/length signatures,
+an unsupported N1000 batch, both orientations, strided nonzero/partial/all-masked
+biases and exception restoration. Incorrect manifest pins must fail. The first
+screen's wrong-pin assertion harness failed to catch the Rust bridge's `OSError`;
+its numerical cases passed. The corrected `published-screen-v2.json` is the
+successful complete receipt; the first attempt is retained, not overwritten.
+
+The retained qualification root is
+`/media/990Pro/fireprot/outputs/experiments/gfx11-of3-promotion-20261019-v1`.
+Its `pairs-standard-n124.json`, `pairs-standard-n1000.json` and
+`pairs-standard-n1536.json` contain exact request/profile pins for one matched
+pair each. The user canceled the N1536 baseline and waived further long-model
+reruns; none of the ordinary-profile pairs completed. Only the strict N124
+pair completed. Do not treat prepared controls as successful evidence or resume
+them without a new request. Rust `benchmark-pairs SPEC NEW_OUTPUT` owns
+execution, isolation and treatment checks. For read-only independent replay of
+the completed strict short-sequence evidence, use a fresh audit destination:
+
+```bash
+python3 experiments/hip_softmax/audit_gfx1100_promotion.py \
+  /media/990Pro/fireprot \
+  /media/990Pro/fireprot/outputs/experiments/gfx11-of3-promotion-20261019-v1 \
+  /absolute/NEW_AUDIT.json 124
+```
+
+The auditor rehashes sealed outputs and maintained source bytes, replays all 11
+array comparisons in Rust, checks complete CIF equality, and requires actual
+HIP/cache/template coverage for both long sequences. N124 must record zero HIP
+launches and no feature reuse. `ready_for_default` requires all three lengths;
+single-pair timings retain `insufficient_repeats`, not a stable speedup claim.
+`collect_gfx1100_promotion.py REPO ROOT NEW_PROVENANCE` additionally validates
+the successful strict-N124 audit, published screen, final tests, inventory digest
+and equality of installed profiles with the prepared controls. The explicit
+`--user-waived-long-reruns` collector flag records this user's deployment override
+without changing the auditor's gates or inventing results; it additionally
+requires the N1536 default example to select `native`. Without that flag, all
+three completed ordinary-profile length gates remain mandatory.
+
+Ordinary verification is the user-selected default; strict verification adds
+the complete recorded Python/ROCm/system dependency-content inventory on every
+invocation. The successful inventory is v3. Earlier captures rejected a legacy
+dangling Qt symlink; v3 partitions that tree and checks absence of its missing
+target ancestor. No system library was changed. This inventory is not a hermetic
+OS lock and does not detect arbitrary newly added top-level system files.
+All failed attempts, discovery, exclusions and successful inventory remain under
+the root. The strict N124 matched pair verifies this separate deployment mode.
+See [Precision usage](../../docs/precision-setup.md#openfold3-maintained-precision-default)
+and `provenance/precision_openfold3_promotion_gfx1100_20261019.json`.

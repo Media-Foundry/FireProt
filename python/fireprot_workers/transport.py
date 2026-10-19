@@ -70,7 +70,7 @@ def announce_outputs(channel, bundle):
         paths.append(output / bundle['input_snapshot'])
     # Keep upstream structure files available and covered by the artifact hashes.
     paths += sorted((output / 'native').rglob('*.cif'))
-    for diagnostic in ('operator-runtime.json', 'atlasfold-model.json'):
+    for diagnostic in ('operator-runtime.json', 'atlasfold-model.json', 'conditioning-cache.json', 'atom-cache.json', 'template-reuse.json', 'gfx1100-composition.json'):
         if (output / diagnostic).is_file():
             paths.append(output / diagnostic)
     artifacts = []

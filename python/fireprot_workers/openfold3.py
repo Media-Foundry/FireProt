@@ -119,6 +119,9 @@ def forward_with_backend(model, forward, args, kwargs, *, backend, output):
         return forward(model, *args, **kwargs)
     if backend != 'hip_fused':
         raise ValueError('Unsupported OpenFold3 worker backend')
+    if os.environ.get('FIREPROT_OPENFOLD3_GFX1100') == '1':
+        from fireprot.adapters.openfold3.gfx1100 import forward as gfx1100_forward
+        return gfx1100_forward(model, forward, args, kwargs, output)
     from fireprot.backends.amd.softmax_fp32 import SoftmaxFP32
     from fireprot.adapters.openfold3.attention import AttentionDispatcher, attention_scope
     dispatcher = AttentionDispatcher(SoftmaxFP32())

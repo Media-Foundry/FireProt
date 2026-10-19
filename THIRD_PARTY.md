@@ -24,6 +24,9 @@ entirety, including FireProt modifications, under
 | `experiments/conditioning_reuse/verified_reuse.py` | `layers/diffusion_conditioning.py` |
 | `experiments/conditioning_reuse/verified_atom_reuse.py` | `layers/sequence_local_atom_attention.py` |
 | `experiments/conditioning_reuse/atom_cache.py` | `layers/sequence_local_atom_attention.py` |
+| `python/fireprot/adapters/openfold3/gfx1100/verified_reuse.py` | Maintained copy of the Apache-2.0 conditioning helper above |
+| `python/fireprot/adapters/openfold3/gfx1100/verified_atom_reuse.py` | Maintained copy of the Apache-2.0 atom helper above |
+| `python/fireprot/adapters/openfold3/gfx1100/atom_cache.py` | Maintained copy of the Apache-2.0 atom cache above |
 | `experiments/triangle_memory/replay.py` | Source-pinned experimental substitutions in `layers/triangular_multiplicative_update.py`; preserves the upstream arithmetic |
 | `experiments/triangle_memory/gfx1100_copy.py` | Guarded gfx1100/N1000 substitutions in the same source-pinned triangle method; preserves native arithmetic |
 

@@ -18,15 +18,19 @@ See the [Rust acceptance audit](docs/rust-acceptance.md).
 | Protenix Mini-default v0.5.0 | `native`, `fireprot` | FP32 N1000/N1536; coordinate/confidence regression gates |
 | Protenix Mini-ESM and Tiny-default v0.5.0 | `native`, `fireprot` | Mini-ESM N1000 with ESM2-3B; Tiny L124; model-specific gates |
 | AtlasFold 260703 **with AtlasLM-3B** | Native, chunked, HIP and fused HIP | N1000/N1536; exact public-output bytes; N1536 reference uses chunked native math |
-| OpenFold3 / OpenBind-0 | `native`, opt-in `hip_fused` | Strict deterministic FP32 N1000/N1536; all 11 arrays bitwise equal |
+| OpenFold3 / OpenBind-0 | `native`, `hip_fused`; Precision optimized N1000 default | Strict FP32 N1000/N1536 exact-array evidence on gfx90a; gfx1100 N1000 composition and packaged N124 fallback qualified; gfx1100 N1536 optimized model gate incomplete |
 | Protenix Base-default v0.5.0 | `native`, opt-in `fireprot` | Strict FP32 N1000 C10/D200/S1: maintained composition passes user 0.1 Å aligned-RMSD and summary-confidence criteria; legacy 0.001 Å coordinate gate fails ([status](docs/protenix-base.md)) |
 | Biohub ESMFold2, including ESMC | `native`, experimental opt-in `fireprot` | N600/N1000 native precision, loops3/schedule50/S1; all 12 arrays and complete CIF bytes exact; N1000 three-pair E2E validated ([status](docs/esmfold2.md)) |
 | OpenFold2, original ESMFold v1 and other models | Planned | No verified integration or speedup claim |
 
 Protenix and OpenFold3 are separate implementations. Precision, preprocessing,
 recycles, diffusion steps, samples and language-model work remain model-specific.
-The latest OpenFold3 composition is an **experiment with
-frozen deployment artifacts**, not automatically enabled by the maintained profile.
+Precision's OpenFold3 N1000 default uses the published gfx1100 softmax plus
+pair/atom/template reuse, promoted at the user's request without further long
+packaged-model reruns. The N1536 default example remains native because its
+optimized model gate was not completed. Later layout-copy/private-score experiments remain
+separate; DiamondHill profiles are unchanged. See the
+[Precision default and verification profiles](docs/precision-setup.md#openfold3-maintained-precision-default).
 
 ## Build
 
@@ -52,8 +56,8 @@ mkdir -p runtime
   -Wl,-rpath,/opt/rocm/lib -o runtime/fireprot-hip-probe
 ```
 
-The checked-in profiles describe DiamondHill, whose workspace is
-`/media/IntelSSD/fireprot`. They are deployment examples with absolute paths,
+The checked-in profiles describe DiamondHill (`/media/IntelSSD/fireprot`) and
+Precision (`/media/990Pro/fireprot`). They are deployment examples with absolute paths,
 not a portable dependency installer. Update paths and verify artifact/inventory
 pins for your host; stale inventories are rejected. See
 [installation](docs/installation.md), [checkpoint locations](docs/diamondhill-checkpoints.md)
@@ -87,6 +91,15 @@ target/release/fireprot infer /tmp/my-openfold3.json \
 ```
 
 Other starting points:
+
+On **Precision / gfx1100**, use
+`configs/requests/precision-openfold3-n1000-default.json` with
+`configs/precision/openfold3-default.json`. N124 and N1536 request examples are
+also available; the N1536 example explicitly selects `native` until qualification.
+`openfold3-strict.json` adds the full recorded environment-content
+rescan; `openfold3-native.json` with a `native` request preserves the native route.
+Default here means the recommended host-specific request/profile pair, not a
+change to the generic CLI backend or other hosts.
 
 | Workflow | Request to copy | DiamondHill profile |
 | --- | --- | --- |

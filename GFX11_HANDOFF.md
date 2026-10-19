@@ -1,12 +1,54 @@
 # FireProt gfx11 handoff
 
-Snapshot: 2026-10-19 UTC. Latest owned-score experiment base revision: `b672c7b` (`master`).
-The checkpoint, softmax, reuse and copy qualifications are on GitHub.
-This document also includes the 2026-10-19 private-score follow-up. The original 2026-10-16
+Snapshot: 2026-10-19 UTC. Default integration base revision: `0db730d` (`master`).
+The checkpoint and softmax/reuse/copy/private-score qualifications are retained.
+This document now records the user-authorized maintained default promotion below.
+The original 2026-10-16
 snapshot is retained at
 `outputs/experiments/gfx11-openfold3-model-20261017-v1/GFX11_HANDOFF.before.md`.
 
-## Latest completed follow-up — private QK scores, 2026-10-19
+## Current deployment — user-authorized default, 2026-10-19
+
+- The user chose ordinary verification as default, with full environment-content
+  rescanning in a separate strict profile, then explicitly said to stop further
+  model runs and promote directly. No additional GPU regressions should be
+  resumed without a new request.
+- Recommended N1000 entry: `configs/requests/precision-openfold3-n1000-default.json`
+  with `configs/precision/openfold3-default.json`. This enables maintained,
+  published out-of-place gfx1100 softmax plus pair/atom/template reuse. Later
+  layout-copy/private-score experiments are NOT included. Generic CLI defaults
+  and DiamondHill profiles are unchanged.
+- `configs/precision/openfold3-strict.json` adds only the complete recorded
+  Python/ROCm/system dependency inventory rescan. `openfold3-native.json` with
+  backend `native` remains the explicit escape hatch. Full weight/source hashes,
+  kernel verification, isolation and numerical gates remain in ordinary mode.
+- Published screen: 54 exact cases, 42 HIP calls and 12 native fallbacks, plus
+  exception restoration and incorrect-manifest rejection. Strict packaged N124
+  passed all 11 arrays and complete CIF bytes; N124 intentionally computes
+  natively. Earlier N1000 three-pair evidence qualifies the composition, but
+  this integration did not complete a new packaged N1000 full-model pair.
+- The ordinary N1536 baseline was canceled on user request after approximately
+  849 seconds; no candidate ran and no numerical result was produced. Rust
+  records `phase=failed` with a cancellation error. This is not a numerical
+  failure and not a validation pass. Ordinary N124/N1000 pairs were never
+  started. The N1536 default request therefore selects `native`; manually
+  selecting `hip_fused` for N1536 remains unqualified full-model execution.
+- Root: `outputs/experiments/gfx11-of3-promotion-20261019-v1`. Preserve
+  `paired-standard-n1536`, `audit-strict-n124.json`, `published-screen-v2.json`,
+  `promotion-map.json`, final tests and inventory v3. Do not rerun old controls.
+  `ready_for_default` remains false for the incomplete three-length audit;
+  provenance records the deployment override separately and honestly.
+- Bundle: `runtime/kernels/openfold3-gfx1100-softmax-v1`, manifest SHA-256
+  `dc8716ef683a43fc5c1c4438966754b7d50e0f3dae46dc24ec5ec7524fa7acf8`.
+  Inventory: `runtime/environments/precision-openfold3-gfx1100-v1.json`, SHA-256
+  `f2e67a1616c713fbb109a4f3e5dad86e247597aff16ea44c37017faffac0c0ff`.
+  Scope/exclusions are documented in `docs/precision-setup.md`; this is not a
+  hermetic OS lock. No system libraries were modified.
+- Evidence: `provenance/precision_openfold3_promotion_gfx1100_20261019.json`.
+  No fresh long-model speedup or N1536 optimized-model qualification is claimed.
+  General asset migration remains blocked by its independent failed AtlasLM gate.
+
+## Previous completed follow-up — private QK scores, 2026-10-19
 
 Precision OpenFold3 N1000 now has independently audited private QK-score reuse:
 previous softmax/reuse/copy composition **231.101 -> 223.261 s E2E**,
@@ -20,16 +62,15 @@ The separate HIP ABI requires private full-storage QK scores; native QK/PV and
 softmax arithmetic stay intact. The frozen root is
 `outputs/experiments/gfx11-of3-owned-20261019-v1`; final audit and driver pass.
 Next candidate from the profile: C128 LayerNorm; no new speedup is claimed for it.
-Environment inventory, maintained publication and N1536 remain open. General
+For this newer private-score composition, maintained publication and N1536 remain open. General
 asset migration still waits behind the earlier failed AtlasLM B4 gate.
 See [Precision evidence](docs/precision-setup.md) and [handoff](GFX11_HANDOFF.md).
 
 Evidence: `provenance/precision_openfold3_owned_gfx1100_20261019.json`.
 The owned-score tmux jobs completed; both GPUs were idle after final audit.
 Inspect current occupancy before new work; do not restart the completed pairs.
-Precision also has unrelated uncommitted gfx1100 production integration work
-(worker/transport, backend, adapter, kernel and test additions). Preserve and
-inspect that work before further edits; it is outside this experiment.
+The concurrent integration of the earlier composition is now the separate
+user-authorized default described above; it does not include this experiment.
 
 ## Previous copy follow-up — 2026-10-19
 
@@ -56,8 +97,9 @@ inspect that work before further edits; it is outside this experiment.
 - The private-score follow-up above supersedes the earlier proposed in-place
   softmax investigation. C128 normalization remains an unmeasured candidate.
 - General migration remains behind its previous failed AtlasLM gate; no sender
-  was resumed or bypassed. Production promotion still needs complete environment
-  inventory and publication. N1536 remains separately unqualified on gfx1100.
+  was resumed or bypassed. This newer copy composition remains experimental;
+  the earlier composition's default promotion is described above. N1536 remains
+  separately unqualified for optimized full-model execution on gfx1100.
 
 ## Workspace and rules
 
@@ -102,7 +144,8 @@ inspect that work before further edits; it is outside this experiment.
   `7de748b7bc93adb5af0a4032d5e9f208b6e1325f`.
 - Python: `runtime/venvs/openfold3-gfx1100/bin/python`, inheriting BIO's Torch.
   The isolated overlay contains the added inference dependencies; BIO was not
-  modified. Complete environment-content inventory qualification remains open.
+  modified. A recorded environment-content inventory is now available through
+  the optional strict profile; see current deployment and its scope limits above.
 - Checkpoint: `runtime/weights/openbind0/of3-ob-2025-06-30-174k.pt`,
   2,287,872,989 bytes; SHA-256
   `bd43301c011d5f87580d3e8b548658869433e4488399feb03035ba248f8e29e4`.
@@ -230,8 +273,9 @@ cp configs/requests/precision-openfold3-n1000-native.json /tmp/my-openfold3.json
 target/release/fireprot infer /tmp/my-openfold3.json configs/precision/openfold3-native.json
 ```
 
-For the experimental optimized worker, use the frozen preparation procedure in
-`experiments/hip_softmax/README.md`; do not simply reuse the gfx90a HIP profile.
+For the current N1000 optimized default, use the `precision-openfold3-n1000-default.json`
+request and `configs/precision/openfold3-default.json`. Frozen experiments remain
+available via `experiments/hip_softmax/README.md`; never reuse a gfx90a HIP bundle.
 
 ## Background migration: do not duplicate jobs
 
@@ -264,14 +308,13 @@ serially; do not add overlapping jobs there.
 
 1. Inspect durable OpenFold3 receipts and any existing tmux job before launching
    another GPU workload. Never overlap runs on HIP0.
-2. N1000 full-model and three-pair gates now pass for both frozen softmax and
-   the subsequent pair/atom/template reuse composition.
-   Before enabling a maintained gfx1100 OpenFold3 profile, publish the kernel
-   through Rust, complete the environment inventory, and requalify the packaged
-   route with actual HIP coverage and all-array/CIF checks.
+2. Default promotion is complete by explicit user decision, using existing
+   N1000 composition evidence plus published-operator and strict N124 gates.
+   Do not describe it as a completed three-length packaged qualification.
 3. Keep exact precision, workload, source/checkpoint hashes and native fallbacks.
    Do not port gfx90a binaries, turn on Triton, or relax deterministic gates.
-4. Qualify a complete OpenFold3 environment inventory and separately test N1536
-   before broadening support. Preserve the independent migration gate and jobs.
+4. Only if newly requested, finish N1536 and maintained-package long-sequence
+   gates in new output roots before extending the optimized default to N1536.
+   Preserve the optional strict inventory and independent migration gate/jobs.
 5. After DiamondHill's final collector succeeds, update README and `.summary.md`
    with all accepted fresh model ratios. Keep Precision results in a separate table.

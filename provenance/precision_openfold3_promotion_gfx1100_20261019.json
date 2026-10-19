@@ -1,0 +1,244 @@
+{
+  "schema_version": 1,
+  "status": "promoted_precision_default",
+  "date": "2026-10-19",
+  "deployment_decision": "user_authorized_without_additional_long_model_reruns",
+  "all_three_packaged_length_gates_passed": false,
+  "user_override": "\u7b97\u4e86\u4e0d\u8dd1\u4e86\uff0c\u76f4\u63a5\u63a8\u5e7f\u5373\u53ef",
+  "n1536_default_backend": "native",
+  "canceled_study": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-promotion-20261019-v1/paired-standard-n1536/benchmark.json",
+    "sha256": "8e953fcc5b12fff8cb45dff9887fd0be2e501d0db3ca9c155a7ce1692a03a2a7"
+  },
+  "previous_n1000_qualification": {
+    "path": "/media/990Pro/fireprot/provenance/precision_openfold3_reuse_gfx1100_20261018.json",
+    "sha256": "83f5ad3047d2b5b0fd6be7065131cad80b827c54eda6eb050dbe4afe1eb6a996"
+  },
+  "scope": "Published out-of-place gfx1100 wave32 softmax plus rollout-local pair/atom and exact duplicate-template reuse. Copy/private-score follow-ups are NOT included.",
+  "host": "Precision",
+  "gpu": {
+    "target": "gfx1100",
+    "pci": "0000:53:00.0",
+    "hip_device": 0
+  },
+  "scientific_contract": "OpenBind-0 strict deterministic FP32 with deterministic fill; recycles3/four trunk passes, diffusion200, sample1, seed101, query-only/no templates. No Triton.",
+  "user_choice": "Ordinary verification is default; the extra full Python/ROCm/system-content inventory rescan is a separate strict profile.",
+  "qualification": [
+    {
+      "length": 124,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "baseline_e2e_seconds": 128.417098602,
+      "candidate_e2e_seconds": 122.524268455,
+      "baseline_forward_seconds": 11.099734401970636,
+      "candidate_forward_seconds": 11.265703916957136,
+      "observed_single_pair_ratio": 1.0480952077601207,
+      "softmax_launches": 0,
+      "reuse_enabled": false,
+      "caches": {},
+      "template": null,
+      "peak_allocated_bytes": 1721098752,
+      "peak_reserved_bytes": 1874853888,
+      "benchmark": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-promotion-20261019-v1/paired-n124/benchmark.json",
+        "sha256": "2ed3c4f238f507ddc2a55742253afe4193c9ebacb07651915be250cd99a04220"
+      },
+      "comparison": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-promotion-20261019-v1/paired-n124/comparison.json",
+        "sha256": "89b295bee1cfd4d901a6df9dd50b4452f94d39918765c78d1d856c83632f0d88"
+      },
+      "accepted": [
+        {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-promotion-20261019-v1/prediction-n124-baseline/accepted.json",
+          "sha256": "869abbec0d47fc25d22f22fac44bccee35fd7cda4c1e0de009af10f427925bdc"
+        },
+        {
+          "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-promotion-20261019-v1/prediction-n124-candidate/accepted.json",
+          "sha256": "1062639e3d6a077e9de37e63b1c9d4dca2a36a5c6aa68f5befbb80f98b4879c1"
+        }
+      ],
+      "performance": {
+        "baseline": {
+          "count": 1,
+          "min": 128.417098602,
+          "median": 128.417098602,
+          "p95": 128.417098602,
+          "max": 128.417098602,
+          "mean": 128.417098602
+        },
+        "candidate": {
+          "count": 1,
+          "min": 122.524268455,
+          "median": 122.524268455,
+          "p95": 122.524268455,
+          "max": 122.524268455,
+          "mean": 122.524268455
+        },
+        "median_speedup": 1.0480952077601207,
+        "p95_speedup": 1.0480952077601207,
+        "paired_speedups": [
+          1.0480952077601207
+        ],
+        "paired_summary": {
+          "count": 1,
+          "min": 1.0480952077601207,
+          "median": 1.0480952077601207,
+          "p95": 1.0480952077601207,
+          "max": 1.0480952077601207,
+          "mean": 1.0480952077601207
+        },
+        "observed_trend": "insufficient_repeats",
+        "changes": {
+          "backend": {
+            "baseline": "native",
+            "candidate": "hip_fused"
+          },
+          "launch.inputs.rust-bridge": {
+            "baseline": null,
+            "candidate": {
+              "canonical_path": "/media/990Pro/fireprot/target/release/lib_fireprot_bridge.so",
+              "name": "rust-bridge",
+              "sha256": "4651cdd1bb9fece995091bc3dc655bd1d058de135f97efd2bb519ac7a94f7b5e"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "strict_n124": {
+    "audit": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-promotion-20261019-v1/audit-strict-n124.json",
+      "sha256": "4a85ca1bdce4965f0ccfa8195bef09a79fe54ce915363dd230762cfeba8212c6"
+    },
+    "e2e_seconds": [
+      128.417098602,
+      122.524268455
+    ]
+  },
+  "publication": {
+    "directory": "/media/990Pro/fireprot/runtime/kernels/openfold3-gfx1100-softmax-v1",
+    "manifest_sha256": "dc8716ef683a43fc5c1c4438966754b7d50e0f3dae46dc24ec5ec7524fa7acf8",
+    "compatibility": {
+      "package": "fireprot_softmax_gfx1100",
+      "target": "gfx1100",
+      "torch": "2.13.0+rocm10.0.0",
+      "hip": "7.15.26333",
+      "c_abi": "softmax-gfx1100-v1"
+    }
+  },
+  "operator_checks": {
+    "count": 54,
+    "hip_launches": 42,
+    "native_fallbacks": 12,
+    "exception_restoration": true,
+    "wrong_manifest_rejected": true
+  },
+  "tests": {
+    "returncode": 0,
+    "passed": 42,
+    "duration_seconds": 2.03,
+    "gpu_work": false,
+    "command": "HIP_VISIBLE_DEVICES= PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/media/990Pro/fireprot/python runtime/venvs/openfold3-gfx1100/bin/python -m pytest -q tests/operators/test_openfold3_gfx1100_composition.py tests/workers/test_openfold3.py tests/operators/test_openfold3_attention_scope.py experiments/conditioning_reuse/test_pair_cache.py experiments/conditioning_reuse/test_atom_cache.py",
+    "log": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-promotion-20261019-v1/tests-final.log",
+      "sha256": "6a15ccfe1a16479b16125e0c64ac9781ab6bfbc8a41aa1410b880e5ed2f02ea6"
+    }
+  },
+  "profiles": {
+    "default": {
+      "path": "/media/990Pro/fireprot/configs/precision/openfold3-default.json",
+      "sha256": "e10b15993e23c66ff5cd00eb9fb3a79dc2ec022c468eb29d279931ed73f71d4f"
+    },
+    "strict": {
+      "path": "/media/990Pro/fireprot/configs/precision/openfold3-strict.json",
+      "sha256": "be4f564463875434115290cbe57544246a688ce06c9dc08e40a1b4b3c0f293cb"
+    },
+    "native": {
+      "path": "/media/990Pro/fireprot/configs/precision/openfold3-native.json",
+      "sha256": "2e65a9ea59423348f1aabb3fa6795e737aaccfd8fced985594725a71dd2895cf"
+    }
+  },
+  "requests": [
+    {
+      "path": "/media/990Pro/fireprot/configs/requests/precision-openfold3-n124-default.json",
+      "sha256": "d58686d646161f91c7e4ee668032d7fab0f28b4871ce4f190073faa0ee7ab404"
+    },
+    {
+      "path": "/media/990Pro/fireprot/configs/requests/precision-openfold3-n1000-default.json",
+      "sha256": "4ee6f5187ee7e5a1346a1f3e3c80fe7c660b1a44929b8fb106c9a31c9e3ee2e0"
+    },
+    {
+      "path": "/media/990Pro/fireprot/configs/requests/precision-openfold3-n1536-default.json",
+      "sha256": "bb9703cfe10bf9ee879862f2dc5004d5da738bb03142725f4b8e8f5bfac0b729"
+    }
+  ],
+  "evidence": {
+    "audit-strict-n124.json": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-promotion-20261019-v1/audit-strict-n124.json",
+      "sha256": "4a85ca1bdce4965f0ccfa8195bef09a79fe54ce915363dd230762cfeba8212c6"
+    },
+    "published-screen-v2.json": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-promotion-20261019-v1/published-screen-v2.json",
+      "sha256": "9c2e829543fc705210b7fc482890488fed0f46cef308a0f9c0af256b1040c4b0"
+    },
+    "publication.json": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-promotion-20261019-v1/publication.json",
+      "sha256": "f1489adcf57fcb35946416621f25d7a537f81df2c327d2202b7cd41e62c987be"
+    },
+    "promotion-map.json": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-promotion-20261019-v1/promotion-map.json",
+      "sha256": "fcb29757b5d95fbf24ef10a7fa22c1825179b2b076051005d36125bc4d7daf48"
+    },
+    "environment-discovery.json": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-promotion-20261019-v1/environment-discovery.json",
+      "sha256": "da10102d6bcba8f7f8d145f77a1eec5dcc5698d6972459ab1d5df0e98b906f9b"
+    },
+    "environment-spec-v3.json": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-promotion-20261019-v1/environment-spec-v3.json",
+      "sha256": "3d4f1462d34766a131ea0ac5148eb93cf2e74cfc40ea9ef93be71bbe9e5a5dd8"
+    },
+    "environment-exclusions-v3.json": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-promotion-20261019-v1/environment-exclusions-v3.json",
+      "sha256": "5c48a1f86843d7371f98f3551f59fb052f094249dadc6c7f98e6b24274fa9b3d"
+    },
+    "environment-v3.json": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-promotion-20261019-v1/environment-v3.json",
+      "sha256": "f2e67a1616c713fbb109a4f3e5dad86e247597aff16ea44c37017faffac0c0ff"
+    },
+    "standard-controls.json": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-promotion-20261019-v1/standard-controls.json",
+      "sha256": "1681ab4aa3565cc6d53c786f766a751f64a9488c5de8d8a83cef86461eb3c6e9"
+    },
+    "qualification-controls.json": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-promotion-20261019-v1/qualification-controls.json",
+      "sha256": "3f8770e2d91f41ed3693b122615146fffe48b7f8fd057fac31e6e1290afff720"
+    },
+    "build/build.json": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-promotion-20261019-v1/build/build.json",
+      "sha256": "b4227704e22b4e1be1ca40b7396e3e8f4cc64097983e44ac93d41d0b16cb9d55"
+    },
+    "tests-final.json": {
+      "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-promotion-20261019-v1/tests-final.json",
+      "sha256": "b5bfd86fccd73b3ecc2921d2cfd21c2643836e4d6a81f3cf24adbc5a9e2fe047"
+    }
+  },
+  "environment_inventory": {
+    "path": "/media/990Pro/fireprot/runtime/environments/precision-openfold3-gfx1100-v1.json",
+    "sha256": "f2e67a1616c713fbb109a4f3e5dad86e247597aff16ea44c37017faffac0c0ff"
+  },
+  "limitations": [
+    "Under the user override, only strict N124 has a completed packaged full-model pair. Standard N1536 was canceled during baseline; standard N1000/N124 did not run. Promotion is a user-authorized deployment decision, not a three-length validation pass.",
+    "N124 is a real 1izq 124-residue input with intentional native computation; no short-sequence speedup claim.",
+    "N1000 has earlier frozen-composition three-pair evidence, not a new maintained-package full-model run. N1536 optimized execution remains unqualified and its default request selects native.",
+    "Other lengths/workloads retain native feature computations and attention falls back outside the screened shape signatures.",
+    "Caches rely on pinned upstream immutable-input contracts and are scoped to one rollout; no arbitrary mutation support.",
+    "The strict inventory covers recorded current dependencies, not a hermetic OS. It partitions around an existing dangling Qt link and checks absence of /usr/share/qtchooser; no system files were changed.",
+    "Failed initial inventory attempts and the initial wrong-pin test harness exception remain recorded; final v3 inventory and v2 screen passed.",
+    "Caches unflushed and clocks unlocked. Forward allocator peaks are not hardware or complete-invocation memory peaks.",
+    "No general asset migration gate was released or modified."
+  ],
+  "collector": {
+    "path": "/media/990Pro/fireprot/experiments/hip_softmax/collect_gfx1100_promotion.py",
+    "sha256": "0483fd9f60f902e3e1e6afa5c36252abba638fe3967806f0662dcfb99a99383c"
+  }
+}

@@ -5,6 +5,88 @@ The top-level checkout tracks `master` from the FireProt GitHub repository.
 This host has Navi 31 / gfx1100 GPUs; DiamondHill's gfx90a binaries and measured
 speedups do not establish compatibility or performance here.
 
+## OpenFold3 maintained Precision default
+
+The recommended Precision entry is now the maintained published **out-of-place
+wave32 softmax plus pair/atom/template reuse** route for N1000. The user explicitly
+canceled additional long-model runs and authorized promotion based on existing
+evidence. This is a deployment decision, not a completed three-length packaged
+qualification. N1536's default example selects native. This route does not include the
+later experimental layout copies or private-score ABI. The host-specific
+default does not change DiamondHill profiles or the generic Rust backend default.
+
+```bash
+cd /media/990Pro/fireprot
+cp configs/requests/precision-openfold3-n1000-default.json /tmp/my-openfold3.json
+# Set a fresh run_id and unused output_dir; retain or explicitly update input pins.
+target/release/fireprot inspect /tmp/my-openfold3.json
+target/release/fireprot infer /tmp/my-openfold3.json configs/precision/openfold3-default.json
+```
+
+Additional examples are `precision-openfold3-n124-default.json` and
+`precision-openfold3-n1536-default.json` under `configs/requests/`. The latter
+uses backend `native`, which bypasses the composition even with the default
+profile. Explicitly changing it to `hip_fused` selects an unqualified N1536
+full-model route; the operator screen alone does not qualify that model. The short
+input is the original 124-residue `cases/1izq_L124/sequence.fasta`, not a prefix
+of a long sequence. Its model computation intentionally remains native.
+
+The three execution choices are:
+
+| Choice | Profile | Request backend |
+| --- | --- | --- |
+| Recommended ordinary verification | `configs/precision/openfold3-default.json` | `hip_fused` |
+| Extra environment-content verification | `configs/precision/openfold3-strict.json` | `hip_fused` |
+| Explicit native escape hatch | `configs/precision/openfold3-native.json` | `native` |
+
+The ordinary profile retains full checkpoint/source checks, published-kernel
+hash/compatibility verification, GPU isolation and Rust numerical acceptance.
+The strict profile differs only by adding the recorded Python/ROCm/system-library
+content inventory, revalidated on every invocation. The user selected ordinary
+verification as the default because that additional scan is costly. Neither
+choice relaxes deterministic FP32, deterministic fill or qualification gates.
+
+The strict inventory is installed at
+`runtime/environments/precision-openfold3-gfx1100-v1.json`, pinned by SHA-256
+`f2e67a1616c713fbb109a4f3e5dad86e247597aff16ea44c37017faffac0c0ff`.
+It covers the recorded current dependency trees, not a hermetic operating system.
+An existing dangling Qt chooser link required partitioning its containing tree;
+the inventory separately checks that `/usr/share/qtchooser` is absent. No system
+files were changed. Discovery, scope and exclusions remain in the evidence root.
+An environment upgrade requires recapture and qualification, not silently
+replacing the trusted digest.
+
+The kernel bundle is `runtime/kernels/openfold3-gfx1100-softmax-v1`, manifest
+SHA-256 `dc8716ef683a43fc5c1c4438966754b7d50e0f3dae46dc24ec5ec7524fa7acf8`.
+Rust builds/publishes/verifies it. The loader checks actual gfx1100, Torch
+`2.13.0+rocm10.0.0` and HIP `7.15.26333`; an invalid explicit bundle fails closed.
+No raw-library or compiler fallback is used by this maintained route.
+
+Qualification uses strict FP32, R3/four trunk passes, D200/S1, seed101,
+query-only inputs without supplied templates. Earlier N1000 full-model evidence
+records pair and atom reuse with one rollout-local miss and 199 hits each, zero fallbacks;
+only bitwise-identical padded template slots are reused, preserving reduction.
+Other lengths/workloads keep native feature computations, and unlisted attention
+signatures use native attention. This is not blanket qualification of arbitrary
+inputs, lengths, versions or multimer workloads.
+
+The published operator screen passes 54 exact checks (42 HIP and 12 native
+fallbacks), both bias orientations and nonzero/partial/fully-masked strided masks,
+exception restoration and rejection of an incorrect manifest digest.
+The strict-profile N124 packaged pair passed all 11 arrays and complete CIF
+equality with intentional zero HIP coverage. The ordinary-profile N1536 pair was
+canceled during its baseline at the user's request; its candidate never ran.
+Ordinary-profile N1000 and N124 pairs were not started. No new long-model or
+ordinary-profile timing result is claimed; the earlier N1000 three-pair study
+remains the composition evidence. The independent auditor still requires all
+three lengths to return `ready_for_default`; that flag is NOT set by this
+deployment override. See `provenance/precision_openfold3_promotion_gfx1100_20261019.json`
+and `outputs/experiments/gfx11-of3-promotion-20261019-v1/`.
+
+Build/publication reproduction and audit commands are in
+[`experiments/hip_softmax/README.md`](../experiments/hip_softmax/README.md).
+Weights, binaries, environment inventories and predictions remain outside Git.
+
 ## Source and CPU entry
 
 The Rust CLI/runtime/bridge build locally with Cargo 1.97.1 and the checked-in

@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-19",
+  "base_revision": "fedff98af4adab90876388006ab4a530c5c1380f",
+  "decision": "Generalize length-independent computation reuse after two exercised correctness points, per explicit user policy.",
+  "user_instruction": "通用优化和计算复用一旦取得两个点就可以完全推广",
+  "memory_request": "write this memory into .agents to avoid over-conservative",
+  "memory": ".agents/project_context.md",
+  "changes": [
+    "Remove exact N1000/N1536 admission from maintained pair, atom and template reuse; admit positive lengths satisfying existing semantic guards.",
+    "Preserve strict FP32, source pins, R3/D200/S1 outer gate, shape/layout guards, immutable rollout lifetime and bitwise-identical template/mask checks.",
+    "Keep softmax shape-specialized dispatch and native attention fallback unchanged.",
+    "Select hip_fused in the N1536 default request under the user-selected semantic generalization policy; explicit native remains available."
+  ],
+  "existing_evidence": [
+    {
+      "path": "provenance/openfold3_conditioning_cache_models.json",
+      "sha256": "397843fd71668b1ff1e1ed6a99fc7b81e5cb92a1995ef6a797859cb1cd3beab7",
+      "scope": "gfx90a pair cache N1000 and N1536 actual model reuse and exact output comparisons"
+    },
+    {
+      "path": "provenance/openfold3_atom_cache_models.json",
+      "sha256": "0bef12dabc8a7ea7f3376bedf5a652854c74296fdfdfaff8f1336015b0a8dc5d",
+      "scope": "gfx90a atom cache N1000 and N1536 actual model reuse and exact output comparisons"
+    },
+    {
+      "path": "provenance/openfold3_template_reuse_model_20261007.json",
+      "sha256": "fb45c0bb3380f7eb8e9c5752798e9dd7f5dce593c4028b480452dc88c77d838a",
+      "scope": "gfx90a N1536 template reuse: 9 eligible calls, 27 reused slots, all arrays and full CIF exact"
+    },
+    {
+      "path": "provenance/precision_openfold3_reuse_gfx1100_20261018.json",
+      "sha256": "83f5ad3047d2b5b0fd6be7065131cad80b827c54eda6eb050dbe4afe1eb6a996",
+      "scope": "gfx1100 N1000 pair/atom/template composition: three cycles and three pairs, actual reuse and all arrays/full CIF exact"
+    }
+  ],
+  "verification": {
+    "new_gpu_runs": 0,
+    "cpu_tests_passed": 76,
+    "duration_seconds": 2.09,
+    "command": "HIP_VISIBLE_DEVICES= PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/media/990Pro/fireprot/python runtime/venvs/openfold3-gfx1100/bin/python -m pytest -q tests/operators/test_openfold3_gfx1100_composition.py tests/operators/test_openfold3_gfx1100_length_policy.py tests/workers/test_openfold3.py tests/operators/test_openfold3_attention_scope.py experiments/conditioning_reuse/test_pair_cache.py experiments/conditioning_reuse/test_atom_cache.py",
+    "coverage": "Positive/intermediate/boundary length metadata, zero/mismatched/channel rejection, lifecycle/exception restoration, template identity/mask/signed-zero fallback; CPU simulated metadata tests are not GPU numerical qualification."
+  },
+  "limits": [
+    "Existing records are reviewed historical evidence, not a new raw-output replay or fresh full-model run.",
+    "Two-point semantic deployment does not establish exactness or speedup at every unmeasured length/platform/version.",
+    "No new gfx1100 N1536 complete-model result; earlier canceled baseline and never-started candidate remain canceled/unrun.",
+    "Prior N124 native-fallback evidence does not describe the newly reuse-enabled N124 route.",
+    "Historical promotion-map and source-dependent audits remain bound to fedff98; their success is not claimed for this revision.",
+    "No kernel whitelist, numerical threshold, strict environment inventory, weight pin or independent asset-migration gate was loosened."
+  ]
+}

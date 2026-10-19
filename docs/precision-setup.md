@@ -8,10 +8,12 @@ speedups do not establish compatibility or performance here.
 ## OpenFold3 maintained Precision default
 
 The recommended Precision entry is now the maintained published **out-of-place
-wave32 softmax plus pair/atom/template reuse** route for N1000. The user explicitly
+wave32 softmax plus length-independent pair/atom/template reuse** route. The user explicitly
 canceled additional long-model runs and authorized promotion based on existing
 evidence. This is a deployment decision, not a completed three-length packaged
-qualification. N1536's default example selects native. This route does not include the
+qualification. The subsequent user policy permits generalizing semantic reuse
+after two exercised, correct length points; N1536's default example now selects
+`hip_fused`. This route does not include the
 later experimental layout copies or private-score ABI. The host-specific
 default does not change DiamondHill profiles or the generic Rust backend default.
 
@@ -25,11 +27,12 @@ target/release/fireprot infer /tmp/my-openfold3.json configs/precision/openfold3
 
 Additional examples are `precision-openfold3-n124-default.json` and
 `precision-openfold3-n1536-default.json` under `configs/requests/`. The latter
-uses backend `native`, which bypasses the composition even with the default
-profile. Explicitly changing it to `hip_fused` selects an unqualified N1536
-full-model route; the operator screen alone does not qualify that model. The short
+uses backend `hip_fused` under that two-point policy. No fresh gfx1100 N1536
+full-model result is claimed; the operator screen alone is not a model test. The short
 input is the original 124-residue `cases/1izq_L124/sequence.fasta`, not a prefix
-of a long sequence. Its model computation intentionally remains native.
+of a long sequence. It now admits semantic reuse too; its attention remains
+native outside the screened kernel signatures. The earlier N124 native-fallback
+qualification describes the previous revision, not a new reuse-enabled run.
 
 The three execution choices are:
 
@@ -66,9 +69,15 @@ Qualification uses strict FP32, R3/four trunk passes, D200/S1, seed101,
 query-only inputs without supplied templates. Earlier N1000 full-model evidence
 records pair and atom reuse with one rollout-local miss and 199 hits each, zero fallbacks;
 only bitwise-identical padded template slots are reused, preserving reduction.
-Other lengths/workloads keep native feature computations, and unlisted attention
-signatures use native attention. This is not blanket qualification of arbitrary
-inputs, lengths, versions or multimer workloads.
+Positive sequence lengths now share the same reuse admission policy; exact-N
+allowlists were removed from pair, atom and template eligibility. Workload,
+batch/channel/layout, source and immutable-rollout conditions still apply, and
+unlisted attention signatures use native attention. Two-point evidence comes
+from N1000/N1536 pair/atom reports, N1536 template reuse on gfx90a and N1000
+composition on gfx1100. This is semantic generalization, not blanket measured
+correctness/performance for every input, version or platform. No new GPU run
+was started; 76 CPU condition/lifecycle tests pass. See the recorded policy in
+`.agents/project_context.md` and `provenance/openfold3_reuse_generalization_20261019.json`.
 
 The published operator screen passes 54 exact checks (42 HIP and 12 native
 fallbacks), both bias orientations and nonzero/partial/fully-masked strided masks,
@@ -79,8 +88,9 @@ canceled during its baseline at the user's request; its candidate never ran.
 Ordinary-profile N1000 and N124 pairs were not started. No new long-model or
 ordinary-profile timing result is claimed; the earlier N1000 three-pair study
 remains the composition evidence. The independent auditor still requires all
-three lengths to return `ready_for_default`; that flag is NOT set by this
-deployment override. See `provenance/precision_openfold3_promotion_gfx1100_20261019.json`
+three lengths to return `ready_for_default`; that historical flag is NOT set by
+either deployment decision. Its source-map replay describes revision `fedff98`,
+not the subsequent generalized code. See `provenance/precision_openfold3_promotion_gfx1100_20261019.json`
 and `outputs/experiments/gfx11-of3-promotion-20261019-v1/`.
 
 Build/publication reproduction and audit commands are in

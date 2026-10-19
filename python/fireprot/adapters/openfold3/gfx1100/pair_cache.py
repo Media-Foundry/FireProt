@@ -33,7 +33,7 @@ def eligible(inputs):
     return (type(pair) is torch.Tensor and pair.device.type == "cuda" and
             pair.dtype == torch.float32 and pair.ndim == 5 and
             tuple(pair.shape[:2]) == (1, 1) and pair.shape[-1] == 128 and
-            pair.shape[-2] == pair.shape[-3] and pair.shape[-2] in (1000, 1536) and
+            pair.shape[-2] == pair.shape[-3] and pair.shape[-2] > 0 and
             inputs["use_conditioning"] is True and inputs["chunk_size"] == 1024)
 
 

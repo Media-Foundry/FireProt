@@ -7,7 +7,30 @@ The original 2026-10-16
 snapshot is retained at
 `outputs/experiments/gfx11-openfold3-model-20261017-v1/GFX11_HANDOFF.before.md`.
 
-## Current deployment — user-authorized default, 2026-10-19
+## Current policy — length-independent reuse, 2026-10-19
+
+The user explicitly permits general optimizations and computation reuse to be
+fully generalized after two distinct, actually exercised correct length points,
+without an exact-length whitelist or a full-model rerun at every new length.
+Remembered in `.agents/project_context.md` and `AGENTS.md`. Existing N1000/N1536
+pair/atom evidence and N1536 template evidence on gfx90a, plus N1000 composition
+on gfx1100, support this semantic policy. Do not relabel them as a new local
+N1536 full-model test or transfer performance ratios across platforms.
+
+Maintained pair/atom/template reuse now admits positive lengths with unchanged
+source, dtype, shape, workload and cache-lifetime guards. Native attention remains
+the fallback outside the softmax kernel's supported signatures. N124 can now
+reuse; its earlier native-fallback run is historical. The N1536 default request
+now selects `hip_fused`, superseding the native-only choice below. Explicit
+`native` still bypasses all composition. No new GPU model runs were launched;
+76 CPU metadata, lifecycle and template-identity tests pass. Evidence:
+`provenance/openfold3_reuse_generalization_20261019.json`.
+
+Historical source-map auditors refer to `fedff98`; do not mutate their records
+to make them appear to validate this new revision. No copy/private-score
+experiment or independent migration gate was changed.
+
+## Previous deployment — user-authorized default, 2026-10-19
 
 - The user chose ordinary verification as default, with full environment-content
   rescanning in a separate strict profile, then explicitly said to stop further
@@ -313,8 +336,8 @@ serially; do not add overlapping jobs there.
    Do not describe it as a completed three-length packaged qualification.
 3. Keep exact precision, workload, source/checkpoint hashes and native fallbacks.
    Do not port gfx90a binaries, turn on Triton, or relax deterministic gates.
-4. Only if newly requested, finish N1536 and maintained-package long-sequence
-   gates in new output roots before extending the optimized default to N1536.
+4. Follow the two-point semantic promotion policy above; do not impose fresh
+   per-length full-model gates. Further GPU studies require a new request.
    Preserve the optional strict inventory and independent migration gate/jobs.
 5. After DiamondHill's final collector succeeds, update README and `.summary.md`
    with all accepted fresh model ratios. Keep Precision results in a separate table.

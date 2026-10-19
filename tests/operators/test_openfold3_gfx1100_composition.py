@@ -54,7 +54,9 @@ def harness(monkeypatch):
 
 @pytest.mark.parametrize('length,steps,recycles,samples,reuse', [
     (1000, 200, 3, 1, True), (1536, 200, 3, 1, True),
-    (124, 200, 3, 1, False), (256, 200, 3, 1, False),
+    (124, 200, 3, 1, True), (256, 200, 3, 1, True),
+    (800, 200, 3, 1, True), (1001, 200, 3, 1, True),
+    (1537, 200, 3, 1, True), (0, 200, 3, 1, False),
     (1000, 20, 3, 1, False), (1000, 200, 2, 1, False),
     (1000, 200, 3, 2, False),
 ])

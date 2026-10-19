@@ -18,13 +18,14 @@ def forward(model, original, args, kwargs, output):
     batch = args[0] if args else kwargs['batch']
     length = int(batch['token_mask'].shape[-1])
     shared = model.config.architecture.shared
-    reuse = (length in (1000, 1536) and shared.num_recycles == 3
+    reuse = (length > 0 and shared.num_recycles == 3
         and shared.diffusion.no_full_rollout_steps == 200
         and shared.diffusion.no_full_rollout_samples == 1)
     dispatcher = Gfx1100Dispatcher(Gfx1100Softmax())
     output = Path(output)
     report = dict(schema_version=1, token_count=length, completed=False,
-        reuse_enabled=reuse, fallback_reason=None if reuse else 'Unqualified reuse length/workload; native feature computations retained',
+        reuse_enabled=reuse, reuse_policy='length-independent, source-pinned immutable rollout',
+        fallback_reason=None if reuse else 'Unsupported reuse workload; native feature computations retained',
         caches={})
     torch.cuda.reset_peak_memory_stats()
     try:

@@ -1,6 +1,6 @@
-"""Experimental exact duplicate-template reuse; native reductions stay intact.
+"""Length-independent exact duplicate-template reuse; native reductions stay intact.
 
-Only identical FP32 template slots in the measured N1536 inference bucket are
+Only bitwise-identical FP32 template slots satisfying the source-pinned contract are
 eligible. The native block computes the first slot and its exact bytes populate
 the other slots. The stack's final normalization and four-slot reduction remain
 native. Distinct templates, training and unsupported calls use the original.
@@ -38,7 +38,7 @@ def template_reuse_scope(model, output, source_sha256):
                 and type(t) is torch.Tensor and type(mask) is torch.Tensor
                 and t.is_cuda and mask.device == t.device
                 and t.dtype == mask.dtype == torch.float32
-                and t.ndim == 5 and t.shape[-2] in (1000, 1536)
+                and t.ndim == 5 and t.shape[-2] > 0
                 and tuple(t.shape) == (1, 4, t.shape[-2], t.shape[-2], 64)
                 and tuple(mask.shape) == (1, 4, t.shape[-2], t.shape[-2])
                 and t.is_contiguous() and mask.stride(-1) == 1

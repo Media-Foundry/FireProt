@@ -45,7 +45,7 @@ def eligible(inputs):
     return (rl.ndim == 4 and tuple(rl.shape[:2]) == (1, 1) and rl.shape[-1] == 3
             and single.ndim == 4 and tuple(single.shape[:2]) == (1, 1)
             and pair.ndim == 5 and tuple(pair.shape[:2]) == (1, 1)
-            and pair.shape[-1] == 128 and pair.shape[-2] in (1000, 1536)
+            and pair.shape[-1] == 128 and pair.shape[-2] > 0
             and pair.shape[-2] == pair.shape[-3] == single.shape[-2])
 
 

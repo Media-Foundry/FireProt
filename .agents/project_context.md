@@ -7891,3 +7891,40 @@ strict124audit and canceled1536records. Collector's explicit user-override flag
 records promotion WITHOUT claiming all-three-length audit passed. Keep failure
 and cancellation records. Provenance precision_openfold3_promotion_gfx1100_20261019.json,
 GFX11_HANDOFF.md and docs/precision-setup.md describe scope and usage.
+
+## User policy: two-point generalization, avoid over-conservative gates (2026-10-19)
+
+Explicit user instruction: general optimizations and computation reuse may be
+fully promoted once two distinct lengths have actually exercised the treatment
+and passed correctness checks. The user explicitly requested remembering this
+in `.agents`. Apply this as the project's promotion policy going forward:
+
+- Do not demand a separate full-model run for every length or maintain exact-N
+  allowlists for length-independent loading, scheduling or computation reuse.
+- Separate semantic validity from shape-specific kernel tuning. Retain only
+  necessary source, dtype, layout, immutable-input and cache-lifetime guards;
+  specialized kernels keep their own supported signatures and native fallback.
+- Two passing points authorize deployment within the same semantic contract;
+  they are not measurements of every length, version, platform or speedup.
+  Do not count a native-only fallback as an exercised optimization point.
+- Do not restart the user-canceled long GPU regressions merely to satisfy a
+  self-imposed per-length packaging gate. Prefer existing evidence and focused
+  CPU/condition tests. Preserve honest result provenance and native escape hatches.
+
+Existing evidence already provides N1000/N1536 reuse points: pair and atom
+cache model reports on gfx90a, N1536 template full-model exact arrays/CIF on
+gfx90a, plus N1000 exact pair/atom/template composition on gfx1100. Sources:
+provenance/openfold3_conditioning_cache_models.json,
+provenance/openfold3_atom_cache_models.json,
+provenance/openfold3_template_reuse_model_20261007.json, and
+provenance/precision_openfold3_reuse_gfx1100_20261018.json.
+This supports semantic length generalization, not a new gfx1100 N1536 model
+timing/pass. Removed fixed lengths from maintained pair/atom/template guards;
+positive length, batch/channel/layout/source/workload guards remain. N124 and
+other positive lengths can now reuse, while softmax dispatch is unchanged.
+The N1536 default example now selects hip_fused under this policy, superseding
+the preceding native-only deployment decision. Explicit native is unchanged.
+76 CPU tests pass, including intermediate/boundary lengths, mismatched shape
+rejection and template bitwise-identity/signed-zero fallback. No new GPU run.
+Historical promotion source maps/audits describe revision fedff98; they are not
+claims that today's generalized source passed the canceled model study.

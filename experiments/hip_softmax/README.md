@@ -402,6 +402,13 @@ bytes. No memory reduction is established. The six template-guard checks and
 
 ## Maintained gfx1100 publication and default qualification (2026-10-19)
 
+This section records revision `fedff98`. The subsequent two-point promotion
+policy in `.agents/project_context.md` generalizes length-independent reuse and
+switches the N1536 default request to `hip_fused`; it does not rewrite these
+historical results. Source-map audit/collector replay below requires the original
+revision and controls, not today's modified maintained files. See
+`provenance/openfold3_reuse_generalization_20261019.json` for the current decision.
+
 The Precision default promotes the earlier **out-of-place softmax plus
 pair/atom/template reuse** composition, not the later layout-copy/private-score
 experiments. It uses maintained modules under

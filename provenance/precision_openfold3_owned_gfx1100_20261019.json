@@ -1,0 +1,596 @@
+{
+  "schema_version": 1,
+  "host": "Precision",
+  "architecture": "gfx1100",
+  "device": "W7900, HIP0, PCI 0000:53:00.0",
+  "workload": {
+    "model": "OpenFold3/OpenBind-0",
+    "length": 1000,
+    "precision": "strict deterministic FP32",
+    "recycles": 3,
+    "trunk_passes": 4,
+    "diffusion_steps": 200,
+    "samples": 1,
+    "seed": 101,
+    "msa": "query only",
+    "templates": "none; internal padded slots retained"
+  },
+  "preparation": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-owned-20261019-v1/preparation.json",
+    "sha256": "afb6e0a81ef7f6087a524081a702bb285e4cc050695ee50093c5893f79e2ae3b"
+  },
+  "final_audit": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-owned-20261019-v1/audit-final.json",
+    "sha256": "39711b0a838b385b7e72c7be0fafe3ed57fb236d9a05dde1c4bf28acfcbb30ab"
+  },
+  "collector": {
+    "path": "/media/990Pro/fireprot/experiments/hip_softmax/collect_gfx1100_owned.py",
+    "sha256": "7999b58985f786e2d1c4e3efaf74a2b31c027f98f504259ca7237c0783fa4f35"
+  },
+  "benchmark": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-owned-20261019-v1/paired/benchmark.json",
+    "sha256": "af15fb176abf920a30592ba9883e7cf915ac90a18f773c2ef2f5ee47c8e94177"
+  },
+  "comparison": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-owned-20261019-v1/paired/comparison.json",
+    "sha256": "96fa5e031a49271af51031d721fe32a526f2cb354119d6238bdc4b508d5ab583"
+  },
+  "native_reference": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-openfold3-model-20261017-v1/native-prediction/accepted.json",
+    "sha256": "5265b3daedfc30c478d3a794e88e07b5c615b33a8667ad9a3dd0d6ffeb603a4c"
+  },
+  "operator_screen": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-owned-20261019-v1/screen.json",
+    "sha256": "73bb4afc0aac1f6909b3960a6789bdeca4cf2a0cd95c59de57049183a0aeaffa"
+  },
+  "operator_results": [
+    {
+      "batch": 1,
+      "ending": false,
+      "exact": true,
+      "samples_ms": {
+        "baseline": [
+          0.26015100876490277,
+          0.2474136749903361,
+          0.2456469933191935
+        ],
+        "candidate": [
+          0.21823332707087198,
+          0.21679999430974325,
+          0.2380639910697937
+        ]
+      },
+      "medians_ms": {
+        "baseline": 0.2474136749903361,
+        "candidate": 0.21823332707087198
+      },
+      "speedup": 1.1337116943187495,
+      "peak_allocated_bytes": {
+        "baseline": 212791296,
+        "candidate": 196014080
+      }
+    },
+    {
+      "batch": 1,
+      "ending": true,
+      "exact": true,
+      "samples_ms": {
+        "baseline": [
+          0.24275734027226767,
+          0.2442506750424703,
+          0.24636733531951904
+        ],
+        "candidate": [
+          0.22689032554626465,
+          0.22979700565338135,
+          0.24094732602437338
+        ]
+      },
+      "medians_ms": {
+        "baseline": 0.2442506750424703,
+        "candidate": 0.22979700565338135
+      },
+      "speedup": 1.0628975532035019,
+      "peak_allocated_bytes": {
+        "baseline": 292483072,
+        "candidate": 275705856
+      }
+    },
+    {
+      "batch": 8,
+      "ending": false,
+      "exact": true,
+      "samples_ms": {
+        "baseline": [
+          2.1630870501200357,
+          2.069812615712484,
+          1.9891513188680012
+        ],
+        "candidate": [
+          1.8623992602030437,
+          1.8403956095377605,
+          1.8088916142781575
+        ]
+      },
+      "medians_ms": {
+        "baseline": 2.069812615712484,
+        "candidate": 1.8403956095377605
+      },
+      "speedup": 1.1246563537675165,
+      "peak_allocated_bytes": {
+        "baseline": 616545792,
+        "candidate": 488545792
+      }
+    },
+    {
+      "batch": 8,
+      "ending": true,
+      "exact": true,
+      "samples_ms": {
+        "baseline": [
+          2.0059450467427573,
+          2.0974629720052085,
+          2.068295955657959
+        ],
+        "candidate": [
+          1.8599356015523274,
+          1.9104633331298828,
+          1.8253820737202961
+        ]
+      },
+      "medians_ms": {
+        "baseline": 2.068295955657959,
+        "candidate": 1.8599356015523274
+      },
+      "speedup": 1.1120255743971625,
+      "peak_allocated_bytes": {
+        "baseline": 696237568,
+        "candidate": 568237568
+      }
+    },
+    {
+      "batch": 232,
+      "ending": false,
+      "exact": true,
+      "samples_ms": {
+        "baseline": [
+          61.56434122721354,
+          61.49052429199219,
+          62.15196228027344
+        ],
+        "candidate": [
+          53.82174173990885,
+          57.56818644205729,
+          57.641377766927086
+        ]
+      },
+      "medians_ms": {
+        "baseline": 61.56434122721354,
+        "candidate": 57.56818644205729
+      },
+      "speedup": 1.0694160270130866,
+      "peak_allocated_bytes": {
+        "baseline": 8633313792,
+        "candidate": 4921313792
+      }
+    },
+    {
+      "batch": 232,
+      "ending": true,
+      "exact": true,
+      "samples_ms": {
+        "baseline": [
+          64.3489481608073,
+          64.58126322428386,
+          64.22563171386719
+        ],
+        "candidate": [
+          59.20729064941406,
+          59.738260904947914,
+          59.56317138671875
+        ]
+      },
+      "medians_ms": {
+        "baseline": 64.3489481608073,
+        "candidate": 59.56317138671875
+      },
+      "speedup": 1.0803479173903703,
+      "peak_allocated_bytes": {
+        "baseline": 8713005568,
+        "candidate": 5001005568
+      }
+    },
+    {
+      "batch": 256,
+      "ending": false,
+      "exact": true,
+      "samples_ms": {
+        "baseline": [
+          69.01788838704427,
+          70.13690694173177,
+          70.61311340332031
+        ],
+        "candidate": [
+          64.4752705891927,
+          63.95683288574219,
+          63.94029744466146
+        ]
+      },
+      "medians_ms": {
+        "baseline": 70.13690694173177,
+        "candidate": 63.95683288574219
+      },
+      "speedup": 1.0966288319346609,
+      "peak_allocated_bytes": {
+        "baseline": 9634816000,
+        "candidate": 5538816000
+      }
+    },
+    {
+      "batch": 256,
+      "ending": true,
+      "exact": true,
+      "samples_ms": {
+        "baseline": [
+          84.16265360514323,
+          78.28817749023438,
+          77.61693827311198
+        ],
+        "candidate": [
+          69.018798828125,
+          70.65521240234375,
+          70.66700236002605
+        ]
+      },
+      "medians_ms": {
+        "baseline": 78.28817749023438,
+        "candidate": 70.65521240234375
+      },
+      "speedup": 1.1080311675297918,
+      "peak_allocated_bytes": {
+        "baseline": 9714507776,
+        "candidate": 5618507776
+      }
+    }
+  ],
+  "all_11_arrays_exact": true,
+  "full_cif_exact": true,
+  "paired_runs": [
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-owned-20261019-v1/paired/measurement-000/invocation.json",
+        "sha256": "7229698138938206f5ef9f9e995117e2634ad29b02e2467c29a69a1facb9c9b7"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-owned-20261019-v1/prediction-baseline-0/accepted.json",
+        "sha256": "2dd796e3ab27fc81a230346fd918e94aa6bdd8c47b21a500ed472f29e3d1f8c8"
+      },
+      "enabled": false,
+      "e2e_seconds": 233.646779163,
+      "model_seconds": 202.24474071495933,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "copy": {
+        "enabled": true,
+        "completed": true,
+        "library_sha256": "4c1b9b677ab31ebc812cedc1f00143096fe30f5bc637b6b90e3464c1f1f7ed84",
+        "counts": {
+          "accepted": 430,
+          "fallback": 18
+        },
+        "copies": 3440,
+        "copy_fallbacks": 1720
+      },
+      "owned_scores": {
+        "enabled": false,
+        "calls": 0,
+        "fallbacks": 0,
+        "library": "/media/990Pro/fireprot/runtime/torch_extensions/rust-v1/fireprot_softmax_gfx1100_owned_v1_9922a6d2a946eca19fd52771bca3b09fcb03ab89a4b8a16c7e70c779c799d5b1/fireprot_softmax_gfx1100_owned_v1_9922a6d2a946eca19fd52771bca3b09fcb03ab89a4b8a16c7e70c779c799d5b1.so",
+        "sha256": "c12c686658c5d4f647c07a3e1c252d2947fc0b55ab8fadafbfa09b4aca1f5bb6",
+        "ownership": "Private fresh QK result in source-pinned AttentionDispatcher._fused"
+      },
+      "softmax_launches": 1696,
+      "peak_allocated_bytes": 38636892160,
+      "peak_reserved_bytes": 40909144064
+    },
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-owned-20261019-v1/paired/measurement-001/invocation.json",
+        "sha256": "27ef17d547cb139b7f403618a10024b5c1042ec1a43964eb55ba23592c501336"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-owned-20261019-v1/prediction-candidate-0/accepted.json",
+        "sha256": "ace24feab7fd764da2d520a1d48c6b7ed0cb4c9be3f61b902e8362459fb0ae89"
+      },
+      "enabled": true,
+      "e2e_seconds": 223.39140952,
+      "model_seconds": 193.13853204599582,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "copy": {
+        "enabled": true,
+        "completed": true,
+        "library_sha256": "4c1b9b677ab31ebc812cedc1f00143096fe30f5bc637b6b90e3464c1f1f7ed84",
+        "counts": {
+          "accepted": 430,
+          "fallback": 18
+        },
+        "copies": 3440,
+        "copy_fallbacks": 1720
+      },
+      "owned_scores": {
+        "enabled": true,
+        "calls": 1696,
+        "fallbacks": 0,
+        "library": "/media/990Pro/fireprot/runtime/torch_extensions/rust-v1/fireprot_softmax_gfx1100_owned_v1_9922a6d2a946eca19fd52771bca3b09fcb03ab89a4b8a16c7e70c779c799d5b1/fireprot_softmax_gfx1100_owned_v1_9922a6d2a946eca19fd52771bca3b09fcb03ab89a4b8a16c7e70c779c799d5b1.so",
+        "sha256": "c12c686658c5d4f647c07a3e1c252d2947fc0b55ab8fadafbfa09b4aca1f5bb6",
+        "ownership": "Private fresh QK result in source-pinned AttentionDispatcher._fused"
+      },
+      "softmax_launches": 1696,
+      "peak_allocated_bytes": 38636892160,
+      "peak_reserved_bytes": 40909144064
+    },
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-owned-20261019-v1/paired/measurement-002/invocation.json",
+        "sha256": "6501a76887df7ad917f55808e62db1fe566218b73174614a6bfe92795683c943"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-owned-20261019-v1/prediction-candidate-1/accepted.json",
+        "sha256": "9700d56ced730189940796faaeb194412b8af807cdb57ad3466c739cb2ea1fe6"
+      },
+      "enabled": true,
+      "e2e_seconds": 223.261026514,
+      "model_seconds": 193.07886854099343,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "copy": {
+        "enabled": true,
+        "completed": true,
+        "library_sha256": "4c1b9b677ab31ebc812cedc1f00143096fe30f5bc637b6b90e3464c1f1f7ed84",
+        "counts": {
+          "accepted": 430,
+          "fallback": 18
+        },
+        "copies": 3440,
+        "copy_fallbacks": 1720
+      },
+      "owned_scores": {
+        "enabled": true,
+        "calls": 1696,
+        "fallbacks": 0,
+        "library": "/media/990Pro/fireprot/runtime/torch_extensions/rust-v1/fireprot_softmax_gfx1100_owned_v1_9922a6d2a946eca19fd52771bca3b09fcb03ab89a4b8a16c7e70c779c799d5b1/fireprot_softmax_gfx1100_owned_v1_9922a6d2a946eca19fd52771bca3b09fcb03ab89a4b8a16c7e70c779c799d5b1.so",
+        "sha256": "c12c686658c5d4f647c07a3e1c252d2947fc0b55ab8fadafbfa09b4aca1f5bb6",
+        "ownership": "Private fresh QK result in source-pinned AttentionDispatcher._fused"
+      },
+      "softmax_launches": 1696,
+      "peak_allocated_bytes": 38636892160,
+      "peak_reserved_bytes": 40909144064
+    },
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-owned-20261019-v1/paired/measurement-003/invocation.json",
+        "sha256": "ff2f37ea9d7224fbc9de34b1f5d5c185a1fadb8a82e30b92b5f038ba92551864"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-owned-20261019-v1/prediction-baseline-1/accepted.json",
+        "sha256": "ba72b5e4a5db2502e60fed85a847f39522f41c76f8d4f8b48df7e01dd9e3210b"
+      },
+      "enabled": false,
+      "e2e_seconds": 231.097187146,
+      "model_seconds": 200.899630215019,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "copy": {
+        "enabled": true,
+        "completed": true,
+        "library_sha256": "4c1b9b677ab31ebc812cedc1f00143096fe30f5bc637b6b90e3464c1f1f7ed84",
+        "counts": {
+          "accepted": 430,
+          "fallback": 18
+        },
+        "copies": 3440,
+        "copy_fallbacks": 1720
+      },
+      "owned_scores": {
+        "enabled": false,
+        "calls": 0,
+        "fallbacks": 0,
+        "library": "/media/990Pro/fireprot/runtime/torch_extensions/rust-v1/fireprot_softmax_gfx1100_owned_v1_9922a6d2a946eca19fd52771bca3b09fcb03ab89a4b8a16c7e70c779c799d5b1/fireprot_softmax_gfx1100_owned_v1_9922a6d2a946eca19fd52771bca3b09fcb03ab89a4b8a16c7e70c779c799d5b1.so",
+        "sha256": "c12c686658c5d4f647c07a3e1c252d2947fc0b55ab8fadafbfa09b4aca1f5bb6",
+        "ownership": "Private fresh QK result in source-pinned AttentionDispatcher._fused"
+      },
+      "softmax_launches": 1696,
+      "peak_allocated_bytes": 38636892160,
+      "peak_reserved_bytes": 40909144064
+    },
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-owned-20261019-v1/paired/measurement-004/invocation.json",
+        "sha256": "f94a006f25d727366f72f90333bf529fe375637329ce60c345fbf2a213a8bf64"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-owned-20261019-v1/prediction-baseline-2/accepted.json",
+        "sha256": "ecba621065a62971bb4322baa7459722d3d11cb2f80372f8c659d03e1aad8b7b"
+      },
+      "enabled": false,
+      "e2e_seconds": 231.100820021,
+      "model_seconds": 200.91089252301026,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "copy": {
+        "enabled": true,
+        "completed": true,
+        "library_sha256": "4c1b9b677ab31ebc812cedc1f00143096fe30f5bc637b6b90e3464c1f1f7ed84",
+        "counts": {
+          "accepted": 430,
+          "fallback": 18
+        },
+        "copies": 3440,
+        "copy_fallbacks": 1720
+      },
+      "owned_scores": {
+        "enabled": false,
+        "calls": 0,
+        "fallbacks": 0,
+        "library": "/media/990Pro/fireprot/runtime/torch_extensions/rust-v1/fireprot_softmax_gfx1100_owned_v1_9922a6d2a946eca19fd52771bca3b09fcb03ab89a4b8a16c7e70c779c799d5b1/fireprot_softmax_gfx1100_owned_v1_9922a6d2a946eca19fd52771bca3b09fcb03ab89a4b8a16c7e70c779c799d5b1.so",
+        "sha256": "c12c686658c5d4f647c07a3e1c252d2947fc0b55ab8fadafbfa09b4aca1f5bb6",
+        "ownership": "Private fresh QK result in source-pinned AttentionDispatcher._fused"
+      },
+      "softmax_launches": 1696,
+      "peak_allocated_bytes": 38636892160,
+      "peak_reserved_bytes": 40909144064
+    },
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-owned-20261019-v1/paired/measurement-005/invocation.json",
+        "sha256": "c6131fdaf640855b02dd27c725893f9c4586a06e85599c65ed939b421896cfde"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-owned-20261019-v1/prediction-candidate-2/accepted.json",
+        "sha256": "dc75310d0f393967fa2d9d0795547d8f3737899f1a3a6d88bc80a124060498ff"
+      },
+      "enabled": true,
+      "e2e_seconds": 223.170534446,
+      "model_seconds": 193.00577228097245,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "copy": {
+        "enabled": true,
+        "completed": true,
+        "library_sha256": "4c1b9b677ab31ebc812cedc1f00143096fe30f5bc637b6b90e3464c1f1f7ed84",
+        "counts": {
+          "accepted": 430,
+          "fallback": 18
+        },
+        "copies": 3440,
+        "copy_fallbacks": 1720
+      },
+      "owned_scores": {
+        "enabled": true,
+        "calls": 1696,
+        "fallbacks": 0,
+        "library": "/media/990Pro/fireprot/runtime/torch_extensions/rust-v1/fireprot_softmax_gfx1100_owned_v1_9922a6d2a946eca19fd52771bca3b09fcb03ab89a4b8a16c7e70c779c799d5b1/fireprot_softmax_gfx1100_owned_v1_9922a6d2a946eca19fd52771bca3b09fcb03ab89a4b8a16c7e70c779c799d5b1.so",
+        "sha256": "c12c686658c5d4f647c07a3e1c252d2947fc0b55ab8fadafbfa09b4aca1f5bb6",
+        "ownership": "Private fresh QK result in source-pinned AttentionDispatcher._fused"
+      },
+      "softmax_launches": 1696,
+      "peak_allocated_bytes": 38636892160,
+      "peak_reserved_bytes": 40909144064
+    }
+  ],
+  "diagnostic_cycle": [
+    {
+      "invocation": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-owned-20261019-v1/measurement-cycle/invocation.json",
+        "sha256": "c0aa8858e21e76474ee208b226720c28aefd6ad50c318ef279987865edc29e47"
+      },
+      "accepted": {
+        "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-owned-20261019-v1/prediction-cycle/accepted.json",
+        "sha256": "ae7c6fcbc1dfe7ecedd64d677fb8817eb73dc93821d01ebc78db72e6089d4b1b"
+      },
+      "enabled": true,
+      "e2e_seconds": 230.317396305,
+      "model_seconds": 194.94510147697292,
+      "all_11_arrays_exact": true,
+      "full_cif_exact": true,
+      "coverage_passed": true,
+      "copy": {
+        "enabled": true,
+        "completed": true,
+        "library_sha256": "4c1b9b677ab31ebc812cedc1f00143096fe30f5bc637b6b90e3464c1f1f7ed84",
+        "counts": {
+          "accepted": 430,
+          "fallback": 18
+        },
+        "copies": 3440,
+        "copy_fallbacks": 1720
+      },
+      "owned_scores": {
+        "enabled": true,
+        "calls": 1696,
+        "fallbacks": 0,
+        "library": "/media/990Pro/fireprot/runtime/torch_extensions/rust-v1/fireprot_softmax_gfx1100_owned_v1_9922a6d2a946eca19fd52771bca3b09fcb03ab89a4b8a16c7e70c779c799d5b1/fireprot_softmax_gfx1100_owned_v1_9922a6d2a946eca19fd52771bca3b09fcb03ab89a4b8a16c7e70c779c799d5b1.so",
+        "sha256": "c12c686658c5d4f647c07a3e1c252d2947fc0b55ab8fadafbfa09b4aca1f5bb6",
+        "ownership": "Private fresh QK result in source-pinned AttentionDispatcher._fused"
+      },
+      "softmax_launches": 1696,
+      "peak_allocated_bytes": 38636892160,
+      "peak_reserved_bytes": 40909144064
+    }
+  ],
+  "end_to_end_performance": {
+    "baseline": {
+      "count": 3,
+      "min": 231.097187146,
+      "median": 231.100820021,
+      "p95": 233.646779163,
+      "max": 233.646779163,
+      "mean": 231.94826211
+    },
+    "candidate": {
+      "count": 3,
+      "min": 223.170534446,
+      "median": 223.261026514,
+      "p95": 223.39140952,
+      "max": 223.39140952,
+      "mean": 223.27432349333333
+    },
+    "median_speedup": 1.035114921889461,
+    "p95_speedup": 1.0459076276255908,
+    "paired_speedups": [
+      1.0459076276255908,
+      1.0350986500167714,
+      1.0355346443682012
+    ],
+    "paired_summary": {
+      "count": 3,
+      "min": 1.0350986500167714,
+      "median": 1.0355346443682012,
+      "p95": 1.0459076276255908,
+      "max": 1.0459076276255908,
+      "mean": 1.038846974003521
+    },
+    "observed_trend": "faster_median_and_p95",
+    "changes": {
+      "invocation.profile_sha256": {
+        "baseline": "373abf07e0f7723b25ab6a43bfece554dca6359917d6845ffc06ea980858e697",
+        "candidate": "01f69fc23ce19ef10b208487c769155c26d3d5b17a21fa0ea32dc51fe9fb5714"
+      },
+      "launch.environment.FIREPROT_GFX1100_OWNED": {
+        "baseline": "0",
+        "candidate": "1"
+      }
+    }
+  },
+  "model_forward": {
+    "baseline": 200.91089252301026,
+    "candidate": 193.07886854099343,
+    "speedup": 1.040563858910091
+  },
+  "implementation": "Private QK-score in-place wave32 softmax; native QK/PV and FP32 arithmetic retained; same previously qualified reuse and triangle copies in both arms.",
+  "limitations": [
+    "Incremental comparison against qualified gfx1100 softmax/pair/atom/template reuse and triangle copies, not direct native E2E.",
+    "Single N1000 development input; no independent biological accuracy evaluation or N1536 qualification.",
+    "Fresh workers, unflushed caches, prebuilt kernels, no concurrent GPU jobs or asset transfers.",
+    "Clocks unlocked; hardware telemetry is sampled, not a controlled-frequency study.",
+    "Three-sample p95 is the observed maximum, not a confidence bound.",
+    "Allocator peaks cover forward only; not hardware/whole-invocation memory peaks.",
+    "A short unrelated GPU task was observed before the diagnostic cycle; its timing is excluded from paired statistics.",
+    "Frozen experiment; inherited environment inventory and maintained route promotion remain open."
+  ],
+  "gpu-cycle.json": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-owned-20261019-v1/gpu-cycle.json",
+    "sha256": "aab64288ba68486fdca7a1cd25150e024440e02aa5c524fac3656f35d386e1da"
+  },
+  "gpu-after.json": {
+    "path": "/media/990Pro/fireprot/outputs/experiments/gfx11-of3-owned-20261019-v1/gpu-after.json",
+    "sha256": "bcf049f4fc88193ca23f438a537851094215041f5587d370d3c8ea699114b5bf"
+  }
+}

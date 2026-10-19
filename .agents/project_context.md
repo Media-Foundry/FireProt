@@ -7837,3 +7837,30 @@ new gfx1100_copy/gfx1100_profile helpers from those maintained paths. The new
 code is isolated experimental preparation/profiling/audit and opt-in copied
 workers; source review plus the six CPU/meta and complete GPU gates establish
 the reviewed scope. Do not infer production deployment from the graph label.
+
+## gfx1100 private-score follow-up (2026-10-19)
+
+Precision OpenFold3 N1000 now has independently audited private QK-score reuse:
+previous softmax/reuse/copy composition **231.101 -> 223.261 s E2E**,
+**1.035115x incremental** (3.3924% less time), three AB/BA/AB pairs.
+All 11 arrays and complete CIF bytes match native for all seven predictions.
+Forward medians: 200.911 -> 193.079 s. Each candidate has
+1,696 in-place calls with zero fallback. Full-model allocator peaks are unchanged.
+This is strict FP32/N1000/R3/D200/S1/seed101, not a direct-native total ratio.
+
+The separate HIP ABI requires private full-storage QK scores; native QK/PV and
+softmax arithmetic stay intact. The frozen root is
+`outputs/experiments/gfx11-of3-owned-20261019-v1`; final audit and driver pass.
+Next candidate from the profile: C128 LayerNorm; no new speedup is claimed for it.
+Environment inventory, maintained publication and N1536 remain open. General
+asset migration still waits behind the earlier failed AtlasLM B4 gate.
+See [Precision evidence](../docs/precision-setup.md) and [handoff](../GFX11_HANDOFF.md).
+
+Evidence: `provenance/precision_openfold3_owned_gfx1100_20261019.json`.
+
+Staged GitNexus analysis again reports broad flows through the Markdown
+"FireProt gfx11 handoff" heading (392 processes). Source review confirms this
+commit changes only isolated experiments, evidence and documentation, with no
+maintained imports. Precision had unrelated uncommitted gfx1100 publication
+work at final inspection; preserve it. Frozen workers isolate this study from
+those concurrent source edits.

@@ -619,3 +619,40 @@ inventory, maintained publication and N1536 qualification remain open.
 
 [Reproduction and scope](../experiments/triangle_memory/GFX1100.md);
 [all timings, hashes and independent audit](../provenance/precision_openfold3_copy_gfx1100_20261019.json).
+
+## Exact gfx1100 private QK-score reuse (2026-10-19)
+
+A separately built HIP entry overwrites the private QK-score tensor with softmax
+probabilities. It removes the separate output allocation and deterministic fill.
+The pinned dispatcher owns the fresh scores; full-storage/disjointness checks
+reject unsafe aliases. Native QK/PV, all FP32 arithmetic, wave selection, existing
+conditioning reuse and triangle copies stay unchanged.
+
+| Scope | Previous copy composition | Added private-score reuse | Median speedup |
+| --- | ---: | ---: | ---: |
+| Complete invocation | 231.100820 s | 223.261027 s | 1.035115x |
+| Model forward | 200.910893 s | 193.078869 s | 1.040564x |
+
+Three fresh-worker AB/BA/AB pairs reduce E2E time by 3.3924%.
+Paired ratios: 1.045908x, 1.035099x, 1.035535x.
+All seven independently audited predictions match the maintained native reference
+in all 11 arrays and complete CIF bytes. Each candidate submits 1,696 in-place
+softmax calls, zero storage fallbacks, and the unchanged 3,440 HIP triangle copies.
+Strict FP32/N1000/R3/four trunk passes/D200/S1/seed101, query-only MSA and no
+supplied templates remain fixed.
+
+Eight complete-attention operator cases improve 1.063–1.134x. The largest
+N1000/chunk256 attention case saves 4,096,000,000 allocated bytes, but **full-model
+forward peaks do not fall**: 38,636,892,160 allocated / 40,909,144,064 reserved
+bytes in both arms. The diagnostic cycle is excluded from paired statistics;
+a short unrelated GPU task was observed before it. The Rust supervisor verified
+the accepted device and isolation for every completed prediction.
+
+These are incremental measurements, not a fresh direct-native ratio. Caches are
+unflushed, clocks unlocked, and a retained SMI sample reports THROTTLED. Three
+samples do not establish a statistical confidence bound. The route remains a
+frozen experiment; full environment inventory, publication and N1536 qualification
+are separate outstanding work.
+
+[Reproduction and ownership contract](../experiments/hip_softmax/GFX1100_OWNED.md);
+[all timings and independent audit](../provenance/precision_openfold3_owned_gfx1100_20261019.json).

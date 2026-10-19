@@ -242,6 +242,7 @@ separate three-pair studies; each row keeps its own control and revision.
 | OpenFold3 N1000, native → wave32 softmax | 322.388 s | 285.978 s | **1.127x** |
 | OpenFold3 N1000, softmax → added pair/atom/template reuse | 283.614 s | 239.335 s | **1.185x incremental** |
 | OpenFold3 N1000, reuse composition → added HIP layout copies | 238.182 s | 231.214 s | **1.030x incremental** |
+| OpenFold3 N1000, copy composition → private QK-score reuse | 231.101 s | 223.261 s | **1.035x incremental** |
 
 All listed studies preserve same-host native output bytes. OpenFold3 also
 preserves all 11 arrays and complete CIF bytes, using strict FP32/R3/D200/S1.

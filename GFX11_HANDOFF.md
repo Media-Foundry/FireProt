@@ -1,12 +1,37 @@
 # FireProt gfx11 handoff
 
-Snapshot: 2026-10-19 UTC. Latest copy experiment base revision: `23133ea` (`master`).
-The checkpoint, softmax and reuse qualifications are on GitHub.
-This document also includes the 2026-10-19 copy follow-up. The original 2026-10-16
+Snapshot: 2026-10-19 UTC. Latest owned-score experiment base revision: `b672c7b` (`master`).
+The checkpoint, softmax, reuse and copy qualifications are on GitHub.
+This document also includes the 2026-10-19 private-score follow-up. The original 2026-10-16
 snapshot is retained at
 `outputs/experiments/gfx11-openfold3-model-20261017-v1/GFX11_HANDOFF.before.md`.
 
-## Latest completed follow-up — 2026-10-19
+## Latest completed follow-up — private QK scores, 2026-10-19
+
+Precision OpenFold3 N1000 now has independently audited private QK-score reuse:
+previous softmax/reuse/copy composition **231.101 -> 223.261 s E2E**,
+**1.035115x incremental** (3.3924% less time), three AB/BA/AB pairs.
+All 11 arrays and complete CIF bytes match native for all seven predictions.
+Forward medians: 200.911 -> 193.079 s. Each candidate has
+1,696 in-place calls with zero fallback. Full-model allocator peaks are unchanged.
+This is strict FP32/N1000/R3/D200/S1/seed101, not a direct-native total ratio.
+
+The separate HIP ABI requires private full-storage QK scores; native QK/PV and
+softmax arithmetic stay intact. The frozen root is
+`outputs/experiments/gfx11-of3-owned-20261019-v1`; final audit and driver pass.
+Next candidate from the profile: C128 LayerNorm; no new speedup is claimed for it.
+Environment inventory, maintained publication and N1536 remain open. General
+asset migration still waits behind the earlier failed AtlasLM B4 gate.
+See [Precision evidence](docs/precision-setup.md) and [handoff](GFX11_HANDOFF.md).
+
+Evidence: `provenance/precision_openfold3_owned_gfx1100_20261019.json`.
+The owned-score tmux jobs completed; both GPUs were idle after final audit.
+Inspect current occupancy before new work; do not restart the completed pairs.
+Precision also has unrelated uncommitted gfx1100 production integration work
+(worker/transport, backend, adapter, kernel and test additions). Preserve and
+inspect that work before further edits; it is outside this experiment.
+
+## Previous copy follow-up — 2026-10-19
 
 - HIP layout copies passed all three AB/BA/AB pairs and the independent final
   audit. Previous softmax/reuse: **238.181973 s**; added copies: **231.214273 s**;
@@ -28,10 +53,8 @@ snapshot is retained at
   maintained workers and earlier immutable experiments were preserved.
 - Forward allocator peaks remain 38,636,892,160 allocated / 40,909,144,064 reserved
   bytes. Clocks were unlocked; a sampled SMI record reports THROTTLED.
-- Next candidate: reduce attention-score allocation/filling using explicitly
-  owned QK scores; the current wave32 ABI rejects aliasing, so a new entry needs
-  bitwise operator and full-model gates before timing. C128 normalization is
-  another measured cost. Neither follow-up has a new speedup claim.
+- The private-score follow-up above supersedes the earlier proposed in-place
+  softmax investigation. C128 normalization remains an unmeasured candidate.
 - General migration remains behind its previous failed AtlasLM gate; no sender
   was resumed or bypassed. Production promotion still needs complete environment
   inventory and publication. N1536 remains separately unqualified on gfx1100.
